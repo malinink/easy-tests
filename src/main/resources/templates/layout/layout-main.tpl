@@ -1,0 +1,11 @@
+html
+{
+    head
+    {
+        title(title)
+    }
+    body
+    {
+        content()
+    }
+}
