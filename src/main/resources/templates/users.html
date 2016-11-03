@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>Surname</th>
+        <th>Name</th>
+        <th>Last Name</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <!--Filling the table with data gathered from Controller via Thymeleaf-->
+    <th:block th:each="User : ${Users}">
+        <tr>
+            <td th:text="${User.getSurname()}"></td>
+            <td th:text="${User.getFirstName()}"></td>
+            <td th:text="${User.getLastName()}"></td>
+        </tr>
+    </th:block>
+    <!---->
+
+    </tbody>
+</table>
+</body>
+</html>
