@@ -2,6 +2,9 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 
+  <div th:repalace="~{head}">
+  </div>
+
   <body>
 
     <div th:replace="~{main-header}">
