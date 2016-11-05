@@ -4,24 +4,22 @@ import easytests.entities.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
 import java.util.ArrayList;
-
 
 /**
  * Created by vkpankov on 31.10.2016.
  * Edited by SingularityA on 03.11.2016
-*/
+ * Edited by malinink on 05.11.2016
+ */
 @Controller
 @RequestMapping("/")
 public class UsersController {
 
     @RequestMapping("/users")
-    public ModelAndView getUsersList(Model model) {
+    public String list(Model model) {
 
         ArrayList<User> users = new ArrayList<>(15);
+
         users.add(new User("Артем","Багаев","Робизонович"));
         users.add(new User("Андрей","Влад","Иванович"));
         users.add(new User("Зоригто","Доржиев","Жаргалович"));
@@ -38,7 +36,7 @@ public class UsersController {
         users.add(new User("Джамиль","Шайморданов","Амирович"));
         users.add(new User("Валентин","Шульга","Александрович"));
 
-        return new ModelAndView("UsersView", "usersList", users);
-
+        model.addAttribute("users", users);
+        return "users/list";
     }
 }
