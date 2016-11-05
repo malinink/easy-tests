@@ -4,13 +4,13 @@
 
   <body>
 
-    <div th:fragment="~{main-header}">
+    <div th:replace="~{main-header}">
     </div>
 
-    <div th:fragment="~{main}">
+    <div th:replace="~{main}">
     </div>
 
-    <div th:fragment="~{main-footer :: copy}">
+    <div th:replace="~{main-footer :: copy}">
     </div>
 
   </body>
