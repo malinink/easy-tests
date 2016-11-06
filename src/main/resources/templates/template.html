@@ -2,19 +2,19 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 
-  <div th:repalace="~{head}">
+  <div th:replace="head">
   </div>
 
   <body>
 
-    <div th:replace="~{main-header}">
+    <div th:replace="main-header">
     </div>
 
-    <div th:replace="~{main}">
+    <div th:replace="main">
     </div>
 
-    <div th:replace="~{main-footer :: copy}">
-    </div>
+    <footer th:replace="main-footer">
+    </footer>
 
   </body>
 
