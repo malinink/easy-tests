@@ -1,4 +1,4 @@
-package service;
+package easytests.service;
 
 import easytests.ConnectionFactory;
 import easytests.dao.UserDAO;
