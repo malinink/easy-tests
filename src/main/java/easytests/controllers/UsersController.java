@@ -5,7 +5,8 @@ import org.apache.commons.logging.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import service.UserService;
+import org.springframework.web.bind.annotation.ResponseBody;
+import easytests.service.UserService;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -17,33 +18,16 @@ import java.util.logging.Logger;
  * Edited by malinink on 05.11.2016
  */
 @Controller
-@RequestMapping("/")
 public class UsersController {
-
-    @RequestMapping("/users")
-    public String list(Model model) throws Exception {
-
+    @RequestMapping("/")
+    @ResponseBody
+    public String list() throws Exception {
         UserService userService = new UserService();
-
-        if(userService.getAllUsers().size()<2) {
-            userService.addUser(new User("Артем", "Багаев", "Робизонович"));
-            userService.addUser(new User("Андрей", "Влад", "Иванович"));
-            userService.addUser(new User("Зоригто", "Доржиев", "Жаргалович"));
-            userService.addUser(new User("Алексей", "Ермолаев", "Николаевич"));
-            userService.addUser(new User("Илья", "Живолуп", "Дмитриевич"));
-            userService.addUser(new User("Василий", "Каминский", "Владимирович"));
-            userService.addUser(new User("Владислав", "Марков", "Викторович"));
-            userService.addUser(new User("Дмитрий", "Марулин", "Алексеевич"));
-            userService.addUser(new User("Викентий", "Панков", "Дмитриевич"));
-            userService.addUser(new User("Антон", "Панченко", "Дмитриевич"));
-            userService.addUser(new User("Никита", "Попов", "Алексеевич"));
-            userService.addUser(new User("Карина", "Сахарова", "Сергеевна"));
-            userService.addUser(new User("Лия", "Халиуллина", "Рауфофна"));
-            userService.addUser(new User("Джамиль", "Шайморданов", "Амирович"));
-            userService.addUser(new User("Валентин", "Шульга", "Александрович"));
+        if(userService.getAllUsers().size()<3) {
+            userService.addUser(new User("Test1", "Test1", "Test1"));
+            userService.addUser(new User("Test2", "Test2", "Test2"));
+            userService.addUser(new User("Test3", "Test3", "Test3"));
         }
-
-        model.addAttribute("users", userService.getAllUsers());
-        return "users/list";
+        return "Users were added successfully!";
     }
 }
