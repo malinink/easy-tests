@@ -98,10 +98,10 @@
                         <version>7.2</version>
                     </dependency>
                 </dependencies>
-				<configuration>
-					<configLocation>checkstyle.xml</configLocation>
-					<consoleOutput>true</consoleOutput>
-				</configuration>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
