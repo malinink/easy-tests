@@ -23,10 +23,10 @@ public class DatabaseConfig {
     @Bean
     public DataSource getDataSource() {
         PooledDataSource dataSource = new PooledDataSource();
-        dataSource.setDriver(env.getProperty("database.driver"));
-        dataSource.setUrl(env.getProperty("database.url"));
-        dataSource.setUsername(env.getProperty("database.username"));
-        dataSource.setPassword(env.getProperty("database.password"));
+        dataSource.setDriver(env.getProperty("driver"));
+        dataSource.setUrl(env.getProperty("url"));
+        dataSource.setUsername(env.getProperty("username"));
+        dataSource.setPassword(env.getProperty("password"));
         return dataSource;
     }
 
