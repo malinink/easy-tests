@@ -1,4 +1,4 @@
-database.driver=org.postgresql.Driver
-database.url=jdbc:postgresql://localhost:5432/__DATABASE__
-database.username=__USERNAME__
-database.password=__PASSWORD__
+driver=org.postgresql.Driver
+url=jdbc:postgresql://localhost:5432/__DATABASE__
+username=__USERNAME__
+password=__PASSWORD__
