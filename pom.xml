@@ -95,19 +95,13 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>7.2</version>
+                        <version>7.1.1</version>
                     </dependency>
                 </dependencies>
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals><goal>check</goal></goals>
-                    </execution>
-                </executions>
             </plugin>
 		</plugins>
 	</build>
