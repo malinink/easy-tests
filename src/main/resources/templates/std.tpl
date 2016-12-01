@@ -21,7 +21,6 @@ content: contents {
         }
       }
     }
-    }
 
     div(class: 'container'){
      yield 'Main page content'
@@ -34,5 +33,4 @@ content: contents {
         }
       }
     }
-
 }
