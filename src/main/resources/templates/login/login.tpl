@@ -1,15 +1,15 @@
 layout 'layout/login.tpl', title:  'Login form',
 content: contents {
     div (class:'section') {
-        main (style:'flex: 1 0 auto;') {
-            center {
+        main {
+            div(class :'center-align') {
                 div (class:'section') {
                     h5 {
                         span ('Sign In')
                     }
                 }
                 div (class:'container') {
-                    div (class:'z-depth-1 grey lighten-4 row', style:'display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;') {
+                    div (id: 'block', class:'z-depth-1 grey lighten-4 row') {
                         form (class:'col s12', method:'post') {
                             div (class:'row') {
                                 div (class: 'col s12') {}
@@ -42,9 +42,9 @@ content: contents {
                                 }
                             }
                             br
-                            center {
+                            div(class :'center-align') {
                                 div (class:'row') {
-                                    button (type:'submit', name:'btn_login', class:'col s11 btn btn-large waves-effect waves-light teal lighten-2', style:'margin-left: 25px') {
+                                    button (type:'submit', name:'btn_login', class:'col s12 btn btn-large waves-effect waves-light teal lighten-2') {
                                         span ('Login')
                                     }
                                 }
