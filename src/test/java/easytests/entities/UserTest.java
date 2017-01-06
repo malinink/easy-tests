@@ -4,25 +4,28 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by zorigto on 10.11.16.
+ * @author zorigto
  */
 public class UserTest {
     @Test
     public void testFirstName() throws Exception {
-        User tstUser = new User("Ivan","Ivanovich","Ivanov");
-        assertEquals("Ivan", tstUser.getFirstName());
+        User testUser = new User();
+        testUser.setFirstName("Ivan");
+        assertEquals("Ivan", testUser.getFirstName());
     }
 
     @Test
     public void testLastName() throws Exception {
-        User tstUser = new User("Ivan","Ivanovich","Ivanov");
-        assertEquals("Ivanovich", tstUser.getLastName());
+        User testUser = new User();
+        testUser.setLastName("Ivanov");
+        assertEquals("Ivanov", testUser.getLastName());
     }
 
     @Test
     public void testSurname() throws Exception {
-        User tstUser = new User("Ivan","Ivanovich","Ivanov");
-        assertEquals("Ivanov", tstUser.getSurname());
+        User testUser = new User();
+        testUser.setSurname("Ivanovich");
+        assertEquals("Ivanovich", testUser.getSurname());
     }
 
 }
