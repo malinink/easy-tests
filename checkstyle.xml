@@ -4,7 +4,7 @@
         "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="Checker">
     <!-- Properties (http://checkstyle.sourceforge.net/config.html#Properties#Checker) -->
-    <property name="fileExtensions" value="java, properties, xml"/>
+    <property name="fileExtensions" value="java, properties, dist, xml, sql"/>
 
     <!-- Filters (http://checkstyle.sourceforge.net/config_filters.html) -->
     <module name="SuppressionCommentFilter"/>
@@ -24,7 +24,11 @@
     <module name="TreeWalker">
 
         <!-- Annotations (http://checkstyle.sourceforge.net/config_annotation.html) -->
-        <!--<module name="AnnotationLocation"/>-->
+        <module name="AnnotationLocation">
+            <property name="allowSamelineMultipleAnnotations" value="false"/>
+            <property name="allowSamelineSingleParameterlessAnnotation" value="false"/>
+            <property name="allowSamelineParameterizedAnnotation" value="false"/>
+        </module>
         <module name="AnnotationUseStyle"/>
         <module name="MissingDeprecated"/>
         <module name="MissingOverride"/>
@@ -121,7 +125,10 @@
         <!-- Imports (http://checkstyle.sourceforge.net/config_imports.html) -->
         <!--<module name="AvoidStarImport"/>-->
         <!--<module name="AvoidStaticImport"/>-->
-        <!--<module name="CustomImportOrder"/>-->
+        <module name="CustomImportOrder">
+            <property name="sortImportsInGroupAlphabetically" value="true"/>
+            <property name="separateLineBetweenGroups" value="false"/>
+        </module>
         <module name="IllegalImport"/>
         <!--<module name="ImportControl"/>-->
         <!--<module name="ImportOrder"/>-->
@@ -130,13 +137,15 @@
 
 
         <!-- Javadoc Comments (http://checkstyle.sourceforge.net/config_javadoc.html) -->
-        <!--<module name="AtclauseOrder"/>-->
+        <module name="AtclauseOrder"/>
         <!--<module name="JavadocMethod"/>-->
         <!--<module name="JavadocPackage"/>-->
         <!--<module name="JavadocParagraph"/>-->
         <!--<module name="JavadocStyle"/>-->
         <!--<module name="JavadocTagContinuationIndentation"/>-->
-        <!--<module name="JavadocType"/>-->
+        <module name="JavadocType">
+            <property name="authorFormat" value="\w+"/>
+        </module>
         <!--<module name="JavadocVariable"/>-->
         <!--<module name="NonEmptyAtclauseDescription"/>-->
         <!--<module name="SingleLineJavadoc"/>-->
@@ -219,7 +228,10 @@
         <!-- Whitespace (http://checkstyle.sourceforge.net/config_whitespace.html) -->
         <module name="EmptyForInitializerPad"/>
         <module name="EmptyForIteratorPad"/>
-        <!--<module name="EmptyLineSeparator"/>-->
+        <module name="EmptyLineSeparator">
+            <property name="allowMultipleEmptyLines" value="false"/>
+            <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
+        </module>
         <module name="GenericWhitespace"/>
         <module name="MethodParamPad"/>
         <module name="NoLineWrap"/>
