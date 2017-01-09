@@ -6,13 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * @author malinink
  */
+@SuppressWarnings("checkstyle:HideUtilityClassConstructor")
 @SpringBootApplication
-public final class EasyTestsApplication {
-    private EasyTestsApplication() {
-
-    }
-
+public class EasyTestsApplication {
     public static void main(String[] args) {
         SpringApplication.run(EasyTestsApplication.class, args);
     }
 }
+
