@@ -4,6 +4,7 @@ jdk:
 services:
 - postgresql
 install:
+- cp src/main/resources/application.travis.properties src/main/resources/application.properties
 - cp src/main/resources/database.travis.properties src/main/resources/database.properties
 - cp src/main/resources/migrations/environments/development.travis.properties src/main/resources/migrations/environments/development.properties
 before_script:
