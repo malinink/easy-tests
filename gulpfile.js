@@ -14,7 +14,7 @@ var config = {
 };
 
 gulp.task('fonts', function() {
-    gulp.src(['bower_components/materialize/dist/fonts/*'])
+    gulp.src(['bower_components/materialize/dist/fonts/**'])
         .pipe(gulp.dest(config.docs + 'fonts'))
         .pipe(gulp.dest(config.dest + 'fonts'));
 });

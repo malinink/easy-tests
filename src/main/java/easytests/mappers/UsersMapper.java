@@ -4,15 +4,19 @@ import easytests.entities.User;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 
+/**
+ * @author malinink
+ */
 @Mapper
 public interface UsersMapper {
 
-    @Results({
+    @Results(
+        {
             @Result(property = "id", column = "id"),
             @Result(property = "firstName", column = "first_name"),
             @Result(property = "lastName", column = "last_name"),
             @Result(property = "surname", column = "surname")
-    })
+        })
 
     @Select("SELECT id, first_name, last_name, surname FROM users")
     List<User> readAll();
