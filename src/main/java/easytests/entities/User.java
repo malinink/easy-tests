@@ -2,11 +2,17 @@ package easytests.entities;
 
 import easytests.entities.user.CommonFieldsInterface;
 
+/**
+ * @author malinink
+ */
 public class User implements CommonFieldsInterface {
 
     private Integer id;
+
     private String firstName;
+
     private String lastName;
+
     private String surname;
 
     public Integer getId() {

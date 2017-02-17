@@ -8,6 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * @author malinink
+ */
 @Controller
 @RequestMapping("/")
 public class UsersController {
@@ -17,7 +20,7 @@ public class UsersController {
 
     @RequestMapping("/users")
     public String list(Model model) {
-        List<User> users = this.usersMapper.readAll();
+        final List<User> users = this.usersMapper.readAll();
         model.addAttribute("users", users);
         return "users/list";
     }
