@@ -10,5 +10,5 @@ import org.apache.ibatis.annotations.*;
  * @author loriens
  */
 
-public class TopicsMapper {
+public interface TopicsMapper {
 }
