@@ -10,9 +10,9 @@ import java.util.List;
  */
 
 public class Topic implements CommonFieldsInterface {
-    String name;
+    private String name;
 
-    List<Question> questions;
+    private List<Question> questions;
 
     String getName() {
         return name;
