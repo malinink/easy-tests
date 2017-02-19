@@ -7,7 +7,7 @@ import java.util.List;
  */
 public interface CommonFieldsInterface {
     Integer getId();
-    
+
     String getName();
 
     void setName(String name);
