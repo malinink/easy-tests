@@ -10,12 +10,18 @@ import java.util.List;
  */
 
 public class Topic implements CommonFieldsInterface {
+    private Integer id;
+
     private String name;
 
     private List<Question> questions;
 
     String getName() {
         return name;
+    }
+
+    Integer getId() {
+        return id;
     }
 
     void setName(String name) {
