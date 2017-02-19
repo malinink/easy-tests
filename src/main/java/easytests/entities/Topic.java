@@ -1,6 +1,5 @@
 package easytests.entities;
 
-
 import easytests.entities.topic.CommonFieldsInterface;
 
 import java.util.List;
@@ -16,23 +15,23 @@ public class Topic implements CommonFieldsInterface {
 
     private List<Question> questions;
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    Integer getId() {
+    public Integer getId() {
         return id;
     }
 
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    List<Question> getQuestions() {
+    public List<Question> getQuestions() {
         return questions;
     }
 
-    void addQuestion(Question question) {
+    public void addQuestion(Question question) {
         questions.add(question);
     }
 }

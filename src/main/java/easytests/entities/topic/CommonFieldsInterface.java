@@ -1,5 +1,7 @@
 package easytests.entities.topic;
 
+import easytests.entities.Question;
+
 import java.util.List;
 
 /**
