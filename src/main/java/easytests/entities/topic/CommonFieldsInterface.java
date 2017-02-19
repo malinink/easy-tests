@@ -12,9 +12,5 @@ public interface CommonFieldsInterface {
 
     String getName();
 
-    void setName(String name);
-
     List<Question> getQuestions();
-
-    void addQuestion(Question question);
 }

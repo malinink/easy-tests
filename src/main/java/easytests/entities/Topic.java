@@ -15,18 +15,21 @@ public class Topic implements CommonFieldsInterface {
 
     private List<Question> questions;
 
-    public String getName() {
-        return name;
-    }
-
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+    
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public List<Question> getQuestions() {
         return questions;
     }
