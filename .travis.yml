@@ -10,7 +10,7 @@ install:
 - cp src/main/resources/migrations/environments/development.travis.properties src/main/resources/migrations/environments/development.properties
 before_script:
 - psql -c 'create database easytests;' -U postgres
-- psql -c 'create database easytests-test;' -U postgres
+- psql -c 'create database easyteststest;' -U postgres
 script:
 - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 - ./mvnw checkstyle:check
