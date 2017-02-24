@@ -30,7 +30,7 @@ public interface TopicsMapper {
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(TopicInterface topic);
 
-    @Update("UPDATE topics SET first_name=#{firstName}, last_name=#{last_name}, surname=#{surname} WHERE id=#{id}")
+    @Update("UPDATE topics SET name=#{firstName}, questions_id=#{last_name}, surname=#{surname} WHERE id=#{id}")
     void update(TopicInterface topic);
 
     @Delete("DELETE FROM topics WHERE id=#{id}")
