@@ -1,9 +1,9 @@
 -- // create_dependent_tables
 -- Migration SQL that makes the change goes here.
 
-CREATE TYPE PRIORITY AS ENUM ('low', 'high');
+CREATE TYPE PRIORITY AS ENUM ('LOW', 'HIGH');
 
-CREATE TABLE topics_priorities (
+CREATE TABLE topic_priorities (
   id              SERIAL      NOT NULL,
   topic_id        INTEGER     NOT NULL,
   topic_priority  PRIORITY    NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE topics_priorities (
         ON DELETE CASCADE
 );
 
-CREATE TABLE question_types_limits (
+CREATE TABLE question_type_options (
   id                SERIAL      NOT NULL,
   question_type_id  INTEGER     NOT NULL,
   min_number        INTEGER,
@@ -40,6 +40,6 @@ CREATE TABLE question_types_limits (
 -- //@UNDO
 -- SQL to undo the change goes here.
 
-DROP TABLE question_types_limits;
-DROP TABLE topics_priorities;
+DROP TABLE question_type_options;
+DROP TABLE topic_priorities;
 DROP TYPE PRIORITY;
