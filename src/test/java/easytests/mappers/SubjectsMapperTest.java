@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 /**
- * @author malinink
+ * @author vkpankov
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
