@@ -20,6 +20,10 @@ public class Topic implements TopicInterface {
         return id;
     }
 
+    public void setId(Integer number) {
+        this.id = number;
+    }
+
     @Override
     public String getName() {
         return name;
