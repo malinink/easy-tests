@@ -6,9 +6,11 @@ import java.util.List;
  * @author malinink
  */
 public interface TopicInterface extends EntityInterface {
-    Integer getId();
 
-    String getName();
+    public  Integer getId();
 
-    List<Question> getQuestions();
+    public  String getName();
+
+    public  List<Question> getQuestions();
+    
 }
