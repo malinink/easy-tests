@@ -17,17 +17,15 @@ public interface IssueStandardInterface extends EntityInterface {
 
     IssueStandardInterface setQuestionsNumber(Integer questionsNumber);
 
-    List<Integer> getHighPriorityTopics();
+    List<IssueStandardTopicPriorityInterface> getIssueStandardTopicPriorities();
 
-    IssueStandardInterface setHighPriorityTopics(List<Integer> highPriorityTopics);
+    IssueStandardInterface setIssueStandardTopicPriorities(
+            List<IssueStandardTopicPriorityInterface> issueStandardTopicPriorities);
 
-    List<Integer> getLowPriorityTopics();
+    List<IssueStandardQuestionTypeOptionInterface> getIssueStandardQuestionTypeOptions();
 
-    IssueStandardInterface setLowPriorityTopics(List<Integer> lowPriorityTopics);
-
-    List<QuestionTypeLimitsInterface> getQuestionTypeLimits();
-
-    IssueStandardInterface setQuestionTypeLimits(List<QuestionTypeLimitsInterface> questionTypesLimits);
+    IssueStandardInterface setIssueStandardQuestionTypeOptions(
+            List<IssueStandardQuestionTypeOptionInterface> issueStandardQuestionTypeOptions);
 
     Integer getSubjectId();
 

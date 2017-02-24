@@ -13,11 +13,9 @@ public class IssueStandard implements IssueStandardInterface {
 
     private Integer questionsNumber;
 
-    private List<Integer> highPriorityTopics;
+    private List<IssueStandardTopicPriorityInterface> issueStandardTopicPriorities;
 
-    private List<Integer> lowPriorityTopics;
-
-    private List<QuestionTypeLimitsInterface> questionTypeLimits;
+    private List<IssueStandardQuestionTypeOptionInterface> issueStandardQuestionTypeOptions;
 
     private Integer subjectId;
 
@@ -55,35 +53,26 @@ public class IssueStandard implements IssueStandardInterface {
     }
 
     @Override
-    public List<Integer> getHighPriorityTopics() {
-        return highPriorityTopics;
+    public List<IssueStandardTopicPriorityInterface> getIssueStandardTopicPriorities() {
+        return issueStandardTopicPriorities;
     }
 
     @Override
-    public IssueStandardInterface setHighPriorityTopics(List<Integer> highPriorityTopics) {
-        this.highPriorityTopics = highPriorityTopics;
+    public IssueStandardInterface setIssueStandardTopicPriorities(
+            List<IssueStandardTopicPriorityInterface> issueStandardTopicPriorities) {
+        this.issueStandardTopicPriorities = issueStandardTopicPriorities;
         return this;
     }
 
     @Override
-    public List<Integer> getLowPriorityTopics() {
-        return lowPriorityTopics;
+    public List<IssueStandardQuestionTypeOptionInterface> getIssueStandardQuestionTypeOptions() {
+        return issueStandardQuestionTypeOptions;
     }
 
     @Override
-    public IssueStandardInterface setLowPriorityTopics(List<Integer> lowPriorityTopics) {
-        this.lowPriorityTopics = lowPriorityTopics;
-        return this;
-    }
-
-    @Override
-    public List<QuestionTypeLimitsInterface> getQuestionTypeLimits() {
-        return questionTypeLimits;
-    }
-
-    @Override
-    public IssueStandardInterface setQuestionTypeLimits(List<QuestionTypeLimitsInterface> questionTypeLimits) {
-        this.questionTypeLimits = questionTypeLimits;
+    public IssueStandardInterface setIssueStandardQuestionTypeOptions(
+            List<IssueStandardQuestionTypeOptionInterface> issueStandardQuestionTypeOptions) {
+        this.issueStandardQuestionTypeOptions = issueStandardQuestionTypeOptions;
         return this;
     }
 
@@ -104,9 +93,8 @@ public class IssueStandard implements IssueStandardInterface {
                 + " id = " + getId()
                 + ", timeLimit = " + getTimeLimit()
                 + ", questionsNumber = " + getQuestionsNumber()
-                + ", highPriorityTopics = " + getHighPriorityTopics()
-                + ", lowPriorityTopics = " + getLowPriorityTopics()
-                + ", questionTypeLimits = " + getQuestionTypeLimits()
+                + ", topicsPriorities = " + getIssueStandardTopicPriorities()
+                + ", questionTypeOptions = " + getIssueStandardQuestionTypeOptions()
                 + ", subjectId=" + getSubjectId()
                 + " ]";
     }
