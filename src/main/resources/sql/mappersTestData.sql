@@ -64,35 +64,35 @@ CREATE TABLE issue_standard (
 CREATE TYPE PRIORITY AS ENUM ('LOW', 'HIGH');
 
 CREATE TABLE topic_priorities (
-  id              SERIAL      NOT NULL,
-  topic_id        INTEGER     NOT NULL,
-  topic_priority  PRIORITY    NOT NULL,
-  is_id           INTEGER     NOT NULL,
+  id                   SERIAL      NOT NULL,
+  topic_id             INTEGER     NOT NULL,
+  topic_priority       PRIORITY    NOT NULL,
+  issue_standard_id    INTEGER     NOT NULL,
     PRIMARY KEY (id),
-    UNIQUE (topic_id, is_id),
+    UNIQUE (topic_id, issue_standard_id),
     FOREIGN KEY (topic_id)
         REFERENCES topics (id)
         ON DELETE CASCADE,
-    FOREIGN KEY (is_id)
+    FOREIGN KEY (issue_standard_id)
         REFERENCES issue_standard (id)
         ON DELETE CASCADE
 );
 
 CREATE TABLE question_type_options (
-  id                SERIAL      NOT NULL,
-  question_type_id  INTEGER     NOT NULL,
-  min_number        INTEGER,
-  max_number        INTEGER,
-  time_limit        INTEGER,
-  is_id             INTEGER     NOT NULL,
+  id                   SERIAL      NOT NULL,
+  question_type_id     INTEGER     NOT NULL,
+  min_number           INTEGER,
+  max_number           INTEGER,
+  time_limit           INTEGER,
+  issue_standard_id    INTEGER     NOT NULL,
     CONSTRAINT positiveness CHECK (min_number >= 0 AND max_number > 0 AND time_limit > 0),
     CONSTRAINT check_limits CHECK (max_number >= min_number),
     PRIMARY KEY (id),
-    UNIQUE (question_type_id, is_id),
+    UNIQUE (question_type_id, issue_standard_id),
     FOREIGN KEY (question_type_id)
         REFERENCES question_types (id)
         ON DELETE CASCADE,
-    FOREIGN KEY (is_id)
+    FOREIGN KEY (issue_standard_id)
         REFERENCES issue_standard (id)
         ON DELETE CASCADE
 );
@@ -119,12 +119,12 @@ INSERT INTO issue_standard (time_limit, questions_number, subject_id) VALUES
   (300, 30, 1),
   (NULL, 15, 3);
 
-INSERT INTO topic_priorities (topic_id, topic_priority, is_id) VALUES
+INSERT INTO topic_priorities (topic_id, topic_priority, issue_standard_id) VALUES
   (1, 'HIGH', 1),
   (2, 'LOW', 1),
   (3, 'HIGH', 2);
 
-INSERT INTO question_type_options (question_type_id, min_number, max_number, time_limit, is_id) VALUES
+INSERT INTO question_type_options (question_type_id, min_number, max_number, time_limit, issue_standard_id) VALUES
   (1, 1, NULL, NULL, 1),
   (2, NULL, 5, NULL, 1),
   (3, 5, 10, NULL, 1),

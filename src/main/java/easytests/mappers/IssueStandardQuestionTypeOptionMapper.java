@@ -19,7 +19,7 @@ public interface IssueStandardQuestionTypeOptionMapper {
             @Result(property = "minQuestions", column = "min_number"),
             @Result(property = "maxQuestions", column = "max_number"),
             @Result(property = "timeLimit", column = "time_limit"),
-            @Result(property = "issueStandardId", column = "is_id")
+            @Result(property = "issueStandardId", column = "issue_standard_id")
         })
     @Select("SELECT * FROM question_type_options")
     List<IssueStandardQuestionTypeOption> findAll();
@@ -28,11 +28,12 @@ public interface IssueStandardQuestionTypeOptionMapper {
     @ResultMap("IssueStandardQuestionTypeOption")
     IssueStandardQuestionTypeOption find(Integer id);
 
-    @Select("SELECT * FROM question_type_options WHERE is_id=#{issueStandardId}")
+    @Select("SELECT * FROM question_type_options WHERE issue_standard_id=#{issueStandardId}")
     @ResultMap("IssueStandardQuestionTypeOption")
     List<IssueStandardQuestionTypeOption> findByIssueStandardId(Integer issueStandardId);
 
-    @Insert("INSERT INTO question_type_options (question_type_id, min_number, max_number, time_limit, is_id)"
+    @Insert("INSERT INTO question_type_options"
+            + " (question_type_id, min_number, max_number, time_limit, issue_standard_id)"
             + " VALUES (#{questionTypeId}, #{minQuestions}, #{maxQuestions}, #{timeLimit}, #{issueStandardId}")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(IssueStandardQuestionTypeOptionInterface issueStandardQuestionTypeOption);
