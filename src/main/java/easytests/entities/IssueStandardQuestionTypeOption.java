@@ -3,7 +3,7 @@ package easytests.entities;
 /**
  * @author SingularityA
  */
-public class QuestionTypeLimits implements QuestionTypeLimitsInterface {
+public class IssueStandardQuestionTypeOption implements IssueStandardQuestionTypeOptionInterface {
 
     private Integer id;
 
@@ -23,7 +23,7 @@ public class QuestionTypeLimits implements QuestionTypeLimitsInterface {
     }
 
     @Override
-    public QuestionTypeLimitsInterface setId(Integer id) {
+    public IssueStandardQuestionTypeOptionInterface setId(Integer id) {
         this.id = id;
         return this;
     }
@@ -34,7 +34,7 @@ public class QuestionTypeLimits implements QuestionTypeLimitsInterface {
     }
 
     @Override
-    public QuestionTypeLimitsInterface setQuestionTypeId(Integer questionTypeId) {
+    public IssueStandardQuestionTypeOptionInterface setQuestionTypeId(Integer questionTypeId) {
         this.questionTypeId = questionTypeId;
         return this;
     }
@@ -45,7 +45,7 @@ public class QuestionTypeLimits implements QuestionTypeLimitsInterface {
     }
 
     @Override
-    public QuestionTypeLimitsInterface setMinQuestions(Integer minQuestions) {
+    public IssueStandardQuestionTypeOptionInterface setMinQuestions(Integer minQuestions) {
         this.minQuestions = minQuestions;
         return this;
     }
@@ -56,7 +56,7 @@ public class QuestionTypeLimits implements QuestionTypeLimitsInterface {
     }
 
     @Override
-    public QuestionTypeLimitsInterface setMaxQuestions(Integer maxQuestions) {
+    public IssueStandardQuestionTypeOptionInterface setMaxQuestions(Integer maxQuestions) {
         this.maxQuestions = maxQuestions;
         return this;
     }
@@ -67,7 +67,7 @@ public class QuestionTypeLimits implements QuestionTypeLimitsInterface {
     }
 
     @Override
-    public QuestionTypeLimitsInterface setTimeLimit(Integer timeLimit) {
+    public IssueStandardQuestionTypeOptionInterface setTimeLimit(Integer timeLimit) {
         this.timeLimit = timeLimit;
         return this;
     }
@@ -78,20 +78,20 @@ public class QuestionTypeLimits implements QuestionTypeLimitsInterface {
     }
 
     @Override
-    public QuestionTypeLimitsInterface setIssueStandardId(Integer issueStandardId) {
+    public IssueStandardQuestionTypeOptionInterface setIssueStandardId(Integer issueStandardId) {
         this.issueStandardId = issueStandardId;
         return this;
     }
 
     @Override
     public String toString() {
-       return "QuestionTypeLimits : ["
-               + " id = " + getId()
-               + ", typeId = " + getQuestionTypeId()
-               + ", minQuestions = " + getMinQuestions()
-               + ", maxQuestions = " + getMaxQuestions()
-               + ", timeLimit = " + getTimeLimit()
-               + ", iSId = " + getIssueStandardId()
-               + " ]";
+        return "QuestionTypeOption : ["
+                + " id = " + getId()
+                + ", typeId = " + getQuestionTypeId()
+                + ", minQuestions = " + getMinQuestions()
+                + ", maxQuestions = " + getMaxQuestions()
+                + ", timeLimit = " + getTimeLimit()
+                + ", issueStandardId = " + getIssueStandardId()
+                + " ]";
     }
 }
