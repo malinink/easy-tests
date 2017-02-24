@@ -18,10 +18,10 @@ public interface IssueStandardMapper {
             @Result(property = "timeLimit", column = "time_limit"),
             @Result(property = "questionsNumber", column = "questions_number"),
 
-            @Result(property = "topicPriorities", column = "is_id", javaType = List.class,
+            @Result(property = "issueStandardTopicPriorities", column = "id", javaType = List.class,
             many = @Many(select = "easytests.mappers.IssueStandardTopicPriorityMapper.findByIssueStandardId")),
 
-            @Result(property = "issueStandardQuestionTypeOptions", column = "is_id", javaType = List.class,
+            @Result(property = "issueStandardQuestionTypeOptions", column = "id", javaType = List.class,
             many = @Many(select = "easytests.mappers.IssueStandardQuestionTypeOptionMapper.findByIssueStandardId")),
 
             @Result(property = "subjectId", column = "subject_id")
