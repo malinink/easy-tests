@@ -6,7 +6,7 @@ import java.util.List;
  * @author loriens
  */
 
-public class Topic {
+public class Topic implements TopicInterface {
     private Integer id;
 
     private String name;
