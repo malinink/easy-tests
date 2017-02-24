@@ -12,7 +12,7 @@ public class Topic implements TopicInterface {
 
     private String name;
 
-    private List<Question> questions;
+    private Integer questions_id;
 
     @Override
     public Integer getId() {
@@ -30,11 +30,11 @@ public class Topic implements TopicInterface {
 
     @Override
     public List<Question> getQuestions() {
-        return questions;
+        // Для метода нужна реализация класса Question
     }
 
     public void addQuestion(Question question) {
-        questions.add(question);
+        // Для метода нужна реализация класса Question
     }
 
 }
