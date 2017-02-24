@@ -1,8 +1,8 @@
 package easytests.controllers;
 
-import easytests.entities.User;
-import easytests.mappers.UsersMapper;
-import java.util.List;
+import easytests.entities.UserInterface;
+import easytests.services.UsersService;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UsersController {
 
     @Autowired
-    private UsersMapper usersMapper;
+    private UsersService usersService;
 
     @RequestMapping("/users")
     public String list(Model model) {
-        final List<User> users = this.usersMapper.readAll();
+        final List<UserInterface> users = this.usersService.findAll();
         model.addAttribute("users", users);
         return "users/list";
     }
