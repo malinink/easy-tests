@@ -7,6 +7,7 @@ import java.util.List;
  */
 
 public class Topic implements TopicInterface {
+
     private Integer id;
 
     private String name;
@@ -35,4 +36,5 @@ public class Topic implements TopicInterface {
     public void addQuestion(Question question) {
         questions.add(question);
     }
+
 }
