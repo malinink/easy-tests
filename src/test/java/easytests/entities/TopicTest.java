@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * @author loriens  zorigto
+ * @author loriens
  */
 public class TopicTest {
 
@@ -15,5 +15,5 @@ public class TopicTest {
         testTopic.setName("test topic");
         assertEquals("test topic", testTopic.getName());
     }
-    
+
 }
