@@ -1,5 +1,6 @@
 package easytests.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +31,8 @@ public class Topic implements TopicInterface {
 
     @Override
     public List<Question> getQuestions() {
-        // Для метода нужна реализация класса Question
+        List<Question> questions = new ArrayList<Question>();
+        return questions;
     }
 
     public void addQuestion(Question question) {
