@@ -7,6 +7,7 @@
 -- DROP TABLES
 ----------------------
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS subjects;
 
 
 ----------------------
@@ -21,6 +22,13 @@ CREATE TABLE users (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE subjects (
+  id        SERIAL        NOT NULL,
+  name      VARCHAR(255)  NOT NULL,
+  user_id   INTEGER       NOT NULL,
+  is_id     INTEGER       NOT NULL,
+  PRIMARY KEY (id)
+);
 
 ----------------------
 -- INSERT DATA
@@ -31,3 +39,7 @@ INSERT INTO users (first_name, last_name, surname) VALUES
   ('FirstName2', 'LastName2', 'Surname2'),
   ('FirstName3', 'LastName3', 'Surname3');
 
+INSERT INTO subjects (name, user_id, is_id) VALUES
+  ('test1', 1, 1),
+  ('test2', 2, 1),
+  ('test3', 3, 1);
