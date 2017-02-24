@@ -1,14 +1,12 @@
 package easytests.entities;
 
-import easytests.entities.topic.CommonFieldsInterface;
-
 import java.util.List;
 
 /**
  * @author loriens
  */
 
-public class Topic implements CommonFieldsInterface {
+public class Topic {
     private Integer id;
 
     private String name;
