@@ -28,8 +28,7 @@ public class QuestionsService {
     public void save(QuestionInterface question) {
         if (question.getId() == null) {
             this.usersMapper.insert(question);
-        }
-        else {
+        } else {
             this.usersMapper.update(question);
         }
     }
