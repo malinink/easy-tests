@@ -16,7 +16,6 @@ public interface IssueStandardTopicPriorityMapper {
         value = {
             @Result(property = "id", column = "id"),
             @Result(property = "topicId", column = "topic_id"),
-                // TODO: javaType for Enum (Priority)
             @Result(property = "priority", column = "priority"),
             @Result(property = "issueStandardId", column = "issue_standard_id")
         })
