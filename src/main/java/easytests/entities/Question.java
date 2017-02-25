@@ -15,7 +15,7 @@ public class Question implements QuestionInterface {
 
     private Integer topicId;
 
-    List<AnswerInterface> answers;
+    private List<AnswerInterface> answers;
 
     @Override
     public Integer getId() {
