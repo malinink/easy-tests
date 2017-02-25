@@ -12,9 +12,6 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface QuestionsMapper {
 
-    @Select("SELECT id, text, is_right, question_id FROM answers WHERE question_id = #{id}")
-    List<Answer> findAnswers(Integer id);
-
     @Results(
             id = "Question",
             value = {
@@ -22,28 +19,19 @@ public interface QuestionsMapper {
                     @Result(property = "text", column = "text"),
                     @Result(property = "type", column = "type"),
                     @Result(property = "topicId", column = "topic_id"),
-                    //@Result(property = "answers", javaType=List.class, column = "id", many = @Many(select = "findAnswers"))
             })
     @Select("SELECT id, text, type, topic_id FROM questions")
     List<Question> findAll();
 
-   @Results(
-            value = {
-                    @Result(property = "id", column = "id"),
-                    @Result(property = "text", column = "text"),
-                    @Result(property = "type", column = "type"),
-                    @Result(property = "topicId", column = "topic_id"),
-                    @Result(property = "answers", javaType=List.class, column = "id", many = @Many(select = "findAnswers"))
-            })
     @Select("SELECT id, text, type, topic_id FROM questions where id=#{id}")
     @ResultMap("Question")
     Question find(Integer id);
 
-    @Insert("INSERT INTO questions (text, type, topicId) VALUES(#{text}, #{type}, #{topicId})")
+    @Insert("INSERT INTO questions (text, type, topic_id) VALUES(#{text}, #{type}, #{topicId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(QuestionInterface question);
 
-    @Update("UPDATE questions SET text=#{text}, type=#{type}, topicId=#{topicId} WHERE id=#{id}")
+    @Update("UPDATE questions SET text=#{text}, type=#{type}, topic_id=#{topicId} WHERE id=#{id}")
     void update(QuestionInterface question);
 
     @Delete("DELETE FROM questions WHERE id=#{id}")
