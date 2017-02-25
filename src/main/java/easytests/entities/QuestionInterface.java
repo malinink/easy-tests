@@ -21,7 +21,7 @@ public interface QuestionInterface extends EntityInterface {
 
     QuestionInterface setTopicId(Integer topicId);
 
-    List<AnswerInterface> getAnswers ();
+    List<AnswerInterface> getAnswers();
 
-    QuestionInterface setAnswers (List<AnswerInterface> answers);
+    QuestionInterface setAnswers(List<AnswerInterface> answers);
 }
