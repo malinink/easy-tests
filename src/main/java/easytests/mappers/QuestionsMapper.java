@@ -17,7 +17,7 @@ public interface QuestionsMapper {
                     @Result(property = "id", column = "id"),
                     @Result(property = "text", column = "text"),
                     @Result(property = "type", column = "type"),
-                    @Result(property = "topicId", column = "topic_id"),
+                    @Result(property = "topicId", column = "topic_id")
             })
     @Select("SELECT id, text, type, topic_id FROM questions")
     List<Question> findAll();
