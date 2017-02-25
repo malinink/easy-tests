@@ -1,6 +1,5 @@
 package easytests.mappers;
 
-import easytests.entities.Answer;
 import easytests.entities.Question;
 import easytests.entities.QuestionInterface;
 import java.util.List;
