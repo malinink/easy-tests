@@ -6,6 +6,8 @@ import easytests.mappers.TopicsMapper;
 import easytests.mappers.UsersMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,10 +23,10 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest
 public class TopicsServiceTest {
 
-    @MockBean
+    @Mock
     private TopicsMapper topicsMapper;
 
-    @Autowired
+    @InjectMocks
     private TopicsService topicsService;
 
     @Test
