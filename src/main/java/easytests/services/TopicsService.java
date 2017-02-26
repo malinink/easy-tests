@@ -2,10 +2,11 @@ package easytests.services;
 
 import easytests.entities.*;
 import easytests.mappers.TopicsMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  * @author loriens
@@ -35,7 +36,6 @@ public class TopicsService {
     public void delete(TopicInterface topic) {
         this.topicsMapper.delete(topic);
     }
-
 
     private List<TopicInterface> map(List<Topic> topicsList) {
         final List<TopicInterface> resultTopicList = new ArrayList(topicsList.size());

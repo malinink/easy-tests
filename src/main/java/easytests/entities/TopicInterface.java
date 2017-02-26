@@ -7,10 +7,10 @@ import java.util.List;
  */
 public interface TopicInterface extends EntityInterface {
 
-    public  Integer getId();
+    Integer getId();
 
-    public  String getName();
+    String getName();
 
-    public  List<QuestionInterface> getQuestions();
+    List<QuestionInterface> getQuestions();
 
 }
