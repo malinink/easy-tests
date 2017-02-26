@@ -33,7 +33,7 @@ public class SubjectsMapperTest {
         final SubjectInterface subject = this.subjectsMapper.find(1);
 
         Assert.assertEquals((long) 1, (long) subject.getId());
-        Assert.assertEquals("test", subject.getName());
+        Assert.assertEquals("test1", subject.getName());
     }
 
     @Test
@@ -41,6 +41,8 @@ public class SubjectsMapperTest {
         final Subject testSubject = new Subject();
 
         testSubject.setName("test");
+        testSubject.setUserId(1);
+
         subjectsMapper.insert(testSubject);
 
         final Subject readSubject = subjectsMapper.find(testSubject.getId());
@@ -50,7 +52,7 @@ public class SubjectsMapperTest {
     @Test
     public void testUpdate() throws Exception {
 
-        final SubjectInterface subject = this.subjectsMapper.find(1);
+        final SubjectInterface subject = this.subjectsMapper.find(2);
         subject.setName("updated");
         this.subjectsMapper.update(subject);
 
