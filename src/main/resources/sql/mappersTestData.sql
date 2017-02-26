@@ -1,7 +1,8 @@
 ----------------------
 -- DROP FOREIGN KEYS
 ----------------------
-
+-- ALTER TABLE question_type_options DROP CONSTRAINT question_type_options_issue_standard_id_fkey;
+-- ALTER TABLE topic_priorities DROP CONSTRAINT topic_priorities_issue_standard_id_fkey;
 
 ----------------------
 -- DROP TABLES
@@ -30,7 +31,8 @@ CREATE TABLE issue_standard (
   questions_number  INTEGER,
   subject_id        INTEGER  NOT NULL,
     CONSTRAINT positiveness CHECK (questions_number > 0 AND time_limit > 0),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE (subject_id)
 );
 
 CREATE TYPE TOPIC_PRIORITY AS ENUM ('LOW', 'HIGH');
@@ -41,7 +43,10 @@ CREATE TABLE topic_priorities (
   priority           TOPIC_PRIORITY  NOT NULL,
   issue_standard_id  INTEGER         NOT NULL,
     PRIMARY KEY (id),
-    UNIQUE (topic_id, issue_standard_id)
+    UNIQUE (topic_id, issue_standard_id),
+    FOREIGN KEY (issue_standard_id)
+        REFERENCES issue_standard (id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE question_type_options (
@@ -54,7 +59,10 @@ CREATE TABLE question_type_options (
     CONSTRAINT positiveness CHECK (min_number >= 0 AND max_number > 0 AND time_limit > 0),
     CONSTRAINT check_limits CHECK (max_number >= min_number),
     PRIMARY KEY (id),
-    UNIQUE (question_type_id, issue_standard_id)
+    UNIQUE (question_type_id, issue_standard_id),
+    FOREIGN KEY (issue_standard_id)
+        REFERENCES issue_standard (id)
+        ON DELETE CASCADE
 );
 
 ----------------------
