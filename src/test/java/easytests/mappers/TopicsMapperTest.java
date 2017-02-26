@@ -30,7 +30,7 @@ public class TopicsMapperTest {
         final TopicInterface topic = this.topicsMapper.find(1);
 
         Assert.assertEquals((long) 1, (long) topic.getId());
-        Assert.assertEquals("Web", topic.getName());
+        Assert.assertEquals("Theme1", topic.getName());
     }
 
     @Test
