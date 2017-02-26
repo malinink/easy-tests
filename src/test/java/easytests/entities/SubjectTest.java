@@ -23,7 +23,7 @@ public class SubjectTest {
     public void testTopics() throws Exception {
         final Subject testSubject = new Subject();
 
-        final List<TopicInterface> testTopics = new ArrayList<TopicInterface>();
+        final List<TopicInterface> testTopics = new ArrayList<>();
         testSubject.setTopics(testTopics);
 
         assertEquals(testTopics, testSubject.getTopics());
@@ -35,15 +35,4 @@ public class SubjectTest {
         testSubject.setUserId(1);
         assertEquals((Integer)1, testSubject.getUserId());
     }
-
-    @Test
-    public void testIssueStandard() throws Exception {
-        final Subject testSubject = new Subject();
-
-        final IssueStandard testIssueStandard = new IssueStandard();
-        testSubject.setIssueStandard(testIssueStandard);
-
-        assertEquals(testIssueStandard, testSubject.getIssueStandard());
-    }
-
 }
