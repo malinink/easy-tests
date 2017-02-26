@@ -18,22 +18,16 @@ import org.springframework.test.context.junit4.*;
 @SpringBootTest
 public class SubjectsServiceTest {
 
-    @MockBean
-    private SubjectsMapper subjectsMapper;
-
-    @MockBean
-    private TopicsMapper topicsMapper;
-
-    @MockBean
-    private IssueStandardService issueStandardService;
-
     @Autowired
     private SubjectsService subjectsService;
+
+    @MockBean
+    private SubjectsMapper subjectsMapper;
 
     @Test
     public void find() {
         this.subjectsService.find(1);
-        verify(this.subjectsService, times(1)).find(1);
+        verify(this.subjectsMapper, times(1)).find(1);
     }
 
     @Test
@@ -45,7 +39,6 @@ public class SubjectsServiceTest {
         this.subjectsService.save(subject);
 
         verify(this.subjectsMapper, times(1)).insert(subject);
-        verify(this.issueStandardService, times(1)).save(subject.issueStandard);
 
     }
 
@@ -56,31 +49,10 @@ public class SubjectsServiceTest {
 
         subject.setId(1);
         subject.setName("updated");
-        subject.getIssueStandard().setId(2);
 
         this.subjectsService.save(subject);
 
         verify(this.subjectsMapper, times(1)).update(subject);
-        verify(this.issueStandardService, times(1)).save(subject.issueStandard);
-
-    }
-
-    @Test
-    public void saveWithTopicsEntityTest() {
-
-        final Subject subject = subjectsMapper.find(1);
-
-        subject.setName("updated");
-
-        Topic topic = new Topic();
-
-        subject.getTopics().get(1).setName("test");
-
-        this.subjectsService.save(subject);
-
-        verify(this.subjectsMapper, times(2)).update(subject);
-        verify(this.topicsMapper, times(1)).insert(subject);
-        verify(this.issueStandardService, times(1)).save(subject.issueStandard);
 
     }
 
