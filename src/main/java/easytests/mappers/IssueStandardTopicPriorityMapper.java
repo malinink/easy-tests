@@ -31,7 +31,7 @@ public interface IssueStandardTopicPriorityMapper {
     List<IssueStandardTopicPriority> findByIssueStandardId(Integer issueStandardId);
 
     @Insert("INSERT INTO topic_priorities (topic_id, priority, issue_standard_id)"
-            + " VALUES (#{topicId}, #{priority}, #{issueStandardId}")
+            + " VALUES (#{topicId}, #{priority}, #{issueStandardId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(IssueStandardTopicPriorityInterface issueStandardTopicPriority);
 

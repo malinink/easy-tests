@@ -38,7 +38,7 @@ public interface IssueStandardMapper {
     IssueStandard findBySubjectId(Integer subjectId);
 
     @Insert("INSERT INTO issue_standard (time_limit, questions_number, subject_id)"
-            + " VALUES (#{timeLimit}, #{questionsNumber}, #{subjectId}")
+            + " VALUES (#{timeLimit}, #{questionsNumber}, #{subjectId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(IssueStandardInterface issueStandard);
 

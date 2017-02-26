@@ -34,7 +34,7 @@ public interface IssueStandardQuestionTypeOptionMapper {
 
     @Insert("INSERT INTO question_type_options"
             + " (question_type_id, min_number, max_number, time_limit, issue_standard_id)"
-            + " VALUES (#{questionTypeId}, #{minQuestions}, #{maxQuestions}, #{timeLimit}, #{issueStandardId}")
+            + " VALUES (#{questionTypeId}, #{minQuestions}, #{maxQuestions}, #{timeLimit}, #{issueStandardId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(IssueStandardQuestionTypeOptionInterface issueStandardQuestionTypeOption);
 
