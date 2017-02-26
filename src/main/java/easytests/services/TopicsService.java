@@ -37,9 +37,9 @@ public class TopicsService {
     }
 
 
-    private List<TopicInterface> map(List<Topic> topictList) {
-        final List<TopicInterface> resultTopicList = new ArrayList(topictList.size());
-        for (Topic topic: topictList) {
+    private List<TopicInterface> map(List<Topic> topicsList) {
+        final List<TopicInterface> resultTopicList = new ArrayList(topicsList.size());
+        for (Topic topic: topicsList) {
             resultTopicList.add(topic);
         }
         return resultTopicList;
