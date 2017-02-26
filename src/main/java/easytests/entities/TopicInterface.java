@@ -11,6 +11,6 @@ public interface TopicInterface extends EntityInterface {
 
     public  String getName();
 
-    public  List<Question> getQuestions();
+    public  List<QuestionInterface> getQuestions();
 
 }

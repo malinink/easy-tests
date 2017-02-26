@@ -34,12 +34,12 @@ public class Topic implements TopicInterface {
     }
 
     @Override
-    public List<Question> getQuestions() {
-        List<Question> questions = new ArrayList<Question>();
+    public List<QuestionInterface> getQuestions() {
+        List<QuestionInterface> questions = new ArrayList<QuestionInterface>();
         return questions;
     }
 
-    public void addQuestion(Question question) {
+    public void addQuestion(QuestionInterface question) {
         // Для метода нужна реализация класса Question
     }
 
