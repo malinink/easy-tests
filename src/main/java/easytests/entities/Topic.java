@@ -35,8 +35,7 @@ public class Topic implements TopicInterface {
 
     @Override
     public List<QuestionInterface> getQuestions() {
-        List<QuestionInterface> questions = new ArrayList<QuestionInterface>();
-        return questions;
+        return new ArrayList<QuestionInterface>();
     }
 
     public void setQuestions(QuestionInterface question) {
