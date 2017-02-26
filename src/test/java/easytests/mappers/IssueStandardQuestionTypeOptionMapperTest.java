@@ -24,7 +24,7 @@ import java.util.List;
 @TestPropertySource(locations = {"classpath:database.test.properties"})
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class IssueStandardQuestionTypeOptionTest {
+public class IssueStandardQuestionTypeOptionMapperTest {
 
     @Autowired
     private IssueStandardQuestionTypeOptionMapper questionTypeOptionMapper;
@@ -55,6 +55,32 @@ public class IssueStandardQuestionTypeOptionTest {
         Assert.assertEquals((Integer) 10, questionTypeOption.getMaxQuestions());
         Assert.assertEquals(null, questionTypeOption.getTimeLimit());
         Assert.assertEquals((Integer) 1, questionTypeOption.getIssueStandardId());
+    }
+
+    @Test
+    public void insertTest() {
+        IssueStandardQuestionTypeOptionInterface questionTypeOption = new IssueStandardQuestionTypeOption();
+        questionTypeOption.setQuestionTypeId(2).setMinQuestions(5).setMaxQuestions(10).setIssueStandardId(2);
+        this.questionTypeOptionMapper.insert(questionTypeOption);
+
+        questionTypeOption = this.questionTypeOptionMapper.find(6);
+        Assert.assertNotNull(questionTypeOption);
+        Assert.assertEquals((Integer) 2, questionTypeOption.getQuestionTypeId());
+        Assert.assertEquals((Integer) 5, questionTypeOption.getMinQuestions());
+        Assert.assertEquals((Integer) 10, questionTypeOption.getMaxQuestions());
+        Assert.assertEquals((Integer) 2, questionTypeOption.getIssueStandardId());
+    }
+
+    @Test
+    public void updateTest() {
+        IssueStandardQuestionTypeOptionInterface questionTypeOption = this.questionTypeOptionMapper.find(5);
+        Assert.assertNotNull(questionTypeOption);
+        questionTypeOption.setMinQuestions(1).setMaxQuestions(2).setTimeLimit(600);
+        this.questionTypeOptionMapper.update(questionTypeOption);
+        questionTypeOption = this.questionTypeOptionMapper.find(5);
+        Assert.assertEquals((Integer) 1, questionTypeOption.getMinQuestions());
+        Assert.assertEquals((Integer) 2, questionTypeOption.getMaxQuestions());
+        Assert.assertEquals((Integer) 600, questionTypeOption.getTimeLimit());
     }
 
     @Test
