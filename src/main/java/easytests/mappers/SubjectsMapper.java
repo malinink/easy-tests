@@ -17,11 +17,7 @@ public interface SubjectsMapper {
             value = {
                     @Result(property = "id", column = "id"),
                     @Result(property = "name", column = "name"),
-                    @Result(property = "userId", column = "user_id"),
-                    @Result(property = "topics", column = "id", many =
-                    @Many(select = "easytests.mappers.TopicsMapper.find")),
-                    @Result(property = "issueStandard", column = "is_id", one =
-                    @One(select = "easytests.mappers.IssueStandardsMapper.find"))
+                    @Result(property = "userId", column = "user_id")
             })
     Subject find(Integer subjectId);
 
