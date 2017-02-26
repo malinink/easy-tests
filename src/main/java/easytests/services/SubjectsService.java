@@ -17,12 +17,6 @@ public class SubjectsService {
     @Autowired
     private SubjectsMapper subjectsMapper;
 
-    @Autowired
-    private TopicsMapper topicsMapper;
-
-    @Autowired
-    private IssueStandardsService issueStandardsService;
-
     public List<SubjectInterface> findAll() {
         return map(subjectsMapper.findAll());
     }
@@ -34,39 +28,10 @@ public class SubjectsService {
     public void save(SubjectInterface subject) {
 
         if (subject.getId() == null) {
-
             this.subjectsMapper.insert(subject);
-
-            for (TopicInterface topic: subject.getTopics()) {
-
-                this.topicsMapper.insert(topic);
-
-            }
-
         } else {
-
             this.subjectsMapper.update(subject);
-
-            for (TopicInterface topic: subject.getTopics()) {
-
-                if (topic.getId() == null) {
-
-                    topicsMapper.insert(topic);
-
-                } else {
-                    if (topic.getName() != null) {
-                        topicsMapper.update(topic);
-                    } else {
-                        topicsMapper.delete(topic);
-                    }
-
-                }
-
-            }
-
         }
-
-        this.issueStandardsService.save(subject.issueStandard);
 
     }
 
