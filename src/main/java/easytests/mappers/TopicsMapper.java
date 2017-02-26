@@ -17,7 +17,7 @@ public interface TopicsMapper {
             value = {
                     @Result(property = "id", column = "id"),
                     @Result(property = "name", column = "name"),
-                    @Result(property = "questions_id", column = "questions_id")
+                    @Result(property = "questionsId", column = "questions_id")
             })
     @Select("SELECT * FROM topics")
     List<Topic> findAll();
@@ -26,11 +26,11 @@ public interface TopicsMapper {
     @ResultMap("Topic")
     Topic find(Integer id);
 
-    @Insert("INSERT INTO topics (id, name, questions_id) VALUES(#{id}, #{name}, #{questions_id})")
+    @Insert("INSERT INTO topics (id, name, questions_id) VALUES(#{id}, #{name}, #{questionsId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(TopicInterface topic);
 
-    @Update("UPDATE topics SET name=#{name}, questions_id=#{questions_id} WHERE id=#{id}")
+    @Update("UPDATE topics SET name=#{name}, questions_id=#{questionsId} WHERE id=#{id}")
     void update(TopicInterface topic);
 
     @Delete("DELETE FROM topics WHERE id=#{id}")

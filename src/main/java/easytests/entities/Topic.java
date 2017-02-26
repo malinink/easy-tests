@@ -13,7 +13,7 @@ public class Topic implements TopicInterface {
 
     private String name;
 
-    private Integer questions_id;
+    private Integer questionsId;
 
     @Override
     public Integer getId() {
@@ -39,7 +39,7 @@ public class Topic implements TopicInterface {
         return questions;
     }
 
-    public void addQuestion(QuestionInterface question) {
+    public void setQuestions(QuestionInterface question) {
         // Для метода нужна реализация класса Question
     }
 
