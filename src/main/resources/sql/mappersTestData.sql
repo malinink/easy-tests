@@ -42,7 +42,7 @@ INSERT INTO users (first_name, last_name, surname) VALUES
   ('FirstName3', 'LastName3', 'Surname3');
 
 INSERT INTO topics (name, question_id) VALUES
-  ('Web', '1'),
-  ('Math', '2'),
-  ('Database', '3');
+  ('Theme1', '1'),
+  ('Theme2', '2'),
+  ('Theme3', '3');
 
