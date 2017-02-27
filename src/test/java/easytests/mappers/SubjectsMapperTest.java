@@ -39,6 +39,14 @@ public class SubjectsMapperTest {
         Assert.assertEquals("test1", subject.getName());
     }
 
+    @Test
+    public void testFindAll() throws Exception {
+        final List<SubjectInterface> subjects = this.subjectsMapper.findAll();
+
+        Assert.assertNotNull(subjects);
+        Assert.assertEquals((long) 3, (long) subjects.size());
+    }
+
 
     @Test
     public void testUserNotNull() throws Exception {
