@@ -40,6 +40,6 @@ INSERT INTO users (first_name, last_name, surname) VALUES
   ('FirstName3', 'LastName3', 'Surname3');
 
 INSERT INTO subjects (name, user_id, issue_standard_id) VALUES
-  ('test1', 1, 1),
+  ('test1', 2, 1),
   ('test2', 2, 1),
   ('test3', 3, 1);
