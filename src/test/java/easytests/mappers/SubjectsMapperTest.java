@@ -16,6 +16,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import java.util.List;
+
 /**
  * @author vkpankov
  */
@@ -34,6 +36,18 @@ public class SubjectsMapperTest {
 
         Assert.assertEquals((long) 1, (long) subject.getId());
         Assert.assertEquals("test1", subject.getName());
+    }
+
+    @Test
+    public void testFindByUser() throws Exception {
+
+        UserInterface user = new User();
+        user.setId(3);
+
+        List<SubjectInterface> subjects = this.subjectsMapper.findByUser(user);
+        Assert.assertEquals(1,subjects.size());
+        Assert.assertNotNull(subjects.get(0));
+        Assert.assertEquals("test3",subjects.get(0).getName());
     }
 
     @Test
