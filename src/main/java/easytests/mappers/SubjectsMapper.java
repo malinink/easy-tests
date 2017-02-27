@@ -2,6 +2,7 @@ package easytests.mappers;
 
 import easytests.entities.Subject;
 import easytests.entities.SubjectInterface;
+import easytests.entities.UserInterface;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 
@@ -24,6 +25,10 @@ public interface SubjectsMapper {
     @Select("SELECT * FROM subjects")
     @ResultMap("Subject")
     List<Subject> findAll();
+
+    @Select("SELECT * FROM subjects WHERE user_id=#{id}")
+    @ResultMap("Subject")
+    List<SubjectInterface> findByUser(UserInterface user);
 
     @Insert("INSERT INTO subjects (name,user_id) VALUES (#{name},#{userId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
