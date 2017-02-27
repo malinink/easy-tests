@@ -25,6 +25,10 @@ public class SubjectsService {
         return subjectsMapper.find(id);
     }
 
+    public List<SubjectInterface> findByUser(UserInterface user) {
+        return subjectsMapper.findByUser(user);
+    }
+
     public void save(SubjectInterface subject) {
 
         if (subject.getId() == null) {
