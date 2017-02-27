@@ -1,6 +1,6 @@
 package easytests.entities;
 
-
+import java.util.List;
 
 /**
  * @author malinink
@@ -17,7 +17,7 @@ public interface IssueInterface extends IssueStandardInterface {
 
     IssueInterface setAuthorId(Integer authorId);
 
-    //List<Quiz> getQuizzes();
+    List<QuizInterface> getQuizzes();
 
-    //IssueInterface setQuizzes(List<Quiz> quizzes);
+    IssueInterface setQuizzes(List<QuizInterface> quizzes);
 }

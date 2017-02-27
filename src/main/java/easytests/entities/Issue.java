@@ -1,5 +1,7 @@
 package easytests.entities;
 
+import java.util.List;
+
 /**
  * @author fortyways
  */
@@ -11,7 +13,7 @@ public class Issue implements IssueInterface {
 
     private Integer authorId;
 
-    //private List<Quiz> quizzes;
+    private List<QuizInterface> quizzes;
 
     @Override
     public Integer getId() {
@@ -43,6 +45,17 @@ public class Issue implements IssueInterface {
     @Override
     public IssueInterface setAuthorId(Integer authorId) {
         this.authorId = authorId;
+        return this;
+    }
+
+    @Override
+    public List<QuizInterface> getQuizzes() {
+        return quizzes;
+    }
+
+    @Override
+    public IssueInterface setQuizzes(List<QuizInterface> quizzes) {
+        this.quizzes = quizzes;
         return this;
     }
 }
