@@ -2,6 +2,8 @@ package easytests.services;
 
 import easytests.entities.IssueStandardInterface;
 import easytests.entities.Subject;
+import easytests.entities.User;
+import easytests.entities.UserInterface;
 import easytests.mappers.SubjectsMapper;
 import org.junit.*;
 import org.junit.runner.*;
@@ -25,9 +27,20 @@ public class SubjectsServiceTest {
     private SubjectsMapper subjectsMapper;
 
     @Test
-    public void find() {
+    public void findTest() {
         this.subjectsService.find(1);
         verify(this.subjectsMapper, times(1)).find(1);
+    }
+
+    @Test
+    public void findByUserTest() {
+
+        final UserInterface user = new User();
+
+        user.setId(3);
+        this.subjectsService.findByUser(user);
+
+        verify(this.subjectsMapper, times(1)).findByUser(user);
     }
 
     @Test
