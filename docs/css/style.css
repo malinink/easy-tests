@@ -1,3 +1,16 @@
+#block {
+    display: inline-block;
+    padding: 32px 48px 0px 48px;
+    border: 1px solid #EEE;
+}
+label:after {
+    transition-property: all !important;
+    font-size: 0.8rem;
+    transform: none;
+}
+label:not(.active):after {
+    transform: translateY(-140%);
+}
 .hide-block {
     display: none;
 }

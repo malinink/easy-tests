@@ -1,3 +1,11 @@
+$.validator.setDefaults({
+    errorClass: 'invalid',
+    errorPlacement: function (error, element) {
+        element.next("label").attr("data-error", error.contents().text());
+    }
+});
+$('form').validate();
+
 formRecovery = document.getElementById("recovery-password");
 message = document.querySelector(".submit-message");
 
