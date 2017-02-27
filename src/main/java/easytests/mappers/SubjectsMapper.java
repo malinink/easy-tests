@@ -24,7 +24,7 @@ public interface SubjectsMapper {
 
     @Select("SELECT * FROM subjects")
     @ResultMap("Subject")
-    List<Subject> findAll();
+    List<SubjectInterface> findAll();
 
     @Select("SELECT * FROM subjects WHERE user_id=#{id}")
     @ResultMap("Subject")
