@@ -27,7 +27,7 @@ CREATE TABLE issues (
   name        VARCHAR(100)  NOT NULL,
   author_id   SERIAL        NOT NULL,
   PRIMARY KEY (id)
-)
+);
 
 
 ----------------------

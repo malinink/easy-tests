@@ -14,19 +14,18 @@ import org.apache.ibatis.annotations.*;
 public interface IssuesMapper {
 
     @Results(
+            id = "Issue",
         value = {
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "authorId", column = "author_id")
-            //,
-            //@Result(property="quizzes", javaType = List.class,
-            // column = "id", many = @Many(select = "easytests.mappers.QuizMapper.findByIssueId")
         })
 
-    @Select("SELECT * FROM issues")
+    @Select("SELECT id,name,author_id FROM issues")
     List<Issue> findAll();
 
-    @Select("SELECT * FROM issues WHERE id=#{id}")
+    @Select("SELECT id,name,author_id FROM issues WHERE id=#{id}")
+    @ResultMap("Issue")
     Issue find(Integer id);
 
     @Insert("INSERT INTO issues (name, author_id) VALUES(#{name}, #{authorId})")

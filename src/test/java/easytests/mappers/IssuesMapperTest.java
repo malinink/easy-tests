@@ -69,8 +69,8 @@ public class IssuesMapperTest {
         Issue testissue=new Issue();
         testissue.setId(2).setName("Name4").setAuthorId(14);
         this.issuesMapper.update(testissue);
-        Issue issue=this.issuesMapper.find(4);
-        Assert.assertEquals((long) 4, (long) issue.getId());
+        Issue issue=this.issuesMapper.find(2);
+        Assert.assertEquals((long) 2, (long) issue.getId());
         Assert.assertEquals("Name4", issue.getName());
         Assert.assertEquals((long)14, (long)issue.getAuthorId());
     }
