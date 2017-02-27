@@ -33,6 +33,12 @@ public class SubjectsServiceTest {
     }
 
     @Test
+    public void findAllTest() {
+        this.subjectsService.findAll();
+        verify(this.subjectsMapper, times(1)).findAll();
+    }
+
+    @Test
     public void findByUserTest() {
 
         final UserInterface user = new User();
