@@ -3,11 +3,11 @@ package easytests.mappers;
 import easytests.config.DatabaseConfig;
 import easytests.entities.Subject;
 import easytests.entities.SubjectInterface;
-import easytests.entities.User;
 import easytests.entities.UserInterface;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -30,6 +30,7 @@ public class SubjectsMapperTest {
     @Autowired
     private SubjectsMapper subjectsMapper;
 
+
     @Test
     public void testFind() throws Exception {
         final SubjectInterface subject = this.subjectsMapper.find(1);
@@ -41,8 +42,8 @@ public class SubjectsMapperTest {
     @Test
     public void testFindByUser() throws Exception {
 
-        UserInterface user = new User();
-        user.setId(3);
+        UserInterface user = Mockito.mock(UserInterface.class);
+        Mockito.when(user.getId()).thenReturn(3);
 
         List<SubjectInterface> subjects = this.subjectsMapper.findByUser(user);
         Assert.assertEquals(1,subjects.size());
