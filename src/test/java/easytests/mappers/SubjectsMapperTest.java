@@ -39,6 +39,19 @@ public class SubjectsMapperTest {
         Assert.assertEquals("test1", subject.getName());
     }
 
+
+    @Test
+    public void testUserNotNull() throws Exception {
+
+        UserInterface user = Mockito.mock(UserInterface.class);
+        Mockito.when(user.getId()).thenReturn(1);
+        List<SubjectInterface> subjects = this.subjectsMapper.findByUser(user);
+
+        Assert.assertNotNull(subjects);
+        Assert.assertEquals(0,subjects.size());
+    }
+
+
     @Test
     public void testFindByUser() throws Exception {
 
@@ -46,8 +59,8 @@ public class SubjectsMapperTest {
         Mockito.when(user.getId()).thenReturn(3);
 
         List<SubjectInterface> subjects = this.subjectsMapper.findByUser(user);
+
         Assert.assertEquals(1,subjects.size());
-        Assert.assertNotNull(subjects.get(0));
         Assert.assertEquals("test3",subjects.get(0).getName());
     }
 
