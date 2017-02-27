@@ -1,2 +1,4 @@
+application.properties
 database.properties
+database.test.properties
 migrations/environments/development.properties

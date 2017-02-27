@@ -11,3 +11,6 @@ label:after {
 label:not(.active):after {
     transform: translateY(-140%);
 }
+.hide-block {
+    display: none;
+}
