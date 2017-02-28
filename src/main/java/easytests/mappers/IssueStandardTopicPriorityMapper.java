@@ -1,5 +1,7 @@
 package easytests.mappers;
 
+import easytests.entities.IssueStandard;
+import easytests.entities.IssueStandardInterface;
 import easytests.entities.IssueStandardTopicPriority;
 import easytests.entities.IssueStandardTopicPriorityInterface;
 import java.util.List;
@@ -26,9 +28,9 @@ public interface IssueStandardTopicPriorityMapper {
     @ResultMap("IssueStandardTopicPriority")
     IssueStandardTopicPriority find(Integer id);
 
-    @Select("SELECT * FROM topic_priorities WHERE issue_standard_id=#{issueStandardId}")
+    @Select("SELECT * FROM topic_priorities WHERE issue_standard_id=#{id}")
     @ResultMap("IssueStandardTopicPriority")
-    List<IssueStandardTopicPriority> findByIssueStandardId(Integer issueStandardId);
+    List<IssueStandardTopicPriority> findByIssueStandard(IssueStandardInterface issueStandard);
 
     @Insert("INSERT INTO topic_priorities (topic_id, priority, issue_standard_id)"
             + " VALUES (#{topicId}, #{priority}, #{issueStandardId})")
