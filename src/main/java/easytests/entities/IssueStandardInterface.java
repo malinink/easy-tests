@@ -27,9 +27,9 @@ public interface IssueStandardInterface extends EntityInterface {
     IssueStandardInterface setIssueStandardQuestionTypeOptions(
             List<IssueStandardQuestionTypeOptionInterface> issueStandardQuestionTypeOptions);
 
-    Integer getSubjectId();
+    SubjectInterface getSubject();
 
-    IssueStandardInterface setSubjectId(Integer subjectId);
+    IssueStandardInterface setSubject(SubjectInterface subject);
 
     String toString();
 }

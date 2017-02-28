@@ -17,7 +17,7 @@ public class IssueStandard implements IssueStandardInterface {
 
     private List<IssueStandardQuestionTypeOptionInterface> issueStandardQuestionTypeOptions;
 
-    private Integer subjectId;
+    private SubjectInterface subject;
 
     @Override
     public Integer getId() {
@@ -77,13 +77,13 @@ public class IssueStandard implements IssueStandardInterface {
     }
 
     @Override
-    public Integer getSubjectId() {
-        return subjectId;
+    public SubjectInterface getSubject() {
+        return subject;
     }
 
     @Override
-    public IssueStandardInterface setSubjectId(Integer subjectId) {
-        this.subjectId = subjectId;
+    public IssueStandardInterface setSubject(SubjectInterface subject) {
+        this.subject = subject;
         return this;
     }
 
@@ -95,7 +95,7 @@ public class IssueStandard implements IssueStandardInterface {
                 + ", questionsNumber = " + getQuestionsNumber()
                 + ", topicsPriorities = " + getIssueStandardTopicPriorities()
                 + ", questionTypeOptions = " + getIssueStandardQuestionTypeOptions()
-                + ", subjectId=" + getSubjectId()
+                + ", subject=" + getSubject()
                 + " ]";
     }
 }
