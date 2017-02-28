@@ -3,6 +3,8 @@ package easytests.mappers;
 import easytests.entities.IssueStandard;
 import easytests.entities.IssueStandardInterface;
 import java.util.List;
+
+import easytests.entities.SubjectInterface;
 import org.apache.ibatis.annotations.*;
 
 /**
@@ -16,15 +18,7 @@ public interface IssueStandardMapper {
         value = {
             @Result(property = "id", column = "id"),
             @Result(property = "timeLimit", column = "time_limit"),
-            @Result(property = "questionsNumber", column = "questions_number"),
-
-            @Result(property = "issueStandardTopicPriorities", column = "id", javaType = List.class,
-            many = @Many(select = "easytests.mappers.IssueStandardTopicPriorityMapper.findByIssueStandardId")),
-
-            @Result(property = "issueStandardQuestionTypeOptions", column = "id", javaType = List.class,
-            many = @Many(select = "easytests.mappers.IssueStandardQuestionTypeOptionMapper.findByIssueStandardId")),
-
-            @Result(property = "subjectId", column = "subject_id")
+            @Result(property = "questionsNumber", column = "questions_number")
         })
     @Select("SELECT * FROM issue_standard")
     List<IssueStandard> findAll();
@@ -33,12 +27,12 @@ public interface IssueStandardMapper {
     @ResultMap("IssueStandard")
     IssueStandard find(Integer id);
 
-    @Select("SELECT * FROM issue_standard WHERE subject_id=#{subjectId}")
+    @Select("SELECT * FROM issue_standard WHERE subject_id=#{id}")
     @ResultMap("IssueStandard")
-    IssueStandard findBySubjectId(Integer subjectId);
+    IssueStandard findBySubject(SubjectInterface subject);
 
     @Insert("INSERT INTO issue_standard (time_limit, questions_number, subject_id)"
-            + " VALUES (#{timeLimit}, #{questionsNumber}, #{subjectId})")
+            + " VALUES (#{timeLimit}, #{questionsNumber}, #{subject.id})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(IssueStandardInterface issueStandard);
 
