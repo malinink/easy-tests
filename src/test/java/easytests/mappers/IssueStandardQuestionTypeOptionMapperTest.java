@@ -1,11 +1,13 @@
 package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
+import easytests.entities.IssueStandardInterface;
 import easytests.entities.IssueStandardQuestionTypeOption;
 import easytests.entities.IssueStandardQuestionTypeOptionInterface;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.*;
 import org.springframework.test.context.ContextConfiguration;
@@ -30,6 +32,14 @@ public class IssueStandardQuestionTypeOptionMapperTest {
     private IssueStandardQuestionTypeOptionMapper questionTypeOptionMapper;
 
     @Test
+    public void findAllTest() {
+        List<IssueStandardQuestionTypeOption> questionTypeOptions = this.questionTypeOptionMapper.findAll();
+
+        Assert.assertNotNull(questionTypeOptions);
+        Assert.assertEquals(5, questionTypeOptions.size());
+    }
+
+    @Test
     public void findTest() {
         final IssueStandardQuestionTypeOptionInterface questionTypeOption = this.questionTypeOptionMapper.find(1);
 
@@ -42,9 +52,12 @@ public class IssueStandardQuestionTypeOptionMapperTest {
     }
 
     @Test
-    public void findByIssueStandardIdTest() {
+    public void findByIssueStandardTest() {
+        IssueStandardInterface issueStandard = Mockito.mock(IssueStandardInterface.class);
+        Mockito.when(issueStandard.getId()).thenReturn(1);
+
         final List<IssueStandardQuestionTypeOption> questionTypeOptions
-                = this.questionTypeOptionMapper.findByIssueStandardId(1);
+                = this.questionTypeOptionMapper.findByIssueStandard(issueStandard);
 
         Assert.assertEquals(3, questionTypeOptions.size());
 

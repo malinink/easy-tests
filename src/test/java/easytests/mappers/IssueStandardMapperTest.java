@@ -3,10 +3,12 @@ package easytests.mappers;
 import easytests.config.DatabaseConfig;
 import easytests.entities.IssueStandard;
 import easytests.entities.IssueStandardInterface;
+import easytests.entities.SubjectInterface;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.*;
 import org.springframework.test.context.ContextConfiguration;
@@ -31,47 +33,55 @@ public class IssueStandardMapperTest {
     private IssueStandardMapper issueStandardMapper;
 
     @Test
+    public void findAllTest() {
+        List<IssueStandard> issueStandards = this.issueStandardMapper.findAll();
+
+        Assert.assertNotNull(issueStandards);
+        Assert.assertEquals(2, issueStandards.size());
+    }
+
+    @Test
     public void findTest() {
         final IssueStandardInterface issueStandard = this.issueStandardMapper.find(1);
 
         Assert.assertEquals((Integer) 1, issueStandard.getId());
         Assert.assertEquals((Integer) 300, issueStandard.getTimeLimit());
         Assert.assertEquals((Integer) 30, issueStandard.getQuestionsNumber());
-        Assert.assertEquals((Integer) 1, issueStandard.getSubjectId());
-
-        Assert.assertNotNull(issueStandard.getIssueStandardTopicPriorities());
-        Assert.assertNotNull(issueStandard.getIssueStandardQuestionTypeOptions());
-
-        Assert.assertEquals(2, issueStandard.getIssueStandardTopicPriorities().size());
-        Assert.assertEquals(3, issueStandard.getIssueStandardQuestionTypeOptions().size());
+        Assert.assertNull(issueStandard.getIssueStandardTopicPriorities());
+        Assert.assertNull(issueStandard.getIssueStandardQuestionTypeOptions());
+        Assert.assertNull(issueStandard.getSubject());
     }
 
     @Test
-    public void findBySubjectIdTest() {
-        final IssueStandardInterface issueStandard = this.issueStandardMapper.findBySubjectId(3);
+    public void findBySubjectTest() {
+        SubjectInterface subject = Mockito.mock(SubjectInterface.class);
+        Mockito.when(subject.getId()).thenReturn(3);
+
+        final IssueStandardInterface issueStandard = this.issueStandardMapper.findBySubject(subject);
 
         Assert.assertEquals((Integer) 2, issueStandard.getId());
         Assert.assertEquals(null, issueStandard.getTimeLimit());
         Assert.assertEquals((Integer) 15, issueStandard.getQuestionsNumber());
-        Assert.assertEquals((Integer) 3, issueStandard.getSubjectId());
-
-        Assert.assertNotNull(issueStandard.getIssueStandardTopicPriorities());
-        Assert.assertNotNull(issueStandard.getIssueStandardQuestionTypeOptions());
-
-        Assert.assertEquals(1, issueStandard.getIssueStandardTopicPriorities().size());
-        Assert.assertEquals(2, issueStandard.getIssueStandardQuestionTypeOptions().size());
+        Assert.assertNull(issueStandard.getIssueStandardTopicPriorities());
+        Assert.assertNull(issueStandard.getIssueStandardQuestionTypeOptions());
+        Assert.assertNull(issueStandard.getSubject());
     }
 
     @Test
     public void insertTest() {
+        SubjectInterface subject = Mockito.mock(SubjectInterface.class);
+        Mockito.when(subject.getId()).thenReturn(2);
+
         IssueStandardInterface issueStandard = new IssueStandard();
-        issueStandard.setTimeLimit(1200).setQuestionsNumber(30).setSubjectId(2);
+        issueStandard.setTimeLimit(1200).setQuestionsNumber(30).setSubject(subject);
         this.issueStandardMapper.insert(issueStandard);
 
-        issueStandard = this.issueStandardMapper.find(3);
+        issueStandard = this.issueStandardMapper.findBySubject(subject);
         Assert.assertEquals((Integer) 1200, issueStandard.getTimeLimit());
         Assert.assertEquals((Integer) 30, issueStandard.getQuestionsNumber());
-        Assert.assertEquals((Integer) 2, issueStandard.getSubjectId());
+        Assert.assertNull(issueStandard.getIssueStandardTopicPriorities());
+        Assert.assertNull(issueStandard.getIssueStandardQuestionTypeOptions());
+        Assert.assertNull(issueStandard.getSubject());
     }
 
     @Test
@@ -87,15 +97,11 @@ public class IssueStandardMapperTest {
         Assert.assertEquals((Integer) 50, issueStandard.getQuestionsNumber());
     }
 
-    // отдельно проходит, валится при прохождении подряд (??)
-    @Ignore
     @Test
     public void deleteTest() {
         IssueStandardInterface issueStandard = this.issueStandardMapper.find(1);
 
         Assert.assertNotNull(issueStandard);
-        Assert.assertNotNull(issueStandard.getIssueStandardTopicPriorities());
-        Assert.assertNotNull(issueStandard.getIssueStandardQuestionTypeOptions());
 
         this.issueStandardMapper.delete(issueStandard);
         issueStandard = this.issueStandardMapper.find(1);

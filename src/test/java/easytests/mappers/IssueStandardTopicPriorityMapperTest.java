@@ -1,13 +1,12 @@
 package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
-import easytests.entities.IssueStandardTopicPriority;
-import easytests.entities.IssueStandardTopicPriorityInterface;
-import easytests.entities.Priority;
+import easytests.entities.*;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.*;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,6 +31,14 @@ public class IssueStandardTopicPriorityMapperTest {
     private IssueStandardTopicPriorityMapper topicPriorityMapper;
 
     @Test
+    public void findAllTest() {
+        List<IssueStandardTopicPriority> topicPriorities = this.topicPriorityMapper.findAll();
+
+        Assert.assertNotNull(topicPriorities);
+        Assert.assertEquals(3, topicPriorities.size());
+    }
+
+    @Test
     public void findTest() {
         final IssueStandardTopicPriorityInterface topicPriority = this.topicPriorityMapper.find(1);
 
@@ -41,11 +48,13 @@ public class IssueStandardTopicPriorityMapperTest {
         Assert.assertEquals((Integer) 1, topicPriority.getIssueStandardId());
     }
 
-    // валится при билде, при отдельном запуске тестов все нормально
-    @Ignore
     @Test
-    public void findByIssueStandardIdTest() {
-        final List<IssueStandardTopicPriority> topicPriorities = this.topicPriorityMapper.findByIssueStandardId(1);
+    public void findByIssueStandardTest() {
+        IssueStandardInterface issueStandard = Mockito.mock(IssueStandardInterface.class);
+        Mockito.when(issueStandard.getId()).thenReturn(1);
+
+        final List<IssueStandardTopicPriority> topicPriorities
+                = this.topicPriorityMapper.findByIssueStandard(issueStandard);
 
         Assert.assertNotNull(topicPriorities);
         Assert.assertEquals(2, topicPriorities.size());
@@ -65,7 +74,12 @@ public class IssueStandardTopicPriorityMapperTest {
         topicPriority.setTopicId(5).setPriority(Priority.LOW).setIssueStandardId(3);
         this.topicPriorityMapper.insert(topicPriority);
 
-        List<IssueStandardTopicPriority> topicPriorities = this.topicPriorityMapper.findByIssueStandardId(3);
+        IssueStandardInterface issueStandard = Mockito.mock(IssueStandardInterface.class);
+        Mockito.when(issueStandard.getId()).thenReturn(3);
+
+        List<IssueStandardTopicPriority> topicPriorities
+                = this.topicPriorityMapper.findByIssueStandard(issueStandard);
+
         Assert.assertNotNull(topicPriorities);
         Assert.assertEquals(topicPriorities.get(0).getTopicId(), topicPriority.getTopicId());
         Assert.assertEquals(topicPriorities.get(0).getPriority(), topicPriority.getPriority());
