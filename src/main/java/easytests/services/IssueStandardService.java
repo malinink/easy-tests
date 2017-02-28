@@ -23,15 +23,53 @@ public class IssueStandardService {
     private IssueStandardQuestionTypeOptionMapper questionTypeOptionMapper;
 
     public List<IssueStandardInterface> findAll() {
-        return this.map(this.issueStandardMapper.findAll());
+        final List<IssueStandardInterface> issueStandards = this.map(this.issueStandardMapper.findAll());
+
+        if (issueStandards != null) {
+            List<IssueStandardTopicPriorityInterface> topicPriorities;
+            List<IssueStandardQuestionTypeOptionInterface> questionTypeOptions;
+
+            for (IssueStandardInterface issueStandard : issueStandards) {
+                topicPriorities = this.map(this.topicPriorityMapper.findByIssueStandard(issueStandard));
+                questionTypeOptions = this.map(this.questionTypeOptionMapper.findByIssueStandard(issueStandard));
+                issueStandard
+                        .setIssueStandardTopicPriorities(topicPriorities)
+                        .setIssueStandardQuestionTypeOptions(questionTypeOptions);
+            }
+        }
+        return issueStandards;
     }
 
     public IssueStandardInterface find(Integer id) {
-        return this.issueStandardMapper.find(id);
+        final IssueStandardInterface issueStandard = this.issueStandardMapper.find(id);
+
+        if (issueStandard != null) {
+            final List<IssueStandardTopicPriorityInterface> topicPriorities
+                    = this.map(this.topicPriorityMapper.findByIssueStandard(issueStandard));
+            final List<IssueStandardQuestionTypeOptionInterface> questionTypeOptions
+                    = this.map(this.questionTypeOptionMapper.findByIssueStandard(issueStandard));
+
+            issueStandard
+                    .setIssueStandardTopicPriorities(topicPriorities)
+                    .setIssueStandardQuestionTypeOptions(questionTypeOptions);
+        }
+        return issueStandard;
     }
 
-    public IssueStandardInterface findBySubjectId(Integer subjectId) {
-        return this.issueStandardMapper.findBySubjectId(subjectId);
+    public IssueStandardInterface findBySubject(SubjectInterface subject) {
+        final IssueStandardInterface issueStandard = this.issueStandardMapper.findBySubject(subject);
+
+        if (issueStandard != null) {
+            final List<IssueStandardTopicPriorityInterface> topicPriorities
+                    = this.map(this.topicPriorityMapper.findByIssueStandard(issueStandard));
+            final List<IssueStandardQuestionTypeOptionInterface> questionTypeOptions
+                    = this.map(this.questionTypeOptionMapper.findByIssueStandard(issueStandard));
+
+            issueStandard
+                    .setIssueStandardTopicPriorities(topicPriorities)
+                    .setIssueStandardQuestionTypeOptions(questionTypeOptions);
+        }
+        return issueStandard;
     }
 
     public void save(IssueStandardInterface issueStandard) {
@@ -91,11 +129,11 @@ public class IssueStandardService {
         this.issueStandardMapper.delete(issueStandard);
     }
 
-    private List<IssueStandardInterface> map(List<IssueStandard> issueStandardList) {
-        final List<IssueStandardInterface> resultIssueStandardList = new ArrayList(issueStandardList.size());
-        for (IssueStandard issueStandard: issueStandardList) {
-            resultIssueStandardList.add(issueStandard);
+    private <T> List<T> map(List<? extends T> objectList) {
+        final List<T> resultObjectList = new ArrayList<>(objectList.size());
+        for (T object: objectList) {
+            resultObjectList.add(object);
         }
-        return resultIssueStandardList;
+        return resultObjectList;
     }
 }
