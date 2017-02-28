@@ -10,6 +10,7 @@ import static org.mockito.BDDMockito.*;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.*;
 import org.springframework.test.context.junit4.*;
 
@@ -48,9 +49,12 @@ public class IssueStandardServiceTest {
     }
 
     @Test
-    public void findBySubjectIdTest() {
-        this.issueStandardService.findBySubjectId(1);
-        verify(this.issueStandardMapper, times(1)).findBySubjectId(1);
+    public void findBySubjectTest() {
+        SubjectInterface subject = Mockito.mock(SubjectInterface.class);
+        Mockito.when(subject.getId()).thenReturn(1);
+
+        this.issueStandardService.findBySubject(subject);
+        verify(this.issueStandardMapper, times(1)).findBySubject(subject);
     }
 
     @Test
