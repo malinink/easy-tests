@@ -1,6 +1,7 @@
 package easytests.entities;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,9 +56,12 @@ public class IssueStandardTest {
     }
 
     @Test
-    public void subjectIdTest() {
+    public void subjectTest() {
+        SubjectInterface subject = Mockito.mock(SubjectInterface.class);
+        Mockito.when(subject.getId()).thenReturn(1);
+
         final IssueStandardInterface issueStandard = new IssueStandard();
-        issueStandard.setSubjectId(1);
-        assertEquals((Integer) 1, issueStandard.getSubjectId());
+        issueStandard.setSubject(subject);
+        assertEquals((Integer) 1, issueStandard.getSubject().getId());
     }
 }
