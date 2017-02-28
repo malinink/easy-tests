@@ -1,5 +1,7 @@
 package easytests.mappers;
 
+import easytests.entities.IssueStandard;
+import easytests.entities.IssueStandardInterface;
 import easytests.entities.IssueStandardQuestionTypeOption;
 import easytests.entities.IssueStandardQuestionTypeOptionInterface;
 import java.util.List;
@@ -28,9 +30,9 @@ public interface IssueStandardQuestionTypeOptionMapper {
     @ResultMap("IssueStandardQuestionTypeOption")
     IssueStandardQuestionTypeOption find(Integer id);
 
-    @Select("SELECT * FROM question_type_options WHERE issue_standard_id=#{issueStandardId}")
+    @Select("SELECT * FROM question_type_options WHERE issue_standard_id=#{id}")
     @ResultMap("IssueStandardQuestionTypeOption")
-    List<IssueStandardQuestionTypeOption> findByIssueStandardId(Integer issueStandardId);
+    List<IssueStandardQuestionTypeOption> findByIssueStandard(IssueStandardInterface issueStandard);
 
     @Insert("INSERT INTO question_type_options"
             + " (question_type_id, min_number, max_number, time_limit, issue_standard_id)"
