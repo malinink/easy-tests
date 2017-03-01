@@ -1,6 +1,5 @@
 package easytests.mappers;
 
-import easytests.entities.IssueStandard;
 import easytests.entities.IssueStandardInterface;
 import easytests.entities.IssueStandardTopicPriority;
 import easytests.entities.IssueStandardTopicPriorityInterface;

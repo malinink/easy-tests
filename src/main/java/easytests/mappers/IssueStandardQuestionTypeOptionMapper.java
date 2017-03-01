@@ -1,6 +1,5 @@
 package easytests.mappers;
 
-import easytests.entities.IssueStandard;
 import easytests.entities.IssueStandardInterface;
 import easytests.entities.IssueStandardQuestionTypeOption;
 import easytests.entities.IssueStandardQuestionTypeOptionInterface;
