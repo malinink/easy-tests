@@ -35,7 +35,7 @@ public interface IssueStandardMapper {
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(IssueStandardInterface issueStandard);
 
-    @Update("UPDATE issue_standard SET time_limit=#{timeLimit}, questions_number=#{questionsNumber}")
+    @Update("UPDATE issue_standard SET time_limit=#{timeLimit}, questions_number=#{questionsNumber} WHERE id=#{id}")
     void update(IssueStandardInterface issueStandard);
 
     @Delete("DELETE FROM issue_standard WHERE id=#{id}")

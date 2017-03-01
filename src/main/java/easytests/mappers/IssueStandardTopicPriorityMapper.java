@@ -37,7 +37,7 @@ public interface IssueStandardTopicPriorityMapper {
     void insert(IssueStandardTopicPriorityInterface issueStandardTopicPriority);
 
     @Update("UPDATE topic_priorities"
-            + " SET topic_id=#{topicId}, priority=#{priority}, issue_standard_id=#{issueStandardId}")
+            + " SET topic_id=#{topicId}, priority=#{priority}, issue_standard_id=#{issueStandardId} WHERE id=#{id}")
     void update(IssueStandardTopicPriorityInterface issueStandardTopicPriority);
 
     @Delete("DELETE FROM topic_priorities WHERE id=#{id}")

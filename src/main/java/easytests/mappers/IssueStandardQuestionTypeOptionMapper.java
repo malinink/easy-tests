@@ -40,7 +40,7 @@ public interface IssueStandardQuestionTypeOptionMapper {
     void insert(IssueStandardQuestionTypeOptionInterface issueStandardQuestionTypeOption);
 
     @Update("UPDATE question_type_options"
-            + " SET min_number=#{minQuestions}, max_number=#{maxQuestions}, time_limit=#{timeLimit}")
+            + " SET min_number=#{minQuestions}, max_number=#{maxQuestions}, time_limit=#{timeLimit} WHERE id=#{id}")
     void update(IssueStandardQuestionTypeOptionInterface issueStandardQuestionTypeOption);
 
     @Delete("DELETE FROM question_type_options WHERE id=#{id}")
