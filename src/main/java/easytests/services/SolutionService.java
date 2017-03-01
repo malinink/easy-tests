@@ -43,7 +43,7 @@ public class SolutionService {
     }
 
     private List<SolutionInterface> map(List<Solution> solutionsList) {
-        final List<SolutionInterface> resultSolutionsList= new ArrayList(solutionsList.size());
+        final List<SolutionInterface> resultSolutionsList = new ArrayList(solutionsList.size());
         for (Solution solution: solutionsList) {
             resultSolutionsList.add(solution);
         }
