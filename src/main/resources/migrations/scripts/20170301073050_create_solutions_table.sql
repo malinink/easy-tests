@@ -5,7 +5,8 @@ CREATE TABLE solutions (
   id        SERIAL  NOT NULL,
   answer_id INTEGER,
   point_id  INTEGER NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE (answer_id, point_id)
 );
 
 
