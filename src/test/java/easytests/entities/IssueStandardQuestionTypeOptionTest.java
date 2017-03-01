@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 public class IssueStandardQuestionTypeOptionTest {
 
     @Test
-    public void idTest() {
+    public void idTest() throws Exception {
         final IssueStandardQuestionTypeOptionInterface issueStandardQuestionTypeOption
                 = new IssueStandardQuestionTypeOption();
         issueStandardQuestionTypeOption.setId(1);
@@ -17,7 +17,7 @@ public class IssueStandardQuestionTypeOptionTest {
     }
 
     @Test
-    public void questionTypeIdTest() {
+    public void questionTypeIdTest() throws Exception {
         final IssueStandardQuestionTypeOptionInterface issueStandardQuestionTypeOption
                 = new IssueStandardQuestionTypeOption();
         issueStandardQuestionTypeOption.setQuestionTypeId(1);
@@ -25,7 +25,7 @@ public class IssueStandardQuestionTypeOptionTest {
     }
 
     @Test
-    public void minQuestionsTest() {
+    public void minQuestionsTest() throws Exception {
         final IssueStandardQuestionTypeOptionInterface issueStandardQuestionTypeOption
                 = new IssueStandardQuestionTypeOption();
         issueStandardQuestionTypeOption.setMinQuestions(10);
@@ -33,7 +33,7 @@ public class IssueStandardQuestionTypeOptionTest {
     }
 
     @Test
-    public void maxQuestionsTest() {
+    public void maxQuestionsTest() throws Exception {
         final IssueStandardQuestionTypeOptionInterface issueStandardQuestionTypeOption
                 = new IssueStandardQuestionTypeOption();
         issueStandardQuestionTypeOption.setMaxQuestions(10);
@@ -41,7 +41,7 @@ public class IssueStandardQuestionTypeOptionTest {
     }
 
     @Test
-    public void timeLimitTest() {
+    public void timeLimitTest() throws Exception {
         final IssueStandardQuestionTypeOptionInterface issueStandardQuestionTypeOption
                 = new IssueStandardQuestionTypeOption();
         issueStandardQuestionTypeOption.setTimeLimit(600);
@@ -49,7 +49,7 @@ public class IssueStandardQuestionTypeOptionTest {
     }
 
     @Test
-    public void issueStandardIdTest() {
+    public void issueStandardIdTest() throws Exception {
         final IssueStandardQuestionTypeOptionInterface issueStandardQuestionTypeOption
                 = new IssueStandardQuestionTypeOption();
         issueStandardQuestionTypeOption.setIssueStandardId(1);

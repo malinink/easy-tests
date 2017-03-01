@@ -33,7 +33,7 @@ public class IssueStandardMapperTest {
     private IssueStandardMapper issueStandardMapper;
 
     @Test
-    public void findAllTest() {
+    public void findAllTest() throws Exception {
         List<IssueStandard> issueStandards = this.issueStandardMapper.findAll();
 
         Assert.assertNotNull(issueStandards);
@@ -41,7 +41,7 @@ public class IssueStandardMapperTest {
     }
 
     @Test
-    public void findTest() {
+    public void findTest() throws Exception {
         final IssueStandardInterface issueStandard = this.issueStandardMapper.find(1);
 
         Assert.assertEquals((Integer) 1, issueStandard.getId());
@@ -53,7 +53,7 @@ public class IssueStandardMapperTest {
     }
 
     @Test
-    public void findBySubjectTest() {
+    public void findBySubjectTest() throws Exception {
         SubjectInterface subject = Mockito.mock(SubjectInterface.class);
         Mockito.when(subject.getId()).thenReturn(3);
 
@@ -68,7 +68,7 @@ public class IssueStandardMapperTest {
     }
 
     @Test
-    public void insertTest() {
+    public void insertTest() throws Exception {
         SubjectInterface subject = Mockito.mock(SubjectInterface.class);
         Mockito.when(subject.getId()).thenReturn(2);
 
@@ -85,7 +85,7 @@ public class IssueStandardMapperTest {
     }
 
     @Test
-    public void updateTest() {
+    public void updateTest() throws Exception {
         IssueStandardInterface issueStandard = this.issueStandardMapper.find(2);
         Assert.assertNotNull(issueStandard);
 
@@ -98,7 +98,7 @@ public class IssueStandardMapperTest {
     }
 
     @Test
-    public void deleteTest() {
+    public void deleteTest() throws Exception {
         IssueStandardInterface issueStandard = this.issueStandardMapper.find(1);
 
         Assert.assertNotNull(issueStandard);

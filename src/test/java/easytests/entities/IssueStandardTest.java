@@ -13,28 +13,28 @@ import static org.junit.Assert.assertEquals;
 public class IssueStandardTest {
 
     @Test
-    public void idTest() {
+    public void idTest() throws Exception {
         final IssueStandardInterface issueStandard = new IssueStandard();
         issueStandard.setId(1);
         assertEquals((Integer) 1, issueStandard.getId());
     }
 
     @Test
-    public void timeLimitTest() {
+    public void timeLimitTest() throws Exception {
         final IssueStandardInterface issueStandard = new IssueStandard();
         issueStandard.setTimeLimit(600);
         assertEquals((Integer) 600, issueStandard.getTimeLimit());
     }
 
     @Test
-    public void questionsNumberTest() {
+    public void questionsNumberTest() throws Exception {
         final IssueStandardInterface issueStandard = new IssueStandard();
         issueStandard.setQuestionsNumber(10);
         assertEquals((Integer) 10, issueStandard.getQuestionsNumber());
     }
 
     @Test
-    public void issueStandardTopicPrioritiesTest() {
+    public void issueStandardTopicPrioritiesTest() throws Exception {
         final IssueStandardInterface issueStandard = new IssueStandard();
         List<IssueStandardTopicPriorityInterface> issueStandardTopicPriorities = new ArrayList<>();
         issueStandardTopicPriorities.add(new IssueStandardTopicPriority().setId(1));
@@ -45,7 +45,7 @@ public class IssueStandardTest {
     }
 
     @Test
-    public void issueStandardQuestionTypeOptionsTest() {
+    public void issueStandardQuestionTypeOptionsTest() throws Exception {
         final IssueStandardInterface issueStandard = new IssueStandard();
         List<IssueStandardQuestionTypeOptionInterface> issueStandardQuestionTypeOptions = new ArrayList<>();
         issueStandardQuestionTypeOptions.add(new IssueStandardQuestionTypeOption().setId(1));
@@ -56,7 +56,7 @@ public class IssueStandardTest {
     }
 
     @Test
-    public void subjectTest() {
+    public void subjectTest() throws Exception {
         SubjectInterface subject = Mockito.mock(SubjectInterface.class);
         Mockito.when(subject.getId()).thenReturn(1);
 

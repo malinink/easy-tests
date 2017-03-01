@@ -32,7 +32,7 @@ public class IssueStandardQuestionTypeOptionMapperTest {
     private IssueStandardQuestionTypeOptionMapper questionTypeOptionMapper;
 
     @Test
-    public void findAllTest() {
+    public void findAllTest() throws Exception {
         List<IssueStandardQuestionTypeOption> questionTypeOptions = this.questionTypeOptionMapper.findAll();
 
         Assert.assertNotNull(questionTypeOptions);
@@ -40,7 +40,7 @@ public class IssueStandardQuestionTypeOptionMapperTest {
     }
 
     @Test
-    public void findTest() {
+    public void findTest() throws Exception {
         final IssueStandardQuestionTypeOptionInterface questionTypeOption = this.questionTypeOptionMapper.find(1);
 
         Assert.assertEquals((Integer) 1, questionTypeOption.getId());
@@ -52,7 +52,7 @@ public class IssueStandardQuestionTypeOptionMapperTest {
     }
 
     @Test
-    public void findByIssueStandardTest() {
+    public void findByIssueStandardTest() throws Exception {
         IssueStandardInterface issueStandard = Mockito.mock(IssueStandardInterface.class);
         Mockito.when(issueStandard.getId()).thenReturn(1);
 
@@ -71,7 +71,7 @@ public class IssueStandardQuestionTypeOptionMapperTest {
     }
 
     @Test
-    public void insertTest() {
+    public void insertTest() throws Exception {
         IssueStandardQuestionTypeOptionInterface questionTypeOption = new IssueStandardQuestionTypeOption();
         questionTypeOption.setQuestionTypeId(2).setMinQuestions(5).setMaxQuestions(10).setIssueStandardId(2);
         this.questionTypeOptionMapper.insert(questionTypeOption);
@@ -85,7 +85,7 @@ public class IssueStandardQuestionTypeOptionMapperTest {
     }
 
     @Test
-    public void updateTest() {
+    public void updateTest() throws Exception {
         IssueStandardQuestionTypeOptionInterface questionTypeOption = this.questionTypeOptionMapper.find(5);
         Assert.assertNotNull(questionTypeOption);
         questionTypeOption.setMinQuestions(1).setMaxQuestions(2).setTimeLimit(600);
@@ -97,7 +97,7 @@ public class IssueStandardQuestionTypeOptionMapperTest {
     }
 
     @Test
-    public void deleteTest() {
+    public void deleteTest() throws Exception {
         IssueStandardQuestionTypeOptionInterface questionTypeOption = this.questionTypeOptionMapper.find(1);
         Assert.assertNotNull(questionTypeOption);
         this.questionTypeOptionMapper.delete(questionTypeOption);

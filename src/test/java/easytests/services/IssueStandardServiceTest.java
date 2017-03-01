@@ -37,19 +37,19 @@ public class IssueStandardServiceTest {
     private IssueStandardService issueStandardService;
 
     @Test
-    public void findAllTest() {
+    public void findAllTest() throws Exception {
         this.issueStandardService.findAll();
         verify(this.issueStandardMapper, times(1)).findAll();
     }
 
     @Test
-    public void findTest() {
+    public void findTest() throws Exception {
         this.issueStandardService.find(1);
         verify(this.issueStandardMapper, times(1)).find(1);
     }
 
     @Test
-    public void findBySubjectTest() {
+    public void findBySubjectTest() throws Exception {
         SubjectInterface subject = Mockito.mock(SubjectInterface.class);
         Mockito.when(subject.getId()).thenReturn(1);
 
@@ -58,7 +58,7 @@ public class IssueStandardServiceTest {
     }
 
     @Test
-    public void saveCreatesEntitiesTest() {
+    public void saveCreatesEntitiesTest() throws Exception {
         IssueStandard issueStandard = new IssueStandard();
 
         List<IssueStandardTopicPriorityInterface> topicPriorities = new ArrayList<>(1);
@@ -77,7 +77,7 @@ public class IssueStandardServiceTest {
     }
 
     @Test
-    public void saveUpdatesEntitiesTest() {
+    public void saveUpdatesEntitiesTest() throws Exception {
         IssueStandard issueStandard = new IssueStandard();
         issueStandard.setId(1);
 
@@ -104,7 +104,7 @@ public class IssueStandardServiceTest {
     }
 
     @Test
-    public void saveUpdatesAndDeletesEntitiesTest() {
+    public void saveUpdatesAndDeletesEntitiesTest() throws Exception {
         IssueStandard issueStandard = new IssueStandard();
         issueStandard.setId(1);
 
@@ -124,7 +124,7 @@ public class IssueStandardServiceTest {
     }
 
     @Test
-    public void deleteTest() {
+    public void deleteTest() throws Exception {
         IssueStandard issueStandard = new IssueStandard();
         issueStandard.setId(1);
         this.issueStandardService.delete(issueStandard);

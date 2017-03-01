@@ -31,7 +31,7 @@ public class IssueStandardTopicPriorityMapperTest {
     private IssueStandardTopicPriorityMapper topicPriorityMapper;
 
     @Test
-    public void findAllTest() {
+    public void findAllTest() throws Exception {
         List<IssueStandardTopicPriority> topicPriorities = this.topicPriorityMapper.findAll();
 
         Assert.assertNotNull(topicPriorities);
@@ -39,7 +39,7 @@ public class IssueStandardTopicPriorityMapperTest {
     }
 
     @Test
-    public void findTest() {
+    public void findTest() throws Exception {
         final IssueStandardTopicPriorityInterface topicPriority = this.topicPriorityMapper.find(1);
 
         Assert.assertEquals((Integer) 1, topicPriority.getId());
@@ -49,7 +49,7 @@ public class IssueStandardTopicPriorityMapperTest {
     }
 
     @Test
-    public void findByIssueStandardTest() {
+    public void findByIssueStandardTest() throws Exception {
         IssueStandardInterface issueStandard = Mockito.mock(IssueStandardInterface.class);
         Mockito.when(issueStandard.getId()).thenReturn(1);
 
@@ -69,7 +69,7 @@ public class IssueStandardTopicPriorityMapperTest {
     // вставка enum некорректная
     @Ignore
     @Test
-    public void insertTest() {
+    public void insertTest() throws Exception {
         IssueStandardTopicPriorityInterface topicPriority = new IssueStandardTopicPriority();
         topicPriority.setTopicId(5).setPriority(Priority.LOW).setIssueStandardId(3);
         this.topicPriorityMapper.insert(topicPriority);
@@ -88,7 +88,7 @@ public class IssueStandardTopicPriorityMapperTest {
     // вставка enum некорректная
     @Ignore
     @Test
-    public void updateTest() {
+    public void updateTest() throws Exception {
         IssueStandardTopicPriorityInterface topicPriority = this.topicPriorityMapper.find(3);
         Assert.assertNotNull(topicPriority);
         Assert.assertEquals(Priority.HIGH, topicPriority.getPriority());
@@ -100,7 +100,7 @@ public class IssueStandardTopicPriorityMapperTest {
     }
 
     @Test
-    public void deleteTest() {
+    public void deleteTest() throws Exception {
         IssueStandardTopicPriorityInterface topicPriority = this.topicPriorityMapper.find(3);
         Assert.assertNotNull(topicPriority);
         this.topicPriorityMapper.delete(topicPriority);
