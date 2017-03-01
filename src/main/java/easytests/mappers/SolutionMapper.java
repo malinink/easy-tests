@@ -25,7 +25,7 @@ public interface SolutionMapper {
     @ResultMap("Solution")
     Solution find(Integer id);
 
-    @Select("SELECT * FROM solutions WHERE point_id=#{point.id}")
+    @Select("SELECT * FROM solutions WHERE point_id=#{id}")
     @ResultMap("Solution")
     List<Solution> findByPoint(PointInterface point);
 
