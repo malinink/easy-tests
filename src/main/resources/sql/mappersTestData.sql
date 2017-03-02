@@ -12,11 +12,11 @@ DROP TABLE IF EXISTS topic_priorities;
 DROP  TYPE IF EXISTS TOPIC_PRIORITY;
 DROP TABLE IF EXISTS issue_standard;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS subjects;
 
 ----------------------
 -- CREATE TABLES
 ----------------------
-
 CREATE TABLE users (
   id         SERIAL      NOT NULL,
   first_name VARCHAR(30) NOT NULL,
@@ -63,12 +63,18 @@ CREATE TABLE question_type_options (
     FOREIGN KEY (issue_standard_id)
         REFERENCES issue_standard (id)
         ON DELETE CASCADE
-);
+
+CREATE TABLE subjects (
+  id        SERIAL        NOT NULL,
+  name      VARCHAR(255)  NOT NULL,
+  user_id   INTEGER       NOT NULL,
+  issue_standard_id     INTEGER,
+  PRIMARY KEY (id)
+
 
 ----------------------
 -- INSERT DATA
 ----------------------
-
 INSERT INTO users (first_name, last_name, surname) VALUES
   ('FirstName1', 'LastName1', 'Surname1'),
   ('FirstName2', 'LastName2', 'Surname2'),
@@ -89,3 +95,8 @@ INSERT INTO question_type_options (question_type_id, min_number, max_number, tim
   (3, 5, 10, NULL, 1),
   (1, 1, 5, 120, 2),
   (3, 5, NULL, 300, 2);
+
+INSERT INTO subjects (name, user_id, issue_standard_id) VALUES
+  ('test1', 2, 1),
+  ('test2', 2, 1),
+  ('test3', 3, 1);
