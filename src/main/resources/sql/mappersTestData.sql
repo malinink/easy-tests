@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS issue_standard;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS subjects;
 DROP TABLE IF EXISTS quizzes;
+DROP TABLE IF EXISTS solutions;
 
 
 ----------------------
@@ -82,6 +83,14 @@ CREATE TABLE quizzes (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE solutions (
+  id        SERIAL  NOT NULL,
+  answer_id INTEGER,
+  point_id  INTEGER NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (answer_id, point_id)
+);
+
 
 ----------------------
 -- INSERT DATA
@@ -116,3 +125,6 @@ INSERT INTO quizzes (issue_id, invite_code) VALUES
  (1, 'test_invite_code1'),
  (2, 'test_invite_code2'),
  (3, 'test_invite_code3');
+
+INSERT INTO solutions (answer_id, point_id) VALUES
+  (10, 1), (20, 1), (11, 2), (21, 2), (12, 3);
