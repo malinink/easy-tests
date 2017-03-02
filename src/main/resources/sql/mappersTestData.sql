@@ -13,6 +13,7 @@ DROP  TYPE IF EXISTS TOPIC_PRIORITY;
 DROP TABLE IF EXISTS issue_standard;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS subjects;
+DROP TABLE IF EXISTS questions;
 DROP TABLE IF EXISTS quizzes;
 DROP TABLE IF EXISTS solutions;
 
@@ -76,6 +77,14 @@ CREATE TABLE subjects (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE questions (
+  id          SERIAL      NOT NULL,
+  text        VARCHAR(80) NOT NULL,
+  type        INTEGER     NOT NULL,
+  topic_id    INTEGER     NOT NULL,
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE quizzes (
   id         SERIAL      NOT NULL,
   issue_id  INTEGER NOT NULL,
@@ -118,6 +127,11 @@ INSERT INTO question_type_options (question_type_id, min_number, max_number, tim
 
 INSERT INTO subjects (name, user_id, issue_standard_id) VALUES
   ('test1', 2, 1),
+  ('test2', 2, 1),
+  ('test3', 3, 1);
+
+INSERT INTO questions (text, type, topic_id) VALUES
+  ('test1', 1, 1),
   ('test2', 2, 1),
   ('test3', 3, 1);
 
