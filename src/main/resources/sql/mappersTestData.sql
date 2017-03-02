@@ -63,6 +63,7 @@ CREATE TABLE question_type_options (
     FOREIGN KEY (issue_standard_id)
         REFERENCES issue_standard (id)
         ON DELETE CASCADE
+);
 
 CREATE TABLE subjects (
   id        SERIAL        NOT NULL,
