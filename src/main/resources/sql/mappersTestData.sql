@@ -13,6 +13,8 @@ DROP  TYPE IF EXISTS TOPIC_PRIORITY;
 DROP TABLE IF EXISTS issue_standard;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS subjects;
+DROP TABLE IF EXISTS quizzes;
+
 
 ----------------------
 -- CREATE TABLES
@@ -73,6 +75,14 @@ CREATE TABLE subjects (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE quizzes (
+  id         SERIAL      NOT NULL,
+  issue_id  INTEGER NOT NULL,
+  invite_code VARCHAR(32),
+  PRIMARY KEY (id)
+);
+
+
 ----------------------
 -- INSERT DATA
 ----------------------
@@ -101,3 +111,8 @@ INSERT INTO subjects (name, user_id, issue_standard_id) VALUES
   ('test1', 2, 1),
   ('test2', 2, 1),
   ('test3', 3, 1);
+
+INSERT INTO quizzes (issue_id, invite_code) VALUES
+ (1, 'test_invite_code1'),
+ (2, 'test_invite_code2'),
+ (3, 'test_invite_code3');
