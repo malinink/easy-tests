@@ -71,7 +71,7 @@ CREATE TABLE subjects (
   user_id   INTEGER       NOT NULL,
   issue_standard_id     INTEGER,
   PRIMARY KEY (id)
-
+);
 
 ----------------------
 -- INSERT DATA
