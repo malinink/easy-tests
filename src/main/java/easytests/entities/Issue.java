@@ -15,6 +15,8 @@ public class Issue implements IssueInterface {
 
     private List<QuizInterface> quizzes;
 
+    private IssueStandard standard;
+
     @Override
     public Integer getId() {
         return id;
@@ -58,4 +60,75 @@ public class Issue implements IssueInterface {
         this.quizzes = quizzes;
         return this;
     }
+
+    public IssueStandard getStandard() {
+        return standard;
+    }
+
+    public void setStandard(IssueStandard standard) {
+        this.standard = standard;
+    }
+
+    @Override
+    public Integer getTimeLimit() {
+        return standard.getTimeLimit()
+    }
+
+    @Override
+    public IssueStandardInterface setTimeLimit(Integer timeLimit) {
+        standard.setTimeLimit(timeLimit);
+        return this;
+    }
+
+    @Override
+    public Integer getQuestionsNumber() {
+        return standard.getQuestionsNumber();
+    }
+
+    @Override
+    public IssueStandardInterface setQuestionsNumber(Integer questionsNumber) {
+        standard.setQuestionsNumber(questionsNumber);
+        return this;
+    }
+
+    @Override
+    public  List<IssueStandardTopicPriorityInterface> getIssueStandardTopicPriorities() {
+        return standard.getIssueStandardTopicPriorities();
+    }
+
+    @Override
+    public IssueStandardInterface setIssueStandardTopicPriorities(
+            List<IssueStandardTopicPriorityInterface> issueStandardTopicPriorities) {
+        standard.setIssueStandardTopicPriorities(issueStandardTopicPriorities);
+        return this;
+    }
+
+    @Override
+    public List<IssueStandardQuestionTypeOptionInterface> getIssueStandardQuestionTypeOptions() {
+        return standard.getIssueStandardQuestionTypeOptions();
+    }
+
+    @Override
+    public  IssueStandardInterface setIssueStandardQuestionTypeOptions(
+            List<IssueStandardQuestionTypeOptionInterface> issueStandardQuestionTypeOptions) {
+        standard.setIssueStandardQuestionTypeOptions(issueStandardQuestionTypeOptions);
+        return this;
+    }
+
+    @Override
+    public  SubjectInterface getSubject() {
+        return standard.getSubject();
+    }
+
+    @Override
+    public IssueStandardInterface setSubject(SubjectInterface subject) {
+        standard.setSubject(subject);
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return standard.toString();
+    }
+
 }
