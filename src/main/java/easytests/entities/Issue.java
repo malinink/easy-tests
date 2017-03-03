@@ -92,7 +92,7 @@ public class Issue implements IssueInterface {
     }
 
     @Override
-    public  List<IssueStandardTopicPriorityInterface> getIssueStandardTopicPriorities() {
+    public List<IssueStandardTopicPriorityInterface> getIssueStandardTopicPriorities() {
         return standard.getIssueStandardTopicPriorities();
     }
 
@@ -109,14 +109,14 @@ public class Issue implements IssueInterface {
     }
 
     @Override
-    public  IssueStandardInterface setIssueStandardQuestionTypeOptions(
+    public IssueStandardInterface setIssueStandardQuestionTypeOptions(
             List<IssueStandardQuestionTypeOptionInterface> issueStandardQuestionTypeOptions) {
         standard.setIssueStandardQuestionTypeOptions(issueStandardQuestionTypeOptions);
         return this;
     }
 
     @Override
-    public  SubjectInterface getSubject() {
+    public SubjectInterface getSubject() {
         return standard.getSubject();
     }
 
