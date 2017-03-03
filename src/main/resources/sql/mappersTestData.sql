@@ -35,9 +35,9 @@ CREATE TABLE issue_standard (
   time_limit        INTEGER,
   questions_number  INTEGER,
   subject_id        INTEGER  NOT NULL,
-  CONSTRAINT positiveness CHECK (questions_number > 0 AND time_limit > 0),
-  PRIMARY KEY (id),
-  UNIQUE (subject_id)
+    CONSTRAINT positiveness CHECK (questions_number > 0 AND time_limit > 0),
+    PRIMARY KEY (id),
+    UNIQUE (subject_id)
 );
 
 CREATE TYPE TOPIC_PRIORITY AS ENUM ('LOW', 'HIGH');
@@ -47,11 +47,11 @@ CREATE TABLE topic_priorities (
   topic_id           INTEGER         NOT NULL,
   priority           TOPIC_PRIORITY  NOT NULL,
   issue_standard_id  INTEGER         NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE (topic_id, issue_standard_id),
-  FOREIGN KEY (issue_standard_id)
-  REFERENCES issue_standard (id)
-  ON DELETE CASCADE
+    PRIMARY KEY (id),
+    UNIQUE (topic_id, issue_standard_id),
+    FOREIGN KEY (issue_standard_id)
+        REFERENCES issue_standard (id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE question_type_options (
@@ -61,13 +61,13 @@ CREATE TABLE question_type_options (
   max_number         INTEGER,
   time_limit         INTEGER,
   issue_standard_id  INTEGER  NOT NULL,
-  CONSTRAINT positiveness CHECK (min_number >= 0 AND max_number > 0 AND time_limit > 0),
-  CONSTRAINT check_limits CHECK (max_number >= min_number),
-  PRIMARY KEY (id),
-  UNIQUE (question_type_id, issue_standard_id),
-  FOREIGN KEY (issue_standard_id)
-  REFERENCES issue_standard (id)
-  ON DELETE CASCADE
+    CONSTRAINT positiveness CHECK (min_number >= 0 AND max_number > 0 AND time_limit > 0),
+    CONSTRAINT check_limits CHECK (max_number >= min_number),
+    PRIMARY KEY (id),
+    UNIQUE (question_type_id, issue_standard_id),
+    FOREIGN KEY (issue_standard_id)
+        REFERENCES issue_standard (id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE subjects (
@@ -97,8 +97,8 @@ CREATE TABLE solutions (
   id        SERIAL  NOT NULL,
   answer_id INTEGER,
   point_id  INTEGER NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE (answer_id, point_id)
+    PRIMARY KEY (id),
+    UNIQUE (answer_id, point_id)
 );
 
 CREATE TABLE answers (
@@ -106,10 +106,9 @@ CREATE TABLE answers (
   txt VARCHAR(250) NOT NULL,
   question_id INTEGER NOT NULL,
   is_right BOOLEAN NOT NULL,
-  PRIMARY KEY (id)--,
-  --FOREIGN KEY (question_id) REFERENCES questions(id)
+    PRIMARY KEY (id)--,
+    --FOREIGN KEY (question_id) REFERENCES questions(id)
 );
-
 
 ----------------------
 -- INSERT DATA
@@ -146,9 +145,9 @@ INSERT INTO questions (text, type, topic_id) VALUES
   ('test3', 3, 1);
 
 INSERT INTO quizzes (issue_id, invite_code) VALUES
-  (1, 'test_invite_code1'),
-  (2, 'test_invite_code2'),
-  (3, 'test_invite_code3');
+ (1, 'test_invite_code1'),
+ (2, 'test_invite_code2'),
+ (3, 'test_invite_code3');
 
 INSERT INTO solutions (answer_id, point_id) VALUES
   (10, 1), (20, 1), (11, 2), (21, 2), (12, 3);
