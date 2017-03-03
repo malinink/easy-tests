@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.*;
 public interface TopicsMapper {
 
     @Results(
-            id = "topicResults",
+            id = "Topic",
             value = {
                     @Result(property = "id", column = "id"),
                     @Result(property = "name", column = "name"),
