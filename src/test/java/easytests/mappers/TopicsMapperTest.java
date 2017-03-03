@@ -36,7 +36,7 @@ public class TopicsMapperTest {
 
     @Test
     public void testDelete() throws Exception {
-        Topic topic = this.topicsMapper.find(1);
+        TopicInterface topic = this.topicsMapper.find(1);
         Assert.assertNotNull(topic);
         this.topicsMapper.delete(topic);
         topic = this.topicsMapper.find(1);
