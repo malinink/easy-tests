@@ -86,15 +86,6 @@ CREATE TABLE questions (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE answers (
-  id SERIAL NOT NULL,
-  txt VARCHAR(250) NOT NULL,
-  question_id INTEGER NOT NULL,
-  is_right BOOLEAN NOT NULL,
-  PRIMARY KEY (id)--,
-  --FOREIGN KEY (question_id) REFERENCES questions(id)
-);
-
 CREATE TABLE quizzes (
   id         SERIAL      NOT NULL,
   issue_id  INTEGER NOT NULL,
@@ -108,6 +99,15 @@ CREATE TABLE solutions (
   point_id  INTEGER NOT NULL,
   PRIMARY KEY (id),
   UNIQUE (answer_id, point_id)
+);
+
+CREATE TABLE answers (
+  id SERIAL NOT NULL,
+  txt VARCHAR(250) NOT NULL,
+  question_id INTEGER NOT NULL,
+  is_right BOOLEAN NOT NULL,
+  PRIMARY KEY (id)--,
+  --FOREIGN KEY (question_id) REFERENCES questions(id)
 );
 
 
@@ -145,11 +145,6 @@ INSERT INTO questions (text, type, topic_id) VALUES
   ('test2', 2, 1),
   ('test3', 3, 1);
 
-INSERT INTO answers(txt, question_id, is_right) VALUES
-  ('Answer1', 1, TRUE),
-  ('Answer2', 3, FALSE),
-  ('Answer3', 2, TRUE);
-
 INSERT INTO quizzes (issue_id, invite_code) VALUES
   (1, 'test_invite_code1'),
   (2, 'test_invite_code2'),
@@ -158,3 +153,7 @@ INSERT INTO quizzes (issue_id, invite_code) VALUES
 INSERT INTO solutions (answer_id, point_id) VALUES
   (10, 1), (20, 1), (11, 2), (21, 2), (12, 3);
 
+INSERT INTO answers(txt, question_id, is_right) VALUES
+  ('Answer1', 1, TRUE),
+  ('Answer2', 3, FALSE),
+  ('Answer3', 2, TRUE);
