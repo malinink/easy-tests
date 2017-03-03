@@ -33,7 +33,7 @@ public class PointsService {
         this.pointsMapper.update(point);
     }
 
-    public void delete(PointInterface point){
+    public void delete(PointInterface point) {
         this.pointsMapper.delete(point);
     }
 
