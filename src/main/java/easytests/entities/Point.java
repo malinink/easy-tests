@@ -13,7 +13,7 @@ public class Point implements PointInterface {
 
     private String text;
 
-    private QuizInterface quiz;
+    private Integer quizId;
 
     private List<SolutionInterface> solutions;
 
@@ -51,13 +51,13 @@ public class Point implements PointInterface {
     }
 
     @Override
-    public QuizInterface getQuiz() {
-        return this.quiz;
+    public Integer getQuizId() {
+        return this.quizId;
     }
 
     @Override
-    public PointInterface setQuiz(QuizInterface quiz) {
-        this.quiz = quiz;
+    public PointInterface setQuizId(Integer quizId) {
+        this.quizId = quizId;
         return this;
     }
 

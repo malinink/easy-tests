@@ -16,9 +16,9 @@ public interface PointInterface extends EntityInterface {
 
     PointInterface setType(String type);
 
-    QuizInterface getQuiz();
+    Integer getQuizId();
 
-    PointInterface setQuiz(QuizInterface quiz);
+    PointInterface setQuizId(Integer quizId);
 
     List<SolutionInterface> getSolutions();
 
