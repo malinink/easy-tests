@@ -2,6 +2,7 @@ package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
 import easytests.entities.*;
+import easytests.mappers.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

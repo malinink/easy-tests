@@ -20,11 +20,11 @@ public interface TopicsMapper {
                     @Result(property = "questionsId", column = "questions_id")
             })
     @Select("SELECT * FROM topics")
-    List<Topic> findAll();
+    List<TopicInterface> findAll();
 
     @Select("SELECT * FROM topics where id=#{id}")
     @ResultMap("Topic")
-    Topic find(Integer id);
+    TopicInterface find(Integer id);
 
     @Insert("INSERT INTO topics (id, name, questions_id) VALUES(#{id}, #{name}, #{questionsId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
