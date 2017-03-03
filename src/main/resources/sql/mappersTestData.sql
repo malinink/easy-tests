@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS subjects;
 DROP TABLE IF EXISTS questions;
 DROP TABLE IF EXISTS quizzes;
 DROP TABLE IF EXISTS solutions;
+DROP TABLE IF EXISTS points;
 
 
 ----------------------
@@ -100,6 +101,14 @@ CREATE TABLE solutions (
     UNIQUE (answer_id, point_id)
 );
 
+CREATE TABLE points (
+  id      SERIAL  		  NOT NULL,
+  type		VARCHAR(20) 	NOT NULL,
+  text		VARCHAR(300)	NOT NULL,
+  quiz_id	INTEGER			  NOT NULL,
+  	PRIMARY KEY (id)  
+);
+
 
 ----------------------
 -- INSERT DATA
@@ -142,3 +151,8 @@ INSERT INTO quizzes (issue_id, invite_code) VALUES
 
 INSERT INTO solutions (answer_id, point_id) VALUES
   (10, 1), (20, 1), (11, 2), (21, 2), (12, 3);
+  
+INSERT INTO points (type, text, quiz_id) VALUES
+	('type1', 'text1', 1),
+	('type2', 'text2', 2),
+	('type3', 'text3', 3);
