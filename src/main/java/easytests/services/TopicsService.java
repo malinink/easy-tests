@@ -37,9 +37,9 @@ public class TopicsService {
         this.topicsMapper.delete(topic);
     }
 
-    private List<TopicInterface> map(List<Topic> topicsList) {
+    private List<TopicInterface> map(List<TopicInterface> topicsList) {
         final List<TopicInterface> resultTopicList = new ArrayList(topicsList.size());
-        for (Topic topic: topicsList) {
+        for (TopicInterface topic: topicsList) {
             resultTopicList.add(topic);
         }
         return resultTopicList;
