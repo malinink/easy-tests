@@ -71,7 +71,7 @@ public class Issue implements IssueInterface {
 
     @Override
     public Integer getTimeLimit() {
-        return standard.getTimeLimit()
+        return standard.getTimeLimit();
     }
 
     @Override
