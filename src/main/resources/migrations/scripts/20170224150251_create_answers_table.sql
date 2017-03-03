@@ -22,8 +22,8 @@ CREATE TABLE answers (
   txt VARCHAR(250) NOT NULL,
   question_id INTEGER NOT NULL,
   is_right BOOLEAN NOT NULL,
-  PRIMARY KEY (id),
-  FOREIGN KEY (question_id) REFERENCES questions(id)
+  PRIMARY KEY (id)--,
+  --FOREIGN KEY (question_id) REFERENCES questions(id)
 );
 
 -- //@UNDO
