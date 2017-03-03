@@ -4,6 +4,7 @@ import easytests.entities.User;
 import easytests.mappers.UsersMapper;
 import org.junit.*;
 import org.junit.runner.*;
+
 import static org.mockito.BDDMockito.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
