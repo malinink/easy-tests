@@ -1,7 +1,7 @@
 package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
-import easytests.entities.User;
+import easytests.entities.UserEntity;
 import easytests.entities.UserInterface;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class UsersMapperTest {
 
     @Test
     public void testFind() throws Exception {
-        final UserInterface user = this.usersMapper.find(1);
+        final UserEntity user = this.usersMapper.find(1);
 
         Assert.assertEquals((long) 1, (long) user.getId());
         Assert.assertEquals("FirstName1", user.getFirstName());
@@ -38,7 +38,7 @@ public class UsersMapperTest {
 
     @Test
     public void testDelete() throws Exception {
-        User user = this.usersMapper.find(1);
+        UserEntity user = this.usersMapper.find(1);
         Assert.assertNotNull(user);
         this.usersMapper.delete(user);
         user = this.usersMapper.find(1);
