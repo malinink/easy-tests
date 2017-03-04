@@ -2,7 +2,6 @@ package easytests.mappers;
 
 import easytests.entities.Subject;
 import easytests.entities.SubjectInterface;
-import easytests.entities.UserInterface;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 

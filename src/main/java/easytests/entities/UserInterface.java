@@ -2,8 +2,9 @@ package easytests.entities;
 
 /**
  * @author malinink
- * @deprecated
+ * @deprecated cause of models
  */
+@Deprecated
 public interface UserInterface extends EntityInterface {
     void setId(Integer id);
 

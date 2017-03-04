@@ -1,6 +1,5 @@
 package easytests.controllers;
 
-import easytests.entities.UserInterface;
 import easytests.models.UserModelInterface;
 import easytests.services.UsersService;
 import java.util.*;
