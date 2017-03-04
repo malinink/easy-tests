@@ -1,13 +1,14 @@
 package easytests.services;
 
-import easytests.entities.IssueStandardInterface;
 import easytests.entities.Subject;
-import easytests.entities.User;
-import easytests.entities.UserInterface;
 import easytests.mappers.SubjectsMapper;
+import easytests.models.UserModel;
+import easytests.models.UserModelInterface;
 import org.junit.*;
 import org.junit.runner.*;
 import static org.mockito.BDDMockito.*;
+
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.mock.mockito.*;
@@ -40,13 +41,12 @@ public class SubjectsServiceTest {
 
     @Test
     public void findByUserTest() {
+        final Integer userId = 3;
+        final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
+        Mockito.when(userModel.getId()).thenReturn(userId);
+        this.subjectsService.findByUser(userModel);
 
-        final UserInterface user = new User();
-
-        user.setId(3);
-        this.subjectsService.findByUser(user);
-
-        verify(this.subjectsMapper, times(1)).findByUser(user);
+        verify(this.subjectsMapper, times(1)).findByUserId(userId);
     }
 
     @Test

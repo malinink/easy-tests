@@ -1,7 +1,9 @@
 package easytests.services;
 
-import easytests.entities.User;
+import easytests.entities.UserEntity;
 import easytests.mappers.UsersMapper;
+import easytests.models.UserModel;
+import org.apache.catalina.User;
 import org.junit.*;
 import org.junit.runner.*;
 import static org.mockito.BDDMockito.*;
@@ -25,16 +27,20 @@ public class UsersServiceTest {
 
     @Test
     public void saveCreatesEntityTest() {
-        final User user = new User();
-        this.usersService.save(user);
-        verify(this.usersMapper, times(1)).insert(user);
+        final UserModel userModel = new UserModel();
+        final UserEntity userEntity = new UserEntity();
+        userEntity.map(userModel);
+        this.usersService.save(userModel);
+        verify(this.usersMapper, times(1)).insert(userEntity);
     }
 
     @Test
     public void saveUpdatesEntityTest() {
-        final User user = new User();
-        user.setId(1);
-        this.usersService.save(user);
-        verify(this.usersMapper, times(1)).update(user);
+        final UserModel userModel = new UserModel();
+        userModel.setId(1);
+        final UserEntity userEntity = new UserEntity();
+        userEntity.map(userModel);
+        this.usersService.save(userModel);
+        verify(this.usersMapper, times(1)).update(userEntity);
     }
 }
