@@ -1,8 +1,8 @@
 package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
-import easytests.entities.UserEntity;
-import easytests.entities.UserInterface;
+import easytests.entities.Question;
+import easytests.entities.QuestionInterface;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,33 +15,33 @@ import org.springframework.test.context.junit4.*;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 /**
- * @author malinink
+ * @author firkhraag
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:database.test.properties"})
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class UsersMapperTest {
+public class QuestionsMapperTest {
+
     @Autowired
-    private UsersMapper usersMapper;
+    private QuestionsMapper questionsMapper;
 
     @Test
     public void testFind() throws Exception {
-        final UserEntity user = this.usersMapper.find(1);
-
-        Assert.assertEquals((long) 1, (long) user.getId());
-        Assert.assertEquals("FirstName1", user.getFirstName());
-        Assert.assertEquals("LastName1", user.getLastName());
-        Assert.assertEquals("Surname1", user.getSurname());
+        final QuestionInterface question = this.questionsMapper.find(1);
+        Assert.assertEquals((long) 1, (long) question.getId());
+        Assert.assertEquals("test1", question.getText());
+        Assert.assertEquals((long) 1, (long) question.getType());
+        Assert.assertEquals((long) 1, (long) question.getTopicId());
     }
 
     @Test
     public void testDelete() throws Exception {
-        UserEntity user = this.usersMapper.find(1);
-        Assert.assertNotNull(user);
-        this.usersMapper.delete(user);
-        user = this.usersMapper.find(1);
-        Assert.assertNull(user);
+        Question question = this.questionsMapper.find(1);
+        Assert.assertNotNull(question);
+        this.questionsMapper.delete(question);
+        question = this.questionsMapper.find(1);
+        Assert.assertNull(question);
     }
 }
