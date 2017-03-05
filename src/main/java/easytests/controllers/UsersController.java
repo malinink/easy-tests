@@ -1,6 +1,6 @@
 package easytests.controllers;
 
-import easytests.entities.UserInterface;
+import easytests.models.UserModelInterface;
 import easytests.services.UsersService;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class UsersController {
 
     @RequestMapping("/users")
     public String list(Model model) {
-        final List<UserInterface> users = this.usersService.findAll();
+        final List<UserModelInterface> users = this.usersService.findAll();
         model.addAttribute("users", users);
         return "users/list";
     }
