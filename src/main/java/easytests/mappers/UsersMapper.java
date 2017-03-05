@@ -29,7 +29,7 @@ public interface UsersMapper {
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(UserEntity user);
 
-    @Update("UPDATE users SET first_name=#{firstName}, last_name=#{last_name}, surname=#{surname} WHERE id=#{id}")
+    @Update("UPDATE users SET first_name=#{firstName}, last_name=#{lastName}, surname=#{surname} WHERE id=#{id}")
     void update(UserEntity user);
 
     @Delete("DELETE FROM users WHERE id=#{id}")
