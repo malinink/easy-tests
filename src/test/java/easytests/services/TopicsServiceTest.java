@@ -1,16 +1,12 @@
 package easytests.services;
 
 import easytests.entities.Topic;
-import easytests.entities.User;
 import easytests.mappers.TopicsMapper;
-import easytests.mappers.UsersMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.times;
