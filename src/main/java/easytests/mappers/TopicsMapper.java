@@ -20,7 +20,7 @@ public interface TopicsMapper {
                     @Result(property = "questionsId", column = "questions_id")
             })
     @Select("SELECT * FROM topics")
-    List<TopicInterface> findAll();
+    List<Topic> findAll();
 
     @Select("SELECT * FROM topics where id=#{id}")
     @ResultMap("Topic")

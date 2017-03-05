@@ -13,7 +13,7 @@ public class Topic implements TopicInterface {
 
     private String name;
 
-    //private Integer questionsId;
+    private Integer questionsId;
 
     @Override
     public Integer getId() {
