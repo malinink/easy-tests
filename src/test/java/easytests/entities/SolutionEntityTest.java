@@ -14,32 +14,12 @@ import static org.junit.Assert.assertEquals;
  * @author SingularityA
  */
 public class SolutionEntityTest {
+
     @Test
     public void testCommon() throws Exception {
         new BeanTester().testBean(SolutionEntity.class);
         new EqualsMethodTester().testEqualsMethod(SolutionEntity.class);
         new HashCodeMethodTester().testHashCodeMethod(SolutionEntity.class);
-    }
-
-    @Test
-    public void testId() throws Exception {
-        final SolutionEntity solution = new SolutionEntity();
-        solution.setId(1);
-        assertEquals((Integer) 1, solution.getId());
-    }
-
-    @Test
-    public void testAnswerId() throws Exception {
-        final SolutionEntity solution = new SolutionEntity();
-        solution.setAnswerId(1);
-        assertEquals((Integer) 1, solution.getAnswerId());
-    }
-
-    @Test
-    public void testPointId() throws Exception {
-        final SolutionEntity solution = new SolutionEntity();
-        solution.setPointId(1);
-        assertEquals((Integer) 1, solution.getPointId());
     }
 
     @Test
