@@ -1,9 +1,9 @@
 package easytests.entities;
 
 /**
- * @author malinink
+ * @author DoZor-80
  */
-public class User implements UserInterface {
+public class Testee implements TesteeInterface {
 
     private Integer id;
 
@@ -13,13 +13,15 @@ public class User implements UserInterface {
 
     private String surname;
 
+    private Integer groupNumber;
+
     @Override
     public Integer getId() {
         return this.id;
     }
 
     @Override
-    public UserInterface setId(Integer id) {
+    public Testee setId(Integer id) {
         this.id = id;
         return this;
     }
@@ -30,7 +32,7 @@ public class User implements UserInterface {
     }
 
     @Override
-    public UserInterface setFirstName(String firstName) {
+    public Testee setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -41,7 +43,7 @@ public class User implements UserInterface {
     }
 
     @Override
-    public UserInterface setLastName(String lastName) {
+    public Testee setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
@@ -52,8 +54,19 @@ public class User implements UserInterface {
     }
 
     @Override
-    public UserInterface setSurname(String surname) {
+    public Testee setSurname(String surname) {
         this.surname = surname;
+        return this;
+    }
+
+    @Override
+    public Integer getGroupNumber() {
+        return this.groupNumber;
+    }
+
+    @Override
+    public Testee setGroupNumber(Integer groupNumber) {
+        this.groupNumber = groupNumber;
         return this;
     }
 }
