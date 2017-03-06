@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS subjects;
 DROP TABLE IF EXISTS questions;
 DROP TABLE IF EXISTS quizzes;
 DROP TABLE IF EXISTS solutions;
+DROP TABLE IF EXISTS testees;
 DROP TABLE IF EXISTS points;
 
 
@@ -101,6 +102,15 @@ CREATE TABLE solutions (
     UNIQUE (answer_id, point_id)
 );
 
+CREATE TABLE testees (
+  id           SERIAL      NOT NULL,
+  first_name   VARCHAR(30) NOT NULL,
+  last_name    VARCHAR(30) NOT NULL,
+  surname      VARCHAR(30) NOT NULL,
+  group_number INTEGER     NOT NULL,
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE points (
   id      SERIAL  		  NOT NULL,
   type		VARCHAR(20) 	NOT NULL,
@@ -151,8 +161,14 @@ INSERT INTO quizzes (issue_id, invite_code) VALUES
 
 INSERT INTO solutions (answer_id, point_id) VALUES
   (10, 1), (20, 1), (11, 2), (21, 2), (12, 3);
+
+INSERT INTO testees (first_name, last_name, surname, group_number) VALUES
+  ('FirstName1', 'LastName1', 'Surname1', 301),
+  ('FirstName2', 'LastName2', 'Surname2', 302),
+  ('FirstName3', 'LastName3', 'Surname3', 303);
   
 INSERT INTO points (type, text, quiz_id) VALUES
 	('type1', 'text1', 1),
 	('type2', 'text2', 2),
 	('type3', 'text3', 3);
+
