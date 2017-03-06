@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS issue_standard;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS subjects;
 DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS answers;
 DROP TABLE IF EXISTS quizzes;
 DROP TABLE IF EXISTS solutions;
 DROP TABLE IF EXISTS testees;
@@ -87,6 +88,15 @@ CREATE TABLE questions (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE answers (
+  id SERIAL NOT NULL,
+  txt VARCHAR(250) NOT NULL,
+  question_id INTEGER NOT NULL,
+  is_right BOOLEAN NOT NULL,
+    PRIMARY KEY (id)--,
+    --FOREIGN KEY (question_id) REFERENCES questions(id)
+);
+
 CREATE TABLE quizzes (
   id         SERIAL      NOT NULL,
   issue_id  INTEGER NOT NULL,
@@ -153,6 +163,11 @@ INSERT INTO questions (text, type, topic_id) VALUES
   ('test1', 1, 1),
   ('test2', 2, 1),
   ('test3', 3, 1);
+
+INSERT INTO answers(txt, question_id, is_right) VALUES
+  ('Answer1', 1, TRUE),
+  ('Answer2', 3, FALSE),
+  ('Answer3', 2, TRUE);
 
 INSERT INTO quizzes (issue_id, invite_code) VALUES
  (1, 'test_invite_code1'),
