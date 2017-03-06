@@ -7,13 +7,14 @@
 ----------------------
 -- DROP TABLES
 ----------------------
+DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS question_type_options;
 DROP TABLE IF EXISTS topic_priorities;
 DROP  TYPE IF EXISTS TOPIC_PRIORITY;
 DROP TABLE IF EXISTS issue_standard;
-DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS subjects;
 DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS issues;
 DROP TABLE IF EXISTS quizzes;
 DROP TABLE IF EXISTS solutions;
 DROP TABLE IF EXISTS testees;
@@ -87,6 +88,13 @@ CREATE TABLE questions (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE issues (
+  id          SERIAL        NOT NULL,
+  name        VARCHAR(100)  NOT NULL,
+  author_id   SERIAL        NOT NULL,
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE quizzes (
   id         SERIAL      NOT NULL,
   issue_id  INTEGER NOT NULL,
@@ -153,6 +161,11 @@ INSERT INTO questions (text, type, topic_id) VALUES
   ('test1', 1, 1),
   ('test2', 2, 1),
   ('test3', 3, 1);
+
+INSERT INTO issues (name, author_id) VALUES
+  ('Name1', 11),
+  ('Name2', 12),
+  ('Name3', 13);
 
 INSERT INTO quizzes (issue_id, invite_code) VALUES
  (1, 'test_invite_code1'),
