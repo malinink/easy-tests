@@ -2,10 +2,13 @@ package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
 import easytests.entities.*;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.*;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,8 +16,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.*;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import java.util.List;
 
 /**
  * @author SingularityA
@@ -63,6 +64,8 @@ public class SolutionsMapperTest {
         Mockito.when((solutionEntity.getPointId())).thenReturn(pointId);
 
         this.solutionsMapper.insert(solutionEntity);
+
+        verify(solutionEntity, times(1)).setId(id);
 
         solutionEntity = this.solutionsMapper.find(6);
         Assert.assertNotNull(solutionEntity);
