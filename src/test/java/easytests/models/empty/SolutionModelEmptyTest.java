@@ -74,31 +74,4 @@ public class SolutionModelEmptyTest {
         exception.expect(CallMethodOnEmptyModelException.class);
         solutionModel.map(solutionEntity);
     }
-
-    @Ignore
-    @Test
-    public void testMethods() {
-        Integer id = 1;
-        final SolutionModelInterface solutionModel = new SolutionModelEmpty(id);
-        Method[] methods = solutionModel.getClass().getMethods();
-
-        for (Method method: methods) {
-            if (method.getName().equals("getId")) {
-                Assert.assertEquals(id, solutionModel.getId());
-            } else {
-                try {
-                    Class[] paramTypes = method.getParameterTypes();
-                    Object[] args = new Object[paramTypes.length];
-
-                    // не может создавать инстансы интерфейсов, потому падает
-                    for (int i = 0; i < args.length; i++) {
-                        args[i] = paramTypes[i].newInstance();
-                    }
-                    method.invoke(solutionModel, args);
-                } catch (Exception exc) {
-                    Assert.assertEquals(exc.getClass(), CallMethodOnEmptyModelException.class);
-                }
-            }
-        }
-    }
 }
