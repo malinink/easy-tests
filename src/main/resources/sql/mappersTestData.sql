@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS questions;
 DROP TABLE IF EXISTS quizzes;
 DROP TABLE IF EXISTS solutions;
 DROP TABLE IF EXISTS testees;
+DROP TABLE IF EXISTS points;
 
 
 ----------------------
@@ -110,6 +111,15 @@ CREATE TABLE testees (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE points (
+  id      SERIAL  		  NOT NULL,
+  type		VARCHAR(20) 	NOT NULL,
+  text		VARCHAR(300)	NOT NULL,
+  quiz_id	INTEGER			  NOT NULL,
+  	PRIMARY KEY (id)  
+);
+
+
 ----------------------
 -- INSERT DATA
 ----------------------
@@ -156,3 +166,9 @@ INSERT INTO testees (first_name, last_name, surname, group_number) VALUES
   ('FirstName1', 'LastName1', 'Surname1', 301),
   ('FirstName2', 'LastName2', 'Surname2', 302),
   ('FirstName3', 'LastName3', 'Surname3', 303);
+  
+INSERT INTO points (type, text, quiz_id) VALUES
+	('type1', 'text1', 1),
+	('type2', 'text2', 2),
+	('type3', 'text3', 3);
+

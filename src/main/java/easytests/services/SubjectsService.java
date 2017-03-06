@@ -2,6 +2,7 @@ package easytests.services;
 
 import easytests.entities.*;
 import easytests.mappers.SubjectsMapper;
+import easytests.models.UserModelInterface;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,8 @@ public class SubjectsService {
         return subjectsMapper.find(id);
     }
 
-    public List<SubjectInterface> findByUser(UserInterface user) {
-        return subjectsMapper.findByUser(user);
+    public List<SubjectInterface> findByUser(UserModelInterface userModel) {
+        return subjectsMapper.findByUserId(userModel.getId());
     }
 
     public void save(SubjectInterface subject) {

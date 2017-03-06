@@ -2,9 +2,11 @@ package easytests.entities;
 
 /**
  * @author malinink
+ * @deprecated cause of models
  */
+@Deprecated
 public interface UserInterface extends EntityInterface {
-    UserInterface setId(Integer id);
+    void setId(Integer id);
 
     String getFirstName();
 

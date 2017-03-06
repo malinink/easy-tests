@@ -1,16 +1,15 @@
 package easytests.mappers;
 
-import easytests.entities.User;
-import easytests.entities.UserInterface;
+import easytests.entities.UserEntity;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
+
 
 /**
  * @author malinink
  */
 @Mapper
 public interface UsersMapper {
-
     @Results(
         id = "User",
         value = {
@@ -20,20 +19,19 @@ public interface UsersMapper {
             @Result(property = "surname", column = "surname")
         })
     @Select("SELECT id, first_name, last_name, surname FROM users")
-    List<User> findAll();
+    List<UserEntity> findAll();
 
     @Select("SELECT id, first_name, last_name, surname FROM users where id=#{id}")
     @ResultMap("User")
-    User find(Integer id);
+    UserEntity find(Integer id);
 
     @Insert("INSERT INTO users (first_name, last_name, surname) VALUES(#{firstName}, #{lastName}, #{surname})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
-    void insert(UserInterface user);
+    void insert(UserEntity user);
 
-    @Update("UPDATE users SET first_name=#{firstName}, last_name=#{last_name}, surname=#{surname} WHERE id=#{id}")
-    void update(UserInterface user);
+    @Update("UPDATE users SET first_name=#{firstName}, last_name=#{lastName}, surname=#{surname} WHERE id=#{id}")
+    void update(UserEntity user);
 
     @Delete("DELETE FROM users WHERE id=#{id}")
-    void delete(UserInterface user);
-
+    void delete(UserEntity user);
 }
