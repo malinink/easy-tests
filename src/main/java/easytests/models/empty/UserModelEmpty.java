@@ -3,7 +3,6 @@ package easytests.models.empty;
 import easytests.entities.UserEntity;
 import easytests.models.SubjectModelInterface;
 import easytests.models.UserModelInterface;
-import easytests.models.exceptions.CallMethodOnEmptyModelException;
 import java.util.List;
 
 
@@ -63,9 +62,5 @@ public class UserModelEmpty extends AbstractModelEmpty implements UserModelInter
     @Override
     public void map(UserEntity userEntity) {
         this.throwException();
-    }
-
-    private void throwException() throws CallMethodOnEmptyModelException {
-        throw new CallMethodOnEmptyModelException();
     }
 }

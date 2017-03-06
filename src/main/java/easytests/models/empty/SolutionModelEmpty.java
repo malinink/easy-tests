@@ -4,7 +4,6 @@ import easytests.entities.SolutionEntity;
 import easytests.models.AnswerModelInterface;
 import easytests.models.PointModelInterface;
 import easytests.models.SolutionModelInterface;
-import easytests.models.exceptions.CallMethodOnEmptyModelException;
 
 /**
  * @author SingularityA
@@ -49,9 +48,5 @@ public class SolutionModelEmpty extends AbstractModelEmpty implements SolutionMo
     @Override
     public void map(SolutionEntity solutionEntity) {
         this.throwException();
-    }
-
-    private void throwException() throws CallMethodOnEmptyModelException {
-        throw new CallMethodOnEmptyModelException();
     }
 }
