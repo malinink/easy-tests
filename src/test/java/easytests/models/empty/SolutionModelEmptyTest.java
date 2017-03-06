@@ -1,5 +1,6 @@
 package easytests.models.empty;
 
+import easytests.entities.SolutionEntity;
 import easytests.models.AnswerModelInterface;
 import easytests.models.PointModelInterface;
 import easytests.models.SolutionModelInterface;
@@ -62,6 +63,16 @@ public class SolutionModelEmptyTest {
         exception.expect(CallMethodOnEmptyModelException.class);
         solutionModel.setPoint(point);
         solutionModel.getPoint();
+    }
+
+    @Test
+    public void testMap() {
+        Integer id = 1;
+        final SolutionEntity solutionEntity = Mockito.mock(SolutionEntity.class);
+        final SolutionModelInterface solutionModel = new SolutionModelEmpty(id);
+
+        exception.expect(CallMethodOnEmptyModelException.class);
+        solutionModel.map(solutionEntity);
     }
 
     @Ignore
