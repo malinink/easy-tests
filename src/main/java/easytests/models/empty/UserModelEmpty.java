@@ -3,6 +3,8 @@ package easytests.models.empty;
 import easytests.entities.UserEntity;
 import easytests.models.SubjectModelInterface;
 import easytests.models.UserModelInterface;
+import easytests.models.exceptions.CreateEmptyModelWithNullIdException;
+import easytests.models.exceptions.CreateEmptyModelWithoutIdException;
 import java.util.List;
 
 
@@ -10,6 +12,14 @@ import java.util.List;
  * @author malinink
  */
 public class UserModelEmpty extends AbstractModelEmpty implements UserModelInterface {
+    public UserModelEmpty(Integer id) throws CreateEmptyModelWithNullIdException{
+        super(id);
+    }
+
+    public UserModelEmpty() throws CreateEmptyModelWithoutIdException {
+        super();
+    }
+
     @Override
     public void setId(Integer id) {
         this.throwException();
