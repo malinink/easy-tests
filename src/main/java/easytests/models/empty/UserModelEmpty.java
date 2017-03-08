@@ -12,7 +12,7 @@ import java.util.List;
  * @author malinink
  */
 public class UserModelEmpty extends AbstractModelEmpty implements UserModelInterface {
-    public UserModelEmpty(Integer id) throws CreateEmptyModelWithNullIdException{
+    public UserModelEmpty(Integer id) throws CreateEmptyModelWithNullIdException {
         super(id);
     }
 
