@@ -1,9 +1,9 @@
 package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
-import easytests.entities.Subject;
-import easytests.entities.SubjectInterface;
-import easytests.entities.UserInterface;
+import easytests.entities.SubjectEntity;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import java.util.List;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 
 /**
  * @author vkpankov
@@ -27,78 +29,104 @@ import java.util.List;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
 public class SubjectsMapperTest {
+
     @Autowired
     private SubjectsMapper subjectsMapper;
 
-
     @Test
     public void testFind() throws Exception {
-        final SubjectInterface subject = this.subjectsMapper.find(1);
+
+        final SubjectEntity subject = this.subjectsMapper.find(1);
 
         Assert.assertEquals((long) 1, (long) subject.getId());
         Assert.assertEquals("test1", subject.getName());
+
     }
+
+
+
 
     @Test
     public void testFindAll() throws Exception {
-        final List<SubjectInterface> subjects = this.subjectsMapper.findAll();
 
-        Assert.assertNotNull(subjects);
-        Assert.assertEquals((long) 3, (long) subjects.size());
+        final List<SubjectEntity> subjectEntities = this.subjectsMapper.findAll();
+
+        Assert.assertNotNull(subjectEntities);
+        Assert.assertEquals((long) 3, (long) subjectEntities.size());
+
     }
-
 
     @Test
     public void testUserNotNull() throws Exception {
 
-        UserInterface user = Mockito.mock(UserInterface.class);
-        Mockito.when(user.getId()).thenReturn(1);
-        List<SubjectInterface> subjects = this.subjectsMapper.findByUser(user);
+        final List<SubjectEntity> subjectEntities = this.subjectsMapper.findByUserId(1);
 
-        Assert.assertNotNull(subjects);
-        Assert.assertEquals(0,subjects.size());
+        Assert.assertNotNull(subjectEntities);
+        Assert.assertEquals(0, subjectEntities.size());
+
     }
 
-
     @Test
-    public void testFindByUser() throws Exception {
+    public void testFindByUserId() throws Exception {
 
-        UserInterface user = Mockito.mock(UserInterface.class);
-        Mockito.when(user.getId()).thenReturn(3);
+        final List<SubjectEntity> subjectEntities = this.subjectsMapper.findByUserId(3);
 
-        List<SubjectInterface> subjects = this.subjectsMapper.findByUser(user);
+        Assert.assertEquals(1, subjectEntities.size());
+        Assert.assertEquals("test3", subjectEntities.get(0).getName());
 
-        Assert.assertEquals(1,subjects.size());
-        Assert.assertEquals("test3",subjects.get(0).getName());
     }
 
     @Test
     public void testInsert() throws Exception {
-        final Subject testSubject = new Subject();
 
-        testSubject.setName("test");
-        testSubject.setUserId(1);
+        final Integer id = this.subjectsMapper.findAll().size() + 1;
+
+
+        final Integer testUserId = 1;
+
+        final String testName = "test";
+
+        final SubjectEntity testSubject = Mockito.mock(SubjectEntity.class);
+
+        Mockito.when(testSubject.getId()).thenReturn(id);
+        Mockito.when(testSubject.getName()).thenReturn(testName);
+        Mockito.when(testSubject.getUserId()).thenReturn(testUserId);
 
         subjectsMapper.insert(testSubject);
 
-        final Subject readSubject = subjectsMapper.find(testSubject.getId());
+        verify(testSubject, times(1)).setId(id);
+
+        final SubjectEntity readSubject = subjectsMapper.find(testSubject.getId());
         Assert.assertNotNull(readSubject);
+        Assert.assertEquals(testUserId,readSubject.getUserId());
+        Assert.assertEquals(testName,readSubject.getName());
+
     }
 
     @Test
     public void testUpdate() throws Exception {
 
-        final SubjectInterface subject = this.subjectsMapper.find(2);
-        subject.setName("updated");
+        final Integer id = 2;
+        final String name = "updated";
+
+        SubjectEntity subject = this.subjectsMapper.find(id);
+
+        Assert.assertNotEquals(name,subject.getName());
+
+        subject = Mockito.mock(SubjectEntity.class);
+
+        Mockito.when(subject.getId()).thenReturn(id);
+        Mockito.when(subject.getName()).thenReturn(name);
+
         this.subjectsMapper.update(subject);
 
-        final Subject readSubject = subjectsMapper.find(subject.getId());
-        Assert.assertEquals("updated",readSubject.getName());
+        final SubjectEntity readSubject = subjectsMapper.find(id);
+        Assert.assertEquals(name, readSubject.getName());
     }
 
     @Test
     public void testDelete() throws Exception {
-        SubjectInterface subject = this.subjectsMapper.find(1);
+        SubjectEntity subject = this.subjectsMapper.find(1);
         Assert.assertNotNull(subject);
         this.subjectsMapper.delete(subject);
         subject = this.subjectsMapper.find(1);
