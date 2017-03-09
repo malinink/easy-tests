@@ -3,14 +3,19 @@ package easytests.models;
 import easytests.entities.UserEntity;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.meanbean.test.BeanTester;
 import org.meanbean.test.EqualsMethodTester;
 import org.meanbean.test.HashCodeMethodTester;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * @author malinink
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class UserModelTest {
     @Test
     public void testCommon() throws Exception {
