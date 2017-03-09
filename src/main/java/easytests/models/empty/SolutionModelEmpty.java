@@ -4,6 +4,7 @@ import easytests.entities.SolutionEntity;
 import easytests.models.AnswerModelInterface;
 import easytests.models.PointModelInterface;
 import easytests.models.SolutionModelInterface;
+import easytests.models.exceptions.CallMethodOnEmptyModelException;
 
 /**
  * @author SingularityA
@@ -15,38 +16,36 @@ public class SolutionModelEmpty extends AbstractModelEmpty implements SolutionMo
     }
 
     public SolutionModelEmpty() {
-        super();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setId(Integer id) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public AnswerModelInterface getAnswer() {
-        this.throwException();
-        return null;
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setAnswer(AnswerModelInterface answer) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public PointModelInterface getPoint() {
-        this.throwException();
-        return null;
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setPoint(PointModelInterface point) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void map(SolutionEntity solutionEntity) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 }
