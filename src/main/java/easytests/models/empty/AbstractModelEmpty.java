@@ -1,6 +1,6 @@
 package easytests.models.empty;
 
-import easytests.models.UserModelInterface;
+import easytests.models.ModelInterface;
 import easytests.models.exceptions.CreateEmptyModelWithoutIdException;
 import lombok.Getter;
 
@@ -8,7 +8,7 @@ import lombok.Getter;
 /**
  * @author malinink
  */
-public abstract class AbstractModelEmpty implements UserModelInterface {
+public abstract class AbstractModelEmpty implements ModelInterface {
     @Getter
     protected Integer id;
 
