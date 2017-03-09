@@ -1,7 +1,6 @@
 package easytests.models.empty;
 
 import easytests.models.ModelInterface;
-import easytests.models.exceptions.CallMethodOnEmptyModelException;
 import easytests.models.exceptions.CreateEmptyModelWithNullIdException;
 import easytests.models.exceptions.CreateEmptyModelWithoutIdException;
 import lombok.Getter;
@@ -14,18 +13,14 @@ public abstract class AbstractModelEmpty implements ModelInterface {
     @Getter
     private Integer id;
 
-    public AbstractModelEmpty(Integer id) throws CreateEmptyModelWithNullIdException {
+    public AbstractModelEmpty(Integer id) {
         if (id == null) {
             throw new CreateEmptyModelWithNullIdException();
         }
         this.id = id;
     }
 
-    public AbstractModelEmpty() throws CreateEmptyModelWithoutIdException {
+    public AbstractModelEmpty() {
         throw new CreateEmptyModelWithoutIdException();
-    }
-
-    protected void throwException() throws CallMethodOnEmptyModelException {
-        throw new CallMethodOnEmptyModelException();
     }
 }
