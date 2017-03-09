@@ -15,10 +15,6 @@ public class SolutionModelEmpty extends AbstractModelEmpty implements SolutionMo
         super(id);
     }
 
-    public SolutionModelEmpty() {
-        throw new CallMethodOnEmptyModelException();
-    }
-
     @Override
     public void setId(Integer id) {
         throw new CallMethodOnEmptyModelException();

@@ -15,10 +15,6 @@ public class UserModelEmpty extends AbstractModelEmpty implements UserModelInter
         super(id);
     }
 
-    public UserModelEmpty() {
-        throw new CallMethodOnEmptyModelException();
-    }
-
     @Override
     public void setId(Integer id) {
         throw new CallMethodOnEmptyModelException();
