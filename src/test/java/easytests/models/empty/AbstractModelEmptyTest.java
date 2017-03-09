@@ -2,7 +2,6 @@ package easytests.models.empty;
 
 import easytests.models.ModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
-import easytests.models.exceptions.CreateEmptyModelWithoutIdException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -37,9 +36,9 @@ public abstract class AbstractModelEmptyTest {
     public final ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void testDefaultConstructorFails() throws IllegalAccessException, InstantiationException {
-        exception.expect(CreateEmptyModelWithoutIdException.class);
-        modelEmpty.newInstance();
+    public void testRightConstructorPresent() throws NoSuchMethodException {
+        Assert.assertEquals(1, modelEmpty.getConstructors().length);
+        modelEmpty.getConstructor(Integer.class);
     }
 
     @Test

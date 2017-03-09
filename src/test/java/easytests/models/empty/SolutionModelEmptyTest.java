@@ -5,15 +5,12 @@ import easytests.models.AnswerModelInterface;
 import easytests.models.PointModelInterface;
 import easytests.models.SolutionModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
-import easytests.models.exceptions.CreateEmptyModelWithoutIdException;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 
-import java.lang.reflect.Method;
 
 /**
  * @author SingularityA
@@ -28,9 +25,6 @@ public class SolutionModelEmptyTest {
         Integer id = 1;
         SolutionModelInterface solutionModel = new SolutionModelEmpty(id);
         Assert.assertEquals(id, solutionModel.getId());
-
-        exception.expect(CreateEmptyModelWithoutIdException.class);
-        solutionModel = new SolutionModelEmpty();
     }
 
     @Test
