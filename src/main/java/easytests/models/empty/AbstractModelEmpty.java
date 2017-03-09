@@ -1,22 +1,21 @@
 package easytests.models.empty;
 
-import easytests.models.UserModelInterface;
-import easytests.models.exceptions.CreateEmptyModelWithoutIdException;
+import easytests.models.ModelInterface;
+import easytests.models.exceptions.CreateEmptyModelWithNullIdException;
 import lombok.Getter;
 
 
 /**
  * @author malinink
  */
-public abstract class AbstractModelEmpty implements UserModelInterface {
+public abstract class AbstractModelEmpty implements ModelInterface {
     @Getter
-    protected Integer id;
+    private Integer id;
 
     public AbstractModelEmpty(Integer id) {
+        if (id == null) {
+            throw new CreateEmptyModelWithNullIdException();
+        }
         this.id = id;
-    }
-
-    public AbstractModelEmpty() throws CreateEmptyModelWithoutIdException {
-        throw new CreateEmptyModelWithoutIdException();
     }
 }

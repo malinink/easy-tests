@@ -14,8 +14,11 @@ DROP TABLE IF EXISTS issue_standard;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS subjects;
 DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS answers;
 DROP TABLE IF EXISTS quizzes;
 DROP TABLE IF EXISTS solutions;
+DROP TABLE IF EXISTS testees;
+DROP TABLE IF EXISTS points;
 
 
 ----------------------
@@ -85,6 +88,15 @@ CREATE TABLE questions (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE answers (
+  id SERIAL NOT NULL,
+  txt VARCHAR(250) NOT NULL,
+  question_id INTEGER NOT NULL,
+  is_right BOOLEAN NOT NULL,
+    PRIMARY KEY (id)--,
+    --FOREIGN KEY (question_id) REFERENCES questions(id)
+);
+
 CREATE TABLE quizzes (
   id         SERIAL      NOT NULL,
   issue_id  INTEGER NOT NULL,
@@ -98,6 +110,23 @@ CREATE TABLE solutions (
   point_id  INTEGER NOT NULL,
     PRIMARY KEY (id),
     UNIQUE (answer_id, point_id)
+);
+
+CREATE TABLE testees (
+  id           SERIAL      NOT NULL,
+  first_name   VARCHAR(30) NOT NULL,
+  last_name    VARCHAR(30) NOT NULL,
+  surname      VARCHAR(30) NOT NULL,
+  group_number INTEGER     NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE points (
+  id      SERIAL  		  NOT NULL,
+  type		VARCHAR(20) 	NOT NULL,
+  text		VARCHAR(300)	NOT NULL,
+  quiz_id	INTEGER			  NOT NULL,
+  	PRIMARY KEY (id)  
 );
 
 
@@ -135,6 +164,11 @@ INSERT INTO questions (text, type, topic_id) VALUES
   ('test2', 2, 1),
   ('test3', 3, 1);
 
+INSERT INTO answers(txt, question_id, is_right) VALUES
+  ('Answer1', 1, TRUE),
+  ('Answer2', 3, FALSE),
+  ('Answer3', 2, TRUE);
+
 INSERT INTO quizzes (issue_id, invite_code) VALUES
  (1, 'test_invite_code1'),
  (2, 'test_invite_code2'),
@@ -142,3 +176,14 @@ INSERT INTO quizzes (issue_id, invite_code) VALUES
 
 INSERT INTO solutions (answer_id, point_id) VALUES
   (10, 1), (20, 1), (11, 2), (21, 2), (12, 3);
+
+INSERT INTO testees (first_name, last_name, surname, group_number) VALUES
+  ('FirstName1', 'LastName1', 'Surname1', 301),
+  ('FirstName2', 'LastName2', 'Surname2', 302),
+  ('FirstName3', 'LastName3', 'Surname3', 303);
+  
+INSERT INTO points (type, text, quiz_id) VALUES
+	('type1', 'text1', 1),
+	('type2', 'text2', 2),
+	('type3', 'text3', 3);
+
