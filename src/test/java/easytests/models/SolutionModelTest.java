@@ -4,14 +4,19 @@ import easytests.entities.SolutionEntity;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.meanbean.test.BeanTester;
 import org.meanbean.test.EqualsMethodTester;
 import org.meanbean.test.HashCodeMethodTester;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * @author SingularityA
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class SolutionModelTest {
     @Ignore
     @Test

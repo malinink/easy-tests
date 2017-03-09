@@ -9,12 +9,17 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 
 /**
  * @author SingularityA
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class SolutionModelEmptyTest {
 
     @Rule
