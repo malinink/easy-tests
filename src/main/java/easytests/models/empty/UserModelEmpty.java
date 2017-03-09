@@ -3,8 +3,7 @@ package easytests.models.empty;
 import easytests.entities.UserEntity;
 import easytests.models.SubjectModelInterface;
 import easytests.models.UserModelInterface;
-import easytests.models.exceptions.CreateEmptyModelWithNullIdException;
-import easytests.models.exceptions.CreateEmptyModelWithoutIdException;
+import easytests.models.exceptions.CallMethodOnEmptyModelException;
 import java.util.List;
 
 
@@ -12,65 +11,61 @@ import java.util.List;
  * @author malinink
  */
 public class UserModelEmpty extends AbstractModelEmpty implements UserModelInterface {
-    public UserModelEmpty(Integer id) throws CreateEmptyModelWithNullIdException {
+    public UserModelEmpty(Integer id) {
         super(id);
     }
 
-    public UserModelEmpty() throws CreateEmptyModelWithoutIdException {
-        super();
+    public UserModelEmpty() {
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setId(Integer id) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public String getFirstName() {
-        this.throwException();
-        return null;
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setFirstName(String firstName) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public String getLastName() {
-        this.throwException();
-        return null;
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setLastName(String lastName) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public String getSurname() {
-        this.throwException();
-        return null;
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setSurname(String surname) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public List<SubjectModelInterface> getSubjects() {
-        this.throwException();
-        return null;
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setSubjects(List<SubjectModelInterface> subjects) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void map(UserEntity userEntity) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 }
