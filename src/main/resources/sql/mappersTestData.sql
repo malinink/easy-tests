@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS quizzes;
 DROP TABLE IF EXISTS solutions;
 DROP TABLE IF EXISTS testees;
 DROP TABLE IF EXISTS points;
-
+DROP TABLE IF EXISTS issues;
 
 ----------------------
 -- CREATE TABLES
@@ -129,6 +129,13 @@ CREATE TABLE points (
   	PRIMARY KEY (id)  
 );
 
+CREATE TABLE issues (
+  id          SERIAL        NOT NULL,
+  name        VARCHAR(100)  NOT NULL,
+  author_id   SERIAL        NOT NULL,
+  PRIMARY KEY (id)
+);
+
 
 ----------------------
 -- INSERT DATA
@@ -187,3 +194,7 @@ INSERT INTO points (type, text, quiz_id) VALUES
 	('type2', 'text2', 2),
 	('type3', 'text3', 3);
 
+INSERT INTO issues (name, author_id) VALUES
+  ('Name1', 11),
+  ('Name2', 12),
+  ('Name3', 13);
