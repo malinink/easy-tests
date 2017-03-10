@@ -20,59 +20,51 @@ public class SubjectModelEmpty extends AbstractModelEmpty implements SubjectMode
 
     @Override
     public void setId(Integer id) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public String getName() {
-        this.throwException();
-        return null;
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setName(String name) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public List<TopicModelInterface> getTopics() {
-        this.throwException();
-        return null;
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setTopics(List<TopicModelInterface> topics) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public IssueStandardModelInterface getIssueStandard() {
-        this.throwException();
-        return null;
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setIssueStandard(IssueStandardModelInterface issueStandard) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public UserModelInterface getUser() {
-        this.throwException();
-        return null;
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setUser(UserModelInterface user) {
-        this.throwException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void map(SubjectEntity subjectEntity) {
-        this.throwException();
-    }
-
-    private void throwException() throws CallMethodOnEmptyModelException {
         throw new CallMethodOnEmptyModelException();
     }
 
