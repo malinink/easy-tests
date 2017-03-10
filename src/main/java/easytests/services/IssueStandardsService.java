@@ -1,9 +1,9 @@
 package easytests.services;
 
 import easytests.entities.*;
-import easytests.mappers.IssueStandardMapper;
-import easytests.mappers.IssueStandardQuestionTypeOptionMapper;
-import easytests.mappers.IssueStandardTopicPriorityMapper;
+import easytests.mappers.IssueStandardQuestionTypeOptionsMapper;
+import easytests.mappers.IssueStandardTopicPrioritiesMapper;
+import easytests.mappers.IssueStandardsMapper;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,19 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @author SingularityA
  */
-public class IssueStandardService {
+public class IssueStandardsService {
 
     @Autowired
-    private IssueStandardMapper issueStandardMapper;
+    private IssueStandardsMapper issueStandardsMapper;
 
     @Autowired
-    private IssueStandardTopicPriorityMapper topicPriorityMapper;
+    private IssueStandardTopicPrioritiesMapper topicPriorityMapper;
 
     @Autowired
-    private IssueStandardQuestionTypeOptionMapper questionTypeOptionMapper;
+    private IssueStandardQuestionTypeOptionsMapper questionTypeOptionMapper;
 
     public List<IssueStandardInterface> findAll() {
-        final List<IssueStandardInterface> issueStandards = this.map(this.issueStandardMapper.findAll());
+        final List<IssueStandardInterface> issueStandards = this.map(this.issueStandardsMapper.findAll());
 
         if (issueStandards != null) {
             List<IssueStandardTopicPriorityInterface> topicPriorities;
@@ -41,7 +41,7 @@ public class IssueStandardService {
     }
 
     public IssueStandardInterface find(Integer id) {
-        final IssueStandardInterface issueStandard = this.issueStandardMapper.find(id);
+        final IssueStandardInterface issueStandard = this.issueStandardsMapper.find(id);
 
         if (issueStandard != null) {
             final List<IssueStandardTopicPriorityInterface> topicPriorities
@@ -57,7 +57,7 @@ public class IssueStandardService {
     }
 
     public IssueStandardInterface findBySubject(SubjectInterface subject) {
-        final IssueStandardInterface issueStandard = this.issueStandardMapper.findBySubject(subject);
+        final IssueStandardInterface issueStandard = this.issueStandardsMapper.findBySubject(subject);
 
         if (issueStandard != null) {
             final List<IssueStandardTopicPriorityInterface> topicPriorities
@@ -75,7 +75,7 @@ public class IssueStandardService {
     public void save(IssueStandardInterface issueStandard) {
         if (issueStandard.getId() != null) {
             // обновляем issueStandard
-            this.issueStandardMapper.update(issueStandard);
+            this.issueStandardsMapper.update(issueStandard);
 
             // обновляем topicPriorities
             for (IssueStandardTopicPriorityInterface topicPriority : issueStandard.getIssueStandardTopicPriorities()) {
@@ -110,7 +110,7 @@ public class IssueStandardService {
 
         } else {
             // создаем issueStandard
-            this.issueStandardMapper.insert(issueStandard);
+            this.issueStandardsMapper.insert(issueStandard);
 
             // создаем topicPriorities
             for (IssueStandardTopicPriorityInterface topicPriority : issueStandard.getIssueStandardTopicPriorities()) {
@@ -126,7 +126,7 @@ public class IssueStandardService {
     }
 
     public void delete(IssueStandardInterface issueStandard) {
-        this.issueStandardMapper.delete(issueStandard);
+        this.issueStandardsMapper.delete(issueStandard);
     }
 
     private <T> List<T> map(List<? extends T> objectList) {

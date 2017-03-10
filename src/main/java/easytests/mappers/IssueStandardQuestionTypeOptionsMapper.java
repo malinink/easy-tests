@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.*;
  * @author  SingularityA
  */
 @Mapper
-public interface IssueStandardQuestionTypeOptionMapper {
+public interface IssueStandardQuestionTypeOptionsMapper {
 
     @Results(
         id = "IssueStandardQuestionTypeOption",
