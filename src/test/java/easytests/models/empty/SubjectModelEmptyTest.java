@@ -10,6 +10,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * @author vkpankov
@@ -67,5 +70,22 @@ public class SubjectModelEmptyTest extends AbstractModelEmptyTest {
         exception.expect(CallMethodOnEmptyModelException.class);
         subjectModel.setIssueStandard(issueStandard);
         subjectModel.getIssueStandard();
+    }
+
+    @Test
+    public void testTopics() {
+
+        final Integer id = 1;
+
+        final TopicModelInterface topic = Mockito.mock(TopicModelInterface.class);
+        final List<TopicModelInterface> topics = new ArrayList<>();
+        topics.add(topic);
+
+        final SubjectModelInterface subjectModel = new SubjectModelEmpty(id);
+
+        exception.expect(CallMethodOnEmptyModelException.class);
+        subjectModel.setTopics(topics);
+        subjectModel.getTopics();
+
     }
 }
