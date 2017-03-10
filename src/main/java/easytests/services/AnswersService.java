@@ -1,10 +1,13 @@
 package easytests.services;
 
-import easytests.entities.Answer;
-import easytests.entities.AnswerInterface;
+import easytests.entities.AnswerEntity;
 import easytests.mappers.AnswersMapper;
+import easytests.models.AnswerModel;
+import easytests.models.AnswerModelInterface;
+import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,30 +21,51 @@ public class AnswersService {
     @Autowired
     private AnswersMapper answersMapper;
 
-    public List<AnswerInterface> findAll() {
+    public List<AnswerModelInterface> findAll() {
         return this.map(this.answersMapper.findAll());
     }
 
-    public AnswerInterface find(Integer id) {
-        return this.answersMapper.find(id);
+    public AnswerModelInterface find(Integer id) {
+        final AnswerEntity answerEntity = this.answersMapper.find(id);
+        if (answerEntity == null) {
+            return null;
+        }
+        return this.map(answerEntity);
     }
 
-    public void save(AnswerInterface answer) {
-        if (answer.getId() == null) {
-            this.answersMapper.insert(answer);
+    public void save(AnswerModelInterface answerModel) {
+        final AnswerEntity answerEntity = this.map(answerModel);
+        if (answerEntity.getId() == null) {
+            this.answersMapper.insert(answerEntity);
             return;
         }
-        this.answersMapper.update(answer);
+        this.answersMapper.update(answerEntity);
     }
 
-    public void delete(AnswerInterface answer) {
-        this.answersMapper.delete(answer);
+    public void delete(AnswerModelInterface answerModel) {
+        final AnswerEntity answerEntity = this.map(answerModel);
+        if (answerEntity.getId() == null) {
+            throw new DeleteUnidentifiedModelException();
+        }
+        this.answersMapper.delete(answerEntity);
     }
 
-    private List<AnswerInterface> map(List<Answer> answersList) {
-        final List<AnswerInterface> resultAnswerList = new ArrayList(answersList.size());
-        for (Answer answer: answersList) {
-            resultAnswerList.add(answer);
+    private AnswerModelInterface map(AnswerEntity answerEntity) {
+        final AnswerModelInterface answerModel = new AnswerModel();
+        answerModel.map(answerEntity);
+        return answerModel;
+    }
+
+    private AnswerEntity map(AnswerModelInterface answerModel) {
+        final AnswerEntity answerEntity = new AnswerEntity();
+        answerEntity.map(answerModel);
+        return answerEntity;
+    }
+
+    private List<AnswerModelInterface> map(List<AnswerEntity> answersList) {
+        final List<AnswerModelInterface> resultAnswerList = new ArrayList(answersList.size());
+        for (AnswerEntity answer: answersList) {
+            resultAnswerList.add(this.map(answer));
         }
         return resultAnswerList;
     }
