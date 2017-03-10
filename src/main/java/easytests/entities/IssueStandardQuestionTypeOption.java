@@ -2,7 +2,9 @@ package easytests.entities;
 
 /**
  * @author SingularityA
+ * @deprecated cause of models
  */
+@Deprecated
 public class IssueStandardQuestionTypeOption implements IssueStandardQuestionTypeOptionInterface {
 
     private Integer id;

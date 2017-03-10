@@ -4,7 +4,9 @@ import java.util.List;
 
 /**
  * @author SingularityA
+ * @deprecated cause of models
  */
+@Deprecated
 public class IssueStandard implements IssueStandardInterface {
 
     private Integer id;
