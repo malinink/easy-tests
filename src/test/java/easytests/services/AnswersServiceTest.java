@@ -114,7 +114,7 @@ public class AnswersServiceTest {
 
     @Test
     public void testSaveCreatesEntity() throws Exception {
-        final AnswerModelInterface answerModel = this.createAnswerModel(null, "Answer", 1, true);
+        final AnswerModelInterface answerModel = this.createAnswerModel(null, "Answer11", 1, true);
 
         this.answersService.save(answerModel);
 
@@ -123,7 +123,7 @@ public class AnswersServiceTest {
 
     @Test
     public void testSaveUpdatesEntity() throws Exception {
-        final AnswerModelInterface answerModel = this.createAnswerModel(1, "Answer", 1, true);
+        final AnswerModelInterface answerModel = this.createAnswerModel(1, "Answer22", 1, true);
 
         this.answersService.save(answerModel);
 
@@ -132,7 +132,7 @@ public class AnswersServiceTest {
 
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
-        final AnswerModelInterface answerModel = this.createAnswerModel(1, "Answer", 1, true);
+        final AnswerModelInterface answerModel = this.createAnswerModel(1, "Answer3", 1, true);
 
         this.answersService.delete(answerModel);
 
@@ -141,7 +141,7 @@ public class AnswersServiceTest {
 
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
-        final AnswerModelInterface answerModel = this.createAnswerModel(null, "Answer", 1, true);
+        final AnswerModelInterface answerModel = this.createAnswerModel(null, "Answer4", 1, true);
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.answersService.delete(answerModel);
