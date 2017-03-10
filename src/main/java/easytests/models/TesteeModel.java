@@ -7,7 +7,7 @@ import lombok.*;
  * @author DoZor-80
  */
 @Data
-public class TesteeModel implements TesteeModelInterface{
+public class TesteeModel implements TesteeModelInterface {
     private Integer id;
 
     private String firstName;
