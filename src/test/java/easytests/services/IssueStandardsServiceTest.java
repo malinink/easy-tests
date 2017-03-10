@@ -1,9 +1,9 @@
 package easytests.services;
 
 import easytests.entities.*;
-import easytests.mappers.IssueStandardMapper;
-import easytests.mappers.IssueStandardQuestionTypeOptionMapper;
-import easytests.mappers.IssueStandardTopicPriorityMapper;
+import easytests.mappers.IssueStandardsMapper;
+import easytests.mappers.IssueStandardQuestionTypeOptionsMapper;
+import easytests.mappers.IssueStandardTopicPrioritiesMapper;
 import org.junit.*;
 import org.junit.runner.*;
 import static org.mockito.BDDMockito.*;
@@ -22,30 +22,30 @@ import java.util.List;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class IssueStandardServiceTest {
+public class IssueStandardsServiceTest {
 
     @Mock
-    private IssueStandardMapper issueStandardMapper;
+    private IssueStandardsMapper issueStandardsMapper;
 
     @Mock
-    private IssueStandardTopicPriorityMapper topicPriorityMapper;
+    private IssueStandardTopicPrioritiesMapper topicPriorityMapper;
 
     @Mock
-    private IssueStandardQuestionTypeOptionMapper questionTypeOptionMapper;
+    private IssueStandardQuestionTypeOptionsMapper questionTypeOptionMapper;
 
     @InjectMocks
-    private IssueStandardService issueStandardService;
+    private IssueStandardsService issueStandardsService;
 
     @Test
     public void findAllTest() throws Exception {
-        this.issueStandardService.findAll();
-        verify(this.issueStandardMapper, times(1)).findAll();
+        this.issueStandardsService.findAll();
+        verify(this.issueStandardsMapper, times(1)).findAll();
     }
 
     @Test
     public void findTest() throws Exception {
-        this.issueStandardService.find(1);
-        verify(this.issueStandardMapper, times(1)).find(1);
+        this.issueStandardsService.find(1);
+        verify(this.issueStandardsMapper, times(1)).find(1);
     }
 
     @Test
@@ -53,8 +53,8 @@ public class IssueStandardServiceTest {
         SubjectInterface subject = Mockito.mock(SubjectInterface.class);
         Mockito.when(subject.getId()).thenReturn(1);
 
-        this.issueStandardService.findBySubject(subject);
-        verify(this.issueStandardMapper, times(1)).findBySubject(subject);
+        this.issueStandardsService.findBySubject(subject);
+        verify(this.issueStandardsMapper, times(1)).findBySubject(subject);
     }
 
     @Test
@@ -70,8 +70,8 @@ public class IssueStandardServiceTest {
         issueStandard.setIssueStandardTopicPriorities(topicPriorities);
         issueStandard.setIssueStandardQuestionTypeOptions(questionTypeOptions);
 
-        this.issueStandardService.save(issueStandard);
-        verify(this.issueStandardMapper, times(1)).insert(issueStandard);
+        this.issueStandardsService.save(issueStandard);
+        verify(this.issueStandardsMapper, times(1)).insert(issueStandard);
         verify(this.topicPriorityMapper, times(1)).insert(topicPriorities.get(0));
         verify(this.questionTypeOptionMapper, times(1)).insert(questionTypeOptions.get(0));
     }
@@ -97,8 +97,8 @@ public class IssueStandardServiceTest {
         issueStandard.setIssueStandardTopicPriorities(topicPriorities);
         issueStandard.setIssueStandardQuestionTypeOptions(questionTypeOptions);
 
-        this.issueStandardService.save(issueStandard);
-        verify(this.issueStandardMapper, times(1)).update(issueStandard);
+        this.issueStandardsService.save(issueStandard);
+        verify(this.issueStandardsMapper, times(1)).update(issueStandard);
         verify(this.topicPriorityMapper, times(1)).update(topicPriorities.get(0));
         verify(this.questionTypeOptionMapper, times(1)).update(questionTypeOptions.get(0));
     }
@@ -117,8 +117,8 @@ public class IssueStandardServiceTest {
         issueStandard.setIssueStandardTopicPriorities(topicPriorities);
         issueStandard.setIssueStandardQuestionTypeOptions(questionTypeOptions);
 
-        this.issueStandardService.save(issueStandard);
-        verify(this.issueStandardMapper, times(1)).update(issueStandard);
+        this.issueStandardsService.save(issueStandard);
+        verify(this.issueStandardsMapper, times(1)).update(issueStandard);
         verify(this.topicPriorityMapper, times(1)).delete(topicPriorities.get(0));
         verify(this.questionTypeOptionMapper, times(1)).delete(questionTypeOptions.get(0));
     }
@@ -127,7 +127,7 @@ public class IssueStandardServiceTest {
     public void deleteTest() throws Exception {
         IssueStandard issueStandard = new IssueStandard();
         issueStandard.setId(1);
-        this.issueStandardService.delete(issueStandard);
-        verify(this.issueStandardMapper, times(1)).delete(issueStandard);
+        this.issueStandardsService.delete(issueStandard);
+        verify(this.issueStandardsMapper, times(1)).delete(issueStandard);
     }
 }

@@ -25,10 +25,10 @@ import java.util.List;
 @TestPropertySource(locations = {"classpath:database.test.properties"})
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class IssueStandardTopicPriorityMapperTest {
+public class IssueStandardTopicPrioritiesMapperTest {
 
     @Autowired
-    private IssueStandardTopicPriorityMapper topicPriorityMapper;
+    private IssueStandardTopicPrioritiesMapper topicPriorityMapper;
 
     @Test
     public void findAllTest() throws Exception {
