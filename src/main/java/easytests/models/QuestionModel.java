@@ -16,7 +16,7 @@ public class QuestionModel implements QuestionModelInterface {
 
     private Integer type;
 
-    private Integer topicId;
+    private TopicModelInterface topic;
 
     private List<AnswerModelInterface> answers;
 
