@@ -36,6 +36,7 @@ public class UsersService {
         final UserEntity userEntity = this.map(userModel);
         if (userEntity.getId() == null) {
             this.usersMapper.insert(userEntity);
+            userModel.setId(userEntity.getId());
             return;
         }
         this.usersMapper.update(userEntity);

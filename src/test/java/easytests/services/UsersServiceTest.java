@@ -10,7 +10,6 @@ import java.util.List;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
-
 import static org.mockito.BDDMockito.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
@@ -118,6 +117,8 @@ public class UsersServiceTest {
         this.usersService.save(userModel);
 
         verify(this.usersMapper, times(1)).insert(this.mapUserEntity(userModel));
+
+        // TODO: 11/03/17 Test that userModel has id after save
     }
 
     @Test
