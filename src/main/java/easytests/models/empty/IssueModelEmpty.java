@@ -10,31 +10,38 @@ import easytests.models.exceptions.CallMethodOnEmptyModelException;
 public class IssueModelEmpty extends AbstractModelEmpty implements IssueModelInterface {
 
     public IssueModelEmpty(Integer id) {
-        super(id); }
+        super(id);
+    }
 
     @Override
     public void setId(Integer id) {
-        throw new CallMethodOnEmptyModelException(); }
+        throw new CallMethodOnEmptyModelException();
+    }
 
     @Override
     public void setName(String name) {
-        throw new CallMethodOnEmptyModelException(); }
+        throw new CallMethodOnEmptyModelException();
+    }
 
     @Override
     public String getName() {
-        throw new CallMethodOnEmptyModelException(); }
+        throw new CallMethodOnEmptyModelException();
+    }
 
     @Override
     public void setAuthorId(Integer authorId) {
-        throw new CallMethodOnEmptyModelException(); }
+        throw new CallMethodOnEmptyModelException();
+    }
 
     @Override
     public Integer getAuthorId() {
-        throw new CallMethodOnEmptyModelException(); }
+        throw new CallMethodOnEmptyModelException();
+    }
 
     @Override
     public void map(IssueEntity issueEntity) {
-        throw new CallMethodOnEmptyModelException(); }
+        throw new CallMethodOnEmptyModelException();
+    }
 
 }
 
