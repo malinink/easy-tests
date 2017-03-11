@@ -3,6 +3,7 @@ package easytests.models.empty;
 import easytests.entities.QuestionEntity;
 import easytests.models.AnswerModelInterface;
 import easytests.models.QuestionModelInterface;
+import easytests.models.TopicModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
 import java.util.List;
 
@@ -40,7 +41,8 @@ public class QuestionModelEmpty extends AbstractModelEmpty implements QuestionMo
         throw new CallMethodOnEmptyModelException();
     }
 
-    @Override public TopicModelInterface getTopic() {
+    @Override
+    public TopicModelInterface getTopic() {
         throw new CallMethodOnEmptyModelException();
     }
 
