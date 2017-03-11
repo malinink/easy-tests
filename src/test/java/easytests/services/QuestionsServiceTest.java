@@ -34,12 +34,14 @@ public class QuestionsServiceTest {
     @Autowired
     private QuestionsService questionsService;
 
-    private QuestionModelInterface createQuestionModel(Integer id, String text, Integer type, Integer topicId) {
+    private QuestionModelInterface createQuestionModel(Integer id, String text, Integer type) {
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.setId(id);
         questionModel.setText(text);
         questionModel.setType(type);
-        questionModel.setTopicId(topicId);
+        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
+        Mockito.when(topicModel.getId()).thenReturn(topicId);
+        questionModel.setTopic(topicModel);
         return questionModel;
     }
 
