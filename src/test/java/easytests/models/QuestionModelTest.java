@@ -29,13 +29,11 @@ public class QuestionModelTest {
         final Integer questionId = 1;
         final String text = "test1";
         final Integer type = 1;
-        final Integer topicId = 1;
         final QuestionEntity questionEntity = Mockito.mock(QuestionEntity.class);
 
         Mockito.when(questionEntity.getId()).thenReturn(questionId);
         Mockito.when(questionEntity.getText()).thenReturn(text);
         Mockito.when(questionEntity.getType()).thenReturn(type);
-        Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
 
         final QuestionModel questionModel = new QuestionModel();
         questionModel.map(questionEntity);
@@ -43,6 +41,5 @@ public class QuestionModelTest {
         Assert.assertEquals(questionId, questionModel.getId());
         Assert.assertEquals(text, questionModel.getText());
         Assert.assertEquals(type, questionModel.getType());
-        Assert.assertEquals(topicId, questionModel.getTopicId());
     }
 }
