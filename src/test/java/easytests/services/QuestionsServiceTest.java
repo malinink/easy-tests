@@ -4,6 +4,7 @@ import easytests.entities.QuestionEntity;
 import easytests.mappers.QuestionsMapper;
 import easytests.models.QuestionModel;
 import easytests.models.QuestionModelInterface;
+import easytests.models.TopicModelInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class QuestionsServiceTest {
     @Autowired
     private QuestionsService questionsService;
 
-    private QuestionModelInterface createQuestionModel(Integer id, String text, Integer type) {
+    private QuestionModelInterface createQuestionModel(Integer id, String text, Integer type,  Integer topicId) {
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.setId(id);
         questionModel.setText(text);
