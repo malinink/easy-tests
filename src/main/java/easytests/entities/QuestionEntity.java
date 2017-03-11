@@ -21,6 +21,6 @@ public class QuestionEntity {
         this.setId(questionModel.getId());
         this.setText(questionModel.getText());
         this.setType(questionModel.getType());
-        this.setTopicId(questionModel.getTopicId());
+        this.setTopicId(questionModel.getTopic().getId());
     }
 }
