@@ -24,6 +24,5 @@ public class QuestionModel implements QuestionModelInterface {
         this.setId(questionEntity.getId());
         this.setText(questionEntity.getText());
         this.setType(questionEntity.getType());
-        this.setTopicId(questionEntity.getTopicId());
     }
 }
