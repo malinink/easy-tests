@@ -21,8 +21,8 @@ public class IssueModelTest {
     @Test
     public void testCommon() throws Exception {
         new BeanTester().testBean(UserModel.class);
-        new EqualsMethodTester().testEqualsMethod(UserModel.class);
-        new HashCodeMethodTester().testHashCodeMethod(UserModel.class);
+        new EqualsMethodTester().testEqualsMethod(IssueModel.class);
+        new HashCodeMethodTester().testHashCodeMethod(IssueModel.class);
     }
 
     @Test
@@ -42,7 +42,6 @@ public class IssueModelTest {
         Assert.assertEquals(issueId, issueModel.getId());
         Assert.assertEquals(name, issueModel.getName());
         Assert.assertEquals(authorId, issueModel.getAuthorId());
-
     }
 
 }
