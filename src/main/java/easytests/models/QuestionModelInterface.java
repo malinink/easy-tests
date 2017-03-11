@@ -18,9 +18,9 @@ public interface QuestionModelInterface extends ModelInterface {
 
     void setType(Integer type);
 
-    Integer getTopicId();
+    TopicModelInterface getTopic();
 
-    void setTopicId(Integer topicId);
+    void setTopic(TopicModelInterface user);
 
     List<AnswerModelInterface> getAnswers();
 
