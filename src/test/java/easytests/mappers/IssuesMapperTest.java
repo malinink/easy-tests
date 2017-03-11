@@ -34,17 +34,14 @@ public class IssuesMapperTest {
     @Test
     public void testFind() throws Exception {
         final IssueEntity issue = this.issuesMapper.find(1);
-
         Assert.assertEquals((long) 1, (long) issue.getId());
         Assert.assertEquals("Name1", issue.getName());
         Assert.assertEquals((long)11, (long)issue.getAuthorId());
-
     }
 
     @Test
     public void testFindAll() throws Exception {
         final List<IssueEntity> issues=this.issuesMapper.findAll();
-
         Assert.assertEquals("Name1",issues.get(0).getName());
         Assert.assertEquals("Name2",issues.get(1).getName());
         Assert.assertEquals("Name3",issues.get(2).getName());
@@ -54,10 +51,12 @@ public class IssuesMapperTest {
     public void testDelete() throws Exception {
         IssueEntity issue = this.issuesMapper.find(1);
         Assert.assertNotNull(issue);
+
         this.issuesMapper.delete(issue);
         issue = this.issuesMapper.find(1);
         Assert.assertNull(issue);
     }
+
     @Test
     public void testInsert() throws Exception {
         final Integer id = this.issuesMapper.findAll().size() + 1;
@@ -68,7 +67,6 @@ public class IssuesMapperTest {
         Mockito.when(issueEntity.getName()).thenReturn(name);
         Mockito.when(issueEntity.getAuthorId()).thenReturn(authorId);
 
-
         this.issuesMapper.insert(issueEntity);
 
         verify(issueEntity, times(1)) .setId(id);
@@ -77,7 +75,6 @@ public class IssuesMapperTest {
         Assert.assertEquals(id, issueEntity.getId());
         Assert.assertEquals(name, issueEntity.getName());
         Assert.assertEquals(authorId, issueEntity.getAuthorId());
-
     }
 
     @Test
@@ -103,7 +100,6 @@ public class IssuesMapperTest {
         Assert.assertEquals(id, issueEntity.getId());
         Assert.assertEquals(name, issueEntity.getName());
         Assert.assertEquals(authorId, issueEntity.getAuthorId());
-
     }
 
 }
