@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS testees;
 DROP TABLE IF EXISTS points;
 DROP TABLE IF EXISTS issues;
 
+
 ----------------------
 -- CREATE TABLES
 ----------------------
