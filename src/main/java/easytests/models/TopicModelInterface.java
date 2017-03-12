@@ -1,7 +1,8 @@
 package easytests.models;
 
 /**
- * @author firkhraag
+ * @author vkpankov
  */
 public interface TopicModelInterface extends ModelInterface {
+
 }
