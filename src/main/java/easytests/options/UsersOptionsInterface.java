@@ -9,7 +9,7 @@ import easytests.services.SubjectsServiceInterface;
  * @author malinink
  */
 public interface UsersOptionsInterface {
-    void withSubjects(SubjectModelInterface subjectModel);
+    UsersOptionsInterface withSubjects(SubjectModelInterface subjectModel);
 
     void setSubjectsService(SubjectsServiceInterface subjectsService);
 

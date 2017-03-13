@@ -10,7 +10,8 @@ import easytests.services.SubjectsServiceInterface;
  */
 public class UsersOptions implements UsersOptionsInterface {
     @Override
-    public void withSubjects(SubjectModelInterface subjectModel) {
+    public UsersOptionsInterface withSubjects(SubjectModelInterface subjectModel) {
+        return this;
     }
 
     @Override
