@@ -4,6 +4,8 @@ import easytests.entities.UserEntity;
 import easytests.mappers.UsersMapper;
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
+import easytests.options.UsersOptions;
+import easytests.options.UsersOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +17,27 @@ import org.springframework.stereotype.Service;
  * @author malinink
  */
 @Service
-public class UsersService {
-
+public class UsersService implements UsersServiceInterface {
     @Autowired
     private UsersMapper usersMapper;
 
+    @Override
     public List<UserModelInterface> findAll() {
+        return this.findAll(new UsersOptions());
+    }
+
+    @Override
+    public List<UserModelInterface> findAll(UsersOptionsInterface usersOptions) {
         return this.map(this.usersMapper.findAll());
     }
 
+    @Override
     public UserModelInterface find(Integer id) {
+        return this.find(id, new UsersOptions());
+    }
+
+    @Override
+    public UserModelInterface find(Integer id, UsersOptionsInterface usersOptions) {
         final UserEntity userEntity = this.usersMapper.find(id);
         if (userEntity == null) {
             return null;
@@ -32,7 +45,13 @@ public class UsersService {
         return this.map(userEntity);
     }
 
+    @Override
     public void save(UserModelInterface userModel) {
+        this.save(userModel, new UsersOptions());
+    }
+
+    @Override
+    public void save(UserModelInterface userModel, UsersOptionsInterface usersOptions) {
         final UserEntity userEntity = this.map(userModel);
         if (userEntity.getId() == null) {
             this.usersMapper.insert(userEntity);
@@ -42,7 +61,13 @@ public class UsersService {
         this.usersMapper.update(userEntity);
     }
 
+    @Override
     public void delete(UserModelInterface userModel) {
+        this.delete(userModel, new UsersOptions());
+    }
+
+    @Override
+    public void delete(UserModelInterface userModel, UsersOptionsInterface usersOptions) {
         final UserEntity userEntity = this.map(userModel);
         if (userEntity.getId() == null) {
             throw new DeleteUnidentifiedModelException();
@@ -69,5 +94,4 @@ public class UsersService {
         }
         return resultUserList;
     }
-
 }
