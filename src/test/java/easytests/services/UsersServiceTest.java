@@ -113,12 +113,16 @@ public class UsersServiceTest {
     @Test
     public void testSaveCreatesEntity() throws Exception {
         final UserModelInterface userModel = this.createUserModel(null, "FirstName", "LastName", "Surname");
+        doAnswer(invocation -> {
+            final UserEntity userEntity = (UserEntity) invocation.getArguments()[0];
+            userEntity.setId(5);
+            return null;
+        }).when(this.usersMapper).insert(Mockito.any(UserEntity.class));
 
         this.usersService.save(userModel);
 
         verify(this.usersMapper, times(1)).insert(this.mapUserEntity(userModel));
-
-        // TODO: 11/03/17 Test that userModel has id after save
+        Assert.assertEquals((Integer) 5, userModel.getId());
     }
 
     @Test
