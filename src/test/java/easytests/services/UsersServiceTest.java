@@ -10,7 +10,6 @@ import java.util.List;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
-
 import static org.mockito.BDDMockito.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
@@ -114,10 +113,16 @@ public class UsersServiceTest {
     @Test
     public void testSaveCreatesEntity() throws Exception {
         final UserModelInterface userModel = this.createUserModel(null, "FirstName", "LastName", "Surname");
+        doAnswer(invocation -> {
+            final UserEntity userEntity = (UserEntity) invocation.getArguments()[0];
+            userEntity.setId(5);
+            return null;
+        }).when(this.usersMapper).insert(Mockito.any(UserEntity.class));
 
         this.usersService.save(userModel);
 
         verify(this.usersMapper, times(1)).insert(this.mapUserEntity(userModel));
+        Assert.assertEquals((Integer) 5, userModel.getId());
     }
 
     @Test
