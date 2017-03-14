@@ -9,10 +9,12 @@ import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author SingularityA
  */
+@Service
 public class IssueStandardsService {
 
     @Autowired
