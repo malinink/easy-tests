@@ -1,8 +1,6 @@
 package easytests.mappers;
 
-import easytests.entities.IssueStandardInterface;
-import easytests.entities.IssueStandardTopicPriority;
-import easytests.entities.IssueStandardTopicPriorityInterface;
+import easytests.entities.IssueStandardTopicPriorityEntity;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 
@@ -17,29 +15,29 @@ public interface IssueStandardTopicPrioritiesMapper {
         value = {
             @Result(property = "id", column = "id"),
             @Result(property = "topicId", column = "topic_id"),
-            @Result(property = "priority", column = "priority"),
+            @Result(property = "isPreferable", column = "is_preferable"),
             @Result(property = "issueStandardId", column = "issue_standard_id")
         })
     @Select("SELECT * FROM topic_priorities")
-    List<IssueStandardTopicPriority> findAll();
+    List<IssueStandardTopicPriorityEntity> findAll();
 
     @Select("SELECT * FROM topic_priorities WHERE id=#{id}")
     @ResultMap("IssueStandardTopicPriority")
-    IssueStandardTopicPriority find(Integer id);
+    IssueStandardTopicPriorityEntity find(Integer id);
 
-    @Select("SELECT * FROM topic_priorities WHERE issue_standard_id=#{id}")
+    @Select("SELECT * FROM topic_priorities WHERE issue_standard_id=#{issueStandardId}")
     @ResultMap("IssueStandardTopicPriority")
-    List<IssueStandardTopicPriority> findByIssueStandard(IssueStandardInterface issueStandard);
+    List<IssueStandardTopicPriorityEntity> findByIssueStandardId(Integer issueStandardId);
 
-    @Insert("INSERT INTO topic_priorities (topic_id, priority, issue_standard_id)"
-            + " VALUES (#{topicId}, #{priority}, #{issueStandardId})")
+    @Insert("INSERT INTO topic_priorities (topic_id, is_preferable, issue_standard_id)"
+            + " VALUES (#{topicId}, #{isPreferable}, #{issueStandardId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
-    void insert(IssueStandardTopicPriorityInterface issueStandardTopicPriority);
+    void insert(IssueStandardTopicPriorityEntity issueStandardTopicPriority);
 
-    @Update("UPDATE topic_priorities"
-            + " SET topic_id=#{topicId}, priority=#{priority}, issue_standard_id=#{issueStandardId} WHERE id=#{id}")
-    void update(IssueStandardTopicPriorityInterface issueStandardTopicPriority);
+    @Update("UPDATE topic_priorities SET topic_id=#{topicId}, is_preferable=#{isPreferable},"
+            + " issue_standard_id=#{issueStandardId} WHERE id=#{id}")
+    void update(IssueStandardTopicPriorityEntity issueStandardTopicPriority);
 
     @Delete("DELETE FROM topic_priorities WHERE id=#{id}")
-    void delete(IssueStandardTopicPriorityInterface issueStandardTopicPriority);
+    void delete(IssueStandardTopicPriorityEntity issueStandardTopicPriority);
 }
