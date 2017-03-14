@@ -36,6 +36,7 @@ public class IssuesService {
         final IssueEntity issueEntity = this.map(issueModel);
         if (issueEntity.getId() == null) {
             this.issuesMapper.insert(issueEntity);
+            issueModel.setId(issueEntity.getId());
             return;
         }
         this.issuesMapper.update(issueEntity);
