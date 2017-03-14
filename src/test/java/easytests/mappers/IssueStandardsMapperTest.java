@@ -2,6 +2,7 @@ package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
 import easytests.entities.IssueStandardEntity;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +14,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.*;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import java.util.List;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -115,7 +114,6 @@ public class IssueStandardsMapperTest {
     @Test
     public void deleteTest() throws Exception {
         IssueStandardEntity issueStandardEntity = this.issueStandardsMapper.find(1);
-
         Assert.assertNotNull(issueStandardEntity);
 
         this.issueStandardsMapper.delete(issueStandardEntity);
