@@ -1,9 +1,11 @@
 package easytests.services;
 
 import easytests.entities.*;
-import easytests.mappers.IssueStandardQuestionTypeOptionsMapper;
-import easytests.mappers.IssueStandardTopicPrioritiesMapper;
 import easytests.mappers.IssueStandardsMapper;
+import easytests.models.IssueStandardModel;
+import easytests.models.IssueStandardModelInterface;
+import easytests.models.SubjectModelInterface;
+import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,124 +18,61 @@ public class IssueStandardsService {
     @Autowired
     private IssueStandardsMapper issueStandardsMapper;
 
-    @Autowired
-    private IssueStandardTopicPrioritiesMapper topicPriorityMapper;
-
-    @Autowired
-    private IssueStandardQuestionTypeOptionsMapper questionTypeOptionMapper;
-
-    public List<IssueStandardInterface> findAll() {
-        final List<IssueStandardInterface> issueStandards = this.map(this.issueStandardsMapper.findAll());
-
-        if (issueStandards != null) {
-            List<IssueStandardTopicPriorityInterface> topicPriorities;
-            List<IssueStandardQuestionTypeOptionInterface> questionTypeOptions;
-
-            for (IssueStandardInterface issueStandard : issueStandards) {
-                topicPriorities = this.map(this.topicPriorityMapper.findByIssueStandard(issueStandard));
-                questionTypeOptions = this.map(this.questionTypeOptionMapper.findByIssueStandard(issueStandard));
-                issueStandard
-                        .setIssueStandardTopicPriorities(topicPriorities)
-                        .setIssueStandardQuestionTypeOptions(questionTypeOptions);
-            }
-        }
-        return issueStandards;
+    public List<IssueStandardModelInterface> findAll() {
+        return this.map(this.issueStandardsMapper.findAll());
     }
 
-    public IssueStandardInterface find(Integer id) {
-        final IssueStandardInterface issueStandard = this.issueStandardsMapper.find(id);
-
-        if (issueStandard != null) {
-            final List<IssueStandardTopicPriorityInterface> topicPriorities
-                    = this.map(this.topicPriorityMapper.findByIssueStandard(issueStandard));
-            final List<IssueStandardQuestionTypeOptionInterface> questionTypeOptions
-                    = this.map(this.questionTypeOptionMapper.findByIssueStandard(issueStandard));
-
-            issueStandard
-                    .setIssueStandardTopicPriorities(topicPriorities)
-                    .setIssueStandardQuestionTypeOptions(questionTypeOptions);
+    public IssueStandardModelInterface find(Integer id) {
+        final IssueStandardEntity issueStandardEntity = this.issueStandardsMapper.find(id);
+        if (issueStandardEntity == null) {
+            return null;
         }
-        return issueStandard;
+        return this.map(issueStandardEntity);
     }
 
-    public IssueStandardInterface findBySubject(SubjectInterface subject) {
-        final IssueStandardInterface issueStandard = this.issueStandardsMapper.findBySubject(subject);
-
-        if (issueStandard != null) {
-            final List<IssueStandardTopicPriorityInterface> topicPriorities
-                    = this.map(this.topicPriorityMapper.findByIssueStandard(issueStandard));
-            final List<IssueStandardQuestionTypeOptionInterface> questionTypeOptions
-                    = this.map(this.questionTypeOptionMapper.findByIssueStandard(issueStandard));
-
-            issueStandard
-                    .setIssueStandardTopicPriorities(topicPriorities)
-                    .setIssueStandardQuestionTypeOptions(questionTypeOptions);
+    public IssueStandardModelInterface findBySubject(SubjectModelInterface subject) {
+        final IssueStandardEntity issueStandardEntity = this.issueStandardsMapper.findBySubjectId(subject.getId());
+        if (issueStandardEntity == null) {
+            return null;
         }
-        return issueStandard;
+        return this.map(issueStandardEntity);
     }
 
-    public void save(IssueStandardInterface issueStandard) {
-        if (issueStandard.getId() != null) {
-            // обновляем issueStandard
-            this.issueStandardsMapper.update(issueStandard);
-
-            // обновляем topicPriorities
-            for (IssueStandardTopicPriorityInterface topicPriority : issueStandard.getIssueStandardTopicPriorities()) {
-
-                if (topicPriority.getId() != null) {
-                    // при пустом значащем поле удаляем (сделать отдельную функцию ??? )
-                    if (topicPriority.getPriority() != null) {
-                        this.topicPriorityMapper.update(topicPriority);
-                    } else {
-                        this.topicPriorityMapper.delete(topicPriority);
-                    }
-                } else {
-                    this.topicPriorityMapper.insert(topicPriority);
-                }
-            }
-
-            // обновляем questionTypeOptions
-            for (IssueStandardQuestionTypeOptionInterface
-                    questionTypeOption : issueStandard.getIssueStandardQuestionTypeOptions()) {
-
-                if (questionTypeOption.getId() != null) {
-                    // при пустом значащем поле удаляем
-                    if (questionTypeOption.getQuestionTypeId() != null) {
-                        this.questionTypeOptionMapper.update(questionTypeOption);
-                    } else {
-                        this.questionTypeOptionMapper.delete(questionTypeOption);
-                    }
-                } else {
-                    this.questionTypeOptionMapper.insert(questionTypeOption);
-                }
-            }
-
-        } else {
-            // создаем issueStandard
-            this.issueStandardsMapper.insert(issueStandard);
-
-            // создаем topicPriorities
-            for (IssueStandardTopicPriorityInterface topicPriority : issueStandard.getIssueStandardTopicPriorities()) {
-                this.topicPriorityMapper.insert(topicPriority);
-            }
-
-            // создаем questionTypeOptions
-            for (IssueStandardQuestionTypeOptionInterface
-                    questionTypeOption : issueStandard.getIssueStandardQuestionTypeOptions()) {
-                this.questionTypeOptionMapper.insert(questionTypeOption);
-            }
+    public void save(IssueStandardModelInterface issueStandardModel) {
+        final IssueStandardEntity issueStandardEntity = this.map(issueStandardModel);
+        if (issueStandardEntity.getId() != null) {
+            this.issueStandardsMapper.update(issueStandardEntity);
+            return;
         }
+        this.issueStandardsMapper.insert(issueStandardEntity);
+        issueStandardModel.setId(issueStandardEntity.getId());
     }
 
-    public void delete(IssueStandardInterface issueStandard) {
-        this.issueStandardsMapper.delete(issueStandard);
+    public void delete(IssueStandardModelInterface issueStandardModel) {
+        final IssueStandardEntity issueStandardEntity = this.map(issueStandardModel);
+        if (issueStandardEntity.getId() == null) {
+            throw new DeleteUnidentifiedModelException();
+        }
+        this.issueStandardsMapper.delete(issueStandardEntity);
     }
 
-    private <T> List<T> map(List<? extends T> objectList) {
-        final List<T> resultObjectList = new ArrayList<>(objectList.size());
-        for (T object: objectList) {
-            resultObjectList.add(object);
+    private IssueStandardModelInterface map(IssueStandardEntity issueStandardEntity) {
+        final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
+        issueStandardModel.map(issueStandardEntity);
+        return issueStandardModel;
+    }
+
+    private IssueStandardEntity map(IssueStandardModelInterface issueStandardModel) {
+        final IssueStandardEntity issueStandardEntity = new IssueStandardEntity();
+        issueStandardEntity.map(issueStandardModel);
+        return issueStandardEntity;
+    }
+
+    private List<IssueStandardModelInterface> map(List<IssueStandardEntity> issueStandardEntities) {
+        final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(issueStandardEntities.size());
+        for (IssueStandardEntity issueStandardEntity: issueStandardEntities) {
+            issueStandardModels.add(this.map(issueStandardEntity));
         }
-        return resultObjectList;
+        return issueStandardModels;
     }
 }
