@@ -1,9 +1,8 @@
 package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
-import easytests.entities.IssueStandardInterface;
-import easytests.entities.IssueStandardQuestionTypeOption;
-import easytests.entities.IssueStandardQuestionTypeOptionInterface;
+import easytests.entities.IssueStandardQuestionTypeOptionEntity;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +14,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.*;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import java.util.List;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author SingularityA
@@ -32,76 +31,119 @@ public class IssueStandardQuestionTypeOptionsMapperTest {
     private IssueStandardQuestionTypeOptionsMapper questionTypeOptionMapper;
 
     @Test
-    public void findAllTest() throws Exception {
-        List<IssueStandardQuestionTypeOption> questionTypeOptions = this.questionTypeOptionMapper.findAll();
+    public void testFindAll() throws Exception {
+        List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities = this.questionTypeOptionMapper.findAll();
 
-        Assert.assertNotNull(questionTypeOptions);
-        Assert.assertEquals(5, questionTypeOptions.size());
+        Assert.assertNotNull(questionTypeOptionEntities);
+        Assert.assertEquals(5, questionTypeOptionEntities.size());
     }
 
     @Test
-    public void findTest() throws Exception {
-        final IssueStandardQuestionTypeOptionInterface questionTypeOption = this.questionTypeOptionMapper.find(1);
+    public void testFind() throws Exception {
+        final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity = this.questionTypeOptionMapper.find(1);
 
-        Assert.assertEquals((Integer) 1, questionTypeOption.getId());
-        Assert.assertEquals((Integer) 1, questionTypeOption.getQuestionTypeId());
-        Assert.assertEquals((Integer) 1, questionTypeOption.getMinQuestions());
-        Assert.assertEquals(null, questionTypeOption.getMaxQuestions());
-        Assert.assertEquals(null, questionTypeOption.getTimeLimit());
-        Assert.assertEquals((Integer) 1, questionTypeOption.getIssueStandardId());
+        Assert.assertEquals((Integer) 1, questionTypeOptionEntity.getId());
+        Assert.assertEquals((Integer) 1, questionTypeOptionEntity.getQuestionTypeId());
+        Assert.assertEquals((Integer) 1, questionTypeOptionEntity.getMinQuestions());
+        Assert.assertEquals(null, questionTypeOptionEntity.getMaxQuestions());
+        Assert.assertEquals(null, questionTypeOptionEntity.getTimeLimit());
+        Assert.assertEquals((Integer) 1, questionTypeOptionEntity.getIssueStandardId());
     }
 
     @Test
-    public void findByIssueStandardTest() throws Exception {
-        IssueStandardInterface issueStandard = Mockito.mock(IssueStandardInterface.class);
-        Mockito.when(issueStandard.getId()).thenReturn(1);
+    public void testFindByIssueStandard() throws Exception {
+        Integer issueStandardId = 1;
 
-        final List<IssueStandardQuestionTypeOption> questionTypeOptions
-                = this.questionTypeOptionMapper.findByIssueStandard(issueStandard);
+        final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities
+                = this.questionTypeOptionMapper.findByIssueStandardId(issueStandardId);
 
-        Assert.assertEquals(3, questionTypeOptions.size());
+        Assert.assertEquals(3, questionTypeOptionEntities.size());
 
-        IssueStandardQuestionTypeOptionInterface questionTypeOption = questionTypeOptions.get(2);
-        Assert.assertEquals((Integer) 3, questionTypeOption.getId());
-        Assert.assertEquals((Integer) 3, questionTypeOption.getQuestionTypeId());
-        Assert.assertEquals((Integer) 5, questionTypeOption.getMinQuestions());
-        Assert.assertEquals((Integer) 10, questionTypeOption.getMaxQuestions());
-        Assert.assertEquals(null, questionTypeOption.getTimeLimit());
-        Assert.assertEquals((Integer) 1, questionTypeOption.getIssueStandardId());
+        IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity = questionTypeOptionEntities.get(2);
+        Assert.assertEquals((Integer) 3, questionTypeOptionEntity.getId());
+        Assert.assertEquals((Integer) 3, questionTypeOptionEntity.getQuestionTypeId());
+        Assert.assertEquals((Integer) 5, questionTypeOptionEntity.getMinQuestions());
+        Assert.assertEquals((Integer) 10, questionTypeOptionEntity.getMaxQuestions());
+        Assert.assertEquals(null, questionTypeOptionEntity.getTimeLimit());
+        Assert.assertEquals((Integer) 1, questionTypeOptionEntity.getIssueStandardId());
     }
 
     @Test
-    public void insertTest() throws Exception {
-        IssueStandardQuestionTypeOptionInterface questionTypeOption = new IssueStandardQuestionTypeOption();
-        questionTypeOption.setQuestionTypeId(2).setMinQuestions(5).setMaxQuestions(10).setIssueStandardId(2);
-        this.questionTypeOptionMapper.insert(questionTypeOption);
+    public void testInsert() throws Exception {
+        final Integer id = this.questionTypeOptionMapper.findAll().size() + 1;
+        final Integer questionTypeId = 2;
+        final Integer minQuestions = 10;
+        final Integer maxQuestions = 20;
+        final Integer timeLimit = 100;
+        final Integer issueStandardId = 2;
 
-        questionTypeOption = this.questionTypeOptionMapper.find(6);
-        Assert.assertNotNull(questionTypeOption);
-        Assert.assertEquals((Integer) 2, questionTypeOption.getQuestionTypeId());
-        Assert.assertEquals((Integer) 5, questionTypeOption.getMinQuestions());
-        Assert.assertEquals((Integer) 10, questionTypeOption.getMaxQuestions());
-        Assert.assertEquals((Integer) 2, questionTypeOption.getIssueStandardId());
+        IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
+                = Mockito.mock(IssueStandardQuestionTypeOptionEntity.class);
+
+        Mockito.when(questionTypeOptionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
+        Mockito.when(questionTypeOptionEntity.getMinQuestions()).thenReturn(minQuestions);
+        Mockito.when(questionTypeOptionEntity.getMaxQuestions()).thenReturn(maxQuestions);
+        Mockito.when(questionTypeOptionEntity.getTimeLimit()).thenReturn(timeLimit);
+        Mockito.when(questionTypeOptionEntity.getIssueStandardId()).thenReturn(issueStandardId);
+
+        this.questionTypeOptionMapper.insert(questionTypeOptionEntity);
+
+        verify(questionTypeOptionEntity, times(1)).setId(id);
+
+        questionTypeOptionEntity = this.questionTypeOptionMapper.find(id);
+        Assert.assertNotNull(questionTypeOptionEntity);
+        Assert.assertEquals(questionTypeId, questionTypeOptionEntity.getQuestionTypeId());
+        Assert.assertEquals(minQuestions, questionTypeOptionEntity.getMinQuestions());
+        Assert.assertEquals(maxQuestions, questionTypeOptionEntity.getMaxQuestions());
+        Assert.assertEquals(timeLimit, questionTypeOptionEntity.getTimeLimit());
+        Assert.assertEquals(issueStandardId, questionTypeOptionEntity.getIssueStandardId());
     }
 
     @Test
-    public void updateTest() throws Exception {
-        IssueStandardQuestionTypeOptionInterface questionTypeOption = this.questionTypeOptionMapper.find(5);
-        Assert.assertNotNull(questionTypeOption);
-        questionTypeOption.setMinQuestions(1).setMaxQuestions(2).setTimeLimit(600);
-        this.questionTypeOptionMapper.update(questionTypeOption);
-        questionTypeOption = this.questionTypeOptionMapper.find(5);
-        Assert.assertEquals((Integer) 1, questionTypeOption.getMinQuestions());
-        Assert.assertEquals((Integer) 2, questionTypeOption.getMaxQuestions());
-        Assert.assertEquals((Integer) 600, questionTypeOption.getTimeLimit());
+    public void testUpdate() throws Exception {
+        final Integer id = 4;
+        final Integer questionTypeId = 2;
+        final Integer minQuestions = 10;
+        final Integer maxQuestions = 20;
+        final Integer timeLimit = 100;
+        final Integer issueStandardId = 2;
+
+        IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity = this.questionTypeOptionMapper.find(id);
+        Assert.assertNotNull(questionTypeOptionEntity);
+        Assert.assertEquals(id, questionTypeOptionEntity.getId());
+        Assert.assertNotEquals(questionTypeId, questionTypeOptionEntity.getQuestionTypeId());
+        Assert.assertNotEquals(minQuestions, questionTypeOptionEntity.getMinQuestions());
+        Assert.assertNotEquals(maxQuestions, questionTypeOptionEntity.getMaxQuestions());
+        Assert.assertNotEquals(timeLimit, questionTypeOptionEntity.getTimeLimit());
+        Assert.assertEquals(issueStandardId, questionTypeOptionEntity.getIssueStandardId());
+
+        questionTypeOptionEntity = Mockito.mock(IssueStandardQuestionTypeOptionEntity.class);
+        Mockito.when(questionTypeOptionEntity.getId()).thenReturn(id);
+        Mockito.when(questionTypeOptionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
+        Mockito.when(questionTypeOptionEntity.getMinQuestions()).thenReturn(minQuestions);
+        Mockito.when(questionTypeOptionEntity.getMaxQuestions()).thenReturn(maxQuestions);
+        Mockito.when(questionTypeOptionEntity.getTimeLimit()).thenReturn(timeLimit);
+        Mockito.when(questionTypeOptionEntity.getIssueStandardId()).thenReturn(issueStandardId);
+
+        this.questionTypeOptionMapper.update(questionTypeOptionEntity);
+
+        questionTypeOptionEntity = this.questionTypeOptionMapper.find(id);
+        Assert.assertEquals(id, questionTypeOptionEntity.getId());
+        Assert.assertEquals(questionTypeId, questionTypeOptionEntity.getQuestionTypeId());
+        Assert.assertEquals(minQuestions, questionTypeOptionEntity.getMinQuestions());
+        Assert.assertEquals(maxQuestions, questionTypeOptionEntity.getMaxQuestions());
+        Assert.assertEquals(timeLimit, questionTypeOptionEntity.getTimeLimit());
+        Assert.assertEquals(issueStandardId, questionTypeOptionEntity.getIssueStandardId());
     }
 
     @Test
-    public void deleteTest() throws Exception {
-        IssueStandardQuestionTypeOptionInterface questionTypeOption = this.questionTypeOptionMapper.find(1);
-        Assert.assertNotNull(questionTypeOption);
-        this.questionTypeOptionMapper.delete(questionTypeOption);
-        questionTypeOption = this.questionTypeOptionMapper.find(1);
-        Assert.assertNull(questionTypeOption);
+    public void testDelete() throws Exception {
+        Integer id = 1;
+        IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity = this.questionTypeOptionMapper.find(id);
+        Assert.assertNotNull(questionTypeOptionEntity);
+
+        this.questionTypeOptionMapper.delete(questionTypeOptionEntity);
+        questionTypeOptionEntity = this.questionTypeOptionMapper.find(id);
+        Assert.assertNull(questionTypeOptionEntity);
     }
 }
