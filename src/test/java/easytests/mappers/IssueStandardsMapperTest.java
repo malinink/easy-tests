@@ -1,9 +1,7 @@
 package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
-import easytests.entities.IssueStandard;
-import easytests.entities.IssueStandardInterface;
-import easytests.entities.SubjectInterface;
+import easytests.entities.IssueStandardEntity;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +15,9 @@ import org.springframework.test.context.junit4.*;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import java.util.List;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author SingularityA
@@ -32,78 +33,93 @@ public class IssueStandardsMapperTest {
     private IssueStandardsMapper issueStandardsMapper;
 
     @Test
-    public void findAllTest() throws Exception {
-        List<IssueStandard> issueStandards = this.issueStandardsMapper.findAll();
+    public void testFindAll() throws Exception {
+        List<IssueStandardEntity> issueStandardEntities = this.issueStandardsMapper.findAll();
 
-        Assert.assertNotNull(issueStandards);
-        Assert.assertEquals(2, issueStandards.size());
+        Assert.assertNotNull(issueStandardEntities);
+        Assert.assertEquals(2, issueStandardEntities.size());
     }
 
     @Test
-    public void findTest() throws Exception {
-        final IssueStandardInterface issueStandard = this.issueStandardsMapper.find(1);
+    public void testFind() throws Exception {
+        final IssueStandardEntity issueStandardEntity = this.issueStandardsMapper.find(1);
 
-        Assert.assertEquals((Integer) 1, issueStandard.getId());
-        Assert.assertEquals((Integer) 300, issueStandard.getTimeLimit());
-        Assert.assertEquals((Integer) 30, issueStandard.getQuestionsNumber());
-        Assert.assertNull(issueStandard.getIssueStandardTopicPriorities());
-        Assert.assertNull(issueStandard.getIssueStandardQuestionTypeOptions());
-        Assert.assertNull(issueStandard.getSubject());
+        Assert.assertEquals((Integer) 1, issueStandardEntity.getId());
+        Assert.assertEquals((Integer) 300, issueStandardEntity.getTimeLimit());
+        Assert.assertEquals((Integer) 30, issueStandardEntity.getQuestionsNumber());
+        Assert.assertEquals((Integer) 1, issueStandardEntity.getSubjectId());
     }
 
     @Test
-    public void findBySubjectTest() throws Exception {
-        SubjectInterface subject = Mockito.mock(SubjectInterface.class);
-        Mockito.when(subject.getId()).thenReturn(3);
+    public void testFindBySubjectId() throws Exception {
+        final IssueStandardEntity issueStandardEntity = this.issueStandardsMapper.findBySubjectId(3);
 
-        final IssueStandardInterface issueStandard = this.issueStandardsMapper.findBySubject(subject);
-
-        Assert.assertEquals((Integer) 2, issueStandard.getId());
-        Assert.assertEquals(null, issueStandard.getTimeLimit());
-        Assert.assertEquals((Integer) 15, issueStandard.getQuestionsNumber());
-        Assert.assertNull(issueStandard.getIssueStandardTopicPriorities());
-        Assert.assertNull(issueStandard.getIssueStandardQuestionTypeOptions());
-        Assert.assertNull(issueStandard.getSubject());
+        Assert.assertEquals((Integer) 2, issueStandardEntity.getId());
+        Assert.assertEquals(null, issueStandardEntity.getTimeLimit());
+        Assert.assertEquals((Integer) 15, issueStandardEntity.getQuestionsNumber());
+        Assert.assertEquals((Integer) 3, issueStandardEntity.getSubjectId());
     }
 
     @Test
-    public void insertTest() throws Exception {
-        SubjectInterface subject = Mockito.mock(SubjectInterface.class);
-        Mockito.when(subject.getId()).thenReturn(2);
+    public void testInsert() throws Exception {
+        final Integer id = this.issueStandardsMapper.findAll().size() + 1;
+        final Integer timeLimit = 3600;
+        final Integer questionsNumber = 20;
+        final Integer subjectId = 2;
 
-        IssueStandardInterface issueStandard = new IssueStandard();
-        issueStandard.setTimeLimit(1200).setQuestionsNumber(30).setSubject(subject);
-        this.issueStandardsMapper.insert(issueStandard);
+        IssueStandardEntity issueStandardEntity = Mockito.mock(IssueStandardEntity.class);
+        Mockito.when(issueStandardEntity.getTimeLimit()).thenReturn(timeLimit);
+        Mockito.when(issueStandardEntity.getQuestionsNumber()).thenReturn(questionsNumber);
+        Mockito.when(issueStandardEntity.getSubjectId()).thenReturn(subjectId);
 
-        issueStandard = this.issueStandardsMapper.findBySubject(subject);
-        Assert.assertEquals((Integer) 1200, issueStandard.getTimeLimit());
-        Assert.assertEquals((Integer) 30, issueStandard.getQuestionsNumber());
-        Assert.assertNull(issueStandard.getIssueStandardTopicPriorities());
-        Assert.assertNull(issueStandard.getIssueStandardQuestionTypeOptions());
-        Assert.assertNull(issueStandard.getSubject());
+        this.issueStandardsMapper.insert(issueStandardEntity);
+
+        verify(issueStandardEntity, times(1)).setId(id);
+
+        issueStandardEntity = this.issueStandardsMapper.find(id);
+        Assert.assertEquals(id, issueStandardEntity.getId());
+        Assert.assertEquals(timeLimit, issueStandardEntity.getTimeLimit());
+        Assert.assertEquals(questionsNumber, issueStandardEntity.getQuestionsNumber());
+        Assert.assertEquals(subjectId, issueStandardEntity.getSubjectId());
     }
 
     @Test
-    public void updateTest() throws Exception {
-        IssueStandardInterface issueStandard = this.issueStandardsMapper.find(2);
-        Assert.assertNotNull(issueStandard);
+    public void testUpdate() throws Exception {
+        final Integer id = 1;
+        final Integer timeLimit = 3600;
+        final Integer questionsNumber = 20;
+        final Integer subjectId = 2;
 
-        issueStandard.setTimeLimit(6000).setQuestionsNumber(50);
-        this.issueStandardsMapper.update(issueStandard);
+        IssueStandardEntity issueStandardEntity = this.issueStandardsMapper.find(id);
+        Assert.assertNotNull(issueStandardEntity);
+        Assert.assertEquals(id, issueStandardEntity.getId());
+        Assert.assertNotEquals(timeLimit, issueStandardEntity.getTimeLimit());
+        Assert.assertNotEquals(questionsNumber, issueStandardEntity.getQuestionsNumber());
+        Assert.assertNotEquals(subjectId, issueStandardEntity.getSubjectId());
 
-        issueStandard = this.issueStandardsMapper.find(2);
-        Assert.assertEquals((Integer) 6000, issueStandard.getTimeLimit());
-        Assert.assertEquals((Integer) 50, issueStandard.getQuestionsNumber());
+        issueStandardEntity = Mockito.mock(IssueStandardEntity.class);
+        Mockito.when(issueStandardEntity.getId()).thenReturn(id);
+        Mockito.when(issueStandardEntity.getTimeLimit()).thenReturn(timeLimit);
+        Mockito.when(issueStandardEntity.getQuestionsNumber()).thenReturn(questionsNumber);
+        Mockito.when(issueStandardEntity.getSubjectId()).thenReturn(subjectId);
+
+        this.issueStandardsMapper.update(issueStandardEntity);
+
+        issueStandardEntity = this.issueStandardsMapper.find(id);
+        Assert.assertEquals(id, issueStandardEntity.getId());
+        Assert.assertEquals(timeLimit, issueStandardEntity.getTimeLimit());
+        Assert.assertEquals(questionsNumber, issueStandardEntity.getQuestionsNumber());
+        Assert.assertEquals(subjectId, issueStandardEntity.getSubjectId());
     }
 
     @Test
     public void deleteTest() throws Exception {
-        IssueStandardInterface issueStandard = this.issueStandardsMapper.find(1);
+        IssueStandardEntity issueStandardEntity = this.issueStandardsMapper.find(1);
 
-        Assert.assertNotNull(issueStandard);
+        Assert.assertNotNull(issueStandardEntity);
 
-        this.issueStandardsMapper.delete(issueStandard);
-        issueStandard = this.issueStandardsMapper.find(1);
-        Assert.assertNull(issueStandard);
+        this.issueStandardsMapper.delete(issueStandardEntity);
+        issueStandardEntity = this.issueStandardsMapper.find(1);
+        Assert.assertNull(issueStandardEntity);
     }
 }
