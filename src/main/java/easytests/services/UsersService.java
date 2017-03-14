@@ -4,7 +4,6 @@ import easytests.entities.UserEntity;
 import easytests.mappers.UsersMapper;
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
-import easytests.options.UsersOptions;
 import easytests.options.UsersOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
@@ -21,37 +20,31 @@ public class UsersService implements UsersServiceInterface {
     @Autowired
     private UsersMapper usersMapper;
 
-    @Override
-    public List<UserModelInterface> findAll() {
-        return this.findAll(new UsersOptions());
-    }
+    @Autowired
+    private SubjectsService subjectsService;
 
     @Override
-    public List<UserModelInterface> findAll(UsersOptionsInterface usersOptions) {
+    public List<UserModelInterface> findAll() {
         return this.map(this.usersMapper.findAll());
     }
 
     @Override
+    public List<UserModelInterface> findAll(UsersOptionsInterface usersOptions) {
+        return this.withServices(usersOptions).setRelations(this.findAll());
+    }
+
+    @Override
     public UserModelInterface find(Integer id) {
-        return this.find(id, new UsersOptions());
+        return this.map(this.usersMapper.find(id));
     }
 
     @Override
     public UserModelInterface find(Integer id, UsersOptionsInterface usersOptions) {
-        final UserEntity userEntity = this.usersMapper.find(id);
-        if (userEntity == null) {
-            return null;
-        }
-        return this.map(userEntity);
+        return this.withServices(usersOptions).setRelations(this.find(id));
     }
 
     @Override
     public void save(UserModelInterface userModel) {
-        this.save(userModel, new UsersOptions());
-    }
-
-    @Override
-    public void save(UserModelInterface userModel, UsersOptionsInterface usersOptions) {
         final UserEntity userEntity = this.map(userModel);
         if (userEntity.getId() == null) {
             this.usersMapper.insert(userEntity);
@@ -62,12 +55,12 @@ public class UsersService implements UsersServiceInterface {
     }
 
     @Override
-    public void delete(UserModelInterface userModel) {
-        this.delete(userModel, new UsersOptions());
+    public void save(UserModelInterface userModel, UsersOptionsInterface usersOptions) {
+        this.withServices(usersOptions).saveWithRelations(userModel);
     }
 
     @Override
-    public void delete(UserModelInterface userModel, UsersOptionsInterface usersOptions) {
+    public void delete(UserModelInterface userModel) {
         final UserEntity userEntity = this.map(userModel);
         if (userEntity.getId() == null) {
             throw new DeleteUnidentifiedModelException();
@@ -75,7 +68,21 @@ public class UsersService implements UsersServiceInterface {
         this.usersMapper.delete(userEntity);
     }
 
+    @Override
+    public void delete(UserModelInterface userModel, UsersOptionsInterface usersOptions) {
+        this.withServices(usersOptions).deleteWithRelations(userModel);
+    }
+
+    private UsersOptionsInterface withServices(UsersOptionsInterface usersOptions) {
+        usersOptions.setUsersService(this);
+        usersOptions.setSubjectsService(this.subjectsService);
+        return usersOptions;
+    }
+
     private UserModelInterface map(UserEntity userEntity) {
+        if (userEntity == null) {
+            return null;
+        }
         final UserModelInterface userModel = new UserModel();
         userModel.map(userEntity);
         return userModel;
