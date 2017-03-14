@@ -2,8 +2,8 @@ package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
 import easytests.entities.*;
+import java.util.List;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -15,7 +15,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.*;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import java.util.List;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author SingularityA
@@ -31,80 +32,97 @@ public class IssueStandardTopicPrioritiesMapperTest {
     private IssueStandardTopicPrioritiesMapper topicPriorityMapper;
 
     @Test
-    public void findAllTest() throws Exception {
-        List<IssueStandardTopicPriority> topicPriorities = this.topicPriorityMapper.findAll();
+    public void testFindAll() throws Exception {
+        List<IssueStandardTopicPriorityEntity> topicPriorityEntities = this.topicPriorityMapper.findAll();
 
-        Assert.assertNotNull(topicPriorities);
-        Assert.assertEquals(3, topicPriorities.size());
+        Assert.assertNotNull(topicPriorityEntities);
+        Assert.assertEquals(3, topicPriorityEntities.size());
     }
 
     @Test
-    public void findTest() throws Exception {
-        final IssueStandardTopicPriorityInterface topicPriority = this.topicPriorityMapper.find(1);
+    public void testFind() throws Exception {
+        final IssueStandardTopicPriorityEntity topicPriorityEntity = this.topicPriorityMapper.find(1);
 
-        Assert.assertEquals((Integer) 1, topicPriority.getId());
-        Assert.assertEquals((Integer) 1, topicPriority.getTopicId());
-        Assert.assertEquals(Priority.HIGH, topicPriority.getPriority());
-        Assert.assertEquals((Integer) 1, topicPriority.getIssueStandardId());
+        Assert.assertEquals((Integer) 1, topicPriorityEntity.getId());
+        Assert.assertEquals((Integer) 1, topicPriorityEntity.getTopicId());
+        Assert.assertEquals(true, topicPriorityEntity.getIsPreferable());
+        Assert.assertEquals((Integer) 1, topicPriorityEntity.getIssueStandardId());
     }
 
     @Test
-    public void findByIssueStandardTest() throws Exception {
-        IssueStandardInterface issueStandard = Mockito.mock(IssueStandardInterface.class);
-        Mockito.when(issueStandard.getId()).thenReturn(1);
+    public void testFindByIssueStandardId() throws Exception {
+        final Integer issueStandardId = 1;
+        final List<IssueStandardTopicPriorityEntity> topicPriorityEntities
+                = this.topicPriorityMapper.findByIssueStandardId(issueStandardId);
 
-        final List<IssueStandardTopicPriority> topicPriorities
-                = this.topicPriorityMapper.findByIssueStandard(issueStandard);
+        Assert.assertNotNull(topicPriorityEntities);
+        Assert.assertEquals(2, topicPriorityEntities.size());
 
-        Assert.assertNotNull(topicPriorities);
-        Assert.assertEquals(2, topicPriorities.size());
+        IssueStandardTopicPriorityEntity topicPriorityEntity = topicPriorityEntities.get(1);
 
-        IssueStandardTopicPriority topicPriority = topicPriorities.get(1);
-
-        Assert.assertEquals((Integer) 2, topicPriority.getTopicId());
-        Assert.assertEquals(Priority.LOW, topicPriority.getPriority());
-        Assert.assertEquals((Integer) 1, topicPriority.getIssueStandardId());
-    }
-
-    // вставка enum некорректная
-    @Ignore
-    @Test
-    public void insertTest() throws Exception {
-        IssueStandardTopicPriorityInterface topicPriority = new IssueStandardTopicPriority();
-        topicPriority.setTopicId(5).setPriority(Priority.LOW).setIssueStandardId(3);
-        this.topicPriorityMapper.insert(topicPriority);
-
-        IssueStandardInterface issueStandard = Mockito.mock(IssueStandardInterface.class);
-        Mockito.when(issueStandard.getId()).thenReturn(3);
-
-        List<IssueStandardTopicPriority> topicPriorities
-                = this.topicPriorityMapper.findByIssueStandard(issueStandard);
-
-        Assert.assertNotNull(topicPriorities);
-        Assert.assertEquals(topicPriorities.get(0).getTopicId(), topicPriority.getTopicId());
-        Assert.assertEquals(topicPriorities.get(0).getPriority(), topicPriority.getPriority());
-    }
-
-    // вставка enum некорректная
-    @Ignore
-    @Test
-    public void updateTest() throws Exception {
-        IssueStandardTopicPriorityInterface topicPriority = this.topicPriorityMapper.find(3);
-        Assert.assertNotNull(topicPriority);
-        Assert.assertEquals(Priority.HIGH, topicPriority.getPriority());
-
-        topicPriority.setPriority(Priority.LOW);
-        this.topicPriorityMapper.update(topicPriority);
-        topicPriority = this.topicPriorityMapper.find(3);
-        Assert.assertEquals(Priority.LOW, topicPriority.getPriority());
+        Assert.assertEquals((Integer) 2, topicPriorityEntity.getTopicId());
+        Assert.assertEquals(false, topicPriorityEntity.getIsPreferable());
+        Assert.assertEquals((Integer) 1, topicPriorityEntity.getIssueStandardId());
     }
 
     @Test
-    public void deleteTest() throws Exception {
-        IssueStandardTopicPriorityInterface topicPriority = this.topicPriorityMapper.find(3);
-        Assert.assertNotNull(topicPriority);
-        this.topicPriorityMapper.delete(topicPriority);
-        topicPriority = this.topicPriorityMapper.find(3);
-        Assert.assertNull(topicPriority);
+    public void testInsert() throws Exception {
+        final Integer id = this.topicPriorityMapper.findAll().size() + 1;
+        final Integer topicId = 4;
+        final Boolean isPreferable = true;
+        final Integer issueStandardId = 2;
+
+        IssueStandardTopicPriorityEntity topicPriorityEntity = Mockito.mock(IssueStandardTopicPriorityEntity.class);
+        Mockito.when(topicPriorityEntity.getTopicId()).thenReturn(topicId);
+        Mockito.when(topicPriorityEntity.getIsPreferable()).thenReturn(isPreferable);
+        Mockito.when(topicPriorityEntity.getIssueStandardId()).thenReturn(issueStandardId);
+
+        this.topicPriorityMapper.insert(topicPriorityEntity);
+
+        verify(topicPriorityEntity, times(1)).setId(id);
+
+        topicPriorityEntity = this.topicPriorityMapper.find(id);
+        Assert.assertEquals(id, topicPriorityEntity.getId());
+        Assert.assertEquals(topicId, topicPriorityEntity.getTopicId());
+        Assert.assertEquals(isPreferable, topicPriorityEntity.getIsPreferable());
+        Assert.assertEquals(issueStandardId, topicPriorityEntity.getIssueStandardId());
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
+        final Integer id = 1;
+        final Integer topicId = 2;
+        final Boolean isPreferable = false;
+        final Integer issueStandardId = 2;
+
+        IssueStandardTopicPriorityEntity topicPriorityEntity = this.topicPriorityMapper.find(id);
+        Assert.assertEquals(id, topicPriorityEntity.getId());
+        Assert.assertNotEquals(topicId, topicPriorityEntity.getTopicId());
+        Assert.assertNotEquals(isPreferable, topicPriorityEntity.getIsPreferable());
+        Assert.assertNotEquals(issueStandardId, topicPriorityEntity.getIssueStandardId());
+
+        topicPriorityEntity = Mockito.mock(IssueStandardTopicPriorityEntity.class);
+        Mockito.when(topicPriorityEntity.getId()).thenReturn(id);
+        Mockito.when(topicPriorityEntity.getTopicId()).thenReturn(topicId);
+        Mockito.when(topicPriorityEntity.getIsPreferable()).thenReturn(isPreferable);
+        Mockito.when(topicPriorityEntity.getIssueStandardId()).thenReturn(issueStandardId);
+
+        this.topicPriorityMapper.update(topicPriorityEntity);
+
+        topicPriorityEntity = this.topicPriorityMapper.find(id);
+        Assert.assertEquals(id, topicPriorityEntity.getId());
+        Assert.assertEquals(topicId, topicPriorityEntity.getTopicId());
+        Assert.assertEquals(isPreferable, topicPriorityEntity.getIsPreferable());
+        Assert.assertEquals(issueStandardId, topicPriorityEntity.getIssueStandardId());
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        IssueStandardTopicPriorityEntity topicPriorityEntity = this.topicPriorityMapper.find(3);
+        Assert.assertNotNull(topicPriorityEntity);
+
+        this.topicPriorityMapper.delete(topicPriorityEntity);
+        topicPriorityEntity = this.topicPriorityMapper.find(3);
+        Assert.assertNull(topicPriorityEntity);
     }
 }
