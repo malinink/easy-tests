@@ -17,6 +17,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import static org.mockito.BDDMockito.*;
@@ -84,6 +85,7 @@ public class SolutionsServiceTest {
 
         final List<SolutionModelInterface> solutionModels = this.solutionsService.findAll();
 
+        Assert.assertNotNull(solutionModels);
         Assert.assertEquals(solutionEntities.size(), solutionModels.size());
         for (int i = 0; i < solutionEntities.size(); i++) {
             Assert.assertEquals(solutionModels.get(i), this.mapSolutionModel(solutionEntities.get(i)));
@@ -93,7 +95,10 @@ public class SolutionsServiceTest {
     @Test
     public void testFindAllAbsentList() throws Exception {
         given(this.solutionsMapper.findAll()).willReturn(new ArrayList<>(0));
+
         final List<SolutionModelInterface> solutionModels = this.solutionsService.findAll();
+
+        Assert.assertNotNull(solutionModels);
         Assert.assertEquals(0, solutionModels.size());
     }
 
@@ -104,6 +109,7 @@ public class SolutionsServiceTest {
         given(this.solutionsMapper.find(id)).willReturn(solutionEntity);
 
         final SolutionModelInterface solutionModel = this.solutionsService.find(id);
+        Assert.assertNotNull(solutionModel);
         Assert.assertEquals(solutionModel, this.mapSolutionModel(solutionEntity));
     }
 
@@ -113,7 +119,7 @@ public class SolutionsServiceTest {
         given(this.solutionsMapper.find(id)).willReturn(null);
 
         final SolutionModelInterface solutionModel = this.solutionsService.find(id);
-        Assert.assertEquals(null, solutionModel);
+        Assert.assertNull(solutionModel);
     }
 
     @Test
@@ -129,6 +135,8 @@ public class SolutionsServiceTest {
         when(pointModel.getId()).thenReturn(pointId);
 
         final List<SolutionModelInterface> solutionModels = this.solutionsService.findByPoint(pointModel);
+
+        Assert.assertNotNull(solutionModels);
         Assert.assertEquals(solutionEntities.size(), solutionModels.size());
         for (int i = 0; i < solutionEntities.size(); i++) {
             Assert.assertEquals(solutionModels.get(i), this.mapSolutionModel(solutionEntities.get(i)));
@@ -144,34 +152,52 @@ public class SolutionsServiceTest {
         when(pointModel.getId()).thenReturn(pointId);
 
         final List<SolutionModelInterface> solutionModels = this.solutionsService.findByPoint(pointModel);
+
+        Assert.assertNotNull(solutionModels);
         Assert.assertEquals(0, solutionModels.size());
     }
 
     @Test
-    public void testSaveUpdatesEntity() throws Exception {
+    public void testSaveInsertsEntity() throws Exception {
         final SolutionModelInterface solutionModel = this.createSolutionModel(null, 13, 4);
+        final Integer id = 5;
+
+        doAnswer(invocations -> {
+            final SolutionEntity solutionEntity = (SolutionEntity) invocations.getArguments()[0];
+            solutionEntity.setId(id);
+            return null;
+        }).when(this.solutionsMapper).insert(Mockito.any(SolutionEntity.class));
+
         this.solutionsService.save(solutionModel);
+
         verify(this.solutionsMapper, times(1)).insert(this.mapSolutionEntity(solutionModel));
+        Assert.assertEquals(id, solutionModel.getId());
     }
 
     @Test
-    public void testSaveInsertsEntity() throws Exception {
+    public void testSaveUpdatesEntity() throws Exception {
         final SolutionModelInterface solutionModel = this.createSolutionModel(1, 10, 1);
+
         this.solutionsService.save(solutionModel);
+
         verify(this.solutionsMapper, times(1)).update(this.mapSolutionEntity(solutionModel));
     }
 
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
         final SolutionModelInterface solutionModel = this.createSolutionModel(1, 10, 1);
+
         this.solutionsService.delete(solutionModel);
+
         verify(this.solutionsMapper, times(1)).delete(this.mapSolutionEntity(solutionModel));
     }
 
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
         final SolutionModelInterface solutionModel = this.createSolutionModel(null, 13, 4);
+
         exception.expect(DeleteUnidentifiedModelException.class);
+
         this.solutionsService.delete(solutionModel);
     }
 }
