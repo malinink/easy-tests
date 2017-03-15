@@ -123,6 +123,8 @@ public abstract class AbstractModelEmptyTest {
             object = 9;
         } else if (type == Double.class) {
             object = 9.5;
+        } else if (type == Boolean.class) {
+            object = true;
         } else if (Modifier.isFinal(type.getModifiers())) {
             object = type.newInstance();
         } else {

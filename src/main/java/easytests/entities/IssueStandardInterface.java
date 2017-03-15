@@ -4,7 +4,9 @@ import java.util.List;
 
 /**
  * @author malinink
+ * @deprecated cause of models
  */
+@Deprecated
 public interface IssueStandardInterface extends EntityInterface {
 
     IssueStandardInterface setId(Integer id);
