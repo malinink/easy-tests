@@ -107,11 +107,11 @@ public class UsersServiceTest {
         final List<UserEntity> usersEntities = this.getUsersEntities();
         final List<UserModelInterface> usersModels = this.getUsersModels();
         given(this.usersMapper.findAll()).willReturn(usersEntities);
-        given(usersOptions.setRelations(Mockito.anyList())).willReturn(usersModels);
+        given(usersOptions.withRelations(Mockito.anyList())).willReturn(usersModels);
 
         final List<UserModelInterface> foundedUsersModels = this.usersService.findAll(usersOptions);
 
-        verify(usersOptions).setRelations(usersModels);
+        verify(usersOptions).withRelations(usersModels);
         Assert.assertEquals(usersModels, foundedUsersModels);
     }
 

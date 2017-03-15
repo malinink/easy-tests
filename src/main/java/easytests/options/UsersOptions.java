@@ -26,11 +26,11 @@ public class UsersOptions implements UsersOptionsInterface {
     }
 
     @Override
-    public UserModelInterface setRelations(UserModelInterface userModel) {
+    public UserModelInterface withRelations(UserModelInterface userModel) {
         return userModel;
     }
 
-    public List<UserModelInterface> setRelations(List<UserModelInterface> usersModels) {
+    public List<UserModelInterface> withRelations(List<UserModelInterface> usersModels) {
         return usersModels;
     }
 

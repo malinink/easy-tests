@@ -16,9 +16,9 @@ public interface UsersOptionsInterface {
 
     UsersOptionsInterface withSubjects(SubjectsOptionsInterface subjectOptions);
 
-    UserModelInterface setRelations(UserModelInterface userModel);
+    UserModelInterface withRelations(UserModelInterface userModel);
 
-    List<UserModelInterface> setRelations(List<UserModelInterface> usersModels);
+    List<UserModelInterface> withRelations(List<UserModelInterface> usersModels);
 
     void saveWithRelations(UserModelInterface userModel);
 

@@ -30,7 +30,7 @@ public class UsersService implements UsersServiceInterface {
 
     @Override
     public List<UserModelInterface> findAll(UsersOptionsInterface usersOptions) {
-        return this.withServices(usersOptions).setRelations(this.findAll());
+        return this.withServices(usersOptions).withRelations(this.findAll());
     }
 
     @Override
@@ -40,7 +40,7 @@ public class UsersService implements UsersServiceInterface {
 
     @Override
     public UserModelInterface find(Integer id, UsersOptionsInterface usersOptions) {
-        return this.withServices(usersOptions).setRelations(this.find(id));
+        return this.withServices(usersOptions).withRelations(this.find(id));
     }
 
     @Override
