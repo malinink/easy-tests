@@ -43,6 +43,7 @@ public class SolutionsService {
             return;
         }
         this.solutionsMapper.insert(solutionEntity);
+        solutionModel.setId(solutionEntity.getId());
     }
 
     public void delete(SolutionModelInterface solutionModel) {
@@ -65,11 +66,11 @@ public class SolutionsService {
         return solutionEntity;
     }
 
-    private List<SolutionModelInterface> map(List<SolutionEntity> solutionsList) {
-        final List<SolutionModelInterface> resultSolutionsList = new ArrayList(solutionsList.size());
-        for (SolutionEntity solution: solutionsList) {
-            resultSolutionsList.add(this.map(solution));
+    private List<SolutionModelInterface> map(List<SolutionEntity> solutionEntities) {
+        final List<SolutionModelInterface> solutionModels = new ArrayList(solutionEntities.size());
+        for (SolutionEntity solutionEntity: solutionEntities) {
+            solutionModels.add(this.map(solutionEntity));
         }
-        return resultSolutionsList;
+        return solutionModels;
     }
 }
