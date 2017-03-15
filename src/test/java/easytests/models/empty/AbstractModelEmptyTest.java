@@ -72,7 +72,6 @@ public abstract class AbstractModelEmptyTest {
             if (skipMethodsWithNames.contains(method.getName())) {
                 continue;
             }
-            System.out.println(method.getName());
             final Method userMethod = modelEmpty.getMethod(method.getName(), method.getParameterTypes());
 
             try {
@@ -82,7 +81,6 @@ public abstract class AbstractModelEmptyTest {
                  */
                 Assert.assertTrue(false);
             } catch (InvocationTargetException ite) {
-                System.out.println(ite.getCause().toString());
                 /**
                  * Exception should be instance of CallMethodOnEmptyModelException
                  */
