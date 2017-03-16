@@ -12,12 +12,17 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 
 /**
  * @author malinink
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public abstract class AbstractModelEmptyTest {
 
     /**
@@ -67,7 +72,6 @@ public abstract class AbstractModelEmptyTest {
             if (skipMethodsWithNames.contains(method.getName())) {
                 continue;
             }
-            System.out.println(method.getName());
             final Method userMethod = modelEmpty.getMethod(method.getName(), method.getParameterTypes());
 
             try {
@@ -77,7 +81,6 @@ public abstract class AbstractModelEmptyTest {
                  */
                 Assert.assertTrue(false);
             } catch (InvocationTargetException ite) {
-                System.out.println(ite.getCause().toString());
                 /**
                  * Exception should be instance of CallMethodOnEmptyModelException
                  */
@@ -120,6 +123,8 @@ public abstract class AbstractModelEmptyTest {
             object = 9;
         } else if (type == Double.class) {
             object = 9.5;
+        } else if (type == Boolean.class) {
+            object = true;
         } else if (Modifier.isFinal(type.getModifiers())) {
             object = type.newInstance();
         } else {

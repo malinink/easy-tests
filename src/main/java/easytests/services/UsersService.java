@@ -4,6 +4,7 @@ import easytests.entities.UserEntity;
 import easytests.mappers.UsersMapper;
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
+import easytests.options.UsersOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,32 +16,50 @@ import org.springframework.stereotype.Service;
  * @author malinink
  */
 @Service
-public class UsersService {
-
+public class UsersService implements UsersServiceInterface {
     @Autowired
     private UsersMapper usersMapper;
 
+    @Autowired
+    private SubjectsService subjectsService;
+
+    @Override
     public List<UserModelInterface> findAll() {
         return this.map(this.usersMapper.findAll());
     }
 
-    public UserModelInterface find(Integer id) {
-        final UserEntity userEntity = this.usersMapper.find(id);
-        if (userEntity == null) {
-            return null;
-        }
-        return this.map(userEntity);
+    @Override
+    public List<UserModelInterface> findAll(UsersOptionsInterface usersOptions) {
+        return this.withServices(usersOptions).withRelations(this.findAll());
     }
 
+    @Override
+    public UserModelInterface find(Integer id) {
+        return this.map(this.usersMapper.find(id));
+    }
+
+    @Override
+    public UserModelInterface find(Integer id, UsersOptionsInterface usersOptions) {
+        return this.withServices(usersOptions).withRelations(this.find(id));
+    }
+
+    @Override
     public void save(UserModelInterface userModel) {
         final UserEntity userEntity = this.map(userModel);
         if (userEntity.getId() == null) {
             this.usersMapper.insert(userEntity);
+            userModel.setId(userEntity.getId());
             return;
         }
         this.usersMapper.update(userEntity);
     }
 
+    @Override
+    public void save(UserModelInterface userModel, UsersOptionsInterface usersOptions) {
+        this.withServices(usersOptions).saveWithRelations(userModel);
+    }
+
+    @Override
     public void delete(UserModelInterface userModel) {
         final UserEntity userEntity = this.map(userModel);
         if (userEntity.getId() == null) {
@@ -49,7 +68,21 @@ public class UsersService {
         this.usersMapper.delete(userEntity);
     }
 
+    @Override
+    public void delete(UserModelInterface userModel, UsersOptionsInterface usersOptions) {
+        this.withServices(usersOptions).deleteWithRelations(userModel);
+    }
+
+    private UsersOptionsInterface withServices(UsersOptionsInterface usersOptions) {
+        usersOptions.setUsersService(this);
+        usersOptions.setSubjectsService(this.subjectsService);
+        return usersOptions;
+    }
+
     private UserModelInterface map(UserEntity userEntity) {
+        if (userEntity == null) {
+            return null;
+        }
         final UserModelInterface userModel = new UserModel();
         userModel.map(userEntity);
         return userModel;
@@ -68,5 +101,4 @@ public class UsersService {
         }
         return resultUserList;
     }
-
 }

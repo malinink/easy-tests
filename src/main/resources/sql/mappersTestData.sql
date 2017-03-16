@@ -9,7 +9,6 @@
 ----------------------
 DROP TABLE IF EXISTS question_type_options;
 DROP TABLE IF EXISTS topic_priorities;
-DROP  TYPE IF EXISTS TOPIC_PRIORITY;
 DROP TABLE IF EXISTS issue_standard;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS subjects;
@@ -19,6 +18,7 @@ DROP TABLE IF EXISTS quizzes;
 DROP TABLE IF EXISTS solutions;
 DROP TABLE IF EXISTS testees;
 DROP TABLE IF EXISTS points;
+DROP TABLE IF EXISTS issues;
 
 
 ----------------------
@@ -37,23 +37,18 @@ CREATE TABLE issue_standard (
   time_limit        INTEGER,
   questions_number  INTEGER,
   subject_id        INTEGER  NOT NULL,
-    CONSTRAINT positiveness CHECK (questions_number > 0 AND time_limit > 0),
-    PRIMARY KEY (id),
-    UNIQUE (subject_id)
+  CONSTRAINT positiveness CHECK (questions_number > 0 AND time_limit > 0),
+  PRIMARY KEY (id),
+  UNIQUE (subject_id)
 );
 
-CREATE TYPE TOPIC_PRIORITY AS ENUM ('LOW', 'HIGH');
-
 CREATE TABLE topic_priorities (
-  id                 SERIAL          NOT NULL,
-  topic_id           INTEGER         NOT NULL,
-  priority           TOPIC_PRIORITY  NOT NULL,
-  issue_standard_id  INTEGER         NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE (topic_id, issue_standard_id),
-    FOREIGN KEY (issue_standard_id)
-        REFERENCES issue_standard (id)
-        ON DELETE CASCADE
+  id                 SERIAL   NOT NULL,
+  topic_id           INTEGER  NOT NULL,
+  is_preferable      BOOLEAN  NOT NULL,
+  issue_standard_id  INTEGER  NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE (topic_id, issue_standard_id)
 );
 
 CREATE TABLE question_type_options (
@@ -63,13 +58,10 @@ CREATE TABLE question_type_options (
   max_number         INTEGER,
   time_limit         INTEGER,
   issue_standard_id  INTEGER  NOT NULL,
-    CONSTRAINT positiveness CHECK (min_number >= 0 AND max_number > 0 AND time_limit > 0),
-    CONSTRAINT check_limits CHECK (max_number >= min_number),
-    PRIMARY KEY (id),
-    UNIQUE (question_type_id, issue_standard_id),
-    FOREIGN KEY (issue_standard_id)
-        REFERENCES issue_standard (id)
-        ON DELETE CASCADE
+  CONSTRAINT positiveness CHECK (min_number >= 0 AND max_number > 0 AND time_limit > 0),
+  CONSTRAINT check_limits CHECK (max_number >= min_number),
+  PRIMARY KEY (id),
+  UNIQUE (question_type_id, issue_standard_id)
 );
 
 CREATE TABLE subjects (
@@ -129,6 +121,13 @@ CREATE TABLE points (
   	PRIMARY KEY (id)  
 );
 
+CREATE TABLE issues (
+  id          SERIAL        NOT NULL,
+  name        VARCHAR(100)  NOT NULL,
+  author_id   SERIAL        NOT NULL,
+  PRIMARY KEY (id)
+);
+
 
 ----------------------
 -- INSERT DATA
@@ -142,10 +141,10 @@ INSERT INTO issue_standard (time_limit, questions_number, subject_id) VALUES
   (300, 30, 1),
   (NULL, 15, 3);
 
-INSERT INTO topic_priorities (topic_id, priority, issue_standard_id) VALUES
-  (1, 'HIGH', 1),
-  (2, 'LOW', 1),
-  (3, 'HIGH', 2);
+INSERT INTO topic_priorities (topic_id, is_preferable, issue_standard_id) VALUES
+  (1, TRUE, 1),
+  (2, FALSE, 1),
+  (3, TRUE, 2);
 
 INSERT INTO question_type_options (question_type_id, min_number, max_number, time_limit, issue_standard_id) VALUES
   (1, 1, NULL, NULL, 1),
@@ -187,3 +186,7 @@ INSERT INTO points (type, text, quiz_id) VALUES
 	('type2', 'text2', 2),
 	('type3', 'text3', 3);
 
+INSERT INTO issues (name, author_id) VALUES
+  ('Name1', 11),
+  ('Name2', 12),
+  ('Name3', 13);

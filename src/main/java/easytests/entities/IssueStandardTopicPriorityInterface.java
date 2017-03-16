@@ -2,7 +2,9 @@ package easytests.entities;
 
 /**
  * @author SingularityA
+ * @deprecated cause of models
  */
+@Deprecated
 public interface IssueStandardTopicPriorityInterface extends EntityInterface {
 
     IssueStandardTopicPriorityInterface setId(Integer id);

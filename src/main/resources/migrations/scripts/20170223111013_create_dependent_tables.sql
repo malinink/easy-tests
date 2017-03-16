@@ -1,13 +1,11 @@
 -- // create_dependent_tables
 -- Migration SQL that makes the change goes here.
 
-CREATE TYPE TOPIC_PRIORITY AS ENUM ('LOW', 'HIGH');
-
 CREATE TABLE topic_priorities (
-  id                 SERIAL          NOT NULL,
-  topic_id           INTEGER         NOT NULL,
-  priority           TOPIC_PRIORITY  NOT NULL,
-  issue_standard_id  INTEGER         NOT NULL,
+  id                 SERIAL   NOT NULL,
+  topic_id           INTEGER  NOT NULL,
+  is_preferable      BOOLEAN  NOT NULL,
+  issue_standard_id  INTEGER  NOT NULL,
     PRIMARY KEY (id),
     UNIQUE (topic_id, issue_standard_id)
 );
@@ -30,4 +28,3 @@ CREATE TABLE question_type_options (
 
 DROP TABLE question_type_options;
 DROP TABLE topic_priorities;
-DROP TYPE TOPIC_PRIORITY;
