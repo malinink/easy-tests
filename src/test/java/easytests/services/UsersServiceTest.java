@@ -4,6 +4,7 @@ import easytests.entities.UserEntity;
 import easytests.mappers.UsersMapper;
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
+import easytests.options.UsersOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,20 +65,31 @@ public class UsersServiceTest {
         return userEntity;
     }
 
-    @Test
-    public void testFindAllPresentList() throws Exception {
+    private List<UserEntity> getUsersEntities() {
         final List<UserEntity> usersEntities = new ArrayList<>(2);
         final UserEntity userEntityFirst = this.createUserEntityMock(1, "FirstName1", "LastName1", "Surname1");
         final UserEntity userEntitySecond = this.createUserEntityMock(2, "FirstName2", "LastName2", "Surname2");
         usersEntities.add(userEntityFirst);
         usersEntities.add(userEntitySecond);
+        return usersEntities;
+    }
+
+    private List<UserModelInterface> getUsersModels() {
+        final List<UserModelInterface> usersModels = new ArrayList<>(2);
+        for (UserEntity userEntity: this.getUsersEntities()) {
+            usersModels.add(this.mapUserModel(userEntity));
+        }
+        return usersModels;
+    }
+
+    @Test
+    public void testFindAllPresentList() throws Exception {
+        final List<UserEntity> usersEntities = this.getUsersEntities();
         given(this.usersMapper.findAll()).willReturn(usersEntities);
 
         final List<UserModelInterface> usersModels = this.usersService.findAll();
 
-        Assert.assertEquals(2, usersModels.size());
-        Assert.assertEquals(usersModels.get(0), this.mapUserModel(userEntityFirst));
-        Assert.assertEquals(usersModels.get(1), this.mapUserModel(userEntitySecond));
+        Assert.assertEquals(this.getUsersModels(), usersModels);
     }
 
     @Test
@@ -87,6 +99,20 @@ public class UsersServiceTest {
         final List<UserModelInterface> usersModels = this.usersService.findAll();
 
         Assert.assertEquals(0, usersModels.size());
+    }
+
+    @Test
+    public void testFindAllWithOptions() throws Exception {
+        final List<UserEntity> usersEntities = this.getUsersEntities();
+        final List<UserModelInterface> usersModels = this.getUsersModels();
+        final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
+        given(this.usersMapper.findAll()).willReturn(usersEntities);
+        given(usersOptions.withRelations(Mockito.anyList())).willReturn(usersModels);
+
+        final List<UserModelInterface> foundedUsersModels = this.usersService.findAll(usersOptions);
+
+        verify(usersOptions).withRelations(usersModels);
+        Assert.assertEquals(usersModels, foundedUsersModels);
     }
 
     @Test
@@ -108,6 +134,21 @@ public class UsersServiceTest {
         final UserModelInterface userModel = this.usersService.find(id);
 
         Assert.assertEquals(null, userModel);
+    }
+
+    @Test
+    public void testFindWithOptions() throws Exception {
+        final Integer id = 1;
+        final UserEntity userEntity = this.createUserEntityMock(id, "NewFirstName", "NewLastName", "NewSurname");
+        final UserModelInterface userModel = this.mapUserModel(userEntity);
+        final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
+        given(this.usersMapper.find(id)).willReturn(userEntity);
+        given(usersOptions.withRelations(userModel)).willReturn(userModel);
+
+        final UserModelInterface foundedUserModel = this.usersService.find(id, usersOptions);
+
+        Assert.assertEquals(userModel, foundedUserModel);
+        verify(usersOptions).withRelations(userModel);
     }
 
     @Test
@@ -135,6 +176,16 @@ public class UsersServiceTest {
     }
 
     @Test
+    public void testSaveWithOptions() throws Exception {
+        final UserModelInterface userModel = this.createUserModel(null, "FirstName", "LastName", "Surname");
+        final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
+
+        this.usersService.save(userModel, usersOptions);
+
+        verify(usersOptions).saveWithRelations(userModel);
+    }
+
+    @Test
     public void testDeleteIdentifiedModel() throws Exception {
         final UserModelInterface userModel = this.createUserModel(1, "FirstName", "LastName", "Surname");
 
@@ -150,4 +201,20 @@ public class UsersServiceTest {
         exception.expect(DeleteUnidentifiedModelException.class);
         this.usersService.delete(userModel);
     }
+
+    @Test
+    public void testDeleteWithOptions() throws Exception {
+        final UserModelInterface userModel = this.createUserModel(1, "FirstName", "LastName", "Surname");
+        final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
+
+        this.usersService.delete(userModel, usersOptions);
+
+        verify(usersOptions).deleteWithRelations(userModel);
+    }
+
+    @Test
+    public void testSetAllOptionsDependencies() throws Exception {
+        // TODO @malinink test private withServices on Options
+    }
+
 }
