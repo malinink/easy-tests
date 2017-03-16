@@ -178,6 +178,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/EasyTestsApplication.java</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

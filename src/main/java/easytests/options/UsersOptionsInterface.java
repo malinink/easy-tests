@@ -1,21 +1,26 @@
 package easytests.options;
 
-import easytests.models.SubjectModelInterface;
 import easytests.models.UserModelInterface;
 import easytests.services.SubjectsServiceInterface;
+import easytests.services.UsersServiceInterface;
+import java.util.List;
 
 
 /**
  * @author malinink
  */
 public interface UsersOptionsInterface {
-    UsersOptionsInterface withSubjects(SubjectModelInterface subjectModel);
-
     void setSubjectsService(SubjectsServiceInterface subjectsService);
 
-    void findWithOptions(UserModelInterface userModel);
+    void setUsersService(UsersServiceInterface usersService);
 
-    void saveWithOptions(UserModelInterface userModel);
+    UsersOptionsInterface withSubjects(SubjectsOptionsInterface subjectOptions);
 
-    void deleteWithOptions(UserModelInterface userModel);
+    UserModelInterface withRelations(UserModelInterface userModel);
+
+    List<UserModelInterface> withRelations(List<UserModelInterface> usersModels);
+
+    void saveWithRelations(UserModelInterface userModel);
+
+    void deleteWithRelations(UserModelInterface userModel);
 }
