@@ -29,7 +29,7 @@ public interface AnswersMapper {
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(AnswerEntity answer);
 
-    @Update("UPDATE answers SET txt=#{txt}, questionId=#{question_id}, right=#{is_right} WHERE id=#{id}")
+    @Update("UPDATE answers SET txt=#{txt}, question_id=#{questionId}, is_right=#{right} WHERE id=#{id}")
     void update(AnswerEntity answer);
 
     @Delete("DELETE FROM answers WHERE id=#{id}")
