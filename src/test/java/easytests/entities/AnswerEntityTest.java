@@ -1,6 +1,7 @@
 package easytests.entities;
 
 import easytests.models.AnswerModelInterface;
+import easytests.models.QuestionModelInterface;
 import org.junit.Assert;
 import org.junit.Test;
 import org.meanbean.test.BeanTester;
@@ -26,11 +27,14 @@ public class AnswerEntityTest {
         final Integer questionId = 5;
         final Boolean right = true;
 
+        final QuestionModelInterface questionModel = Mockito.mock(QuestionModelInterface.class);
+        Mockito.when(questionModel.getId()).thenReturn(questionId);
+
         final AnswerModelInterface answerModel = Mockito.mock(AnswerModelInterface.class);
         Mockito.when(answerModel.getId()).thenReturn(id);
         Mockito.when(answerModel.getTxt()).thenReturn(txt);
-        Mockito.when(answerModel.getQuestionId()).thenReturn(questionId);
-        Mockito.when(answerModel.isRight()).thenReturn(right);
+        Mockito.when(answerModel.getQuestion()).thenReturn(questionModel);
+        Mockito.when(answerModel.getRight()).thenReturn(right);
 
         final AnswerEntity answerEntity = new AnswerEntity();
         answerEntity.map(answerModel);
@@ -38,7 +42,7 @@ public class AnswerEntityTest {
         Assert.assertEquals(id, answerEntity.getId());
         Assert.assertEquals(txt, answerEntity.getTxt());
         Assert.assertEquals(questionId, answerEntity.getQuestionId());
-        Assert.assertEquals(right, answerEntity.isRight());
+        Assert.assertEquals(right, answerEntity.getRight());
     }
 
 }
