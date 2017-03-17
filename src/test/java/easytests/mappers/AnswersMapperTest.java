@@ -2,9 +2,9 @@ package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
 import easytests.entities.AnswerEntity;
+import easytests.models.QuestionModelInterface;
 import java.util.List;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -44,7 +44,7 @@ public class AnswersMapperTest {
         Assert.assertEquals((Integer) 1, answer.getId());
         Assert.assertEquals("Answer1", answer.getTxt());
         Assert.assertEquals((Integer) 1, answer.getQuestionId());
-        Assert.assertEquals(true, answer.isRight());
+        Assert.assertEquals(true, answer.getRight());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class AnswersMapperTest {
         AnswerEntity answerEntity = Mockito.mock(AnswerEntity.class);
         Mockito.when(answerEntity.getTxt()).thenReturn(txt);
         Mockito.when(answerEntity.getQuestionId()).thenReturn(questionId);
-        Mockito.when(answerEntity.isRight()).thenReturn(right);
+        Mockito.when(answerEntity.getRight()).thenReturn(right);
 
         this.answersMapper.insert(answerEntity);
 
@@ -67,29 +67,31 @@ public class AnswersMapperTest {
         Assert.assertEquals(id, answerEntity.getId());
         Assert.assertEquals(txt, answerEntity.getTxt());
         Assert.assertEquals(questionId, answerEntity.getQuestionId());
-        Assert.assertEquals(right, answerEntity.isRight());
+        Assert.assertEquals(right, answerEntity.getRight());
     }
 
-    @Ignore
     @Test
     public void testUpdate() throws Exception {
         final Integer id = 1;
-        final String txt = "Answer2";
+        final String txt = "Answer1";
         final Integer questionId = 1;
         final Boolean right = true;
+
+        final QuestionModelInterface questionModel = Mockito.mock(QuestionModelInterface.class);
+        Mockito.when(questionModel.getId()).thenReturn(questionId);
 
         AnswerEntity answerEntity = this.answersMapper.find(id);
         Assert.assertNotNull(answerEntity);
         Assert.assertEquals(id, answerEntity.getId());
         Assert.assertEquals(txt, answerEntity.getTxt());
         Assert.assertEquals(questionId, answerEntity.getQuestionId());
-        Assert.assertEquals(right, answerEntity.isRight());
+        Assert.assertEquals(right, answerEntity.getRight());
 
         answerEntity = Mockito.mock(AnswerEntity.class);
         Mockito.when(answerEntity.getId()).thenReturn(id);
         Mockito.when(answerEntity.getTxt()).thenReturn(txt);
         Mockito.when(answerEntity.getQuestionId()).thenReturn(questionId);
-        Mockito.when(answerEntity.isRight()).thenReturn(right);
+        Mockito.when(answerEntity.getRight()).thenReturn(right);
 
         this.answersMapper.update(answerEntity);
 
@@ -97,7 +99,7 @@ public class AnswersMapperTest {
         Assert.assertEquals(id, answerEntity.getId());
         Assert.assertEquals(txt, answerEntity.getTxt());
         Assert.assertEquals(questionId, answerEntity.getQuestionId());
-        Assert.assertEquals(right, answerEntity.isRight());
+        Assert.assertEquals(right, answerEntity.getRight());
     }
 
     @Test
