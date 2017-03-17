@@ -12,11 +12,11 @@ public interface AnswerModelInterface extends ModelInterface {
 
     void setTxt(String txt);
 
-    Integer getQuestionId();
+    QuestionModelInterface getQuestion();
 
-    void setQuestionId(Integer id);
+    void setQuestion(QuestionModelInterface question);
 
-    Boolean isRight();
+    Boolean getRight();
 
     void setRight(Boolean right);
 
