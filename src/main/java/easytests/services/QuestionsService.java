@@ -35,6 +35,7 @@ public class QuestionsService {
         final QuestionEntity questionEntity = this.map(questionModel);
         if (questionEntity.getId() == null) {
             this.questionsMapper.insert(questionEntity);
+            questionModel.setId(questionEntity.getId());
             return;
         }
         this.questionsMapper.update(questionEntity);
