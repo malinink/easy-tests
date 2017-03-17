@@ -2,6 +2,7 @@ package easytests.models.empty;
 
 import easytests.entities.AnswerEntity;
 import easytests.models.AnswerModelInterface;
+import easytests.models.QuestionModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
 
 /**
@@ -28,17 +29,17 @@ public class AnswerModelEmpty extends AbstractModelEmpty implements AnswerModelI
     }
 
     @Override
-    public Integer getQuestionId() {
+    public QuestionModelInterface getQuestion() {
         throw new CallMethodOnEmptyModelException();
     }
 
     @Override
-    public void setQuestionId(Integer id) {
+    public void setQuestion(QuestionModelInterface question) {
         throw new CallMethodOnEmptyModelException();
     }
 
-    //@Override
-    public Boolean isRight() {
+    @Override
+    public Boolean getRight() {
         throw new CallMethodOnEmptyModelException();
     }
 
