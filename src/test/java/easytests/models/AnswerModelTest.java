@@ -19,9 +19,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class AnswerModelTest {
     @Test
     public void testCommon() throws Exception {
-        new BeanTester().testBean(UserModel.class);
-        new EqualsMethodTester().testEqualsMethod(UserModel.class);
-        new HashCodeMethodTester().testHashCodeMethod(UserModel.class);
+        new BeanTester().testBean(AnswerModel.class);
+        new EqualsMethodTester().testEqualsMethod(AnswerModel.class);
+        new HashCodeMethodTester().testHashCodeMethod(AnswerModel.class);
     }
 
     @Test
