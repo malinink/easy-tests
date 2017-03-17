@@ -37,6 +37,7 @@ public class AnswersService {
         final AnswerEntity answerEntity = this.map(answerModel);
         if (answerEntity.getId() == null) {
             this.answersMapper.insert(answerEntity);
+            answerModel.setId(answerEntity.getId());
             return;
         }
         this.answersMapper.update(answerEntity);
