@@ -132,10 +132,15 @@ public class AnswersServiceTest {
     @Test
     public void testSaveCreatesEntity() throws Exception {
         final AnswerModelInterface answerModel = this.createAnswerModel(null, "Answer11", 1, true);
-
+        doAnswer(invocation -> {
+            final AnswerEntity answerEntity = (AnswerEntity) invocation.getArguments()[0];
+            answerEntity.setId(100);
+            return null;
+        }).when(this.answersMapper).insert(Mockito.any(AnswerEntity.class));
         this.answersService.save(answerModel);
 
         verify(this.answersMapper, times(1)).insert(this.mapAnswerEntity(answerModel));
+        Assert.assertEquals((Integer) 100, answerModel.getId());
     }
 
     @Test
