@@ -4,6 +4,7 @@ import easytests.entities.AnswerEntity;
 import easytests.mappers.AnswersMapper;
 import easytests.models.AnswerModel;
 import easytests.models.AnswerModelInterface;
+import easytests.models.QuestionModelInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 
 import java.util.ArrayList;
@@ -36,13 +37,29 @@ public class AnswersServiceTest {
     @Autowired
     private AnswersService answersService;
 
-    private AnswerModelInterface createAnswerModel(Integer id, String txt, Integer questionId, boolean right) {
+    private AnswerModelInterface createAnswerModel(Integer id, String txt,
+                                                   QuestionModelInterface question, boolean right) {
         final AnswerModelInterface answerModel = new AnswerModel();
         answerModel.setId(id);
         answerModel.setTxt(txt);
-        answerModel.setQuestionId(questionId);
+        answerModel.setQuestion(question);
         answerModel.setRight(right);
         return answerModel;
+    }
+
+    private AnswerModelInterface createAnswerModel(Integer id, String txt, Integer questionId, Boolean right) {
+
+        final AnswerModelInterface answerModel = new AnswerModel();
+        answerModel.setId(id);
+        answerModel.setTxt("txt");
+
+        final QuestionModelInterface questionModel = Mockito.mock(QuestionModelInterface.class);
+        Mockito.when(questionModel.getId()).thenReturn(questionId);
+
+        answerModel.setQuestion(questionModel);
+
+        return answerModel;
+
     }
 
     private AnswerEntity createAnswerEntityMock(Integer id, String txt, Integer questionId, boolean right) {
@@ -50,7 +67,7 @@ public class AnswersServiceTest {
         Mockito.when(answerEntity.getId()).thenReturn(id);
         Mockito.when(answerEntity.getTxt()).thenReturn(txt);
         Mockito.when(answerEntity.getQuestionId()).thenReturn(questionId);
-        Mockito.when(answerEntity.isRight()).thenReturn(right);
+        Mockito.when(answerEntity.getRight()).thenReturn(right);
         return answerEntity;
     }
 
