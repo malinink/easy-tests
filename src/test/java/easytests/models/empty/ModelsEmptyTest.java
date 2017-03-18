@@ -2,36 +2,34 @@ package easytests.models.empty;
 
 import easytests.models.ModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
+import easytests.models.exceptions.CreateEmptyModelWithNullIdException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import easytests.models.exceptions.CreateEmptyModelWithNullIdException;
-import easytests.services.exceptions.DeleteUnidentifiedModelException;
+import java.util.Set;
+import java.util.regex.Pattern;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.RegexPatternTypeFilter;
 
 /**
  * @author malinink
  */
-@RunWith(SpringRunner.class)
+@RunWith(Parameterized.class)
 @SpringBootTest
-public abstract class AbstractModelEmptyTest {
-    /**
-     * Must be class of testing empty model
-     */
-    protected static Class modelEmpty;
-
+public class ModelsEmptyTest {
     /**
      * Determine all defaults methods that should be skipped from test
      */
@@ -42,23 +40,49 @@ public abstract class AbstractModelEmptyTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
-    @Test
-    public void testDefaultConstructorPresent() throws Exception {
-        Assert.assertEquals(2, modelEmpty.getConstructors().length);
-        modelEmpty.getConstructor();
+    /**
+     * Must be class of testing empty model
+     */
+    private Class modelEmpty;
+
+    public ModelsEmptyTest(Class modelEmptyClass) {
+        this.modelEmpty = modelEmptyClass;
+    }
+
+    /**
+     * Generate all EmptyModel classes as params for that test
+     * @return
+     * @throws ClassNotFoundException
+     */
+    @Parameters
+    public static List<Object[]> data() throws ClassNotFoundException {
+        final ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
+        provider.addIncludeFilter(new RegexPatternTypeFilter(Pattern.compile(".*")));
+        final Set<BeanDefinition> classes = provider.findCandidateComponents("easytests.models.empty");
+        final List<Object[]> parametersList = new ArrayList<>();
+
+        for (BeanDefinition bean : classes) {
+            final Class<?> emptyModelClass = Class.forName(bean.getBeanClassName());
+            if (emptyModelClass == ModelsEmptyTest.class) {
+                continue;
+            }
+            parametersList.add(new Object[] {emptyModelClass});
+        }
+        return parametersList;
     }
 
     @Test
-    public void testIntegerConstructorPresent() throws Exception {
-        Assert.assertEquals(2, modelEmpty.getConstructors().length);
-        modelEmpty.getConstructor(Integer.class);
+    public void testConstructorsPresent() throws Exception {
+        Assert.assertEquals(2, this.modelEmpty.getConstructors().length);
+        this.modelEmpty.getConstructor(Integer.class);
+        this.modelEmpty.getConstructor();
     }
 
     @Test
     public void testConstructorFailsWithNullArgument() throws Throwable {
         exception.expect(CreateEmptyModelWithNullIdException.class);
         try {
-            modelEmpty.getDeclaredConstructor(Integer.class).newInstance((Integer) null);
+            this.modelEmpty.getDeclaredConstructor(Integer.class).newInstance((Integer) null);
         } catch (InvocationTargetException ite) {
             throw ite.getCause();
         }
@@ -67,14 +91,14 @@ public abstract class AbstractModelEmptyTest {
     @Test
     public void testIdIsSet() throws Exception {
         final Integer id = 5;
-        final ModelInterface model = (ModelInterface) modelEmpty.getDeclaredConstructor(Integer.class).newInstance(id);
+        final ModelInterface model = (ModelInterface) this.modelEmpty.getDeclaredConstructor(Integer.class).newInstance(id);
 
         Assert.assertEquals(id, model.getId());
     }
 
     @Test
     public void testGetIdOnModelWithoutIdThrowsException() throws Exception {
-        final ModelInterface model = (ModelInterface) modelEmpty.getDeclaredConstructor().newInstance();
+        final ModelInterface model = (ModelInterface) this.modelEmpty.getDeclaredConstructor().newInstance();
 
         exception.expect(CallMethodOnEmptyModelException.class);
         model.getId();
@@ -82,14 +106,14 @@ public abstract class AbstractModelEmptyTest {
 
     @Test
     public void testAllOtherMethodsFailsOnEmptyModelWithId() throws Exception {
-        final ModelInterface model = (ModelInterface) modelEmpty.getDeclaredConstructor(Integer.class).newInstance(10);
+        final ModelInterface model = (ModelInterface) this.modelEmpty.getDeclaredConstructor(Integer.class).newInstance(10);
 
         this.testModelTrowsExpectedExceptions(model);
     }
 
     @Test
     public void testAllOtherMethodsFailsOnEmptyModelWithoutId() throws Exception {
-        final ModelInterface model = (ModelInterface) modelEmpty.getDeclaredConstructor().newInstance();
+        final ModelInterface model = (ModelInterface) this.modelEmpty.getDeclaredConstructor().newInstance();
 
         this.testModelTrowsExpectedExceptions(model);
     }
@@ -99,11 +123,11 @@ public abstract class AbstractModelEmptyTest {
      * @param model
      */
     private void testModelTrowsExpectedExceptions(ModelInterface model) throws Exception {
-        for (Method method: modelEmpty.getMethods()) {
+        for (Method method: this.modelEmpty.getMethods()) {
             if (skipMethodsWithNames.contains(method.getName())) {
                 continue;
             }
-            final Method userMethod = modelEmpty.getMethod(method.getName(), method.getParameterTypes());
+            final Method userMethod = this.modelEmpty.getMethod(method.getName(), method.getParameterTypes());
 
             try {
                 userMethod.invoke(model, this.getMethodParametersValues(method));
