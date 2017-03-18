@@ -46,10 +46,6 @@ public class AbstractEmptyTest {
                 throw new Exception("Method should throw exception");
             } catch (InvocationTargetException ite) {
                 if (ite.getCause().getClass() != expectedException) {
-                    System.out.println(ite.getCause().getClass().getName());
-                    for (StackTraceElement st: ite.getCause().getStackTrace()) {
-                        System.out.println(st);
-                    }
                     throw new Exception("Exception should be instance of " + expectedException.getName());
                 }
             }
