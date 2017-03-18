@@ -8,6 +8,9 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import easytests.models.exceptions.CreateEmptyModelWithNullIdException;
+import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,7 +27,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public abstract class AbstractModelEmptyTest {
-
     /**
      * Must be class of testing empty model
      */
@@ -41,18 +43,29 @@ public abstract class AbstractModelEmptyTest {
     public final ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void testRightConstructorPresent() throws NoSuchMethodException {
-        Assert.assertEquals(1, modelEmpty.getConstructors().length);
+    public void testDefaultConstructorPresent() throws Exception {
+        Assert.assertEquals(2, modelEmpty.getConstructors().length);
+        modelEmpty.getConstructor();
+    }
+
+    @Test
+    public void testIntegerConstructorPresent() throws Exception {
+        Assert.assertEquals(2, modelEmpty.getConstructors().length);
         modelEmpty.getConstructor(Integer.class);
     }
 
     @Test
-    public void testIdIsSet()
-        throws
-            NoSuchMethodException,
-            IllegalAccessException,
-            InstantiationException,
-            InvocationTargetException {
+    public void testConstructorFailsWithNullArgument() throws Throwable {
+        exception.expect(CreateEmptyModelWithNullIdException.class);
+        try {
+            modelEmpty.getDeclaredConstructor(Integer.class).newInstance((Integer) null);
+        } catch (InvocationTargetException ite) {
+            throw ite.getCause();
+        }
+    }
+
+    @Test
+    public void testIdIsSet() throws Exception {
         final Integer id = 5;
         final ModelInterface model = (ModelInterface) modelEmpty.getDeclaredConstructor(Integer.class).newInstance(id);
 
@@ -60,14 +73,32 @@ public abstract class AbstractModelEmptyTest {
     }
 
     @Test
-    public void testAllOtherMethodsFails()
-        throws
-            NoSuchMethodException,
-            IllegalAccessException,
-            InstantiationException,
-            InvocationTargetException {
+    public void testGetIdOnModelWithoutIdThrowsException() throws Exception {
+        final ModelInterface model = (ModelInterface) modelEmpty.getDeclaredConstructor().newInstance();
+
+        exception.expect(CallMethodOnEmptyModelException.class);
+        model.getId();
+    }
+
+    @Test
+    public void testAllOtherMethodsFailsOnEmptyModelWithId() throws Exception {
         final ModelInterface model = (ModelInterface) modelEmpty.getDeclaredConstructor(Integer.class).newInstance(10);
 
+        this.testModelTrowsExpectedExceptions(model);
+    }
+
+    @Test
+    public void testAllOtherMethodsFailsOnEmptyModelWithoutId() throws Exception {
+        final ModelInterface model = (ModelInterface) modelEmpty.getDeclaredConstructor().newInstance();
+
+        this.testModelTrowsExpectedExceptions(model);
+    }
+
+    /**
+     * Test that each method which are not in skipList throw expected Exception
+     * @param model
+     */
+    private void testModelTrowsExpectedExceptions(ModelInterface model) throws Exception {
         for (Method method: modelEmpty.getMethods()) {
             if (skipMethodsWithNames.contains(method.getName())) {
                 continue;
@@ -76,15 +107,11 @@ public abstract class AbstractModelEmptyTest {
 
             try {
                 userMethod.invoke(model, this.getMethodParametersValues(method));
-                /**
-                 * Method should throw exception
-                 */
-                Assert.assertTrue(false);
+                throw new Exception("Method should throw exception");
             } catch (InvocationTargetException ite) {
-                /**
-                 * Exception should be instance of CallMethodOnEmptyModelException
-                 */
-                Assert.assertTrue(ite.getCause() instanceof CallMethodOnEmptyModelException);
+                if (!(ite.getCause() instanceof CallMethodOnEmptyModelException)) {
+                    throw new Exception("Exception should be instance of CallMethodOnEmptyModelException");
+                }
             }
         }
     }
@@ -94,10 +121,8 @@ public abstract class AbstractModelEmptyTest {
      *
      * @param method
      * @return
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
-    private Object[] getMethodParametersValues(Method method) throws IllegalAccessException, InstantiationException {
+    private Object[] getMethodParametersValues(Method method) throws Exception {
         final Object[] parameters = new Object[method.getParameterCount()];
         Integer i = 0;
         for (Class<?> type: method.getParameterTypes()) {
@@ -114,10 +139,8 @@ public abstract class AbstractModelEmptyTest {
      *
      * @param type
      * @return
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
-    private Object getObjectByType(Class<?> type) throws IllegalAccessException, InstantiationException {
+    private Object getObjectByType(Class<?> type) throws Exception {
         final Object object;
         if (type == Integer.class) {
             object = 9;
