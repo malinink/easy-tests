@@ -165,8 +165,8 @@ INSERT INTO questions (text, type, topic_id) VALUES
 
 INSERT INTO answers(txt, question_id, is_right) VALUES
   ('Answer1', 1, TRUE),
-  ('Answer2', 3, FALSE),
-  ('Answer3', 2, TRUE);
+  ('Answer2', 2, FALSE),
+  ('Answer3', 3, TRUE);
 
 INSERT INTO quizzes (issue_id, invite_code) VALUES
  (1, 'test_invite_code1'),
