@@ -12,6 +12,10 @@ import java.util.List;
  * @author firkhraag
  */
 public class QuestionModelEmpty extends AbstractModelEmpty implements QuestionModelInterface {
+    public QuestionModelEmpty() {
+        super();
+    }
+
     public QuestionModelEmpty(Integer id) {
         super(id);
     }

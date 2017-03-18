@@ -13,6 +13,9 @@ import java.util.List;
  * @author vkpankov
  */
 public class SubjectModelEmpty extends AbstractModelEmpty implements SubjectModelInterface {
+    public SubjectModelEmpty() {
+        super();
+    }
 
     public SubjectModelEmpty(Integer id) {
         super(id);
