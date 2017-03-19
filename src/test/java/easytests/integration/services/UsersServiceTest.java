@@ -2,6 +2,7 @@ package easytests.integration.services;
 
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
+import easytests.models.empty.ModelsListEmpty;
 import easytests.services.UsersService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,6 +31,7 @@ public class UsersServiceTest {
         userModel.setFirstName(firstName);
         userModel.setLastName(lastName);
         userModel.setSurname(surname);
+        userModel.setSubjects(new ModelsListEmpty());
         return userModel;
     }
 

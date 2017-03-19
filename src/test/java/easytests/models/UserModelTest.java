@@ -1,12 +1,11 @@
 package easytests.models;
 
 import easytests.entities.UserEntity;
+import easytests.models.empty.ModelsListEmpty;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.meanbean.test.BeanTester;
-import org.meanbean.test.EqualsMethodTester;
-import org.meanbean.test.HashCodeMethodTester;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,8 +19,6 @@ public class UserModelTest {
     @Test
     public void testCommon() throws Exception {
         new BeanTester().testBean(UserModel.class);
-        new EqualsMethodTester().testEqualsMethod(UserModel.class);
-        new HashCodeMethodTester().testHashCodeMethod(UserModel.class);
     }
 
     @Test
@@ -44,5 +41,6 @@ public class UserModelTest {
         Assert.assertEquals(firstName, userModel.getFirstName());
         Assert.assertEquals(lastName, userModel.getLastName());
         Assert.assertEquals(surname, userModel.getSurname());
+        Assert.assertEquals(new ModelsListEmpty(), userModel.getSubjects());
     }
 }
