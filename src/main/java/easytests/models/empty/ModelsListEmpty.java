@@ -165,4 +165,14 @@ public class ModelsListEmpty implements List {
     public void forEach(Consumer consumer) {
         throw new CallMethodOnEmptyModelsListException();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof ModelsListEmpty;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
