@@ -27,20 +27,32 @@ public class UsersOptions implements UsersOptionsInterface {
 
     @Override
     public UserModelInterface withRelations(UserModelInterface userModel) {
+        if (this.subjectsOptions != null) {
+            userModel.setSubjects(this.subjectsService.findByUser(userModel, this.subjectsOptions));
+        }
         return userModel;
     }
 
     public List<UserModelInterface> withRelations(List<UserModelInterface> usersModels) {
+        for (UserModelInterface userModel: usersModels) {
+            this.withRelations(userModel);
+        }
         return usersModels;
     }
 
     @Override
     public void saveWithRelations(UserModelInterface userModel) {
         this.usersService.save(userModel);
+        if (this.subjectsOptions != null) {
+            this.subjectsService.save(userModel.getSubjects(), this.subjectsOptions);
+        }
     }
 
     @Override
     public void deleteWithRelations(UserModelInterface userModel) {
+        if (this.subjectsOptions != null) {
+            this.subjectsService.delete(userModel.getSubjects(), this.subjectsOptions);
+        }
         this.usersService.delete(userModel);
     }
 }
