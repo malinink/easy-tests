@@ -33,6 +33,7 @@ public class UsersOptions implements UsersOptionsInterface {
         return userModel;
     }
 
+    @Override
     public List<UserModelInterface> withRelations(List<UserModelInterface> usersModels) {
         for (UserModelInterface userModel: usersModels) {
             this.withRelations(userModel);
