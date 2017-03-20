@@ -3,12 +3,14 @@ package easytests.options;
 import easytests.models.SubjectModelInterface;
 import easytests.models.UserModelInterface;
 import easytests.services.SubjectsServiceInterface;
+import easytests.services.UsersServiceInterface;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.given;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.verify;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,4 +67,45 @@ public class UsersOptionsTest {
         verify(subjectsService).findByUser(userModelSecond, subjectsOptions);
         Assert.assertEquals(subjectsModelsSecond, usersModelsWithRelations.get(1).getSubjects());
     }
+
+    @Test
+    public void testSaveWithRelations() throws Exception {
+        final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
+        final UsersOptionsInterface usersOptions = new UsersOptions();
+        final UsersServiceInterface usersService = Mockito.mock(UsersServiceInterface.class);
+        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        usersOptions.setUsersService(usersService);
+        usersOptions.setSubjectsService(subjectsService);
+        usersOptions.withSubjects(subjectsOptions);
+        final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
+        userModel.setSubjects(subjectsModels);
+        final InOrder inOrder = Mockito.inOrder(subjectsService, usersService);
+
+        usersOptions.saveWithRelations(userModel);
+
+        inOrder.verify(usersService).save(userModel);
+        inOrder.verify(subjectsService).save(subjectsModels, subjectsOptions);
+    }
+
+    @Test
+    public void testDeleteWithRelations() throws Exception {
+        final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
+        final UsersOptionsInterface usersOptions = new UsersOptions();
+        final UsersServiceInterface usersService = Mockito.mock(UsersServiceInterface.class);
+        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        usersOptions.setUsersService(usersService);
+        usersOptions.setSubjectsService(subjectsService);
+        usersOptions.withSubjects(subjectsOptions);
+        final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
+        userModel.setSubjects(subjectsModels);
+        final InOrder inOrder = Mockito.inOrder(subjectsService, usersService);
+
+        usersOptions.deleteWithRelations(userModel);
+
+        inOrder.verify(subjectsService).delete(subjectsModels, subjectsOptions);
+        inOrder.verify(usersService).delete(userModel);
+    }
+
 }
