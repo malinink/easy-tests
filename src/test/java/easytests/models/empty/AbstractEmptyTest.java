@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class AbstractEmptyTest {
+public abstract class AbstractEmptyTest {
     /**
      * Determine all defaults methods that should be skipped from test
      */

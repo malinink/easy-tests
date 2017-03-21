@@ -96,4 +96,52 @@ public class ModelsEmptyTest extends AbstractEmptyTest {
 
         this.testModelTrowsExpectedExceptions(model, CallMethodOnEmptyModelException.class);
     }
+
+    @Test
+    public void testEqualsOnSameClassSameObjects() throws Exception {
+        final Object first = this.modelEmpty.getDeclaredConstructor(Integer.class).newInstance(1);
+        final Object second = first;
+
+        Assert.assertEquals(first, second);
+    }
+
+    @Test
+    public void testEqualsOnSameClassEqualsObjects() throws Exception {
+        final Object first = this.modelEmpty.getDeclaredConstructor(Integer.class).newInstance(1);
+        final Object second = this.modelEmpty.getDeclaredConstructor(Integer.class).newInstance(1);
+
+        Assert.assertEquals(first, second);
+    }
+
+    @Test
+    public void testEqualsOnSameClassEqualsEmptyObjects() throws Exception {
+        final Object first = this.modelEmpty.getDeclaredConstructor().newInstance();
+        final Object second = this.modelEmpty.getDeclaredConstructor().newInstance();
+
+        Assert.assertEquals(first, second);
+    }
+
+    @Test
+    public void testEqualsOnDifferentClassObjects() throws Exception {
+        final Object first = this.modelEmpty.getDeclaredConstructor(Integer.class).newInstance(1);
+        final Object second = new AbstractModelEmpty(1) { };
+
+        Assert.assertNotEquals(first, second);
+    }
+
+    @Test
+    public void testEqualsOnDifferentClassEmptyObjects() throws Exception {
+        final Object first = this.modelEmpty.getDeclaredConstructor().newInstance();
+        final Object second = new AbstractModelEmpty() { };
+
+        Assert.assertNotEquals(first, second);
+    }
+
+    @Test
+    public void testEqualsOnSameClassDifferentObjects() throws Exception {
+        final Object first = this.modelEmpty.getDeclaredConstructor(Integer.class).newInstance(1);
+        final Object second = this.modelEmpty.getDeclaredConstructor(Integer.class).newInstance(3);
+
+        Assert.assertNotEquals(first, second);
+    }
 }
