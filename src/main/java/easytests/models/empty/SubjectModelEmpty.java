@@ -6,8 +6,8 @@ import easytests.models.SubjectModelInterface;
 import easytests.models.TopicModelInterface;
 import easytests.models.UserModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
-
 import java.util.List;
+
 
 /**
  * @author vkpankov

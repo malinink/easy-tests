@@ -28,4 +28,24 @@ public abstract class AbstractModelEmpty implements ModelInterface {
         }
         return this.id;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (getClass() != object.getClass()) {
+            return false;
+        }
+        final AbstractModelEmpty other = (AbstractModelEmpty) object;
+        if (this.id == other.id) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id == null ? -1 : this.id;
+    }
 }
