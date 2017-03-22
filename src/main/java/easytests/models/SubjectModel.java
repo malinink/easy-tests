@@ -1,11 +1,10 @@
 package easytests.models;
 
 import easytests.entities.SubjectEntity;
-import java.util.List;
-
 import easytests.models.empty.IssueStandardModelEmpty;
 import easytests.models.empty.ModelsListEmpty;
 import easytests.models.empty.UserModelEmpty;
+import java.util.List;
 import lombok.*;
 
 /**
