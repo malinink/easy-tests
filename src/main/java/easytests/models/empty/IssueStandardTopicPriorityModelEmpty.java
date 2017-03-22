@@ -12,6 +12,10 @@ public class IssueStandardTopicPriorityModelEmpty
         extends AbstractModelEmpty
         implements IssueStandardTopicPriorityModelInterface {
 
+    public IssueStandardTopicPriorityModelEmpty() {
+        super();
+    }
+
     public IssueStandardTopicPriorityModelEmpty(Integer id) {
         super(id);
     }

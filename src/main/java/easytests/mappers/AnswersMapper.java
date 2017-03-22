@@ -1,7 +1,6 @@
 package easytests.mappers;
 
-import easytests.entities.Answer;
-import easytests.entities.AnswerInterface;
+import easytests.entities.AnswerEntity;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 
@@ -12,28 +11,28 @@ import org.apache.ibatis.annotations.*;
 public interface AnswersMapper {
 
     @Results(
-            id = "Answer",
+            id = "AnswerEntity",
             value = {
                     @Result(property = "id", column = "id"),
                     @Result(property = "txt", column = "txt"),
                     @Result(property = "questionId", column = "question_id"),
-                    @Result(property = "isRight", column = "is_right")
+                    @Result(property = "right", column = "is_right")
             })
     @Select("SELECT id, txt, question_id, is_right FROM answers")
-    List<Answer> findAll();
+    List<AnswerEntity> findAll();
 
     @Select("SELECT id, txt, question_id, is_right FROM answers where id=#{id}")
-    @ResultMap("Answer")
-    Answer find(Integer id);
+    @ResultMap("AnswerEntity")
+    AnswerEntity find(Integer id);
 
-    @Insert("INSERT INTO answers (txt, question_id, is_right) VALUES(#{txt}, #{questionId}, #{isRight})")
+    @Insert("INSERT INTO answers (txt, question_id, is_right) VALUES(#{txt}, #{questionId}, #{right})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
-    void insert(AnswerInterface answer);
+    void insert(AnswerEntity answer);
 
-    @Update("UPDATE answers SET txt=#{txt}, questionId=#{question_id}, isRight=#{is_right} WHERE id=#{id}")
-    void update(AnswerInterface answer);
+    @Update("UPDATE answers SET txt=#{txt}, question_id=#{questionId}, is_right=#{right} WHERE id=#{id}")
+    void update(AnswerEntity answer);
 
     @Delete("DELETE FROM answers WHERE id=#{id}")
-    void delete(AnswerInterface answer);
+    void delete(AnswerEntity answer);
 
 }

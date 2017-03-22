@@ -5,5 +5,4 @@ package easytests.models;
  */
 public interface TopicModelInterface extends ModelInterface {
 
-
 }
