@@ -56,14 +56,13 @@ public class SubjectsServiceTest {
 
     }
 
-    private SubjectEntity createSubjectEntityMock(Integer id, String name, Integer userId, Integer issueStandardId) {
+    private SubjectEntity createSubjectEntityMock(Integer id, String name, Integer userId) {
 
         final SubjectEntity subjectEntity = Mockito.mock(SubjectEntity.class);
 
         Mockito.when(subjectEntity.getId()).thenReturn(id);
         Mockito.when(subjectEntity.getName()).thenReturn(name);
         Mockito.when(subjectEntity.getUserId()).thenReturn(userId);
-        Mockito.when(subjectEntity.getIssueStandardId()).thenReturn(issueStandardId);
 
         return subjectEntity;
 
@@ -89,8 +88,8 @@ public class SubjectsServiceTest {
     public void testFindAllPresentList() throws Exception {
 
         final List<SubjectEntity> subjectsEntities = new ArrayList<>(2);
-        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(1, "test1", 1, 1);
-        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(2, "test2", 2, 1);
+        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(1, "test1", 1);
+        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(2, "test2", 2);
 
         subjectsEntities.add(subjectEntityFirst);
         subjectsEntities.add(subjectEntitySecond);
@@ -120,7 +119,7 @@ public class SubjectsServiceTest {
     public void testFindPresentModel() throws Exception {
 
         final Integer id = 1;
-        final SubjectEntity subjectEntity = this.createSubjectEntityMock(id, "test", 1, 1);
+        final SubjectEntity subjectEntity = this.createSubjectEntityMock(id, "test", 1);
         given(this.subjectsMapper.find(id)).willReturn(subjectEntity);
 
         final SubjectModelInterface subjectModel = this.subjectsService.find(id);
@@ -145,8 +144,8 @@ public class SubjectsServiceTest {
     public void testFindByUser() throws Exception {
         final Integer userId = 7;
         final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
-        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(3, "test3", userId, 1);
-        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(12, "test12", userId, 1);
+        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(3, "test3", userId);
+        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(12, "test12", userId);
         final List<SubjectEntity> subjectsEntities = new ArrayList<>();
         subjectsEntities.add(subjectEntityFirst);
         subjectsEntities.add(subjectEntitySecond);
@@ -166,8 +165,8 @@ public class SubjectsServiceTest {
     public void testFindByUserWithOptions() throws Exception {
         final Integer userId = 7;
         final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
-        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(3, "test3", userId, 1);
-        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(12, "test12", userId, 1);
+        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(3, "test3", userId);
+        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(12, "test12", userId);
         final List<SubjectEntity> subjectsEntities = new ArrayList<>();
         subjectsEntities.add(subjectEntityFirst);
         subjectsEntities.add(subjectEntitySecond);
