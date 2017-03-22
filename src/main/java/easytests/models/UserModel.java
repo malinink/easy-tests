@@ -1,6 +1,7 @@
 package easytests.models;
 
 import easytests.entities.UserEntity;
+import easytests.models.empty.ModelsListEmpty;
 import java.util.List;
 import lombok.*;
 
@@ -24,5 +25,6 @@ public class UserModel implements UserModelInterface {
         this.setFirstName(userEntity.getFirstName());
         this.setLastName(userEntity.getLastName());
         this.setSurname(userEntity.getSurname());
+        this.setSubjects(new ModelsListEmpty());
     }
 }

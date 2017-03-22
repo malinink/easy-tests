@@ -11,6 +11,10 @@ import java.util.List;
  * @author malinink
  */
 public class UserModelEmpty extends AbstractModelEmpty implements UserModelInterface {
+    public UserModelEmpty() {
+        super();
+    }
+
     public UserModelEmpty(Integer id) {
         super(id);
     }

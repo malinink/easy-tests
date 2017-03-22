@@ -4,8 +4,6 @@ import easytests.models.UserModelInterface;
 import org.junit.Assert;
 import org.junit.Test;
 import org.meanbean.test.BeanTester;
-import org.meanbean.test.EqualsMethodTester;
-import org.meanbean.test.HashCodeMethodTester;
 import org.mockito.Mockito;
 
 /**
@@ -15,8 +13,6 @@ public class UserEntityTest {
     @Test
     public void testCommon() throws Exception {
         new BeanTester().testBean(UserEntity.class);
-        new EqualsMethodTester().testEqualsMethod(UserEntity.class);
-        new HashCodeMethodTester().testHashCodeMethod(UserEntity.class);
     }
 
     @Test

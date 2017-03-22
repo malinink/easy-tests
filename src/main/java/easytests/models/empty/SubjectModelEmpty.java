@@ -6,13 +6,16 @@ import easytests.models.SubjectModelInterface;
 import easytests.models.TopicModelInterface;
 import easytests.models.UserModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
-
 import java.util.List;
+
 
 /**
  * @author vkpankov
  */
 public class SubjectModelEmpty extends AbstractModelEmpty implements SubjectModelInterface {
+    public SubjectModelEmpty() {
+        super();
+    }
 
     public SubjectModelEmpty(Integer id) {
         super(id);

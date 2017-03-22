@@ -95,10 +95,10 @@ public class UsersService implements UsersServiceInterface {
     }
 
     private List<UserModelInterface> map(List<UserEntity> usersList) {
-        final List<UserModelInterface> resultUserList = new ArrayList(usersList.size());
+        final List<UserModelInterface> resultUsersList = new ArrayList(usersList.size());
         for (UserEntity user: usersList) {
-            resultUserList.add(this.map(user));
+            resultUsersList.add(this.map(user));
         }
-        return resultUserList;
+        return resultUsersList;
     }
 }

@@ -9,6 +9,10 @@ import easytests.models.exceptions.CallMethodOnEmptyModelException;
  * @author rezenbekk
  */
 public class AnswerModelEmpty extends AbstractModelEmpty implements AnswerModelInterface {
+    public AnswerModelEmpty() {
+        super();
+    }
+
     public AnswerModelEmpty(Integer id) {
         super(id);
     }

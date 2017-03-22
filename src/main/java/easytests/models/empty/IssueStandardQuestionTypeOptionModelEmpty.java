@@ -12,6 +12,10 @@ public class IssueStandardQuestionTypeOptionModelEmpty
         extends AbstractModelEmpty
         implements IssueStandardQuestionTypeOptionModelInterface {
 
+    public IssueStandardQuestionTypeOptionModelEmpty() {
+        super();
+    }
+
     public IssueStandardQuestionTypeOptionModelEmpty(Integer id) {
         super(id);
     }
