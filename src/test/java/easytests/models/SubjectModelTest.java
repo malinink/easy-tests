@@ -1,6 +1,9 @@
 package easytests.models;
 
 import easytests.entities.SubjectEntity;
+import easytests.models.empty.IssueStandardModelEmpty;
+import easytests.models.empty.ModelsListEmpty;
+import easytests.models.empty.UserModelEmpty;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,16 +31,21 @@ public class SubjectModelTest {
 
         final Integer subjectId = 5;
         final String subjectName = "Test subject";
+        final Integer subjectUserId = 3;
 
         final SubjectEntity subjectEntity = Mockito.mock(SubjectEntity.class);
         Mockito.when(subjectEntity.getId()).thenReturn(subjectId);
         Mockito.when(subjectEntity.getName()).thenReturn(subjectName);
+        Mockito.when(subjectEntity.getUserId()).thenReturn(subjectUserId);
 
-        final SubjectModel subjectModel = new SubjectModel();
+        final SubjectModelInterface subjectModel = new SubjectModel();
         subjectModel.map(subjectEntity);
 
         Assert.assertEquals(subjectId, subjectModel.getId());
         Assert.assertEquals(subjectName, subjectModel.getName());
+        Assert.assertEquals(new ModelsListEmpty(), subjectModel.getTopics());
+        Assert.assertEquals(new UserModelEmpty(subjectUserId), subjectModel.getUser());
+        Assert.assertEquals(new IssueStandardModelEmpty(), subjectModel.getIssueStandard());
 
     }
 

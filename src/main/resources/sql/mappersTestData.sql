@@ -65,10 +65,9 @@ CREATE TABLE question_type_options (
 );
 
 CREATE TABLE subjects (
-  id        SERIAL        NOT NULL,
-  name      VARCHAR(255)  NOT NULL,
-  user_id   INTEGER       NOT NULL,
-  issue_standard_id     INTEGER,
+  id        SERIAL       NOT NULL,
+  name      VARCHAR(255) NOT NULL,
+  user_id   INTEGER      NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -153,10 +152,10 @@ INSERT INTO question_type_options (question_type_id, min_number, max_number, tim
   (1, 1, 5, 120, 2),
   (3, 5, NULL, 300, 2);
 
-INSERT INTO subjects (name, user_id, issue_standard_id) VALUES
-  ('test1', 2, 1),
-  ('test2', 2, 1),
-  ('test3', 3, 1);
+INSERT INTO subjects (name, user_id) VALUES
+  ('test1', 2),
+  ('test2', 2),
+  ('test3', 3);
 
 INSERT INTO questions (text, type, topic_id) VALUES
   ('test1', 1, 1),

@@ -1,6 +1,9 @@
 package easytests.models;
 
 import easytests.entities.SubjectEntity;
+import easytests.models.empty.IssueStandardModelEmpty;
+import easytests.models.empty.ModelsListEmpty;
+import easytests.models.empty.UserModelEmpty;
 import java.util.List;
 import lombok.*;
 
@@ -24,6 +27,8 @@ public class SubjectModel implements SubjectModelInterface {
 
         this.setId(subjectEntity.getId());
         this.setName(subjectEntity.getName());
-
+        this.setTopics(new ModelsListEmpty());
+        this.setUser(new UserModelEmpty(subjectEntity.getUserId()));
+        this.setIssueStandard(new IssueStandardModelEmpty());
     }
 }

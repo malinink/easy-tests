@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.*;
  */
 public interface SubjectsMapper {
 
-    @Select("SELECT * FROM subjects WHERE id=#{subjectId}")
+    @Select("SELECT * FROM subjects")
     @Results(
             id = "Subject",
             value = {
@@ -18,17 +18,17 @@ public interface SubjectsMapper {
                     @Result(property = "name", column = "name"),
                     @Result(property = "userId", column = "user_id")
             })
-    SubjectEntity find(Integer subjectId);
-
-    @Select("SELECT * FROM subjects")
-    @ResultMap("Subject")
     List<SubjectEntity> findAll();
 
-    @Select("SELECT * FROM subjects WHERE user_id=#{id}")
+    @Select("SELECT * FROM subjects WHERE id=#{id}")
     @ResultMap("Subject")
-    List<SubjectEntity> findByUserId(Integer id);
+    SubjectEntity find(Integer id);
 
-    @Insert("INSERT INTO subjects (name,user_id) VALUES (#{name},#{userId})")
+    @Select("SELECT * FROM subjects WHERE user_id=#{userId}")
+    @ResultMap("Subject")
+    List<SubjectEntity> findByUserId(Integer userId);
+
+    @Insert("INSERT INTO subjects (name, user_id) VALUES (#{name}, #{userId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(SubjectEntity subject);
 
