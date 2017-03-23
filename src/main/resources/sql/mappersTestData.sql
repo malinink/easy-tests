@@ -29,6 +29,10 @@ CREATE TABLE users (
   first_name VARCHAR(30) NOT NULL,
   last_name  VARCHAR(30) NOT NULL,
   surname    VARCHAR(30) NOT NULL,
+  email      VARCHAR(30) NOT NULL UNIQUE,
+  password   VARCHAR(60) NOT NULL,
+  is_admin   BOOLEAN     NOT NULL DEFAULT FALSE,
+  state      SMALLINT    NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
 
@@ -132,10 +136,10 @@ CREATE TABLE issues (
 ----------------------
 -- INSERT DATA
 ----------------------
-INSERT INTO users (first_name, last_name, surname) VALUES
-  ('FirstName1', 'LastName1', 'Surname1'),
-  ('FirstName2', 'LastName2', 'Surname2'),
-  ('FirstName3', 'LastName3', 'Surname3');
+INSERT INTO users (first_name, last_name, surname, email, password, is_admin, state) VALUES
+  ('FirstName1', 'LastName1', 'Surname1', 'email1@gmail.com', 'hash1', TRUE, 1),
+  ('FirstName2', 'LastName2', 'Surname2', 'email2@gmail.com', 'hash2', FALSE, 2),
+  ('FirstName3', 'LastName3', 'Surname3', 'email3@gmail.com', 'hash3', FALSE, 1);
 
 INSERT INTO issue_standard (time_limit, questions_number, subject_id) VALUES
   (300, 30, 1),
