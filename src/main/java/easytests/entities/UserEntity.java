@@ -16,6 +16,14 @@ public class UserEntity {
 
     private String surname;
 
+    private String email;
+
+    private String password;
+
+    private Boolean isAdmin;
+
+    private Integer state;
+
     public void map(UserModelInterface userModel) {
         this.setId(userModel.getId());
         this.setFirstName(userModel.getFirstName());
