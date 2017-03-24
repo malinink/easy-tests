@@ -31,8 +31,8 @@ public class IssueStandardTopicPrioritiesOptions implements IssueStandardTopicPr
         withRelations(IssueStandardTopicPriorityModelInterface topicPriorityModel) {
 
         if (this.issueStandardsOptions != null) {
-            topicPriorityModel.setIssueStandard(
-                    this.issueStandardsService.find(topicPriorityModel.getIssueStandard().getId()));
+            topicPriorityModel.setIssueStandard(this.issueStandardsService
+                    .find(topicPriorityModel.getIssueStandard().getId(), this.issueStandardsOptions));
         }
         return topicPriorityModel;
     }

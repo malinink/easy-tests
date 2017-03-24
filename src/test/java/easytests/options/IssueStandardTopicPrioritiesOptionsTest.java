@@ -43,13 +43,13 @@ public class IssueStandardTopicPrioritiesOptionsTest {
 
         final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
         Mockito.when(issueStandardModel.getId()).thenReturn(issueStandardId);
-        given(issueStandardsService.find(issueStandardId)).willReturn(issueStandardModel);
+        given(issueStandardsService.find(issueStandardId, issueStandardsOptions)).willReturn(issueStandardModel);
 
         // options не заданы
         final IssueStandardTopicPriorityModelInterface topicPriorityModelWithoutRelations
                 = topicPrioritiesOptions.withRelations(topicPriorityModel);
 
-        verify(issueStandardsService, times(0)).find(issueStandardId);
+        verify(issueStandardsService, times(0)).find(issueStandardId, issueStandardsOptions);
         Assert.assertEquals(topicPriorityModel, topicPriorityModelWithoutRelations);
         Assert.assertNotEquals(issueStandardModel, topicPriorityModelWithoutRelations.getIssueStandard());
 
@@ -60,7 +60,7 @@ public class IssueStandardTopicPrioritiesOptionsTest {
         final IssueStandardTopicPriorityModelInterface topicPriorityModelWithRelations
                 = topicPrioritiesOptions.withRelations(topicPriorityModel);
 
-        verify(issueStandardsService, times(1)).find(issueStandardId);
+        verify(issueStandardsService, times(1)).find(issueStandardId, issueStandardsOptions);
         Assert.assertEquals(topicPriorityModel, topicPriorityModelWithRelations);
         Assert.assertEquals(issueStandardModel, topicPriorityModelWithRelations.getIssueStandard());
     }
@@ -90,18 +90,20 @@ public class IssueStandardTopicPrioritiesOptionsTest {
 
         final IssueStandardModelInterface issueStandardModelFirst = Mockito.mock(IssueStandardModelInterface.class);
         Mockito.when(issueStandardModelFirst.getId()).thenReturn(issueStandardIdFirst);
-        given(issueStandardsService.find(issueStandardIdFirst)).willReturn(issueStandardModelFirst);
+        given(issueStandardsService.find(issueStandardIdFirst, issueStandardsOptions))
+                .willReturn(issueStandardModelFirst);
 
         final IssueStandardModelInterface issueStandardModelSecond = Mockito.mock(IssueStandardModelInterface.class);
         Mockito.when(issueStandardModelSecond.getId()).thenReturn(issueStandardIdSecond);
-        given(issueStandardsService.find(issueStandardIdSecond)).willReturn(issueStandardModelSecond);
+        given(issueStandardsService.find(issueStandardIdSecond, issueStandardsOptions))
+                .willReturn(issueStandardModelSecond);
 
         // options не заданы
         final List<IssueStandardTopicPriorityModelInterface> topicPriorityModelsWithoutRelations
                 = topicPrioritiesOptions.withRelations(topicPriorityModels);
 
-        verify(issueStandardsService, times(0)).find(issueStandardIdFirst);
-        verify(issueStandardsService, times(0)).find(issueStandardIdSecond);
+        verify(issueStandardsService, times(0)).find(issueStandardIdFirst, issueStandardsOptions);
+        verify(issueStandardsService, times(0)).find(issueStandardIdSecond, issueStandardsOptions);
         Assert.assertEquals(topicPriorityModels, topicPriorityModelsWithoutRelations);
         Assert.assertNotEquals(issueStandardModelFirst, topicPriorityModelsWithoutRelations.get(0).getIssueStandard());
         Assert.assertNotEquals(issueStandardModelSecond, topicPriorityModelsWithoutRelations.get(1).getIssueStandard());
@@ -115,8 +117,8 @@ public class IssueStandardTopicPrioritiesOptionsTest {
         final List<IssueStandardTopicPriorityModelInterface> topicPriorityModelsWithRelations
                 = topicPrioritiesOptions.withRelations(topicPriorityModels);
 
-        verify(issueStandardsService, times(1)).find(issueStandardIdFirst);
-        verify(issueStandardsService, times(1)).find(issueStandardIdSecond);
+        verify(issueStandardsService, times(1)).find(issueStandardIdFirst, issueStandardsOptions);
+        verify(issueStandardsService, times(1)).find(issueStandardIdSecond, issueStandardsOptions);
         Assert.assertEquals(topicPriorityModels, topicPriorityModelsWithRelations);
         Assert.assertEquals(issueStandardModelFirst, topicPriorityModelsWithRelations.get(0).getIssueStandard());
         Assert.assertEquals(issueStandardModelSecond, topicPriorityModelsWithRelations.get(1).getIssueStandard());
