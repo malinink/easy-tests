@@ -50,7 +50,7 @@ public class IssueStandardTopicPrioritiesOptions implements IssueStandardTopicPr
     @Override
     public void saveWithRelations(IssueStandardTopicPriorityModelInterface topicPriorityModel) {
         if (this.issueStandardsOptions != null) {
-            this.issueStandardsService.save(topicPriorityModel.getIssueStandard());
+            this.issueStandardsService.save(topicPriorityModel.getIssueStandard(), this.issueStandardsOptions);
         }
         this.topicPrioritiesService.save(topicPriorityModel);
     }
@@ -59,7 +59,7 @@ public class IssueStandardTopicPrioritiesOptions implements IssueStandardTopicPr
     public void deleteWithRelations(IssueStandardTopicPriorityModelInterface topicPriorityModel) {
         this.topicPrioritiesService.delete(topicPriorityModel);
         if (this.issueStandardsOptions != null) {
-            this.issueStandardsService.delete(topicPriorityModel.getIssueStandard());
+            this.issueStandardsService.delete(topicPriorityModel.getIssueStandard(), this.issueStandardsOptions);
         }
     }
 }
