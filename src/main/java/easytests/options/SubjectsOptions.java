@@ -78,7 +78,7 @@ public class SubjectsOptions implements SubjectsOptionsInterface {
         if (this.usersOptions != null) {
 
             this.usersOptions.withSubjects(this);
-            this.usersService.save(subjectModel.getUser(), this.usersOptions);
+            this.usersOptions.saveWithRelations(subjectModel.getUser());
             return;
 
         }
