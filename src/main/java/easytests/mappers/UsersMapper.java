@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.*;
  * @author malinink
  */
 @Mapper
+@SuppressWarnings("checkstyle:linelength")
 public interface UsersMapper {
     @Results(
         id = "User",
@@ -20,7 +21,7 @@ public interface UsersMapper {
             @Result(property = "email", column = "email"),
             @Result(property = "password", column = "password"),
             @Result(property = "isAdmin", column = "is_admin"),
-            @Result(property = "state", column = "state"),
+            @Result(property = "state", column = "state")
         })
     @Select("SELECT * FROM users")
     List<UserEntity> findAll();
