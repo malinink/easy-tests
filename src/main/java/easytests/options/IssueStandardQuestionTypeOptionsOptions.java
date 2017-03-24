@@ -32,7 +32,8 @@ public class IssueStandardQuestionTypeOptionsOptions implements IssueStandardQue
 
         if (this.issueStandardsOptions != null) {
             questionTypeOptionModel.setIssueStandard(
-                    this.issueStandardsService.find(questionTypeOptionModel.getIssueStandard().getId()));
+                    this.issueStandardsService
+                            .find(questionTypeOptionModel.getIssueStandard().getId(), this.issueStandardsOptions));
         }
         return questionTypeOptionModel;
     }

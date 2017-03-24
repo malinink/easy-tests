@@ -42,13 +42,13 @@ public class IssueStandardQuestionTypeOptionsOptionsTest {
 
         final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
         Mockito.when(issueStandardModel.getId()).thenReturn(issueStandardId);
-        given(issueStandardsService.find(issueStandardId)).willReturn(issueStandardModel);
+        given(issueStandardsService.find(issueStandardId, issueStandardsOptions)).willReturn(issueStandardModel);
 
         // options не заданы
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModelWithoutRelations
                 = questionTypeOptionsOptions.withRelations(questionTypeOptionModel);
 
-        verify(issueStandardsService, times(0)).find(issueStandardId);
+        verify(issueStandardsService, times(0)).find(issueStandardId, issueStandardsOptions);
         Assert.assertEquals(questionTypeOptionModel, questionTypeOptionModelWithoutRelations);
         Assert.assertNotEquals(issueStandardModel, questionTypeOptionModelWithoutRelations.getIssueStandard());
 
@@ -59,7 +59,7 @@ public class IssueStandardQuestionTypeOptionsOptionsTest {
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModelWithRelations
                 = questionTypeOptionsOptions.withRelations(questionTypeOptionModel);
 
-        verify(issueStandardsService, times(1)).find(issueStandardId);
+        verify(issueStandardsService, times(1)).find(issueStandardId, issueStandardsOptions);
         Assert.assertEquals(questionTypeOptionModel, questionTypeOptionModelWithoutRelations);
         Assert.assertEquals(issueStandardModel, questionTypeOptionModelWithoutRelations.getIssueStandard());
     }
@@ -88,18 +88,20 @@ public class IssueStandardQuestionTypeOptionsOptionsTest {
 
         final IssueStandardModelInterface issueStandardModelFirst = Mockito.mock(IssueStandardModelInterface.class);
         Mockito.when(issueStandardModelFirst.getId()).thenReturn(issueStandardIdFirst);
-        given(issueStandardsService.find(issueStandardIdFirst)).willReturn(issueStandardModelFirst);
+        given(issueStandardsService.find(issueStandardIdFirst, issueStandardsOptions))
+                .willReturn(issueStandardModelFirst);
 
         final IssueStandardModelInterface issueStandardModelSecond = Mockito.mock(IssueStandardModelInterface.class);
         Mockito.when(issueStandardModelSecond.getId()).thenReturn(issueStandardIdSecond);
-        given(issueStandardsService.find(issueStandardIdSecond)).willReturn(issueStandardModelSecond);
+        given(issueStandardsService.find(issueStandardIdSecond, issueStandardsOptions))
+                .willReturn(issueStandardModelSecond);
 
         // options не заданы
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModelsWithoutRelations
                 = questionTypeOptionsOptions.withRelations(questionTypeOptionModels);
 
-        verify(issueStandardsService, times(0)).find(issueStandardIdFirst);
-        verify(issueStandardsService, times(0)).find(issueStandardIdSecond);
+        verify(issueStandardsService, times(0)).find(issueStandardIdFirst, issueStandardsOptions);
+        verify(issueStandardsService, times(0)).find(issueStandardIdSecond, issueStandardsOptions);
         Assert.assertEquals(questionTypeOptionModels, questionTypeOptionModelsWithoutRelations);
         Assert.assertNotEquals(issueStandardModelFirst, questionTypeOptionModelsWithoutRelations.get(0).getIssueStandard());
         Assert.assertNotEquals(issueStandardModelSecond, questionTypeOptionModelsWithoutRelations.get(1).getIssueStandard());
@@ -113,8 +115,8 @@ public class IssueStandardQuestionTypeOptionsOptionsTest {
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModelsWithRelations
                 = questionTypeOptionsOptions.withRelations(questionTypeOptionModels);
 
-        verify(issueStandardsService, times(1)).find(issueStandardIdFirst);
-        verify(issueStandardsService, times(1)).find(issueStandardIdSecond);
+        verify(issueStandardsService, times(1)).find(issueStandardIdFirst, issueStandardsOptions);
+        verify(issueStandardsService, times(1)).find(issueStandardIdSecond, issueStandardsOptions);
         Assert.assertEquals(questionTypeOptionModels, questionTypeOptionModelsWithoutRelations);
         Assert.assertEquals(issueStandardModelFirst, questionTypeOptionModelsWithoutRelations.get(0).getIssueStandard());
         Assert.assertEquals(issueStandardModelSecond, questionTypeOptionModelsWithoutRelations.get(1).getIssueStandard());
