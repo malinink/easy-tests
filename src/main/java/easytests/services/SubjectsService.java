@@ -26,9 +26,6 @@ public class SubjectsService implements SubjectsServiceInterface {
     private UsersService usersService;
 
     @Autowired
-    private TopicsService topicsService;
-
-    @Autowired
     private IssueStandardsService issueStandardsService;
 
     @Override
@@ -142,14 +139,6 @@ public class SubjectsService implements SubjectsServiceInterface {
         return subjectModel;
     }
 
-    private SubjectsOptionsInterface withServices(SubjectsOptionsInterface subjectsOptions) {
-        subjectsOptions.setSubjectsService(this);
-        subjectsOptions.setUsersService(this.usersService);
-        subjectsOptions.setIssueStandardsService(this.issueStandardsService);
-        subjectsOptions.setTopicsService(this.topicsService);
-        return subjectsOptions;
-    }
-
     private List<SubjectModelInterface> map(List<SubjectEntity> subjectsList) {
         final List<SubjectModelInterface> resultSubjectList = new ArrayList(subjectsList.size());
         for (SubjectEntity subject: subjectsList) {
@@ -157,4 +146,13 @@ public class SubjectsService implements SubjectsServiceInterface {
         }
         return resultSubjectList;
     }
+
+    private SubjectsOptionsInterface withServices(SubjectsOptionsInterface subjectsOptions) {
+        subjectsOptions.setSubjectsService(this);
+        subjectsOptions.setUsersService(this.usersService);
+        subjectsOptions.setIssueStandardsService(this.issueStandardsService);
+        //subjectsOptions.setTopicsService(this.topicsService);
+        return subjectsOptions;
+    }
+
 }
