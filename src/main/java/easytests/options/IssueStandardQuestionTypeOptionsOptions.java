@@ -50,7 +50,7 @@ public class IssueStandardQuestionTypeOptionsOptions implements IssueStandardQue
     @Override
     public void saveWithRelations(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel) {
         if (this.issueStandardsOptions != null) {
-            this.issueStandardsService.save(questionTypeOptionModel.getIssueStandard());
+            this.issueStandardsService.save(questionTypeOptionModel.getIssueStandard(), this.issueStandardsOptions);
         }
         this.questionTypeOptionsService.save(questionTypeOptionModel);
     }
@@ -59,7 +59,7 @@ public class IssueStandardQuestionTypeOptionsOptions implements IssueStandardQue
     public void deleteWithRelations(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel) {
         this.questionTypeOptionsService.delete(questionTypeOptionModel);
         if (this.issueStandardsOptions != null) {
-            this.issueStandardsService.delete(questionTypeOptionModel.getIssueStandard());
+            this.issueStandardsService.delete(questionTypeOptionModel.getIssueStandard(), this.issueStandardsOptions);
         }
     }
 }
