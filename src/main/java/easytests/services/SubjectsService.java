@@ -37,6 +37,12 @@ public class SubjectsService implements SubjectsServiceInterface {
     }
 
     @Override
+    public SubjectModelInterface find(Integer id, SubjectsOptionsInterface subjectsOptions) {
+        // TODO: vkpankov
+        return null;
+    }
+
+    @Override
     public List<SubjectModelInterface> findByUser(UserModelInterface userModel) {
         return this.map(this.subjectsMapper.findByUserId(userModel.getId()));
     }
