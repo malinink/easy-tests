@@ -95,7 +95,7 @@ public class SubjectsServiceTest {
 
     private List<SubjectModelInterface> getUsersModels() {
         final List<SubjectModelInterface> subjectsModels = new ArrayList<>(2);
-        for (SubjectEntity subjectEntity: this.getSubjectsEntities()) {
+        for (SubjectEntity subjectEntity : this.getSubjectsEntities()) {
             subjectsModels.add(this.mapSubjectModel(subjectEntity));
         }
         return subjectsModels;
@@ -220,6 +220,30 @@ public class SubjectsServiceTest {
     }
 
     @Test
+    public void testSaveEntitiesList() throws Exception {
+
+        final SubjectModelInterface subjectModelFirst = this.createSubjectModel(null, "test1", 1, 1);
+        final SubjectModelInterface subjectModelSecond = this.createSubjectModel(null, "test2", 2, 2);
+
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        List<SubjectModelInterface> subjectsModels = new ArrayList<>();
+        subjectsModels.add(subjectModelFirst);
+        subjectsModels.add(subjectModelSecond);
+
+        final SubjectsServiceInterface subjectsServiceSpy = Mockito.spy(subjectsService);
+
+        subjectsServiceSpy.save(subjectsModels);
+        verify(subjectsServiceSpy, times(1)).save(subjectModelFirst);
+        verify(subjectsServiceSpy, times(1)).save(subjectModelSecond);
+
+        subjectsServiceSpy.save(subjectsModels, subjectsOptions);
+        verify(subjectsServiceSpy, times(1)).save(subjectModelFirst, subjectsOptions);
+        verify(subjectsServiceSpy, times(1)).save(subjectModelSecond, subjectsOptions);
+
+    }
+
+    @Test
     public void testDeleteIdentifiedModel() throws Exception {
 
         final SubjectModelInterface subjectModel = this.createSubjectModel(1, "test", 1, 1);
@@ -289,5 +313,6 @@ public class SubjectsServiceTest {
 
         verify(subjectsOptions).deleteWithRelations(subjectModel);
     }
+
 
 }
