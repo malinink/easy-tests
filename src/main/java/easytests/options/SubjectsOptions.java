@@ -76,21 +76,27 @@ public class SubjectsOptions implements SubjectsOptionsInterface {
     public void saveWithRelations(SubjectModelInterface subjectModel) {
 
         if (this.usersOptions != null) {
+
             this.usersOptions.withSubjects(this);
-            this.usersOptions.saveWithRelations(subjectModel.getUser());
+            this.usersService.save(subjectModel.getUser(), this.usersOptions);
             return;
+
         }
 
         this.subjectsService.save(subjectModel);
 
         if (this.issueStandardsOptions != null) {
-            this.issueStandardsOptions.saveWithRelations(subjectModel.getIssueStandard());
+
+            this.issueStandardsService.save(subjectModel.getIssueStandard(), this.issueStandardsOptions);
 
         }
 
         if (this.topicsOptions != null) {
-            this.topicsOptions.saveWithRelations(subjectModel.getTopics());
+
+            this.topicsService.save(subjectModel.getTopics(), this.topicsOptions);
+
         }
+
     }
 
     public void deleteWithRelations(SubjectModelInterface subjectModel) {
@@ -102,11 +108,11 @@ public class SubjectsOptions implements SubjectsOptionsInterface {
         }
 
         if (this.topicsOptions != null) {
-            this.topicsOptions.deleteWithRelations(subjectModel.getTopics());
+            this.topicsService.delete(subjectModel.getTopics(), this.topicsOptions);
 
         }
         if (this.issueStandardsOptions != null) {
-            this.issueStandardsOptions.deleteWithRelations(subjectModel.getIssueStandard());
+            this.issueStandardsService.delete(subjectModel.getIssueStandard(), this.issueStandardsOptions);
         }
 
         this.subjectsService.delete(subjectModel);
