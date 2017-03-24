@@ -18,6 +18,14 @@ public class UserModel implements UserModelInterface {
 
     private String surname;
 
+    private String email;
+
+    private String password;
+
+    private Boolean isAdmin;
+
+    private Integer state;
+
     private List<SubjectModelInterface> subjects;
 
     public void map(UserEntity userEntity) {
