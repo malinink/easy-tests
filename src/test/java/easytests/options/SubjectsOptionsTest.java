@@ -161,4 +161,29 @@ public class SubjectsOptionsTest {
         inOrder.verify(subjectsService).delete(subjectModel);
 
     }
+
+    @Test
+    public void testSaveDeleteWithUser() {
+
+        final SubjectsOptionsInterface subjectsOptions = new SubjectsOptions();
+
+        final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
+
+        final UsersServiceInterface usersService = Mockito.mock(UsersServiceInterface.class);
+        subjectsOptions.setUsersService(usersService);
+        subjectsOptions.withUser(usersOptions);
+
+        final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
+
+        SubjectsOptionsInterface subjectsOptionsSpy = Mockito.spy(subjectsOptions);
+
+        subjectsOptionsSpy.deleteWithRelations(subjectModel);
+
+        verify(usersOptions, times(1)).deleteWithRelations(subjectModel.getUser());
+
+        subjectsOptionsSpy.saveWithRelations(subjectModel);
+
+        verify(usersOptions, times(1)).saveWithRelations(subjectModel.getUser());
+
+    }
 }
