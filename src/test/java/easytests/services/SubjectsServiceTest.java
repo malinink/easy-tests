@@ -84,23 +84,35 @@ public class SubjectsServiceTest {
 
     }
 
-    @Test
-    public void testFindAllPresentList() throws Exception {
-
+    private List<SubjectEntity> getSubjectsEntities() {
         final List<SubjectEntity> subjectsEntities = new ArrayList<>(2);
         final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(1, "test1", 1);
         final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(2, "test2", 2);
-
         subjectsEntities.add(subjectEntityFirst);
         subjectsEntities.add(subjectEntitySecond);
+        return subjectsEntities;
+    }
+
+    private List<SubjectModelInterface> getUsersModels() {
+        final List<SubjectModelInterface> subjectsModels = new ArrayList<>(2);
+        for (SubjectEntity subjectEntity: this.getSubjectsEntities()) {
+            subjectsModels.add(this.mapSubjectModel(subjectEntity));
+        }
+        return subjectsModels;
+    }
+
+    @Test
+    public void testFindAllPresentList() throws Exception {
+
+        final List<SubjectEntity> subjectsEntities = getSubjectsEntities();
 
         given(this.subjectsMapper.findAll()).willReturn(subjectsEntities);
 
         final List<SubjectModelInterface> subjectsModels = this.subjectsService.findAll();
 
         Assert.assertEquals(2, subjectsModels.size());
-        Assert.assertEquals(subjectsModels.get(0), this.mapSubjectModel(subjectEntityFirst));
-        Assert.assertEquals(subjectsModels.get(1), this.mapSubjectModel(subjectEntitySecond));
+        Assert.assertEquals(subjectsModels.get(0), this.mapSubjectModel(subjectsEntities.get(0)));
+        Assert.assertEquals(subjectsModels.get(1), this.mapSubjectModel(subjectsEntities.get(1)));
 
     }
 
@@ -227,4 +239,55 @@ public class SubjectsServiceTest {
         this.subjectsService.delete(subjectModel);
 
     }
+
+    @Test
+    public void testFindWithOptions() throws Exception {
+        final Integer id = 1;
+        final Integer userId = 1;
+        final SubjectEntity subjectEntity = this.createSubjectEntityMock(4, "test3", userId);
+        final SubjectModelInterface subjectModel = this.mapSubjectModel(subjectEntity);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        given(this.subjectsMapper.find(id)).willReturn(subjectEntity);
+        given(subjectsOptions.withRelations(subjectModel)).willReturn(subjectModel);
+
+        final SubjectModelInterface foundedSubjectModel = this.subjectsService.find(id, subjectsOptions);
+
+        Assert.assertEquals(subjectModel, foundedSubjectModel);
+        verify(subjectsOptions).withRelations(subjectModel);
+    }
+
+    @Test
+    public void testFindAllWithOptions() throws Exception {
+        final List<SubjectEntity> subjectsEntities = this.getSubjectsEntities();
+        final List<SubjectModelInterface> subjectsModels = this.getUsersModels();
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        given(this.subjectsMapper.findAll()).willReturn(subjectsEntities);
+        given(subjectsOptions.withRelations(Mockito.anyList())).willReturn(subjectsModels);
+
+        final List<SubjectModelInterface> foundedSubjectsModels = this.subjectsService.findAll(subjectsOptions);
+
+        verify(subjectsOptions).withRelations(foundedSubjectsModels);
+        Assert.assertEquals(subjectsModels, foundedSubjectsModels);
+    }
+
+    @Test
+    public void testSaveWithOptions() throws Exception {
+        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", 1, 1);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        this.subjectsService.save(subjectModel, subjectsOptions);
+
+        verify(subjectsOptions).saveWithRelations(subjectModel);
+    }
+
+    @Test
+    public void testDeleteWithOptions() throws Exception {
+        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", 1, 1);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        this.subjectsService.delete(subjectModel, subjectsOptions);
+
+        verify(subjectsOptions).deleteWithRelations(subjectModel);
+    }
+
 }
