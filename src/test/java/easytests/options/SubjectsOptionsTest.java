@@ -30,9 +30,10 @@ public class SubjectsOptionsTest {
     @Test
     public void testWithRelationsOnSingleModel() throws Exception {
 
-        final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
+        final UsersOptionsInterface usersOptions =  Mockito.mock(UsersOptionsInterface.class);
         final SubjectsOptionsInterface subjectOptions = new SubjectsOptions();
 
+        final UsersServiceInterface usersService = Mockito.mock(UsersServiceInterface.class);
         final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
         final IssueStandardsServiceInterface issueStandardService = Mockito.mock(IssueStandardsServiceInterface.class);
 
@@ -40,9 +41,13 @@ public class SubjectsOptionsTest {
         final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
         final IssueStandardsOptionsInterface issueStandardOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
 
+        final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
+
+        subjectOptions.setUsersService(usersService);
         subjectOptions.setTopicsService(topicsService);
         subjectOptions.setIssueStandardsService(issueStandardService);
 
+        subjectOptions.withUser(usersOptions);
         subjectOptions.withTopics(topicsOptions);
         subjectOptions.withIssueStandard(issueStandardOptions);
 
@@ -51,8 +56,13 @@ public class SubjectsOptionsTest {
         given(topicsService.findBySubject(Mockito.any(SubjectModelInterface.class))).willReturn(topicsModels);
 
         IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
+        UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
 
         given(topicsService.findBySubject(Mockito.any(SubjectModelInterface.class))).willReturn(topicsModels);
+
+        given(subjectModel.getUser()).willReturn(userModel);
+        given(usersService.find(subjectModel.getUser().getId())).willReturn(userModel);
+
         //given(issueStandardService.findBySubject(Mockito.any(SubjectModelInterface.class), issueStandardOptions)).willReturn(issueStandardModel);
 
         final SubjectModelInterface subjectModelWithRelations = subjectOptions.withRelations(subjectModel);
@@ -62,6 +72,8 @@ public class SubjectsOptionsTest {
         verify(issueStandardService).findBySubject(subjectModel, issueStandardOptions);
 
         Assert.assertEquals(topicsModels, subjectModelWithRelations.getTopics());
+        Assert.assertEquals(userModel, subjectModelWithRelations.getUser());
+
         //Assert.assertEquals(issueStandardModel, subjectModelWithRelations.getIssueStandard());
 
         //TODO: vkpankov
