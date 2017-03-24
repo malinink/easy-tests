@@ -71,6 +71,7 @@ public class SubjectsService implements SubjectsServiceInterface {
         final SubjectEntity subjectEntity = this.map(subjectModel);
         if (subjectEntity.getId() == null) {
             this.subjectsMapper.insert(subjectEntity);
+            subjectModel.setId(subjectEntity.getId());
             return;
         }
         this.subjectsMapper.update(subjectEntity);
