@@ -33,6 +33,10 @@ public class UserModel implements UserModelInterface {
         this.setFirstName(userEntity.getFirstName());
         this.setLastName(userEntity.getLastName());
         this.setSurname(userEntity.getSurname());
+        this.setEmail(userEntity.getEmail());
+        this.setPassword(userEntity.getPassword());
+        this.setIsAdmin(userEntity.getIsAdmin());
+        this.setState(userEntity.getState());
         this.setSubjects(new ModelsListEmpty());
     }
 }

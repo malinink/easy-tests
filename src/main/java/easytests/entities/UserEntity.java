@@ -29,5 +29,9 @@ public class UserEntity {
         this.setFirstName(userModel.getFirstName());
         this.setLastName(userModel.getLastName());
         this.setSurname(userModel.getSurname());
+        this.setEmail(userModel.getEmail());
+        this.setPassword(userModel.getPassword());
+        this.setIsAdmin(userModel.getIsAdmin());
+        this.setState(userModel.getState());
     }
 }
