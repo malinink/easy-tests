@@ -57,6 +57,16 @@ public class IssueStandardsService implements IssueStandardsServiceInterface {
         issueStandardModel.setId(issueStandardEntity.getId());
     }
 
+    public void save(IssueStandardModelInterface issueStandardModel,
+                     IssueStandardsOptionsInterface issueStandardsOptions) {
+        //TODO: SingularityA
+    }
+
+    public void delete(IssueStandardModelInterface issueStandardModel,
+                       IssueStandardsOptionsInterface issueStandardsOptions) {
+        //TODO: SingularityA
+    }
+
     public void delete(IssueStandardModelInterface issueStandardModel) {
         final IssueStandardEntity issueStandardEntity = this.map(issueStandardModel);
         if (issueStandardEntity.getId() == null) {
