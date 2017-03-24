@@ -255,6 +255,29 @@ public class SubjectsServiceTest {
     }
 
     @Test
+    public void testDeleteModelsList() throws Exception {
+
+        final SubjectModelInterface subjectModelFirst = this.createSubjectModel(2, "test2", 1, 1);
+        final SubjectModelInterface subjectModelSecond = this.createSubjectModel(3, "test3", 2, 2);
+
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        List<SubjectModelInterface> subjectsModels = new ArrayList<>();
+        subjectsModels.add(subjectModelFirst);
+        subjectsModels.add(subjectModelSecond);
+
+        final SubjectsServiceInterface subjectsServiceSpy = Mockito.spy(subjectsService);
+
+        subjectsServiceSpy.delete(subjectsModels);
+        verify(subjectsServiceSpy, times(1)).delete(subjectModelFirst);
+        verify(subjectsServiceSpy, times(1)).delete(subjectModelSecond);
+
+        subjectsServiceSpy.delete(subjectsModels, subjectsOptions);
+        verify(subjectsServiceSpy, times(1)).delete(subjectModelFirst, subjectsOptions);
+        verify(subjectsServiceSpy, times(1)).delete(subjectModelSecond, subjectsOptions);
+    }
+
+    @Test
     public void testDeleteUnidentifiedModel() throws Exception {
 
         final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", 1, 1);
