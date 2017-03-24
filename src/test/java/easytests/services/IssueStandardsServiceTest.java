@@ -139,17 +139,18 @@ public class IssueStandardsServiceTest {
 
     @Test
     public void testFindBySubjectWithOptions() throws Exception {
-
         final Integer subjectId = 3;
-
-        final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
+        final IssueStandardEntity issueStandardEntity = this.createIssueStandardEntityMock(3, 600, 10, subjectId);
+        given(this.issueStandardsMapper.findBySubjectId(subjectId)).willReturn(issueStandardEntity);
 
         final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
         Mockito.when(subjectModel.getId()).thenReturn(subjectId);
 
-        final IssueStandardModelInterface issueStandardModel = this.issueStandardsService.findBySubject(subjectModel, issueStandardsOptions);
+        final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
 
-        verify(issueStandardsOptions).withRelations(issueStandardModel);
+        this.issueStandardsService.findBySubject(subjectModel, issueStandardsOptions);
+
+        verify(issueStandardsOptions).withRelations(Mockito.any());
     }
 
     @Test
