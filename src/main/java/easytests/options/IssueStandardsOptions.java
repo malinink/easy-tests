@@ -80,7 +80,7 @@ public class IssueStandardsOptions implements IssueStandardsOptionsInterface {
     @Override
     public void saveWithRelations(IssueStandardModelInterface issueStandardModel) {
         if (this.subjectsOptions != null) {
-            this.subjectsService.save(issueStandardModel.getSubject(), subjectsOptions);
+            this.subjectsService.save(issueStandardModel.getSubject(), this.subjectsOptions);
         }
 
         this.issueStandardsService.save(issueStandardModel);
