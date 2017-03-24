@@ -103,10 +103,10 @@ public class IssueStandardTopicPrioritiesOptionsTest {
         verify(issueStandardsService, times(0)).find(issueStandardIdFirst);
         verify(issueStandardsService, times(0)).find(issueStandardIdSecond);
         Assert.assertEquals(topicPriorityModels, topicPriorityModelsWithoutRelations);
-        Assert.assertNotEquals(issueStandardModelFirst, topicPriorityModelsWithoutRelations.get(0));
-        Assert.assertNotEquals(issueStandardModelSecond, topicPriorityModelsWithoutRelations.get(1));
-        Assert.assertNotEquals(issueStandardModelFirst, topicPriorityModelsWithoutRelations.get(0));
-        Assert.assertNotEquals(issueStandardModelSecond, topicPriorityModelsWithoutRelations.get(1));
+        Assert.assertNotEquals(issueStandardModelFirst, topicPriorityModelsWithoutRelations.get(0).getIssueStandard());
+        Assert.assertNotEquals(issueStandardModelSecond, topicPriorityModelsWithoutRelations.get(1).getIssueStandard());
+        Assert.assertNotEquals(issueStandardModelFirst, topicPriorityModelsWithoutRelations.get(0).getIssueStandard());
+        Assert.assertNotEquals(issueStandardModelSecond, topicPriorityModelsWithoutRelations.get(1).getIssueStandard());
 
         topicPrioritiesOptions.setIssueStandardsService(issueStandardsService);
         topicPrioritiesOptions.withIssueStandard(issueStandardsOptions);
