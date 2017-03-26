@@ -1,7 +1,6 @@
 package easytests.mappers;
 
-import easytests.entities.Question;
-import easytests.entities.QuestionInterface;
+import easytests.entities.QuestionEntity;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 
@@ -20,20 +19,20 @@ public interface QuestionsMapper {
                     @Result(property = "topicId", column = "topic_id")
             })
     @Select("SELECT id, text, type, topic_id FROM questions")
-    List<Question> findAll();
+    List<QuestionEntity> findAll();
 
     @Select("SELECT id, text, type, topic_id FROM questions where id=#{id}")
     @ResultMap("Question")
-    Question find(Integer id);
+    QuestionEntity find(Integer id);
 
     @Insert("INSERT INTO questions (text, type, topic_id) VALUES(#{text}, #{type}, #{topicId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
-    void insert(QuestionInterface question);
+    void insert(QuestionEntity question);
 
     @Update("UPDATE questions SET text=#{text}, type=#{type}, topic_id=#{topicId} WHERE id=#{id}")
-    void update(QuestionInterface question);
+    void update(QuestionEntity question);
 
     @Delete("DELETE FROM questions WHERE id=#{id}")
-    void delete(QuestionInterface question);
+    void delete(QuestionEntity question);
 
 }

@@ -10,6 +10,9 @@ import easytests.models.exceptions.CallMethodOnEmptyModelException;
  * @author SingularityA
  */
 public class SolutionModelEmpty extends AbstractModelEmpty implements SolutionModelInterface {
+    public SolutionModelEmpty() {
+        super();
+    }
 
     public SolutionModelEmpty(Integer id) {
         super(id);

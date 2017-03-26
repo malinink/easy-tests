@@ -12,6 +12,10 @@ public class IssueStandardModelEmpty
         extends AbstractModelEmpty
         implements IssueStandardModelInterface {
 
+    public IssueStandardModelEmpty() {
+        super();
+    }
+
     public IssueStandardModelEmpty(Integer id) {
         super(id);
     }

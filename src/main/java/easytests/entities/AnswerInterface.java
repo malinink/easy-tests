@@ -2,7 +2,9 @@ package easytests.entities;
 
 /**
  * @author rezenbekk
+ * @deprecated (models)
  */
+@Deprecated
 public interface AnswerInterface extends EntityInterface {
     AnswerInterface setId(Integer id);
 
@@ -14,7 +16,7 @@ public interface AnswerInterface extends EntityInterface {
 
     AnswerInterface setQuestionId(Integer id);
 
-    boolean getIsRight();
+    Boolean getIsRight();
 
-    AnswerInterface setIsRight(boolean isRight);
+    AnswerInterface setIsRight(Boolean isRight);
 }

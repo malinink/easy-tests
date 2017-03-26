@@ -4,6 +4,7 @@ import easytests.entities.UserEntity;
 import easytests.mappers.UsersMapper;
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
+import easytests.models.empty.ModelsListEmpty;
 import easytests.options.UsersOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class UsersServiceTest {
         userModel.setFirstName(firstName);
         userModel.setLastName(lastName);
         userModel.setSurname(surname);
+        userModel.setSubjects(new ModelsListEmpty());
         return userModel;
     }
 
