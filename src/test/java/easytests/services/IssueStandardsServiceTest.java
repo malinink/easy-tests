@@ -235,11 +235,9 @@ public class IssueStandardsServiceTest {
 
     @Test
     public void testSaveList() throws  Exception {
-        final IssueStandardModelInterface issueStandardModelFirst = this.createIssueStandardModel(1, 600, 10, 1);
-        final IssueStandardModelInterface issueStandardModelSecond = this.createIssueStandardModel(null, 1200, 20, 5);
         final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(2);
-        issueStandardModels.add(issueStandardModelFirst);
-        issueStandardModels.add(issueStandardModelSecond);
+        issueStandardModels.add(this.createIssueStandardModel(1, 600, 10, 1));
+        issueStandardModels.add(this.createIssueStandardModel(null, 1200, 20, 5));
 
         final Integer id = 10;
         doAnswer(invocations -> {
@@ -250,9 +248,9 @@ public class IssueStandardsServiceTest {
 
         this.issueStandardsService.save(issueStandardModels);
 
-        verify(this.issueStandardsMapper, times(1)).update(this.mapIssueStandardEntity(issueStandardModelFirst));
-        verify(this.issueStandardsMapper, times(1)).insert(this.mapIssueStandardEntity(issueStandardModelSecond));
-        Assert.assertEquals(id, issueStandardModelSecond.getId());
+        verify(this.issueStandardsMapper, times(1)).update(this.mapIssueStandardEntity(issueStandardModels.get(0)));
+        verify(this.issueStandardsMapper, times(1)).insert(this.mapIssueStandardEntity(issueStandardModels.get(1)));
+        Assert.assertEquals(id, issueStandardModels.get(1).getId());
     }
 
     @Test
@@ -268,23 +266,13 @@ public class IssueStandardsServiceTest {
     @Test
     public void testSaveListWithOptions() throws Exception {
         final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
-        final IssueStandardModelInterface issueStandardModelFirst = this.createIssueStandardModel(1, 600, 10, 1);
-        final IssueStandardModelInterface issueStandardModelSecond = this.createIssueStandardModel(null, 1200, 20, 5);
-        final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(2);
-        issueStandardModels.add(issueStandardModelFirst);
-        issueStandardModels.add(issueStandardModelSecond);
-
-        final Integer id = 10;
-        doAnswer(invocations -> {
-            final IssueStandardEntity issueStandardEntity = (IssueStandardEntity) invocations.getArguments()[0];
-            issueStandardEntity.setId(id);
-            return null;
-        }).when(this.issueStandardsMapper).insert(Mockito.any(IssueStandardEntity.class));
+        final List<IssueStandardModelInterface> issueStandardModels = this.getIssueStandardModels();
 
         this.issueStandardsService.save(issueStandardModels, issueStandardsOptions);
 
-        verify(issueStandardsOptions).saveWithRelations(issueStandardModelFirst);
-        verify(issueStandardsOptions).saveWithRelations(issueStandardModelSecond);
+        for(IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+            verify(issueStandardsOptions).saveWithRelations(issueStandardModel);
+        }
     }
 
     @Test
@@ -302,21 +290,21 @@ public class IssueStandardsServiceTest {
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.issueStandardsService.delete(issueStandardModel);
+
+        verify(this.issueStandardsMapper, times(0)).delete(this.mapIssueStandardEntity(issueStandardModel));
     }
 
     @Test
     public void testDeleteList() throws Exception {
-        final IssueStandardModelInterface issueStandardModelFirst = this.createIssueStandardModel(1, 600, 10, 1);
-        final IssueStandardModelInterface issueStandardModelSecond = this.createIssueStandardModel(null, 1200, 20, 5);
         final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(2);
-        issueStandardModels.add(issueStandardModelFirst);
-        issueStandardModels.add(issueStandardModelSecond);
+        issueStandardModels.add(this.createIssueStandardModel(1, 600, 10, 1));
+        issueStandardModels.add(this.createIssueStandardModel(null, 1200, 20, 5));
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.issueStandardsService.delete(issueStandardModels);
 
-        verify(this.issueStandardsMapper, times(1)).delete(this.mapIssueStandardEntity(issueStandardModelFirst));
-        verify(this.issueStandardsMapper, times(0)).delete(this.mapIssueStandardEntity(issueStandardModelSecond));
+        verify(this.issueStandardsMapper, times(1)).delete(this.mapIssueStandardEntity(issueStandardModels.get(0)));
+        verify(this.issueStandardsMapper, times(0)).delete(this.mapIssueStandardEntity(issueStandardModels.get(1)));
     }
 
     @Test
@@ -332,15 +320,12 @@ public class IssueStandardsServiceTest {
     @Test
     public void testDeleteListWithOptions() throws Exception {
         final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
-        final IssueStandardModelInterface issueStandardModelFirst = this.createIssueStandardModel(1, 600, 10, 1);
-        final IssueStandardModelInterface issueStandardModelSecond = this.createIssueStandardModel(2, 1200, 20, 5);
-        final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(2);
-        issueStandardModels.add(issueStandardModelFirst);
-        issueStandardModels.add(issueStandardModelSecond);
+        final List<IssueStandardModelInterface> issueStandardModels = this.getIssueStandardModels();
 
         this.issueStandardsService.delete(issueStandardModels, issueStandardsOptions);
 
-        verify(issueStandardsOptions).deleteWithRelations(issueStandardModelFirst);
-        verify(issueStandardsOptions).deleteWithRelations(issueStandardModelSecond);
+        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+            verify(issueStandardsOptions).deleteWithRelations(issueStandardModel);
+        }
     }
 }
