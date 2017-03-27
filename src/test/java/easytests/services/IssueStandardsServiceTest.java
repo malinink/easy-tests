@@ -296,15 +296,13 @@ public class IssueStandardsServiceTest {
 
     @Test
     public void testDeleteList() throws Exception {
-        final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(2);
-        issueStandardModels.add(this.createIssueStandardModel(1, 600, 10, 1));
-        issueStandardModels.add(this.createIssueStandardModel(null, 1200, 20, 5));
+        final List<IssueStandardModelInterface> issueStandardModels = this.getIssueStandardModels();
 
-        exception.expect(DeleteUnidentifiedModelException.class);
         this.issueStandardsService.delete(issueStandardModels);
 
-        verify(this.issueStandardsMapper, times(1)).delete(this.mapIssueStandardEntity(issueStandardModels.get(0)));
-        verify(this.issueStandardsMapper, times(0)).delete(this.mapIssueStandardEntity(issueStandardModels.get(1)));
+        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+            verify(this.issueStandardsMapper, times(1)).delete(this.mapIssueStandardEntity(issueStandardModel));
+        }
     }
 
     @Test

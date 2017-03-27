@@ -341,15 +341,13 @@ public class IssueStandardTopicPrioritiesServiceTest {
 
     @Test
     public void testDeleteList() throws Exception {
-        final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = new ArrayList<>(2);
-        topicPriorityModels.add(this.createTopicPriorityModel(1, 2, true, 3));
-        topicPriorityModels.add(this.createTopicPriorityModel(null, 3, false, 3));
+        final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = this.getTopicPriorityModels();
 
-        exception.expect(DeleteUnidentifiedModelException.class);
         this.topicPrioritiesService.delete(topicPriorityModels);
 
-        verify(this.topicPrioritiesMapper, times(1)).delete(this.mapTopicPriorityEntity(topicPriorityModels.get(0)));
-        verify(this.topicPrioritiesMapper, times(0)).delete(this.mapTopicPriorityEntity(topicPriorityModels.get(1)));
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+            verify(this.topicPrioritiesMapper, times(1)).delete(this.mapTopicPriorityEntity(topicPriorityModel));
+        }
     }
 
     @Test
