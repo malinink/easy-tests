@@ -172,12 +172,12 @@ public class IssueStandardTopicPrioritiesServiceTest {
         given(this.topicPrioritiesMapper.find(id)).willReturn(topicPriorityEntity);
         given(topicPrioritiesOptions.withRelations(topicPriorityModel)).willReturn(topicPriorityModel);
 
-        final IssueStandardTopicPriorityModelInterface foundedTopicPriorityModelInterface
+        final IssueStandardTopicPriorityModelInterface foundedTopicPriorityModels
                 = this.topicPrioritiesService.find(id, topicPrioritiesOptions);
 
         verify(topicPrioritiesOptions).withRelations(topicPriorityModel);
-        Assert.assertNotNull(foundedTopicPriorityModelInterface);
-        Assert.assertEquals(topicPriorityModel, foundedTopicPriorityModelInterface);
+        Assert.assertNotNull(foundedTopicPriorityModels);
+        Assert.assertEquals(topicPriorityModel, foundedTopicPriorityModels);
     }
 
     @Test
@@ -233,13 +233,13 @@ public class IssueStandardTopicPrioritiesServiceTest {
         given(this.topicPrioritiesMapper.findByIssueStandardId(issueStandardId)).willReturn(topicPriorityEntities);
         given(topicPrioritiesOptions.withRelations(topicPriorityModels)).willReturn(topicPriorityModels);
 
-        final List<IssueStandardTopicPriorityModelInterface> foundedTopicPriorityModelInterface
+        final List<IssueStandardTopicPriorityModelInterface> foundedTopicPriorityModels
                 = this.topicPrioritiesService.findByIssueStandard(
                         topicPriorityModels.get(0).getIssueStandard(), topicPrioritiesOptions);
 
         verify(topicPrioritiesOptions).withRelations(topicPriorityModels);
-        Assert.assertNotNull(foundedTopicPriorityModelInterface);
-        Assert.assertEquals(topicPriorityModels, foundedTopicPriorityModelInterface);
+        Assert.assertNotNull(foundedTopicPriorityModels);
+        Assert.assertEquals(topicPriorityModels, foundedTopicPriorityModels);
     }
 
     @Test
