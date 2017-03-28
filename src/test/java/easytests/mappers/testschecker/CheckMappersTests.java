@@ -1,10 +1,21 @@
 package easytests.mappers.testschecker;
 
 import easytests.config.DatabaseConfig;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,16 +30,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
-
-
 /**
  * @author vkpankov
  */
@@ -37,19 +38,18 @@ import java.util.regex.Pattern;
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:database.test.properties"})
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-public class CheckMapperTests {
+public class CheckMappersTests {
 
     static final String MAPPER_PACKAGE_NAME = "easytests.mappers";
 
     @Autowired
     private ApplicationContext applicationContext;
 
-    public Set<BeanDefinition> getMappers() throws ClassNotFoundException {
+    private Set<BeanDefinition> getMappers() throws ClassNotFoundException {
         return new InterfaceComponentProvider().findCandidateComponents(MAPPER_PACKAGE_NAME);
     }
 
-    public Set<BeanDefinition> getMapperTests() throws ClassNotFoundException {
-
+    private Set<BeanDefinition> getMapperTests() throws ClassNotFoundException {
         final ClassPathScanningCandidateComponentProvider provider =
                 new ClassPathScanningCandidateComponentProvider(false);
         provider.addIncludeFilter(new RegexPatternTypeFilter(Pattern.compile(".*")));
@@ -57,17 +57,58 @@ public class CheckMapperTests {
         return provider.findCandidateComponents(MAPPER_PACKAGE_NAME);
     }
 
-    public SqlSession getMapperSqlSession(Object mapper) throws Exception {
-
+    private SqlSession getMapperSqlSession(Object mapper) throws Exception {
         final InvocationHandler mapperInvocationHandler = Proxy.getInvocationHandler(mapper);
         final Field sqlSessionField = mapperInvocationHandler.getClass().getDeclaredField("sqlSession");
         sqlSessionField.setAccessible(true);
         return (SqlSession) sqlSessionField.get(mapperInvocationHandler);
-
     }
 
-    public void checkMapperTests(Class mapperClass, Class mapperTestClass, Field mapperField) throws Exception {
+    private Field findMapperFieldInTest (Class test) throws Exception {
+        final Field[] mapperTestFields = test.getDeclaredFields();
+        Field mapperField = null;
 
+        for (Field field: mapperTestFields) {
+
+            Package fieldPackage = field.getType().getPackage();
+            if(fieldPackage == null) {
+                continue;
+            }
+
+            final String fieldPackageName = field.getType().getPackage().getName();
+
+            if (MAPPER_PACKAGE_NAME.equals(fieldPackageName)) {
+                mapperField = field;
+                break;
+            }
+        }
+        return mapperField;
+    }
+
+    private void invokeTestMethods (Object test, Object mapper) throws Exception {
+        final SqlSession mapperSqlSession = getMapperSqlSession(mapper);
+
+        final Method[] testMethods = test.getClass().getMethods();
+        for (Method method : testMethods) {
+
+            Annotation[] annotations = method.getDeclaredAnnotations();
+            if(annotations.length == 0) {
+                continue;
+            }
+            if (annotations[0].annotationType().equals(Test.class)) {
+
+                ScriptUtils.executeSqlScript(
+                        mapperSqlSession.getConnection(),
+                        new ClassPathResource("sql/mappersTestData.sql"));
+
+                mapperSqlSession.clearCache();
+
+                method.invoke(test);
+
+            }
+        }
+    }
+    private void checkMapperTests(Class mapperClass, Class mapperTestClass, Field mapperField) throws Exception {
         final Object mapperTestInstance = mapperTestClass.newInstance();
         final Object originalMapper = applicationContext.getBean(mapperClass);
         final InterceptInvocationsProxy proxy = new InterceptInvocationsProxy(originalMapper);
@@ -78,33 +119,8 @@ public class CheckMapperTests {
         mapperField.setAccessible(true);
         mapperField.set(mapperTestInstance, mapperProxy);
 
-        final SqlSession mapperSqlSession = getMapperSqlSession(originalMapper);
+        invokeTestMethods(mapperTestInstance, originalMapper);
 
-        final Method[] testMethods = mapperTestClass.getMethods();
-        for (Method method : testMethods) {
-
-            try {
-
-                final Annotation methodAnnotation = method.getDeclaredAnnotations()[0];
-                if (methodAnnotation.annotationType().equals(Test.class)) {
-
-                    ScriptUtils.executeSqlScript(
-                            mapperSqlSession.getConnection(),
-                            new ClassPathResource("sql/mappersTestData.sql"));
-
-                    mapperSqlSession.clearCache();
-
-                    method.invoke(mapperTestInstance);
-
-                }
-
-            } catch (AssertionError anyAssertionException) {
-                continue;
-            } catch (Exception anyOtherException) {
-                continue;
-            }
-
-        }
         final Method[] mapperMethods = mapperClass.getMethods();
         final List<Method> calledMethodsList = proxy.getMethodList();
         for (Method method : mapperMethods) {
@@ -121,13 +137,11 @@ public class CheckMapperTests {
             Assert.assertTrue(String.format("Method '%1$s' from mapper '%2$s' has not been invoked",
                     method.getName(), mapperClass.getName()), founded);
         }
-
     }
 
     @Transactional
     @Test
     public void checkAllMappers() throws Exception {
-
         final Set<BeanDefinition> mappers = getMappers();
         final Set<BeanDefinition> mapperTests = getMapperTests();
 
@@ -141,18 +155,8 @@ public class CheckMapperTests {
             for (Object mapperTestBean: mapperTests) {
 
                 final Class mapperTest = Class.forName(((BeanDefinition) mapperTestBean).getBeanClassName());
-                final Field[] mapperTestFields = mapperTest.getDeclaredFields();
-                Field mapperField = null;
 
-                for (Field field: mapperTestFields) {
-
-                    final String fieldPackageName = field.getType().getPackage().getName();
-
-                    if (MAPPER_PACKAGE_NAME.equals(fieldPackageName)) {
-                        mapperField = field;
-                        break;
-                    }
-                }
+                Field mapperField = findMapperFieldInTest(mapperTest);
 
                 if (mapperField == null) {
                     continue;
@@ -169,8 +173,6 @@ public class CheckMapperTests {
             Assert.assertNotNull("Couldn't find test for mapper " + mapper.getName(), currentMapperTest);
 
             checkMapperTests(mapper, currentMapperTest, currentMapperAutowiredField);
-
         }
-
     }
 }
