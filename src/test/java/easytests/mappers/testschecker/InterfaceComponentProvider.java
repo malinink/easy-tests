@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ClassPathScanningCandidateComponen
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 /**
- * @author xxx
+ * @author vkpankov
  */
 class InterfaceComponentProvider extends ClassPathScanningCandidateComponentProvider {
 
