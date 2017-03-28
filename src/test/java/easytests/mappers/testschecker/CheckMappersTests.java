@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
 public class CheckMappersTests {
 
-    static final String MAPPER_PACKAGE_NAME = "easytests.mappers";
+    private static final String MAPPER_PACKAGE_NAME = "easytests.mappers";
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -64,14 +64,14 @@ public class CheckMappersTests {
         return (SqlSession) sqlSessionField.get(mapperInvocationHandler);
     }
 
-    private Field findMapperFieldInTest (Class test) throws Exception {
+    private Field findMapperFieldInTest(Class test) throws Exception {
         final Field[] mapperTestFields = test.getDeclaredFields();
         Field mapperField = null;
 
         for (Field field: mapperTestFields) {
 
-            Package fieldPackage = field.getType().getPackage();
-            if(fieldPackage == null) {
+            final Package fieldPackage = field.getType().getPackage();
+            if (fieldPackage == null) {
                 continue;
             }
 
@@ -85,14 +85,14 @@ public class CheckMappersTests {
         return mapperField;
     }
 
-    private void invokeTestMethods (Object test, Object mapper) throws Exception {
+    private void invokeTestMethods(Object test, Object mapper) throws Exception {
         final SqlSession mapperSqlSession = getMapperSqlSession(mapper);
 
         final Method[] testMethods = test.getClass().getMethods();
         for (Method method : testMethods) {
 
-            Annotation[] annotations = method.getDeclaredAnnotations();
-            if(annotations.length == 0) {
+            final Annotation[] annotations = method.getDeclaredAnnotations();
+            if (annotations.length == 0) {
                 continue;
             }
             if (annotations[0].annotationType().equals(Test.class)) {
@@ -108,6 +108,7 @@ public class CheckMappersTests {
             }
         }
     }
+
     private void checkMapperTests(Class mapperClass, Class mapperTestClass, Field mapperField) throws Exception {
         final Object mapperTestInstance = mapperTestClass.newInstance();
         final Object originalMapper = applicationContext.getBean(mapperClass);
@@ -156,7 +157,7 @@ public class CheckMappersTests {
 
                 final Class mapperTest = Class.forName(((BeanDefinition) mapperTestBean).getBeanClassName());
 
-                Field mapperField = findMapperFieldInTest(mapperTest);
+                final Field mapperField = findMapperFieldInTest(mapperTest);
 
                 if (mapperField == null) {
                     continue;
