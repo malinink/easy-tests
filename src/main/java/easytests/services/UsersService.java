@@ -1,8 +1,11 @@
 package easytests.services;
 
-import easytests.entities.User;
-import easytests.entities.UserInterface;
+import easytests.entities.UserEntity;
 import easytests.mappers.UsersMapper;
+import easytests.models.UserModel;
+import easytests.models.UserModelInterface;
+import easytests.options.UsersOptionsInterface;
+import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,37 +16,89 @@ import org.springframework.stereotype.Service;
  * @author malinink
  */
 @Service
-public class UsersService {
-
+public class UsersService implements UsersServiceInterface {
     @Autowired
     private UsersMapper usersMapper;
 
-    public List<UserInterface> findAll() {
+    @Autowired
+    private SubjectsService subjectsService;
+
+    @Override
+    public List<UserModelInterface> findAll() {
         return this.map(this.usersMapper.findAll());
     }
 
-    public UserInterface find(Integer id) {
-        return this.usersMapper.find(id);
+    @Override
+    public List<UserModelInterface> findAll(UsersOptionsInterface usersOptions) {
+        return this.withServices(usersOptions).withRelations(this.findAll());
     }
 
-    public void save(UserInterface user) {
-        if (user.getId() == null) {
-            this.usersMapper.insert(user);
+    @Override
+    public UserModelInterface find(Integer id) {
+        return this.map(this.usersMapper.find(id));
+    }
+
+    @Override
+    public UserModelInterface find(Integer id, UsersOptionsInterface usersOptions) {
+        return this.withServices(usersOptions).withRelations(this.find(id));
+    }
+
+    @Override
+    public void save(UserModelInterface userModel) {
+        final UserEntity userEntity = this.map(userModel);
+        if (userEntity.getId() == null) {
+            this.usersMapper.insert(userEntity);
+            userModel.setId(userEntity.getId());
             return;
         }
-        this.usersMapper.update(user);
+        this.usersMapper.update(userEntity);
     }
 
-    public void delete(UserInterface user) {
-        this.usersMapper.delete(user);
+    @Override
+    public void save(UserModelInterface userModel, UsersOptionsInterface usersOptions) {
+        this.withServices(usersOptions).saveWithRelations(userModel);
     }
 
-    private List<UserInterface> map(List<User> usersList) {
-        final List<UserInterface> resultUserList = new ArrayList(usersList.size());
-        for (User user: usersList) {
-            resultUserList.add(user);
+    @Override
+    public void delete(UserModelInterface userModel) {
+        final UserEntity userEntity = this.map(userModel);
+        if (userEntity.getId() == null) {
+            throw new DeleteUnidentifiedModelException();
         }
-        return resultUserList;
+        this.usersMapper.delete(userEntity);
     }
 
+    @Override
+    public void delete(UserModelInterface userModel, UsersOptionsInterface usersOptions) {
+        this.withServices(usersOptions).deleteWithRelations(userModel);
+    }
+
+    private UsersOptionsInterface withServices(UsersOptionsInterface usersOptions) {
+        usersOptions.setUsersService(this);
+        usersOptions.setSubjectsService(this.subjectsService);
+        return usersOptions;
+    }
+
+    private UserModelInterface map(UserEntity userEntity) {
+        if (userEntity == null) {
+            return null;
+        }
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(userEntity);
+        return userModel;
+    }
+
+    private UserEntity map(UserModelInterface userModel) {
+        final UserEntity userEntity = new UserEntity();
+        userEntity.map(userModel);
+        return userEntity;
+    }
+
+    private List<UserModelInterface> map(List<UserEntity> usersList) {
+        final List<UserModelInterface> resultUsersList = new ArrayList(usersList.size());
+        for (UserEntity user: usersList) {
+            resultUsersList.add(this.map(user));
+        }
+        return resultUsersList;
+    }
 }
