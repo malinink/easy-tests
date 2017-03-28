@@ -90,7 +90,7 @@ public class CheckMappersTests {
         return mapperField;
     }
 
-    private void invokeTestMethods(Object test, Object mapper) throws Exception {
+    private void invokeTestMethods(Object test) throws Exception {
 
         final Method[] testMethods = test.getClass().getMethods();
         for (Method method : testMethods) {
@@ -119,7 +119,7 @@ public class CheckMappersTests {
         mapperField.setAccessible(true);
         mapperField.set(mapperTestInstance, mapperProxy);
 
-        invokeTestMethods(mapperTestInstance, originalMapper);
+        invokeTestMethods(mapperTestInstance);
 
         final Method[] mapperMethods = mapperClass.getMethods();
         final List<Method> calledMethodsList = proxy.getMethodList();
