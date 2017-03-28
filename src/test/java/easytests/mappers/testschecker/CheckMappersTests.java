@@ -4,7 +4,6 @@ import easytests.config.DatabaseConfig;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
@@ -12,6 +11,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +28,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author vkpankov
@@ -45,6 +44,9 @@ public class CheckMappersTests {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
     private Set<BeanDefinition> getMappers() throws ClassNotFoundException {
         return new InterfaceComponentProvider().findCandidateComponents(MAPPER_PACKAGE_NAME);
     }
@@ -57,11 +59,14 @@ public class CheckMappersTests {
         return provider.findCandidateComponents(MAPPER_PACKAGE_NAME);
     }
 
-    private SqlSession getMapperSqlSession(Object mapper) throws Exception {
-        final InvocationHandler mapperInvocationHandler = Proxy.getInvocationHandler(mapper);
-        final Field sqlSessionField = mapperInvocationHandler.getClass().getDeclaredField("sqlSession");
-        sqlSessionField.setAccessible(true);
-        return (SqlSession) sqlSessionField.get(mapperInvocationHandler);
+    private void resetTestData() throws Exception {
+        final SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        ScriptUtils.executeSqlScript(
+                sqlSession.getConnection(),
+                new ClassPathResource("sql/mappersTestData.sql"));
+
+        sqlSession.close();
     }
 
     private Field findMapperFieldInTest(Class test) throws Exception {
@@ -86,7 +91,6 @@ public class CheckMappersTests {
     }
 
     private void invokeTestMethods(Object test, Object mapper) throws Exception {
-        final SqlSession mapperSqlSession = getMapperSqlSession(mapper);
 
         final Method[] testMethods = test.getClass().getMethods();
         for (Method method : testMethods) {
@@ -97,12 +101,7 @@ public class CheckMappersTests {
             }
             if (annotations[0].annotationType().equals(Test.class)) {
 
-                ScriptUtils.executeSqlScript(
-                        mapperSqlSession.getConnection(),
-                        new ClassPathResource("sql/mappersTestData.sql"));
-
-                mapperSqlSession.clearCache();
-
+                resetTestData();
                 method.invoke(test);
 
             }
@@ -140,7 +139,6 @@ public class CheckMappersTests {
         }
     }
 
-    @Transactional
     @Test
     public void checkAllMappers() throws Exception {
         final Set<BeanDefinition> mappers = getMappers();
