@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author xxx
+ * @author vkpankov
  */
 public final class InterceptInvocationsProxy implements InvocationHandler {
 
