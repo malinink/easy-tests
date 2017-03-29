@@ -1,7 +1,6 @@
 package easytests.options;
 
 import easytests.models.SubjectModelInterface;
-import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
 import easytests.services.SubjectsServiceInterface;
 import easytests.services.UsersServiceInterface;
@@ -26,7 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class UsersOptionsTest {
     @Test
     public void testWithRelationsOnSingleModel() throws Exception {
-        final UserModelInterface userModel = new UserModel();
+        final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
         final UsersOptionsInterface usersOptions = new UsersOptions();
         final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
         final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
@@ -40,14 +39,15 @@ public class UsersOptionsTest {
 
         Assert.assertEquals(userModel, userModelWithRelations);
         verify(subjectsService).findByUser(userModel, subjectsOptions);
-        Assert.assertEquals(subjectsModels, userModelWithRelations.getSubjects());
+        verify(userModel).setSubjects(subjectsModels);
+        verify(userModel).setSubjects(Mockito.anyList());
     }
 
     @Test
     public void testWithRelationsOnModelsList() throws Exception {
-        final UserModelInterface userModelFirst = new UserModel();
+        final UserModelInterface userModelFirst = Mockito.mock(UserModelInterface.class);
         userModelFirst.setId(1);
-        final UserModelInterface userModelSecond = new UserModel();
+        final UserModelInterface userModelSecond = Mockito.mock(UserModelInterface.class);
         userModelSecond.setId(2);
         final List<UserModelInterface> usersModels = new ArrayList<>(2);
         usersModels.add(userModelFirst);
@@ -70,9 +70,11 @@ public class UsersOptionsTest {
 
         Assert.assertEquals(usersModelsWithRelations, usersModels);
         verify(subjectsService).findByUser(userModelFirst, subjectsOptions);
-        Assert.assertEquals(subjectsModelsFirst, usersModelsWithRelations.get(0).getSubjects());
+        verify(usersModels.get(0)).setSubjects(subjectsModelsFirst);
+        verify(usersModels.get(0)).setSubjects(Mockito.anyList());
         verify(subjectsService).findByUser(userModelSecond, subjectsOptions);
-        Assert.assertEquals(subjectsModelsSecond, usersModelsWithRelations.get(1).getSubjects());
+        verify(usersModels.get(1)).setSubjects(subjectsModelsSecond);
+        verify(usersModels.get(1)).setSubjects(Mockito.anyList());
     }
 
     @Test
