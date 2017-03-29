@@ -1,11 +1,11 @@
 package easytests.mappers.testschecker;
 
-import lombok.Getter;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+
 
 /**
  * @author vkpankov
@@ -18,10 +18,8 @@ public final class InterceptInvocationsProxy implements InvocationHandler {
     private final Object mapperBean;
 
     public InterceptInvocationsProxy(Object originalMapper) {
-
         methodList = new ArrayList<>();
         mapperBean = originalMapper;
-
     }
 
     public Object invoke(Object proxy, Method m, Object[] args) {

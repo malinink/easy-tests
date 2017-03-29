@@ -9,7 +9,6 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
  * @author vkpankov
  */
 class InterfaceComponentProvider extends ClassPathScanningCandidateComponentProvider {
-
     InterfaceComponentProvider() {
         super(false);
         addIncludeFilter(new AnnotationTypeFilter(Mapper.class, false));
@@ -19,5 +18,4 @@ class InterfaceComponentProvider extends ClassPathScanningCandidateComponentProv
     protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
         return beanDefinition.getMetadata().isInterface();
     }
-
 }
