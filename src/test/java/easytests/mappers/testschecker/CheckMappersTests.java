@@ -124,18 +124,10 @@ public class CheckMappersTests {
         final Method[] mapperMethods = mapperClass.getMethods();
         final List<Method> calledMethodsList = proxy.getMethodList();
         for (Method method : mapperMethods) {
-
-            boolean founded = false;
-
-            for (Method calledMethod : calledMethodsList) {
-                if (calledMethod.getName().equals(method.getName())) {
-                    founded = true;
-                    break;
-                }
-            }
-
-            Assert.assertTrue(String.format("Method '%1$s' from mapper '%2$s' has not been invoked",
-                    method.getName(), mapperClass.getName()), founded);
+            Assert.assertTrue(
+                    String.format("Method '%1$s' from mapper '%2$s' has not been invoked",
+                    method.getName(), mapperClass.getName()),
+                    calledMethodsList.contains(method));
         }
     }
 
