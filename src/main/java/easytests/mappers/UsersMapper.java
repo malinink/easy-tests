@@ -30,6 +30,10 @@ public interface UsersMapper {
     @ResultMap("User")
     UserEntity find(Integer id);
 
+    @Select("SELECT * FROM users where email=#{email}")
+    @ResultMap("User")
+    UserEntity findByEmail(String email);
+
     @Insert("INSERT INTO users (first_name, last_name, surname, email, password, is_admin, state) VALUES(#{firstName}, #{lastName}, #{surname}, #{email}, #{password}, #{isAdmin}, #{state})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(UserEntity user);
