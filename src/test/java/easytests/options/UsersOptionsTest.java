@@ -42,6 +42,20 @@ public class UsersOptionsTest {
     }
 
     @Test
+    public void testWithRelationsOnNull() throws Exception {
+        final UserModelInterface userModel = null;
+        final UsersOptionsInterface usersOptions = new UsersOptions();
+        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        usersOptions.setSubjectsService(subjectsService);
+        usersOptions.withSubjects(subjectsOptions);
+
+        final UserModelInterface userModelWithRelations = usersOptions.withRelations(userModel);
+
+        Assert.assertEquals(null, userModelWithRelations);
+    }
+
+    @Test
     public void testWithRelationsOnModelsList() throws Exception {
         final UserModelInterface userModelFirst = Mockito.mock(UserModelInterface.class);
         final UserModelInterface userModelSecond = Mockito.mock(UserModelInterface.class);
