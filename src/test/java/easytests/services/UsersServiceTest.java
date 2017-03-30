@@ -170,6 +170,60 @@ public class UsersServiceTest {
     }
 
     @Test
+    public void testFindByEmailPresentModel() throws Exception {
+        final String email = "new.email@gmail.com";
+        final UserEntity userEntity = Entities.createUserEntityMock(
+                1,
+                "NewFirstName",
+                "NewLastName1",
+                "NewSurname1",
+                email,
+                "newhash1",
+                false,
+                3
+        );
+        given(this.usersMapper.findByEmail(email)).willReturn(userEntity);
+
+        final UserModelInterface userModel = this.usersService.findByEmail(email);
+
+        Assert.assertEquals(this.mapUserModel(userEntity), userModel);
+    }
+
+    @Test
+    public void testFindByEmailAbsentModel() throws Exception {
+        final String email = "absent.email@gmail.com";
+        given(this.usersMapper.findByEmail(email)).willReturn(null);
+
+        final UserModelInterface userModel = this.usersService.findByEmail(email);
+
+        Assert.assertEquals(null, userModel);
+    }
+
+    @Test
+    public void testFindByEmailWithOptions() throws Exception {
+        final String email = "new.email@gmail.com";
+        final UserEntity userEntity = Entities.createUserEntityMock(
+                1,
+                "NewFirstName",
+                "NewLastName1",
+                "NewSurname1",
+                email,
+                "newhash1",
+                false,
+                3
+        );
+        final UserModelInterface userModel = this.mapUserModel(userEntity);
+        final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
+        given(this.usersMapper.findByEmail(email)).willReturn(userEntity);
+        given(usersOptions.withRelations(userModel)).willReturn(userModel);
+
+        final UserModelInterface foundedUserModel = this.usersService.findByEmail(email, usersOptions);
+
+        Assert.assertEquals(userModel, foundedUserModel);
+        verify(usersOptions).withRelations(userModel);
+    }
+
+    @Test
     public void testSaveCreatesEntity() throws Exception {
         final UserModelInterface userModel = Models.createUserModel(
                 null,
