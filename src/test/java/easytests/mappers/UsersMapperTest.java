@@ -52,6 +52,19 @@ public class UsersMapperTest {
     }
 
     @Test
+    public void testFindByEmail() throws Exception {
+        final UserEntity userEntity = this.usersMapper.findByEmail("email1@gmail.com");
+        Assert.assertEquals((Integer) 1, userEntity.getId());
+        Assert.assertEquals("FirstName1", userEntity.getFirstName());
+        Assert.assertEquals("LastName1", userEntity.getLastName());
+        Assert.assertEquals("Surname1", userEntity.getSurname());
+        Assert.assertEquals("email1@gmail.com", userEntity.getEmail());
+        Assert.assertEquals("hash1", userEntity.getPassword());
+        Assert.assertEquals(true, userEntity.getIsAdmin());
+        Assert.assertEquals((Integer) 1, userEntity.getState());
+    }
+
+    @Test
     public void testInsert() throws Exception {
         final Integer id = this.usersMapper.findAll().size() + 1;
         final String firstName = "FirstName";
