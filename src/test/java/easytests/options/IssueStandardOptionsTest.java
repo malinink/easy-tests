@@ -36,6 +36,40 @@ public class IssueStandardOptionsTest {
     public final ExpectedException exception = ExpectedException.none();
 
     @Test
+    public void testWithRelationsOnNull() throws Exception {
+
+        final IssueStandardsOptionsInterface issueStandardsOptions = new IssueStandardsOptions();
+
+        final IssueStandardTopicPrioritiesServiceInterface topicPrioritiesService
+                = Mockito.mock(IssueStandardTopicPrioritiesServiceInterface.class);
+        final IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions
+                = Mockito.mock(IssueStandardTopicPrioritiesOptionsInterface.class);
+
+        final IssueStandardQuestionTypeOptionsServiceInterface questionTypeOptionsService
+                = Mockito.mock(IssueStandardQuestionTypeOptionsServiceInterface.class);
+        final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions
+                = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
+
+        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        issueStandardsOptions.setTopicPrioritiesService(topicPrioritiesService);
+        issueStandardsOptions.setQuestionTypeOptionsService(questionTypeOptionsService);
+        issueStandardsOptions.setSubjectsService(subjectsService);
+        issueStandardsOptions
+                .withTopicPriorities(topicPrioritiesOptions)
+                .withQuestionTypeOptions(questionTypeOptionsOptions)
+                .withSubject(subjectsOptions);
+
+        final IssueStandardModelInterface issueStandardModel = null;
+
+        final IssueStandardModelInterface issueStandardModelWithRelations
+                = issueStandardsOptions.withRelations(issueStandardModel);
+
+        Assert.assertEquals(null, issueStandardModelWithRelations);
+    }
+
+    @Test
     public void testWithRelationsOnSingleModel() throws Exception {
 
         final IssueStandardsOptionsInterface issueStandardsOptions = new IssueStandardsOptions();

@@ -28,6 +28,26 @@ import static org.mockito.Mockito.verify;
 public class IssueStandardTopicPrioritiesOptionsTest {
 
     @Test
+    public void testWithRelationsOnNull() throws Exception {
+
+        final IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions
+                = new IssueStandardTopicPrioritiesOptions();
+
+        final IssueStandardsServiceInterface issueStandardsService = Mockito.mock(IssueStandardsServiceInterface.class);
+        final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
+
+        topicPrioritiesOptions.setIssueStandardsService(issueStandardsService);
+        topicPrioritiesOptions.withIssueStandard(issueStandardsOptions);
+
+        final IssueStandardTopicPriorityModelInterface topicPriorityModel = null;
+
+        final IssueStandardTopicPriorityModelInterface topicPriorityModelWithRelations
+                = topicPrioritiesOptions.withRelations(topicPriorityModel);
+
+        Assert.assertEquals(null, topicPriorityModelWithRelations);
+    }
+
+    @Test
     public void testWithRelationsOnSingleModel() throws Exception {
 
         final IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions

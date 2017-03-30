@@ -28,6 +28,25 @@ import static org.mockito.Mockito.verify;
 public class IssueStandardQuestionTypeOptionsOptionsTest {
 
     @Test
+    public void testWithRelationsOnNull() throws Exception {
+
+        final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions
+                = new IssueStandardQuestionTypeOptionsOptions();
+        final IssueStandardsServiceInterface issueStandardsService = Mockito.mock(IssueStandardsServiceInterface.class);
+        final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
+
+        questionTypeOptionsOptions.setIssueStandardsService(issueStandardsService);
+        questionTypeOptionsOptions.withIssueStandard(issueStandardsOptions);
+
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel = null;
+
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModelWithRelations
+                = questionTypeOptionsOptions.withRelations(questionTypeOptionModel);
+
+        Assert.assertEquals(null, questionTypeOptionModelWithRelations);
+    }
+
+    @Test
     public void testWithRelationsOnSingleModel() throws Exception {
 
         final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions
