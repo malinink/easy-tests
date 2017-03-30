@@ -54,6 +54,9 @@ public class IssueStandardsOptions implements IssueStandardsOptionsInterface {
 
     @Override
     public IssueStandardModelInterface withRelations(IssueStandardModelInterface issueStandardModel) {
+        if (issueStandardModel == null) {
+            return issueStandardModel;
+        }
         if (this.topicPrioritiesOptions != null) {
             issueStandardModel.setTopicPriorities(this.topicPrioritiesService
                     .findByIssueStandard(issueStandardModel, this.topicPrioritiesOptions));

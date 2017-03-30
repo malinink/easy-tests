@@ -30,6 +30,9 @@ public class IssueStandardQuestionTypeOptionsOptions implements IssueStandardQue
     public IssueStandardQuestionTypeOptionModelInterface
         withRelations(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel) {
 
+        if (questionTypeOptionModel == null) {
+            return questionTypeOptionModel;
+        }
         if (this.issueStandardsOptions != null) {
             questionTypeOptionModel.setIssueStandard(
                     this.issueStandardsService
