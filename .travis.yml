@@ -12,9 +12,9 @@ before_script:
 - psql -c 'create database easytests;' -U postgres
 - psql -c 'create database easyteststest;' -U postgres
 script:
-- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-- ./mvnw checkstyle:check
-- ./mvnw migration:up
-- ./mvnw test jacoco:report
+- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V --quiet
+- ./mvnw checkstyle:check --quiet
+- ./mvnw migration:up --quiet
+- ./mvnw test jacoco:report --quiet
 after_success:
-- ./mvnw coveralls:report
+- ./mvnw coveralls:report --quiet
