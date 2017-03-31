@@ -2,6 +2,9 @@ package easytests.models;
 
 import easytests.entities.IssueStandardEntity;
 import java.util.List;
+
+import easytests.models.empty.ModelsListEmpty;
+import easytests.models.empty.SubjectModelEmpty;
 import lombok.Data;
 
 /**
@@ -26,5 +29,8 @@ public class IssueStandardModel implements IssueStandardModelInterface {
         this.setId(issueStandardEntity.getId());
         this.setTimeLimit(issueStandardEntity.getTimeLimit());
         this.setQuestionsNumber(issueStandardEntity.getQuestionsNumber());
+        this.setTopicPriorities(new ModelsListEmpty());
+        this.setQuestionTypeOptions(new ModelsListEmpty());
+        this.setSubject(new SubjectModelEmpty(issueStandardEntity.getSubjectId()));
     }
 }
