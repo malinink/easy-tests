@@ -1,11 +1,12 @@
 package easytests.models;
 
 import easytests.entities.IssueStandardEntity;
+import easytests.models.empty.ModelsListEmpty;
+import easytests.models.empty.SubjectModelEmpty;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.meanbean.test.*;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 /**
@@ -32,7 +33,7 @@ public class IssueStandardModelTest {
         final Integer id = 5;
         final Integer timeLimit = 3600;
         final Integer questionsNumber = 30;
-        final Integer subjectId = 1;
+        final Integer subjectId = 3;
 
         final IssueStandardEntity issueStandardEntity = Mockito.mock(IssueStandardEntity.class);
         Mockito.when(issueStandardEntity.getId()).thenReturn(id);
@@ -46,8 +47,8 @@ public class IssueStandardModelTest {
         Assert.assertEquals(id, issueStandardModel.getId());
         Assert.assertEquals(timeLimit, issueStandardModel.getTimeLimit());
         Assert.assertEquals(questionsNumber, issueStandardModel.getQuestionsNumber());
-        Assert.assertNull(issueStandardModel.getTopicPriorities());
-        Assert.assertNull(issueStandardModel.getQuestionTypeOptions());
-        Assert.assertNull(issueStandardModel.getSubject());
+        Assert.assertEquals(new ModelsListEmpty(), issueStandardModel.getTopicPriorities());
+        Assert.assertEquals(new ModelsListEmpty(), issueStandardModel.getQuestionTypeOptions());
+        Assert.assertEquals(new SubjectModelEmpty(subjectId), issueStandardModel.getSubject());
     }
 }
