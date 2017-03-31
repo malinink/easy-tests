@@ -2,6 +2,8 @@ package easytests.models;
 
 import easytests.entities.QuestionEntity;
 import java.util.List;
+import easytests.models.empty.ModelsListEmpty;
+import easytests.models.empty.TopicModelEmpty;
 import lombok.*;
 
 /**
@@ -24,5 +26,7 @@ public class QuestionModel implements QuestionModelInterface {
         this.setId(questionEntity.getId());
         this.setText(questionEntity.getText());
         this.setType(questionEntity.getType());
+        this.setTopic(new TopicModelEmpty(questionEntity.getTopicId()));
+        this.setAnswers(new ModelsListEmpty());
     }
 }
