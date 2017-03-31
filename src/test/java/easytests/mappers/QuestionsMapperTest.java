@@ -46,6 +46,12 @@ public class QuestionsMapperTest {
     }
 
     @Test
+    public void testFindByTopicId() throws Exception {
+        final List<QuestionEntity> questionEntities = this.questionsMapper.findByTopicId(1);
+        Assert.assertEquals((long) 3, (long) questionEntities.size());
+    }
+
+    @Test
     public void testInsert() throws Exception {
         final Integer id = this.questionsMapper.findAll().size() + 1;
         final String text = "text1";
