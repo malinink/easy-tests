@@ -47,6 +47,10 @@ public class SubjectsOptions implements SubjectsOptionsInterface {
 
     public SubjectModelInterface withRelations(SubjectModelInterface subjectModel) {
 
+        if (subjectModel == null) {
+            return subjectModel;
+        }
+
         if (this.usersOptions != null) {
             subjectModel.setUser(this.usersService.find(subjectModel.getUser().getId(), this.usersOptions));
         }
