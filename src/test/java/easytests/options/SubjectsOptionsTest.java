@@ -5,21 +5,24 @@ import easytests.services.IssueStandardsServiceInterface;
 import easytests.services.SubjectsServiceInterface;
 import easytests.services.TopicsServiceInterface;
 import easytests.services.UsersServiceInterface;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.mockito.BDDMockito.given;
 import org.mockito.InOrder;
+
+import static org.mockito.Mockito.times;
 import org.mockito.Mockito;
+
+import static org.mockito.Mockito.verify;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+
 
 /**
  * @author vkpankov
@@ -30,13 +33,12 @@ public class SubjectsOptionsTest {
     @Test
     public void testWithRelationsOnSingleModel() throws Exception {
 
-        final UsersOptionsInterface usersOptions =  Mockito.mock(UsersOptionsInterface.class);
+        final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
         final SubjectsOptionsInterface subjectOptions = new SubjectsOptions();
 
         final UsersServiceInterface usersService = Mockito.mock(UsersServiceInterface.class);
         final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
         final IssueStandardsServiceInterface issueStandardService = Mockito.mock(IssueStandardsServiceInterface.class);
-
 
         final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
         final IssueStandardsOptionsInterface issueStandardOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
@@ -51,19 +53,16 @@ public class SubjectsOptionsTest {
         subjectOptions.withTopics(topicsOptions);
         subjectOptions.withIssueStandard(issueStandardOptions);
 
-
         final List<TopicModelInterface> topicsModels = new ArrayList<>();
         given(topicsService.findBySubject(Mockito.any(SubjectModelInterface.class))).willReturn(topicsModels);
 
-        IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
-        UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
+        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
+        final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
 
         given(topicsService.findBySubject(Mockito.any(SubjectModelInterface.class))).willReturn(topicsModels);
 
         given(subjectModel.getUser()).willReturn(userModel);
         given(usersService.find(subjectModel.getUser().getId())).willReturn(userModel);
-
-        //given(issueStandardService.findBySubject(Mockito.any(SubjectModelInterface.class), issueStandardOptions)).willReturn(issueStandardModel);
 
         final SubjectModelInterface subjectModelWithRelations = subjectOptions.withRelations(subjectModel);
 
@@ -80,6 +79,32 @@ public class SubjectsOptionsTest {
     }
 
     @Test
+    public void testWithRelationsOnNull() throws Exception {
+
+        final SubjectsOptionsInterface subjectsOptions = new SubjectsOptions();
+
+        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
+        final IssueStandardsServiceInterface issueStandardsService = Mockito.mock(IssueStandardsServiceInterface.class);
+        final UsersServiceInterface usersService = Mockito.mock(UsersServiceInterface.class);
+
+        final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
+        final IssueStandardsOptionsInterface issueStandardOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
+        final UsersOptionsInterface userOptions = Mockito.mock(UsersOptionsInterface.class);
+
+        subjectsOptions.setTopicsService(topicsService);
+        subjectsOptions.setIssueStandardsService(issueStandardsService);
+        subjectsOptions.setUsersService(usersService);
+
+        subjectsOptions.withTopics(topicsOptions).withIssueStandard(issueStandardOptions).withUser(userOptions);
+
+        final SubjectModelInterface nullSubjectModel = null;
+        final SubjectModelInterface subjectModelWithRelations = subjectsOptions.withRelations(nullSubjectModel);
+
+        Assert.assertNull(subjectModelWithRelations);
+
+    }
+
+    @Test
     public void testWithRelationsOnModelsList() throws Exception {
 
         final SubjectModelInterface subjectModelFirst = Mockito.mock(SubjectModelInterface.class);
@@ -90,7 +115,7 @@ public class SubjectsOptionsTest {
         subjectsModels.add(subjecModelSecond);
 
         final SubjectsOptionsInterface subjectsOptions = new SubjectsOptions();
-        SubjectsOptionsInterface subjectsOptionsSpy = Mockito.spy(subjectsOptions);
+        final SubjectsOptionsInterface subjectsOptionsSpy = Mockito.spy(subjectsOptions);
 
         subjectsOptionsSpy.withRelations(subjectsModels);
 
@@ -98,7 +123,6 @@ public class SubjectsOptionsTest {
         Mockito.verify(subjectsOptionsSpy, times(1)).withRelations(subjecModelSecond);
 
     }
-
 
     @Test
     public void testSaveWithRelations() throws Exception {
@@ -113,7 +137,6 @@ public class SubjectsOptionsTest {
         final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
         final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
 
-
         subjectsOptions.setSubjectsService(subjectsService);
         subjectsOptions.setTopicsService(topicsService);
         subjectsOptions.setIssueStandardsService(issueStandardsService);
@@ -123,7 +146,7 @@ public class SubjectsOptionsTest {
         final List<TopicModelInterface> topicsModels = new ArrayList<>();
         subjectModel.setTopics(topicsModels);
 
-        IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
+        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
 
         subjectModel.setIssueStandard(issueStandardModel);
 
@@ -150,7 +173,6 @@ public class SubjectsOptionsTest {
         final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
         final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
 
-
         subjectsOptions.setSubjectsService(subjectsService);
         subjectsOptions.setTopicsService(topicsService);
         subjectsOptions.setIssueStandardsService(issueStandardsService);
@@ -160,7 +182,7 @@ public class SubjectsOptionsTest {
         final List<TopicModelInterface> topicsModels = new ArrayList<>();
         subjectModel.setTopics(topicsModels);
 
-        IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
+        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
 
         subjectModel.setIssueStandard(issueStandardModel);
 
@@ -187,7 +209,7 @@ public class SubjectsOptionsTest {
 
         final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
 
-        SubjectsOptionsInterface subjectsOptionsSpy = Mockito.spy(subjectsOptions);
+        final SubjectsOptionsInterface subjectsOptionsSpy = Mockito.spy(subjectsOptions);
 
         subjectsOptionsSpy.deleteWithRelations(subjectModel);
 
