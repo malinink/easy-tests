@@ -23,7 +23,6 @@ public class AuthUsersService implements UserDetailsService {
     private UsersService usersService;
 
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
         final UserModelInterface userModel = usersService.findByEmail(email);
         if (userModel == null) {
             throw new UsernameNotFoundException("No user found with login: " + email);
@@ -41,10 +40,10 @@ public class AuthUsersService implements UserDetailsService {
 
     private static List<GrantedAuthority> getAuthorities(UserModelInterface userModel) {
         final List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("testee"));
-        authorities.add(new SimpleGrantedAuthority("user"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_TESTEE"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         if (userModel.getIsAdmin()) {
-            authorities.add(new SimpleGrantedAuthority("admin"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         return authorities;
     }
