@@ -18,7 +18,12 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
-    @RequestMapping("/users")
+    @RequestMapping("")
+    public String root(Model model) {
+        return "users/root";
+    }
+
+    @RequestMapping("users")
     public String list(Model model) {
         final List<UserModelInterface> users = this.usersService.findAll();
         model.addAttribute("users", users);
