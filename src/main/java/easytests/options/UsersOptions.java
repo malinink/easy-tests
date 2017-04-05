@@ -27,6 +27,9 @@ public class UsersOptions implements UsersOptionsInterface {
 
     @Override
     public UserModelInterface withRelations(UserModelInterface userModel) {
+        if (userModel == null) {
+            return userModel;
+        }
         if (this.subjectsOptions != null) {
             userModel.setSubjects(this.subjectsService.findByUser(userModel, this.subjectsOptions));
         }
