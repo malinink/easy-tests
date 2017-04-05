@@ -44,6 +44,16 @@ public class UsersService implements UsersServiceInterface {
     }
 
     @Override
+    public UserModelInterface findByEmail(String email) {
+        return this.map(this.usersMapper.findByEmail(email));
+    }
+
+    @Override
+    public UserModelInterface findByEmail(String email, UsersOptionsInterface usersOptions) {
+        return this.withServices(usersOptions).withRelations(this.findByEmail(email));
+    }
+
+    @Override
     public void save(UserModelInterface userModel) {
         final UserEntity userEntity = this.map(userModel);
         if (userEntity.getId() == null) {

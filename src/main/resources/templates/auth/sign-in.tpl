@@ -1,4 +1,4 @@
-layout 'layout/login.tpl', title:  'Login form',
+layout 'layout/auth.tpl', title:  'Login form',
 content: contents {
     div (class:'section') {
         main {
@@ -19,7 +19,7 @@ content: contents {
                                     i (class:'material-icons prefix') {
                                         span('account_circle')
                                     }
-                                    input (class:'validate', type:'email', name:'email', id:'email', required:'')
+                                    input (class:'validate', type:'email', name:'login', id:'login', required:'', value:login)
                                     label (for:'email') {
                                         span ('Enter your email')
                                     }

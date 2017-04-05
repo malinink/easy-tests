@@ -1,9 +1,8 @@
 package easytests.integration.services;
 
-import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
-import easytests.models.empty.ModelsListEmpty;
 import easytests.services.UsersService;
+import easytests.support.Models;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,20 +24,19 @@ public class UsersServiceTest {
     @Autowired
     private UsersService usersService;
 
-    private UserModelInterface createUserModel(Integer id, String firstName, String lastName, String surname) {
-        final UserModelInterface userModel = new UserModel();
-        userModel.setId(id);
-        userModel.setFirstName(firstName);
-        userModel.setLastName(lastName);
-        userModel.setSurname(surname);
-        userModel.setSubjects(new ModelsListEmpty());
-        return userModel;
-    }
-
     @Test
     public void testFindPresentModel() throws Exception {
         final Integer id = 1;
-        final UserModelInterface userModel = this.createUserModel(id, "FirstName1", "LastName1", "Surname1");
+        final UserModelInterface userModel = Models.createUserModel(
+                id,
+                "FirstName1",
+                "LastName1",
+                "Surname1",
+                "email1@gmail.com",
+                "hash1",
+                true,
+                1
+        );
 
         final UserModelInterface foundedUserModel = this.usersService.find(id);
 
