@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS question_type_options;
 DROP TABLE IF EXISTS topic_priorities;
 DROP TABLE IF EXISTS issue_standard;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS topics;
 DROP TABLE IF EXISTS subjects;
 DROP TABLE IF EXISTS questions;
 DROP TABLE IF EXISTS answers;
@@ -133,6 +134,15 @@ CREATE TABLE issues (
 );
 
 
+CREATE TABLE topics (
+  id         SERIAL      NOT NULL,
+  name VARCHAR(60) NOT NULL,
+  questions_id  INTEGER NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (name)
+);
+
+
 ----------------------
 -- INSERT DATA
 ----------------------
@@ -141,6 +151,11 @@ INSERT INTO users (first_name, last_name, surname, email, password, is_admin, st
   ('FirstName2', 'LastName2', 'Surname2', 'email2@gmail.com', 'hash2', FALSE, 2),
   ('FirstName3', 'LastName3', 'Surname3', 'email3@gmail.com', 'hash3', FALSE, 1);
 
+INSERT INTO topics (name, questions_id) VALUES
+  ('Theme1', '1'),
+  ('Theme2', '2'),
+  ('Theme3', '3');
+  
 INSERT INTO issue_standard (time_limit, questions_number, subject_id) VALUES
   (300, 30, 1),
   (NULL, 15, 3);
