@@ -16,7 +16,9 @@ public interface QuestionsServiceInterface extends ServiceInterface {
 
     List<QuestionModelInterface> findByTopic(TopicModelInterface topicModel);
 
-    List<QuestionModelInterface> findByTopic(TopicModelInterface topicModel, QuestionsOptionsInterface questionsOptions);
+    List<QuestionModelInterface> findByTopic(
+            TopicModelInterface topicModel, 
+            QuestionsOptionsInterface questionsOptions);
 
     QuestionModelInterface find(Integer id);
 
