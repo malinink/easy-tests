@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author rezenbekk
  */
-public interface AnswersOptionsInterface {
+public interface AnswersOptionsInterface extends OptionsInterface {
 
     AnswersOptionsInterface withQuestion(QuestionsOptionsInterface questionsOptions);
 
