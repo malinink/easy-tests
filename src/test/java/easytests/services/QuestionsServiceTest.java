@@ -225,6 +225,28 @@ public class QuestionsServiceTest {
     }
 
     @Test
+    public void testSaveEntitiesList() throws Exception {
+
+        final QuestionModelInterface questionModelFirst = this.createQuestionModel(null, "Text1", 1, 1);
+        final QuestionModelInterface questionModelSecond = this.createQuestionModel(null, "Text2", 2, 1);
+        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
+
+        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
+        questionsModels.add(questionModelFirst);
+        questionsModels.add(questionModelSecond);
+
+        final QuestionsServiceInterface questionsServiceSpy = Mockito.spy(questionsService);
+
+        questionsServiceSpy.save(questionsModels);
+        verify(questionsServiceSpy, times(1)).save(questionModelFirst);
+        verify(questionsServiceSpy, times(1)).save(questionModelSecond);
+
+        questionsServiceSpy.save(questionsModels, questionsOptions);
+        verify(questionsServiceSpy, times(1)).save(questionModelFirst, questionsOptions);
+        verify(questionsServiceSpy, times(1)).save(questionModelSecond, questionsOptions);
+    }
+
+    @Test
     public void testSaveWithOptions() throws Exception {
         final QuestionModelInterface questionModel = this.createQuestionModel(null, "Text", 1, 1);
         final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
@@ -249,6 +271,28 @@ public class QuestionsServiceTest {
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.questionsService.delete(questionModel);
+    }
+
+    @Test
+    public void testDeleteModelsList() throws Exception {
+
+        final QuestionModelInterface questionModelFirst = this.createQuestionModel(1, "test1", 1, 1);
+        final QuestionModelInterface questionModelSecond = this.createQuestionModel(2, "test2", 2, 1);
+        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
+
+        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
+        questionsModels.add(questionModelFirst);
+        questionsModels.add(questionModelSecond);
+
+        final QuestionsServiceInterface questionsServiceSpy = Mockito.spy(questionsService);
+
+        questionsServiceSpy.delete(questionsModels);
+        verify(questionsServiceSpy, times(1)).delete(questionModelFirst);
+        verify(questionsServiceSpy, times(1)).delete(questionModelSecond);
+
+        questionsServiceSpy.delete(questionsModels, questionsOptions);
+        verify(questionsServiceSpy, times(1)).delete(questionModelFirst, questionsOptions);
+        verify(questionsServiceSpy, times(1)).delete(questionModelSecond, questionsOptions);
     }
 
     @Test
