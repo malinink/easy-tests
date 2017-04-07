@@ -35,6 +35,7 @@ public class TesteesService {
         final TesteeEntity testeeEntity = this.map(testeeModel);
         if (testeeEntity.getId() == null) {
             this.testeesMapper.insert(testeeEntity);
+            testeeModel.setId(testeeEntity.getId());
             return;
         }
         this.testeesMapper.update(testeeEntity);
