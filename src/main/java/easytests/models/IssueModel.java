@@ -1,7 +1,10 @@
 package easytests.models;
 
 import easytests.entities.IssueEntity;
+import easytests.models.empty.ModelsListEmpty;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author fortyways
@@ -14,12 +17,13 @@ public class IssueModel implements IssueModelInterface {
 
     private Integer authorId;
 
-    //private List<QuizModelInterface> quizzes;
+    private List<QuizModelInterface> quizzes;
 
     public void map(IssueEntity issueEntity) {
         this.setId(issueEntity.getId());
         this.setName(issueEntity.getName());
         this.setAuthorId(issueEntity.getAuthorId());
+        this.setQuizzes(new ModelsListEmpty());
     }
 
 }

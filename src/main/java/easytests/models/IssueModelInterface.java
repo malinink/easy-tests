@@ -2,6 +2,8 @@ package easytests.models;
 
 import easytests.entities.IssueEntity;
 
+import java.util.List;
+
 /**
  * @author fortyways
  */
@@ -19,4 +21,8 @@ public interface IssueModelInterface extends ModelInterface {
     void setAuthorId(Integer authorId);
 
     void map(IssueEntity issueEntity);
+
+    List<QuizModelInterface> getQuizzes();
+
+    void setQuizzes(List<QuizModelInterface> quizzes);
 }
