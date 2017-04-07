@@ -2,9 +2,10 @@ package easytests.models;
 
 import easytests.entities.IssueEntity;
 import easytests.models.empty.ModelsListEmpty;
+import java.util.List;
 import lombok.Data;
 
-import java.util.List;
+
 
 /**
  * @author fortyways
