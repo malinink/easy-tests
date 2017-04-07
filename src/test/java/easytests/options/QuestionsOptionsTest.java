@@ -54,6 +54,24 @@ public class QuestionsOptionsTest {
     }
 
     @Test
+    public void testWithRelationsOnNull() throws Exception {
+        final QuestionModelInterface questionModel = null;
+        final QuestionsOptionsInterface questionsOptions = new QuestionsOptions();
+        final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
+        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
+        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
+        final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
+        questionsOptions.setAnswersService(answersService);
+        questionsOptions.withAnswers(answersOptions);
+        questionsOptions.setTopicsService(topicsService);
+        questionsOptions.withTopic(topicsOptions);
+
+        final QuestionModelInterface questionModelWithRelations = questionsOptions.withRelations(questionModel);
+
+        Assert.assertEquals(null, questionModelWithRelations);
+    }
+
+    @Test
     public void testWithRelationsOnModelsList() throws Exception {
         final QuestionModelInterface questionModelFirst = Mockito.mock(QuestionModelInterface.class);
         questionModelFirst.setId(1);
