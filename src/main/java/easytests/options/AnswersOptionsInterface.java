@@ -10,6 +10,10 @@ import java.util.List;
  * @author rezenbekk
  */
 public interface AnswersOptionsInterface extends OptionsInterface {
+    
+    void setAnswersService(AnswersServiceInterface answersService);
+
+    void setQuestionsService(QuestionsServiceInterface questionsService);
 
     AnswersOptionsInterface withQuestion(QuestionsOptionsInterface questionsOptions);
 
