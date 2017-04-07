@@ -1,6 +1,8 @@
 package easytests.models;
 
+import easytests.entities.TopicEntity;
 import java.util.List;
+
 
 /**
  * @author malinink
@@ -19,4 +21,6 @@ public interface TopicModelInterface extends ModelInterface {
     List<QuestionModelInterface> getQuestions();
 
     void setQuestions(List<QuestionModelInterface> questions);
+
+    void map(TopicEntity topicEntity);
 }
