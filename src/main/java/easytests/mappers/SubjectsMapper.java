@@ -16,6 +16,7 @@ public interface SubjectsMapper {
             value = {
                     @Result(property = "id", column = "id"),
                     @Result(property = "name", column = "name"),
+                    @Result(property = "description", column = "description"),
                     @Result(property = "userId", column = "user_id")
             })
     List<SubjectEntity> findAll();
@@ -28,11 +29,11 @@ public interface SubjectsMapper {
     @ResultMap("Subject")
     List<SubjectEntity> findByUserId(Integer userId);
 
-    @Insert("INSERT INTO subjects (name, user_id) VALUES (#{name}, #{userId})")
+    @Insert("INSERT INTO subjects (name, description, user_id) VALUES (#{name}, #{description}, #{userId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(SubjectEntity subject);
 
-    @Update("UPDATE subjects SET name=#{name}, user_id=#{userId} WHERE id=#{id}")
+    @Update("UPDATE subjects SET name=#{name}, description=#{description}, user_id=#{userId} WHERE id=#{id}")
     void update(SubjectEntity subject);
 
     @Delete("DELETE FROM subjects WHERE id=#{id}")
