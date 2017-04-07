@@ -4,18 +4,23 @@ import easytests.entities.TesteeEntity;
 import easytests.mappers.TesteesMapper;
 import easytests.models.TesteeModel;
 import easytests.models.TesteeModelInterface;
+import easytests.options.TesteesOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.*;
+import easytests.support.Entities;
+import easytests.support.Models;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.*;
+import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.test.context.*;
-import org.springframework.boot.test.mock.mockito.*;
-import org.springframework.test.context.junit4.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author DoZor-80
@@ -32,25 +37,6 @@ public class TesteesServiceTest {
     @Autowired
     private TesteesService testeesService;
 
-    private TesteeModelInterface createTesteeModel(Integer id, String firstName, String lastName, String surname, Integer groupNumber) {
-        final TesteeModelInterface testeeModel = new TesteeModel();
-        testeeModel.setId(id);
-        testeeModel.setFirstName(firstName);
-        testeeModel.setLastName(lastName);
-        testeeModel.setSurname(surname);
-        testeeModel.setGroupNumber(groupNumber);
-        return testeeModel;
-    }
-
-    private TesteeEntity createTesteeEntityMock(Integer id, String firstName, String lastName, String surname, Integer groupNumber) {
-        final TesteeEntity testeeEntity = Mockito.mock(TesteeEntity.class);
-        Mockito.when(testeeEntity.getId()).thenReturn(id);
-        Mockito.when(testeeEntity.getFirstName()).thenReturn(firstName);
-        Mockito.when(testeeEntity.getLastName()).thenReturn(lastName);
-        Mockito.when(testeeEntity.getSurname()).thenReturn(surname);
-        Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
-        return testeeEntity;
-    }
 
     private TesteeModelInterface mapTesteeModel(TesteeEntity testeeEntity) {
         final TesteeModelInterface testeeModel = new TesteeModel();
@@ -64,20 +50,43 @@ public class TesteesServiceTest {
         return testeeEntity;
     }
 
-    @Test
-    public void testFindAllPresentList() throws Exception {
+    private List<TesteeEntity> getTesteesEntities() {
         final List<TesteeEntity> testeesEntities = new ArrayList<>(2);
-        final TesteeEntity testeeEntityFirst = this.createTesteeEntityMock(1, "FirstName1", "LastName1", "Surname1",307);
-        final TesteeEntity testeeEntitySecond = this.createTesteeEntityMock(2, "FirstName2", "LastName2", "Surname2",308);
+        final TesteeEntity testeeEntityFirst = Entities.createTesteeEntityMock(
+                1,
+                "FirstName1",
+                "LastName1",
+                "Surname1",
+                301
+        );
+        final TesteeEntity testeeEntitySecond = Entities.createTesteeEntityMock(
+                2,
+                "FirstName2",
+                "LastName2",
+                "Surname2",
+                302
+        );
         testeesEntities.add(testeeEntityFirst);
         testeesEntities.add(testeeEntitySecond);
+        return testeesEntities;
+    }
+
+    private List<TesteeModelInterface> getTesteesModels() {
+        final List<TesteeModelInterface> testeesModels = new ArrayList<>(2);
+        for (TesteeEntity testeeEntity: this.getTesteesEntities()) {
+            testeesModels.add(this.mapTesteeModel(testeeEntity));
+        }
+        return testeesModels;
+    }
+
+    @Test
+    public void testFindAllPresentList() throws Exception {
+        final List<TesteeEntity> testeesEntities = this.getTesteesEntities();
         given(this.testeesMapper.findAll()).willReturn(testeesEntities);
 
         final List<TesteeModelInterface> testeesModels = this.testeesService.findAll();
 
-        Assert.assertEquals(2, testeesModels.size());
-        Assert.assertEquals(testeesModels.get(0), this.mapTesteeModel(testeeEntityFirst));
-        Assert.assertEquals(testeesModels.get(1), this.mapTesteeModel(testeeEntitySecond));
+        Assert.assertEquals(this.getTesteesModels(), testeesModels);
     }
 
     @Test
@@ -90,9 +99,29 @@ public class TesteesServiceTest {
     }
 
     @Test
+    public void testFindAllWithOptions() throws Exception {
+        final List<TesteeEntity> testeesEntities = this.getTesteesEntities();
+        final List<TesteeModelInterface> testeesModels = this.getTesteesModels();
+        final TesteesOptionsInterface testeesOptions = Mockito.mock(TesteesOptionsInterface.class);
+        given(this.testeesMapper.findAll()).willReturn(testeesEntities);
+        given(testeesOptions.withRelations(Mockito.anyList())).willReturn(testeesModels);
+
+        final List<TesteeModelInterface> foundedTesteesModels = this.testeesService.findAll(testeesOptions);
+
+        verify(testeesOptions).withRelations(testeesModels);
+        Assert.assertEquals(testeesModels, foundedTesteesModels);
+    }
+
+    @Test
     public void testFindPresentModel() throws Exception {
         final Integer id = 1;
-        final TesteeEntity testeeEntity = this.createTesteeEntityMock(id, "NewFirstName", "NewLastName", "NewSurname", 307);
+        final TesteeEntity testeeEntity = Entities.createTesteeEntityMock(
+                id,
+                "NewFirstName",
+                "NewLastName1",
+                "NewSurname1",
+                307
+        );
         given(this.testeesMapper.find(id)).willReturn(testeeEntity);
 
         final TesteeModelInterface testeeModel = this.testeesService.find(id);
@@ -111,17 +140,56 @@ public class TesteesServiceTest {
     }
 
     @Test
+    public void testFindWithOptions() throws Exception {
+        final Integer id = 1;
+        final TesteeEntity testeeEntity = Entities.createTesteeEntityMock(
+                id,
+                "NewFirstName",
+                "NewLastName1",
+                "NewSurname1",
+                307
+        );
+        final TesteeModelInterface testeeModel = this.mapTesteeModel(testeeEntity);
+        final TesteesOptionsInterface testeesOptions = Mockito.mock(TesteesOptionsInterface.class);
+        given(this.testeesMapper.find(id)).willReturn(testeeEntity);
+        given(testeesOptions.withRelations(testeeModel)).willReturn(testeeModel);
+
+        final TesteeModelInterface foundedTesteeModel = this.testeesService.find(id, testeesOptions);
+
+        Assert.assertEquals(testeeModel, foundedTesteeModel);
+        verify(testeesOptions).withRelations(testeeModel);
+    }
+
+    @Test
     public void testSaveCreatesEntity() throws Exception {
-        final TesteeModelInterface testeeModel = this.createTesteeModel(null, "FirstName", "LastName", "Surname", 307);
+        final TesteeModelInterface testeeModel = Models.createTesteeModel(
+                null,
+                "FirstName",
+                "LastName",
+                "Surname",
+                301
+        );
+        doAnswer(invocation -> {
+            final TesteeEntity testeeEntity = (TesteeEntity) invocation.getArguments()[0];
+            testeeEntity.setId(5);
+            return null;
+        }).when(this.testeesMapper).insert(Mockito.any(TesteeEntity.class));
 
         this.testeesService.save(testeeModel);
 
         verify(this.testeesMapper, times(1)).insert(this.mapTesteeEntity(testeeModel));
+        Assert.assertEquals((Integer) 5, testeeModel.getId());
     }
 
     @Test
     public void testSaveUpdatesEntity() throws Exception {
-        final TesteeModelInterface testeeModel = this.createTesteeModel(1, "FirstName", "LastName", "Surname", 307);
+        final TesteeModelInterface testeeModel = Models.createTesteeModel(
+                1,
+                "FirstName",
+                "LastName",
+                "Surname",
+                301
+        );
 
         this.testeesService.save(testeeModel);
 
@@ -129,8 +197,30 @@ public class TesteesServiceTest {
     }
 
     @Test
+    public void testSaveWithOptions() throws Exception {
+        final TesteeModelInterface testeeModel = Models.createTesteeModel(
+                null,
+                "FirstName",
+                "LastName",
+                "Surname",
+                301
+        );
+        final TesteesOptionsInterface testeesOptions = Mockito.mock(TesteesOptionsInterface.class);
+
+        this.testeesService.save(testeeModel, testeesOptions);
+
+        verify(testeesOptions).saveWithRelations(testeeModel);
+    }
+
+    @Test
     public void testDeleteIdentifiedModel() throws Exception {
-        final TesteeModelInterface testeeModel = this.createTesteeModel(1, "FirstName", "LastName", "Surname", 307);
+        final TesteeModelInterface testeeModel = Models.createTesteeModel(
+                1,
+                "FirstName",
+                "LastName",
+                "Surname",
+                301
+        );
 
         this.testeesService.delete(testeeModel);
 
@@ -139,9 +229,31 @@ public class TesteesServiceTest {
 
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
-        final TesteeModelInterface testeeModel = this.createTesteeModel(null, "FirstName", "LastName", "Surname", 307);
+        final TesteeModelInterface testeeModel = Models.createTesteeModel(
+                null,
+                "FirstName",
+                "LastName",
+                "Surname",
+                301
+        );
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.testeesService.delete(testeeModel);
+    }
+
+    @Test
+    public void testDeleteWithOptions() throws Exception {
+        final TesteeModelInterface testeeModel = Models.createTesteeModel(
+                1,
+                "FirstName",
+                "LastName",
+                "Surname",
+                301
+        );
+        final TesteesOptionsInterface testeesOptions = Mockito.mock(TesteesOptionsInterface.class);
+
+        this.testeesService.delete(testeeModel, testeesOptions);
+
+        verify(testeesOptions).deleteWithRelations(testeeModel);
     }
 }
