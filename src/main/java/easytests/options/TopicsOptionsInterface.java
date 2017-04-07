@@ -1,5 +1,6 @@
 package easytests.options;
 
+import easytests.models.TopicModelInterface;
 import easytests.services.QuestionsServiceInterface;
 import easytests.services.SubjectsServiceInterface;
 import easytests.services.TopicsServiceInterface;
@@ -20,11 +21,11 @@ public interface TopicsOptionsInterface extends OptionsInterface {
 
     TopicsOptionsInterface withQuestions(QuestionsOptionsInterface questionOptions);
 
-    TopicsOptionsInterface withRelations(TopicsOptionsInterface topicModel);
+    TopicModelInterface withRelations(TopicModelInterface topicModel);
 
-    List<TopicsOptionsInterface> withRelations(List<TopicsOptionsInterface> topicsModels);
+    List<TopicModelInterface> withRelations(List<TopicModelInterface> topicsModels);
 
-    void saveWithRelations(TopicsOptionsInterface topicModel);
+    void saveWithRelations(TopicModelInterface topicModel);
 
-    void deleteWithRelations(TopicsOptionsInterface topicModel);
+    void deleteWithRelations(TopicModelInterface topicModel);
 }
