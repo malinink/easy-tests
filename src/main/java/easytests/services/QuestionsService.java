@@ -4,6 +4,8 @@ import easytests.entities.QuestionEntity;
 import easytests.mappers.QuestionsMapper;
 import easytests.models.QuestionModel;
 import easytests.models.QuestionModelInterface;
+import easytests.models.TopicModelInterface;
+import easytests.options.QuestionsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +20,12 @@ public class QuestionsService implements QuestionsServiceInterface {
     @Autowired
     private QuestionsMapper questionsMapper;
 
+    @Override
     public List<QuestionModelInterface> findAll() {
         return this.map(this.questionsMapper.findAll());
     }
 
+    @Override
     public QuestionModelInterface find(Integer id) {
         final QuestionEntity questionEntity = this.questionsMapper.find(id);
         if (questionEntity == null) {
@@ -30,6 +34,19 @@ public class QuestionsService implements QuestionsServiceInterface {
         return this.map(questionEntity);
     }
 
+    @Override
+    public List<QuestionModelInterface> findByTopic(TopicModelInterface topicModel) {
+        return this.map(this.questionsMapper.findByTopicId(topicModel.getId()));
+    }
+
+    @Override
+    public List<QuestionModelInterface> findByTopic(
+            TopicModelInterface topicModel,
+            QuestionsOptionsInterface questionsOptions) {
+        return questionsOptions.withRelations(this.map(this.questionsMapper.findByTopicId(topicModel.getId())));
+    }
+
+    @Override
     public void save(QuestionModelInterface questionModel) {
         final QuestionEntity questionEntity = this.map(questionModel);
         if (questionEntity.getId() == null) {
@@ -40,12 +57,23 @@ public class QuestionsService implements QuestionsServiceInterface {
         this.questionsMapper.update(questionEntity);
     }
 
+    @Override
+    public void save(List<QuestionModelInterface> questionsModels, QuestionsOptionsInterface questionsOptions) {
+        //TODO: firkhraag + add tests
+    }
+
+    @Override
     public void delete(QuestionModelInterface questionModel) {
         final QuestionEntity questionEntity = this.map(questionModel);
         if (questionEntity.getId() == null) {
             throw new DeleteUnidentifiedModelException();
         }
         this.questionsMapper.delete(questionEntity);
+    }
+
+    @Override
+    public void delete(List<QuestionModelInterface> questionsModels, QuestionsOptionsInterface questionsOptions) {
+        //TODO: firkhraag + add tests
     }
 
     private QuestionModelInterface map(QuestionEntity questionEntity) {
