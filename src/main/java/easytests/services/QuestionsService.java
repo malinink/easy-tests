@@ -78,6 +78,20 @@ public class QuestionsService implements QuestionsServiceInterface {
     }
 
     @Override
+    public void save(List<QuestionModelInterface> questionsModels) {
+        for (QuestionModelInterface questionModel: questionsModels) {
+            this.save(questionModel);
+        }
+    }
+
+    @Override
+    public void save(List<QuestionModelInterface> questionsModels, QuestionsOptionsInterface questionsOptions) {
+        for (QuestionModelInterface questionModel: questionsModels) {
+            this.save(questionModel, questionsOptions);
+        }
+    }
+
+    @Override
     public void delete(QuestionModelInterface questionModel) {
         final QuestionEntity questionEntity = this.map(questionModel);
         if (questionEntity.getId() == null) {
@@ -89,6 +103,20 @@ public class QuestionsService implements QuestionsServiceInterface {
     @Override
     public void delete(QuestionModelInterface questionModel, QuestionsOptionsInterface questionsOptions) {
         this.withServices(questionsOptions).deleteWithRelations(questionModel);
+    }
+
+    @Override
+    public void delete(List<QuestionModelInterface> questionsModels) {
+        for (QuestionModelInterface questionModel: questionsModels) {
+            this.delete(questionModel);
+        }
+    }
+
+    @Override
+    public void delete(List<QuestionModelInterface> questionsModels, QuestionsOptionsInterface questionsOptions) {
+        for (QuestionModelInterface questionModel: questionsModels) {
+            this.delete(questionModel, questionsOptions);
+        }
     }
 
     private QuestionsOptionsInterface withServices(QuestionsOptionsInterface questionsOptions) {

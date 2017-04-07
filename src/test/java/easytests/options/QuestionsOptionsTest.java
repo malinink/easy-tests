@@ -34,8 +34,8 @@ public class QuestionsOptionsTest {
         final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
         final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
         questionsOptions.setAnswersService(answersService);
-        questionsOptions.setTopicsService(topicsService);
         questionsOptions.withAnswers(answersOptions);
+        questionsOptions.setTopicsService(topicsService);
         questionsOptions.withTopic(topicsOptions);
         final List<AnswerModelInterface> answersModels = new ArrayList<>();
         answersModels.add(Mockito.mock(AnswerModelInterface.class));
@@ -54,6 +54,24 @@ public class QuestionsOptionsTest {
     }
 
     @Test
+    public void testWithRelationsOnNull() throws Exception {
+        final QuestionModelInterface questionModel = null;
+        final QuestionsOptionsInterface questionsOptions = new QuestionsOptions();
+        final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
+        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
+        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
+        final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
+        questionsOptions.setAnswersService(answersService);
+        questionsOptions.withAnswers(answersOptions);
+        questionsOptions.setTopicsService(topicsService);
+        questionsOptions.withTopic(topicsOptions);
+
+        final QuestionModelInterface questionModelWithRelations = questionsOptions.withRelations(questionModel);
+
+        Assert.assertEquals(null, questionModelWithRelations);
+    }
+
+    @Test
     public void testWithRelationsOnModelsList() throws Exception {
         final QuestionModelInterface questionModelFirst = Mockito.mock(QuestionModelInterface.class);
         questionModelFirst.setId(1);
@@ -69,8 +87,8 @@ public class QuestionsOptionsTest {
         final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
         final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
         questionsOptions.setAnswersService(answersService);
-        questionsOptions.setTopicsService(topicsService);
         questionsOptions.withAnswers(answersOptions);
+        questionsOptions.setTopicsService(topicsService);
         questionsOptions.withTopic(topicsOptions);
         final List<AnswerModelInterface> answersModelsFirst = new ArrayList<>();
         answersModelsFirst.add(Mockito.mock(AnswerModelInterface.class));
@@ -105,16 +123,23 @@ public class QuestionsOptionsTest {
         final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
         final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
         final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
+        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
+        final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
         questionsOptions.setQuestionsService(questionsService);
         questionsOptions.setAnswersService(answersService);
         questionsOptions.withAnswers(answersOptions);
+        questionsOptions.setTopicsService(topicsService);
+        questionsOptions.withTopic(topicsOptions);
         final List<AnswerModelInterface> answersModels = new ArrayList<>();
         answersModels.add(Mockito.mock(AnswerModelInterface.class));
+        TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
         given(questionModel.getAnswers()).willReturn(answersModels);
-        final InOrder inOrder = Mockito.inOrder(answersService, questionsService);
+        given(questionModel.getTopic()).willReturn(topicModel);
+        final InOrder inOrder = Mockito.inOrder(topicsService, questionsService, answersService);
 
         questionsOptions.saveWithRelations(questionModel);
 
+        inOrder.verify(topicsService).save(topicModel, topicsOptions);
         inOrder.verify(questionsService).save(questionModel);
         inOrder.verify(answersService).save(answersModels, answersOptions);
     }
@@ -126,17 +151,24 @@ public class QuestionsOptionsTest {
         final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
         final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
         final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
+        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
+        final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
         questionsOptions.setQuestionsService(questionsService);
         questionsOptions.setAnswersService(answersService);
         questionsOptions.withAnswers(answersOptions);
+        questionsOptions.setTopicsService(topicsService);
+        questionsOptions.withTopic(topicsOptions);
         final List<AnswerModelInterface> answersModels = new ArrayList<>();
         answersModels.add(Mockito.mock(AnswerModelInterface.class));
+        TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
         given(questionModel.getAnswers()).willReturn(answersModels);
-        final InOrder inOrder = Mockito.inOrder(answersService, questionsService);
+        given(questionModel.getTopic()).willReturn(topicModel);
+        final InOrder inOrder = Mockito.inOrder(answersService, questionsService, topicsService);
 
         questionsOptions.deleteWithRelations(questionModel);
 
         inOrder.verify(answersService).delete(answersModels, answersOptions);
         inOrder.verify(questionsService).delete(questionModel);
+        inOrder.verify(topicsService).delete(topicModel, topicsOptions);
     }
 }

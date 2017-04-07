@@ -26,6 +26,16 @@ public interface QuestionsServiceInterface extends ServiceInterface {
 
     void save(QuestionModelInterface questionModel, QuestionsOptionsInterface questionsOptions);
 
+    void save(List<QuestionModelInterface> questionModel);
+
+    void save(List<QuestionModelInterface> questionModel, QuestionsOptionsInterface questionsOptions);
+
     void delete(QuestionModelInterface questionModel);
 
     void delete(QuestionModelInterface questionModel, QuestionsOptionsInterface questionsOptions);
+
+    void delete(List<QuestionModelInterface> questionModel);
+
+    void delete(List<QuestionModelInterface> questionModel, QuestionsOptionsInterface questionsOptions);
+
+}

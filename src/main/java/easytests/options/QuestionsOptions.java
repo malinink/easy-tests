@@ -60,28 +60,22 @@ public class QuestionsOptions implements QuestionsOptionsInterface {
     @Override
     public void saveWithRelations(QuestionModelInterface questionModel) {
         if (this.topicsOptions != null) {
-            this.topicsOptions.withSubjects(this);
-            this.topicsOptions.saveWithRelations(questionModel.getTopic());
-            return;
-
+            this.topicsService.save(questionModel.getTopic(), this.topicsOptions);
         }
         this.questionsService.save(questionModel);
         if (this.answersOptions != null) {
             this.answersService.save(questionModel.getAnswers(), this.answersOptions);
         }
-
     }
 
     @Override
     public void deleteWithRelations(QuestionModelInterface questionModel) {
-        if (this.topicsOptions != null) {
-            this.topicsOptions.withQuestions(this);
-            this.topicsOptions.deleteWithRelations(questionModel.getTopic());
-            return;
-        }
         if (this.answersOptions != null) {
             this.answersService.delete(questionModel.getAnswers(), this.answersOptions);
         }
         this.questionsService.delete(questionModel);
+        if (this.topicsOptions != null) {
+            this.topicsService.delete(questionModel.getTopic(), this.topicsOptions);
+        }
     }
 }
