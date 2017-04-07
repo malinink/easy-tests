@@ -1,9 +1,9 @@
 package easytests.models;
 
 import easytests.entities.QuestionEntity;
-import java.util.List;
 import easytests.models.empty.ModelsListEmpty;
 import easytests.models.empty.TopicModelEmpty;
+import java.util.List;
 import lombok.*;
 
 /**
