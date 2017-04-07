@@ -4,6 +4,7 @@ import easytests.entities.AnswerEntity;
 import easytests.mappers.AnswersMapper;
 import easytests.models.AnswerModel;
 import easytests.models.AnswerModelInterface;
+import easytests.options.AnswersOptionsInterface;
 import easytests.models.QuestionModelInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
