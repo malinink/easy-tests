@@ -17,6 +17,8 @@ public class SubjectModel implements SubjectModelInterface {
 
     private String name;
 
+    private String description;
+
     private List<TopicModelInterface> topics;
 
     private UserModelInterface user;
@@ -27,6 +29,7 @@ public class SubjectModel implements SubjectModelInterface {
 
         this.setId(subjectEntity.getId());
         this.setName(subjectEntity.getName());
+        this.setDescription(subjectEntity.getDescription());
         this.setTopics(new ModelsListEmpty());
         this.setUser(new UserModelEmpty(subjectEntity.getUserId()));
         this.setIssueStandard(new IssueStandardModelEmpty());
