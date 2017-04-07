@@ -34,6 +34,14 @@ public class AnswersService implements AnswersServiceInterface {
     public List<AnswerModelInterface> findByQuestion(QuestionModelInterface questionModel) {
         return this.map(this.answersMapper.findByQuestionId(questionModel.getId()));
     }
+    
+    @Override
+    public List<AnswerModelInterface> findByQuestion(
+            QuestionModelInterface questionModel,
+            AnswersOptionsInterface answersOptions
+    ) {
+        return answersOptions.withRelations(this.map(this.answersMapper.findByQuestionId(questionModel.getId())));
+    }
 
     @Override
     public AnswerModelInterface find(Integer id) {
@@ -54,6 +62,11 @@ public class AnswersService implements AnswersServiceInterface {
         }
         this.answersMapper.update(answerEntity);
     }
+    
+    @Override
+    public void save(AnswerModelInterface answerModel, AnswersOptionsInterface answersOptions) {
+        this.withServices(answersOptions).saveWithRelations(answerModel);
+    }
 
     @Override
     public void delete(AnswerModelInterface answerModel) {
@@ -62,6 +75,17 @@ public class AnswersService implements AnswersServiceInterface {
             throw new DeleteUnidentifiedModelException();
         }
         this.answersMapper.delete(answerEntity);
+    }
+    
+    @Override
+    public void delete(AnswerModelInterface answerModel, AnswersOptionsInterface answersOptions) {
+        this.withServices(answersOptions).deleteWithRelations(answerModel);
+    }
+    
+    private AnswersOptionsInterface withServices(AnswersOptionsInterface answersOptions) {
+        answersOptions.setAnswersService(this);
+        answersOptions.setQuestionsService(this.questionsService);
+        return answersOptions;
     }
 
     private AnswerModelInterface map(AnswerEntity answerEntity) {
