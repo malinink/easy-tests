@@ -14,8 +14,7 @@ import org.springframework.stereotype.Service;
  * @author firkhraag
  */
 @Service
-public class QuestionsService {
-
+public class QuestionsService implements QuestionsServiceInterface {
     @Autowired
     private QuestionsMapper questionsMapper;
 
