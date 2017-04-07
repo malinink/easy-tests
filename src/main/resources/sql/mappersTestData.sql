@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS solutions;
 DROP TABLE IF EXISTS testees;
 DROP TABLE IF EXISTS points;
 DROP TABLE IF EXISTS issues;
+DROP TABLE IF EXISTS topics;
 
 
 ----------------------
@@ -73,6 +74,13 @@ CREATE TABLE subjects (
   name      VARCHAR(255)  NOT NULL,
   user_id   INTEGER       NOT NULL,
   issue_standard_id     INTEGER,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE topics (
+  id         SERIAL      NOT NULL,
+  name       VARCHAR(30) NOT NULL,
+  subject_id INTEGER     NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -161,6 +169,11 @@ INSERT INTO subjects (name, user_id, issue_standard_id) VALUES
   ('test1', 2, 1),
   ('test2', 2, 1),
   ('test3', 3, 1);
+
+INSERT INTO topics (name, subject_id) VALUES
+  ('Name1', 2),
+  ('Name2', 2),
+  ('Name3', 3);
 
 INSERT INTO questions (text, type, topic_id) VALUES
   ('test1', 1, 1),
