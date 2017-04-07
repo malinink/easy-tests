@@ -9,7 +9,7 @@ import lombok.Setter;
 /**
  * @author rezenbekk
  */
-public class AnswersOptions implements AnswersOptionsInterface{
+public class AnswersOptions implements AnswersOptionsInterface {
 
     @Setter
     private QuestionsServiceInterface questionsService;
@@ -19,20 +19,24 @@ public class AnswersOptions implements AnswersOptionsInterface{
 
     private QuestionsOptionsInterface questionsOptions;
 
+    @Override
     public AnswersOptionsInterface withQuestion(QuestionsOptionsInterface questionsOptions) {
         this.questionsOptions = questionsOptions;
         return this;
     }
 
+    @Override
     public AnswerModelInterface withRelations(AnswerModelInterface answerModel) {
 
         if (this.questionsOptions != null) {
-            answerModel.setQuestion(this.questionsService.find(answerModel.getQuestion().getId(), this.questionsOptions));
+            answerModel.setQuestion(this.questionsService.find(
+                    answerModel.getQuestion().getId(), this.questionsOptions));
         }
 
         return answerModel;
     }
 
+    @Override
     public List<AnswerModelInterface> withRelations(List<AnswerModelInterface> answerModels) {
 
         for (AnswerModelInterface answerModel: answerModels) {
@@ -42,6 +46,7 @@ public class AnswersOptions implements AnswersOptionsInterface{
 
     }
 
+    @Override
     public void saveWithRelations(AnswerModelInterface answerModel) {
 
         if (this.questionsOptions != null) {
@@ -52,6 +57,7 @@ public class AnswersOptions implements AnswersOptionsInterface{
 
     }
 
+    @Override
     public void deleteWithRelations(AnswerModelInterface answerModel) {
 
         if (this.questionsOptions != null) {
