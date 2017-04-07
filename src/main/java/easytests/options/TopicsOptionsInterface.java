@@ -17,7 +17,7 @@ public interface TopicsOptionsInterface extends OptionsInterface {
 
     void setTopicsService(TopicsServiceInterface topicsService);
 
-    TopicsOptionsInterface withSubjects(SubjectsOptionsInterface subjectOptions);
+    TopicsOptionsInterface withSubject(SubjectsOptionsInterface subjectsOptions);
 
     TopicsOptionsInterface withQuestions(QuestionsOptionsInterface questionOptions);
 
