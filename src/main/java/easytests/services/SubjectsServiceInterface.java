@@ -14,6 +14,8 @@ public interface SubjectsServiceInterface extends ServiceInterface {
 
     SubjectModelInterface find(Integer id);
 
+    SubjectModelInterface find(Integer id, SubjectsOptionsInterface subjectsOptions);
+
     List<SubjectModelInterface> findByUser(UserModelInterface userModel);
 
     List<SubjectModelInterface> findByUser(UserModelInterface userModel, SubjectsOptionsInterface subjectsOptions);

@@ -17,6 +17,10 @@ public interface UsersServiceInterface extends ServiceInterface {
 
     UserModelInterface find(Integer id, UsersOptionsInterface usersOptions);
 
+    UserModelInterface findByEmail(String email);
+
+    UserModelInterface findByEmail(String email, UsersOptionsInterface usersOptions);
+
     void save(UserModelInterface userModel);
 
     void save(UserModelInterface userModel, UsersOptionsInterface usersOptions);

@@ -2,6 +2,7 @@ package easytests.models;
 
 import easytests.entities.UserEntity;
 import easytests.models.empty.ModelsListEmpty;
+import easytests.support.Entities;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,12 +28,20 @@ public class UserModelTest {
         final String firstName = "FirstName";
         final String lastName = "LastName";
         final String surname = "Surname";
-        final UserEntity userEntity = Mockito.mock(UserEntity.class);
-
-        Mockito.when(userEntity.getId()).thenReturn(userId);
-        Mockito.when(userEntity.getFirstName()).thenReturn(firstName);
-        Mockito.when(userEntity.getLastName()).thenReturn(lastName);
-        Mockito.when(userEntity.getSurname()).thenReturn(surname);
+        final String email = "email";
+        final String password = "password";
+        final Boolean isAdmin = false;
+        final Integer state = 2;
+        final UserEntity userEntity = Entities.createUserEntityMock(
+                userId,
+                firstName,
+                lastName,
+                surname,
+                email,
+                password,
+                isAdmin,
+                state
+        );
 
         final UserModel userModel = new UserModel();
         userModel.map(userEntity);
@@ -41,6 +50,10 @@ public class UserModelTest {
         Assert.assertEquals(firstName, userModel.getFirstName());
         Assert.assertEquals(lastName, userModel.getLastName());
         Assert.assertEquals(surname, userModel.getSurname());
+        Assert.assertEquals(email, userModel.getEmail());
+        Assert.assertEquals(password, userModel.getPassword());
+        Assert.assertEquals(isAdmin, userModel.getIsAdmin());
+        Assert.assertEquals(state, userModel.getState());
         Assert.assertEquals(new ModelsListEmpty(), userModel.getSubjects());
     }
 }

@@ -29,4 +29,3 @@ public interface QuestionsServiceInterface extends ServiceInterface {
     void delete(QuestionModelInterface questionModel);
 
     void delete(QuestionModelInterface questionModel, QuestionsOptionsInterface questionsOptions);
-}
