@@ -177,8 +177,8 @@ INSERT INTO topics (name, subject_id) VALUES
 
 INSERT INTO questions (text, type, topic_id) VALUES
   ('test1', 1, 1),
-  ('test2', 2, 1),
-  ('test3', 3, 1);
+  ('test2', 2, 3),
+  ('test3', 3, 2);
 
 INSERT INTO answers(txt, question_id, is_right) VALUES
   ('Answer1', 1, TRUE),
