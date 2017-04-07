@@ -20,8 +20,8 @@ public class UsersOptions implements UsersOptionsInterface {
     private SubjectsOptionsInterface subjectsOptions;
 
     @Override
-    public UsersOptionsInterface withSubjects(SubjectsOptionsInterface subjectOptions) {
-        this.subjectsOptions = subjectOptions;
+    public UsersOptionsInterface withSubjects(SubjectsOptionsInterface subjectsOptions) {
+        this.subjectsOptions = subjectsOptions;
         return this;
     }
 
