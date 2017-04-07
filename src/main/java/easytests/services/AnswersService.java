@@ -4,8 +4,8 @@ import easytests.entities.AnswerEntity;
 import easytests.mappers.AnswersMapper;
 import easytests.models.AnswerModel;
 import easytests.models.AnswerModelInterface;
-import easytests.options.AnswersOptionsInterface;
 import easytests.models.QuestionModelInterface;
+import easytests.options.AnswersOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +107,34 @@ public class AnswersService implements AnswersServiceInterface {
             resultAnswerList.add(this.map(answer));
         }
         return resultAnswerList;
+    }
+    
+    @Override
+    public void save(List<AnswerModelInterface> answersModels) {
+        for (AnswerModelInterface answerModel: answersModels) {
+            this.save(answerModel);
+        }
+    }
+
+    @Override
+    public void save(List<AnswerModelInterface> answersModels, AnswersOptionsInterface answersOptions) {
+        for (AnswerModelInterface answerModel: answersModels) {
+            this.save(answerModel, answersOptions);
+        }
+    }
+
+    @Override
+    public void delete(List<AnswerModelInterface> answersModels) {
+        for (AnswerModelInterface answerModel: answersModels) {
+            this.save(answerModel);
+        }
+    }
+
+    @Override
+    public void delete(List<AnswerModelInterface> answersModels, AnswersOptionsInterface answersOptions) {
+        for (AnswerModelInterface answerModel: answersModels) {
+            this.save(answerModel, answersOptions);
+        }
     }
 
 }
