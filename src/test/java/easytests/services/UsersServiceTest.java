@@ -4,9 +4,10 @@ import easytests.entities.UserEntity;
 import easytests.mappers.UsersMapper;
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
-import easytests.models.empty.ModelsListEmpty;
 import easytests.options.UsersOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
+import easytests.support.Models;
+import easytests.support.Entities;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.*;
@@ -19,14 +20,12 @@ import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.mock.mockito.*;
 import org.springframework.test.context.junit4.*;
 
-
 /**
  * @author malinink
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UsersServiceTest {
-
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
@@ -35,25 +34,6 @@ public class UsersServiceTest {
 
     @Autowired
     private UsersService usersService;
-
-    private UserModelInterface createUserModel(Integer id, String firstName, String lastName, String surname) {
-        final UserModelInterface userModel = new UserModel();
-        userModel.setId(id);
-        userModel.setFirstName(firstName);
-        userModel.setLastName(lastName);
-        userModel.setSurname(surname);
-        userModel.setSubjects(new ModelsListEmpty());
-        return userModel;
-    }
-
-    private UserEntity createUserEntityMock(Integer id, String firstName, String lastName, String surname) {
-        final UserEntity userEntity = Mockito.mock(UserEntity.class);
-        Mockito.when(userEntity.getId()).thenReturn(id);
-        Mockito.when(userEntity.getFirstName()).thenReturn(firstName);
-        Mockito.when(userEntity.getLastName()).thenReturn(lastName);
-        Mockito.when(userEntity.getSurname()).thenReturn(surname);
-        return userEntity;
-    }
 
     private UserModelInterface mapUserModel(UserEntity userEntity) {
         final UserModelInterface userModel = new UserModel();
@@ -69,8 +49,26 @@ public class UsersServiceTest {
 
     private List<UserEntity> getUsersEntities() {
         final List<UserEntity> usersEntities = new ArrayList<>(2);
-        final UserEntity userEntityFirst = this.createUserEntityMock(1, "FirstName1", "LastName1", "Surname1");
-        final UserEntity userEntitySecond = this.createUserEntityMock(2, "FirstName2", "LastName2", "Surname2");
+        final UserEntity userEntityFirst = Entities.createUserEntityMock(
+                1,
+                "FirstName1",
+                "LastName1",
+                "Surname1",
+                "email1@gmail.com",
+                "hash1",
+                true,
+                1
+        );
+        final UserEntity userEntitySecond = Entities.createUserEntityMock(
+                2,
+                "FirstName2",
+                "LastName2",
+                "Surname2",
+                "email2@gmail.com",
+                "hash2",
+                false,
+                2
+        );
         usersEntities.add(userEntityFirst);
         usersEntities.add(userEntitySecond);
         return usersEntities;
@@ -120,7 +118,16 @@ public class UsersServiceTest {
     @Test
     public void testFindPresentModel() throws Exception {
         final Integer id = 1;
-        final UserEntity userEntity = this.createUserEntityMock(id, "NewFirstName", "NewLastName", "NewSurname");
+        final UserEntity userEntity = Entities.createUserEntityMock(
+                id,
+                "NewFirstName",
+                "NewLastName1",
+                "NewSurname1",
+                "new.email@gmail.com",
+                "newhash1",
+                false,
+                3
+        );
         given(this.usersMapper.find(id)).willReturn(userEntity);
 
         final UserModelInterface userModel = this.usersService.find(id);
@@ -141,7 +148,16 @@ public class UsersServiceTest {
     @Test
     public void testFindWithOptions() throws Exception {
         final Integer id = 1;
-        final UserEntity userEntity = this.createUserEntityMock(id, "NewFirstName", "NewLastName", "NewSurname");
+        final UserEntity userEntity = Entities.createUserEntityMock(
+                id,
+                "NewFirstName",
+                "NewLastName1",
+                "NewSurname1",
+                "new.email@gmail.com",
+                "newhash1",
+                false,
+                3
+        );
         final UserModelInterface userModel = this.mapUserModel(userEntity);
         final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
         given(this.usersMapper.find(id)).willReturn(userEntity);
@@ -154,8 +170,71 @@ public class UsersServiceTest {
     }
 
     @Test
+    public void testFindByEmailPresentModel() throws Exception {
+        final String email = "new.email@gmail.com";
+        final UserEntity userEntity = Entities.createUserEntityMock(
+                1,
+                "NewFirstName",
+                "NewLastName1",
+                "NewSurname1",
+                email,
+                "newhash1",
+                false,
+                3
+        );
+        given(this.usersMapper.findByEmail(email)).willReturn(userEntity);
+
+        final UserModelInterface userModel = this.usersService.findByEmail(email);
+
+        Assert.assertEquals(this.mapUserModel(userEntity), userModel);
+    }
+
+    @Test
+    public void testFindByEmailAbsentModel() throws Exception {
+        final String email = "absent.email@gmail.com";
+        given(this.usersMapper.findByEmail(email)).willReturn(null);
+
+        final UserModelInterface userModel = this.usersService.findByEmail(email);
+
+        Assert.assertEquals(null, userModel);
+    }
+
+    @Test
+    public void testFindByEmailWithOptions() throws Exception {
+        final String email = "new.email@gmail.com";
+        final UserEntity userEntity = Entities.createUserEntityMock(
+                1,
+                "NewFirstName",
+                "NewLastName1",
+                "NewSurname1",
+                email,
+                "newhash1",
+                false,
+                3
+        );
+        final UserModelInterface userModel = this.mapUserModel(userEntity);
+        final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
+        given(this.usersMapper.findByEmail(email)).willReturn(userEntity);
+        given(usersOptions.withRelations(userModel)).willReturn(userModel);
+
+        final UserModelInterface foundedUserModel = this.usersService.findByEmail(email, usersOptions);
+
+        Assert.assertEquals(userModel, foundedUserModel);
+        verify(usersOptions).withRelations(userModel);
+    }
+
+    @Test
     public void testSaveCreatesEntity() throws Exception {
-        final UserModelInterface userModel = this.createUserModel(null, "FirstName", "LastName", "Surname");
+        final UserModelInterface userModel = Models.createUserModel(
+                null,
+                "FirstName",
+                "LastName",
+                "Surname",
+                "email@gmail.com",
+                "hash",
+                true,
+                1
+        );
         doAnswer(invocation -> {
             final UserEntity userEntity = (UserEntity) invocation.getArguments()[0];
             userEntity.setId(5);
@@ -170,7 +249,16 @@ public class UsersServiceTest {
 
     @Test
     public void testSaveUpdatesEntity() throws Exception {
-        final UserModelInterface userModel = this.createUserModel(1, "FirstName", "LastName", "Surname");
+        final UserModelInterface userModel = Models.createUserModel(
+                1,
+                "FirstName",
+                "LastName",
+                "Surname",
+                "email@gmail.com",
+                "hash",
+                true,
+                1
+        );
 
         this.usersService.save(userModel);
 
@@ -179,7 +267,16 @@ public class UsersServiceTest {
 
     @Test
     public void testSaveWithOptions() throws Exception {
-        final UserModelInterface userModel = this.createUserModel(null, "FirstName", "LastName", "Surname");
+        final UserModelInterface userModel = Models.createUserModel(
+                null,
+                "FirstName",
+                "LastName",
+                "Surname",
+                "email@gmail.com",
+                "hash",
+                true,
+                1
+        );
         final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
 
         this.usersService.save(userModel, usersOptions);
@@ -189,7 +286,16 @@ public class UsersServiceTest {
 
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
-        final UserModelInterface userModel = this.createUserModel(1, "FirstName", "LastName", "Surname");
+        final UserModelInterface userModel = Models.createUserModel(
+                1,
+                "FirstName",
+                "LastName",
+                "Surname",
+                "email@gmail.com",
+                "hash",
+                true,
+                1
+        );
 
         this.usersService.delete(userModel);
 
@@ -198,7 +304,16 @@ public class UsersServiceTest {
 
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
-        final UserModelInterface userModel = this.createUserModel(null, "FirstName", "LastName", "Surname");
+        final UserModelInterface userModel = Models.createUserModel(
+                null,
+                "FirstName",
+                "LastName",
+                "Surname",
+                "email@gmail.com",
+                "hash",
+                true,
+                1
+        );
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.usersService.delete(userModel);
@@ -206,7 +321,16 @@ public class UsersServiceTest {
 
     @Test
     public void testDeleteWithOptions() throws Exception {
-        final UserModelInterface userModel = this.createUserModel(1, "FirstName", "LastName", "Surname");
+        final UserModelInterface userModel = Models.createUserModel(
+                1,
+                "FirstName",
+                "LastName",
+                "Surname",
+                "email@gmail.com",
+                "hash",
+                true,
+                1
+        );
         final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
 
         this.usersService.delete(userModel, usersOptions);
@@ -217,6 +341,6 @@ public class UsersServiceTest {
     @Test
     public void testSetAllOptionsDependencies() throws Exception {
         // TODO @malinink test private withServices on Options
+        // need we really test realization here ?
     }
-
 }

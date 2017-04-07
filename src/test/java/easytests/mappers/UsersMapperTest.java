@@ -7,6 +7,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +40,28 @@ public class UsersMapperTest {
 
     @Test
     public void testFind() throws Exception {
-        final UserEntity user = this.usersMapper.find(1);
-        Assert.assertEquals((Integer) 1, user.getId());
-        Assert.assertEquals("FirstName1", user.getFirstName());
-        Assert.assertEquals("LastName1", user.getLastName());
-        Assert.assertEquals("Surname1", user.getSurname());
+        final UserEntity userEntity = this.usersMapper.find(1);
+        Assert.assertEquals((Integer) 1, userEntity.getId());
+        Assert.assertEquals("FirstName1", userEntity.getFirstName());
+        Assert.assertEquals("LastName1", userEntity.getLastName());
+        Assert.assertEquals("Surname1", userEntity.getSurname());
+        Assert.assertEquals("email1@gmail.com", userEntity.getEmail());
+        Assert.assertEquals("hash1", userEntity.getPassword());
+        Assert.assertEquals(true, userEntity.getIsAdmin());
+        Assert.assertEquals((Integer) 1, userEntity.getState());
+    }
+
+    @Test
+    public void testFindByEmail() throws Exception {
+        final UserEntity userEntity = this.usersMapper.findByEmail("email1@gmail.com");
+        Assert.assertEquals((Integer) 1, userEntity.getId());
+        Assert.assertEquals("FirstName1", userEntity.getFirstName());
+        Assert.assertEquals("LastName1", userEntity.getLastName());
+        Assert.assertEquals("Surname1", userEntity.getSurname());
+        Assert.assertEquals("email1@gmail.com", userEntity.getEmail());
+        Assert.assertEquals("hash1", userEntity.getPassword());
+        Assert.assertEquals(true, userEntity.getIsAdmin());
+        Assert.assertEquals((Integer) 1, userEntity.getState());
     }
 
     @Test
@@ -51,11 +70,19 @@ public class UsersMapperTest {
         final String firstName = "FirstName";
         final String lastName = "LastName";
         final String surname = "Surname";
+        final String email = "email@gmail.com";
+        final String password = "hash";
+        final Boolean isAdmin = true;
+        final Integer state = 1;
 
         UserEntity userEntity = Mockito.mock(UserEntity.class);
         Mockito.when(userEntity.getFirstName()).thenReturn(firstName);
         Mockito.when(userEntity.getLastName()).thenReturn(lastName);
         Mockito.when(userEntity.getSurname()).thenReturn(surname);
+        Mockito.when(userEntity.getEmail()).thenReturn(email);
+        Mockito.when(userEntity.getPassword()).thenReturn(password);
+        Mockito.when(userEntity.getIsAdmin()).thenReturn(isAdmin);
+        Mockito.when(userEntity.getState()).thenReturn(state);
 
         this.usersMapper.insert(userEntity);
 
@@ -66,6 +93,10 @@ public class UsersMapperTest {
         Assert.assertEquals(firstName, userEntity.getFirstName());
         Assert.assertEquals(lastName, userEntity.getLastName());
         Assert.assertEquals(surname, userEntity.getSurname());
+        Assert.assertEquals(email, userEntity.getEmail());
+        Assert.assertEquals(password, userEntity.getPassword());
+        Assert.assertEquals(isAdmin, userEntity.getIsAdmin());
+        Assert.assertEquals(state, userEntity.getState());
     }
 
     @Test
@@ -74,6 +105,11 @@ public class UsersMapperTest {
         final String firstName = "NewFirstName";
         final String lastName = "NewLastName";
         final String surname = "NewSurname";
+        final String email = "new.email@gmail.com";
+        final String password = "new.hash";
+        final Boolean isAdmin = false;
+        final Integer state = 2;
+
 
         UserEntity userEntity = this.usersMapper.find(id);
         Assert.assertNotNull(userEntity);
@@ -81,12 +117,20 @@ public class UsersMapperTest {
         Assert.assertNotEquals(firstName, userEntity.getFirstName());
         Assert.assertNotEquals(lastName, userEntity.getLastName());
         Assert.assertNotEquals(surname, userEntity.getSurname());
+        Assert.assertNotEquals(email, userEntity.getEmail());
+        Assert.assertNotEquals(password, userEntity.getPassword());
+        Assert.assertNotEquals(isAdmin, userEntity.getIsAdmin());
+        Assert.assertNotEquals(state, userEntity.getState());
 
         userEntity = Mockito.mock(UserEntity.class);
         Mockito.when(userEntity.getId()).thenReturn(id);
         Mockito.when(userEntity.getFirstName()).thenReturn(firstName);
         Mockito.when(userEntity.getLastName()).thenReturn(lastName);
         Mockito.when(userEntity.getSurname()).thenReturn(surname);
+        Mockito.when(userEntity.getEmail()).thenReturn(email);
+        Mockito.when(userEntity.getPassword()).thenReturn(password);
+        Mockito.when(userEntity.getIsAdmin()).thenReturn(isAdmin);
+        Mockito.when(userEntity.getState()).thenReturn(state);
 
         this.usersMapper.update(userEntity);
 
@@ -95,6 +139,10 @@ public class UsersMapperTest {
         Assert.assertEquals(firstName, userEntity.getFirstName());
         Assert.assertEquals(lastName, userEntity.getLastName());
         Assert.assertEquals(surname, userEntity.getSurname());
+        Assert.assertEquals(email, userEntity.getEmail());
+        Assert.assertEquals(password, userEntity.getPassword());
+        Assert.assertEquals(isAdmin, userEntity.getIsAdmin());
+        Assert.assertEquals(state, userEntity.getState());
     }
 
     @Test

@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS solutions;
 DROP TABLE IF EXISTS testees;
 DROP TABLE IF EXISTS points;
 DROP TABLE IF EXISTS issues;
+DROP TABLE IF EXISTS topics;
 
 
 ----------------------
@@ -29,6 +30,10 @@ CREATE TABLE users (
   first_name VARCHAR(30) NOT NULL,
   last_name  VARCHAR(30) NOT NULL,
   surname    VARCHAR(30) NOT NULL,
+  email      VARCHAR(30) NOT NULL UNIQUE,
+  password   VARCHAR(60) NOT NULL,
+  is_admin   BOOLEAN     NOT NULL DEFAULT FALSE,
+  state      SMALLINT    NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 );
 
@@ -69,6 +74,13 @@ CREATE TABLE subjects (
   name      VARCHAR(255)  NOT NULL,
   user_id   INTEGER       NOT NULL,
   issue_standard_id     INTEGER,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE topics (
+  id         SERIAL      NOT NULL,
+  name       VARCHAR(30) NOT NULL,
+  subject_id INTEGER     NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -132,10 +144,10 @@ CREATE TABLE issues (
 ----------------------
 -- INSERT DATA
 ----------------------
-INSERT INTO users (first_name, last_name, surname) VALUES
-  ('FirstName1', 'LastName1', 'Surname1'),
-  ('FirstName2', 'LastName2', 'Surname2'),
-  ('FirstName3', 'LastName3', 'Surname3');
+INSERT INTO users (first_name, last_name, surname, email, password, is_admin, state) VALUES
+  ('FirstName1', 'LastName1', 'Surname1', 'email1@gmail.com', 'hash1', TRUE, 1),
+  ('FirstName2', 'LastName2', 'Surname2', 'email2@gmail.com', 'hash2', FALSE, 2),
+  ('FirstName3', 'LastName3', 'Surname3', 'email3@gmail.com', 'hash3', FALSE, 1);
 
 INSERT INTO issue_standard (time_limit, questions_number, subject_id) VALUES
   (300, 30, 1),
@@ -158,10 +170,15 @@ INSERT INTO subjects (name, user_id, issue_standard_id) VALUES
   ('test2', 2, 1),
   ('test3', 3, 1);
 
+INSERT INTO topics (name, subject_id) VALUES
+  ('Name1', 2),
+  ('Name2', 2),
+  ('Name3', 3);
+
 INSERT INTO questions (text, type, topic_id) VALUES
   ('test1', 1, 1),
-  ('test2', 2, 1),
-  ('test3', 3, 1);
+  ('test2', 2, 3),
+  ('test3', 3, 2);
 
 INSERT INTO answers(txt, question_id, is_right) VALUES
   ('Answer1', 1, TRUE),

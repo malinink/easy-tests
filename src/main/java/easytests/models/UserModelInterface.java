@@ -21,6 +21,22 @@ public interface UserModelInterface extends ModelInterface {
 
     void setSurname(String surname);
 
+    String getEmail();
+
+    void setEmail(String email);
+
+    String getPassword();
+
+    void setPassword(String password);
+
+    Boolean getIsAdmin();
+
+    void setIsAdmin(Boolean isAdmin);
+
+    Integer getState();
+
+    void setState(Integer state);
+
     List<SubjectModelInterface> getSubjects();
 
     void setSubjects(List<SubjectModelInterface> subjects);

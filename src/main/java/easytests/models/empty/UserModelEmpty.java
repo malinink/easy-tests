@@ -55,6 +55,46 @@ public class UserModelEmpty extends AbstractModelEmpty implements UserModelInter
     }
 
     @Override
+    public String getEmail() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setEmail(String email) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public String getPassword() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setPassword(String password) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public Boolean getIsAdmin() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setIsAdmin(Boolean isAdmin) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public Integer getState() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setState(Integer state) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
     public List<SubjectModelInterface> getSubjects() {
         throw new CallMethodOnEmptyModelException();
     }

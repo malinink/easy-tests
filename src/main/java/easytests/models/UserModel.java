@@ -18,6 +18,14 @@ public class UserModel implements UserModelInterface {
 
     private String surname;
 
+    private String email;
+
+    private String password;
+
+    private Boolean isAdmin;
+
+    private Integer state;
+
     private List<SubjectModelInterface> subjects;
 
     public void map(UserEntity userEntity) {
@@ -25,6 +33,10 @@ public class UserModel implements UserModelInterface {
         this.setFirstName(userEntity.getFirstName());
         this.setLastName(userEntity.getLastName());
         this.setSurname(userEntity.getSurname());
+        this.setEmail(userEntity.getEmail());
+        this.setPassword(userEntity.getPassword());
+        this.setIsAdmin(userEntity.getIsAdmin());
+        this.setState(userEntity.getState());
         this.setSubjects(new ModelsListEmpty());
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author malinink
  */
-public interface UsersOptionsInterface {
+public interface UsersOptionsInterface extends OptionsInterface {
     void setSubjectsService(SubjectsServiceInterface subjectsService);
 
     void setUsersService(UsersServiceInterface usersService);
