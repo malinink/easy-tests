@@ -75,6 +75,9 @@ public class IssuesService implements IssuesServiceInterface {
     }
 
     private IssueModelInterface map(IssueEntity issueEntity) {
+        if (issueEntity == null) {
+            return null;
+        }
         final IssueModelInterface issueModel = new IssueModel();
         issueModel.map(issueEntity);
         return issueModel;
