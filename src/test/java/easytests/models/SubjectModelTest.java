@@ -31,11 +31,13 @@ public class SubjectModelTest {
 
         final Integer subjectId = 5;
         final String subjectName = "Test subject";
+        final String subjectDescription = "Test subject description";
         final Integer subjectUserId = 3;
 
         final SubjectEntity subjectEntity = Mockito.mock(SubjectEntity.class);
         Mockito.when(subjectEntity.getId()).thenReturn(subjectId);
         Mockito.when(subjectEntity.getName()).thenReturn(subjectName);
+        Mockito.when(subjectEntity.getDescription()).thenReturn(subjectDescription);
         Mockito.when(subjectEntity.getUserId()).thenReturn(subjectUserId);
 
         final SubjectModelInterface subjectModel = new SubjectModel();
@@ -43,6 +45,7 @@ public class SubjectModelTest {
 
         Assert.assertEquals(subjectId, subjectModel.getId());
         Assert.assertEquals(subjectName, subjectModel.getName());
+        Assert.assertEquals(subjectDescription, subjectModel.getDescription());
         Assert.assertEquals(new ModelsListEmpty(), subjectModel.getTopics());
         Assert.assertEquals(new UserModelEmpty(subjectUserId), subjectModel.getUser());
         Assert.assertEquals(new IssueStandardModelEmpty(), subjectModel.getIssueStandard());
