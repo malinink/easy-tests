@@ -191,7 +191,7 @@ public class IssueStandardsServiceTest {
 
         this.issueStandardsService.findBySubject(subjectModel, issueStandardsOptions);
 
-        verify(issueStandardsOptions).withRelations(Mockito.any());
+        verify(issueStandardsOptions).withRelations(Mockito.any(IssueStandardModelInterface.class));
     }
 
     @Test
