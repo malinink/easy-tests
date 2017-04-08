@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author malinink
  */
-public interface SubjectsOptionsInterface {
+public interface SubjectsOptionsInterface extends OptionsInterface {
 
     void setSubjectsService(SubjectsServiceInterface subjectsService);
 
