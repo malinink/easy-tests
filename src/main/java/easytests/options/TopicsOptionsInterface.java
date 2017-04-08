@@ -27,9 +27,5 @@ public interface TopicsOptionsInterface extends OptionsInterface {
 
     void saveWithRelations(TopicModelInterface topicModel);
 
-    void saveWithRelations(List<TopicModelInterface> topicsModels);
-
     void deleteWithRelations(TopicModelInterface topicModel);
-
-    void deleteWithRelations(List<TopicModelInterface> topicsModels);
 }
