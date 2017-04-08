@@ -2,6 +2,8 @@ package easytests.support;
 
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
+import easytests.models.TesteeModel;
+import easytests.models.TesteeModelInterface;
 import easytests.models.empty.ModelsListEmpty;
 
 
@@ -30,5 +32,21 @@ public abstract class Models {
         userModel.setState(state);
         userModel.setSubjects(new ModelsListEmpty());
         return userModel;
+    }
+    public static TesteeModelInterface createTesteeModel(
+            Integer id,
+            String firstName,
+            String lastName,
+            String surname,
+            Integer groupNumber
+    ) {
+        final TesteeModelInterface testeeModel = new TesteeModel();
+        testeeModel.setId(id);
+        testeeModel.setFirstName(firstName);
+        testeeModel.setLastName(lastName);
+        testeeModel.setSurname(surname);
+        testeeModel.setGroupNumber(groupNumber);
+
+        return testeeModel;
     }
 }
