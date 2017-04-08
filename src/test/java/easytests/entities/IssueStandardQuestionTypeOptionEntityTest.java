@@ -1,12 +1,10 @@
 package easytests.entities;
 
-import easytests.models.IssueStandardModelInterface;
 import easytests.models.IssueStandardQuestionTypeOptionModelInterface;
+import easytests.models.empty.IssueStandardModelEmpty;
 import org.junit.Assert;
 import org.junit.Test;
 import org.meanbean.test.BeanTester;
-import org.meanbean.test.EqualsMethodTester;
-import org.meanbean.test.HashCodeMethodTester;
 import org.mockito.Mockito;
 
 /**
@@ -16,8 +14,6 @@ public class IssueStandardQuestionTypeOptionEntityTest {
     @Test
     public void testCommon() throws Exception {
         new BeanTester().testBean(IssueStandardQuestionTypeOptionEntity.class);
-        new EqualsMethodTester().testEqualsMethod(IssueStandardQuestionTypeOptionEntity.class);
-        new HashCodeMethodTester().testHashCodeMethod(IssueStandardQuestionTypeOptionEntity.class);
     }
 
     @Test
@@ -29,9 +25,6 @@ public class IssueStandardQuestionTypeOptionEntityTest {
         final Integer timeLimit = 600;
         final Integer issueStandardId = 12;
 
-        final IssueStandardModelInterface issueStandard = Mockito.mock(IssueStandardModelInterface.class);
-        Mockito.when(issueStandard.getId()).thenReturn(issueStandardId);
-
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
                 = Mockito.mock(IssueStandardQuestionTypeOptionModelInterface.class);
 
@@ -40,7 +33,8 @@ public class IssueStandardQuestionTypeOptionEntityTest {
         Mockito.when(questionTypeOptionModel.getMinQuestions()).thenReturn(minQuestions);
         Mockito.when(questionTypeOptionModel.getMaxQuestions()).thenReturn(maxQuestions);
         Mockito.when(questionTypeOptionModel.getTimeLimit()).thenReturn(timeLimit);
-        Mockito.when(questionTypeOptionModel.getIssueStandard()).thenReturn(issueStandard);
+        Mockito.when(questionTypeOptionModel.getIssueStandard())
+                .thenReturn(new IssueStandardModelEmpty(issueStandardId));
 
         final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
                 = new IssueStandardQuestionTypeOptionEntity();

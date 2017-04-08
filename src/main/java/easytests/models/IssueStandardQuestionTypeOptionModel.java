@@ -1,6 +1,7 @@
 package easytests.models;
 
 import easytests.entities.IssueStandardQuestionTypeOptionEntity;
+import easytests.models.empty.IssueStandardModelEmpty;
 import lombok.Data;
 
 /**
@@ -27,5 +28,6 @@ public class IssueStandardQuestionTypeOptionModel implements IssueStandardQuesti
         this.setMinQuestions(questionTypeOptionEntity.getMinQuestions());
         this.setMaxQuestions(questionTypeOptionEntity.getMaxQuestions());
         this.setTimeLimit(questionTypeOptionEntity.getTimeLimit());
+        this.setIssueStandard(new IssueStandardModelEmpty(questionTypeOptionEntity.getIssueStandardId()));
     }
 }

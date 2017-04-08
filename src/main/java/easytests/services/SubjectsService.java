@@ -79,7 +79,6 @@ public class SubjectsService implements SubjectsServiceInterface {
 
     @Override
     public void save(SubjectModelInterface subjectModel, SubjectsOptionsInterface subjectsOptions) {
-
         this.withServices(subjectsOptions).saveWithRelations(subjectModel);
     }
 
@@ -108,9 +107,7 @@ public class SubjectsService implements SubjectsServiceInterface {
 
     @Override
     public void delete(SubjectModelInterface subjectModel, SubjectsOptionsInterface subjectsOptions) {
-
         this.withServices(subjectsOptions).deleteWithRelations(subjectModel);
-
     }
 
     @Override
