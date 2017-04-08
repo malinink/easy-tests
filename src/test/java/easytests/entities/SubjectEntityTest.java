@@ -1,9 +1,9 @@
 package easytests.entities;
 
-import easytests.entities.SubjectEntity;
-import easytests.models.IssueStandardModelInterface;
 import easytests.models.SubjectModelInterface;
-import easytests.models.UserModelInterface;
+import easytests.models.empty.IssueStandardModelEmpty;
+import easytests.models.empty.ModelsListEmpty;
+import easytests.models.empty.UserModelEmpty;
 import org.junit.Assert;
 import org.junit.Test;
 import org.meanbean.test.BeanTester;
@@ -37,20 +37,14 @@ public class SubjectEntityTest {
         final Integer subjectId = 5;
         final String subjectName = "Test subject";
         final Integer subjectUserId = 1;
-        final Integer issueStandardId = 2;
 
         final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
 
-        final UserModelInterface user = Mockito.mock(UserModelInterface.class);
-        Mockito.when(user.getId()).thenReturn(subjectUserId);
-
-        final IssueStandardModelInterface issueStandard = Mockito.mock(IssueStandardModelInterface.class);
-        Mockito.when(issueStandard.getId()).thenReturn(issueStandardId);
-
         Mockito.when(subjectModel.getId()).thenReturn(subjectId);
         Mockito.when(subjectModel.getName()).thenReturn(subjectName);
-        Mockito.when(subjectModel.getUser()).thenReturn(user);
-        Mockito.when(subjectModel.getIssueStandard()).thenReturn(issueStandard);
+        Mockito.when(subjectModel.getTopics()).thenReturn(new ModelsListEmpty());
+        Mockito.when(subjectModel.getUser()).thenReturn(new UserModelEmpty(subjectUserId));
+        Mockito.when(subjectModel.getIssueStandard()).thenReturn(new IssueStandardModelEmpty());
 
         final SubjectEntity subjectEntity = new SubjectEntity();
         subjectEntity.map(subjectModel);
@@ -58,8 +52,6 @@ public class SubjectEntityTest {
         Assert.assertEquals(subjectId, subjectEntity.getId());
         Assert.assertEquals(subjectName, subjectEntity.getName());
         Assert.assertEquals(subjectUserId, subjectEntity.getUserId());
-        Assert.assertEquals(issueStandardId, subjectEntity.getIssueStandardId());
-
 
     }
 

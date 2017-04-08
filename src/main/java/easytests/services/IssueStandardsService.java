@@ -5,6 +5,7 @@ import easytests.mappers.IssueStandardsMapper;
 import easytests.models.IssueStandardModel;
 import easytests.models.IssueStandardModelInterface;
 import easytests.models.SubjectModelInterface;
+import easytests.options.IssueStandardsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
  * @author SingularityA
  */
 @Service
-public class IssueStandardsService {
+public class IssueStandardsService implements IssueStandardsServiceInterface {
 
     @Autowired
     private IssueStandardsMapper issueStandardsMapper;
@@ -40,6 +41,12 @@ public class IssueStandardsService {
         return this.map(issueStandardEntity);
     }
 
+    public IssueStandardModelInterface findBySubject(SubjectModelInterface subjectModel,
+                                                     IssueStandardsOptionsInterface issueStandardsOptions) {
+        return issueStandardsOptions.withRelations(
+                this.map(this.issueStandardsMapper.findBySubjectId(subjectModel.getId())));
+    }
+
     public void save(IssueStandardModelInterface issueStandardModel) {
         final IssueStandardEntity issueStandardEntity = this.map(issueStandardModel);
         if (issueStandardEntity.getId() != null) {
@@ -48,6 +55,16 @@ public class IssueStandardsService {
         }
         this.issueStandardsMapper.insert(issueStandardEntity);
         issueStandardModel.setId(issueStandardEntity.getId());
+    }
+
+    public void save(IssueStandardModelInterface issueStandardModel,
+                     IssueStandardsOptionsInterface issueStandardsOptions) {
+        //TODO: SingularityA
+    }
+
+    public void delete(IssueStandardModelInterface issueStandardModel,
+                       IssueStandardsOptionsInterface issueStandardsOptions) {
+        //TODO: SingularityA
     }
 
     public void delete(IssueStandardModelInterface issueStandardModel) {

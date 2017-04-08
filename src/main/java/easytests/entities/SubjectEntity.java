@@ -15,18 +15,13 @@ public class SubjectEntity {
 
     private Integer userId;
 
-    private Integer issueStandardId;
+    private String description;
 
     public void map(SubjectModelInterface subjectModel) {
 
         this.setId(subjectModel.getId());
-
         this.setName(subjectModel.getName());
-
+        this.setDescription(subjectModel.getDescription());
         this.setUserId(subjectModel.getUser().getId());
-
-        this.setIssueStandardId(subjectModel.getIssueStandard().getId());
-
     }
-
 }

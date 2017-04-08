@@ -3,6 +3,7 @@ package easytests.services;
 import easytests.entities.*;
 import easytests.mappers.IssueStandardsMapper;
 import easytests.models.*;
+import easytests.options.IssueStandardsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +138,22 @@ public class IssueStandardsServiceTest {
     }
 
     @Test
+    public void testFindBySubjectWithOptions() throws Exception {
+        final Integer subjectId = 3;
+        final IssueStandardEntity issueStandardEntity = this.createIssueStandardEntityMock(3, 600, 10, subjectId);
+        given(this.issueStandardsMapper.findBySubjectId(subjectId)).willReturn(issueStandardEntity);
+
+        final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
+        Mockito.when(subjectModel.getId()).thenReturn(subjectId);
+
+        final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
+
+        this.issueStandardsService.findBySubject(subjectModel, issueStandardsOptions);
+
+        verify(issueStandardsOptions).withRelations(Mockito.any());
+    }
+
+    @Test
     public void testFindBySubjectAbsentModel() throws Exception {
         final Integer subjectId = 5;
         given(this.issueStandardsMapper.findBySubjectId(subjectId)).willReturn(null);
@@ -148,7 +165,6 @@ public class IssueStandardsServiceTest {
         Assert.assertNull(issueStandardModel);
     }
 
-    @Test
     public void testSaveUpdatesEntity() throws Exception {
         final IssueStandardModelInterface issueStandardModel = this.createIssueStandardModel(1, 600, 10, 1);
 

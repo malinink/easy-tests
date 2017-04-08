@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
+
 import static org.mockito.BDDMockito.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
@@ -37,11 +38,13 @@ public class SubjectsServiceTest {
     @Autowired
     private SubjectsService subjectsService;
 
-    private SubjectModelInterface createSubjectModel(Integer id, String name, Integer userId, Integer issueStandardId) {
+    private SubjectModelInterface createSubjectModel(Integer id, String name,
+                                                     String description, Integer userId, Integer issueStandardId) {
 
         final SubjectModelInterface subjectModel = new SubjectModel();
         subjectModel.setId(id);
-        subjectModel.setName("test");
+        subjectModel.setName(name);
+        subjectModel.setDescription(description);
 
         final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
         Mockito.when(userModel.getId()).thenReturn(userId);
@@ -56,14 +59,14 @@ public class SubjectsServiceTest {
 
     }
 
-    private SubjectEntity createSubjectEntityMock(Integer id, String name, Integer userId, Integer issueStandardId) {
+    private SubjectEntity createSubjectEntityMock(Integer id, String name, String description, Integer userId) {
 
         final SubjectEntity subjectEntity = Mockito.mock(SubjectEntity.class);
 
         Mockito.when(subjectEntity.getId()).thenReturn(id);
         Mockito.when(subjectEntity.getName()).thenReturn(name);
+        Mockito.when(subjectEntity.getDescription()).thenReturn(description);
         Mockito.when(subjectEntity.getUserId()).thenReturn(userId);
-        Mockito.when(subjectEntity.getIssueStandardId()).thenReturn(issueStandardId);
 
         return subjectEntity;
 
@@ -85,23 +88,35 @@ public class SubjectsServiceTest {
 
     }
 
+    private List<SubjectEntity> getSubjectsEntities() {
+        final List<SubjectEntity> subjectsEntities = new ArrayList<>(2);
+        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(1, "test1", "description1", 1);
+        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(2,  "test2", "description2", 2);
+        subjectsEntities.add(subjectEntityFirst);
+        subjectsEntities.add(subjectEntitySecond);
+        return subjectsEntities;
+    }
+
+    private List<SubjectModelInterface> getUsersModels() {
+        final List<SubjectModelInterface> subjectsModels = new ArrayList<>(2);
+        for (SubjectEntity subjectEntity : this.getSubjectsEntities()) {
+            subjectsModels.add(this.mapSubjectModel(subjectEntity));
+        }
+        return subjectsModels;
+    }
+
     @Test
     public void testFindAllPresentList() throws Exception {
 
-        final List<SubjectEntity> subjectsEntities = new ArrayList<>(2);
-        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(1, "test1", 1, 1);
-        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(2, "test2", 2, 1);
-
-        subjectsEntities.add(subjectEntityFirst);
-        subjectsEntities.add(subjectEntitySecond);
+        final List<SubjectEntity> subjectsEntities = getSubjectsEntities();
 
         given(this.subjectsMapper.findAll()).willReturn(subjectsEntities);
 
         final List<SubjectModelInterface> subjectsModels = this.subjectsService.findAll();
 
         Assert.assertEquals(2, subjectsModels.size());
-        Assert.assertEquals(subjectsModels.get(0), this.mapSubjectModel(subjectEntityFirst));
-        Assert.assertEquals(subjectsModels.get(1), this.mapSubjectModel(subjectEntitySecond));
+        Assert.assertEquals(subjectsModels.get(0), this.mapSubjectModel(subjectsEntities.get(0)));
+        Assert.assertEquals(subjectsModels.get(1), this.mapSubjectModel(subjectsEntities.get(1)));
 
     }
 
@@ -120,7 +135,7 @@ public class SubjectsServiceTest {
     public void testFindPresentModel() throws Exception {
 
         final Integer id = 1;
-        final SubjectEntity subjectEntity = this.createSubjectEntityMock(id, "test", 1, 1);
+        final SubjectEntity subjectEntity = this.createSubjectEntityMock(id, "test", "description", 1);
         given(this.subjectsMapper.find(id)).willReturn(subjectEntity);
 
         final SubjectModelInterface subjectModel = this.subjectsService.find(id);
@@ -145,8 +160,8 @@ public class SubjectsServiceTest {
     public void testFindByUser() throws Exception {
         final Integer userId = 7;
         final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
-        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(3, "test3", userId, 1);
-        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(12, "test12", userId, 1);
+        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(3, "test3", "description3", userId);
+        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(12, "test12", "description12", userId);
         final List<SubjectEntity> subjectsEntities = new ArrayList<>();
         subjectsEntities.add(subjectEntityFirst);
         subjectsEntities.add(subjectEntitySecond);
@@ -166,8 +181,8 @@ public class SubjectsServiceTest {
     public void testFindByUserWithOptions() throws Exception {
         final Integer userId = 7;
         final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
-        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(3, "test3", userId, 1);
-        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(12, "test12", userId, 1);
+        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(3, "test3", "description3", userId);
+        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(12, "test12", "description12", userId);
         final List<SubjectEntity> subjectsEntities = new ArrayList<>();
         subjectsEntities.add(subjectEntityFirst);
         subjectsEntities.add(subjectEntitySecond);
@@ -179,7 +194,8 @@ public class SubjectsServiceTest {
         final SubjectsOptionsInterface subjectOptions = Mockito.mock(SubjectsOptionsInterface.class);
         given(subjectOptions.withRelations(subjectsModels)).willReturn(subjectsModels);
 
-        final List<SubjectModelInterface> foundedSubjectsModels = this.subjectsService.findByUser(userModel, subjectOptions);
+        final List<SubjectModelInterface> foundedSubjectsModels =
+                this.subjectsService.findByUser(userModel, subjectOptions);
 
         verify(this.subjectsMapper).findByUserId(userId);
         verify(subjectOptions).withRelations(subjectsModels);
@@ -189,7 +205,7 @@ public class SubjectsServiceTest {
     @Test
     public void testSaveCreatesEntity() throws Exception {
 
-        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", 1, 1);
+        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", "description", 1, 1);
 
         this.subjectsService.save(subjectModel);
 
@@ -200,18 +216,42 @@ public class SubjectsServiceTest {
     @Test
     public void testSaveUpdatesEntity() throws Exception {
 
-        final SubjectModelInterface userModel = this.createSubjectModel(1, "test", 1, 1);
+        final SubjectModelInterface subjectModel = this.createSubjectModel(1, "test", "description", 1, 1);
 
-        this.subjectsService.save(userModel);
+        this.subjectsService.save(subjectModel);
 
-        verify(this.subjectsMapper, times(1)).update(this.mapSubjectEntity(userModel));
+        verify(this.subjectsMapper, times(1)).update(this.mapSubjectEntity(subjectModel));
+
+    }
+
+    @Test
+    public void testSaveEntitiesList() throws Exception {
+
+        final SubjectModelInterface subjectModelFirst = this.createSubjectModel(null, "test1", "description1", 1, 1);
+        final SubjectModelInterface subjectModelSecond = this.createSubjectModel(null, "test2", "description2", 2, 2);
+
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
+        subjectsModels.add(subjectModelFirst);
+        subjectsModels.add(subjectModelSecond);
+
+        final SubjectsServiceInterface subjectsServiceSpy = Mockito.spy(subjectsService);
+
+        subjectsServiceSpy.save(subjectsModels);
+        verify(subjectsServiceSpy, times(1)).save(subjectModelFirst);
+        verify(subjectsServiceSpy, times(1)).save(subjectModelSecond);
+
+        subjectsServiceSpy.save(subjectsModels, subjectsOptions);
+        verify(subjectsServiceSpy, times(1)).save(subjectModelFirst, subjectsOptions);
+        verify(subjectsServiceSpy, times(1)).save(subjectModelSecond, subjectsOptions);
 
     }
 
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
 
-        final SubjectModelInterface subjectModel = this.createSubjectModel(1, "test", 1, 1);
+        final SubjectModelInterface subjectModel = this.createSubjectModel(1, "test", "description", 1, 1);
 
         this.subjectsService.delete(subjectModel);
 
@@ -220,12 +260,86 @@ public class SubjectsServiceTest {
     }
 
     @Test
+    public void testDeleteModelsList() throws Exception {
+
+        final SubjectModelInterface subjectModelFirst = this.createSubjectModel(2, "test2", "description2", 1, 1);
+        final SubjectModelInterface subjectModelSecond = this.createSubjectModel(3, "test3", "description3", 2, 2);
+
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
+        subjectsModels.add(subjectModelFirst);
+        subjectsModels.add(subjectModelSecond);
+
+        final SubjectsServiceInterface subjectsServiceSpy = Mockito.spy(subjectsService);
+
+        subjectsServiceSpy.delete(subjectsModels);
+        verify(subjectsServiceSpy, times(1)).delete(subjectModelFirst);
+        verify(subjectsServiceSpy, times(1)).delete(subjectModelSecond);
+
+        subjectsServiceSpy.delete(subjectsModels, subjectsOptions);
+        verify(subjectsServiceSpy, times(1)).delete(subjectModelFirst, subjectsOptions);
+        verify(subjectsServiceSpy, times(1)).delete(subjectModelSecond, subjectsOptions);
+    }
+
+    @Test
     public void testDeleteUnidentifiedModel() throws Exception {
 
-        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", 1, 1);
+        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", "description", 1, 1);
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.subjectsService.delete(subjectModel);
 
     }
+
+    @Test
+    public void testFindWithOptions() throws Exception {
+        final Integer id = 1;
+        final Integer userId = 1;
+        final SubjectEntity subjectEntity = this.createSubjectEntityMock(4, "test3", "description3", userId);
+        final SubjectModelInterface subjectModel = this.mapSubjectModel(subjectEntity);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        given(this.subjectsMapper.find(id)).willReturn(subjectEntity);
+        given(subjectsOptions.withRelations(subjectModel)).willReturn(subjectModel);
+
+        final SubjectModelInterface foundedSubjectModel = this.subjectsService.find(id, subjectsOptions);
+
+        Assert.assertEquals(subjectModel, foundedSubjectModel);
+        verify(subjectsOptions).withRelations(subjectModel);
+    }
+
+    @Test
+    public void testFindAllWithOptions() throws Exception {
+        final List<SubjectEntity> subjectsEntities = this.getSubjectsEntities();
+        final List<SubjectModelInterface> subjectsModels = this.getUsersModels();
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        given(this.subjectsMapper.findAll()).willReturn(subjectsEntities);
+        given(subjectsOptions.withRelations(Mockito.anyList())).willReturn(subjectsModels);
+
+        final List<SubjectModelInterface> foundedSubjectsModels = this.subjectsService.findAll(subjectsOptions);
+
+        verify(subjectsOptions).withRelations(foundedSubjectsModels);
+        Assert.assertEquals(subjectsModels, foundedSubjectsModels);
+    }
+
+    @Test
+    public void testSaveWithOptions() throws Exception {
+        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", "description", 1, 1);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        this.subjectsService.save(subjectModel, subjectsOptions);
+
+        verify(subjectsOptions).saveWithRelations(subjectModel);
+    }
+
+    @Test
+    public void testDeleteWithOptions() throws Exception {
+        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", "description", 1, 1);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        this.subjectsService.delete(subjectModel, subjectsOptions);
+
+        verify(subjectsOptions).deleteWithRelations(subjectModel);
+    }
+
 }
