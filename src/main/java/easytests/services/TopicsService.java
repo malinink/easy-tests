@@ -2,6 +2,7 @@ package easytests.services;
 
 import easytests.entities.TopicEntity;
 import easytests.mappers.TopicsMapper;
+import easytests.models.SubjectModelInterface;
 import easytests.models.TopicModel;
 import easytests.models.TopicModelInterface;
 import easytests.options.TopicsOptionsInterface;
@@ -44,6 +45,20 @@ public class TopicsService implements TopicsServiceInterface {
     @Override
     public TopicModelInterface find(Integer id, TopicsOptionsInterface usersOptions) {
         return this.withServices(usersOptions).withRelations(this.find(id));
+    }
+
+    @Override
+    public List<TopicModelInterface> findBySubject(
+            SubjectModelInterface subjectModel,
+            TopicsOptionsInterface topicsOptions) {
+        //TODO vkpankov
+        return null;
+    }
+
+    @Override
+    public List<TopicModelInterface> findBySubject(SubjectModelInterface subjectModel) {
+        //TODO vkpankov
+        return null;
     }
 
     @Override
