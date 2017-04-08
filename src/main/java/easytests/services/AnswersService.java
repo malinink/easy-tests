@@ -68,6 +68,20 @@ public class AnswersService implements AnswersServiceInterface {
     public void save(AnswerModelInterface answerModel, AnswersOptionsInterface answersOptions) {
         this.withServices(answersOptions).saveWithRelations(answerModel);
     }
+    
+    @Override
+    public void save(List<AnswerModelInterface> answersModels) {
+        for (AnswerModelInterface answerModel: answersModels) {
+            this.save(answerModel);
+        }
+    }
+
+    @Override
+    public void save(List<AnswerModelInterface> answersModels, AnswersOptionsInterface answersOptions) {
+        for (AnswerModelInterface answerModel: answersModels) {
+            this.save(answerModel, answersOptions);
+        }
+    }
 
     @Override
     public void delete(AnswerModelInterface answerModel) {
@@ -81,6 +95,20 @@ public class AnswersService implements AnswersServiceInterface {
     @Override
     public void delete(AnswerModelInterface answerModel, AnswersOptionsInterface answersOptions) {
         this.withServices(answersOptions).deleteWithRelations(answerModel);
+    }
+    
+    @Override
+    public void delete(List<AnswerModelInterface> answersModels) {
+        for (AnswerModelInterface answerModel: answersModels) {
+            this.save(answerModel);
+        }
+    }
+
+    @Override
+    public void delete(List<AnswerModelInterface> answersModels, AnswersOptionsInterface answersOptions) {
+        for (AnswerModelInterface answerModel: answersModels) {
+            this.save(answerModel, answersOptions);
+        }
     }
     
     private AnswersOptionsInterface withServices(AnswersOptionsInterface answersOptions) {
@@ -107,34 +135,6 @@ public class AnswersService implements AnswersServiceInterface {
             resultAnswerList.add(this.map(answer));
         }
         return resultAnswerList;
-    }
-    
-    @Override
-    public void save(List<AnswerModelInterface> answersModels) {
-        for (AnswerModelInterface answerModel: answersModels) {
-            this.save(answerModel);
-        }
-    }
-
-    @Override
-    public void save(List<AnswerModelInterface> answersModels, AnswersOptionsInterface answersOptions) {
-        for (AnswerModelInterface answerModel: answersModels) {
-            this.save(answerModel, answersOptions);
-        }
-    }
-
-    @Override
-    public void delete(List<AnswerModelInterface> answersModels) {
-        for (AnswerModelInterface answerModel: answersModels) {
-            this.save(answerModel);
-        }
-    }
-
-    @Override
-    public void delete(List<AnswerModelInterface> answersModels, AnswersOptionsInterface answersOptions) {
-        for (AnswerModelInterface answerModel: answersModels) {
-            this.save(answerModel, answersOptions);
-        }
     }
 
 }
