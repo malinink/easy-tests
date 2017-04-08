@@ -3,6 +3,7 @@ package easytests.options;
 import easytests.models.AnswerModelInterface;
 import easytests.models.TopicModelInterface;
 import easytests.models.QuestionModelInterface;
+import easytests.models.empty.TopicModelEmpty;
 import easytests.services.AnswersServiceInterface;
 import easytests.services.TopicsServiceInterface;
 import easytests.services.QuestionsServiceInterface;
