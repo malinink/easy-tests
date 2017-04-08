@@ -1,4 +1,6 @@
-layout 'layout/main.tpl', title:  'Layout example',
+layout 'layout/main.tpl',
+title:  'Layout example',
+_csrf: _csrf,
 content: contents {
   table(class: 'striped') {
     thead {
