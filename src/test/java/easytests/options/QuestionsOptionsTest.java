@@ -28,6 +28,8 @@ public class QuestionsOptionsTest {
     @Test
     public void testWithRelationsOnSingleModel() throws Exception {
         final QuestionModelInterface questionModel = Mockito.mock(QuestionModelInterface.class);
+        questionModel.setId(1);
+        given(questionModel.getTopic()).willReturn(new TopicModelEmpty(1));
         final QuestionsOptionsInterface questionsOptions = new QuestionsOptions();
         final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
         final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
@@ -75,8 +77,10 @@ public class QuestionsOptionsTest {
     public void testWithRelationsOnModelsList() throws Exception {
         final QuestionModelInterface questionModelFirst = Mockito.mock(QuestionModelInterface.class);
         questionModelFirst.setId(1);
+        given(questionModelFirst.getTopic()).willReturn(new TopicModelEmpty(1));
         final QuestionModelInterface questionModelSecond = Mockito.mock(QuestionModelInterface.class);
         questionModelSecond.setId(2);
+        given(questionModelSecond.getTopic()).willReturn(new TopicModelEmpty(2));
         final List<QuestionModelInterface> questionsModels = new ArrayList<>(2);
         questionsModels.add(questionModelFirst);
         questionsModels.add(questionModelSecond);
