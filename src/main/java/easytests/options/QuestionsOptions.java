@@ -51,6 +51,9 @@ public class QuestionsOptions implements QuestionsOptionsInterface {
 
     @Override
     public List<QuestionModelInterface> withRelations(List<QuestionModelInterface> questionsModels) {
+        if (questionModel == null) {
+            return questionModel;
+        }
         for (QuestionModelInterface questionModel: questionsModels) {
             this.withRelations(questionModel);
         }
