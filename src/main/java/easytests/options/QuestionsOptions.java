@@ -40,6 +40,9 @@ public class QuestionsOptions implements QuestionsOptionsInterface {
 
     @Override
     public QuestionModelInterface withRelations(QuestionModelInterface questionModel) {
+        if (questionModel == null) {
+            return questionModel;
+        }
         if (this.answersOptions != null) {
             questionModel.setAnswers(this.answersService.findByQuestion(questionModel, this.answersOptions));
         }
@@ -51,9 +54,6 @@ public class QuestionsOptions implements QuestionsOptionsInterface {
 
     @Override
     public List<QuestionModelInterface> withRelations(List<QuestionModelInterface> questionsModels) {
-        if (questionModel == null) {
-            return questionModel;
-        }
         for (QuestionModelInterface questionModel: questionsModels) {
             this.withRelations(questionModel);
         }
