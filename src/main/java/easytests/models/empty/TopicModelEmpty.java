@@ -1,22 +1,22 @@
 package easytests.models.empty;
 
-import easytests.entities.QuestionEntity;
-import easytests.models.AnswerModelInterface;
+import easytests.entities.TopicEntity;
 import easytests.models.QuestionModelInterface;
+import easytests.models.SubjectModelInterface;
 import easytests.models.TopicModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
 import java.util.List;
 
 
 /**
- * @author firkhraag
+ * @author malinink
  */
-public class QuestionModelEmpty extends AbstractModelEmpty implements QuestionModelInterface {
-    public QuestionModelEmpty() {
+public class TopicModelEmpty extends AbstractModelEmpty implements TopicModelInterface {
+    public TopicModelEmpty() {
         super();
     }
 
-    public QuestionModelEmpty(Integer id) {
+    public TopicModelEmpty(Integer id) {
         super(id);
     }
 
@@ -26,47 +26,37 @@ public class QuestionModelEmpty extends AbstractModelEmpty implements QuestionMo
     }
 
     @Override
-    public String getText() {
+    public String getName() {
         throw new CallMethodOnEmptyModelException();
     }
 
     @Override
-    public void setText(String text) {
+    public void setName(String name) {
         throw new CallMethodOnEmptyModelException();
     }
 
     @Override
-    public Integer getType() {
+    public SubjectModelInterface getSubject() {
         throw new CallMethodOnEmptyModelException();
     }
 
     @Override
-    public void setType(Integer type) {
+    public void setSubject(SubjectModelInterface subject) {
         throw new CallMethodOnEmptyModelException();
     }
 
     @Override
-    public TopicModelInterface getTopic() {
+    public List<QuestionModelInterface> getQuestions() {
         throw new CallMethodOnEmptyModelException();
     }
 
     @Override
-    public void setTopic(TopicModelInterface topic) {
+    public void setQuestions(List<QuestionModelInterface> questions) {
         throw new CallMethodOnEmptyModelException();
     }
 
     @Override
-    public List<AnswerModelInterface> getAnswers() {
-        throw new CallMethodOnEmptyModelException();
-    }
-
-    @Override
-    public void setAnswers(List<AnswerModelInterface> answers) {
-        throw new CallMethodOnEmptyModelException();
-    }
-
-    @Override
-    public void map(QuestionEntity questionEntity) {
+    public void map(TopicEntity topicEntity) {
         throw new CallMethodOnEmptyModelException();
     }
 }

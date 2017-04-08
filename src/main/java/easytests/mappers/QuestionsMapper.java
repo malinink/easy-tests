@@ -25,6 +25,10 @@ public interface QuestionsMapper {
     @ResultMap("Question")
     QuestionEntity find(Integer id);
 
+    @Select("SELECT * FROM questions where topic_id=#{topicId}")
+    @ResultMap("Question")
+    List<QuestionEntity> findByTopicId(Integer topicId);
+
     @Insert("INSERT INTO questions (text, type, topic_id) VALUES(#{text}, #{type}, #{topicId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(QuestionEntity question);
