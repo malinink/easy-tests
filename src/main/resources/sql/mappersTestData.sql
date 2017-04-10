@@ -13,12 +13,14 @@ DROP TABLE IF EXISTS issue_standard;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS subjects;
 DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS question_types;
 DROP TABLE IF EXISTS answers;
 DROP TABLE IF EXISTS quizzes;
 DROP TABLE IF EXISTS solutions;
 DROP TABLE IF EXISTS testees;
 DROP TABLE IF EXISTS points;
 DROP TABLE IF EXISTS issues;
+DROP TABLE IF EXISTS topics;
 
 
 ----------------------
@@ -69,10 +71,17 @@ CREATE TABLE question_type_options (
 );
 
 CREATE TABLE subjects (
-  id        SERIAL        NOT NULL,
-  name      VARCHAR(255)  NOT NULL,
-  user_id   INTEGER       NOT NULL,
-  issue_standard_id     INTEGER,
+  id        SERIAL       NOT NULL,
+  name      VARCHAR(255) NOT NULL,
+  description TEXT,
+  user_id   INTEGER      NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE topics (
+  id         SERIAL      NOT NULL,
+  name       VARCHAR(30) NOT NULL,
+  subject_id INTEGER     NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -84,13 +93,20 @@ CREATE TABLE questions (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE question_types (
+  id         INTEGER     NOT NULL,
+  name       VARCHAR(30) NOT NULL,
+  sort       INTEGER     NOT NULL,
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE answers (
   id SERIAL NOT NULL,
   txt VARCHAR(250) NOT NULL,
   question_id INTEGER NOT NULL,
   is_right BOOLEAN NOT NULL,
-    PRIMARY KEY (id)--,
-    --FOREIGN KEY (question_id) REFERENCES questions(id)
+  PRIMARY KEY (id)--,
+  --FOREIGN KEY (question_id) REFERENCES questions(id)
 );
 
 CREATE TABLE quizzes (
@@ -104,8 +120,8 @@ CREATE TABLE solutions (
   id        SERIAL  NOT NULL,
   answer_id INTEGER,
   point_id  INTEGER NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE (answer_id, point_id)
+  PRIMARY KEY (id),
+  UNIQUE (answer_id, point_id)
 );
 
 CREATE TABLE testees (
@@ -122,7 +138,7 @@ CREATE TABLE points (
   type		VARCHAR(20) 	NOT NULL,
   text		VARCHAR(300)	NOT NULL,
   quiz_id	INTEGER			  NOT NULL,
-  	PRIMARY KEY (id)  
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE issues (
@@ -157,15 +173,26 @@ INSERT INTO question_type_options (question_type_id, min_number, max_number, tim
   (1, 1, 5, 120, 2),
   (3, 5, NULL, 300, 2);
 
-INSERT INTO subjects (name, user_id, issue_standard_id) VALUES
-  ('test1', 2, 1),
-  ('test2', 2, 1),
-  ('test3', 3, 1);
+INSERT INTO subjects (name, description, user_id) VALUES
+  ('test1', 'testdescription1', 2),
+  ('test2', 'testdescription2', 2),
+  ('test3', 'testdescription3', 3);
+
+INSERT INTO topics (name, subject_id) VALUES
+  ('Name1', 2),
+  ('Name2', 2),
+  ('Name3', 3);
 
 INSERT INTO questions (text, type, topic_id) VALUES
   ('test1', 1, 1),
-  ('test2', 2, 1),
-  ('test3', 3, 1);
+  ('test2', 2, 3),
+  ('test3', 3, 2);
+
+INSERT INTO question_types VALUES
+  (1, 'Один ответ', 1),
+  (2, 'Много ответов', 2),
+  (3, 'Нумерация', 3),
+  (4, 'Текст', 4);
 
 INSERT INTO answers(txt, question_id, is_right) VALUES
   ('Answer1', 1, TRUE),

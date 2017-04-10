@@ -1,8 +1,8 @@
 package easytests.models;
 
 import easytests.entities.IssueStandardQuestionTypeOptionEntity;
+import easytests.models.empty.IssueStandardModelEmpty;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.meanbean.test.*;
@@ -16,17 +16,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class IssueStandardQuestionTypeOptionModelTest {
-    @Ignore
+
     @Test
     public void testCommon() throws Exception {
         Configuration configuration = new ConfigurationBuilder()
                 .ignoreProperty("issueStandard")
                 .build();
-        // TODO: attempt to create specific factory
-        // testBean - passes
         new BeanTester().testBean(IssueStandardQuestionTypeOptionModel.class, configuration);
-        new EqualsMethodTester().testEqualsMethod(IssueStandardQuestionTypeOptionModel.class, configuration);
-        new HashCodeMethodTester().testHashCodeMethod(IssueStandardQuestionTypeOptionModel.class);
     }
 
     @Test
@@ -56,6 +52,6 @@ public class IssueStandardQuestionTypeOptionModelTest {
         Assert.assertEquals(minQuestions, questionTypeOptionModel.getMinQuestions());
         Assert.assertEquals(maxQuestions, questionTypeOptionModel.getMaxQuestions());
         Assert.assertEquals(timeLimit, questionTypeOptionModel.getTimeLimit());
-        Assert.assertNull(questionTypeOptionModel.getIssueStandard());
+        Assert.assertEquals(new IssueStandardModelEmpty(issueStandardId), questionTypeOptionModel.getIssueStandard());
     }
 }

@@ -22,9 +22,20 @@ public class SubjectsService implements SubjectsServiceInterface {
     @Autowired
     private SubjectsMapper subjectsMapper;
 
+    @Autowired
+    private UsersService usersService;
+
+    @Autowired
+    private IssueStandardsService issueStandardsService;
+
     @Override
     public List<SubjectModelInterface> findAll() {
         return this.map(this.subjectsMapper.findAll());
+    }
+
+    @Override
+    public List<SubjectModelInterface> findAll(SubjectsOptionsInterface subjectsOptions) {
+        return this.withServices(subjectsOptions).withRelations(this.findAll());
     }
 
     @Override
@@ -34,6 +45,12 @@ public class SubjectsService implements SubjectsServiceInterface {
             return null;
         }
         return this.map(subjectEntity);
+    }
+
+    @Override
+    public SubjectModelInterface find(Integer id, SubjectsOptionsInterface subjectsOptions) {
+        return this.withServices(subjectsOptions).withRelations(this.find(id));
+
     }
 
     @Override
@@ -54,6 +71,7 @@ public class SubjectsService implements SubjectsServiceInterface {
         final SubjectEntity subjectEntity = this.map(subjectModel);
         if (subjectEntity.getId() == null) {
             this.subjectsMapper.insert(subjectEntity);
+            subjectModel.setId(subjectEntity.getId());
             return;
         }
         this.subjectsMapper.update(subjectEntity);
@@ -61,7 +79,7 @@ public class SubjectsService implements SubjectsServiceInterface {
 
     @Override
     public void save(SubjectModelInterface subjectModel, SubjectsOptionsInterface subjectsOptions) {
-        // TODO: vkpankov
+        this.withServices(subjectsOptions).saveWithRelations(subjectModel);
     }
 
     @Override
@@ -89,7 +107,7 @@ public class SubjectsService implements SubjectsServiceInterface {
 
     @Override
     public void delete(SubjectModelInterface subjectModel, SubjectsOptionsInterface subjectsOptions) {
-        // TODO: vkpankov
+        this.withServices(subjectsOptions).deleteWithRelations(subjectModel);
     }
 
     @Override
@@ -126,4 +144,13 @@ public class SubjectsService implements SubjectsServiceInterface {
         }
         return resultSubjectList;
     }
+
+    private SubjectsOptionsInterface withServices(SubjectsOptionsInterface subjectsOptions) {
+        subjectsOptions.setSubjectsService(this);
+        subjectsOptions.setUsersService(this.usersService);
+        subjectsOptions.setIssueStandardsService(this.issueStandardsService);
+        //subjectsOptions.setTopicsService(this.topicsService);
+        return subjectsOptions;
+    }
+
 }

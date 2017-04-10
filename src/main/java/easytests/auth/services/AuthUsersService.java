@@ -22,6 +22,7 @@ public class AuthUsersService implements UserDetailsService {
     @Autowired
     private UsersService usersService;
 
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         final UserModelInterface userModel = usersService.findByEmail(email);
         if (userModel == null) {

@@ -20,7 +20,7 @@ public interface QuestionModelInterface extends ModelInterface {
 
     TopicModelInterface getTopic();
 
-    void setTopic(TopicModelInterface user);
+    void setTopic(TopicModelInterface topic);
 
     List<AnswerModelInterface> getAnswers();
 

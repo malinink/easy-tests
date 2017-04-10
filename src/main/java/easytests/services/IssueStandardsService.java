@@ -5,6 +5,7 @@ import easytests.mappers.IssueStandardsMapper;
 import easytests.models.IssueStandardModel;
 import easytests.models.IssueStandardModelInterface;
 import easytests.models.SubjectModelInterface;
+import easytests.options.IssueStandardsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,15 +16,31 @@ import org.springframework.stereotype.Service;
  * @author SingularityA
  */
 @Service
-public class IssueStandardsService {
+public class IssueStandardsService implements IssueStandardsServiceInterface {
 
     @Autowired
     private IssueStandardsMapper issueStandardsMapper;
 
+    @Autowired
+    private IssueStandardTopicPrioritiesService topicPrioritiesService;
+
+    @Autowired
+    private IssueStandardQuestionTypeOptionsService questionTypeOptionsService;
+
+    @Autowired
+    private SubjectsService subjectsService;
+
+    @Override
     public List<IssueStandardModelInterface> findAll() {
         return this.map(this.issueStandardsMapper.findAll());
     }
 
+    @Override
+    public List<IssueStandardModelInterface> findAll(IssueStandardsOptionsInterface issueStandardsOptions) {
+        return this.withServices(issueStandardsOptions).withRelations(this.findAll());
+    }
+
+    @Override
     public IssueStandardModelInterface find(Integer id) {
         final IssueStandardEntity issueStandardEntity = this.issueStandardsMapper.find(id);
         if (issueStandardEntity == null) {
@@ -32,6 +49,12 @@ public class IssueStandardsService {
         return this.map(issueStandardEntity);
     }
 
+    @Override
+    public IssueStandardModelInterface find(Integer id, IssueStandardsOptionsInterface issueStandardsOptions) {
+        return this.withServices(issueStandardsOptions).withRelations(this.find(id));
+    }
+
+    @Override
     public IssueStandardModelInterface findBySubject(SubjectModelInterface subject) {
         final IssueStandardEntity issueStandardEntity = this.issueStandardsMapper.findBySubjectId(subject.getId());
         if (issueStandardEntity == null) {
@@ -40,6 +63,13 @@ public class IssueStandardsService {
         return this.map(issueStandardEntity);
     }
 
+    @Override
+    public IssueStandardModelInterface findBySubject(SubjectModelInterface subjectModel,
+                                                     IssueStandardsOptionsInterface issueStandardsOptions) {
+        return this.withServices(issueStandardsOptions).withRelations(this.findBySubject(subjectModel));
+    }
+
+    @Override
     public void save(IssueStandardModelInterface issueStandardModel) {
         final IssueStandardEntity issueStandardEntity = this.map(issueStandardModel);
         if (issueStandardEntity.getId() != null) {
@@ -50,12 +80,68 @@ public class IssueStandardsService {
         issueStandardModel.setId(issueStandardEntity.getId());
     }
 
+    @Override
+    public void save(List<IssueStandardModelInterface> issueStandardModels) {
+        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+            this.save(issueStandardModel);
+        }
+    }
+
+    @Override
+    public void save(IssueStandardModelInterface issueStandardModel,
+                     IssueStandardsOptionsInterface issueStandardsOptions) {
+
+        this.withServices(issueStandardsOptions).saveWithRelations(issueStandardModel);
+    }
+
+    @Override
+    public void save(List<IssueStandardModelInterface> issueStandardModels,
+                     IssueStandardsOptionsInterface issueStandardsOptions) {
+
+        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+            this.save(issueStandardModel, issueStandardsOptions);
+        }
+
+    }
+
+    @Override
     public void delete(IssueStandardModelInterface issueStandardModel) {
         final IssueStandardEntity issueStandardEntity = this.map(issueStandardModel);
         if (issueStandardEntity.getId() == null) {
             throw new DeleteUnidentifiedModelException();
         }
         this.issueStandardsMapper.delete(issueStandardEntity);
+    }
+
+    @Override
+    public void delete(List<IssueStandardModelInterface> issueStandardModels) {
+        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+            this.delete(issueStandardModel);
+        }
+    }
+
+    @Override
+    public void delete(IssueStandardModelInterface issueStandardModel,
+                       IssueStandardsOptionsInterface issueStandardsOptions) {
+
+        this.withServices(issueStandardsOptions).deleteWithRelations(issueStandardModel);
+    }
+
+    @Override
+    public void delete(List<IssueStandardModelInterface> issueStandardModels,
+                       IssueStandardsOptionsInterface issueStandardsOptions) {
+
+        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+            this.delete(issueStandardModel, issueStandardsOptions);
+        }
+    }
+
+    private IssueStandardsOptionsInterface withServices(IssueStandardsOptionsInterface issueStandardsOptions) {
+        issueStandardsOptions.setIssueStandardsService(this);
+        issueStandardsOptions.setTopicPrioritiesService(this.topicPrioritiesService);
+        issueStandardsOptions.setQuestionTypeOptionsService(this.questionTypeOptionsService);
+        issueStandardsOptions.setSubjectsService(this.subjectsService);
+        return issueStandardsOptions;
     }
 
     private IssueStandardModelInterface map(IssueStandardEntity issueStandardEntity) {

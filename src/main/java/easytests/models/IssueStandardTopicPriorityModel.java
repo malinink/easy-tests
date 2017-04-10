@@ -1,6 +1,7 @@
 package easytests.models;
 
 import easytests.entities.IssueStandardTopicPriorityEntity;
+import easytests.models.empty.IssueStandardModelEmpty;
 import lombok.Data;
 
 /**
@@ -21,5 +22,6 @@ public class IssueStandardTopicPriorityModel implements IssueStandardTopicPriori
         this.setId(topicPriorityEntity.getId());
         this.setTopicId(topicPriorityEntity.getTopicId());
         this.setIsPreferable(topicPriorityEntity.getIsPreferable());
+        this.setIssueStandard(new IssueStandardModelEmpty(topicPriorityEntity.getIssueStandardId()));
     }
 }

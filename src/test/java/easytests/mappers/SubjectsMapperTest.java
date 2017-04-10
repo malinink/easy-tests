@@ -8,6 +8,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,8 +19,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+
 
 
 /**
@@ -40,11 +42,9 @@ public class SubjectsMapperTest {
 
         Assert.assertEquals((long) 1, (long) subject.getId());
         Assert.assertEquals("test1", subject.getName());
+        Assert.assertEquals("testdescription1", subject.getDescription());
 
     }
-
-
-
 
     @Test
     public void testFindAll() throws Exception {
@@ -73,23 +73,24 @@ public class SubjectsMapperTest {
 
         Assert.assertEquals(1, subjectEntities.size());
         Assert.assertEquals("test3", subjectEntities.get(0).getName());
+        Assert.assertEquals("testdescription3", subjectEntities.get(0).getDescription());
 
     }
 
     @Test
     public void testInsert() throws Exception {
-
         final Integer id = this.subjectsMapper.findAll().size() + 1;
-
 
         final Integer testUserId = 1;
 
         final String testName = "test";
+        final String testDescription = "testSubject.description";
 
         final SubjectEntity testSubject = Mockito.mock(SubjectEntity.class);
 
         Mockito.when(testSubject.getId()).thenReturn(id);
         Mockito.when(testSubject.getName()).thenReturn(testName);
+        Mockito.when(testSubject.getDescription()).thenReturn(testDescription);
         Mockito.when(testSubject.getUserId()).thenReturn(testUserId);
 
         subjectsMapper.insert(testSubject);
@@ -97,10 +98,11 @@ public class SubjectsMapperTest {
         verify(testSubject, times(1)).setId(id);
 
         final SubjectEntity readSubject = subjectsMapper.find(testSubject.getId());
-        Assert.assertNotNull(readSubject);
-        Assert.assertEquals(testUserId,readSubject.getUserId());
-        Assert.assertEquals(testName,readSubject.getName());
 
+        Assert.assertNotNull(readSubject);
+        Assert.assertEquals(testUserId, readSubject.getUserId());
+        Assert.assertEquals(testName, readSubject.getName());
+        Assert.assertEquals(testDescription, readSubject.getDescription());
     }
 
     @Test
@@ -108,20 +110,25 @@ public class SubjectsMapperTest {
 
         final Integer id = 2;
         final String name = "updated";
+        final String description = "updated description";
 
         SubjectEntity subject = this.subjectsMapper.find(id);
 
-        Assert.assertNotEquals(name,subject.getName());
+        Assert.assertNotEquals(name, subject.getName());
+        Assert.assertNotEquals(description, subject.getDescription());
 
         subject = Mockito.mock(SubjectEntity.class);
 
         Mockito.when(subject.getId()).thenReturn(id);
         Mockito.when(subject.getName()).thenReturn(name);
+        Mockito.when(subject.getDescription()).thenReturn(description);
 
         this.subjectsMapper.update(subject);
 
         final SubjectEntity readSubject = subjectsMapper.find(id);
         Assert.assertEquals(name, readSubject.getName());
+        Assert.assertEquals(description, readSubject.getDescription());
+
     }
 
     @Test

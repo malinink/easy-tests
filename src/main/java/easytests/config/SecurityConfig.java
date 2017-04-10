@@ -41,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl(signInUrl)
                 .clearAuthentication(true)
                 .and()
-            .csrf().disable()
+            .csrf()
+                .and()
             .rememberMe();
     }
 }

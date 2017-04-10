@@ -11,6 +11,7 @@ content: contents {
                 div (class:'container') {
                     div (id: 'block', class:'z-depth-1 grey lighten-4 row') {
                         form (class:'col s12', method:'post') {
+                            input (type:'hidden', name:_csrf.parameterName, value:_csrf.token)
                             div (class:'row') {
                                 div (class: 'col s12') {}
                             }
