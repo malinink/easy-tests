@@ -1,10 +1,11 @@
 package easytests.options;
 
-import easytests.models.*;
-import easytests.models.empty.IssueStandardModelEmpty;
+import easytests.models.IssueStandardModelInterface;
+import easytests.models.IssueStandardQuestionTypeOptionModelInterface;
+import easytests.models.IssueStandardTopicPriorityModelInterface;
+import easytests.models.SubjectModelInterface;
 import easytests.models.empty.ModelsListEmpty;
 import easytests.models.empty.SubjectModelEmpty;
-import easytests.models.exceptions.CallMethodOnEmptyModelsListException;
 import easytests.services.IssueStandardQuestionTypeOptionsServiceInterface;
 import easytests.services.IssueStandardsServiceInterface;
 import easytests.services.IssueStandardTopicPrioritiesServiceInterface;
@@ -12,9 +13,7 @@ import easytests.services.SubjectsServiceInterface;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
@@ -31,9 +30,6 @@ import static org.mockito.Mockito.verify;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class IssueStandardOptionsTest {
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
 
     @Test
     public void testWithRelationsOnNull() throws Exception {
@@ -89,14 +85,18 @@ public class IssueStandardOptionsTest {
 
         final Integer subjectId = 3;
         // модель в начале
-        final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
-        issueStandardModel.setTopicPriorities(new ModelsListEmpty());
-        issueStandardModel.setQuestionTypeOptions(new ModelsListEmpty());
-        issueStandardModel.setSubject(new SubjectModelEmpty(subjectId));
+        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
+        Mockito.when(issueStandardModel.getTopicPriorities()).thenReturn(new ModelsListEmpty());
+        Mockito.when(issueStandardModel.getQuestionTypeOptions()).thenReturn(new ModelsListEmpty());
+        Mockito.when(issueStandardModel.getSubject()).thenReturn(new SubjectModelEmpty(subjectId));
 
         // возвращаемые сервисами
-        final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = new ArrayList<>();
-        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels = new ArrayList<>();
+        final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = new ArrayList<>(1);
+        topicPriorityModels.add(Mockito.mock(IssueStandardTopicPriorityModelInterface.class));
+
+        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels = new ArrayList<>(1);
+        questionTypeOptionModels.add(Mockito.mock(IssueStandardQuestionTypeOptionModelInterface.class));
+
         final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
         Mockito.when(subjectModel.getId()).thenReturn(subjectId);
 
@@ -115,14 +115,9 @@ public class IssueStandardOptionsTest {
         verify(subjectsService, times(0)).find(subjectId, subjectsOptions);
 
         Assert.assertEquals(issueStandardModel, issueStandardModelWithoutRelations);
-
-        exception.expect(CallMethodOnEmptyModelsListException.class);
-        Assert.assertNotEquals(topicPriorityModels, issueStandardModelWithoutRelations.getTopicPriorities());
-
-        exception.expect(CallMethodOnEmptyModelsListException.class);
-        Assert.assertNotEquals(questionTypeOptionModels, issueStandardModelWithoutRelations.getQuestionTypeOptions());
-
-        Assert.assertNotEquals(subjectModel, issueStandardModelWithoutRelations.getSubject());
+        verify(issueStandardModel, times(0)).setTopicPriorities(topicPriorityModels);
+        verify(issueStandardModel, times(0)).setQuestionTypeOptions(questionTypeOptionModels);
+        verify(issueStandardModel, times(0)).setSubject(subjectModel);
 
         issueStandardsOptions.setTopicPrioritiesService(topicPrioritiesService);
         issueStandardsOptions.setQuestionTypeOptionsService(questionTypeOptionsService);
@@ -141,9 +136,9 @@ public class IssueStandardOptionsTest {
         verify(subjectsService, times(1)).find(subjectId, subjectsOptions);
 
         Assert.assertEquals(issueStandardModel, issueStandardModelWithRelations);
-        Assert.assertEquals(topicPriorityModels, issueStandardModelWithRelations.getTopicPriorities());
-        Assert.assertEquals(questionTypeOptionModels, issueStandardModelWithRelations.getQuestionTypeOptions());
-        Assert.assertEquals(subjectModel, issueStandardModelWithRelations.getSubject());
+        verify(issueStandardModel, times(1)).setTopicPriorities(topicPriorityModels);
+        verify(issueStandardModel, times(1)).setQuestionTypeOptions(questionTypeOptionModels);
+        verify(issueStandardModel, times(1)).setSubject(subjectModel);
     }
 
     @Test
@@ -166,76 +161,71 @@ public class IssueStandardOptionsTest {
 
         final Integer subjectIdFirst = 3;
         final Integer subjectIdSecond = 5;
+
+        // модели в начале
+        final IssueStandardModelInterface issueStandardModelFirst = Mockito.mock(IssueStandardModelInterface.class);
+        Mockito.when(issueStandardModelFirst.getTopicPriorities()).thenReturn(new ModelsListEmpty());
+        Mockito.when(issueStandardModelFirst.getQuestionTypeOptions()).thenReturn(new ModelsListEmpty());
+        Mockito.when(issueStandardModelFirst.getSubject()).thenReturn(new SubjectModelEmpty(subjectIdFirst));
+
+        final IssueStandardModelInterface issueStandardModelSecond = Mockito.mock(IssueStandardModelInterface.class);
+        Mockito.when(issueStandardModelSecond.getTopicPriorities()).thenReturn(new ModelsListEmpty());
+        Mockito.when(issueStandardModelSecond.getQuestionTypeOptions()).thenReturn(new ModelsListEmpty());
+        Mockito.when(issueStandardModelSecond.getSubject()).thenReturn(new SubjectModelEmpty(subjectIdSecond));
+
         final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(2);
-
-        final IssueStandardModelInterface issueStandardModelFirst = new IssueStandardModel();
-        final IssueStandardModelInterface issueStandardModelSecond = new IssueStandardModel();
-        issueStandardModelFirst.setTopicPriorities(new ModelsListEmpty());
-        issueStandardModelFirst.setQuestionTypeOptions(new ModelsListEmpty());
-        issueStandardModelFirst.setSubject(new SubjectModelEmpty(subjectIdFirst));
-        issueStandardModelSecond.setTopicPriorities(new ModelsListEmpty());
-        issueStandardModelSecond.setQuestionTypeOptions(new ModelsListEmpty());
-        issueStandardModelSecond.setSubject(new SubjectModelEmpty(subjectIdFirst));
-
         issueStandardModels.add(issueStandardModelFirst);
         issueStandardModels.add(issueStandardModelSecond);
 
         final List<IssueStandardTopicPriorityModelInterface> topicPriorityModelsFirst = new ArrayList<>(1);
         topicPriorityModelsFirst.add(Mockito.mock(IssueStandardTopicPriorityModelInterface.class));
+
         final List<IssueStandardTopicPriorityModelInterface> topicPriorityModelsSecond = new ArrayList<>(1);
         topicPriorityModelsSecond.add(Mockito.mock(IssueStandardTopicPriorityModelInterface.class));
-        given(topicPrioritiesService.findByIssueStandard(issueStandardModelFirst))
+
+        given(topicPrioritiesService.findByIssueStandard(issueStandardModelFirst, topicPrioritiesOptions))
                 .willReturn(topicPriorityModelsFirst);
-        given(topicPrioritiesService.findByIssueStandard(issueStandardModelSecond))
+        given(topicPrioritiesService.findByIssueStandard(issueStandardModelSecond, topicPrioritiesOptions))
                 .willReturn(topicPriorityModelsSecond);
 
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModelsFirst = new ArrayList<>(1);
         questionTypeOptionModelsFirst.add(Mockito.mock(IssueStandardQuestionTypeOptionModelInterface.class));
+
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModelsSecond = new ArrayList<>(1);
         questionTypeOptionModelsSecond.add(Mockito.mock(IssueStandardQuestionTypeOptionModelInterface.class));
-        given(questionTypeOptionsService.findByIssueStandard(issueStandardModelFirst))
+
+        given(questionTypeOptionsService.findByIssueStandard(issueStandardModelFirst, questionTypeOptionsOptions))
                 .willReturn(questionTypeOptionModelsFirst);
-        given(questionTypeOptionsService.findByIssueStandard(issueStandardModelSecond))
+        given(questionTypeOptionsService.findByIssueStandard(issueStandardModelSecond, questionTypeOptionsOptions))
                 .willReturn(questionTypeOptionModelsSecond);
 
         final SubjectModelInterface subjectModelFirst = Mockito.mock(SubjectModelInterface.class);
         Mockito.when(subjectModelFirst.getId()).thenReturn(subjectIdFirst);
+
         final SubjectModelInterface subjectModelSecond = Mockito.mock(SubjectModelInterface.class);
         Mockito.when(subjectModelSecond.getId()).thenReturn(subjectIdSecond);
+
         given(subjectsService.find(subjectIdFirst, subjectsOptions)).willReturn(subjectModelFirst);
         given(subjectsService.find(subjectIdSecond, subjectsOptions)).willReturn(subjectModelSecond);
 
+        // options не заданы
         List<IssueStandardModelInterface> issueStandardModelsWithoutRelations
                 = issueStandardsOptions.withRelations(issueStandardModels);
 
-        verify(topicPrioritiesService, times(0)).findByIssueStandard(issueStandardModelFirst);
-        verify(topicPrioritiesService, times(0)).findByIssueStandard(issueStandardModelSecond);
-        verify(questionTypeOptionsService, times(0)).findByIssueStandard(issueStandardModelFirst);
-        verify(questionTypeOptionsService, times(0)).findByIssueStandard(issueStandardModelSecond);
-        verify(subjectsService, times(0)).find(subjectIdFirst);
-        verify(subjectsService, times(0)).find(subjectIdSecond);
+        verify(topicPrioritiesService, times(0)).findByIssueStandard(issueStandardModelFirst, topicPrioritiesOptions);
+        verify(topicPrioritiesService, times(0)).findByIssueStandard(issueStandardModelSecond, topicPrioritiesOptions);
+        verify(questionTypeOptionsService, times(0)).findByIssueStandard(issueStandardModelFirst, questionTypeOptionsOptions);
+        verify(questionTypeOptionsService, times(0)).findByIssueStandard(issueStandardModelSecond, questionTypeOptionsOptions);
+        verify(subjectsService, times(0)).find(subjectIdFirst, subjectsOptions);
+        verify(subjectsService, times(0)).find(subjectIdSecond, subjectsOptions);
 
         Assert.assertEquals(issueStandardModels, issueStandardModelsWithoutRelations);
-        exception.expect(CallMethodOnEmptyModelsListException.class);
-        Assert.assertNotEquals(topicPriorityModelsFirst,
-                issueStandardModelsWithoutRelations.get(0).getTopicPriorities());
-
-        exception.expect(CallMethodOnEmptyModelsListException.class);
-        Assert.assertNotEquals(topicPriorityModelsSecond,
-                issueStandardModelsWithoutRelations.get(1).getTopicPriorities());
-
-        exception.expect(CallMethodOnEmptyModelsListException.class);
-        Assert.assertNotEquals(questionTypeOptionModelsFirst,
-                issueStandardModelsWithoutRelations.get(0).getQuestionTypeOptions());
-
-        exception.expect(CallMethodOnEmptyModelsListException.class);
-        Assert.assertNotEquals(questionTypeOptionModelsSecond,
-                issueStandardModelsWithoutRelations.get(1).getQuestionTypeOptions());
-
-        Assert.assertNotEquals(subjectModelFirst,
-                issueStandardModelsWithoutRelations.get(0).getSubject());
-        Assert.assertNotEquals(subjectModelSecond,
-                issueStandardModelsWithoutRelations.get(1).getSubject());
+        verify(issueStandardModelFirst, times(0)).setTopicPriorities(topicPriorityModelsFirst);
+        verify(issueStandardModelFirst, times(0)).setQuestionTypeOptions(questionTypeOptionModelsFirst);
+        verify(issueStandardModelFirst, times(0)).setSubject(subjectModelFirst);
+        verify(issueStandardModelSecond, times(0)).setTopicPriorities(topicPriorityModelsSecond);
+        verify(issueStandardModelSecond, times(0)).setQuestionTypeOptions(questionTypeOptionModelsSecond);
+        verify(issueStandardModelSecond, times(0)).setSubject(subjectModelSecond);
 
         issueStandardsOptions.setTopicPrioritiesService(topicPrioritiesService);
         issueStandardsOptions.setQuestionTypeOptionsService(questionTypeOptionsService);
@@ -245,29 +235,24 @@ public class IssueStandardOptionsTest {
                 .withQuestionTypeOptions(questionTypeOptionsOptions)
                 .withSubject(subjectsOptions);
 
+        // теперь options заданы
         List<IssueStandardModelInterface> issueStandardModelsWithRelations
                 = issueStandardsOptions.withRelations(issueStandardModels);
 
-        verify(topicPrioritiesService, times(1)).findByIssueStandard(issueStandardModelFirst);
-        verify(topicPrioritiesService, times(1)).findByIssueStandard(issueStandardModelSecond);
-        verify(questionTypeOptionsService, times(1)).findByIssueStandard(issueStandardModelFirst);
-        verify(questionTypeOptionsService, times(1)).findByIssueStandard(issueStandardModelSecond);
-        verify(subjectsService, times(1)).find(subjectIdFirst);
-        verify(subjectsService, times(1)).find(subjectIdSecond);
+        verify(topicPrioritiesService, times(1)).findByIssueStandard(issueStandardModelFirst, topicPrioritiesOptions);
+        verify(topicPrioritiesService, times(1)).findByIssueStandard(issueStandardModelSecond, topicPrioritiesOptions);
+        verify(questionTypeOptionsService, times(1)).findByIssueStandard(issueStandardModelFirst, questionTypeOptionsOptions);
+        verify(questionTypeOptionsService, times(1)).findByIssueStandard(issueStandardModelSecond, questionTypeOptionsOptions);
+        verify(subjectsService, times(1)).find(subjectIdFirst, subjectsOptions);
+        verify(subjectsService, times(1)).find(subjectIdSecond, subjectsOptions);
 
         Assert.assertEquals(issueStandardModels, issueStandardModelsWithRelations);
-        Assert.assertEquals(topicPriorityModelsFirst,
-                issueStandardModelsWithRelations.get(0).getTopicPriorities());
-        Assert.assertEquals(topicPriorityModelsSecond,
-                issueStandardModelsWithRelations.get(1).getTopicPriorities());
-        Assert.assertEquals(questionTypeOptionModelsFirst,
-                issueStandardModelsWithRelations.get(0).getQuestionTypeOptions());
-        Assert.assertEquals(questionTypeOptionModelsSecond,
-                issueStandardModelsWithRelations.get(1).getQuestionTypeOptions());
-        Assert.assertEquals(subjectModelFirst,
-                issueStandardModelsWithRelations.get(0).getSubject());
-        Assert.assertEquals(subjectModelSecond,
-                issueStandardModelsWithRelations.get(1).getSubject());
+        verify(issueStandardModelFirst, times(1)).setTopicPriorities(topicPriorityModelsFirst);
+        verify(issueStandardModelFirst, times(1)).setQuestionTypeOptions(questionTypeOptionModelsFirst);
+        verify(issueStandardModelFirst, times(1)).setSubject(subjectModelFirst);
+        verify(issueStandardModelSecond, times(1)).setTopicPriorities(topicPriorityModelsSecond);
+        verify(issueStandardModelSecond, times(1)).setQuestionTypeOptions(questionTypeOptionModelsSecond);
+        verify(issueStandardModelSecond, times(1)).setSubject(subjectModelSecond);
     }
 
     @Test
@@ -292,10 +277,12 @@ public class IssueStandardOptionsTest {
         final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
         Mockito.when(subjectModel.getId()).thenReturn(subjectId);
 
-        final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
-        issueStandardModel.setTopicPriorities(new ArrayList<IssueStandardTopicPriorityModelInterface>());
-        issueStandardModel.setQuestionTypeOptions(new ArrayList<IssueStandardQuestionTypeOptionModelInterface>());
-        issueStandardModel.setSubject(subjectModel);
+        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
+        Mockito.when(issueStandardModel.getTopicPriorities())
+                .thenReturn(new ArrayList<>());
+        Mockito.when(issueStandardModel.getQuestionTypeOptions())
+                .thenReturn(new ArrayList<>());
+        Mockito.when(issueStandardModel.getSubject()).thenReturn(subjectModel);
 
         issueStandardsOptions.setIssueStandardsService(issueStandardsService);
         issueStandardsOptions.setTopicPrioritiesService(topicPrioritiesService);
@@ -341,10 +328,12 @@ public class IssueStandardOptionsTest {
         final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
         Mockito.when(subjectModel.getId()).thenReturn(subjectId);
 
-        final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
-        issueStandardModel.setTopicPriorities(new ArrayList<IssueStandardTopicPriorityModelInterface>());
-        issueStandardModel.setQuestionTypeOptions(new ArrayList<IssueStandardQuestionTypeOptionModelInterface>());
-        issueStandardModel.setSubject(subjectModel);
+        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
+        Mockito.when(issueStandardModel.getTopicPriorities())
+                .thenReturn(new ArrayList<>());
+        Mockito.when(issueStandardModel.getQuestionTypeOptions())
+                .thenReturn(new ArrayList<>());
+        Mockito.when(issueStandardModel.getSubject()).thenReturn(subjectModel);
 
         issueStandardsOptions.setIssueStandardsService(issueStandardsService);
         issueStandardsOptions.setTopicPrioritiesService(topicPrioritiesService);

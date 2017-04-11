@@ -9,7 +9,7 @@
 ----------------------
 DROP TABLE IF EXISTS question_type_options;
 DROP TABLE IF EXISTS topic_priorities;
-DROP TABLE IF EXISTS issue_standard;
+DROP TABLE IF EXISTS issue_standards;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS subjects;
 DROP TABLE IF EXISTS questions;
@@ -38,7 +38,7 @@ CREATE TABLE users (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE issue_standard (
+CREATE TABLE issue_standards (
   id                SERIAL   NOT NULL,
   time_limit        INTEGER,
   questions_number  INTEGER,
@@ -157,7 +157,7 @@ INSERT INTO users (first_name, last_name, surname, email, password, is_admin, st
   ('FirstName2', 'LastName2', 'Surname2', 'email2@gmail.com', 'hash2', FALSE, 2),
   ('FirstName3', 'LastName3', 'Surname3', 'email3@gmail.com', 'hash3', FALSE, 1);
 
-INSERT INTO issue_standard (time_limit, questions_number, subject_id) VALUES
+INSERT INTO issue_standards (time_limit, questions_number, subject_id) VALUES
   (300, 30, 1),
   (NULL, 15, 3);
 
