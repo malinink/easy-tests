@@ -1,7 +1,8 @@
 package easytests.support;
 
-import easytests.entities.UserEntity;
 import easytests.entities.TesteeEntity;
+import easytests.entities.TopicEntity;
+import easytests.entities.UserEntity;
 import org.mockito.Mockito;
 
 
@@ -30,6 +31,7 @@ public abstract class Entities {
         Mockito.when(userEntity.getState()).thenReturn(state);
         return userEntity;
     }
+
     public static TesteeEntity createTesteeEntityMock(
             Integer id,
             String firstName,
@@ -45,4 +47,16 @@ public abstract class Entities {
         Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
         return testeeEntity;
     }
+
+    public static TopicEntity createTopicEntityMock(Integer id, Integer subjectId, String name) {
+
+        final TopicEntity topicEntity = Mockito.mock(TopicEntity.class);
+
+        Mockito.when(topicEntity.getId()).thenReturn(id);
+        Mockito.when(topicEntity.getSubjectId()).thenReturn(subjectId);
+        Mockito.when(topicEntity.getName()).thenReturn(name);
+        return topicEntity;
+
+    }
+
 }
