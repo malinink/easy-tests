@@ -6,6 +6,7 @@ import easytests.models.SubjectModelInterface;
 import easytests.models.TopicModel;
 import easytests.models.TopicModelInterface;
 import easytests.options.TopicsOptionsInterface;
+import easytests.support.Entities;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -39,39 +40,38 @@ public class TopicsServiceTest {
     @MockBean
     private TopicsMapper topicsMapper;
 
-    private TopicEntity createTopicEntityMock(Integer id, Integer subjectId, String name) {
-
-        final TopicEntity topicEntity = Mockito.mock(TopicEntity.class);
-
-        Mockito.when(topicEntity.getId()).thenReturn(id);
-        Mockito.when(topicEntity.getSubjectId()).thenReturn(subjectId);
-        Mockito.when(topicEntity.getName()).thenReturn(name);
-        return topicEntity;
-
-    }
-
     private TopicModelInterface mapTopicModel(TopicEntity topicEntity) {
-
         final TopicModelInterface topicModel = new TopicModel();
         topicModel.map(topicEntity);
         return topicModel;
+    }
 
+    private List<TopicEntity> getTopicsEntities() {
+        final TopicEntity topicEntityFirst = Entities.createTopicEntityMock(4, 3, "testfirst");
+        final TopicEntity topicEntitySecond = Entities.createTopicEntityMock(5, 3, "testsecond");
+        final List<TopicEntity> topicsEntities = new ArrayList<>();
+        topicsEntities.add(topicEntityFirst);
+        topicsEntities.add(topicEntitySecond);
+        return topicsEntities;
+    }
+
+    private List<TopicModelInterface> getTopicsModels() {
+        final List<TopicModelInterface> topicsModels = new ArrayList<>(2);
+        for (TopicEntity topicEntity: this.getTopicsEntities()) {
+            topicsModels.add(this.mapTopicModel(topicEntity));
+        }
+        return topicsModels;
     }
 
     @Test
     public void testFindBySubject() throws Exception {
         final Integer subjectId = 3;
         final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
-        final TopicEntity topicEntityFirst = this.createTopicEntityMock(4, subjectId, "testfirst");
-        final TopicEntity topicEntitySecond = this.createTopicEntityMock(5, subjectId, "testsecond");
-        final List<TopicEntity> topicsEntities = new ArrayList<>();
-        topicsEntities.add(topicEntityFirst);
-        topicsEntities.add(topicEntitySecond);
+        final List<TopicEntity> topicsEntities = this.getTopicsEntities();
+        final List<TopicModelInterface> topicsModels = getTopicsModels();
+
         Mockito.when(subjectModel.getId()).thenReturn(subjectId);
         given(this.topicsMapper.findBySubjectId(subjectId)).willReturn(topicsEntities);
-        final List<TopicModelInterface> topicsModels = new ArrayList<>();
-        topicsModels.add(this.mapTopicModel(topicEntityFirst));
-        topicsModels.add(this.mapTopicModel(topicEntitySecond));
 
         final List<TopicModelInterface> foundedTopicsModels = this.topicsService.findBySubject(subjectModel);
 
@@ -83,17 +83,11 @@ public class TopicsServiceTest {
     public void testFindByUserWithOptions() throws Exception {
         final Integer subjectId = 3;
         final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
-        final TopicEntity topicEntityFirst = this.createTopicEntityMock(4, subjectId, "testfirst");
-        final TopicEntity topicEntitySecond = this.createTopicEntityMock(5, subjectId, "testsecond");
-        final List<TopicEntity> topicsEntities = new ArrayList<>();
-        topicsEntities.add(topicEntityFirst);
-        topicsEntities.add(topicEntitySecond);
+        final List<TopicEntity> topicsEntities = this.getTopicsEntities();
+        final List<TopicModelInterface> topicsModels = this.getTopicsModels();
 
         given(subjectModel.getId()).willReturn(subjectId);
         given(this.topicsMapper.findBySubjectId(subjectId)).willReturn(topicsEntities);
-        final List<TopicModelInterface> topicsModels = new ArrayList<>();
-        topicsModels.add(this.mapTopicModel(topicEntityFirst));
-        topicsModels.add(this.mapTopicModel(topicEntitySecond));
         final TopicsOptionsInterface topicOptions = Mockito.mock(TopicsOptionsInterface.class);
         given(topicOptions.withRelations(topicsModels)).willReturn(topicsModels);
 
