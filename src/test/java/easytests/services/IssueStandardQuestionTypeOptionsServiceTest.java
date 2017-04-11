@@ -5,6 +5,7 @@ import easytests.mappers.IssueStandardQuestionTypeOptionsMapper;
 import easytests.models.IssueStandardModelInterface;
 import easytests.models.IssueStandardQuestionTypeOptionModel;
 import easytests.models.IssueStandardQuestionTypeOptionModelInterface;
+import easytests.models.QuestionTypeModelInterface;
 import easytests.options.IssueStandardQuestionTypeOptionsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
@@ -48,11 +49,14 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
                 = new IssueStandardQuestionTypeOptionModel();
 
+        final QuestionTypeModelInterface questionTypeModel = Mockito.mock(QuestionTypeModelInterface.class);
+        Mockito.when(questionTypeModel.getId()).thenReturn(questionTypeId);
+
         final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
         Mockito.when(issueStandardModel.getId()).thenReturn(issueStandardId);
 
         questionTypeOptionModel.setId(id);
-        questionTypeOptionModel.setQuestionTypeId(questionTypeId);
+        questionTypeOptionModel.setQuestionType(questionTypeModel);
         questionTypeOptionModel.setMinQuestions(minQuestions);
         questionTypeOptionModel.setMaxQuestions(maxQuestions);
         questionTypeOptionModel.setTimeLimit(timeLimit);

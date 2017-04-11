@@ -1,7 +1,7 @@
 -- // create_issue_standard_table
 -- Migration SQL that makes the change goes here.
 
-CREATE TABLE issue_standard (
+CREATE TABLE issue_standards (
   id                SERIAL   NOT NULL,
   time_limit        INTEGER,
   questions_number  INTEGER,
@@ -14,4 +14,4 @@ CREATE TABLE issue_standard (
 -- //@UNDO
 -- SQL to undo the change goes here.
 
-DROP TABLE issue_standard;
+DROP TABLE issue_standards;

@@ -2,6 +2,7 @@ package easytests.entities;
 
 import easytests.models.IssueStandardQuestionTypeOptionModelInterface;
 import easytests.models.empty.IssueStandardModelEmpty;
+import easytests.models.empty.QuestionTypeModelEmpty;
 import org.junit.Assert;
 import org.junit.Test;
 import org.meanbean.test.BeanTester;
@@ -19,7 +20,7 @@ public class IssueStandardQuestionTypeOptionEntityTest {
     @Test
     public void testMap() throws Exception {
         final Integer id = 3;
-        final Integer questionTypeId = 5;
+        final Integer questionTypeId = 4;
         final Integer minQuestions = 10;
         final Integer maxQuestions = 20;
         final Integer timeLimit = 600;
@@ -29,7 +30,7 @@ public class IssueStandardQuestionTypeOptionEntityTest {
                 = Mockito.mock(IssueStandardQuestionTypeOptionModelInterface.class);
 
         Mockito.when(questionTypeOptionModel.getId()).thenReturn(id);
-        Mockito.when(questionTypeOptionModel.getQuestionTypeId()).thenReturn(questionTypeId);
+        Mockito.when(questionTypeOptionModel.getQuestionType()).thenReturn(new QuestionTypeModelEmpty(questionTypeId));
         Mockito.when(questionTypeOptionModel.getMinQuestions()).thenReturn(minQuestions);
         Mockito.when(questionTypeOptionModel.getMaxQuestions()).thenReturn(maxQuestions);
         Mockito.when(questionTypeOptionModel.getTimeLimit()).thenReturn(timeLimit);
