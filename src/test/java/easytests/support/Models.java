@@ -1,11 +1,10 @@
 package easytests.support;
 
-import easytests.models.UserModel;
-import easytests.models.UserModelInterface;
-import easytests.models.TesteeModel;
-import easytests.models.TesteeModelInterface;
+import easytests.models.*;
+import easytests.models.empty.IssueStandardModelEmpty;
 import easytests.models.empty.ModelsListEmpty;
-
+import easytests.models.empty.QuestionTypeModelEmpty;
+import easytests.models.empty.SubjectModelEmpty;
 
 /**
  * @author malinink
@@ -33,6 +32,57 @@ public abstract class Models {
         userModel.setSubjects(new ModelsListEmpty());
         return userModel;
     }
+
+    public static IssueStandardModelInterface createIssueStandardModel(
+            Integer id,
+            Integer timeLimit,
+            Integer questionsNumber,
+            Integer subjectId
+    ) {
+
+        final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
+        issueStandardModel.setId(id);
+        issueStandardModel.setTimeLimit(timeLimit);
+        issueStandardModel.setQuestionsNumber(questionsNumber);
+        issueStandardModel.setTopicPriorities(new ModelsListEmpty());
+        issueStandardModel.setQuestionTypeOptions(new ModelsListEmpty());
+        issueStandardModel.setSubject(new SubjectModelEmpty(subjectId));
+        return issueStandardModel;
+    }
+
+    public static IssueStandardTopicPriorityModelInterface createTopicPriorityModel(
+            Integer id,
+            Integer topicId,
+            Boolean isPreferable,
+            Integer issueStandardId
+    ) {
+        final IssueStandardTopicPriorityModelInterface topicPriorityModel = new IssueStandardTopicPriorityModel();
+        topicPriorityModel.setId(id);
+        topicPriorityModel.setTopicId(topicId);
+        topicPriorityModel.setIsPreferable(isPreferable);
+        topicPriorityModel.setIssueStandard(new IssueStandardModelEmpty(issueStandardId));
+        return topicPriorityModel;
+    }
+
+    public static IssueStandardQuestionTypeOptionModelInterface createQuestionTypeOptionModel(
+            Integer id,
+            Integer questionTypeId,
+            Integer minQuestions,
+            Integer maxQuestions,
+            Integer timeLimit,
+            Integer issueStandardId
+    ) {
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
+                = new IssueStandardQuestionTypeOptionModel();
+        questionTypeOptionModel.setId(id);
+        questionTypeOptionModel.setQuestionType(new QuestionTypeModelEmpty(questionTypeId));
+        questionTypeOptionModel.setMinQuestions(minQuestions);
+        questionTypeOptionModel.setMaxQuestions(maxQuestions);
+        questionTypeOptionModel.setTimeLimit(timeLimit);
+        questionTypeOptionModel.setIssueStandard(new IssueStandardModelEmpty(issueStandardId));
+        return questionTypeOptionModel;
+    }
+
     public static TesteeModelInterface createTesteeModel(
             Integer id,
             String firstName,
