@@ -177,25 +177,8 @@ public class IssueStandardsServiceTest {
         Assert.assertEquals(this.mapIssueStandardModel(issueStandardEntity), issueStandardModel);
     }
 
-    // TODO: SingularityA choose appropriate test
     @Test
-    public void testFindBySubjectWithOptions1() throws Exception {
-        final Integer subjectId = 3;
-        final IssueStandardEntity issueStandardEntity = this.createIssueStandardEntityMock(3, 600, 10, subjectId);
-        given(this.issueStandardsMapper.findBySubjectId(subjectId)).willReturn(issueStandardEntity);
-
-        final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
-        Mockito.when(subjectModel.getId()).thenReturn(subjectId);
-
-        final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
-
-        this.issueStandardsService.findBySubject(subjectModel, issueStandardsOptions);
-
-        verify(issueStandardsOptions).withRelations(Mockito.any(IssueStandardModelInterface.class));
-    }
-
-    @Test
-    public void testFindBySubjectWithOptions2() throws Exception {
+    public void testFindBySubjectWithOptions() throws Exception {
         final Integer subjectId = 3;
         final IssueStandardEntity issueStandardEntity = this.createIssueStandardEntityMock(3, 600, 10, subjectId);
         final IssueStandardModelInterface issueStandardModel = this.mapIssueStandardModel(issueStandardEntity);
