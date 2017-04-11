@@ -9,9 +9,9 @@ public interface IssueStandardQuestionTypeOptionModelInterface extends ModelInte
 
     void setId(Integer id);
 
-    Integer getQuestionTypeId();
+    QuestionTypeModelInterface getQuestionType();
 
-    void setQuestionTypeId(Integer questionTypeId);
+    void setQuestionType(QuestionTypeModelInterface questionType);
 
     Integer getMinQuestions();
 
