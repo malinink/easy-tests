@@ -7,6 +7,8 @@ import easytests.models.IssueStandardQuestionTypeOptionModel;
 import easytests.models.IssueStandardQuestionTypeOptionModelInterface;
 import easytests.options.IssueStandardQuestionTypeOptionsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
+import easytests.support.Entities;
+import easytests.support.Models;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -41,43 +43,6 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
     @InjectMocks
     private IssueStandardQuestionTypeOptionsService questionTypeOptionsService;
 
-    private IssueStandardQuestionTypeOptionModelInterface createQuestionTypeOptionModel(
-            Integer id, Integer questionTypeId, Integer minQuestions,
-            Integer maxQuestions, Integer timeLimit, Integer issueStandardId) {
-
-        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = new IssueStandardQuestionTypeOptionModel();
-
-        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
-        Mockito.when(issueStandardModel.getId()).thenReturn(issueStandardId);
-
-        questionTypeOptionModel.setId(id);
-        questionTypeOptionModel.setQuestionTypeId(questionTypeId);
-        questionTypeOptionModel.setMinQuestions(minQuestions);
-        questionTypeOptionModel.setMaxQuestions(maxQuestions);
-        questionTypeOptionModel.setTimeLimit(timeLimit);
-        questionTypeOptionModel.setIssueStandard(issueStandardModel);
-
-        return questionTypeOptionModel;
-    }
-
-    private IssueStandardQuestionTypeOptionEntity createQuestionTypeOptionEntityMock(
-            Integer id, Integer questionTypeId, Integer minQuestions,
-            Integer maxQuestions, Integer timeLimit, Integer issueStandardId) {
-
-        final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
-                = Mockito.mock(IssueStandardQuestionTypeOptionEntity.class);
-
-        Mockito.when(questionTypeOptionEntity.getId()).thenReturn(id);
-        Mockito.when(questionTypeOptionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
-        Mockito.when(questionTypeOptionEntity.getMinQuestions()).thenReturn(minQuestions);
-        Mockito.when(questionTypeOptionEntity.getMaxQuestions()).thenReturn(maxQuestions);
-        Mockito.when(questionTypeOptionEntity.getTimeLimit()).thenReturn(timeLimit);
-        Mockito.when(questionTypeOptionEntity.getIssueStandardId()).thenReturn(issueStandardId);
-
-        return questionTypeOptionEntity;
-    }
-
     private IssueStandardQuestionTypeOptionModelInterface
         mapQuestionTypeOptionModel(IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity) {
 
@@ -98,8 +63,8 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
 
     private List<IssueStandardQuestionTypeOptionEntity> getQuestionTypeOptionEntities() {
         final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities = new ArrayList<>(2);
-        questionTypeOptionEntities.add(this.createQuestionTypeOptionEntityMock(1, 2, 10, 20, null, 3));
-        questionTypeOptionEntities.add(this.createQuestionTypeOptionEntityMock(2, 3, 5, 25, 60, 2));
+        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(1, 2, 10, 20, null, 3));
+        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(2, 3, 5, 25, 60, 2));
         return questionTypeOptionEntities;
     }
 
@@ -160,7 +125,7 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
     public void testFindPresentModel() throws Exception {
         final Integer id = 1;
         final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
-                = this.createQuestionTypeOptionEntityMock(id, 1, 10, 20, 60, 1);
+                = Entities.createQuestionTypeOptionEntityMock(id, 1, 10, 20, 60, 1);
         given(this.questionTypeOptionsMapper.find(id)).willReturn(questionTypeOptionEntity);
 
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
@@ -185,7 +150,7 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
     public void testFindWithOptions() throws Exception {
         final Integer id = 1;
         final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
-                = this.createQuestionTypeOptionEntityMock(id, 1, 10, 20, 60, 1);
+                = Entities.createQuestionTypeOptionEntityMock(id, 1, 10, 20, 60, 1);
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
                 = this.mapQuestionTypeOptionModel(questionTypeOptionEntity);
 
@@ -207,8 +172,8 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
         final Integer issueStandardId = 5;
         final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities = new ArrayList<>(2);
 
-        questionTypeOptionEntities.add(this.createQuestionTypeOptionEntityMock(1, 1, 1, 10, null, issueStandardId));
-        questionTypeOptionEntities.add(this.createQuestionTypeOptionEntityMock(2, 2, 10, 20, 60, issueStandardId));
+        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(1, 1, 1, 10, null, issueStandardId));
+        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(2, 2, 10, 20, 60, issueStandardId));
         given(this.questionTypeOptionsMapper.findByIssueStandardId(issueStandardId))
                 .willReturn(questionTypeOptionEntities);
 
@@ -244,8 +209,8 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
     public void testFindByIssueStandardWithOptions() throws Exception {
         final Integer issueStandardId = 5;
         final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities = new ArrayList<>(2);
-        questionTypeOptionEntities.add(this.createQuestionTypeOptionEntityMock(1, 1, 1, 10, null, issueStandardId));
-        questionTypeOptionEntities.add(this.createQuestionTypeOptionEntityMock(2, 2, 10, 20, 60, issueStandardId));
+        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(1, 1, 1, 10, null, issueStandardId));
+        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(2, 2, 10, 20, 60, issueStandardId));
 
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels = new ArrayList<>(2);
         questionTypeOptionModels.add(this.mapQuestionTypeOptionModel(questionTypeOptionEntities.get(0)));
@@ -269,7 +234,7 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
     @Test
     public void testSaveUpdatesEntity() throws Exception {
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = this.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1);
+                = Models.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1);
         this.questionTypeOptionsService.save(questionTypeOptionModel);
 
         verify(this.questionTypeOptionsMapper, times(1))
@@ -279,7 +244,7 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
     @Test
     public void testSaveInsertsEntity() throws Exception {
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = this.createQuestionTypeOptionModel(null, 1, 10, 20, 60, 1);
+                = Models.createQuestionTypeOptionModel(null, 1, 10, 20, 60, 1);
 
         final Integer id = 10;
         doAnswer(invocations -> {
@@ -299,8 +264,8 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
     @Test
     public void testSaveList() throws Exception {
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels = new ArrayList<>(2);
-        questionTypeOptionModels.add(this.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1));
-        questionTypeOptionModels.add(this.createQuestionTypeOptionModel(null, 1, 10, 20, 60, 1));
+        questionTypeOptionModels.add(Models.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1));
+        questionTypeOptionModels.add(Models.createQuestionTypeOptionModel(null, 1, 10, 20, 60, 1));
 
         final Integer id = 10;
         doAnswer(invocations -> {
@@ -325,7 +290,7 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
                 = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
 
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = this.createQuestionTypeOptionModel(1, 2, 10, 20, 60, 2);
+                = Models.createQuestionTypeOptionModel(1, 2, 10, 20, 60, 2);
 
         this.questionTypeOptionsService.save(questionTypeOptionModel, questionTypeOptionsOptions);
 
@@ -350,7 +315,7 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = this.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1);
+                = Models.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1);
 
         this.questionTypeOptionsService.delete(questionTypeOptionModel);
 
@@ -361,7 +326,7 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = this.createQuestionTypeOptionModel(null, 1, 10, 20, 60, 1);
+                = Models.createQuestionTypeOptionModel(null, 1, 10, 20, 60, 1);
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.questionTypeOptionsService.delete(questionTypeOptionModel);
@@ -389,7 +354,7 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
                 = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
 
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = this.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1);
+                = Models.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1);
 
         this.questionTypeOptionsService.delete(questionTypeOptionModel, questionTypeOptionsOptions);
 

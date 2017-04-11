@@ -3,6 +3,8 @@ package easytests.models.empty;
 import easytests.entities.IssueStandardQuestionTypeOptionEntity;
 import easytests.models.IssueStandardModelInterface;
 import easytests.models.IssueStandardQuestionTypeOptionModelInterface;
+import easytests.models.QuestionTypeModel;
+import easytests.models.QuestionTypeModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
 
 /**
@@ -26,12 +28,12 @@ public class IssueStandardQuestionTypeOptionModelEmpty
     }
 
     @Override
-    public Integer getQuestionTypeId() {
+    public QuestionTypeModel getQuestionType() {
         throw new CallMethodOnEmptyModelException();
     }
 
     @Override
-    public void setQuestionTypeId(Integer questionTypeId) {
+    public void setQuestionType(QuestionTypeModelInterface questionType) {
         throw new CallMethodOnEmptyModelException();
     }
 
