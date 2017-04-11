@@ -1,10 +1,7 @@
 package easytests.support;
 
 import easytests.models.*;
-import easytests.models.empty.IssueStandardModelEmpty;
-import easytests.models.empty.ModelsListEmpty;
-import easytests.models.empty.QuestionTypeModelEmpty;
-import easytests.models.empty.SubjectModelEmpty;
+import easytests.models.empty.*;
 
 /**
  * @author malinink
@@ -31,6 +28,22 @@ public abstract class Models {
         userModel.setState(state);
         userModel.setSubjects(new ModelsListEmpty());
         return userModel;
+    }
+
+    public static SubjectModelInterface createSubjectModel(
+            Integer id,
+            String name,
+            String description,
+            Integer userId
+    ) {
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subjectModel.setId(id);
+        subjectModel.setName(name);
+        subjectModel.setDescription(description);
+        subjectModel.setTopics(new ModelsListEmpty());
+        subjectModel.setUser(new UserModelEmpty(userId));
+        subjectModel.setIssueStandard(new IssueStandardModelEmpty());
+        return subjectModel;
     }
 
     public static IssueStandardModelInterface createIssueStandardModel(
