@@ -22,6 +22,9 @@ public class IssueStandardQuestionTypeOptionsService implements IssueStandardQue
     private IssueStandardQuestionTypeOptionsMapper questionTypeOptionsMapper;
 
     @Autowired
+    private QuestionTypesServiceInterface questionTypesService;
+
+    @Autowired
     private IssueStandardsService issueStandardsService;
 
     @Override
@@ -137,6 +140,7 @@ public class IssueStandardQuestionTypeOptionsService implements IssueStandardQue
         withServices(IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions) {
 
         questionTypeOptionsOptions.setQuestionTypeOptionsService(this);
+        questionTypeOptionsOptions.setQuestionTypesService(this.questionTypesService);
         questionTypeOptionsOptions.setIssueStandardsService(this.issueStandardsService);
         return questionTypeOptionsOptions;
     }
