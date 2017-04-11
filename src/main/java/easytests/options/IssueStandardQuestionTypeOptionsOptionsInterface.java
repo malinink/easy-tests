@@ -3,6 +3,8 @@ package easytests.options;
 import easytests.models.IssueStandardQuestionTypeOptionModelInterface;
 import easytests.services.IssueStandardQuestionTypeOptionsServiceInterface;
 import easytests.services.IssueStandardsServiceInterface;
+import easytests.services.QuestionTypesServiceInterface;
+
 import java.util.List;
 
 /**
@@ -12,7 +14,12 @@ public interface IssueStandardQuestionTypeOptionsOptionsInterface extends Option
 
     void setQuestionTypeOptionsService(IssueStandardQuestionTypeOptionsServiceInterface questionTypeOptionsService);
 
+    void setQuestionTypesService(QuestionTypesServiceInterface questionTypeService);
+
     void setIssueStandardsService(IssueStandardsServiceInterface issueStandardsService);
+
+    IssueStandardQuestionTypeOptionsOptionsInterface
+        withQuestionType(QuestionTypesOptionsInterface questionTypesOptions);
 
     IssueStandardQuestionTypeOptionsOptionsInterface
         withIssueStandard(IssueStandardsOptionsInterface issueStandardsOptions);
