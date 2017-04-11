@@ -1,8 +1,6 @@
 package easytests.support;
 
-import easytests.entities.TesteeEntity;
-import easytests.entities.TopicEntity;
-import easytests.entities.UserEntity;
+import easytests.entities.*;
 import org.mockito.Mockito;
 
 
@@ -32,6 +30,55 @@ public abstract class Entities {
         return userEntity;
     }
 
+    public static IssueStandardEntity createIssueStandardEntityMock(
+            Integer id,
+            Integer timeLimit,
+            Integer questionsNumber,
+            Integer subjectId
+    ) {
+
+        final IssueStandardEntity issueStandardEntity = Mockito.mock(IssueStandardEntity.class);
+        Mockito.when(issueStandardEntity.getId()).thenReturn(id);
+        Mockito.when(issueStandardEntity.getTimeLimit()).thenReturn(timeLimit);
+        Mockito.when(issueStandardEntity.getQuestionsNumber()).thenReturn(questionsNumber);
+        Mockito.when(issueStandardEntity.getSubjectId()).thenReturn(subjectId);
+        return issueStandardEntity;
+    }
+
+    public static IssueStandardTopicPriorityEntity createTopicPriorityEntityMock(
+            Integer id,
+            Integer topicId,
+            Boolean isPreferable,
+            Integer issueStandardId
+    ) {
+        final IssueStandardTopicPriorityEntity topicPriorityEntity
+                = Mockito.mock(IssueStandardTopicPriorityEntity.class);
+        Mockito.when(topicPriorityEntity.getId()).thenReturn(id);
+        Mockito.when(topicPriorityEntity.getTopicId()).thenReturn(topicId);
+        Mockito.when(topicPriorityEntity.getIsPreferable()).thenReturn(isPreferable);
+        Mockito.when(topicPriorityEntity.getIssueStandardId()).thenReturn(issueStandardId);
+        return topicPriorityEntity;
+    }
+
+    public static IssueStandardQuestionTypeOptionEntity createQuestionTypeOptionEntityMock(
+            Integer id,
+            Integer questionTypeId,
+            Integer minQuestions,
+            Integer maxQuestions,
+            Integer timeLimit,
+            Integer issueStandardId
+    ) {
+        final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
+                = Mockito.mock(IssueStandardQuestionTypeOptionEntity.class);
+        Mockito.when(questionTypeOptionEntity.getId()).thenReturn(id);
+        Mockito.when(questionTypeOptionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
+        Mockito.when(questionTypeOptionEntity.getMinQuestions()).thenReturn(minQuestions);
+        Mockito.when(questionTypeOptionEntity.getMaxQuestions()).thenReturn(maxQuestions);
+        Mockito.when(questionTypeOptionEntity.getTimeLimit()).thenReturn(timeLimit);
+        Mockito.when(questionTypeOptionEntity.getIssueStandardId()).thenReturn(issueStandardId);
+        return questionTypeOptionEntity;
+    }
+
     public static TesteeEntity createTesteeEntityMock(
             Integer id,
             String firstName,
@@ -58,5 +105,4 @@ public abstract class Entities {
         return topicEntity;
 
     }
-
 }
