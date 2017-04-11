@@ -3,10 +3,10 @@ package easytests.services;
 import easytests.entities.*;
 import easytests.mappers.IssueStandardsMapper;
 import easytests.models.*;
-import easytests.models.empty.ModelsListEmpty;
-import easytests.models.empty.SubjectModelEmpty;
 import easytests.options.IssueStandardsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
+import easytests.support.Entities;
+import easytests.support.Models;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.*;
@@ -36,30 +36,6 @@ public class IssueStandardsServiceTest {
     @InjectMocks
     private IssueStandardsService issueStandardsService;
 
-    private IssueStandardEntity
-        createIssueStandardEntityMock(Integer id, Integer timeLimit, Integer questionsNumber, Integer subjectId) {
-
-        final IssueStandardEntity issueStandardEntity = Mockito.mock(IssueStandardEntity.class);
-        Mockito.when(issueStandardEntity.getId()).thenReturn(id);
-        Mockito.when(issueStandardEntity.getTimeLimit()).thenReturn(timeLimit);
-        Mockito.when(issueStandardEntity.getQuestionsNumber()).thenReturn(questionsNumber);
-        Mockito.when(issueStandardEntity.getSubjectId()).thenReturn(subjectId);
-        return issueStandardEntity;
-    }
-
-    private IssueStandardModelInterface
-        createIssueStandardModel(Integer id, Integer timeLimit, Integer questionsNumber, Integer subjectId) {
-
-        final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
-        issueStandardModel.setId(id);
-        issueStandardModel.setTimeLimit(timeLimit);
-        issueStandardModel.setQuestionsNumber(questionsNumber);
-        issueStandardModel.setTopicPriorities(new ModelsListEmpty());
-        issueStandardModel.setQuestionTypeOptions(new ModelsListEmpty());
-        issueStandardModel.setSubject(new SubjectModelEmpty(subjectId));
-        return issueStandardModel;
-    }
-
     private IssueStandardEntity mapIssueStandardEntity(IssueStandardModelInterface issueStandardModel) {
         final IssueStandardEntity issueStandardEntity = new IssueStandardEntity();
         issueStandardEntity.map(issueStandardModel);
@@ -74,8 +50,8 @@ public class IssueStandardsServiceTest {
 
     private List<IssueStandardEntity> getIssueStandardEntities() {
         final List<IssueStandardEntity> issueStandardEntities = new ArrayList<>(2);
-        issueStandardEntities.add(this.createIssueStandardEntityMock(1, 600, 10, 1));
-        issueStandardEntities.add(this.createIssueStandardEntityMock(2, 1200, 20, 2));
+        issueStandardEntities.add(Entities.createIssueStandardEntityMock(1, 600, 10, 1));
+        issueStandardEntities.add(Entities.createIssueStandardEntityMock(2, 1200, 20, 2));
         return issueStandardEntities;
     }
 
@@ -128,7 +104,7 @@ public class IssueStandardsServiceTest {
     @Test
     public void testFindPresentModel() throws Exception {
         final Integer id = 1;
-        final IssueStandardEntity issueStandardEntity = this.createIssueStandardEntityMock(id, 1200, 20, 2);
+        final IssueStandardEntity issueStandardEntity = Entities.createIssueStandardEntityMock(id, 1200, 20, 2);
         given(this.issueStandardsMapper.find(id)).willReturn(issueStandardEntity);
 
         final IssueStandardModelInterface issueStandardModel = this.issueStandardsService.find(id);
@@ -148,7 +124,7 @@ public class IssueStandardsServiceTest {
     @Test
     public void testFindWithOptions() throws Exception {
         final Integer id = 1;
-        final IssueStandardEntity issueStandardEntity = this.createIssueStandardEntityMock(id, 1200, 20, 2);
+        final IssueStandardEntity issueStandardEntity = Entities.createIssueStandardEntityMock(id, 1200, 20, 2);
         final IssueStandardModelInterface issueStandardModel = this.mapIssueStandardModel(issueStandardEntity);
 
         final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
@@ -166,7 +142,7 @@ public class IssueStandardsServiceTest {
     @Test
     public void testFindBySubjectPresentModel() throws Exception {
         final Integer subjectId = 3;
-        final IssueStandardEntity issueStandardEntity = this.createIssueStandardEntityMock(3, 600, 10, subjectId);
+        final IssueStandardEntity issueStandardEntity = Entities.createIssueStandardEntityMock(3, 600, 10, subjectId);
         given(this.issueStandardsMapper.findBySubjectId(subjectId)).willReturn(issueStandardEntity);
 
         final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
@@ -180,7 +156,7 @@ public class IssueStandardsServiceTest {
     @Test
     public void testFindBySubjectWithOptions() throws Exception {
         final Integer subjectId = 3;
-        final IssueStandardEntity issueStandardEntity = this.createIssueStandardEntityMock(3, 600, 10, subjectId);
+        final IssueStandardEntity issueStandardEntity = Entities.createIssueStandardEntityMock(3, 600, 10, subjectId);
         final IssueStandardModelInterface issueStandardModel = this.mapIssueStandardModel(issueStandardEntity);
 
         final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
@@ -209,7 +185,7 @@ public class IssueStandardsServiceTest {
 
     @Test
     public void testSaveUpdatesEntity() throws Exception {
-        final IssueStandardModelInterface issueStandardModel = this.createIssueStandardModel(1, 600, 10, 1);
+        final IssueStandardModelInterface issueStandardModel = Models.createIssueStandardModel(1, 600, 10, 1);
 
         this.issueStandardsService.save(issueStandardModel);
 
@@ -218,7 +194,7 @@ public class IssueStandardsServiceTest {
 
     @Test
     public void testSaveInsertsEntity() throws Exception {
-        final IssueStandardModelInterface issueStandardModel = this.createIssueStandardModel(null, 1200, 20, 5);
+        final IssueStandardModelInterface issueStandardModel = Models.createIssueStandardModel(null, 1200, 20, 5);
         final Integer id = 10;
 
         doAnswer(invocations -> {
@@ -236,8 +212,8 @@ public class IssueStandardsServiceTest {
     @Test
     public void testSaveList() throws  Exception {
         final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(2);
-        issueStandardModels.add(this.createIssueStandardModel(1, 600, 10, 1));
-        issueStandardModels.add(this.createIssueStandardModel(null, 1200, 20, 5));
+        issueStandardModels.add(Models.createIssueStandardModel(1, 600, 10, 1));
+        issueStandardModels.add(Models.createIssueStandardModel(null, 1200, 20, 5));
 
         final Integer id = 10;
         doAnswer(invocations -> {
@@ -255,7 +231,7 @@ public class IssueStandardsServiceTest {
 
     @Test
     public void testSaveWithOptions() throws Exception {
-        final IssueStandardModelInterface issueStandardModel = this.createIssueStandardModel(null, 1200, 20, 5);
+        final IssueStandardModelInterface issueStandardModel = Models.createIssueStandardModel(null, 1200, 20, 5);
         final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
 
         this.issueStandardsService.save(issueStandardModel, issueStandardsOptions);
@@ -277,7 +253,7 @@ public class IssueStandardsServiceTest {
 
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
-        final IssueStandardModelInterface issueStandardModel = this.createIssueStandardModel(1, 600, 10, 2);
+        final IssueStandardModelInterface issueStandardModel = Models.createIssueStandardModel(1, 600, 10, 2);
 
         this.issueStandardsService.delete(issueStandardModel);
 
@@ -286,7 +262,7 @@ public class IssueStandardsServiceTest {
 
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
-        final IssueStandardModelInterface issueStandardModel = this.createIssueStandardModel(null, 600, 10, 1);
+        final IssueStandardModelInterface issueStandardModel = Models.createIssueStandardModel(null, 600, 10, 1);
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.issueStandardsService.delete(issueStandardModel);
@@ -307,7 +283,7 @@ public class IssueStandardsServiceTest {
 
     @Test
     public void testDeleteWithOptions() throws Exception {
-        final IssueStandardModelInterface issueStandardModel = this.createIssueStandardModel(1, 1200, 20, 5);
+        final IssueStandardModelInterface issueStandardModel = Models.createIssueStandardModel(1, 1200, 20, 5);
         final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
 
         this.issueStandardsService.delete(issueStandardModel, issueStandardsOptions);

@@ -1,7 +1,6 @@
 package easytests.options;
 
 import easytests.models.IssueStandardModelInterface;
-import easytests.models.IssueStandardQuestionTypeOptionModel;
 import easytests.models.IssueStandardQuestionTypeOptionModelInterface;
 import easytests.models.QuestionTypeModelInterface;
 import easytests.models.empty.IssueStandardModelEmpty;
@@ -42,9 +41,10 @@ public class IssueStandardQuestionTypeOptionsOptionsTest {
         final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
 
         questionTypeOptionsOptions.setQuestionTypesService(questionTypesService);
-        questionTypeOptionsOptions.withQuestionType(questionTypesOptions);
         questionTypeOptionsOptions.setIssueStandardsService(issueStandardsService);
-        questionTypeOptionsOptions.withIssueStandard(issueStandardsOptions);
+        questionTypeOptionsOptions
+                .withQuestionType(questionTypesOptions)
+                .withIssueStandard(issueStandardsOptions);
 
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel = null;
 
@@ -95,9 +95,10 @@ public class IssueStandardQuestionTypeOptionsOptionsTest {
         Mockito.verify(questionTypeOptionModel, times(0)).setIssueStandard(issueStandardModel);
 
         questionTypeOptionsOptions.setQuestionTypesService(questionTypesService);
-        questionTypeOptionsOptions.withQuestionType(questionTypesOptions);
         questionTypeOptionsOptions.setIssueStandardsService(issueStandardsService);
-        questionTypeOptionsOptions.withIssueStandard(issueStandardsOptions);
+        questionTypeOptionsOptions
+                .withQuestionType(questionTypesOptions)
+                .withIssueStandard(issueStandardsOptions);
 
         // теперь options заданы
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModelWithRelations
@@ -181,9 +182,10 @@ public class IssueStandardQuestionTypeOptionsOptionsTest {
         Mockito.verify(questionTypeOptionModelSecond, times(0)).setIssueStandard(issueStandardModelSecond);
 
         questionTypeOptionsOptions.setQuestionTypesService(questionTypesService);
-        questionTypeOptionsOptions.withQuestionType(questionTypesOptions);
         questionTypeOptionsOptions.setIssueStandardsService(issueStandardsService);
-        questionTypeOptionsOptions.withIssueStandard(issueStandardsOptions);
+        questionTypeOptionsOptions
+                .withQuestionType(questionTypesOptions)
+                .withIssueStandard(issueStandardsOptions);
 
         // теперь options заданы
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModelsWithRelations
@@ -216,8 +218,8 @@ public class IssueStandardQuestionTypeOptionsOptionsTest {
         Mockito.when(issueStandardModel.getId()).thenReturn(issueStandardId);
 
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = new IssueStandardQuestionTypeOptionModel();
-        questionTypeOptionModel.setIssueStandard(issueStandardModel);
+                = Mockito.mock(IssueStandardQuestionTypeOptionModelInterface.class);
+        Mockito.when(questionTypeOptionModel.getIssueStandard()).thenReturn(issueStandardModel);
 
         questionTypeOptionsOptions.setQuestionTypeOptionsService(questionTypeOptionsService);
         questionTypeOptionsOptions.setIssueStandardsService(issueStandardsService);
@@ -246,8 +248,8 @@ public class IssueStandardQuestionTypeOptionsOptionsTest {
         Mockito.when(issueStandardModel.getId()).thenReturn(issueStandardId);
 
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = new IssueStandardQuestionTypeOptionModel();
-        questionTypeOptionModel.setIssueStandard(issueStandardModel);
+                = Mockito.mock(IssueStandardQuestionTypeOptionModelInterface.class);
+        Mockito.when(questionTypeOptionModel.getIssueStandard()).thenReturn(issueStandardModel);
 
         questionTypeOptionsOptions.setQuestionTypeOptionsService(questionTypeOptionsService);
         questionTypeOptionsOptions.setIssueStandardsService(issueStandardsService);
