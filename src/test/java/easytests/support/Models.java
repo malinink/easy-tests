@@ -1,5 +1,7 @@
 package easytests.support;
 
+import easytests.models.IssueModel;
+import easytests.models.IssueModelInterface;
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
 import easytests.models.empty.ModelsListEmpty;
@@ -30,5 +32,18 @@ public abstract class Models {
         userModel.setState(state);
         userModel.setSubjects(new ModelsListEmpty());
         return userModel;
+    }
+
+    public static IssueModelInterface createIssueModel(
+            Integer id,
+            String name,
+            Integer authorId
+    ) {
+        final IssueModelInterface issueModel = new IssueModel();
+        issueModel.setId(id);
+        issueModel.setName(name);
+        issueModel.setAuthorId(authorId);
+        issueModel.setQuizzes(new ModelsListEmpty());
+        return issueModel;
     }
 }

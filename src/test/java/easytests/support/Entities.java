@@ -1,5 +1,6 @@
 package easytests.support;
 
+import easytests.entities.IssueEntity;
 import easytests.entities.UserEntity;
 import org.mockito.Mockito;
 
@@ -28,5 +29,16 @@ public abstract class Entities {
         Mockito.when(userEntity.getIsAdmin()).thenReturn(isAdmin);
         Mockito.when(userEntity.getState()).thenReturn(state);
         return userEntity;
+    }
+    public static IssueEntity createIssueEntityMock(
+            Integer id,
+            String name,
+            Integer authorId
+    ) {
+        final IssueEntity issueEntity = Mockito.mock(IssueEntity.class);
+        Mockito.when(issueEntity.getId()).thenReturn(id);
+        Mockito.when(issueEntity.getName()).thenReturn(name);
+        Mockito.when(issueEntity.getAuthorId()).thenReturn(authorId);
+        return issueEntity;
     }
 }
