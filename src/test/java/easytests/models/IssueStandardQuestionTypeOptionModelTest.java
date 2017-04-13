@@ -20,6 +20,7 @@ public class IssueStandardQuestionTypeOptionModelTest {
     @Test
     public void testCommon() throws Exception {
         Configuration configuration = new ConfigurationBuilder()
+                .ignoreProperty("questionType")
                 .ignoreProperty("issueStandard")
                 .build();
         new BeanTester().testBean(IssueStandardQuestionTypeOptionModel.class, configuration);
@@ -48,7 +49,7 @@ public class IssueStandardQuestionTypeOptionModelTest {
         questionTypeOptionModel.map(questionTypeOptionEntity);
 
         Assert.assertEquals(id, questionTypeOptionModel.getId());
-        Assert.assertEquals(questionTypeId, questionTypeOptionModel.getQuestionTypeId());
+        Assert.assertEquals(questionTypeId, questionTypeOptionModel.getQuestionType().getId());
         Assert.assertEquals(minQuestions, questionTypeOptionModel.getMinQuestions());
         Assert.assertEquals(maxQuestions, questionTypeOptionModel.getMaxQuestions());
         Assert.assertEquals(timeLimit, questionTypeOptionModel.getTimeLimit());

@@ -51,14 +51,12 @@ public class TopicsService implements TopicsServiceInterface {
     public List<TopicModelInterface> findBySubject(
             SubjectModelInterface subjectModel,
             TopicsOptionsInterface topicsOptions) {
-        //TODO vkpankov
-        return null;
+        return topicsOptions.withRelations(this.map(this.topicsMapper.findBySubjectId(subjectModel.getId())));
     }
 
     @Override
     public List<TopicModelInterface> findBySubject(SubjectModelInterface subjectModel) {
-        //TODO vkpankov
-        return null;
+        return this.map(this.topicsMapper.findBySubjectId(subjectModel.getId()));
     }
 
     @Override

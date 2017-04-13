@@ -23,6 +23,10 @@ public interface TopicsMapper {
     @ResultMap("Topic")
     TopicEntity find(Integer id);
 
+    @Select("SELECT * FROM topics where subject_id=#{subjectId}")
+    @ResultMap("Topic")
+    List<TopicEntity> findBySubjectId(Integer subjectId);
+
     @Insert("INSERT INTO topics (name, subject_id) VALUES(#{name}, #{subjectId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(TopicEntity topic);

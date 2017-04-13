@@ -18,26 +18,26 @@ public interface IssueStandardsMapper {
             @Result(property = "questionsNumber", column = "questions_number"),
             @Result(property = "subjectId", column = "subject_id")
         })
-    @Select("SELECT * FROM issue_standard")
+    @Select("SELECT * FROM issue_standards")
     List<IssueStandardEntity> findAll();
 
-    @Select("SELECT * FROM issue_standard WHERE id=#{id}")
+    @Select("SELECT * FROM issue_standards WHERE id=#{id}")
     @ResultMap("IssueStandard")
     IssueStandardEntity find(Integer id);
 
-    @Select("SELECT * FROM issue_standard WHERE subject_id=#{subjectId}")
+    @Select("SELECT * FROM issue_standards WHERE subject_id=#{subjectId}")
     @ResultMap("IssueStandard")
     IssueStandardEntity findBySubjectId(Integer subjectId);
 
-    @Insert("INSERT INTO issue_standard (time_limit, questions_number, subject_id)"
+    @Insert("INSERT INTO issue_standards (time_limit, questions_number, subject_id)"
             + " VALUES (#{timeLimit}, #{questionsNumber}, #{subjectId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(IssueStandardEntity issueStandard);
 
-    @Update("UPDATE issue_standard SET time_limit=#{timeLimit}, questions_number=#{questionsNumber},"
+    @Update("UPDATE issue_standards SET time_limit=#{timeLimit}, questions_number=#{questionsNumber},"
             + " subject_id=#{subjectId} WHERE id=#{id}")
     void update(IssueStandardEntity issueStandard);
 
-    @Delete("DELETE FROM issue_standard WHERE id=#{id}")
+    @Delete("DELETE FROM issue_standards WHERE id=#{id}")
     void delete(IssueStandardEntity issueStandard);
 }
