@@ -14,3 +14,7 @@ formRecovery.addEventListener("submit", function(event) {
     formRecovery.classList.add("hide-block");
     message.classList.remove("hide-block");
 });
+
+$(document).ready(function() {
+    $('select').material_select();
+});

@@ -1,8 +1,8 @@
 package easytests.models;
 
 import easytests.entities.IssueStandardTopicPriorityEntity;
+import easytests.models.empty.IssueStandardModelEmpty;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.meanbean.test.*;
 import org.mockito.Mockito;
@@ -11,17 +11,13 @@ import org.mockito.Mockito;
  * @author SingularityA
  */
 public class IssueStandardTopicPriorityModelTest {
-    @Ignore
+
     @Test
     public void testCommon() {
         Configuration configuration = new ConfigurationBuilder()
                 .ignoreProperty("issueStandard")
                 .build();
-        // TODO: attempt to create specific factory
-        // testBean - passes
         new BeanTester().testBean(IssueStandardTopicPriorityModel.class, configuration);
-        new EqualsMethodTester().testEqualsMethod(IssueStandardTopicPriorityModel.class, configuration);
-        new HashCodeMethodTester().testHashCodeMethod(IssueStandardTopicPriorityModel.class);
     }
 
     @Test
@@ -30,7 +26,6 @@ public class IssueStandardTopicPriorityModelTest {
         final Integer topicId = 3;
         final Boolean isPreferable = false;
         final Integer issueStandardId = 2;
-
 
         final IssueStandardTopicPriorityEntity topicPriorityEntity
                 = Mockito.mock(IssueStandardTopicPriorityEntity.class);
@@ -45,6 +40,6 @@ public class IssueStandardTopicPriorityModelTest {
         Assert.assertEquals(id, topicPriorityModel.getId());
         Assert.assertEquals(topicId, topicPriorityModel.getTopicId());
         Assert.assertEquals(isPreferable, topicPriorityModel.getIsPreferable());
-        Assert.assertNull(topicPriorityModel.getIssueStandard());
+        Assert.assertEquals(new IssueStandardModelEmpty(issueStandardId), topicPriorityModel.getIssueStandard());
     }
 }

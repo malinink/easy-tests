@@ -46,6 +46,18 @@ public class AnswersMapperTest {
         Assert.assertEquals((Integer) 1, answer.getQuestionId());
         Assert.assertEquals(true, answer.getRight());
     }
+    
+    @Test
+    public void testFindByQuestionId() throws Exception {
+        final List<AnswerEntity> answers = this.answersMapper.findByQuestionId(1);
+        Assert.assertEquals((Integer) 1, (Integer) answers.size());
+        final AnswerEntity answer = answers.get(0);
+
+        Assert.assertEquals((Integer) 1, answer.getId());
+        Assert.assertEquals("Answer1", answer.getTxt());
+        Assert.assertEquals((Integer) 1, answer.getQuestionId());
+        Assert.assertEquals(true, answer.getRight());
+    }
 
     @Test
     public void testInsert() throws Exception {

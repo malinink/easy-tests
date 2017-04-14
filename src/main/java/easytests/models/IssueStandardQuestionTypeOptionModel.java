@@ -1,6 +1,8 @@
 package easytests.models;
 
 import easytests.entities.IssueStandardQuestionTypeOptionEntity;
+import easytests.models.empty.IssueStandardModelEmpty;
+import easytests.models.empty.QuestionTypeModelEmpty;
 import lombok.Data;
 
 /**
@@ -11,7 +13,7 @@ public class IssueStandardQuestionTypeOptionModel implements IssueStandardQuesti
 
     private Integer id;
 
-    private Integer questionTypeId;
+    private QuestionTypeModelInterface questionType;
 
     private Integer minQuestions;
 
@@ -23,9 +25,10 @@ public class IssueStandardQuestionTypeOptionModel implements IssueStandardQuesti
 
     public void map(IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity) {
         this.setId(questionTypeOptionEntity.getId());
-        this.setQuestionTypeId(questionTypeOptionEntity.getQuestionTypeId());
+        this.setQuestionType(new QuestionTypeModelEmpty(questionTypeOptionEntity.getQuestionTypeId()));
         this.setMinQuestions(questionTypeOptionEntity.getMinQuestions());
         this.setMaxQuestions(questionTypeOptionEntity.getMaxQuestions());
         this.setTimeLimit(questionTypeOptionEntity.getTimeLimit());
+        this.setIssueStandard(new IssueStandardModelEmpty(questionTypeOptionEntity.getIssueStandardId()));
     }
 }

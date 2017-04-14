@@ -37,6 +37,16 @@ public class SubjectModelEmpty extends AbstractModelEmpty implements SubjectMode
     }
 
     @Override
+    public String getDescription() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setDescription(String name) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
     public List<TopicModelInterface> getTopics() {
         throw new CallMethodOnEmptyModelException();
     }

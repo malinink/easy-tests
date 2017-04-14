@@ -23,7 +23,7 @@ public class IssueStandardQuestionTypeOptionEntity {
 
     public void map(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel) {
         this.setId(questionTypeOptionModel.getId());
-        this.setQuestionTypeId(questionTypeOptionModel.getQuestionTypeId());
+        this.setQuestionTypeId(questionTypeOptionModel.getQuestionType().getId());
         this.setMinQuestions(questionTypeOptionModel.getMinQuestions());
         this.setMaxQuestions(questionTypeOptionModel.getMaxQuestions());
         this.setTimeLimit(questionTypeOptionModel.getTimeLimit());

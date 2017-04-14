@@ -1,7 +1,6 @@
 package easytests.support;
 
-import easytests.entities.IssueEntity;
-import easytests.entities.UserEntity;
+import easytests.entities.*;
 import org.mockito.Mockito;
 
 
@@ -30,15 +29,80 @@ public abstract class Entities {
         Mockito.when(userEntity.getState()).thenReturn(state);
         return userEntity;
     }
-    public static IssueEntity createIssueEntityMock(
+
+    public static IssueStandardEntity createIssueStandardEntityMock(
             Integer id,
-            String name,
-            Integer authorId
+            Integer timeLimit,
+            Integer questionsNumber,
+            Integer subjectId
     ) {
-        final IssueEntity issueEntity = Mockito.mock(IssueEntity.class);
-        Mockito.when(issueEntity.getId()).thenReturn(id);
-        Mockito.when(issueEntity.getName()).thenReturn(name);
-        Mockito.when(issueEntity.getAuthorId()).thenReturn(authorId);
-        return issueEntity;
+
+        final IssueStandardEntity issueStandardEntity = Mockito.mock(IssueStandardEntity.class);
+        Mockito.when(issueStandardEntity.getId()).thenReturn(id);
+        Mockito.when(issueStandardEntity.getTimeLimit()).thenReturn(timeLimit);
+        Mockito.when(issueStandardEntity.getQuestionsNumber()).thenReturn(questionsNumber);
+        Mockito.when(issueStandardEntity.getSubjectId()).thenReturn(subjectId);
+        return issueStandardEntity;
+    }
+
+    public static IssueStandardTopicPriorityEntity createTopicPriorityEntityMock(
+            Integer id,
+            Integer topicId,
+            Boolean isPreferable,
+            Integer issueStandardId
+    ) {
+        final IssueStandardTopicPriorityEntity topicPriorityEntity
+                = Mockito.mock(IssueStandardTopicPriorityEntity.class);
+        Mockito.when(topicPriorityEntity.getId()).thenReturn(id);
+        Mockito.when(topicPriorityEntity.getTopicId()).thenReturn(topicId);
+        Mockito.when(topicPriorityEntity.getIsPreferable()).thenReturn(isPreferable);
+        Mockito.when(topicPriorityEntity.getIssueStandardId()).thenReturn(issueStandardId);
+        return topicPriorityEntity;
+    }
+
+    public static IssueStandardQuestionTypeOptionEntity createQuestionTypeOptionEntityMock(
+            Integer id,
+            Integer questionTypeId,
+            Integer minQuestions,
+            Integer maxQuestions,
+            Integer timeLimit,
+            Integer issueStandardId
+    ) {
+        final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
+                = Mockito.mock(IssueStandardQuestionTypeOptionEntity.class);
+        Mockito.when(questionTypeOptionEntity.getId()).thenReturn(id);
+        Mockito.when(questionTypeOptionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
+        Mockito.when(questionTypeOptionEntity.getMinQuestions()).thenReturn(minQuestions);
+        Mockito.when(questionTypeOptionEntity.getMaxQuestions()).thenReturn(maxQuestions);
+        Mockito.when(questionTypeOptionEntity.getTimeLimit()).thenReturn(timeLimit);
+        Mockito.when(questionTypeOptionEntity.getIssueStandardId()).thenReturn(issueStandardId);
+        return questionTypeOptionEntity;
+    }
+
+    public static TesteeEntity createTesteeEntityMock(
+            Integer id,
+            String firstName,
+            String lastName,
+            String surname,
+            Integer groupNumber
+    ) {
+        final TesteeEntity testeeEntity = Mockito.mock(TesteeEntity.class);
+        Mockito.when(testeeEntity.getId()).thenReturn(id);
+        Mockito.when(testeeEntity.getFirstName()).thenReturn(firstName);
+        Mockito.when(testeeEntity.getLastName()).thenReturn(lastName);
+        Mockito.when(testeeEntity.getSurname()).thenReturn(surname);
+        Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
+        return testeeEntity;
+    }
+
+    public static TopicEntity createTopicEntityMock(Integer id, Integer subjectId, String name) {
+
+        final TopicEntity topicEntity = Mockito.mock(TopicEntity.class);
+
+        Mockito.when(topicEntity.getId()).thenReturn(id);
+        Mockito.when(topicEntity.getSubjectId()).thenReturn(subjectId);
+        Mockito.when(topicEntity.getName()).thenReturn(name);
+        return topicEntity;
+
     }
 }

@@ -5,7 +5,10 @@ import easytests.mappers.IssueStandardTopicPrioritiesMapper;
 import easytests.models.IssueStandardModelInterface;
 import easytests.models.IssueStandardTopicPriorityModel;
 import easytests.models.IssueStandardTopicPriorityModelInterface;
+import easytests.options.IssueStandardTopicPrioritiesOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
+import easytests.support.Entities;
+import easytests.support.Models;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -40,32 +43,6 @@ public class IssueStandardTopicPrioritiesServiceTest {
     @InjectMocks
     private IssueStandardTopicPrioritiesService topicPrioritiesService;
 
-    private IssueStandardTopicPriorityEntity
-        createTopicPriorityEntityMock(Integer id, Integer topicId, Boolean isPreferable, Integer issueStandardId) {
-
-        final IssueStandardTopicPriorityEntity topicPriorityEntity
-                = Mockito.mock(IssueStandardTopicPriorityEntity.class);
-        Mockito.when(topicPriorityEntity.getId()).thenReturn(id);
-        Mockito.when(topicPriorityEntity.getTopicId()).thenReturn(topicId);
-        Mockito.when(topicPriorityEntity.getIsPreferable()).thenReturn(isPreferable);
-        Mockito.when(topicPriorityEntity.getIssueStandardId()).thenReturn(issueStandardId);
-        return topicPriorityEntity;
-    }
-
-    private IssueStandardTopicPriorityModelInterface
-        createTopicPriorityModel(Integer id, Integer topicId, Boolean isPreferable, Integer issueStandardId) {
-
-        final IssueStandardTopicPriorityModelInterface topicPriorityModel = new IssueStandardTopicPriorityModel();
-        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
-        Mockito.when(issueStandardModel.getId()).thenReturn(issueStandardId);
-
-        topicPriorityModel.setId(id);
-        topicPriorityModel.setTopicId(topicId);
-        topicPriorityModel.setIsPreferable(isPreferable);
-        topicPriorityModel.setIssueStandard(issueStandardModel);
-        return topicPriorityModel;
-    }
-
     private IssueStandardTopicPriorityModelInterface
         mapTopicPriorityModel(IssueStandardTopicPriorityEntity topicPriorityEntity) {
 
@@ -82,21 +59,31 @@ public class IssueStandardTopicPrioritiesServiceTest {
         return topicPriorityEntity;
     }
 
+    private List<IssueStandardTopicPriorityEntity> getTopicPriorityEntities() {
+        List<IssueStandardTopicPriorityEntity> topicPriorityEntities = new ArrayList<>(2);
+        topicPriorityEntities.add(Entities.createTopicPriorityEntityMock(1, 11, true, 3));
+        topicPriorityEntities.add(Entities.createTopicPriorityEntityMock(2, 12, false, 4));
+        return topicPriorityEntities;
+    }
+
+    private List<IssueStandardTopicPriorityModelInterface> getTopicPriorityModels() {
+        List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = new ArrayList<>(2);
+        for (IssueStandardTopicPriorityEntity topicPriorityEntity: this.getTopicPriorityEntities()) {
+            topicPriorityModels.add(this.mapTopicPriorityModel(topicPriorityEntity));
+        }
+        return topicPriorityModels;
+    }
+
     @Test
     public void testFindAllPresentList() throws Exception {
-        final List<IssueStandardTopicPriorityEntity> topicPriorityEntities = new ArrayList<>(2);
-        topicPriorityEntities.add(this.createTopicPriorityEntityMock(1, 1, true, 1));
-        topicPriorityEntities.add(this.createTopicPriorityEntityMock(2, 3, false, 2));
+        final List<IssueStandardTopicPriorityEntity> topicPriorityEntities = this.getTopicPriorityEntities();
         given(this.topicPrioritiesMapper.findAll()).willReturn(topicPriorityEntities);
 
         final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels
                 = this.topicPrioritiesService.findAll();
 
         Assert.assertNotNull(topicPriorityModels);
-        Assert.assertEquals(topicPriorityEntities.size(), topicPriorityModels.size());
-        for (int i = 0; i < topicPriorityModels.size(); i++) {
-            Assert.assertEquals(topicPriorityModels.get(i), this.mapTopicPriorityModel(topicPriorityEntities.get(i)));
-        }
+        Assert.assertEquals(this.getTopicPriorityModels(), topicPriorityModels);
     }
 
     @Test
@@ -111,9 +98,28 @@ public class IssueStandardTopicPrioritiesServiceTest {
     }
 
     @Test
+    public void testFindAllWithOptions() throws Exception {
+        final List<IssueStandardTopicPriorityEntity> topicPriorityEntities = this.getTopicPriorityEntities();
+        final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = this.getTopicPriorityModels();
+
+        final IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions
+                = Mockito.mock(IssueStandardTopicPrioritiesOptionsInterface.class);
+        given(this.topicPrioritiesMapper.findAll()).willReturn(topicPriorityEntities);
+        given(topicPrioritiesOptions.withRelations(Mockito.anyList())).willReturn(topicPriorityModels);
+
+        final List<IssueStandardTopicPriorityModelInterface> foundedTopicPriorityModels
+                = this.topicPrioritiesService.findAll(topicPrioritiesOptions);
+
+        verify(topicPrioritiesOptions).withRelations(topicPriorityModels);
+        Assert.assertNotNull(foundedTopicPriorityModels);
+        Assert.assertEquals(topicPriorityModels, foundedTopicPriorityModels);
+    }
+
+    @Test
     public void testFindPresentModel() throws Exception {
         final Integer id = 1;
-        final IssueStandardTopicPriorityEntity topicPriorityEntity = this.createTopicPriorityEntityMock(id, 2, true, 3);
+        final IssueStandardTopicPriorityEntity topicPriorityEntity
+                = Entities.createTopicPriorityEntityMock(id, 2, true, 3);
         given(this.topicPrioritiesMapper.find(id)).willReturn(topicPriorityEntity);
 
         final IssueStandardTopicPriorityModelInterface topicPriorityModel = this.topicPrioritiesService.find(id);
@@ -133,12 +139,32 @@ public class IssueStandardTopicPrioritiesServiceTest {
     }
 
     @Test
+    public void testFindWithOptions() throws Exception {
+        final Integer id = 1;
+        final IssueStandardTopicPriorityEntity topicPriorityEntity
+                = Entities.createTopicPriorityEntityMock(id, 2, true, 3);
+        final IssueStandardTopicPriorityModelInterface topicPriorityModel = this.mapTopicPriorityModel(topicPriorityEntity);
+
+        final IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions
+                = Mockito.mock(IssueStandardTopicPrioritiesOptionsInterface.class);
+        given(this.topicPrioritiesMapper.find(id)).willReturn(topicPriorityEntity);
+        given(topicPrioritiesOptions.withRelations(topicPriorityModel)).willReturn(topicPriorityModel);
+
+        final IssueStandardTopicPriorityModelInterface foundedTopicPriorityModels
+                = this.topicPrioritiesService.find(id, topicPrioritiesOptions);
+
+        verify(topicPrioritiesOptions).withRelations(topicPriorityModel);
+        Assert.assertNotNull(foundedTopicPriorityModels);
+        Assert.assertEquals(topicPriorityModel, foundedTopicPriorityModels);
+    }
+
+    @Test
     public void testFindByIssueStandardPresentList() throws Exception {
         final Integer issueStandardId = 5;
         final List<IssueStandardTopicPriorityEntity> topicPriorityEntities = new ArrayList<>(2);
 
-        topicPriorityEntities.add(this.createTopicPriorityEntityMock(1, 2, true, issueStandardId));
-        topicPriorityEntities.add(this.createTopicPriorityEntityMock(2, 4, false, issueStandardId));
+        topicPriorityEntities.add(Entities.createTopicPriorityEntityMock(1, 2, true, issueStandardId));
+        topicPriorityEntities.add(Entities.createTopicPriorityEntityMock(2, 4, false, issueStandardId));
         given(this.topicPrioritiesMapper.findByIssueStandardId(issueStandardId)).willReturn(topicPriorityEntities);
 
         final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
@@ -170,20 +196,46 @@ public class IssueStandardTopicPrioritiesServiceTest {
     }
 
     @Test
+    public void testFindByIssueStandardWithOptions() throws Exception {
+        Integer issueStandardId = 10;
+        final List<IssueStandardTopicPriorityEntity> topicPriorityEntities = new ArrayList<>(2);
+        topicPriorityEntities.add(Entities.createTopicPriorityEntityMock(1, 2, true, issueStandardId));
+        topicPriorityEntities.add(Entities.createTopicPriorityEntityMock(3, 4, true, issueStandardId));
+
+        final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = new ArrayList<>(2);
+        topicPriorityModels.add(this.mapTopicPriorityModel(topicPriorityEntities.get(0)));
+        topicPriorityModels.add(this.mapTopicPriorityModel(topicPriorityEntities.get(1)));
+
+        final IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions
+                = Mockito.mock(IssueStandardTopicPrioritiesOptionsInterface.class);
+        given(this.topicPrioritiesMapper.findByIssueStandardId(issueStandardId)).willReturn(topicPriorityEntities);
+        given(topicPrioritiesOptions.withRelations(topicPriorityModels)).willReturn(topicPriorityModels);
+
+        final List<IssueStandardTopicPriorityModelInterface> foundedTopicPriorityModels
+                = this.topicPrioritiesService.findByIssueStandard(
+                        topicPriorityModels.get(0).getIssueStandard(), topicPrioritiesOptions);
+
+        verify(topicPrioritiesOptions).withRelations(topicPriorityModels);
+        Assert.assertNotNull(foundedTopicPriorityModels);
+        Assert.assertEquals(topicPriorityModels, foundedTopicPriorityModels);
+    }
+
+    @Test
     public void testSaveUpdatesEntity() throws Exception {
         final IssueStandardTopicPriorityModelInterface topicPriorityModel
-                = this.createTopicPriorityModel(1, 2, false, 1);
+                = Models.createTopicPriorityModel(1, 2, false, 1);
 
         this.topicPrioritiesService.save(topicPriorityModel);
+
         verify(this.topicPrioritiesMapper, times(1)).update(this.mapTopicPriorityEntity(topicPriorityModel));
     }
 
     @Test
     public void testSaveInsertsEntity() throws Exception {
         final IssueStandardTopicPriorityModelInterface topicPriorityModel
-                = this.createTopicPriorityModel(null, 3, true, 5);
-        final Integer id = 10;
+                = Models.createTopicPriorityModel(null, 3, true, 5);
 
+        final Integer id = 10;
         doAnswer(invocations -> {
             final IssueStandardTopicPriorityEntity topicPriorityEntity
                     = (IssueStandardTopicPriorityEntity) invocations.getArguments()[0];
@@ -198,20 +250,107 @@ public class IssueStandardTopicPrioritiesServiceTest {
     }
 
     @Test
+    public void testSaveList() throws Exception {
+        final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = new ArrayList<>(2);
+        topicPriorityModels.add(Models.createTopicPriorityModel(1, 2, true, 3));
+        topicPriorityModels.add(Models.createTopicPriorityModel(null, 3, false, 3));
+
+        final Integer id = 10;
+        doAnswer(invocations -> {
+            final IssueStandardTopicPriorityEntity topicPriorityEntity
+                    = (IssueStandardTopicPriorityEntity) invocations.getArguments()[0];
+            topicPriorityEntity.setId(id);
+            return null;
+        }).when(this.topicPrioritiesMapper).insert(Mockito.any(IssueStandardTopicPriorityEntity.class));
+
+        this.topicPrioritiesService.save(topicPriorityModels);
+
+        verify(this.topicPrioritiesMapper, times(1)).update(this.mapTopicPriorityEntity(topicPriorityModels.get(0)));
+        verify(this.topicPrioritiesMapper, times(1)).insert(this.mapTopicPriorityEntity(topicPriorityModels.get(1)));
+        Assert.assertEquals(id, topicPriorityModels.get(1).getId());
+    }
+
+    @Test
+    public void testSaveWithOptions() throws Exception {
+        final IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions
+                = Mockito.mock(IssueStandardTopicPrioritiesOptionsInterface.class);
+
+        final IssueStandardTopicPriorityModelInterface topicPriorityModel
+                = Models.createTopicPriorityModel(1, 2, false, 1);
+
+        this.topicPrioritiesService.save(topicPriorityModel, topicPrioritiesOptions);
+
+        verify(topicPrioritiesOptions).saveWithRelations(topicPriorityModel);
+    }
+
+    @Test
+    public void testSaveListWithOptions() throws Exception {
+        final IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions
+                = Mockito.mock(IssueStandardTopicPrioritiesOptionsInterface.class);
+        final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = this.getTopicPriorityModels();
+
+        this.topicPrioritiesService.save(topicPriorityModels, topicPrioritiesOptions);
+
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+            verify(topicPrioritiesOptions).saveWithRelations(topicPriorityModel);
+        }
+    }
+
+    @Test
     public void testDeleteIdentifiedModel() throws Exception {
         final IssueStandardTopicPriorityModelInterface topicPriorityModel
-                = this.createTopicPriorityModel(1, 3, true, 1);
+                = Models.createTopicPriorityModel(1, 3, true, 1);
 
         this.topicPrioritiesService.delete(topicPriorityModel);
+
         verify(this.topicPrioritiesMapper, times(1)).delete(this.mapTopicPriorityEntity(topicPriorityModel));
     }
 
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
         final IssueStandardTopicPriorityModelInterface topicPriorityModel
-                = this.createTopicPriorityModel(null, 2, true, 4);
+                = Models.createTopicPriorityModel(null, 2, true, 4);
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.topicPrioritiesService.delete(topicPriorityModel);
+
+        verify(this.topicPrioritiesMapper, times(0)).delete(this.mapTopicPriorityEntity(topicPriorityModel));
+    }
+
+    @Test
+    public void testDeleteList() throws Exception {
+        final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = this.getTopicPriorityModels();
+
+        this.topicPrioritiesService.delete(topicPriorityModels);
+
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+            verify(this.topicPrioritiesMapper, times(1)).delete(this.mapTopicPriorityEntity(topicPriorityModel));
+        }
+    }
+
+    @Test
+    public void testDeleteWithOptions() throws Exception {
+        final IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions
+                = Mockito.mock(IssueStandardTopicPrioritiesOptionsInterface.class);
+
+        final IssueStandardTopicPriorityModelInterface topicPriorityModel
+                = Models.createTopicPriorityModel(1, 2, false, 1);
+
+        this.topicPrioritiesService.delete(topicPriorityModel, topicPrioritiesOptions);
+
+        verify(topicPrioritiesOptions).deleteWithRelations(topicPriorityModel);
+    }
+
+    @Test
+    public void testDeleteListWithOptions() throws Exception {
+        final IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions
+                = Mockito.mock(IssueStandardTopicPrioritiesOptionsInterface.class);
+        final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = this.getTopicPriorityModels();
+
+        this.topicPrioritiesService.delete(topicPriorityModels, topicPrioritiesOptions);
+
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+            verify(topicPrioritiesOptions).deleteWithRelations(topicPriorityModel);
+        }
     }
 }

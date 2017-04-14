@@ -51,7 +51,7 @@ public class QuestionModelEmpty extends AbstractModelEmpty implements QuestionMo
     }
 
     @Override
-    public void setTopic(TopicModelInterface user) {
+    public void setTopic(TopicModelInterface topic) {
         throw new CallMethodOnEmptyModelException();
     }
 

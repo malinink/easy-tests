@@ -12,7 +12,11 @@ import java.util.List;
 public interface SubjectsServiceInterface extends ServiceInterface {
     List<SubjectModelInterface> findAll();
 
+    List<SubjectModelInterface> findAll(SubjectsOptionsInterface subjectsOptions);
+
     SubjectModelInterface find(Integer id);
+
+    SubjectModelInterface find(Integer id, SubjectsOptionsInterface subjectsOptions);
 
     List<SubjectModelInterface> findByUser(UserModelInterface userModel);
 
