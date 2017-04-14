@@ -1,6 +1,7 @@
 package easytests.entities;
 
 import easytests.models.QuestionModelInterface;
+import easytests.models.QuestionTypeModelInterface;
 import easytests.models.TopicModelInterface;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,16 +26,19 @@ public class QuestionEntityTest {
     public void testMap() throws Exception {
         final Integer questionId = 1;
         final String text = "test1";
-        final Integer type = 1;
+        final Integer questionTypeId = 1;
         final Integer topicId = 1;
         
         final TopicModelInterface topic = Mockito.mock(TopicModelInterface.class);
         Mockito.when(topic.getId()).thenReturn(topicId);
 
+        final QuestionTypeModelInterface questionType = Mockito.mock(QuestionTypeModelInterface.class);
+        Mockito.when(questionType.getId()).thenReturn(questionTypeId);
+
         final QuestionModelInterface questionModel = Mockito.mock(QuestionModelInterface.class);
         Mockito.when(questionModel.getId()).thenReturn(questionId);
         Mockito.when(questionModel.getText()).thenReturn(text);
-        Mockito.when(questionModel.getType()).thenReturn(type);
+        Mockito.when(questionModel.getQuestionType()).thenReturn(questionType);
         Mockito.when(questionModel.getTopic()).thenReturn(topic);
 
         final QuestionEntity questionEntity = new QuestionEntity();
@@ -42,7 +46,7 @@ public class QuestionEntityTest {
 
         Assert.assertEquals(questionId, questionEntity.getId());
         Assert.assertEquals(text, questionEntity.getText());
-        Assert.assertEquals(type, questionEntity.getType());
+        Assert.assertEquals(questionTypeId, questionEntity.getQuestionTypeId());
         Assert.assertEquals(topicId, questionEntity.getTopicId());
     }
 }
