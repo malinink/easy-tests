@@ -1,10 +1,13 @@
 package easytests.options;
 
 import easytests.models.AnswerModelInterface;
+import easytests.models.QuestionTypeModelInterface;
 import easytests.models.TopicModelInterface;
 import easytests.models.QuestionModelInterface;
+import easytests.models.empty.QuestionTypeModelEmpty;
 import easytests.models.empty.TopicModelEmpty;
 import easytests.services.AnswersServiceInterface;
+import easytests.services.QuestionTypesServiceInterface;
 import easytests.services.TopicsServiceInterface;
 import easytests.services.QuestionsServiceInterface;
 import java.util.ArrayList;
@@ -31,28 +34,37 @@ public class QuestionsOptionsTest {
         final QuestionModelInterface questionModel = Mockito.mock(QuestionModelInterface.class);
         questionModel.setId(1);
         given(questionModel.getTopic()).willReturn(new TopicModelEmpty(1));
+        given(questionModel.getQuestionType()).willReturn(new QuestionTypeModelEmpty(1));
         final QuestionsOptionsInterface questionsOptions = new QuestionsOptions();
         final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
         final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
         final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
         final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
+        final QuestionTypesServiceInterface questionTypesService = Mockito.mock(QuestionTypesServiceInterface.class);
+        final QuestionTypesOptionsInterface questionTypesOptions = Mockito.mock(QuestionTypesOptionsInterface.class);
         questionsOptions.setAnswersService(answersService);
         questionsOptions.withAnswers(answersOptions);
         questionsOptions.setTopicsService(topicsService);
         questionsOptions.withTopic(topicsOptions);
+        questionsOptions.setQuestionTypesService(questionTypesService);
+        questionsOptions.withQuestionType(questionTypesOptions);
         final List<AnswerModelInterface> answersModels = new ArrayList<>();
         answersModels.add(Mockito.mock(AnswerModelInterface.class));
         TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
+        QuestionTypeModelInterface questionTypeModel = Mockito.mock(QuestionTypeModelInterface.class);
         given(answersService.findByQuestion(questionModel, answersOptions)).willReturn(answersModels);
         given(topicsService.find(questionModel.getTopic().getId(), topicsOptions)).willReturn(topicModel);
+        given(questionTypesService.find(questionModel.getQuestionType().getId(), questionTypesOptions)).willReturn(questionTypeModel);
 
         final QuestionModelInterface questionModelWithRelations = questionsOptions.withRelations(questionModel);
 
         Assert.assertEquals(questionModel, questionModelWithRelations);
         verify(answersService).findByQuestion(questionModel, answersOptions);
         verify(topicsService).find(questionModel.getTopic().getId(), topicsOptions);
+        verify(questionTypesService).find(questionModel.getQuestionType().getId(), questionTypesOptions);
         verify(questionModel).setAnswers(answersModels);
         verify(questionModel).setTopic(topicModel);
+        verify(questionModel).setQuestionType(questionTypeModel);
         verify(questionModel).setAnswers(Mockito.anyList());
     }
 
@@ -64,10 +76,14 @@ public class QuestionsOptionsTest {
         final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
         final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
         final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
+        final QuestionTypesServiceInterface questionTypesService = Mockito.mock(QuestionTypesServiceInterface.class);
+        final QuestionTypesOptionsInterface questionTypesOptions = Mockito.mock(QuestionTypesOptionsInterface.class);
         questionsOptions.setAnswersService(answersService);
         questionsOptions.withAnswers(answersOptions);
         questionsOptions.setTopicsService(topicsService);
         questionsOptions.withTopic(topicsOptions);
+        questionsOptions.setQuestionTypesService(questionTypesService);
+        questionsOptions.withQuestionType(questionTypesOptions);
 
         final QuestionModelInterface questionModelWithRelations = questionsOptions.withRelations(questionModel);
 
@@ -79,9 +95,11 @@ public class QuestionsOptionsTest {
         final QuestionModelInterface questionModelFirst = Mockito.mock(QuestionModelInterface.class);
         questionModelFirst.setId(1);
         given(questionModelFirst.getTopic()).willReturn(new TopicModelEmpty(1));
+        given(questionModelFirst.getQuestionType()).willReturn(new QuestionTypeModelEmpty(1));
         final QuestionModelInterface questionModelSecond = Mockito.mock(QuestionModelInterface.class);
         questionModelSecond.setId(2);
         given(questionModelSecond.getTopic()).willReturn(new TopicModelEmpty(2));
+        given(questionModelSecond.getQuestionType()).willReturn(new QuestionTypeModelEmpty(2));
         final List<QuestionModelInterface> questionsModels = new ArrayList<>(2);
         questionsModels.add(questionModelFirst);
         questionsModels.add(questionModelSecond);
@@ -91,20 +109,28 @@ public class QuestionsOptionsTest {
         final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
         final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
         final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
+        final QuestionTypesServiceInterface questionTypesService = Mockito.mock(QuestionTypesServiceInterface.class);
+        final QuestionTypesOptionsInterface questionTypesOptions = Mockito.mock(QuestionTypesOptionsInterface.class);
         questionsOptions.setAnswersService(answersService);
         questionsOptions.withAnswers(answersOptions);
         questionsOptions.setTopicsService(topicsService);
         questionsOptions.withTopic(topicsOptions);
+        questionsOptions.setQuestionTypesService(questionTypesService);
+        questionsOptions.withQuestionType(questionTypesOptions);
         final List<AnswerModelInterface> answersModelsFirst = new ArrayList<>();
         answersModelsFirst.add(Mockito.mock(AnswerModelInterface.class));
         final List<AnswerModelInterface> answersModelsSecond = new ArrayList<>();
         answersModelsSecond.add(Mockito.mock(AnswerModelInterface.class));
         TopicModelInterface topicModelFirst = Mockito.mock(TopicModelInterface.class);
         TopicModelInterface topicModelSecond = Mockito.mock(TopicModelInterface.class);
+        QuestionTypeModelInterface questionTypeModelFirst = Mockito.mock(QuestionTypeModelInterface.class);
+        QuestionTypeModelInterface questionTypeModelSecond = Mockito.mock(QuestionTypeModelInterface.class);
         given(answersService.findByQuestion(questionModelFirst, answersOptions)).willReturn(answersModelsFirst);
         given(answersService.findByQuestion(questionModelSecond, answersOptions)).willReturn(answersModelsSecond);
         given(topicsService.find(questionModelFirst.getTopic().getId(), topicsOptions)).willReturn(topicModelFirst);
         given(topicsService.find(questionModelSecond.getTopic().getId(), topicsOptions)).willReturn(topicModelSecond);
+        given(questionTypesService.find(questionModelFirst.getQuestionType().getId(), questionTypesOptions)).willReturn(questionTypeModelFirst);
+        given(questionTypesService.find(questionModelSecond.getQuestionType().getId(), questionTypesOptions)).willReturn(questionTypeModelSecond);
 
         final List<QuestionModelInterface> questionsModelsWithRelations = questionsOptions.withRelations(questionsModels);
 
@@ -119,6 +145,10 @@ public class QuestionsOptionsTest {
         verify(topicsService).find(questionModelSecond.getTopic().getId(), topicsOptions);
         verify(questionsModels.get(0)).setTopic(topicModelFirst);
         verify(questionsModels.get(1)).setTopic(topicModelSecond);
+        verify(questionTypesService).find(questionModelFirst.getQuestionType().getId(), questionTypesOptions);
+        verify(questionTypesService).find(questionModelSecond.getQuestionType().getId(), questionTypesOptions);
+        verify(questionModelFirst).setQuestionType(questionTypeModelFirst);
+        verify(questionModelSecond).setQuestionType(questionTypeModelSecond);
     }
 
     @Test
