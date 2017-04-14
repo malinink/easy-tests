@@ -41,7 +41,7 @@ public class QuestionsMapperTest {
         final QuestionEntity question = this.questionsMapper.find(1);
         Assert.assertEquals((long) 1, (long) question.getId());
         Assert.assertEquals("test1", question.getText());
-        Assert.assertEquals((long) 1, (long) question.getType());
+        Assert.assertEquals((long) 1, (long) question.getQuestionTypeId());
         Assert.assertEquals((long) 1, (long) question.getTopicId());
     }
 
@@ -53,7 +53,7 @@ public class QuestionsMapperTest {
 
         Assert.assertEquals((Integer) 3, question.getId());
         Assert.assertEquals("test3", question.getText());
-        Assert.assertEquals((Integer) 3, question.getType());
+        Assert.assertEquals((Integer) 3, question.getQuestionTypeId());
         Assert.assertEquals((Integer) 2, question.getTopicId());
     }
 
@@ -61,12 +61,12 @@ public class QuestionsMapperTest {
     public void testInsert() throws Exception {
         final Integer id = this.questionsMapper.findAll().size() + 1;
         final String text = "text1";
-        final Integer type = 1;
+        final Integer questionTypeId = 1;
         final Integer topicId = 1;
 
         QuestionEntity questionEntity = Mockito.mock(QuestionEntity.class);
         Mockito.when(questionEntity.getText()).thenReturn(text);
-        Mockito.when(questionEntity.getType()).thenReturn(type);
+        Mockito.when(questionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
         Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
 
         this.questionsMapper.insert(questionEntity);
@@ -76,7 +76,7 @@ public class QuestionsMapperTest {
         questionEntity = this.questionsMapper.find(id);
         Assert.assertEquals(id, questionEntity.getId());
         Assert.assertEquals(text, questionEntity.getText());
-        Assert.assertEquals(type, questionEntity.getType());
+        Assert.assertEquals(questionTypeId, questionEntity.getQuestionTypeId());
         Assert.assertEquals(topicId, questionEntity.getTopicId());
     }
 
@@ -84,20 +84,20 @@ public class QuestionsMapperTest {
     public void testUpdate() throws Exception {
         final Integer id = 1;
         final String text = "text2";
-        final Integer type = 2;
+        final Integer questionTypeId = 2;
         final Integer topicId = 2;
 
         QuestionEntity questionEntity = this.questionsMapper.find(id);
         Assert.assertNotNull(questionEntity);
         Assert.assertEquals(id, questionEntity.getId());
         Assert.assertNotEquals(text, questionEntity.getText());
-        Assert.assertNotEquals(type, questionEntity.getType());
+        Assert.assertNotEquals(questionTypeId, questionEntity.getQuestionTypeId());
         Assert.assertNotEquals(topicId, questionEntity.getTopicId());
 
         questionEntity = Mockito.mock(QuestionEntity.class);
         Mockito.when(questionEntity.getId()).thenReturn(id);
         Mockito.when(questionEntity.getText()).thenReturn(text);
-        Mockito.when(questionEntity.getType()).thenReturn(type);
+        Mockito.when(questionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
         Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
 
         this.questionsMapper.update(questionEntity);
@@ -105,7 +105,7 @@ public class QuestionsMapperTest {
         questionEntity = this.questionsMapper.find(id);
         Assert.assertEquals(id, questionEntity.getId());
         Assert.assertEquals(text, questionEntity.getText());
-        Assert.assertEquals(type, questionEntity.getType());
+        Assert.assertEquals(questionTypeId, questionEntity.getQuestionTypeId());
         Assert.assertEquals(topicId, questionEntity.getTopicId());
     }
 
