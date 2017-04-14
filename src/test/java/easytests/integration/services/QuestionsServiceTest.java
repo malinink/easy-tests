@@ -2,6 +2,7 @@ package easytests.integration.services;
 
 import easytests.models.*;
 import easytests.models.empty.ModelsListEmpty;
+import easytests.models.empty.QuestionTypeModelEmpty;
 import easytests.models.empty.TopicModelEmpty;
 import easytests.services.QuestionsService;
 import org.junit.Assert;
@@ -25,11 +26,11 @@ public class QuestionsServiceTest {
     @Autowired
     private QuestionsService questionsService;
 
-    private QuestionModelInterface createQuestionModel(Integer id, String text, Integer type, Integer topicId) {
+    private QuestionModelInterface createQuestionModel(Integer id, String text, Integer questionTypeId, Integer topicId) {
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.setId(id);
         questionModel.setText(text);
-        questionModel.setType(type);
+        questionModel.setQuestionType(new QuestionTypeModelEmpty(questionTypeId));
         questionModel.setAnswers(new ModelsListEmpty());
         questionModel.setTopic(new TopicModelEmpty(topicId));
         return questionModel;
@@ -39,7 +40,7 @@ public class QuestionsServiceTest {
     public void testSaveModel() throws Exception {
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.setText("test1");
-        questionModel.setType(1);
+        questionModel.setQuestionType(new QuestionTypeModelEmpty(1));
         questionModel.setAnswers(new ModelsListEmpty());
         questionModel.setTopic(new TopicModelEmpty(1));
 
@@ -59,7 +60,6 @@ public class QuestionsServiceTest {
 
         Assert.assertEquals(questionModel.getId(), foundedQuestionModel.getId());
         Assert.assertEquals(questionModel.getText(), foundedQuestionModel.getText());
-        Assert.assertEquals(questionModel.getType(), foundedQuestionModel.getType());
     }
 
     @Test
