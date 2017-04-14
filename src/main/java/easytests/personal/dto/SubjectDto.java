@@ -1,7 +1,5 @@
 package easytests.personal.dto;
 
-import easytests.models.IssueStandardModelInterface;
-import easytests.models.UserModelInterface;
 import lombok.Data;
 
 /**
