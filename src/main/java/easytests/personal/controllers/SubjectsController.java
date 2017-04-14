@@ -23,6 +23,8 @@ public class SubjectsController extends AbstractPersonalController {
 
     private final String subjectsListUrl = "redirect:/personal/subjects/list";
 
+    private final String subjectFieldName = "subject";
+
     private SubjectDto mapToDto(SubjectModelInterface subjectModel) {
         final SubjectDto subjectDto = new SubjectDto();
         subjectDto.setId(subjectModel.getId());
@@ -50,7 +52,7 @@ public class SubjectsController extends AbstractPersonalController {
 
     @GetMapping("create")
     public String create(Model model) {
-        model.addAttribute("subject", new SubjectModel());
+        model.addAttribute(subjectFieldName, new SubjectModel());
         return "subjects/create";
     }
 
@@ -70,7 +72,7 @@ public class SubjectsController extends AbstractPersonalController {
     public String read(@PathVariable("id") Integer id,
                          Model model) {
         final SubjectDto subject = mapToDto(this.subjectsService.find(id));
-        model.addAttribute("subject", subject);
+        model.addAttribute(subjectFieldName, subject);
         return "subjects/read";
     }
 
@@ -78,7 +80,7 @@ public class SubjectsController extends AbstractPersonalController {
     public String update(@PathVariable("id") Integer id,
                          Model model) {
         final SubjectDto subject = mapToDto(this.subjectsService.find(id));
-        model.addAttribute("subject", subject);
+        model.addAttribute(subjectFieldName, subject);
         return "subjects/update";
     }
 
