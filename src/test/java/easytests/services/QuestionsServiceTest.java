@@ -4,6 +4,7 @@ import easytests.entities.QuestionEntity;
 import easytests.mappers.QuestionsMapper;
 import easytests.models.QuestionModel;
 import easytests.models.QuestionModelInterface;
+import easytests.models.QuestionTypeModelInterface;
 import easytests.models.TopicModelInterface;
 import easytests.models.empty.ModelsListEmpty;
 import easytests.options.QuestionsOptionsInterface;
@@ -36,23 +37,25 @@ public class QuestionsServiceTest {
     @Autowired
     private QuestionsService questionsService;
 
-    private QuestionModelInterface createQuestionModel(Integer id, String text, Integer type,  Integer topicId) {
+    private QuestionModelInterface createQuestionModel(Integer id, String text, Integer questionTypeId,  Integer topicId) {
         final QuestionModelInterface questionModel = new QuestionModel();
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
         Mockito.when(topicModel.getId()).thenReturn(topicId);
+        final QuestionTypeModelInterface questionTypeModel = Mockito.mock(QuestionTypeModelInterface.class);
+        Mockito.when(questionTypeModel.getId()).thenReturn(questionTypeId);
         questionModel.setId(id);
         questionModel.setText(text);
-        questionModel.setType(type);
+        questionModel.setQuestionType(questionTypeModel);
         questionModel.setTopic(topicModel);
         questionModel.setAnswers(new ModelsListEmpty());
         return questionModel;
     }
 
-    private QuestionEntity createQuestionEntityMock(Integer id, String text, Integer type, Integer topicId) {
+    private QuestionEntity createQuestionEntityMock(Integer id, String text, Integer questionTypeId, Integer topicId) {
         final QuestionEntity questionEntity = Mockito.mock(QuestionEntity.class);
         Mockito.when(questionEntity.getId()).thenReturn(id);
         Mockito.when(questionEntity.getText()).thenReturn(text);
-        Mockito.when(questionEntity.getType()).thenReturn(type);
+        Mockito.when(questionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
         Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
         return questionEntity;
     }
