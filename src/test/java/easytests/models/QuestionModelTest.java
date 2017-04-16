@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.meanbean.test.BeanTester;
+import org.meanbean.test.Configuration;
+import org.meanbean.test.ConfigurationBuilder;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,7 +23,12 @@ public class QuestionModelTest {
 
     @Test
     public void testCommon() throws Exception {
-        new BeanTester().testBean(QuestionModel.class);
+        Configuration configuration = new ConfigurationBuilder()
+                .ignoreProperty("topic")
+                .ignoreProperty("answers")
+                .ignoreProperty("questionType")
+                .build();
+        new BeanTester().testBean(QuestionModel.class, configuration);
     }
 
     @Test
