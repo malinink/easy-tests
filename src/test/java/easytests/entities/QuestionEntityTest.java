@@ -18,8 +18,6 @@ public class QuestionEntityTest {
     @Test
     public void testCommon() throws Exception {
         new BeanTester().testBean(QuestionEntity.class);
-        new EqualsMethodTester().testEqualsMethod(QuestionEntity.class);
-        new HashCodeMethodTester().testHashCodeMethod(QuestionEntity.class);
     }
 
     @Test
