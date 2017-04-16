@@ -13,14 +13,14 @@ public class QuestionEntity {
 
     private String text;
 
-    private Integer type;
+    private Integer questionTypeId;
 
     private Integer topicId;
 
     public void map(QuestionModelInterface questionModel) {
         this.setId(questionModel.getId());
         this.setText(questionModel.getText());
-        this.setType(questionModel.getType());
+        this.setQuestionTypeId(questionModel.getQuestionType().getId());
         this.setTopicId(questionModel.getTopic().getId());
     }
 }

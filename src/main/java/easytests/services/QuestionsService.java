@@ -27,6 +27,9 @@ public class QuestionsService implements QuestionsServiceInterface {
     @Autowired
     private TopicsService topicsService;
 
+    @Autowired
+    private QuestionTypesService questionTypesService;
+
     @Override
     public List<QuestionModelInterface> findAll() {
         return this.map(this.questionsMapper.findAll());
@@ -123,6 +126,7 @@ public class QuestionsService implements QuestionsServiceInterface {
         questionsOptions.setQuestionsService(this);
         questionsOptions.setAnswersService(this.answersService);
         questionsOptions.setTopicsService(this.topicsService);
+        questionsOptions.setQuestionTypesService(this.questionTypesService);
         return questionsOptions;
     }
 
