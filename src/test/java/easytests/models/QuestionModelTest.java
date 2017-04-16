@@ -21,7 +21,7 @@ public class QuestionModelTest {
 
     @Test
     public void testCommon() throws Exception {
-        new BeanTester().testBean(UserModel.class);
+        new BeanTester().testBean(QuestionModel.class);
     }
 
     @Test
