@@ -4,11 +4,11 @@ import easytests.entities.QuestionEntity;
 import easytests.mappers.QuestionsMapper;
 import easytests.models.QuestionModel;
 import easytests.models.QuestionModelInterface;
-import easytests.models.QuestionTypeModelInterface;
 import easytests.models.TopicModelInterface;
-import easytests.models.empty.ModelsListEmpty;
 import easytests.options.QuestionsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
+import easytests.support.Models;
+import easytests.support.Entities;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.*;
@@ -37,29 +37,6 @@ public class QuestionsServiceTest {
     @Autowired
     private QuestionsService questionsService;
 
-    private QuestionModelInterface createQuestionModel(Integer id, String text, Integer questionTypeId,  Integer topicId) {
-        final QuestionModelInterface questionModel = new QuestionModel();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        Mockito.when(topicModel.getId()).thenReturn(topicId);
-        final QuestionTypeModelInterface questionTypeModel = Mockito.mock(QuestionTypeModelInterface.class);
-        Mockito.when(questionTypeModel.getId()).thenReturn(questionTypeId);
-        questionModel.setId(id);
-        questionModel.setText(text);
-        questionModel.setQuestionType(questionTypeModel);
-        questionModel.setTopic(topicModel);
-        questionModel.setAnswers(new ModelsListEmpty());
-        return questionModel;
-    }
-
-    private QuestionEntity createQuestionEntityMock(Integer id, String text, Integer questionTypeId, Integer topicId) {
-        final QuestionEntity questionEntity = Mockito.mock(QuestionEntity.class);
-        Mockito.when(questionEntity.getId()).thenReturn(id);
-        Mockito.when(questionEntity.getText()).thenReturn(text);
-        Mockito.when(questionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
-        Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
-        return questionEntity;
-    }
-
     private QuestionModelInterface mapQuestionModel(QuestionEntity questionEntity) {
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.map(questionEntity);
@@ -74,8 +51,8 @@ public class QuestionsServiceTest {
 
     private List<QuestionEntity> getQuestionsEntities() {
         final List<QuestionEntity> questionsEntities = new ArrayList<>(2);
-        final QuestionEntity questionEntityFirst = this.createQuestionEntityMock(1, "test1", 1, 1);
-        final QuestionEntity questionEntitySecond = this.createQuestionEntityMock(2, "test2", 2, 1);
+        final QuestionEntity questionEntityFirst = Entities.createQuestionEntityMock(1, "test1", 1, 1);
+        final QuestionEntity questionEntitySecond = Entities.createQuestionEntityMock(2, "test2", 2, 1);
         questionsEntities.add(questionEntityFirst);
         questionsEntities.add(questionEntitySecond);
         return questionsEntities;
@@ -125,7 +102,7 @@ public class QuestionsServiceTest {
     @Test
     public void testFindPresentModel() throws Exception {
         final Integer id = 1;
-        final QuestionEntity questionEntity = this.createQuestionEntityMock(id, "NewText", 1, 1);
+        final QuestionEntity questionEntity = Entities.createQuestionEntityMock(id, "NewText", 1, 1);
         given(this.questionsMapper.find(id)).willReturn(questionEntity);
 
         final QuestionModelInterface questionModel = this.questionsService.find(id);
@@ -146,7 +123,7 @@ public class QuestionsServiceTest {
     @Test
     public void testFindWithOptions() throws Exception {
         final Integer id = 1;
-        final QuestionEntity questionEntity = this.createQuestionEntityMock(id, "NewText", 1, 1);
+        final QuestionEntity questionEntity = Entities.createQuestionEntityMock(id, "NewText", 1, 1);
         final QuestionModelInterface questionModel = this.mapQuestionModel(questionEntity);
         final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
         given(this.questionsMapper.find(id)).willReturn(questionEntity);
@@ -162,8 +139,8 @@ public class QuestionsServiceTest {
     public void testFindByTopic() throws Exception {
         final Integer topicId = 7;
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final QuestionEntity questionEntityFirst = this.createQuestionEntityMock(3, "test3", 1, topicId);
-        final QuestionEntity questionEntitySecond = this.createQuestionEntityMock(12, "test12", 1, topicId);
+        final QuestionEntity questionEntityFirst = Entities.createQuestionEntityMock(3, "test3", 1, topicId);
+        final QuestionEntity questionEntitySecond = Entities.createQuestionEntityMock(12, "test12", 1, topicId);
         final List<QuestionEntity> questionsEntities = new ArrayList<>();
         questionsEntities.add(questionEntityFirst);
         questionsEntities.add(questionEntitySecond);
@@ -183,8 +160,8 @@ public class QuestionsServiceTest {
     public void testFindByTopicWithOptions() throws Exception {
         final Integer topicId = 7;
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final QuestionEntity questionEntityFirst = this.createQuestionEntityMock(3, "test3", 1, topicId);
-        final QuestionEntity questionEntitySecond = this.createQuestionEntityMock(12, "test12", 1, topicId);
+        final QuestionEntity questionEntityFirst = Entities.createQuestionEntityMock(3, "test3", 1, topicId);
+        final QuestionEntity questionEntitySecond = Entities.createQuestionEntityMock(12, "test12", 1, topicId);
         final List<QuestionEntity> questionsEntities = new ArrayList<>();
         questionsEntities.add(questionEntityFirst);
         questionsEntities.add(questionEntitySecond);
@@ -205,7 +182,7 @@ public class QuestionsServiceTest {
 
     @Test
     public void testSaveCreatesEntity() throws Exception {
-        final QuestionModelInterface questionModel = this.createQuestionModel(null, "Text", 1, 1);
+        final QuestionModelInterface questionModel = Models.createQuestionModel(null, "Text", 1, 1);
         doAnswer(invocation -> {
             final QuestionEntity questionEntity = (QuestionEntity) invocation.getArguments()[0];
             questionEntity.setId(5);
@@ -220,7 +197,7 @@ public class QuestionsServiceTest {
 
     @Test
     public void testSaveUpdatesEntity() throws Exception {
-        final QuestionModelInterface questionModel = this.createQuestionModel(1, "Text", 1, 1);
+        final QuestionModelInterface questionModel = Models.createQuestionModel(1, "Text", 1, 1);
 
         this.questionsService.save(questionModel);
 
@@ -230,8 +207,8 @@ public class QuestionsServiceTest {
     @Test
     public void testSaveEntitiesList() throws Exception {
 
-        final QuestionModelInterface questionModelFirst = this.createQuestionModel(null, "Text1", 1, 1);
-        final QuestionModelInterface questionModelSecond = this.createQuestionModel(null, "Text2", 2, 1);
+        final QuestionModelInterface questionModelFirst = Models.createQuestionModel(null, "Text1", 1, 1);
+        final QuestionModelInterface questionModelSecond = Models.createQuestionModel(null, "Text2", 2, 1);
         final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
 
         final List<QuestionModelInterface> questionsModels = new ArrayList<>();
@@ -251,7 +228,7 @@ public class QuestionsServiceTest {
 
     @Test
     public void testSaveWithOptions() throws Exception {
-        final QuestionModelInterface questionModel = this.createQuestionModel(null, "Text", 1, 1);
+        final QuestionModelInterface questionModel = Models.createQuestionModel(null, "Text", 1, 1);
         final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
 
         this.questionsService.save(questionModel, questionsOptions);
@@ -261,7 +238,7 @@ public class QuestionsServiceTest {
 
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
-        final QuestionModelInterface questionModel = this.createQuestionModel(1, "Text", 1, 1);
+        final QuestionModelInterface questionModel = Models.createQuestionModel(1, "Text", 1, 1);
 
         this.questionsService.delete(questionModel);
 
@@ -270,7 +247,7 @@ public class QuestionsServiceTest {
 
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
-        final QuestionModelInterface questionModel = this.createQuestionModel(null, "Text", 1, 1);
+        final QuestionModelInterface questionModel = Models.createQuestionModel(null, "Text", 1, 1);
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.questionsService.delete(questionModel);
@@ -279,8 +256,8 @@ public class QuestionsServiceTest {
     @Test
     public void testDeleteModelsList() throws Exception {
 
-        final QuestionModelInterface questionModelFirst = this.createQuestionModel(1, "test1", 1, 1);
-        final QuestionModelInterface questionModelSecond = this.createQuestionModel(2, "test2", 2, 1);
+        final QuestionModelInterface questionModelFirst = Models.createQuestionModel(1, "test1", 1, 1);
+        final QuestionModelInterface questionModelSecond = Models.createQuestionModel(2, "test2", 2, 1);
         final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
 
         final List<QuestionModelInterface> questionsModels = new ArrayList<>();
@@ -300,7 +277,7 @@ public class QuestionsServiceTest {
 
     @Test
     public void testDeleteWithOptions() throws Exception {
-        final QuestionModelInterface questionModel = this.createQuestionModel(1, "Text", 1, 1);
+        final QuestionModelInterface questionModel = Models.createQuestionModel(1, "Text", 1, 1);
         final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
 
         this.questionsService.delete(questionModel, questionsOptions);
