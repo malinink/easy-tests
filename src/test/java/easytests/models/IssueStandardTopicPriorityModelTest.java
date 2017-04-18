@@ -2,6 +2,7 @@ package easytests.models;
 
 import easytests.entities.IssueStandardTopicPriorityEntity;
 import easytests.models.empty.IssueStandardModelEmpty;
+import easytests.models.empty.TopicModelEmpty;
 import org.junit.Assert;
 import org.junit.Test;
 import org.meanbean.test.*;
@@ -15,6 +16,7 @@ public class IssueStandardTopicPriorityModelTest {
     @Test
     public void testCommon() {
         Configuration configuration = new ConfigurationBuilder()
+                .ignoreProperty("topic")
                 .ignoreProperty("issueStandard")
                 .build();
         new BeanTester().testBean(IssueStandardTopicPriorityModel.class, configuration);
@@ -38,7 +40,7 @@ public class IssueStandardTopicPriorityModelTest {
         topicPriorityModel.map(topicPriorityEntity);
 
         Assert.assertEquals(id, topicPriorityModel.getId());
-        Assert.assertEquals(topicId, topicPriorityModel.getTopicId());
+        Assert.assertEquals(new TopicModelEmpty(topicId), topicPriorityModel.getTopic());
         Assert.assertEquals(isPreferable, topicPriorityModel.getIsPreferable());
         Assert.assertEquals(new IssueStandardModelEmpty(issueStandardId), topicPriorityModel.getIssueStandard());
     }
