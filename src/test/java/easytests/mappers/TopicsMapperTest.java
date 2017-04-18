@@ -45,6 +45,13 @@ public class TopicsMapperTest {
     }
 
     @Test
+    public void testFindBySubjectId() throws Exception {
+        final List<TopicEntity> topicEntities = this.topicsMapper.findBySubjectId(3);
+        Assert.assertEquals(1, topicEntities.size());
+        Assert.assertEquals("Name3", topicEntities.get(0).getName());
+    }
+
+    @Test
     public void testInsert() throws Exception {
         final Integer id = this.topicsMapper.findAll().size() + 1;
         final String name = "FirstName";

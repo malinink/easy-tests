@@ -94,4 +94,29 @@ public abstract class Entities {
         Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
         return testeeEntity;
     }
+
+    public static TopicEntity createTopicEntityMock(Integer id, Integer subjectId, String name) {
+
+        final TopicEntity topicEntity = Mockito.mock(TopicEntity.class);
+
+        Mockito.when(topicEntity.getId()).thenReturn(id);
+        Mockito.when(topicEntity.getSubjectId()).thenReturn(subjectId);
+        Mockito.when(topicEntity.getName()).thenReturn(name);
+        return topicEntity;
+
+    }
+
+    public static QuestionEntity createQuestionEntityMock(
+            Integer id, 
+            String text, 
+            Integer questionTypeId, 
+            Integer topicId
+    ) {
+        final QuestionEntity questionEntity = Mockito.mock(QuestionEntity.class);
+        Mockito.when(questionEntity.getId()).thenReturn(id);
+        Mockito.when(questionEntity.getText()).thenReturn(text);
+        Mockito.when(questionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
+        Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
+        return questionEntity;
+    }
 }
