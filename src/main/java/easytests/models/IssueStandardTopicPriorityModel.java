@@ -2,6 +2,7 @@ package easytests.models;
 
 import easytests.entities.IssueStandardTopicPriorityEntity;
 import easytests.models.empty.IssueStandardModelEmpty;
+import easytests.models.empty.TopicModelEmpty;
 import lombok.Data;
 
 /**
@@ -12,7 +13,7 @@ public class IssueStandardTopicPriorityModel implements IssueStandardTopicPriori
 
     private Integer id;
 
-    private Integer topicId;
+    private TopicModelInterface topic;
 
     private Boolean isPreferable;
 
@@ -20,7 +21,7 @@ public class IssueStandardTopicPriorityModel implements IssueStandardTopicPriori
 
     public void map(IssueStandardTopicPriorityEntity topicPriorityEntity) {
         this.setId(topicPriorityEntity.getId());
-        this.setTopicId(topicPriorityEntity.getTopicId());
+        this.setTopic(new TopicModelEmpty(topicPriorityEntity.getTopicId()));
         this.setIsPreferable(topicPriorityEntity.getIsPreferable());
         this.setIssueStandard(new IssueStandardModelEmpty(topicPriorityEntity.getIssueStandardId()));
     }
