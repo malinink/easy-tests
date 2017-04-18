@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  */
 @Controller
 public class AbstractPersonalController {
+    @Autowired
+    protected UsersService usersService;
+
     private UserModelInterface userModel;
 
     private Boolean userModelFetched = false;
-
-    @Autowired
-    private UsersService usersService;
 
     @ModelAttribute("currentUserModel")
     public UserModelInterface getCurrentUserModel() {
