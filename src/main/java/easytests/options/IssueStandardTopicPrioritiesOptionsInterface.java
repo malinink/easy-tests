@@ -3,6 +3,8 @@ package easytests.options;
 import easytests.models.IssueStandardTopicPriorityModelInterface;
 import easytests.services.IssueStandardTopicPrioritiesServiceInterface;
 import easytests.services.IssueStandardsServiceInterface;
+import easytests.services.TopicsServiceInterface;
+
 import java.util.List;
 
 /**
@@ -12,7 +14,12 @@ public interface IssueStandardTopicPrioritiesOptionsInterface extends OptionsInt
 
     void setTopicPrioritiesService(IssueStandardTopicPrioritiesServiceInterface topicPrioritiesService);
 
+    void setTopicsService(TopicsServiceInterface topicsService);
+
     void setIssueStandardsService(IssueStandardsServiceInterface issueStandardService);
+
+    IssueStandardTopicPrioritiesOptionsInterface
+        withTopic(TopicsOptionsInterface topicsOptions);
 
     IssueStandardTopicPrioritiesOptionsInterface
         withIssueStandard(IssueStandardsOptionsInterface issueStandardsOptions);
