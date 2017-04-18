@@ -71,7 +71,7 @@ public abstract class Models {
     ) {
         final IssueStandardTopicPriorityModelInterface topicPriorityModel = new IssueStandardTopicPriorityModel();
         topicPriorityModel.setId(id);
-        topicPriorityModel.setTopicId(topicId);
+        topicPriorityModel.setTopic(new TopicModelEmpty(topicId));
         topicPriorityModel.setIsPreferable(isPreferable);
         topicPriorityModel.setIssueStandard(new IssueStandardModelEmpty(issueStandardId));
         return topicPriorityModel;
