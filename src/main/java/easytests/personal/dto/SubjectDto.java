@@ -16,4 +16,6 @@ public class SubjectDto {
 
     private Integer userId;
 
+    private Integer issueStandardId;
+
 }
