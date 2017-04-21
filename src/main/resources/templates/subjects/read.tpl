@@ -2,7 +2,6 @@ layout 'layout/main.tpl', title:  'View subject',
 content: contents {
   h4 ('View subject')
   form (class:'col s12', method:'post') {
-
     input (type:'hidden', name:_csrf.parameterName, value:_csrf.token)
     div (class:'row') {
       div (class:'input-field col s12') {
@@ -16,8 +15,14 @@ content: contents {
         label (for:'textarea_description', 'Subject description')
       }
     }
-  }
 
+    div (class:'row') {
+      div (class:'input-field col s12') {
+        a (href: '/personal/issuestandards/read/' + subject.issueStandardId) {yield 'View issue standard'}
+      }
+    }
+
+  }
   div (class:'row') {
     div (class:'col s12') {
       a (class:'waves-effect waves-light btn-large red', onclick: 'document.location.href="/personal/subjects/list"') {
