@@ -1,8 +1,14 @@
 package easytests.personal.controllers;
 
+import easytests.models.IssueStandardModel;
+import easytests.models.IssueStandardModelInterface;
 import easytests.models.SubjectModel;
 import easytests.models.SubjectModelInterface;
+import easytests.models.empty.SubjectModelEmpty;
+import easytests.options.IssueStandardsOptions;
+import easytests.options.SubjectsOptions;
 import easytests.personal.dto.SubjectDto;
+import easytests.services.IssueStandardsService;
 import easytests.services.SubjectsService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +27,9 @@ public class SubjectsController extends AbstractPersonalController {
     @Autowired
     private SubjectsService subjectsService;
 
+    @Autowired
+    private IssueStandardsService issueStandardsService;
+
     private final String subjectsListUrl = "redirect:/personal/subjects/list";
 
     private final String subjectFieldName = "subject";
@@ -31,6 +40,7 @@ public class SubjectsController extends AbstractPersonalController {
         subjectDto.setName(subjectModel.getName());
         subjectDto.setDescription(subjectModel.getDescription());
         subjectDto.setUserId(this.getCurrentUserModel().getId());
+        subjectDto.setIssueStandardId(subjectModel.getIssueStandard().getId());
         return subjectDto;
     }
 
@@ -58,20 +68,23 @@ public class SubjectsController extends AbstractPersonalController {
 
     @PostMapping("create")
     @ResponseStatus(value = HttpStatus.MOVED_PERMANENTLY)
-    public String create(@RequestParam("name") String name,
-                         @RequestParam("description") String description,
+    public String create(SubjectDto subject,
                          Model model) {
-        final SubjectDto subject = new SubjectDto();
-        subject.setName(name);
-        subject.setDescription(description);
-        subjectsService.save(mapToModel(subject));
+
+        final SubjectModelInterface subjectModel = mapToModel(subject);
+        subjectsService.save(subjectModel);
+        final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
+        issueStandardModel.setSubject(new SubjectModelEmpty(subjectModel.getId()));
+        issueStandardsService.save(issueStandardModel);
+
         return subjectsListUrl;
     }
 
     @GetMapping("read/{id}")
     public String read(@PathVariable("id") Integer id,
                          Model model) {
-        final SubjectDto subject = mapToDto(this.subjectsService.find(id));
+        final SubjectDto subject = mapToDto(this.subjectsService.find(id,
+                new SubjectsOptions().withIssueStandard(new IssueStandardsOptions())));
         model.addAttribute(subjectFieldName, subject);
         return "subjects/read";
     }
@@ -79,7 +92,8 @@ public class SubjectsController extends AbstractPersonalController {
     @GetMapping("update/{id}")
     public String update(@PathVariable("id") Integer id,
                          Model model) {
-        final SubjectDto subject = mapToDto(this.subjectsService.find(id));
+        final SubjectDto subject = mapToDto(this.subjectsService.find(id,
+                new SubjectsOptions().withIssueStandard(new IssueStandardsOptions())));
         model.addAttribute(subjectFieldName, subject);
         return "subjects/update";
     }
@@ -87,13 +101,9 @@ public class SubjectsController extends AbstractPersonalController {
     @PostMapping("update/{id}")
     @ResponseStatus(value = HttpStatus.MOVED_PERMANENTLY)
     public String update(@PathVariable("id") Integer id,
-                         @RequestParam("name") String name,
-                         @RequestParam("description") String description,
+                         SubjectDto subject,
                          Model model) {
-        final SubjectDto subject = new SubjectDto();
         subject.setId(id);
-        subject.setName(name);
-        subject.setDescription(description);
         subjectsService.save(mapToModel(subject));
         return subjectsListUrl;
     }
@@ -101,8 +111,8 @@ public class SubjectsController extends AbstractPersonalController {
     @GetMapping("delete/{id}")
     public String delete(@PathVariable("id") Integer id,
                          Model model) {
-        subjectsService.delete(this.subjectsService.find(id));
+        subjectsService.delete(this.subjectsService.find(id),
+                new SubjectsOptions().withIssueStandard(new IssueStandardsOptions()));
         return subjectsListUrl;
     }
-
 }
