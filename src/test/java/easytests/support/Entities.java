@@ -106,7 +106,22 @@ public abstract class Entities {
 
     }
 
-    public static IssueEntity createIssueEntityMock(
+   public static QuestionEntity createQuestionEntityMock(
+            Integer id, 
+            String text, 
+            Integer questionTypeId, 
+            Integer topicId
+    ) {
+        final QuestionEntity questionEntity = Mockito.mock(QuestionEntity.class);
+        Mockito.when(questionEntity.getId()).thenReturn(id);
+        Mockito.when(questionEntity.getText()).thenReturn(text);
+        Mockito.when(questionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
+        Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
+        return questionEntity;
+    }
+
+
+public static IssueEntity createIssueEntityMock(
                    Integer id,
                     String name,
                    Integer authorId
@@ -118,3 +133,4 @@ public abstract class Entities {
                 return issueEntity;
             }
     }
+

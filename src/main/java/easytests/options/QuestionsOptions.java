@@ -2,6 +2,7 @@ package easytests.options;
 
 import easytests.models.QuestionModelInterface;
 import easytests.services.AnswersServiceInterface;
+import easytests.services.QuestionTypesServiceInterface;
 import easytests.services.QuestionsServiceInterface;
 import easytests.services.TopicsServiceInterface;
 import java.util.List;
@@ -22,9 +23,14 @@ public class QuestionsOptions implements QuestionsOptionsInterface {
     @Setter
     private AnswersServiceInterface answersService;
 
+    @Setter
+    private QuestionTypesServiceInterface questionTypesService;
+
     private TopicsOptionsInterface topicsOptions;
 
     private AnswersOptionsInterface answersOptions;
+
+    private QuestionTypesOptionsInterface questionTypesOptions;
 
     @Override
     public QuestionsOptionsInterface withAnswers(AnswersOptionsInterface answerOptions) {
@@ -39,6 +45,12 @@ public class QuestionsOptions implements QuestionsOptionsInterface {
     }
 
     @Override
+    public QuestionsOptionsInterface withQuestionType(QuestionTypesOptionsInterface questionTypesOptions) {
+        this.questionTypesOptions = questionTypesOptions;
+        return this;
+    }
+
+    @Override
     public QuestionModelInterface withRelations(QuestionModelInterface questionModel) {
         if (questionModel == null) {
             return questionModel;
@@ -48,6 +60,10 @@ public class QuestionsOptions implements QuestionsOptionsInterface {
         }
         if (this.topicsOptions != null) {
             questionModel.setTopic(this.topicsService.find(questionModel.getTopic().getId(), this.topicsOptions));
+        }
+        if (this.questionTypesOptions != null) {
+            questionModel.setQuestionType(
+                    this.questionTypesService.find(questionModel.getQuestionType().getId(), questionTypesOptions));
         }
         return questionModel;
     }
