@@ -112,4 +112,16 @@ public abstract class Models {
 
         return testeeModel;
     }
+    public static IssueModelInterface createIssueModel(
+           Integer id,
+           String name,
+           Integer authorId
+               ) {
+            final IssueModelInterface issueModel = new IssueModel();
+            issueModel.setId(id);
+            issueModel.setName(name);
+            issueModel.setAuthorId(authorId);
+            issueModel.setQuizzes(new ModelsListEmpty());
+            return issueModel;
+           }
 }
