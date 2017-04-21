@@ -31,16 +31,16 @@ public class QuizzesServiceTest {
     @Test
     public void findTest() {
 
-        //this.quizzesService.find(1);
-        //verify(this.quizzesMapper, times(1)).find(1);
+        this.quizzesService.find(1);
+        verify(this.quizzesMapper, times(1)).find(1);
 
     }
     @Ignore
     @Test
     public void findAllTest() {
 
-        //this.quizzesService.findAll();
-        //verify(this.quizzesMapper, times(1)).findAll();
+        this.quizzesService.findAll();
+        verify(this.quizzesMapper, times(1)).findAll();
 
     }
     @Ignore
@@ -49,7 +49,7 @@ public class QuizzesServiceTest {
 
         IssueInterface issue = Mockito.mock(IssueInterface.class);
         Mockito.when(issue.getId()).thenReturn(1);
-       // List<QuizInterface> quizzes = this.quizzesService.findByIssue(issue);
+        List<QuizInterface> quizzes = this.quizzesService.findByIssue(issue);
 
         verify(this.quizzesMapper, times(1)).findByIssue(issue);
     }
@@ -61,7 +61,7 @@ public class QuizzesServiceTest {
         final QuizInterface quiz = new Quiz();
         quiz.setIssueId(1);
 
-        //this.quizzesService.save(quiz);
+        this.quizzesService.save(quiz);
 
         verify(this.quizzesMapper, times(1)).insert(quiz);
 
@@ -73,7 +73,7 @@ public class QuizzesServiceTest {
         final QuizInterface quiz = new Quiz();
         quiz.setId(1);
 
-        //this.quizzesService.save(quiz);
+        this.quizzesService.save(quiz);
 
         verify(this.quizzesMapper, times(1)).update(quiz);
 
