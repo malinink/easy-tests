@@ -4,7 +4,10 @@ import java.util.List;
 
 /**
  * @author malinink
+ * @deprecated because of models
  */
+
+@Deprecated
 public interface QuizInterface extends EntityInterface {
 
     QuizInterface setId(Integer id);
