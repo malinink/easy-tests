@@ -1,8 +1,8 @@
 package easytests.mappers;
 
-import easytests.entities.Point;
-import easytests.entities.PointInterface;
 import java.util.List;
+
+import easytests.entities.PointEntity;
 import org.apache.ibatis.annotations.*;
 
 /**
@@ -20,20 +20,20 @@ public interface PointsMapper {
             @Result(property = "quizId", column = "quiz_id")
         })
     @Select("SELECT * FROM points")
-    List<Point> findAll();
+    List<PointEntity> findAll();
 
     @Select("SELECT * FROM points WHERE id=#{id}")
     @ResultMap("Point")
-    Point find(Integer id);
+    PointEntity find(Integer id);
 
     @Insert("INSERT INTO points (text, type, quiz_id) VALUES(#{text}, #{type}, #{quizId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
-    void insert(PointInterface point);
+    void insert(PointEntity point);
 
     @Update("UPDATE points SET text=#{text}, type=#{type}, quiz_id=#{quizId} WHERE id=#{id}")
-    void update(PointInterface point);
+    void update(PointEntity point);
 
     @Delete("DELETE FROM points WHERE id=#{id}")
-    void delete(PointInterface point);
+    void delete(PointEntity point);
 
 }
