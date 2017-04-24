@@ -1,10 +1,13 @@
 package easytests.services;
 
-import easytests.entities.Point;
-import easytests.entities.PointInterface;
+import easytests.entities.PointEntity;
+import easytests.models.PointModel;
+import easytests.models.PointModelInterface;
 import easytests.mappers.PointsMapper;
 import java.util.ArrayList;
 import java.util.List;
+
+import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,31 +20,66 @@ public class PointsService {
     @Autowired
     private PointsMapper pointsMapper;
 
-    public List<PointInterface> findAll() {
+    public List<PointModelInterface> findAll() {
+
         return this.map(this.pointsMapper.findAll());
+
     }
 
-    public PointInterface find(Integer id) {
-        return this.pointsMapper.find(id);
+    public PointModelInterface find(Integer id) {
+
+        final PointEntity pointEntity = this.pointsMapper.find(id);
+        if (pointEntity == null) {
+            return null;
+        }
+        return this.map(pointEntity);
+
     }
 
-    public void save(PointInterface point) {
-        if (point.getId() == null) {
-            this.pointsMapper.insert(point);
+    public void save(PointModelInterface pointModel) {
+
+        final PointEntity pointEntity = this.map(pointModel);
+        if (pointEntity.getId() == null) {
+            this.pointsMapper.insert(pointEntity);
             return;
         }
-        this.pointsMapper.update(point);
+        this.pointsMapper.update(pointEntity);
+
     }
 
-    public void delete(PointInterface point) {
-        this.pointsMapper.delete(point);
+    public void delete(PointModelInterface pointModel) {
+
+        final PointEntity pointEntity = this.map(pointModel);
+        if (pointEntity.getId() == null) {
+            throw new DeleteUnidentifiedModelException();
+        }
+        this.pointsMapper.delete(pointEntity);
+
     }
 
-    private List<PointInterface> map(List<Point> pointsList) {
-        final List<PointInterface> resultPointList = new ArrayList<>(pointsList.size());
-        for (Point point: pointsList) {
-            resultPointList.add(point);
+    private PointEntity map(PointModelInterface pointModel) {
+
+        final PointEntity pointEntity = new PointEntity();
+        pointEntity.map(pointModel);
+        return pointEntity;
+
+    }
+
+    private PointModel map(PointEntity pointEntity) {
+
+        final PointModel pointModel = new PointModel();
+        pointModel.map(pointEntity);
+        return pointModel;
+
+    }
+
+    private List<PointModelInterface> map(List<PointEntity> pointsList) {
+
+        final List<PointModelInterface> resultPointList = new ArrayList<>(pointsList.size());
+        for (PointEntity point: pointsList) {
+            resultPointList.add(this.map(point));
         }
         return resultPointList;
+
     }
 }
