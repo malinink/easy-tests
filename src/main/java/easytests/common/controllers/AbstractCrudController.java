@@ -1,4 +1,4 @@
-package easytests.personal.controllers;
+package easytests.common.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

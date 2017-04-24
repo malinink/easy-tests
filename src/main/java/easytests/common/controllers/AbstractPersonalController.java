@@ -1,4 +1,4 @@
-package easytests.personal.controllers;
+package easytests.common.controllers;
 
 import easytests.models.UserModelInterface;
 import easytests.services.UsersService;
