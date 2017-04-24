@@ -1,11 +1,15 @@
 package easytests.admin.controllers;
 
 import easytests.admin.dto.UserModelDto;
+import easytests.admin.validators.UserModelDtoValidator;
+import easytests.common.controllers.AbstractCrudController;
 import easytests.models.UserModelInterface;
-import easytests.personal.controllers.AbstractCrudController;
 import java.util.List;
+import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/admin/users/")
 public class UsersController extends AbstractCrudController {
+    @Autowired
+    private UserModelDtoValidator userModelDtoValidator;
+
     @GetMapping("")
     public String list(Model model) {
         final List<UserModelInterface> users = this.usersService.findAll();
@@ -26,18 +33,27 @@ public class UsersController extends AbstractCrudController {
 
     @GetMapping("create/")
     public String create(Model model) {
-        final UserModelDto user = new UserModelDto();
-        model.addAttribute("user", user);
+        final UserModelDto userModelDto = new UserModelDto();
+        injectUserModelDto(model, userModelDto);
         setCreateBehaviour(model);
         return form();
     }
 
     @PostMapping("create/")
-    public String insert(Model model) {
-        if (false) {
-            return redirectToList();
+    public String insert(Model model, @Valid UserModelDto userModelDto, BindingResult bindingResult) {
+        this.userModelDtoValidator.validate(userModelDto, bindingResult);
+        if (bindingResult.hasErrors()) {
+            injectUserModelDto(model, userModelDto);
+            setCreateBehaviour(model);
+            model.addAttribute("errors", bindingResult);
+            return form();
         }
-        return form();
+        // TODO map into model & save
+        return redirectToList();
+    }
+
+    private static void injectUserModelDto(Model model, UserModelDto userModelDto) {
+        model.addAttribute("user", userModelDto);
     }
 
     private static String form() {
