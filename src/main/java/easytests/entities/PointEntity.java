@@ -17,7 +17,7 @@ public class PointEntity {
 
     private Integer quizId;
 
-    private void map(PointModelInterface pointModel) {
+    public void map(PointModelInterface pointModel) {
 
         this.setId(pointModel.getId());
 
