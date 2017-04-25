@@ -105,7 +105,11 @@ content: contents {
       div (class:'col s12') {
         button (class:'waves-effect waves-light btn-large blue', type:'submit') {
           i (class:'material-icons left', 'save')
-          yield submitButtonName
+          if (update) {
+            yield 'Update'
+          } else if (create) {
+            yield 'Create'
+          }
         }
         a (class:'waves-effect waves-light btn-large red', href:'/admin/users/') {
           i (class:'material-icons left', 'cancel')
