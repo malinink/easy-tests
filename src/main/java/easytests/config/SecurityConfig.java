@@ -22,11 +22,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         final String signInUrl = "/auth/sign-in";
         final String usernameParameter = "login";
+        final String userRole = "hasRole('USER')";
         http
             .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/admin/**").access("hasRole('ADMIN')")
-                .antMatchers("/users/**").access("hasRole('USER')")
+                .antMatchers("/users/**").access(userRole)
+                .antMatchers("/personal/**").access(userRole)
                 .and()
             .userDetailsService(this.authUsersService)
             .formLogin()
