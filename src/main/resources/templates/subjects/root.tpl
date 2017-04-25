@@ -14,13 +14,13 @@ content: contents {
       }
     }
     tbody {
-      subjects.each { subject ->
+      subjects.eachWithIndex { subject, number ->
         tr {
-          td(subject.getId())
+          td(number + 1)
           td(subject.getName())
           td() {
             a (class:'waves-effect waves-light btn-floating blue') {
-              i (class:'material-icons left', 'pageview', onclick:'document.location.href="/personal/subjects/read/'+subject.id + '"')
+              i (class:'material-icons left', 'pageview', onclick:'document.location.href="/personal/subjects/'+subject.id + '"')
               yield 'View'
             }
             a (class:'waves-effect waves-light btn-floating blue') {
