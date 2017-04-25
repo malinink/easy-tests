@@ -1,5 +1,6 @@
 package easytests.admin.dto;
 
+import easytests.common.dto.ModelDtoInterface;
 import easytests.models.UserModelInterface;
 import easytests.models.empty.ModelsListEmpty;
 import javax.validation.constraints.Max;
@@ -15,7 +16,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author malinink
  */
 @Data
-public class UserModelDto {
+public class UserModelDto implements ModelDtoInterface {
     private Integer routeId;
 
     private Integer id;
