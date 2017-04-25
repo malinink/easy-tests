@@ -1,7 +1,7 @@
 package easytests.admin.validators;
 
 import easytests.admin.dto.UserModelDto;
-import easytests.common.validators.AbstractValidator;
+import easytests.common.validators.AbstractDtoValidator;
 import easytests.models.UserModelInterface;
 import easytests.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.validation.Errors;
  * @author malinink
  */
 @Service
-public class UserModelDtoValidator extends AbstractValidator {
+public class UserModelDtoValidator extends AbstractDtoValidator {
     @Autowired
     private UsersService usersService;
 
@@ -27,14 +27,6 @@ public class UserModelDtoValidator extends AbstractValidator {
         this.validateEmailIsUnique(errors, userModelDto);
         this.validatePassword(errors, userModelDto);
         this.validatePasswordRepeat(errors, userModelDto);
-    }
-
-    private void validateIdEquals(Errors errors, UserModelDto userModelDto) {
-        final Integer routeId = userModelDto.getRouteId();
-        final Integer id = userModelDto.getId();
-        if (((routeId == null) && (id != null)) || ((routeId != null) && !routeId.equals(id))) {
-            reject(errors, "id", "Id must be the same");
-        }
     }
 
     private void validateEmailIsUnique(Errors errors, UserModelDto userModelDto) {
