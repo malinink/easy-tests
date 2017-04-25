@@ -13,11 +13,12 @@ import easytests.personal.exceptions.ForbiddenException;
 import easytests.services.IssueStandardsService;
 import easytests.services.SubjectsService;
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -32,33 +33,21 @@ public class SubjectsController extends AbstractPersonalController {
 
     private static final String SUBJECT_FIELD_NAME = "subject";
 
-    private static final String SUBJECTS_EDIT_TEMPLATE = "subjects/create";
+    private static final String SUBJECTS_EDIT_TEMPLATE = "subjects/form";
 
-    private static final String METHOD_TITLE_FIELD_NAME = "methodTitle";
+    private static final String METHOD_TYPE_FIELD_NAME = "methodType";
+
+    private static final String METHOD_TYPE_CREATE = "create";
+
+    private static final String METHOD_TYPE_UPDATE = "update";
+
+    private static final String ERRORS_FIELD_NAME = "errors";
 
     @Autowired
     private SubjectsService subjectsService;
 
     @Autowired
     private IssueStandardsService issueStandardsService;
-
-    private SubjectDto mapToDto(@NotNull SubjectModelInterface subjectModel) {
-        final SubjectDto subjectDto = new SubjectDto();
-        subjectDto.setId(subjectModel.getId());
-        subjectDto.setName(subjectModel.getName());
-        subjectDto.setDescription(subjectModel.getDescription());
-        subjectDto.setIssueStandardId(subjectModel.getIssueStandard().getId());
-        return subjectDto;
-    }
-
-    private SubjectModelInterface mapToModel(@NotNull SubjectDto subjectDto) {
-        final SubjectModelInterface subjectModel = new SubjectModel();
-        subjectModel.setId(subjectDto.getId());
-        subjectModel.setName(subjectDto.getName());
-        subjectModel.setDescription(subjectDto.getDescription());
-        subjectModel.setUser(this.getCurrentUserModel());
-        return subjectModel;
-    }
 
     private void checkPermissions(SubjectDto subject) {
         final SubjectModelInterface foundSubject = subjectsService.find(subject.getId());
@@ -69,39 +58,50 @@ public class SubjectsController extends AbstractPersonalController {
 
     @RequestMapping("list")
     public String list(Model model) {
-        final List<SubjectModelInterface> subjects = this.subjectsService.findAll();
+        final List<SubjectModelInterface> subjects = this.subjectsService.findByUser(this.getCurrentUserModel());
         model.addAttribute("subjects", subjects);
         return "subjects/root";
     }
 
     @GetMapping("create")
     public String create(Model model) {
-        model.addAttribute(METHOD_TITLE_FIELD_NAME, "Create subject");
-        final SubjectModelInterface subjectModel = new SubjectModel();
-        subjectModel.setName("");
-        subjectModel.setDescription("");
-        model.addAttribute(SUBJECT_FIELD_NAME, subjectModel);
+        model.addAttribute(METHOD_TYPE_FIELD_NAME, METHOD_TYPE_CREATE);
+        final SubjectDto subject = new SubjectDto();
+        subject.setName("");
+        subject.setDescription("");
+        model.addAttribute(SUBJECT_FIELD_NAME, subject);
         return SUBJECTS_EDIT_TEMPLATE;
     }
 
     @PostMapping("create")
-    @ResponseStatus(value = HttpStatus.MOVED_PERMANENTLY)
-    public String create(SubjectDto subject,
+    public String create(@Valid @NotNull SubjectDto subject,
+                         BindingResult bindingResult,
                          Model model) {
-        final SubjectModelInterface subjectModel = mapToModel(subject);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute(METHOD_TYPE_FIELD_NAME, METHOD_TYPE_CREATE);
+            model.addAttribute(SUBJECT_FIELD_NAME, subject);
+            model.addAttribute(ERRORS_FIELD_NAME, bindingResult);
+            return SUBJECTS_EDIT_TEMPLATE;
+        }
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subject.mapInto(subjectModel);
+        subjectModel.setUser(this.getCurrentUserModel());
         subjectsService.save(subjectModel);
+
         final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
         issueStandardModel.setSubject(new SubjectModelEmpty(subjectModel.getId()));
         issueStandardsService.save(issueStandardModel);
+
         return SUBJECTS_LIST_URL;
     }
 
-    @GetMapping("read/{id}")
+    @GetMapping("{id}")
     public String read(@PathVariable("id") Integer id,
                          Model model) {
         final SubjectModelInterface subjectModel = this.subjectsService.find(id,
                 new SubjectsOptions().withIssueStandard(new IssueStandardsOptions()));
-        final SubjectDto subject = mapToDto(subjectModel);
+        final SubjectDto subject = new SubjectDto();
+        subject.mapFromModel(subjectModel);
         model.addAttribute(SUBJECT_FIELD_NAME, subject);
         return "subjects/read";
     }
@@ -109,21 +109,31 @@ public class SubjectsController extends AbstractPersonalController {
     @GetMapping("update/{id}")
     public String update(@PathVariable("id") Integer id,
                          Model model) {
-        model.addAttribute(METHOD_TITLE_FIELD_NAME, "Edit subject");
-        final SubjectDto subject = mapToDto(this.subjectsService.find(id,
-                new SubjectsOptions().withIssueStandard(new IssueStandardsOptions())));
+        model.addAttribute(METHOD_TYPE_FIELD_NAME, METHOD_TYPE_UPDATE);
+        final SubjectModelInterface subjectModel = this.subjectsService.find(id,
+                new SubjectsOptions().withIssueStandard(new IssueStandardsOptions()));
+        final SubjectDto subject = new SubjectDto();
+        subject.mapFromModel(subjectModel);
         model.addAttribute(SUBJECT_FIELD_NAME, subject);
         return SUBJECTS_EDIT_TEMPLATE;
     }
 
     @PostMapping("update/{id}")
-    @ResponseStatus(value = HttpStatus.MOVED_PERMANENTLY)
-    public String update(@PathVariable("id") Integer id,
-                         @NotNull SubjectDto subject,
+    public String update(@Valid @NotNull SubjectDto subject,
+                         BindingResult bindingResult,
                          Model model) {
-        subject.setId(id);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute(METHOD_TYPE_FIELD_NAME, METHOD_TYPE_UPDATE);
+            model.addAttribute(SUBJECT_FIELD_NAME, subject);
+            model.addAttribute(ERRORS_FIELD_NAME, bindingResult);
+            return SUBJECTS_EDIT_TEMPLATE;
+        }
         checkPermissions(subject);
-        subjectsService.save(mapToModel(subject));
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subject.mapInto(subjectModel);
+        subjectModel.setUser(this.getCurrentUserModel());
+        subjectsService.save(subjectModel);
         return SUBJECTS_LIST_URL;
     }
 
@@ -140,7 +150,11 @@ public class SubjectsController extends AbstractPersonalController {
         final SubjectsOptionsInterface subjectOptions =
                 new SubjectsOptions().withIssueStandard(new IssueStandardsOptions());
         final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectOptions);
-        checkPermissions(mapToDto(subjectModel));
+
+        final SubjectDto subjectDto = new SubjectDto();
+        subjectDto.mapFromModel(subjectModel);
+        checkPermissions(subjectDto);
+
         subjectsService.delete(subjectModel, subjectOptions);
         return SUBJECTS_LIST_URL;
     }
