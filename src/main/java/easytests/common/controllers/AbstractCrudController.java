@@ -8,16 +8,13 @@ import org.springframework.ui.Model;
  * @author malinink
  */
 @Controller
-public class AbstractCrudController extends AbstractPersonalController {
+public abstract class AbstractCrudController extends AbstractPersonalController {
+
     protected static void setCreateBehaviour(Model model) {
-        model.addAttribute(getSubmitButtonName(), "Create");
+        model.addAttribute("create", true);
     }
 
     protected static void setUpdateBehaviour(Model model) {
-        model.addAttribute(getSubmitButtonName(), "Save");
-    }
-
-    private static String getSubmitButtonName() {
-        return "submitButtonName";
+        model.addAttribute("update", true);
     }
 }
