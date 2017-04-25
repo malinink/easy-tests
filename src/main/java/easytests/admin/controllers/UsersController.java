@@ -3,6 +3,7 @@ package easytests.admin.controllers;
 import easytests.admin.dto.UserModelDto;
 import easytests.admin.validators.UserModelDtoValidator;
 import easytests.common.controllers.AbstractCrudController;
+import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
 import java.util.List;
 import javax.validation.Valid;
@@ -41,6 +42,7 @@ public class UsersController extends AbstractCrudController {
 
     @PostMapping("create/")
     public String insert(Model model, @Valid UserModelDto userModelDto, BindingResult bindingResult) {
+        userModelDto.setRouteId(null);
         this.userModelDtoValidator.validate(userModelDto, bindingResult);
         if (bindingResult.hasErrors()) {
             injectUserModelDto(model, userModelDto);
@@ -48,7 +50,10 @@ public class UsersController extends AbstractCrudController {
             model.addAttribute("errors", bindingResult);
             return form();
         }
-        // TODO map into model & save
+
+        final UserModelInterface userModel = new UserModel();
+        userModelDto.mapInto(userModel);
+        this.usersService.save(userModel);
         return redirectToList();
     }
 
