@@ -1,5 +1,7 @@
 package easytests.admin.dto;
 
+import easytests.models.UserModelInterface;
+import easytests.models.empty.ModelsListEmpty;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -14,6 +16,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Data
 public class UserModelDto {
+    private Integer routeId;
+
     private Integer id;
 
     @NotNull
@@ -37,15 +41,31 @@ public class UserModelDto {
     @Size(min = 6, max = 30)
     private String email;
 
+    @NotNull
     private String password;
 
+    @NotNull
     private String passwordRepeat;
 
     @NotNull
-    private Boolean isAdmin;
+    private Boolean isAdmin = false;
 
     @NotNull
     @Min(3)
     @Max(4)
     private Integer state = 3;
+
+    public void mapInto(UserModelInterface userModel) {
+        userModel.setId(this.getId());
+        userModel.setFirstName(this.getFirstName());
+        userModel.setLastName(this.getLastName());
+        userModel.setSurname(this.getSurname());
+        userModel.setEmail(this.getEmail());
+        if (!this.getPassword().equals("")) {
+            userModel.setPassword(this.getPassword());
+        }
+        userModel.setIsAdmin(this.getIsAdmin());
+        userModel.setState(this.getState());
+        userModel.setSubjects(new ModelsListEmpty());
+    }
 }
