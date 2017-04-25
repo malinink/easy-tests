@@ -1,5 +1,6 @@
 package easytests.personal.dto;
 
+import easytests.models.SubjectModelInterface;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -15,11 +16,23 @@ public class SubjectDto {
 
     @NotNull
     @NotEmpty
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     private String name;
 
     private String description;
 
     private Integer issueStandardId;
 
+    public void mapFromModel(SubjectModelInterface subjectModel) {
+        this.setId(subjectModel.getId());
+        this.setName(subjectModel.getName());
+        this.setDescription(subjectModel.getDescription());
+        this.setIssueStandardId(subjectModel.getIssueStandard().getId());
+    }
+
+    public void mapInto(SubjectModelInterface subjectModel) {
+        subjectModel.setId(this.getId());
+        subjectModel.setName(this.getName());
+        subjectModel.setDescription(this.getDescription());
+    }
 }
