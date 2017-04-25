@@ -1,5 +1,7 @@
 package easytests.personal.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Data;
 
 /**
@@ -10,11 +12,11 @@ public class SubjectDto {
 
     private Integer id;
 
+    @NotNull
+    @Size(max = 255)
     private String name;
 
     private String description;
-
-    private Integer userId;
 
     private Integer issueStandardId;
 
