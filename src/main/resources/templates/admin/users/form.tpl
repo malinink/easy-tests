@@ -22,7 +22,7 @@ content: contents {
           input (id:'lastName', name:'lastName', type:'text', class:'validate invalid', value:errors.getFieldValue('lastName'))
           label (for:'lastName', 'data-error':errors.getFieldErrors('lastName')*.getDefaultMessage().join(', '), 'LastName')
         } else {
-          input (id:'lastName', name:'firstName', type:'text', class:'validate', value:user.getLastName())
+          input (id:'lastName', name:'lastName', type:'text', class:'validate', value:user.getLastName())
           label (for:'lastName', 'LastName')
         }
       }
@@ -48,7 +48,27 @@ content: contents {
       }
     }
     div (class:'row') {
-      div (class:'input-field col s12') {
+      div (class:'input-field col s6') {
+        if (errors && errors.hasFieldErrors('password')) {
+          input (id:'password', name:'password', type:'text', class:'validate invalid', value:errors.getFieldValue('password'))
+          label (for:'password', 'data-error':errors.getFieldErrors('password')*.getDefaultMessage().join(', '), 'Password')
+        } else {
+          input (id:'password', name:'password', type:'text', class:'validate', value:user.getPassword())
+          label (for:'password', 'password')
+        }
+      }
+      div (class:'input-field col s6') {
+        if (errors && errors.hasFieldErrors('passwordRepeat')) {
+          input (id:'passwordRepeat', name:'passwordRepeat', type:'text', class:'validate invalid', value:errors.getFieldValue('passwordRepeat'))
+          label (for:'passwordRepeat', 'data-error':errors.getFieldErrors('passwordRepeat')*.getDefaultMessage().join(', '), 'Password Repeat')
+        } else {
+          input (id:'passwordRepeat', name:'passwordRepeat', type:'text', class:'validate', value:user.getPasswordRepeat())
+          label (for:'passwordRepeat', 'passwordRepeat')
+        }
+      }
+    }
+    div (class:'row') {
+      div (class:'input-field col s8') {
         select (id:'state', name:'state') {
           if ((errors && errors.hasFieldErrors('state')) || user.getState().equals(3)) {
               option (value:'3', selected:'selected', 'Active')
@@ -65,6 +85,19 @@ content: contents {
           label (for:'state', 'data-error':errors.getFieldErrors('state')*.getDefaultMessage().join(', '), 'State')
         } else {
           label (for:'state', 'State')
+        }
+      }
+      div (class:'input-field col s4') {
+        if (errors && errors.hasFieldErrors('isAdmin')) {
+          input (id:'isAdmin', name:'isAdmin', class:'validate invalid', type:'checkbox')
+          label (for:'isAdmin', 'data-error':errors.getFieldErrors('isAdmin')*.getDefaultMessage().join(', '), 'isAdmin')
+        } else {
+          if (user.getIsAdmin()) {
+            input (id:'isAdmin', name:'isAdmin', class:'validate', type:'checkbox', checked:'checked')
+          } else {
+            input (id:'isAdmin', name:'isAdmin', class:'validate', type:'checkbox')
+          }
+          label (for:'isAdmin', 'isAdmin')
         }
       }
     }
