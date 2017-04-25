@@ -1,12 +1,20 @@
-layout 'layout/main.tpl', title: methodTitle,
+layout 'layout/main.tpl', title: methodType=='create' ? 'Create subject' : 'Edit subject',
 content: contents {
-  h4 (methodTitle)
+  h4 (methodType=='create' ? 'Create subject' : 'Edit subject')
   form (class:'col s12', method:'post') {
     input (type:'hidden', name:_csrf.parameterName, value:_csrf.token)
+    if(methodType=='update') {
+      input (type:'hidden', name:'id', value:subject.id)
+    }
     div (class:'row') {
       div (class:'input-field col s12') {
-        input (name:'name', id:'field_name', type:'text', class:'validate') {yield subject.name}
-        label (for:'field_name', 'Subject name')
+        if (errors && errors.hasFieldErrors('name')) {
+            input (name:'name', id:'field_name', type:'text', class:'validate invalid', value:errors.getFieldValue('name'))
+            label (for:'field_name', 'data-error':errors.getFieldErrors('name')*.getDefaultMessage().join(', '), 'name')
+        } else {
+            input (name:'name', id:'field_name', type:'text', class:'validate', value:subject.name)
+            label (for:'field_name', 'Subject name')
+        }
       }
     }
     div (class:'row') {
