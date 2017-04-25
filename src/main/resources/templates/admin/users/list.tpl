@@ -1,7 +1,7 @@
 layout 'layout/main.tpl', title:  'Users',
 content: contents {
   h4 ('Users')
-  a (class:'right waves-effect waves-light btn-floating btn-large blue') {
+  a (class:'right waves-effect waves-light btn-floating btn-large blue', href:'/admin/users/create/') {
     i (class:'material-icons left', 'add')
     yield 'Add'
   }
