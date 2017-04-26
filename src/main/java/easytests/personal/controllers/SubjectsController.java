@@ -33,6 +33,8 @@ public class SubjectsController extends AbstractPersonalController {
 
     private static final String SUBJECT_FIELD_NAME = "subject";
 
+    private static final String ISSUE_STANDARD_ID_FIELD_NAME = "issueStandardId";
+
     private static final String SUBJECTS_EDIT_TEMPLATE = "subjects/form";
 
     private static final String METHOD_TYPE_FIELD_NAME = "methodType";
@@ -101,7 +103,9 @@ public class SubjectsController extends AbstractPersonalController {
                 new SubjectsOptions().withIssueStandard(new IssueStandardsOptions()));
         final SubjectDto subject = new SubjectDto();
         subject.map(subjectModel);
+        checkPermissions(subject);
         model.addAttribute(SUBJECT_FIELD_NAME, subject);
+        model.addAttribute(ISSUE_STANDARD_ID_FIELD_NAME, subjectModel.getIssueStandard().getId());
         return "subjects/read";
     }
 
@@ -139,6 +143,10 @@ public class SubjectsController extends AbstractPersonalController {
     @GetMapping("delete/{id}")
     public String deleteConfirmation(@PathVariable("id") Integer id,
                          Model model) {
+        final SubjectDto subjectDto = new SubjectDto();
+        final SubjectModelInterface subjectModel = this.subjectsService.find(id);
+        subjectDto.map(subjectModel);
+        checkPermissions(subjectDto);
         model.addAttribute("subjectId", id);
         return "subjects/delete";
     }
