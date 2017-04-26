@@ -23,7 +23,7 @@ public class SubjectDto {
 
     private Integer issueStandardId;
 
-    public void mapFromModel(SubjectModelInterface subjectModel) {
+    public void map(SubjectModelInterface subjectModel) {
         this.setId(subjectModel.getId());
         this.setName(subjectModel.getName());
         this.setDescription(subjectModel.getDescription());
