@@ -15,7 +15,7 @@ content: contents {
   }
   div (class:'row') {
     div (class:'input-field col s12') {
-      a (href: '/personal/issue_standard/' + subject.issueStandardId) {yield 'View issue standard'}
+      a (href: '/personal/issue_standard/' + issueStandardId) {yield 'View issue standard'}
     }
   }
   div (class:'row') {
