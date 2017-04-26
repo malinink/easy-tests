@@ -51,7 +51,7 @@ public class SubjectsController extends AbstractPersonalController {
 
     private void checkPermissions(SubjectDto subject) {
         final SubjectModelInterface foundSubject = subjectsService.find(subject.getId());
-        if (foundSubject.getUser().getId() != this.getCurrentUserModel().getId()) {
+        if (!foundSubject.getUser().getId().equals(this.getCurrentUserModel().getId())) {
             throw new ForbiddenException();
         }
     }
@@ -60,7 +60,7 @@ public class SubjectsController extends AbstractPersonalController {
     public String list(Model model) {
         final List<SubjectModelInterface> subjects = this.subjectsService.findByUser(this.getCurrentUserModel());
         model.addAttribute("subjects", subjects);
-        return "subjects/root";
+        return "subjects/list";
     }
 
     @GetMapping("create")
@@ -91,7 +91,6 @@ public class SubjectsController extends AbstractPersonalController {
         final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
         issueStandardModel.setSubject(new SubjectModelEmpty(subjectModel.getId()));
         issueStandardsService.save(issueStandardModel);
-
         return SUBJECTS_LIST_URL;
     }
 
@@ -101,7 +100,7 @@ public class SubjectsController extends AbstractPersonalController {
         final SubjectModelInterface subjectModel = this.subjectsService.find(id,
                 new SubjectsOptions().withIssueStandard(new IssueStandardsOptions()));
         final SubjectDto subject = new SubjectDto();
-        subject.mapFromModel(subjectModel);
+        subject.map(subjectModel);
         model.addAttribute(SUBJECT_FIELD_NAME, subject);
         return "subjects/read";
     }
@@ -113,7 +112,7 @@ public class SubjectsController extends AbstractPersonalController {
         final SubjectModelInterface subjectModel = this.subjectsService.find(id,
                 new SubjectsOptions().withIssueStandard(new IssueStandardsOptions()));
         final SubjectDto subject = new SubjectDto();
-        subject.mapFromModel(subjectModel);
+        subject.map(subjectModel);
         model.addAttribute(SUBJECT_FIELD_NAME, subject);
         return SUBJECTS_EDIT_TEMPLATE;
     }
@@ -152,7 +151,7 @@ public class SubjectsController extends AbstractPersonalController {
         final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectOptions);
 
         final SubjectDto subjectDto = new SubjectDto();
-        subjectDto.mapFromModel(subjectModel);
+        subjectDto.map(subjectModel);
         checkPermissions(subjectDto);
 
         subjectsService.delete(subjectModel, subjectOptions);
