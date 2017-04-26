@@ -117,6 +117,7 @@ public class SubjectsController extends AbstractPersonalController {
                 new SubjectsOptions().withIssueStandard(new IssueStandardsOptions()));
         final SubjectDto subject = new SubjectDto();
         subject.map(subjectModel);
+        checkPermissions(subject);
         model.addAttribute(SUBJECT_FIELD_NAME, subject);
         return SUBJECTS_EDIT_TEMPLATE;
     }
