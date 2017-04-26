@@ -21,13 +21,10 @@ public class SubjectDto {
 
     private String description;
 
-    private Integer issueStandardId;
-
     public void map(SubjectModelInterface subjectModel) {
         this.setId(subjectModel.getId());
         this.setName(subjectModel.getName());
         this.setDescription(subjectModel.getDescription());
-        this.setIssueStandardId(subjectModel.getIssueStandard().getId());
     }
 
     public void mapInto(SubjectModelInterface subjectModel) {
