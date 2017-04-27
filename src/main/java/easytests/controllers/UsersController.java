@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * @author malinink
  */
-@Controller
+@Controller("temporary.users.controller")
 @RequestMapping("/")
 public class UsersController {
 
