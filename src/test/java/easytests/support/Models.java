@@ -112,4 +112,35 @@ public abstract class Models {
 
         return testeeModel;
     }
+
+    
+
+
+    public static QuestionModelInterface createQuestionModel(
+            Integer id, 
+            String text, 
+            Integer questionTypeId,  
+            Integer topicId
+    ) {
+        final QuestionModelInterface questionModel = new QuestionModel();
+        questionModel.setId(id);
+        questionModel.setText(text);
+        questionModel.setQuestionType(new QuestionTypeModelEmpty(questionTypeId));
+        questionModel.setTopic(new TopicModelEmpty(topicId));
+        questionModel.setAnswers(new ModelsListEmpty());
+        return questionModel;
+    }
+
+  public static IssueModelInterface createIssueModel(
+           Integer id,
+           String name,
+           Integer authorId
+               ) {
+            final IssueModelInterface issueModel = new IssueModel();
+            issueModel.setId(id);
+            issueModel.setName(name);
+            issueModel.setAuthorId(authorId);
+            issueModel.setQuizzes(new ModelsListEmpty());
+            return issueModel;
+           }
 }

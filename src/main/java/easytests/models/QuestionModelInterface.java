@@ -14,9 +14,9 @@ public interface QuestionModelInterface extends ModelInterface {
 
     void setText(String text);
 
-    Integer getType();
+    QuestionTypeModelInterface getQuestionType();
 
-    void setType(Integer type);
+    void setQuestionType(QuestionTypeModelInterface questionType);
 
     TopicModelInterface getTopic();
 

@@ -2,7 +2,10 @@ package easytests.models.empty;
 
 import easytests.entities.IssueEntity;
 import easytests.models.IssueModelInterface;
+import easytests.models.QuizModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
+
+import java.util.List;
 
 /**
  * @author fortyways
@@ -46,5 +49,14 @@ public class IssueModelEmpty extends AbstractModelEmpty implements IssueModelInt
         throw new CallMethodOnEmptyModelException();
     }
 
+    @Override
+    public List<QuizModelInterface> getQuizzes() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setQuizzes(List<QuizModelInterface> quizzes) {
+        throw new CallMethodOnEmptyModelException();
+    }
 }
 

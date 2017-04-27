@@ -86,10 +86,10 @@ CREATE TABLE topics (
 );
 
 CREATE TABLE questions (
-  id          SERIAL      NOT NULL,
-  text        VARCHAR(80) NOT NULL,
-  type        INTEGER     NOT NULL,
-  topic_id    INTEGER     NOT NULL,
+  id                      SERIAL        NOT NULL,
+  text                    VARCHAR(255)  NOT NULL,
+  question_type_id        INTEGER       NOT NULL,
+  topic_id                INTEGER       NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -183,7 +183,7 @@ INSERT INTO topics (name, subject_id) VALUES
   ('Name2', 2),
   ('Name3', 3);
 
-INSERT INTO questions (text, type, topic_id) VALUES
+INSERT INTO questions (text, question_type_id, topic_id) VALUES
   ('test1', 1, 1),
   ('test2', 2, 3),
   ('test3', 3, 2);
