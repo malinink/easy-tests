@@ -1,5 +1,6 @@
 package easytests.personal.controllers;
 
+import easytests.common.controllers.AbstractPersonalController;
 import easytests.models.IssueStandardModel;
 import easytests.models.IssueStandardModelInterface;
 import easytests.models.SubjectModel;
@@ -10,6 +11,7 @@ import easytests.options.SubjectsOptions;
 import easytests.options.SubjectsOptionsInterface;
 import easytests.personal.dto.SubjectDto;
 import easytests.personal.exceptions.ForbiddenException;
+import easytests.personal.validators.SubjectModelDtoValidator;
 import easytests.services.IssueStandardsService;
 import easytests.services.SubjectsService;
 import java.util.List;
@@ -51,6 +53,8 @@ public class SubjectsController extends AbstractPersonalController {
     @Autowired
     private IssueStandardsService issueStandardsService;
 
+    private SubjectModelDtoValidator subjectModelDtoValidator = new SubjectModelDtoValidator();
+
     private void checkPermissions(SubjectDto subject) {
         final SubjectModelInterface foundSubject = subjectsService.find(subject.getId());
         if (!foundSubject.getUser().getId().equals(this.getCurrentUserModel().getId())) {
@@ -89,7 +93,6 @@ public class SubjectsController extends AbstractPersonalController {
         subject.mapInto(subjectModel);
         subjectModel.setUser(this.getCurrentUserModel());
         subjectsService.save(subjectModel);
-
         final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
         issueStandardModel.setSubject(new SubjectModelEmpty(subjectModel.getId()));
         issueStandardsService.save(issueStandardModel);
@@ -98,7 +101,7 @@ public class SubjectsController extends AbstractPersonalController {
 
     @GetMapping("{id}")
     public String read(@PathVariable("id") Integer id,
-                         Model model) {
+                       Model model) {
         final SubjectModelInterface subjectModel = this.subjectsService.find(id,
                 new SubjectsOptions().withIssueStandard(new IssueStandardsOptions()));
         final SubjectDto subject = new SubjectDto();
@@ -123,10 +126,12 @@ public class SubjectsController extends AbstractPersonalController {
     }
 
     @PostMapping("update/{id}")
-    public String update(@Valid @NotNull SubjectDto subject,
+    public String update(@PathVariable("id") Integer routeId,
+                         @Valid @NotNull SubjectDto subject,
                          BindingResult bindingResult,
                          Model model) {
-
+        subject.setRouteId(routeId);
+        subjectModelDtoValidator.validate(subject, bindingResult);
         if (bindingResult.hasErrors()) {
             model.addAttribute(METHOD_TYPE_FIELD_NAME, METHOD_TYPE_UPDATE);
             model.addAttribute(SUBJECT_FIELD_NAME, subject);
@@ -143,27 +148,26 @@ public class SubjectsController extends AbstractPersonalController {
 
     @GetMapping("delete/{id}")
     public String deleteConfirmation(@PathVariable("id") Integer id,
-                         Model model) {
+                                     Model model) {
         final SubjectDto subjectDto = new SubjectDto();
         final SubjectModelInterface subjectModel = this.subjectsService.find(id);
         subjectDto.map(subjectModel);
         checkPermissions(subjectDto);
-        model.addAttribute("subjectId", id);
+        model.addAttribute(SUBJECT_FIELD_NAME, subjectDto);
         return "subjects/delete";
     }
 
     @PostMapping("delete/{id}")
-    public String delete(@PathVariable("id") Integer id,
+    public String delete(@PathVariable("id") Integer routeId,
+                         SubjectDto subjectDto,
+                         BindingResult bindingResult,
                          Model model) {
+        subjectDto.setRouteId(routeId);
+        subjectModelDtoValidator.validate(subjectDto, bindingResult);
+        checkPermissions(subjectDto);
         final SubjectsOptionsInterface subjectOptions =
                 new SubjectsOptions().withIssueStandard(new IssueStandardsOptions());
-        final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectOptions);
-
-        final SubjectDto subjectDto = new SubjectDto();
-        subjectDto.map(subjectModel);
-        checkPermissions(subjectDto);
-
-        subjectsService.delete(subjectModel, subjectOptions);
+        subjectsService.delete(this.subjectsService.find(subjectDto.getId(), subjectOptions), subjectOptions);
         return SUBJECTS_LIST_URL;
     }
 }
