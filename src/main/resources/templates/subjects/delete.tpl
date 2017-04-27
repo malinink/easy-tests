@@ -3,8 +3,9 @@ content: contents {
   h4 ('Delete subject')
   form (class:'col s12', method:'post') {
     input (type:'hidden', name:_csrf.parameterName, value:_csrf.token)
+    input (type:'hidden', name:id, value:subject.id)
     div (class:'row') {
-       p (class: 'col s12') { yield 'Delete subject with id ' + subjectId + '?' }
+       p (class: 'col s12') { yield 'Delete subject "' + subject.name + '"?' }
     }
     div (class:'row') {
       div (class:'col s12') {
