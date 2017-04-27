@@ -1,5 +1,6 @@
 package easytests.personal.dto;
 
+import easytests.common.dto.ModelDtoInterface;
 import easytests.models.SubjectModelInterface;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,9 +11,11 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author vkpankov
  */
 @Data
-public class SubjectDto {
+public class SubjectDto implements ModelDtoInterface {
 
     private Integer id;
+
+    private Integer routeId;
 
     @NotNull
     @NotEmpty
