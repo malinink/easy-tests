@@ -32,7 +32,9 @@ public class UserModelDtoValidator extends AbstractDtoValidator {
     private void validateEmailIsUnique(Errors errors, UserModelDto userModelDto) {
         final UserModelInterface userModel = this.usersService.findByEmail(userModelDto.getEmail());
         if (userModel != null) {
-            reject(errors, "email", "This Email already present");
+            if ((userModelDto.getRouteId() == null) || !userModelDto.getRouteId().equals(userModel.getId())) {
+                reject(errors, "email", "This Email already present");
+            }
         }
     }
 
