@@ -69,4 +69,14 @@ public class UserModelDto implements ModelDtoInterface {
         userModel.setState(this.getState());
         userModel.setSubjects(new ModelsListEmpty());
     }
+
+    public void map(UserModelInterface userModel) {
+        this.setId(userModel.getId());
+        this.setFirstName(userModel.getFirstName());
+        this.setLastName(userModel.getLastName());
+        this.setSurname(userModel.getSurname());
+        this.setEmail(userModel.getEmail());
+        this.setIsAdmin(userModel.getIsAdmin());
+        this.setState(userModel.getState());
+    }
 }
