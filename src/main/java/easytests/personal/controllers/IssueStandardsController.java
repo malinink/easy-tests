@@ -1,5 +1,6 @@
 package easytests.personal.controllers;
 
+import easytests.common.controllers.AbstractPersonalController;
 import easytests.models.*;
 import easytests.options.*;
 import easytests.personal.dto.IssueStandardDto;
