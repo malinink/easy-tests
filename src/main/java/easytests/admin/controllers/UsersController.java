@@ -37,6 +37,7 @@ public class UsersController extends AbstractCrudController {
     @GetMapping("create/")
     public String create(Model model) {
         final UserModelDto userModelDto = new UserModelDto();
+
         injectUserModelDto(model, userModelDto);
         setCreateBehaviour(model);
         return form();
@@ -46,10 +47,11 @@ public class UsersController extends AbstractCrudController {
     public String insert(Model model, @Valid UserModelDto userModelDto, BindingResult bindingResult) {
         userModelDto.setRouteId(null);
         this.userModelDtoValidator.validate(userModelDto, bindingResult);
+
         if (bindingResult.hasErrors()) {
             injectUserModelDto(model, userModelDto);
+            injectErrors(model, bindingResult);
             setCreateBehaviour(model);
-            model.addAttribute("errors", bindingResult);
             return form();
         }
 
@@ -63,15 +65,41 @@ public class UsersController extends AbstractCrudController {
     public String update(Model model, @PathVariable Integer id) {
         final UserModelInterface userModel = this.getUserModel(id);
         final UserModelDto userModelDto = new UserModelDto();
-        userModelDto.map(userModel);
 
+        userModelDto.map(userModel);
         injectUserModelDto(model, userModelDto);
         setUpdateBehaviour(model);
         return form();
     }
 
+    @PostMapping("update/{id}/")
+    public String save(
+            Model model,
+            @PathVariable Integer id,
+            @Valid UserModelDto userModelDto,
+            BindingResult bindingResult) {
+        final UserModelInterface userModel = this.getUserModel(id);
+        userModelDto.setRouteId(id);
+        this.userModelDtoValidator.validate(userModelDto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            injectUserModelDto(model, userModelDto);
+            injectErrors(model, bindingResult);
+            setUpdateBehaviour(model);
+            return form();
+        }
+
+        userModelDto.mapInto(userModel);
+        this.usersService.save(userModel);
+        return redirectToList();
+    }
+
     private static void injectUserModelDto(Model model, UserModelDto userModelDto) {
         model.addAttribute("user", userModelDto);
+    }
+
+    private static void injectErrors(Model model, BindingResult bindingResult) {
+        model.addAttribute("errors", bindingResult);
     }
 
     private UserModelInterface getUserModel(Integer id) {
