@@ -36,11 +36,11 @@ content: contents {
         }
       }
       tbody {
-        for (int i = 0; i < topicPriorities.size(); i++) {
+        issueStandard.topicPriorities.eachWithIndex { topicPriority, index ->
           tr {
-            td(i + 1)
-            td(topicPriorities[i].topic.name)
-            td(topicPriorities[i].isPreferable ? 'Preferable': 'Non-preferable')
+            td(index + 1)
+            td(topicPriority.topic.name)
+            td(topicPriority.isPreferable ? 'Preferable': 'Non-preferable')
           }
         }
       }
@@ -60,13 +60,13 @@ content: contents {
         }
       }
       tbody {
-        for (int i = 0; i < questionTypeOptions.size(); i++) {
+        issueStandard.questionTypeOptions.eachWithIndex { questionTypeOption, index ->
           tr {
-            td(i + 1)
-            td(questionTypeOptions[i].questionType.name)
-            td(questionTypeOptions[i].minQuestions ? questionTypeOptions[i].minQuestions : 'No Restriction')
-            td(questionTypeOptions[i].maxQuestions ? questionTypeOptions[i].maxQuestions : 'No Restriction')
-            td(questionTypeOptions[i].timeLimit ? questionTypeOptions[i].timeLimit : 'No Restriction')
+            td(index + 1)
+            td(questionTypeOption.questionType.name)
+            td(questionTypeOption.minQuestions ?: 'No Restriction')
+            td(questionTypeOption.maxQuestions ?: 'No Restriction')
+            td(questionTypeOption.timeLimit ?: 'No Restriction')
           }
         }
       }
