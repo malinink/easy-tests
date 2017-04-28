@@ -3,7 +3,7 @@ title:  'Edit Issue Standard',
 _csrf: _csrf,
 content: contents {
   div(class: 'row') {
-    h4(class: 'header', 'Issue Standard for subject: ' + subjectName)
+    h4(class: 'header', 'Issue Standard for subject: ' + subject.name)
     form(id: 'issueStandardForm', method:'post', class: 'col s12') {
       input (id: '_csrf', type:'hidden', name:_csrf.parameterName, value:_csrf.token)
       div(class: 'row') {
