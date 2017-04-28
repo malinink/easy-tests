@@ -30,7 +30,7 @@ public interface TesteesMapper {
     @ResultMap("Testee")
     TesteeEntity findByQuizId(Integer quizId);
 
-    @Insert("INSERT INTO testees (first_name, last_name, surname, group_number) VALUES(#{firstName}, "
+    @Insert("INSERT INTO testees (first_name, last_name, surname, group_number, quiz_id) VALUES(#{firstName}, "
             + "#{lastName}, #{surname}, #{groupNumber}, #{quizId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(TesteeEntity testee);
