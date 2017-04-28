@@ -92,7 +92,7 @@ public class TesteesMapperTest {
         final String lastName = "NewLastName";
         final String surname = "NewSurname";
         final Integer groupNumber = 308;
-        final Integer quizId = 2;
+        final Integer quizId = 19;
 
         TesteeEntity testeeEntity = this.testeesMapper.find(id);
         Assert.assertNotNull(testeeEntity);
