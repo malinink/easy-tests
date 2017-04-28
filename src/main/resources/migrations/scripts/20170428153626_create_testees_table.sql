@@ -6,9 +6,12 @@ CREATE TABLE testees (
   last_name    VARCHAR(30) NOT NULL,
   surname      VARCHAR(30) NOT NULL,
   group_number INTEGER     NOT NULL,
-  PRIMARY KEY (id)
+  quiz_id   INTEGER     NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE (quiz_id)
 );
 
 -- //@UNDO
 
 DROP TABLE testees;
+
