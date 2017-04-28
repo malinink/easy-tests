@@ -14,4 +14,3 @@ CREATE TABLE testees (
 -- //@UNDO
 
 DROP TABLE testees;
-
