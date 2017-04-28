@@ -1,10 +1,10 @@
 package easytests.options;
 
 import easytests.models.TesteeModelInterface;
+import easytests.services.QuizzesServiceInterface;
 import easytests.services.TesteesServiceInterface;
 import java.util.List;
 import lombok.Setter;
-
 
 /**
  * @author DoZor-80
@@ -13,8 +13,27 @@ public class TesteesOptions implements TesteesOptionsInterface {
     @Setter
     private TesteesServiceInterface testeesService;
 
+    @Setter
+    private QuizzesServiceInterface quizzesService;
+
+    private QuizzesOptionsInterface quizzesOptions;
+
+    @Override
+    public TesteesOptionsInterface withQuiz(QuizzesOptionsInterface quizzesOptions) {
+        this.quizzesOptions = quizzesOptions;
+        return this;
+    }
+
     @Override
     public TesteeModelInterface withRelations(TesteeModelInterface testeeModel) {
+        if (testeeModel == null) {
+            return testeeModel;
+        }
+
+        if (this.quizzesOptions != null) {
+            testeeModel.setQuiz(this.quizzesService
+                    .find(testeeModel.getQuiz().getId(), this.quizzesOptions));
+        }
         return testeeModel;
     }
 
@@ -28,11 +47,17 @@ public class TesteesOptions implements TesteesOptionsInterface {
 
     @Override
     public void saveWithRelations(TesteeModelInterface testeeModel) {
+        if (this.quizzesOptions != null) {
+            this.quizzesService.save(testeeModel.getQuiz(), this.quizzesOptions);
+        }
         this.testeesService.save(testeeModel);
     }
 
     @Override
     public void deleteWithRelations(TesteeModelInterface testeeModel) {
+        if (this.quizzesOptions != null) {
+            this.quizzesService.delete(testeeModel.getQuiz(), quizzesOptions);
+        }
         this.testeesService.delete(testeeModel);
     }
 }
