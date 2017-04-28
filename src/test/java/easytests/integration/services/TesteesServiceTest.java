@@ -70,7 +70,7 @@ public class TesteesServiceTest {
     @Test
     public void testSaveInsertsModel() throws Exception {
         final Integer id = this.testeesService.findAll().size() + 1;
-        final TesteeModelInterface testeeModel = Models.createTesteeModel(null, "FirstName2", "LastName2", "Surname2", 302, 2);
+        final TesteeModelInterface testeeModel = Models.createTesteeModel(null, "FirstName2", "LastName2", "Surname2", 302, 19);
 
         this.testeesService.save(testeeModel);
         TesteeModelInterface foundedTesteeModel = this.testeesService.find(id);

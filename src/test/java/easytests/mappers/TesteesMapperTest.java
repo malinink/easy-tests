@@ -49,10 +49,10 @@ public class TesteesMapperTest {
     public void testFindByQuizId() throws Exception {
         final TesteeEntity testee = this.testeesMapper.findByQuizId(3);
 
-        Assert.assertEquals((long) 2, (long) testee.getId());
-        Assert.assertEquals("FirstName2", testee.getFirstName());
-        Assert.assertEquals("LastName2", testee.getLastName());
-        Assert.assertEquals("Surname2", testee.getSurname());
+        Assert.assertEquals((long) 3, (long) testee.getId());
+        Assert.assertEquals("FirstName3", testee.getFirstName());
+        Assert.assertEquals("LastName3", testee.getLastName());
+        Assert.assertEquals("Surname3", testee.getSurname());
         Assert.assertEquals((long) 3, (long) testee.getQuizId());
     }
 
@@ -63,7 +63,7 @@ public class TesteesMapperTest {
         final String lastName = "LastName";
         final String surname = "Surname";
         final Integer groupNumber = 307;
-        final Integer quizId = 2;
+        final Integer quizId = 19;
 
         TesteeEntity testeeEntity = Mockito.mock(TesteeEntity.class);
         Mockito.when(testeeEntity.getFirstName()).thenReturn(firstName);
