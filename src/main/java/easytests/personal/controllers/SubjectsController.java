@@ -1,6 +1,8 @@
 package easytests.personal.controllers;
 
 import easytests.common.controllers.AbstractPersonalController;
+import easytests.common.exceptions.ForbiddenException;
+import easytests.common.exceptions.NotFoundException;
 import easytests.models.IssueStandardModel;
 import easytests.models.IssueStandardModelInterface;
 import easytests.models.SubjectModel;
@@ -10,7 +12,6 @@ import easytests.options.IssueStandardsOptions;
 import easytests.options.SubjectsOptions;
 import easytests.options.SubjectsOptionsInterface;
 import easytests.personal.dto.SubjectDto;
-import easytests.personal.exceptions.ForbiddenException;
 import easytests.personal.validators.SubjectModelDtoValidator;
 import easytests.services.IssueStandardsService;
 import easytests.services.SubjectsService;
@@ -18,7 +19,6 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author vkpankov
  */
-@Controller
+@SuppressWarnings("ClassDataAbstractionCoupling")
 @RequestMapping("/personal/subjects/")
 public class SubjectsController extends AbstractPersonalController {
 
@@ -60,6 +60,22 @@ public class SubjectsController extends AbstractPersonalController {
         if (!foundSubject.getUser().getId().equals(this.getCurrentUserModel().getId())) {
             throw new ForbiddenException();
         }
+    }
+
+    private SubjectModelInterface getSubjectModel(Integer id) {
+        final SubjectModelInterface subjectModel = this.subjectsService.find(id);
+        if (subjectModel == null) {
+            throw new NotFoundException();
+        }
+        return subjectModel;
+    }
+
+    private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectsOptions) {
+        final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectsOptions);
+        if (subjectModel == null) {
+            throw new NotFoundException();
+        }
+        return subjectModel;
     }
 
     @RequestMapping("list")
@@ -102,8 +118,11 @@ public class SubjectsController extends AbstractPersonalController {
     @GetMapping("{id}")
     public String read(@PathVariable("id") Integer id,
                        Model model) {
-        final SubjectModelInterface subjectModel = this.subjectsService.find(id,
-                new SubjectsOptions().withIssueStandard(new IssueStandardsOptions()));
+
+        final SubjectsOptionsInterface subjectsOptions =
+                new SubjectsOptions().withIssueStandard(new IssueStandardsOptions());
+        final SubjectModelInterface subjectModel = getSubjectModel(id, subjectsOptions);
+
         final SubjectDto subject = new SubjectDto();
         subject.map(subjectModel);
         checkPermissions(subject);
@@ -116,8 +135,7 @@ public class SubjectsController extends AbstractPersonalController {
     public String update(@PathVariable("id") Integer id,
                          Model model) {
         model.addAttribute(METHOD_TYPE_FIELD_NAME, METHOD_TYPE_UPDATE);
-        final SubjectModelInterface subjectModel = this.subjectsService.find(id,
-                new SubjectsOptions().withIssueStandard(new IssueStandardsOptions()));
+        final SubjectModelInterface subjectModel = getSubjectModel(id);
         final SubjectDto subject = new SubjectDto();
         subject.map(subjectModel);
         checkPermissions(subject);
@@ -150,7 +168,7 @@ public class SubjectsController extends AbstractPersonalController {
     public String deleteConfirmation(@PathVariable("id") Integer id,
                                      Model model) {
         final SubjectDto subjectDto = new SubjectDto();
-        final SubjectModelInterface subjectModel = this.subjectsService.find(id);
+        final SubjectModelInterface subjectModel = getSubjectModel(id);
         subjectDto.map(subjectModel);
         checkPermissions(subjectDto);
         model.addAttribute(SUBJECT_FIELD_NAME, subjectDto);
@@ -167,7 +185,8 @@ public class SubjectsController extends AbstractPersonalController {
         checkPermissions(subjectDto);
         final SubjectsOptionsInterface subjectOptions =
                 new SubjectsOptions().withIssueStandard(new IssueStandardsOptions());
-        subjectsService.delete(this.subjectsService.find(subjectDto.getId(), subjectOptions), subjectOptions);
+        final SubjectModelInterface subjectModel = getSubjectModel(subjectDto.getId(), subjectOptions);
+        subjectsService.delete(subjectModel, subjectOptions);
         return SUBJECTS_LIST_URL;
     }
 }
