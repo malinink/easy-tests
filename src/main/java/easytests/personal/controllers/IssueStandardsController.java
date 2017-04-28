@@ -1,17 +1,21 @@
 package easytests.personal.controllers;
 
 import easytests.common.controllers.AbstractPersonalController;
+import easytests.common.exceptions.ForbiddenException;
+import easytests.common.exceptions.NotFoundException;
 import easytests.models.*;
 import easytests.options.*;
 import easytests.personal.dto.IssueStandardDto;
+import easytests.personal.validators.IssueStandardDtoValidator;
 import easytests.services.IssueStandardsService;
 import easytests.services.QuestionTypesService;
 import easytests.services.TopicsService;
+import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,8 +23,16 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 @RequestMapping("personal/issue_standard/")
-@SuppressWarnings("checkstyle:MultipleStringLiterals")
+@SuppressWarnings("checkstyle:ClassDataAbstractionCoupling")
 public class IssueStandardsController extends AbstractPersonalController {
+
+    private static final String ISSUE_STANDARD_ATTR = "issueStandard";
+
+    private static final String ERRORS_ATTR = "errors";
+
+    private static final String VIEW_TEMPLATE = "issue_standards/view";
+
+    private static final String EDIT_TEMPLATE = "issue_standards/edit";
 
     @Autowired
     private IssueStandardsService issueStandardsService;
@@ -31,11 +43,36 @@ public class IssueStandardsController extends AbstractPersonalController {
     @Autowired
     private QuestionTypesService questionTypesService;
 
-    @GetMapping("{id}")
+    @Autowired
+    private IssueStandardDtoValidator issueStandardValidator;
+
+    @ModelAttribute("subject")
+    private SubjectModelInterface getCurrentSubject(@PathVariable Integer routeId) {
+        final IssueStandardModelInterface issueStandardModel = this.issueStandardsService
+                .find(routeId, new IssueStandardsOptions()
+                        .withSubject(new SubjectsOptions()));
+        if (issueStandardModel == null) {
+            throw new NotFoundException();
+        }
+        return issueStandardModel.getSubject();
+    }
+
+    @ModelAttribute("topics")
+    private List<TopicModelInterface> getTopics(@PathVariable Integer routeId) {
+        final SubjectModelInterface subjectModel = this.getCurrentSubject(routeId);
+        return this.topicsService.findBySubject(subjectModel);
+    }
+
+    @ModelAttribute("questionTypes")
+    private List<QuestionTypeModelInterface> getQuestionTypes() {
+        return this.questionTypesService.findAll();
+    }
+
+    @GetMapping("{routeId}")
     public String read(Model model,
-                       @PathVariable Integer id) {
+                       @PathVariable Integer routeId) {
         final IssueStandardModelInterface issueStandard = this.issueStandardsService.find(
-                id,
+                routeId,
                 new IssueStandardsOptions()
                         .withTopicPriorities(new IssueStandardTopicPrioritiesOptions()
                                 .withTopic(new TopicsOptions()))
@@ -43,40 +80,56 @@ public class IssueStandardsController extends AbstractPersonalController {
                                 .withQuestionType(new QuestionTypesOptions()))
                         .withSubject(new SubjectsOptions()));
 
-        model.addAttribute("issueStandard", issueStandard);
-        return "issue_standards/view";
+        model.addAttribute(ISSUE_STANDARD_ATTR, issueStandard);
+        return VIEW_TEMPLATE;
     }
 
-    @GetMapping("update/{id}")
+    @GetMapping("update/{routeId}")
     public String updateView(Model model,
-                             @PathVariable Integer id) {
+                             @PathVariable Integer routeId) {
         final IssueStandardModelInterface issueStandard = this.issueStandardsService.find(
-                id,
+                routeId,
                 new IssueStandardsOptions()
                         .withTopicPriorities(new IssueStandardTopicPrioritiesOptions())
                         .withQuestionTypeOptions(new IssueStandardQuestionTypeOptionsOptions())
                         .withSubject(new SubjectsOptions()));
 
         final IssueStandardDto issueStandardDto = new IssueStandardDto();
+        issueStandardDto.setRouteId(routeId);
         issueStandardDto.map(issueStandard);
 
-        model.addAttribute("subjectName", issueStandard.getSubject().getName());
-        model.addAttribute("issueStandard", issueStandardDto);
-        model.addAttribute("topics", this.topicsService.findBySubject(issueStandard.getSubject()));
-        model.addAttribute("questionTypes", this.questionTypesService.findAll());
-        return "issue_standards/edit";
+        model.addAttribute(ISSUE_STANDARD_ATTR, issueStandardDto);
+        return EDIT_TEMPLATE;
     }
 
-    @PostMapping("update/{id}")
+    @PostMapping("update/{routeId}")
     public String updateSubmit(Model model,
-                               @PathVariable Integer id,
-                               @RequestBody @Validated IssueStandardDto issueStandardDto,
+                               @PathVariable Integer routeId,
+                               @RequestBody @Valid IssueStandardDto issueStandardDto,
                                BindingResult bindingResult) {
-        // TODO: add errors handlering and save
+
+        checkPermission(issueStandardDto);
+        issueStandardDto.setRouteId(routeId);
+        issueStandardValidator.validate(issueStandardDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
+            model.addAttribute(ISSUE_STANDARD_ATTR, issueStandardDto);
+            model.addAttribute(ERRORS_ATTR, bindingResult);
+            return EDIT_TEMPLATE;
         }
-        System.out.println(issueStandardDto);
-        return "redirect:/personal/issue_standard/{id}";
+        final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
+        issueStandardDto.mapInto(issueStandardModel);
+        // TODO: сохрание списков
+        // this.issueStandardsService.save(issueStandardModel);
+        return "redirect:/personal/issue_standard/{routeId}";
+    }
+
+    private void checkPermission(IssueStandardDto issueStandardDto) {
+        final IssueStandardModelInterface foundIssueStandardModel = this.issueStandardsService
+                .find(issueStandardDto.getId(), new IssueStandardsOptions()
+                .withSubject(new SubjectsOptions()
+                .withUser(new UsersOptions())));
+        if (!foundIssueStandardModel.getSubject().getUser().getId().equals(this.getCurrentUserModel().getId())) {
+            throw new ForbiddenException();
+        }
     }
 }
