@@ -16,7 +16,7 @@ public class IssueStandardQuestionTypeOptionDto {
 
     private Integer id;
 
-    @NotNull
+    @NotNull(message = "Question Type may not be null")
     private Integer questionTypeId;
 
     @Min(1)

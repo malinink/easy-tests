@@ -14,10 +14,10 @@ public class IssueStandardTopicPriorityDto {
 
     private Integer id;
 
-    @NotNull
+    @NotNull(message = "Topic may not be null")
     private Integer topicId;
 
-    @NotNull
+    @NotNull(message = "Priority may not be null")
     private Boolean isPreferable;
 
     public void map(IssueStandardTopicPriorityModelInterface topicPriorityModel) {
