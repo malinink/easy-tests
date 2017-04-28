@@ -1,19 +1,15 @@
 package easytests.mappers;
 
-import easytests.entities.IssueInterface;
-import easytests.entities.Quiz;
-import easytests.entities.QuizInterface;
+import easytests.entities.QuizEntity;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
-
 
 /**
  * @author vkpankov
  */
-@Mapper
 public interface QuizzesMapper {
 
-    @Select("SELECT * FROM quizzes WHERE id=#{quizId}")
+    @Select("SELECT * FROM quizzes")
     @Results(
             id = "Quiz",
             value = {
@@ -22,24 +18,24 @@ public interface QuizzesMapper {
                     @Result(property = "inviteCode", column = "invite_code")
 
             })
-    Quiz find(Integer quizId);
+    List<QuizEntity> findAll();
 
-    @Select("SELECT * FROM quizzes")
+    @Select("SELECT * FROM quizzes WHERE id=#{id}")
     @ResultMap("Quiz")
-    List<QuizInterface> findAll();
+    QuizEntity find(Integer id);
 
-    @Select("SELECT * FROM quizzes WHERE issue_id=#{id}")
+    @Select("SELECT * FROM quizzes WHERE issue_id=#{issueId}")
     @ResultMap("Quiz")
-    List<QuizInterface> findByIssue(IssueInterface issue);
+    List<QuizEntity> findByIssueId(Integer issueId);
 
     @Insert("INSERT INTO quizzes (issue_id, invite_code) VALUES (#{issueId},#{inviteCode})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
-    void insert(QuizInterface quiz);
+    void insert(QuizEntity quiz);
 
     @Update("UPDATE quizzes SET issue_id=#{issueId}, invite_code=#{inviteCode} WHERE id=#{id}")
-    void update(QuizInterface quiz);
+    void update(QuizEntity quiz);
 
     @Delete("DELETE FROM quizzes WHERE id=#{id}")
-    void delete(QuizInterface quiz);
+    void delete(QuizEntity quiz);
 
 }
