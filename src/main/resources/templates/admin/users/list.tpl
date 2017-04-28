@@ -27,7 +27,7 @@ content: contents {
               i (class:'material-icons left', 'pageview')
               yield 'View'
             }
-            a (class:'waves-effect waves-light btn-floating blue') {
+            a (class:'waves-effect waves-light btn-floating blue', href:'/admin/users/update/' + user.getId() + '/') {
               i (class:'material-icons left', 'edit')
               yield 'Edit'
             }
