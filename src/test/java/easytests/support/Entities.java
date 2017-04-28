@@ -84,7 +84,8 @@ public abstract class Entities {
             String firstName,
             String lastName,
             String surname,
-            Integer groupNumber
+            Integer groupNumber,
+            Integer quizId
     ) {
         final TesteeEntity testeeEntity = Mockito.mock(TesteeEntity.class);
         Mockito.when(testeeEntity.getId()).thenReturn(id);
@@ -92,6 +93,7 @@ public abstract class Entities {
         Mockito.when(testeeEntity.getLastName()).thenReturn(lastName);
         Mockito.when(testeeEntity.getSurname()).thenReturn(surname);
         Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
+        Mockito.when(testeeEntity.getQuizId()).thenReturn(quizId);
         return testeeEntity;
     }
 
