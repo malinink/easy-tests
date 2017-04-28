@@ -101,7 +101,8 @@ public abstract class Models {
             String firstName,
             String lastName,
             String surname,
-            Integer groupNumber
+            Integer groupNumber,
+            Integer quizId
     ) {
         final TesteeModelInterface testeeModel = new TesteeModel();
         testeeModel.setId(id);
@@ -109,7 +110,7 @@ public abstract class Models {
         testeeModel.setLastName(lastName);
         testeeModel.setSurname(surname);
         testeeModel.setGroupNumber(groupNumber);
-
+        testeeModel.setQuiz(new QuizModelEmpty(quizId));
         return testeeModel;
     }
 
@@ -129,6 +130,18 @@ public abstract class Models {
         questionModel.setTopic(new TopicModelEmpty(topicId));
         questionModel.setAnswers(new ModelsListEmpty());
         return questionModel;
+    }
+
+    public static QuizModelInterface createQuizModel(
+            Integer id,
+            String inviteCode,
+            Integer issueId
+    ){
+        final QuizModelInterface quizModel = new QuizModel();
+        quizModel.setId(id);
+        quizModel.setInviteCode(inviteCode);
+        quizModel.setIssue(new IssueModelEmpty(issueId));
+        return quizModel;
     }
 
   public static IssueModelInterface createIssueModel(
