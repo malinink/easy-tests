@@ -1,5 +1,6 @@
 package easytests.personal.dto;
 
+import easytests.common.dto.ModelDtoInterface;
 import easytests.models.*;
 import easytests.models.empty.SubjectModelEmpty;
 import java.util.ArrayList;
@@ -14,7 +15,9 @@ import lombok.Data;
  * @author SingularityA
  */
 @Data
-public class IssueStandardDto {
+public class IssueStandardDto implements ModelDtoInterface {
+
+    private Integer routeId;
 
     @NotNull
     private Integer id;
