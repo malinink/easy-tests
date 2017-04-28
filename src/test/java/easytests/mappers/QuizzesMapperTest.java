@@ -37,7 +37,7 @@ public class QuizzesMapperTest {
         final QuizEntity quiz = this.quizzesMapper.find(1);
 
         Assert.assertEquals((long) 1, (long) quiz.getId());
-        Assert.assertEquals("test1", quiz.getInviteCode());
+        Assert.assertEquals("test_invite_code1", quiz.getInviteCode());
 
     }
 
@@ -54,7 +54,7 @@ public class QuizzesMapperTest {
     @Test
     public void testIssueNotNull() throws Exception {
 
-        final List<QuizEntity> quizEntities = this.quizzesMapper.findByIssueId(1);
+        final List<QuizEntity> quizEntities = this.quizzesMapper.findByIssueId(4);
 
         Assert.assertNotNull(quizEntities);
         Assert.assertEquals(0, quizEntities.size());
@@ -67,7 +67,7 @@ public class QuizzesMapperTest {
         final List<QuizEntity> quizEntities = this.quizzesMapper.findByIssueId(3);
 
         Assert.assertEquals(1, quizEntities.size());
-        Assert.assertEquals("test3", quizEntities.get(0).getInviteCode());
+        Assert.assertEquals("test_invite_code3", quizEntities.get(0).getInviteCode());
 
     }
 
@@ -78,7 +78,6 @@ public class QuizzesMapperTest {
         final Integer testIssueId = 1;
 
         final String testInviteCode = "test";
-        final String testDescription = "testQuiz.description";
 
         final QuizEntity testQuiz = Mockito.mock(QuizEntity.class);
 
@@ -102,7 +101,6 @@ public class QuizzesMapperTest {
 
         final Integer id = 2;
         final String inviteCode = "updated";
-        final String description = "updated description";
 
         QuizEntity quiz = this.quizzesMapper.find(id);
 

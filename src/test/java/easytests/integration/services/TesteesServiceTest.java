@@ -57,7 +57,7 @@ public class TesteesServiceTest {
         final Integer quizId = 1;
 
         final TesteeModelInterface testeeModel = Models.createTesteeModel(id, "FirstName1", "LastName1", "Surname1", 301, quizId);
-        final QuizModelInterface quizModel = Models.createQuizModel(quizId, "testInvite", 2);
+        final QuizModelInterface quizModel = Models.createQuizModel(quizId, "test_invite_code1", 1);
         testeeModel.setQuiz(quizModel);
 
         final TesteeModelInterface foundedTesteeModel
@@ -81,7 +81,7 @@ public class TesteesServiceTest {
     @Test
     public void testSaveUpdatesModel() throws Exception {
         final Integer id = 1;
-        final TesteeModelInterface testeeModel = Models.createTesteeModel(id, "FirstName1", "LastName1", "Surname1", 301, 2);
+        final TesteeModelInterface testeeModel = Models.createTesteeModel(id, "FirstName1", "LastName1", "Surname1", 301, 19);
         Assert.assertNotEquals(testeeModel, this.testeesService.find(id));
 
         this.testeesService.save(testeeModel);

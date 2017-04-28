@@ -53,7 +53,7 @@ public class TesteesMapperTest {
         Assert.assertEquals("FirstName2", testee.getFirstName());
         Assert.assertEquals("LastName2", testee.getLastName());
         Assert.assertEquals("Surname2", testee.getSurname());
-        Assert.assertEquals((long) 2, (long) testee.getQuizId());
+        Assert.assertEquals((long) 3, (long) testee.getQuizId());
     }
 
     @Test
