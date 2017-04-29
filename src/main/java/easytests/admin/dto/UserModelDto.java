@@ -1,6 +1,5 @@
 package easytests.admin.dto;
 
-import easytests.common.dto.ModelDtoInterface;
 import easytests.models.UserModelInterface;
 import easytests.models.empty.ModelsListEmpty;
 import javax.validation.constraints.Max;
@@ -16,11 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author malinink
  */
 @Data
-public class UserModelDto implements ModelDtoInterface {
-    private Integer routeId;
-
-    private Integer id;
-
+public class UserModelDto {
     @NotNull
     @NotEmpty
     @Size(min = 2, max = 30)
@@ -57,7 +52,6 @@ public class UserModelDto implements ModelDtoInterface {
     private Integer state = 3;
 
     public void mapInto(UserModelInterface userModel) {
-        userModel.setId(this.getId());
         userModel.setFirstName(this.getFirstName());
         userModel.setLastName(this.getLastName());
         userModel.setSurname(this.getSurname());
@@ -71,7 +65,6 @@ public class UserModelDto implements ModelDtoInterface {
     }
 
     public void map(UserModelInterface userModel) {
-        this.setId(userModel.getId());
         this.setFirstName(userModel.getFirstName());
         this.setLastName(userModel.getLastName());
         this.setSurname(userModel.getSurname());
