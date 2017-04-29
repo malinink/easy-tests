@@ -46,7 +46,6 @@ public class UsersController extends AbstractCrudController {
 
     @PostMapping("create/")
     public String insert(Model model, @Valid UserModelDto userModelDto, BindingResult bindingResult) {
-        userModelDto.setRouteId(null);
         this.userModelDtoValidator.validate(userModelDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -62,9 +61,9 @@ public class UsersController extends AbstractCrudController {
         return "redirect:/admin/users/";
     }
 
-    @GetMapping("update/{id}/")
-    public String update(Model model, @PathVariable Integer id) {
-        final UserModelInterface userModel = this.getUserModel(id);
+    @GetMapping("update/{userId}/")
+    public String update(Model model, @PathVariable Integer userId) {
+        final UserModelInterface userModel = this.getUserModel(userId);
         final UserModelDto userModelDto = new UserModelDto();
 
         userModelDto.map(userModel);
@@ -73,14 +72,14 @@ public class UsersController extends AbstractCrudController {
         return "admin/users/form";
     }
 
-    @PostMapping("update/{id}/")
+    @PostMapping("update/{userId}/")
     public String save(
             Model model,
-            @PathVariable Integer id,
+            @PathVariable Integer userId,
             @Valid UserModelDto userModelDto,
             BindingResult bindingResult) {
-        final UserModelInterface userModel = this.getUserModel(id);
-        userModelDto.setRouteId(id);
+        final UserModelInterface userModel = this.getUserModel(userId);
+        userModelDto.setId(userId);
         this.userModelDtoValidator.validate(userModelDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
