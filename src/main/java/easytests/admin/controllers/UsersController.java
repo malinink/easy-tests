@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author malinink
  */
 @Controller
+@SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/admin/users/")
 public class UsersController extends AbstractCrudController {
     @Autowired
@@ -38,9 +39,9 @@ public class UsersController extends AbstractCrudController {
     public String create(Model model) {
         final UserModelDto userModelDto = new UserModelDto();
 
-        injectUserModelDto(model, userModelDto);
+        model.addAttribute("user", userModelDto);
         setCreateBehaviour(model);
-        return form();
+        return "admin/users/form";
     }
 
     @PostMapping("create/")
@@ -49,16 +50,16 @@ public class UsersController extends AbstractCrudController {
         this.userModelDtoValidator.validate(userModelDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            injectUserModelDto(model, userModelDto);
-            injectErrors(model, bindingResult);
+            model.addAttribute("user", userModelDto);
+            model.addAttribute("errors", bindingResult);
             setCreateBehaviour(model);
-            return form();
+            return "admin/users/form";
         }
 
         final UserModelInterface userModel = new UserModel();
         userModelDto.mapInto(userModel);
         this.usersService.save(userModel);
-        return redirectToList();
+        return "redirect:/admin/users/";
     }
 
     @GetMapping("update/{id}/")
@@ -67,9 +68,9 @@ public class UsersController extends AbstractCrudController {
         final UserModelDto userModelDto = new UserModelDto();
 
         userModelDto.map(userModel);
-        injectUserModelDto(model, userModelDto);
+        model.addAttribute("user", userModelDto);
         setUpdateBehaviour(model);
-        return form();
+        return "admin/users/form";
     }
 
     @PostMapping("update/{id}/")
@@ -83,23 +84,15 @@ public class UsersController extends AbstractCrudController {
         this.userModelDtoValidator.validate(userModelDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            injectUserModelDto(model, userModelDto);
-            injectErrors(model, bindingResult);
+            model.addAttribute("user", userModelDto);
+            model.addAttribute("errors", bindingResult);
             setUpdateBehaviour(model);
-            return form();
+            return "admin/users/form";
         }
 
         userModelDto.mapInto(userModel);
         this.usersService.save(userModel);
-        return redirectToList();
-    }
-
-    private static void injectUserModelDto(Model model, UserModelDto userModelDto) {
-        model.addAttribute("user", userModelDto);
-    }
-
-    private static void injectErrors(Model model, BindingResult bindingResult) {
-        model.addAttribute("errors", bindingResult);
+        return "redirect:/admin/users/";
     }
 
     private UserModelInterface getUserModel(Integer id) {
@@ -108,13 +101,5 @@ public class UsersController extends AbstractCrudController {
             throw new NotFoundException();
         }
         return userModel;
-    }
-
-    private static String form() {
-        return "admin/users/form";
-    }
-
-    private static String redirectToList() {
-        return "redirect:/admin/users/";
     }
 }
