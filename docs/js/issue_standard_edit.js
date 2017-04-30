@@ -424,7 +424,6 @@ $(document).ready(function () {
 
         var data = {
             "_csrf": token,
-            "id": inputs.filter("[name='id']").val(),
             "timeLimit": inputs.filter("[name='timeLimit']").val(),
             "questionsNumber": inputs.filter("[name='questionsNumber']").val(),
             "topicPriorities": [],

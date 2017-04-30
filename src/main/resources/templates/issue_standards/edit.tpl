@@ -7,7 +7,6 @@ content: contents {
     form(id: 'issueStandardForm', method:'post', class: 'col s12') {
       input (id: '_csrf', type:'hidden', name:_csrf.parameterName, value:_csrf.token)
       div(class: 'row') {
-        input(id: 'id', name: 'id', value: issueStandard.id, disabled: true, type: 'hidden')
         div(class: 'row') {
           div(class: 'input-field col s4') {
             input(id: 'timeLimit', name: 'timeLimit', value: issueStandard.timeLimit,  placeholder: 'No Restriction', type: 'number', min: 1, class:'validate')
