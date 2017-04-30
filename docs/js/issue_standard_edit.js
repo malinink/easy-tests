@@ -37,6 +37,18 @@ $(document).ready(function() {
     $('select').material_select();
 });
 
+function tpFieldName(index, field) {
+    return "topicPriorities[" + index + "]." + field;
+}
+
+function qtoFieldName(index, field) {
+    return "questionTypeOptions[" + index + "]." + field;
+}
+
+function cutIndex(fieldName) {
+    return Number(fieldName.match(/\d+/));
+}
+
 /**
  * adds another row with TopicPriority form for on button 'plus' click
  */
@@ -72,19 +84,23 @@ $(document).ready(function() {
         });
 
         var rowIndex = newListSize - 1;
+        var tpId = tpFieldName(rowIndex, "id");
+        var tpTopicId = tpFieldName(rowIndex, "topicId");
+        var tpIsPreferable = tpFieldName(rowIndex, "isPreferable");
+
         var newRow =
             '<div class="topicPriorityForm row">'
-            +  '<input id="tpId' + rowIndex + '" name="tpId' + rowIndex + '" disabled value="" type="hidden">'
+            +  '<input id="' + tpId + '" name="' + tpId + '" disabled value="" type="hidden">'
             +  '<div class="input-field col s6">'
-            +    '<select id="tpTopicId' + rowIndex + '" name="tpTopicId' + rowIndex + '">'
+            +    '<select id="' + tpTopicId + '" name="' + tpTopicId + '">'
             +       optionsString
             +    '</select>'
             +    '<label>Topic</label>'
             +  '</div>'
             +  '<div class="col s4">'
             +    '<p>'
-            +        '<input id="tpIsPreferable' + rowIndex + '" name="tpIsPreferable' + rowIndex + '" type="checkbox"/>'
-            +        '<label for="tpIsPreferable' + rowIndex + '">Is Preferable</label>'
+            +        '<input id="' + tpIsPreferable + '" name="' + tpIsPreferable + '" type="checkbox"/>'
+            +        '<label for="' + tpIsPreferable + '">Is Preferable</label>'
             +    '</p>'
             +  '</div>'
             +  '<a class="deleteTopicPriorityForm btn-floating btn-large waves-effect waves-light right blue-grey">'
@@ -97,7 +113,7 @@ $(document).ready(function() {
 
         var hiddenRow =
             '<div class="topicSelectRow">'
-            +	'<p class="selectId">tpTopicId' + rowIndex + '</p>'
+            +	'<p class="selectId">' + tpTopicId + '</p>'
             +	'<p class="topicId"></p>'
             +'</div>';
         // добавление строки в hidden слой
@@ -148,9 +164,7 @@ $(document).ready(function() {
         var currentSelectValue = formRow.find("select").val();
 
         // отрезание индекса
-        var position = Number(currentSelectId.search("\\d"));
-        var currentIndex = Number(currentSelectId.slice(position, position.length));
-
+        var currentIndex = cutIndex(currentSelectId);
         // все элементы после удаляемого
         var formRowsAfter = formRow.nextAll().filter(".topicPriorityForm");
         // скрытый слой селектов
@@ -169,13 +183,13 @@ $(document).ready(function() {
             var rowCheckbox = $(this).find(":checkbox");
 
             // для скрытого id
-            var newTopicPriorityIdId = "tpId" + currentIndex;
+            var newTopicPriorityIdId = tpFieldName(index, "id");
             rowId.attr("id", newTopicPriorityIdId);
             rowId.attr("name", newTopicPriorityIdId);
 
             // для селектов
             var rowSelectId = rowSelect.attr("id");
-            var newSelectId = "tpTopicId" + index;
+            var newSelectId = tpFieldName(index, "topicId");
             rowSelect.attr("id", newSelectId);
             rowSelect.attr("name", newSelectId);
 
@@ -184,7 +198,7 @@ $(document).ready(function() {
             }).text(newSelectId);
 
             // для чекбоксов
-            var newCheckboxId = "tpIsPreferable" + index;
+            var newCheckboxId = tpFieldName(index, "isPreferable");
             rowCheckbox.attr("id", newCheckboxId);
             rowCheckbox.attr("name", newCheckboxId);
             rowCheckbox.next("label").attr("for", newCheckboxId);
@@ -241,26 +255,32 @@ $(document).ready(function() {
         });
 
         var rowIndex = newListSize - 1;
+        var qtoId = qtoFieldName(rowIndex, "id");
+        var qtoQuestionTypeId = qtoFieldName(rowIndex, "questionTypeId");
+        var qtoMinQuestions = qtoFieldName(rowIndex, "minQuestions");
+        var qtoMaxQuestions = qtoFieldName(rowIndex, "maxQuestions");
+        var qtoTimeLimit = qtoFieldName(rowIndex, "timeLimit");
+
         var newRow =
             '<div class="questionTypeOptionForm row">'
-            + '<input id="qtoId' + rowIndex + '" name="qtoId' + rowIndex + '" disabled value="" type="hidden">'
+            + '<input id="' + qtoId + '" name="' + qtoId + '" disabled value="" type="hidden">'
             + '<div class="input-field col s5">'
-            +   '<select id="qtoQuestionTypeId' + rowIndex + '" name="qtoQuestionTypeId' + rowIndex + '">'
+            +   '<select id="' + qtoQuestionTypeId + '" name="' + qtoQuestionTypeId + '">'
             +      optionsString
             +   '</select>'
             +   '<label>Question Type</label>'
             + '</div>'
             + '<div class="input-field col s2">'
-            +    '<input id="qtoMinQuestions' + rowIndex + '" name="qtoMinQuestions' + rowIndex + '" placeholder="No Restriction" type="number" min="1" class="validate">'
-            +    '<label class="active" for="qtoMinQuestions' + rowIndex + '">Minimal number of questions</label>'
+            +    '<input id="' + qtoMinQuestions + '" name="' + qtoMinQuestions + '" placeholder="No Restriction" type="number" min="1" class="validate">'
+            +    '<label class="active" for="' + qtoMinQuestions + '">Minimal number of questions</label>'
             + '</div>'
             + '<div class="input-field col s2">'
-            +    '<input id="qtoMaxQuestions' + rowIndex + '" name="qtoMaxQuestions' + rowIndex + '" placeholder="No Restriction" type="number" min="1" class="validate">'
-            +    '<label class="active" for="qtoMaxQuestions' + rowIndex + '">Maximal number of questions</label>'
+            +    '<input id="' + qtoMaxQuestions + '" name="' + qtoMaxQuestions + '" placeholder="No Restriction" type="number" min="1" class="validate">'
+            +    '<label class="active" for="' + qtoMaxQuestions + '">Maximal number of questions</label>'
             + '</div>'
             + '<div class="input-field col s2">'
-            +    '<input id="qtoTimeLimit' + rowIndex + '" name="qtoTimeLimit' + rowIndex + '" placeholder="No Restriction" type="number" min="1" class="validate">'
-            +    '<label class="active" for="qtoTimeLimit' + rowIndex + '">Time limit for type</label>'
+            +    '<input id="' + qtoTimeLimit + '" name="' + qtoTimeLimit + '" placeholder="No Restriction" type="number" min="1" class="validate">'
+            +    '<label class="active" for="' + qtoTimeLimit + '">Time limit for type</label>'
             + '</div>'
             + '<a class="deleteQuestionTypeOptionForm btn-floating btn-large waves-effect waves-light right blue-grey"><i class="material-icons">delete</i></a>'
             +'</div>';
@@ -271,7 +291,7 @@ $(document).ready(function() {
 
         var hiddenRow =
             '<div class="questionTypeSelectRow">'
-            +	'<p class="selectId">qtoQuestionTypeId' + rowIndex + '</p>'
+            +	'<p class="selectId">' + qtoQuestionTypeId + '</p>'
             +	'<p class="questionTypeId"></p>'
             +'</div>';
         // добавление строки в hidden слой
@@ -322,9 +342,7 @@ $(document).ready(function() {
         var currentSelectValue = formRow.find("select").val();
 
         // отрезание индекса
-        var position = Number(currentSelectId.search("\\d"));
-        var currentIndex = Number(currentSelectId.slice(position, position.length));
-
+        var currentIndex = cutIndex(currentSelectId);
         // все элементы после удаляемого
         var formRowsAfter = formRow.nextAll().filter(".questionTypeOptionForm");
         // скрытый слой селектов
@@ -345,13 +363,13 @@ $(document).ready(function() {
             var rowTimeLimit = $(this).find("input[type='number']").eq(2);
 
             // для скрытого id
-            var newQuestionTypeOptionIdId = "qtoId" + currentIndex;
+            var newQuestionTypeOptionIdId = qtoFieldName(index, "id");
             rowId.attr("id", newQuestionTypeOptionIdId);
             rowId.attr("name", newQuestionTypeOptionIdId);
 
             // для селектов
             var rowSelectId = rowSelect.attr("id");
-            var newSelectId = "qtoQuestionTypeId" + index;
+            var newSelectId = qtoFieldName(index, "questionTypeId");
             rowSelect.attr("id", newSelectId);
             rowSelect.attr("name", newSelectId);
 
@@ -360,19 +378,19 @@ $(document).ready(function() {
             }).text(newSelectId);
 
             // для поля min
-            var newMinId = "qtoMinQuestions" + index;
+            var newMinId = qtoFieldName(index, "minQuestions");
             rowMin.attr("id", newMinId);
             rowMin.attr("name", newMinId);
             rowMin.next("label").attr("for", newMinId);
 
             // для поля max
-            var newMaxId = "qtoMaxQuestions" + index;
+            var newMaxId = qtoFieldName(index, "maxQuestions");
             rowMax.attr("id", newMaxId);
             rowMax.attr("name", newMaxId);
             rowMax.next("label").attr("for", newMaxId);
 
             // для поля timeLimit
-            var newTimeLimitId = "qtoTimeLimit" + index;
+            var newTimeLimitId = qtoFieldName(index, "timeLimit");
             rowTimeLimit.attr("id", newTimeLimitId);
             rowTimeLimit.attr("name", newTimeLimitId);
             rowTimeLimit.next("label").attr("for", newTimeLimitId);
@@ -416,9 +434,9 @@ $(document).ready(function () {
         var tpRows = $(".topicPriorityForm");
         tpRows.each(function () {
             var rowInputs = $(this).find("input,select");
-            var tpId = rowInputs.filter("[name^='tpId']").val();
-            var tpTopicId = rowInputs.filter("[name^='tpTopicId']").val();
-            var tpIsPreferable = (rowInputs.filter("[name^='tpIsPreferable']").attr("checked") == "checked");
+            var tpId = rowInputs.filter("[name$='.id']").val();
+            var tpTopicId = rowInputs.filter("[name$='.topicId']").val();
+            var tpIsPreferable = (rowInputs.filter("[name$='.isPreferable']").attr("checked") == "checked");
             var tpElement = {
                 "id": tpId,
                 "topicId": tpTopicId,
@@ -429,11 +447,11 @@ $(document).ready(function () {
         var qtoRows = $(".questionTypeOptionForm");
         qtoRows.each(function () {
             var rowInputs = $(this).find("input,select");
-            var qtoId = rowInputs.filter("[name^='qtoId']").val();
-            var qtoQuestionTypeId = rowInputs.filter("[name^='qtoQuestionTypeId']").val();
-            var qtoMinQuestions = rowInputs.filter("[name^='qtoMinQuestions']").val();
-            var qtoMaxQuestions = rowInputs.filter("[name^='qtoMaxQuestions']").val();
-            var qtoTimeLimit = rowInputs.filter("[name^='qtoTimeLimit']").val();
+            var qtoId = rowInputs.filter("[name$='.id']").val();
+            var qtoQuestionTypeId = rowInputs.filter("[name$='.questionTypeId']").val();
+            var qtoMinQuestions = rowInputs.filter("[name$='.minQuestions']").val();
+            var qtoMaxQuestions = rowInputs.filter("[name$='.maxQuestions']").val();
+            var qtoTimeLimit = rowInputs.filter("[name$='.timeLimit']").val();
             var qtoElement =  {
                 "id": qtoId,
                 "questionTypeId": qtoQuestionTypeId,
