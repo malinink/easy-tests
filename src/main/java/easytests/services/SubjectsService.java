@@ -23,6 +23,9 @@ public class SubjectsService implements SubjectsServiceInterface {
     private SubjectsMapper subjectsMapper;
 
     @Autowired
+    private TopicsService topicsService;
+
+    @Autowired
     private UsersService usersService;
 
     @Autowired
@@ -149,7 +152,7 @@ public class SubjectsService implements SubjectsServiceInterface {
         subjectsOptions.setSubjectsService(this);
         subjectsOptions.setUsersService(this.usersService);
         subjectsOptions.setIssueStandardsService(this.issueStandardsService);
-        //subjectsOptions.setTopicsService(this.topicsService);
+        subjectsOptions.setTopicsService(this.topicsService);
         return subjectsOptions;
     }
 
