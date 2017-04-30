@@ -1,6 +1,5 @@
 package easytests.personal.dto;
 
-import easytests.common.dto.ModelDtoInterface;
 import easytests.models.*;
 import easytests.models.empty.SubjectModelEmpty;
 import java.util.ArrayList;
@@ -15,9 +14,7 @@ import lombok.Data;
  * @author SingularityA
  */
 @Data
-public class IssueStandardDto implements ModelDtoInterface {
-
-    private Integer routeId;
+public class IssueStandardDto {
 
     @NotNull
     private Integer id;
@@ -60,7 +57,6 @@ public class IssueStandardDto implements ModelDtoInterface {
             questionTypeOptionDtoList.add(questionTypeOptionDto);
         }
 
-        this.setId(issueStandardModel.getId());
         this.setTimeLimit(issueStandardModel.getTimeLimit());
         this.setQuestionsNumber(issueStandardModel.getQuestionsNumber());
         this.setTopicPriorities(topicPriorityDtoList);
@@ -90,7 +86,6 @@ public class IssueStandardDto implements ModelDtoInterface {
             questionTypeOptionModelList.add(questionTypeOptionModel);
         }
 
-        issueStandardModel.setId(this.getId());
         issueStandardModel.setTimeLimit(this.getTimeLimit());
         issueStandardModel.setQuestionsNumber(this.getQuestionsNumber());
         issueStandardModel.setTopicPriorities(topicPriorityModelList);
