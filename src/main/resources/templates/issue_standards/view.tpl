@@ -37,9 +37,15 @@ content: contents {
       }
       tbody {
         issueStandard.topicPriorities.eachWithIndex { topicPriority, index ->
+          def topicName = ""
+          issueStandard.subject.topics.each { topic -> 
+            if (topic.id == topicPriority.topic.id) {
+              topicName = topic.name
+            }
+          }
           tr {
             td(index + 1)
-            td(topicPriority.topic.name)
+            td(topicName)
             td(topicPriority.isPreferable ? 'Preferable': 'Non-preferable')
           }
         }
@@ -61,9 +67,15 @@ content: contents {
       }
       tbody {
         issueStandard.questionTypeOptions.eachWithIndex { questionTypeOption, index ->
+          def questionTypeName = ""
+          questionTypes.each { questionType ->
+            if (questionType.id == questionTypeOption.questionType.id) {
+              questionTypeName = questionType.name
+            }
+          }
           tr {
             td(index + 1)
-            td(questionTypeOption.questionType.name)
+            td(questionTypeName)
             td(questionTypeOption.minQuestions ?: 'No Restriction')
             td(questionTypeOption.maxQuestions ?: 'No Restriction')
             td(questionTypeOption.timeLimit ?: 'No Restriction')
