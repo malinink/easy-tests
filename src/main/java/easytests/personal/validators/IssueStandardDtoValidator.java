@@ -34,7 +34,6 @@ public class IssueStandardDtoValidator extends AbstractDtoValidator {
 
     public void validate(Object object, Errors errors) {
         final IssueStandardDto issueStandardDto = (IssueStandardDto) object;
-        validateIdEquals(errors, issueStandardDto);
         validateTopicPriorities(errors, issueStandardDto);
         validateQuestionTypeOptions(errors, issueStandardDto);
     }
