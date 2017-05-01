@@ -28,26 +28,10 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author vkpankov
  */
-@SuppressWarnings("ClassDataAbstractionCoupling")
+@SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:ClassDataAbstractionCoupling"})
 @Controller
 @RequestMapping("/personal/subjects/")
 public class SubjectsController extends AbstractPersonalController {
-
-    private static final String SUBJECTS_LIST_URL = "redirect:/personal/subjects/list";
-
-    private static final String SUBJECT_FIELD_NAME = "subject";
-
-    private static final String ISSUE_STANDARD_ID_FIELD_NAME = "issueStandardId";
-
-    private static final String SUBJECTS_EDIT_TEMPLATE = "subjects/form";
-
-    private static final String METHOD_TYPE_FIELD_NAME = "methodType";
-
-    private static final String METHOD_TYPE_CREATE = "create";
-
-    private static final String METHOD_TYPE_UPDATE = "update";
-
-    private static final String ERRORS_FIELD_NAME = "errors";
 
     @Autowired
     private SubjectsService subjectsService;
@@ -57,26 +41,24 @@ public class SubjectsController extends AbstractPersonalController {
 
     private SubjectModelDtoValidator subjectModelDtoValidator = new SubjectModelDtoValidator();
 
-    private void checkPermissions(SubjectDto subject) {
-        final SubjectModelInterface foundSubject = subjectsService.find(subject.getId());
-        if (!foundSubject.getUser().getId().equals(this.getCurrentUserModel().getId())) {
+    private void checkModel(SubjectModelInterface subjectModel) {
+        if (subjectModel == null) {
+            throw new NotFoundException();
+        }
+        if (!subjectModel.getUser().getId().equals(this.getCurrentUserModel().getId())) {
             throw new ForbiddenException();
         }
     }
 
     private SubjectModelInterface getSubjectModel(Integer id) {
         final SubjectModelInterface subjectModel = this.subjectsService.find(id);
-        if (subjectModel == null) {
-            throw new NotFoundException();
-        }
+        checkModel(subjectModel);
         return subjectModel;
     }
 
     private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectsOptions) {
         final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectsOptions);
-        if (subjectModel == null) {
-            throw new NotFoundException();
-        }
+        checkModel(subjectModel);
         return subjectModel;
     }
 
@@ -89,12 +71,12 @@ public class SubjectsController extends AbstractPersonalController {
 
     @GetMapping("create")
     public String create(Model model) {
-        model.addAttribute(METHOD_TYPE_FIELD_NAME, METHOD_TYPE_CREATE);
         final SubjectDto subject = new SubjectDto();
         subject.setName("");
         subject.setDescription("");
-        model.addAttribute(SUBJECT_FIELD_NAME, subject);
-        return SUBJECTS_EDIT_TEMPLATE;
+        model.addAttribute("methodType", "create");
+        model.addAttribute("subject", subject);
+        return "subjects/form";
     }
 
     @PostMapping("create")
@@ -102,10 +84,10 @@ public class SubjectsController extends AbstractPersonalController {
                          BindingResult bindingResult,
                          Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute(METHOD_TYPE_FIELD_NAME, METHOD_TYPE_CREATE);
-            model.addAttribute(SUBJECT_FIELD_NAME, subject);
-            model.addAttribute(ERRORS_FIELD_NAME, bindingResult);
-            return SUBJECTS_EDIT_TEMPLATE;
+            model.addAttribute("methodType", "create");
+            model.addAttribute("subject", subject);
+            model.addAttribute("errors", bindingResult);
+            return "subjects/form";
         }
         final SubjectModelInterface subjectModel = new SubjectModel();
         subject.mapInto(subjectModel);
@@ -114,7 +96,7 @@ public class SubjectsController extends AbstractPersonalController {
         final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
         issueStandardModel.setSubject(new SubjectModelEmpty(subjectModel.getId()));
         issueStandardsService.save(issueStandardModel);
-        return SUBJECTS_LIST_URL;
+        return "redirect:/personal/subjects/list";
     }
 
     @GetMapping("{id}")
@@ -127,43 +109,39 @@ public class SubjectsController extends AbstractPersonalController {
 
         final SubjectDto subject = new SubjectDto();
         subject.map(subjectModel);
-        checkPermissions(subject);
-        model.addAttribute(SUBJECT_FIELD_NAME, subject);
-        model.addAttribute(ISSUE_STANDARD_ID_FIELD_NAME, subjectModel.getIssueStandard().getId());
+        model.addAttribute("subject", subject);
+        model.addAttribute("issueStandardId", subjectModel.getIssueStandard().getId());
         return "subjects/read";
     }
 
     @GetMapping("update/{id}")
     public String update(@PathVariable("id") Integer id,
                          Model model) {
-        model.addAttribute(METHOD_TYPE_FIELD_NAME, METHOD_TYPE_UPDATE);
+        model.addAttribute("methodType", "update");
         final SubjectModelInterface subjectModel = getSubjectModel(id);
         final SubjectDto subject = new SubjectDto();
         subject.map(subjectModel);
-        checkPermissions(subject);
-        model.addAttribute(SUBJECT_FIELD_NAME, subject);
-        return SUBJECTS_EDIT_TEMPLATE;
+        model.addAttribute("subject", subject);
+        return "subjects/form";
     }
 
     @PostMapping("update/{id}")
-    public String update(@PathVariable("id") Integer routeId,
+    public String update(@PathVariable("id") Integer subjectId,
                          @Valid @NotNull SubjectDto subject,
                          BindingResult bindingResult,
                          Model model) {
-        subject.setRouteId(routeId);
-        subjectModelDtoValidator.validate(subject, bindingResult);
         if (bindingResult.hasErrors()) {
-            model.addAttribute(METHOD_TYPE_FIELD_NAME, METHOD_TYPE_UPDATE);
-            model.addAttribute(SUBJECT_FIELD_NAME, subject);
-            model.addAttribute(ERRORS_FIELD_NAME, bindingResult);
-            return SUBJECTS_EDIT_TEMPLATE;
+            model.addAttribute("methodType", "update");
+            model.addAttribute("subject", subject);
+            model.addAttribute("errors", bindingResult);
+            return "subjects/form";
         }
-        checkPermissions(subject);
         final SubjectModelInterface subjectModel = new SubjectModel();
         subject.mapInto(subjectModel);
+        subjectModel.setId(subjectId);
         subjectModel.setUser(this.getCurrentUserModel());
         subjectsService.save(subjectModel);
-        return SUBJECTS_LIST_URL;
+        return "redirect:/personal/subjects/list";
     }
 
     @GetMapping("delete/{id}")
@@ -172,23 +150,20 @@ public class SubjectsController extends AbstractPersonalController {
         final SubjectDto subjectDto = new SubjectDto();
         final SubjectModelInterface subjectModel = getSubjectModel(id);
         subjectDto.map(subjectModel);
-        checkPermissions(subjectDto);
-        model.addAttribute(SUBJECT_FIELD_NAME, subjectDto);
+        model.addAttribute("subject", subjectDto);
         return "subjects/delete";
     }
 
     @PostMapping("delete/{id}")
-    public String delete(@PathVariable("id") Integer routeId,
+    public String delete(@PathVariable("id") Integer subjectId,
                          SubjectDto subjectDto,
                          BindingResult bindingResult,
                          Model model) {
-        subjectDto.setRouteId(routeId);
         subjectModelDtoValidator.validate(subjectDto, bindingResult);
-        checkPermissions(subjectDto);
         final SubjectsOptionsInterface subjectOptions =
                 new SubjectsOptions().withIssueStandard(new IssueStandardsOptions());
-        final SubjectModelInterface subjectModel = getSubjectModel(subjectDto.getId(), subjectOptions);
+        final SubjectModelInterface subjectModel = getSubjectModel(subjectId, subjectOptions);
         subjectsService.delete(subjectModel, subjectOptions);
-        return SUBJECTS_LIST_URL;
+        return "redirect:/personal/subjects/list";
     }
 }
