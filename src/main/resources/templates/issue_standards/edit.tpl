@@ -124,7 +124,7 @@ content: contents {
           i(class: 'material-icons right', 'send')
           yield 'Save'
         }
-        a(class: 'btn-large waves-effect waves-light red', onclick:'location.href="/personal/issue_standard/' + issueStandard.id + '"', name: 'cancel') {
+        a(href: viewUrl, class: 'btn-large waves-effect waves-light red', name: 'cancel') {
           i (class:'material-icons right', 'cancel')
           yield 'Cancel'
         }

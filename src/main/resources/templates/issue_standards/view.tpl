@@ -3,7 +3,7 @@ title:  'View Issue Standard',
 _csrf: _csrf,
 content: contents {
   div(class: 'row') {
-    a (class: 'btn-floating btn-large waves-effect waves-light right blue', onclick:'location.href="/personal/issue_standard/update/' + issueStandard.id + '"') {
+    a (href: editUrl, class: 'btn-floating btn-large waves-effect waves-light right blue') {
       i (class: 'material-icons', 'edit')
     }
     h4 (class: 'header', 'Issue Standard')
