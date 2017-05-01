@@ -72,6 +72,16 @@ public class IssueStandardsController extends AbstractPersonalController {
         return this.questionTypesService.findAll();
     }
 
+    @ModelAttribute("viewUrl")
+    private String viewUrl(@PathVariable Integer issueStandardId) {
+        return "/personal/issue_standard/" + Integer.toString(issueStandardId) + "/";
+    }
+
+    @ModelAttribute("editUrl")
+    private String editUrl(@PathVariable Integer issueStandardId) {
+        return "/personal/issue_standard/update/" + Integer.toString(issueStandardId) + "/";
+    }
+
     @GetMapping("{issueStandardId}/")
     public String read(Model model,
                        @PathVariable Integer issueStandardId) {
@@ -116,6 +126,6 @@ public class IssueStandardsController extends AbstractPersonalController {
         }
 
         // TODO: save
-        return "redirect:/personal/issue_standard/{issueStandardId}";
+        return "redirect:/personal/issue_standard/{issueStandardId}/";
     }
 }
