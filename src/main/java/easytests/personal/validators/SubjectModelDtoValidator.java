@@ -14,6 +14,6 @@ public class SubjectModelDtoValidator extends AbstractDtoValidator {
     }
 
     public void validate(Object obj, Errors errors) {
-        validateIdEquals(errors, (SubjectDto) obj);
+
     }
 }
