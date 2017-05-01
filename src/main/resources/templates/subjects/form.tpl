@@ -3,9 +3,6 @@ content: contents {
   h4 (methodType=='create' ? 'Create subject' : 'Edit subject')
   form (class:'col s12', method:'post') {
     input (type:'hidden', name:_csrf.parameterName, value:_csrf.token)
-    if(methodType=='update') {
-      input (type:'hidden', name:'id', value:subject.id)
-    }
     div (class:'row') {
       div (class:'input-field col s12') {
         if (errors && errors.hasFieldErrors('name')) {
