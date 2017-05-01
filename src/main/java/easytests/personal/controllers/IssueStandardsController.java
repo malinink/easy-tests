@@ -8,10 +8,13 @@ import easytests.options.*;
 import easytests.personal.dto.IssueStandardDto;
 import easytests.personal.validators.IssueStandardDtoValidator;
 import easytests.services.*;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +32,12 @@ public class IssueStandardsController extends AbstractPersonalController {
 
     @Autowired
     private IssueStandardsService issueStandardsService;
+
+    @Autowired
+    private IssueStandardTopicPrioritiesService topicPrioritiesService;
+
+    @Autowired
+    private IssueStandardQuestionTypeOptionsService questionTypeOptionsService;
 
     @Autowired
     private SubjectsService subjectsService;
@@ -110,10 +119,10 @@ public class IssueStandardsController extends AbstractPersonalController {
                                @RequestBody @Valid IssueStandardDto issueStandardDto,
                                BindingResult bindingResult) {
 
-        final IssueStandardModelInterface currentIssueStandardModel = this.getIssueStandardModel(issueStandardId);
         issueStandardDto.setId(issueStandardId);
         issueStandardValidator.validate(issueStandardDto, bindingResult);
 
+        // TODO: display errors on view
         System.out.println(issueStandardDto);
         System.out.println(bindingResult);
 
@@ -125,7 +134,49 @@ public class IssueStandardsController extends AbstractPersonalController {
             return "issue_standards/edit";
         }
 
-        // TODO: save
+        final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
+        issueStandardDto.mapInto(issueStandardModel);
+        issueStandardModel.setId(issueStandardId);
+        saveIssueStandardModel(issueStandardModel);
+
         return "redirect:/personal/issue_standard/{issueStandardId}/";
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+    private void saveIssueStandardModel(IssueStandardModelInterface newIssueStandardModel) {
+        final IssueStandardModelInterface currentIssueStandardModel
+                = this.getIssueStandardModel(newIssueStandardModel.getId());
+
+        final List<Integer> newTopicPriorityIds
+                = new ArrayList<>(newIssueStandardModel.getTopicPriorities().size());
+        for (IssueStandardTopicPriorityModelInterface newTopicPriority
+                : newIssueStandardModel.getTopicPriorities()) {
+            newTopicPriorityIds.add(newTopicPriority.getId());
+        }
+
+        final List<Integer> newQuestionTypeOptionIds
+                = new ArrayList<>(newIssueStandardModel.getQuestionTypeOptions().size());
+        for (IssueStandardQuestionTypeOptionModelInterface newQuestionTypeOption
+                : newIssueStandardModel.getQuestionTypeOptions()) {
+            newQuestionTypeOptionIds.add(newQuestionTypeOption.getId());
+        }
+
+        for (IssueStandardTopicPriorityModelInterface currentTopicPriority
+                : currentIssueStandardModel.getTopicPriorities()) {
+            if (!newTopicPriorityIds.contains(currentTopicPriority.getId())) {
+                this.topicPrioritiesService.delete(currentTopicPriority);
+            }
+        }
+
+        for (IssueStandardQuestionTypeOptionModelInterface currentQuestionTypeOption
+                : currentIssueStandardModel.getQuestionTypeOptions()) {
+            if (!newQuestionTypeOptionIds.contains(currentQuestionTypeOption.getId())) {
+                this.questionTypeOptionsService.delete(currentQuestionTypeOption);
+            }
+        }
+
+        this.issueStandardsService.save(newIssueStandardModel, new IssueStandardsOptions()
+                .withTopicPriorities(new IssueStandardTopicPrioritiesOptions())
+                .withQuestionTypeOptions(new IssueStandardQuestionTypeOptionsOptions()));
     }
 }
