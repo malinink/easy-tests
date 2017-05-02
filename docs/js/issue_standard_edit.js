@@ -113,7 +113,7 @@ $(document).ready(function() {
             +  '<div class="col s4">'
             +    '<p>'
             +        '<input id="' + tpIsPreferableId + '" name="' + tpIsPreferableName + '" type="checkbox"/>'
-            +        '<label for="' + tpIsPreferableName + '">Is Preferable</label>'
+            +        '<label for="' + tpIsPreferableId + '">Is Preferable</label>'
             +    '</p>'
             +  '</div>'
             +  '<a class="deleteTopicPriorityForm btn-floating btn-large waves-effect waves-light right blue-grey">'
@@ -430,63 +430,5 @@ $(document).ready(function() {
 
         // кнопка "добавить" снова активна
         $("#addQuestionTypeOptionForm").attr("disabled", false);
-    });
-});
-
-/**
- * overloads submit event
- */
-$(document).ready(function () {
-    $("#issueStandardForm").submit(function (event) {
-        event.preventDefault();
-        var inputs = $(this).find("input");
-        var token = inputs.filter("[name='_csrf']").val();
-
-        var data = {
-            "_csrf": token,
-            "timeLimit": inputs.filter("[name='timeLimit']").val(),
-            "questionsNumber": inputs.filter("[name='questionsNumber']").val(),
-            "topicPriorities": [],
-            "questionTypeOptions": [],
-            "subjectId": inputs.filter("[name='subjectId']").val()
-        };
-        var tpRows = $(".topicPriorityForm");
-        tpRows.each(function () {
-            var rowInputs = $(this).find("input,select");
-            var tpId = rowInputs.filter("[name$='.id']").val();
-            var tpTopicId = rowInputs.filter("[name$='.topicId']").val();
-            var tpIsPreferable = (rowInputs.filter("[name$='.isPreferable']").attr("checked") == "checked");
-            var tpElement = {
-                "id": tpId,
-                "topicId": tpTopicId,
-                "isPreferable": tpIsPreferable
-            };
-            data.topicPriorities.push(tpElement);
-        });
-        var qtoRows = $(".questionTypeOptionForm");
-        qtoRows.each(function () {
-            var rowInputs = $(this).find("input,select");
-            var qtoId = rowInputs.filter("[name$='.id']").val();
-            var qtoQuestionTypeId = rowInputs.filter("[name$='.questionTypeId']").val();
-            var qtoMinQuestions = rowInputs.filter("[name$='.minQuestions']").val();
-            var qtoMaxQuestions = rowInputs.filter("[name$='.maxQuestions']").val();
-            var qtoTimeLimit = rowInputs.filter("[name$='.timeLimit']").val();
-            var qtoElement =  {
-                "id": qtoId,
-                "questionTypeId": qtoQuestionTypeId,
-                "minQuestions": qtoMinQuestions,
-                "maxQuestions": qtoMaxQuestions,
-                "timeLimit": qtoTimeLimit
-            };
-            data.questionTypeOptions.push(qtoElement);
-        });
-
-        // post запрос
-        var xhr = new XMLHttpRequest();
-        var url = $(location).attr('pathname');
-        xhr.open("POST", url , true);
-        xhr.setRequestHeader("X-CSRF-TOKEN", token);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-        xhr.send(JSON.stringify(data));
     });
 });
