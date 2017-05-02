@@ -116,7 +116,7 @@ public class IssueStandardsController extends AbstractPersonalController {
     @PostMapping("update/{issueStandardId}/")
     public String updateSubmit(Model model,
                                @PathVariable Integer issueStandardId,
-                               @RequestBody @Valid IssueStandardDto issueStandardDto,
+                               @Valid IssueStandardDto issueStandardDto,
                                BindingResult bindingResult) {
 
         issueStandardDto.setId(issueStandardId);
