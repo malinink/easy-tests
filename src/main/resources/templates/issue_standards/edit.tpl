@@ -19,7 +19,7 @@ content: contents {
             label(class: 'active', for:'questionsNumber', 'Number of Questions')
           }
         }
-        input(id: 'subjectId', name: 'subjectId', value: issueStandard.subjectId, disabled: true, type: 'hidden')
+        input(id: 'subjectId', name: 'subjectId', value: issueStandard.subjectId, type: 'hidden')
       }
       newLine()
       div(class: 'row') {
@@ -35,7 +35,7 @@ content: contents {
             def isPreferableName = 'topicPriorities[' + index + '].isPreferable'
           
             div(class: 'topicPriorityForm row') {
-              input(id: idId, name: idName, value: topicPriority.id, disabled: true, type: 'hidden')
+              input(id: idId, name: idName, value: topicPriority.id, type: 'hidden')
               div(class:'input-field col s6') {
                 select(id: topicIdId, name: topicIdName) {
                   option(value: '', disabled: true, 'Choose Topic')
@@ -49,7 +49,7 @@ content: contents {
               }
               div(class: 'col s4') {
                 def checkboxAttrs = [id: isPreferableId, name: isPreferableName, type: 'checkbox']
-                if (topicPriority.isPreferable) checkboxAttrs += [checked: true]
+                if (topicPriority.isPreferable == "on") checkboxAttrs += [checked: true]
                 p {
                   input(checkboxAttrs)
                   label(for: isPreferableId, 'isPreferable')
@@ -89,7 +89,7 @@ content: contents {
             def timeLimitName = 'questionTypeOptions[' + index + '].timeLimit'
           
             div(class: 'questionTypeOptionForm row') {
-              input(id: idId, name: idName, disabled: 'disabled', value: questionTypeOption.id, type: 'hidden')
+              input(id: idId, name: idName, value: questionTypeOption.id, type: 'hidden')
               div(class: 'input-field col s5') {
                 select(id: questionTypeIdId, name: questionTypeIdName) {
                   option(value:'', disabled: true, 'Choose Question Type')
@@ -120,6 +120,15 @@ content: contents {
             }
           }
         }
+        // temp
+        if (errors && errors.hasErrors()) {
+          def errorMessages = errors.getAllErrors()*.getDefaultMessage()
+          div (class: 'card-panel red-text text-darken-1') {
+            errorMessages.each { message ->
+              span(message)
+            }
+          }
+        }
         div(class: 'row') {
           def buttonAttrs = [id: 'addQuestionTypeOptionForm', class: 'btn-floating btn-large waves-effect waves-light right blue']
           if (issueStandard.questionTypeOptions.size() == questionTypes.size()) buttonAttrs += [disabled: true]
@@ -137,15 +146,6 @@ content: contents {
         a(href: viewUrl, class: 'btn-large waves-effect waves-light red', name: 'cancel') {
           i (class:'material-icons right', 'cancel')
           yield 'Cancel'
-        }
-      }
-    }
-    // temp
-    if (errors && errors.hasErrors()) {
-      def errorMessages = errors.getAllErrors()*.getDefaultMessage()
-      div (class: 'card-panel red-text text-darken-1') {
-        errorMessages.each { message ->
-          span(message)
         }
       }
     }
