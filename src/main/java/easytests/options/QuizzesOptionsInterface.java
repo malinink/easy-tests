@@ -13,6 +13,8 @@ public interface QuizzesOptionsInterface {
 
     void setIssuesService(IssuesServiceInterface issuesService);
 
+    QuizzesOptionsInterface withTestee(TesteesOptionsInterface testeeOptions);
+
     QuizModelInterface withRelations(QuizModelInterface subjectModel);
 
     List<QuizModelInterface> withRelations(List<QuizModelInterface> subjectsModels);
