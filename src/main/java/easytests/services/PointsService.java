@@ -1,13 +1,13 @@
 package easytests.services;
 
 import easytests.entities.PointEntity;
+import easytests.mappers.PointsMapper;
 import easytests.models.PointModel;
 import easytests.models.PointModelInterface;
-import easytests.mappers.PointsMapper;
+import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
 
-import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

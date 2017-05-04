@@ -1,8 +1,8 @@
 package easytests.mappers;
 
-import java.util.List;
-
 import easytests.entities.PointEntity;
+
+import java.util.List;
 import org.apache.ibatis.annotations.*;
 
 /**

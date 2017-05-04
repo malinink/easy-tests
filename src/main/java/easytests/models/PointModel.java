@@ -1,9 +1,9 @@
 package easytests.models;
 
 import easytests.entities.PointEntity;
-import lombok.Data;
-
 import java.util.List;
+
+import lombok.Data;
 
 /**
  * @author nikitalpopov
