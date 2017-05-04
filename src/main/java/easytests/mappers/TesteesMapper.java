@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.*;
  * @author DoZor-80
  */
 @Mapper
+@SuppressWarnings("checkstyle:linelength")
 public interface TesteesMapper {
     @Results(
             id = "Testee",
@@ -30,13 +31,11 @@ public interface TesteesMapper {
     @ResultMap("Testee")
     TesteeEntity findByQuizId(Integer quizId);
 
-    @Insert("INSERT INTO testees (first_name, last_name, surname, group_number, quiz_id) VALUES(#{firstName}, "
-            + "#{lastName}, #{surname}, #{groupNumber}, #{quizId})")
+    @Insert("INSERT INTO testees (first_name, last_name, surname, group_number, quiz_id) VALUES(#{firstName}, #{lastName}, #{surname}, #{groupNumber}, #{quizId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(TesteeEntity testee);
 
-    @Update("UPDATE testees SET first_name=#{firstName}, last_name=#{lastName}, surname=#{surname}, "
-            + "group_number=#{groupNumber}, quiz_id=#{quizId} WHERE id=#{id}")
+    @Update("UPDATE testees SET first_name=#{firstName}, last_name=#{lastName}, surname=#{surname}, group_number=#{groupNumber}, quiz_id=#{quizId} WHERE id=#{id}")
     void update(TesteeEntity testee);
 
     @Delete("DELETE FROM testees WHERE id=#{id}")
