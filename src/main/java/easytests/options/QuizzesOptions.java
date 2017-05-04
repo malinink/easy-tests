@@ -1,8 +1,10 @@
 package easytests.options;
 
 import easytests.models.QuizModelInterface;
+import easytests.models.TesteeModelInterface;
 import easytests.services.IssuesServiceInterface;
 import easytests.services.QuizzesServiceInterface;
+import easytests.services.TesteesServiceInterface;
 import java.util.List;
 import lombok.Setter;
 
@@ -16,10 +18,20 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
     @Setter
     private QuizzesServiceInterface quizzesService;
 
+    @Setter
+    private TesteesServiceInterface testeesService;
+
     private IssuesOptionsInterface issuesOptions;
+
+    private TesteesOptionsInterface testeesOptions;
 
     public QuizzesOptionsInterface withIssue(IssuesOptionsInterface issuesOptions) {
         this.issuesOptions = issuesOptions;
+        return this;
+    }
+
+    public QuizzesOptionsInterface withTestee(TesteesOptionsInterface testeeOptions) {
+        this.testeesOptions = testeeOptions;
         return this;
     }
 
@@ -31,6 +43,13 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
 
         if (this.issuesOptions != null) {
             quizModel.setIssue(this.issuesService.find(quizModel.getIssue().getId(), this.issuesOptions));
+        }
+
+        if (this.testeesOptions != null) {
+            final TesteeModelInterface testee =
+                    this.testeesService.findByQuiz(quizModel, this.testeesOptions);
+
+            quizModel.setTestee(testee);
         }
 
         return quizModel;
@@ -58,6 +77,12 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
 
         this.quizzesService.save(quizModel);
 
+        if (this.testeesOptions != null) {
+
+            this.testeesService.save(quizModel.getTestee(), this.testeesOptions);
+
+        }
+
     }
 
     public void deleteWithRelations(QuizModelInterface quizModel) {
@@ -66,6 +91,10 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
             this.issuesOptions.withQuizzes(this);
             this.issuesOptions.deleteWithRelations(quizModel.getIssue());
             return;
+        }
+
+        if (this.testeesOptions != null) {
+            this.testeesService.delete(quizModel.getTestee(), this.testeesOptions);
         }
 
         this.quizzesService.delete(quizModel);
