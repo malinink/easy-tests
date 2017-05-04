@@ -142,6 +142,7 @@ public abstract class Models {
         quizModel.setInviteCode(inviteCode);
         quizModel.setIssue(new IssueModelEmpty(issueId));
         quizModel.setPoints(new ModelsListEmpty());
+        quizModel.setTestee(new TesteeModelEmpty());
         return quizModel;
     }
 
