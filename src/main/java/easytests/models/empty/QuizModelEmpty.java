@@ -4,6 +4,7 @@ import easytests.entities.QuizEntity;
 import easytests.models.IssueModelInterface;
 import easytests.models.PointModelInterface;
 import easytests.models.QuizModelInterface;
+import easytests.models.TesteeModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
 import java.util.List;
 
@@ -51,6 +52,16 @@ public class QuizModelEmpty extends AbstractModelEmpty implements QuizModelInter
 
     @Override
     public void setPoints(List<PointModelInterface> points) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public TesteeModelInterface getTestee() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setTestee(TesteeModelInterface testee) {
         throw new CallMethodOnEmptyModelException();
     }
 
