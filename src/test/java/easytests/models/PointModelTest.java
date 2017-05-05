@@ -1,6 +1,7 @@
 package easytests.models;
 
 import easytests.entities.PointEntity;
+import easytests.models.empty.QuizModelEmpty;
 import org.junit.Assert;
 import org.junit.Test;
 import org.meanbean.test.BeanTester;
@@ -46,7 +47,7 @@ public class PointModelTest {
         Assert.assertEquals(pointId, pointModel.getId());
         Assert.assertEquals(pointType, pointModel.getType());
         Assert.assertEquals(pointText, pointModel.getText());
-        Assert.assertEquals(quizModel, pointModel.getQuiz());
+        Assert.assertEquals(new QuizModelEmpty(quizId), pointModel.getQuiz());
 
     }
 
