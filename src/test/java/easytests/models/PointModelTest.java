@@ -4,9 +4,7 @@ import easytests.entities.PointEntity;
 import easytests.models.empty.QuizModelEmpty;
 import org.junit.Assert;
 import org.junit.Test;
-import org.meanbean.test.BeanTester;
-import org.meanbean.test.EqualsMethodTester;
-import org.meanbean.test.HashCodeMethodTester;
+import org.meanbean.test.*;
 import org.mockito.Mockito;
 
 /**
@@ -17,9 +15,11 @@ public class PointModelTest {
     @Test
     public void testCommon() throws Exception {
 
-        new BeanTester().testBean(PointModel.class);
-        new EqualsMethodTester().testEqualsMethod(PointModel.class);
-        new HashCodeMethodTester().testHashCodeMethod(PointModel.class);
+        Configuration configuration = new ConfigurationBuilder()
+                .ignoreProperty("quiz")
+                .ignoreProperty("solutions")
+                .build();
+        new BeanTester().testBean(PointModel.class, configuration);
 
     }
 

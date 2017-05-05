@@ -5,6 +5,7 @@ import easytests.models.PointModelInterface;
 import easytests.models.QuizModelInterface;
 import easytests.models.SolutionModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
+import easytests.models.exceptions.CallMethodOnEmptyModelsListException;
 
 import java.util.List;
 
@@ -23,59 +24,77 @@ public class PointModelEmpty extends AbstractModelEmpty implements PointModelInt
 
     @Override
     public void setId(Integer id) {
-        this.throwException();
+
+        throw new CallMethodOnEmptyModelsListException();
+
     }
 
     @Override
     public String getType() {
-        this.throwException();
-        return null;
+
+        throw new CallMethodOnEmptyModelsListException();
+
     }
 
     @Override
     public void setType(String type) {
-        this.throwException();
+
+        throw new CallMethodOnEmptyModelsListException();
+
     }
 
     @Override
     public String getText() {
-        this.throwException();
-        return null;
+
+        throw new CallMethodOnEmptyModelsListException();
+
     }
 
     @Override
     public void setText(String text) {
-        this.throwException();
+
+        throw new CallMethodOnEmptyModelsListException();
+
     }
 
     @Override
     public QuizModelInterface getQuiz() {
-        this.throwException();
-        return null;
+
+        throw new CallMethodOnEmptyModelsListException();
+
     }
 
     @Override
     public void setQuiz(QuizModelInterface quiz) {
-        this.throwException();
+
+        throw new CallMethodOnEmptyModelsListException();
+
     }
 
     @Override
     public List<SolutionModelInterface> getSolutions() {
-        this.throwException();
-        return null;
+
+        throw new CallMethodOnEmptyModelsListException();
+
     }
 
     @Override
     public void setSolutions(List<SolutionModelInterface> solutions) {
-        this.throwException();
+
+        throw new CallMethodOnEmptyModelsListException();
+
     }
 
     @Override
     public void map(PointEntity pointEntity) {
-        this.throwException();
+
+        throw new CallMethodOnEmptyModelsListException();
+
     }
 
     private void throwException() throws CallMethodOnEmptyModelException {
+
         throw new CallMethodOnEmptyModelException();
+
     }
 }

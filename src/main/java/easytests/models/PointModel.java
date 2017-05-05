@@ -1,6 +1,7 @@
 package easytests.models;
 
 import easytests.entities.PointEntity;
+import easytests.models.empty.ModelsListEmpty;
 import easytests.models.empty.QuizModelEmpty;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class PointModel implements PointModelInterface {
         this.setType(pointEntity.getType());
         this.setText(pointEntity.getText());
         this.setQuiz(new QuizModelEmpty(pointEntity.getQuizId()));
+        this.setSolutions(new ModelsListEmpty());
 
     }
 
