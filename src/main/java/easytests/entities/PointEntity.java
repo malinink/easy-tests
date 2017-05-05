@@ -20,12 +20,10 @@ public class PointEntity {
     public void map(PointModelInterface pointModel) {
 
         this.setId(pointModel.getId());
-
         this.setType(pointModel.getType());
-
         this.setText(pointModel.getText());
-
         this.setQuizId(pointModel.getQuiz().getId());
 
     }
+
 }

@@ -21,9 +21,7 @@ public class PointsService {
     private PointsMapper pointsMapper;
 
     public List<PointModelInterface> findAll() {
-
         return this.map(this.pointsMapper.findAll());
-
     }
 
     public PointModelInterface find(Integer id) {

@@ -16,11 +16,7 @@ public class PointEntityTest {
 
     @Test
     public void testCommon() throws Exception {
-
         new BeanTester().testBean(PointEntity.class);
-        new EqualsMethodTester().testEqualsMethod(PointEntity.class);
-        new HashCodeMethodTester().testHashCodeMethod(PointEntity.class);
-
     }
 
     @Test

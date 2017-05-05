@@ -24,77 +24,52 @@ public class PointModelEmpty extends AbstractModelEmpty implements PointModelInt
 
     @Override
     public void setId(Integer id) {
-
         throw new CallMethodOnEmptyModelsListException();
-
     }
 
     @Override
     public String getType() {
-
         throw new CallMethodOnEmptyModelsListException();
-
     }
 
     @Override
     public void setType(String type) {
-
         throw new CallMethodOnEmptyModelsListException();
-
     }
 
     @Override
     public String getText() {
-
         throw new CallMethodOnEmptyModelsListException();
-
     }
 
     @Override
     public void setText(String text) {
-
         throw new CallMethodOnEmptyModelsListException();
-
     }
 
     @Override
     public QuizModelInterface getQuiz() {
-
         throw new CallMethodOnEmptyModelsListException();
-
     }
 
     @Override
     public void setQuiz(QuizModelInterface quiz) {
-
         throw new CallMethodOnEmptyModelsListException();
-
     }
 
     @Override
     public List<SolutionModelInterface> getSolutions() {
-
         throw new CallMethodOnEmptyModelsListException();
-
     }
 
     @Override
     public void setSolutions(List<SolutionModelInterface> solutions) {
-
         throw new CallMethodOnEmptyModelsListException();
-
     }
 
     @Override
     public void map(PointEntity pointEntity) {
-
         throw new CallMethodOnEmptyModelsListException();
-
     }
 
-    private void throwException() throws CallMethodOnEmptyModelException {
-
-        throw new CallMethodOnEmptyModelException();
-
-    }
 }
