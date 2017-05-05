@@ -33,7 +33,7 @@ content: contents {
   }
   div (class:'row') {
     div (class:'col s12') {
-      a (class:'waves-effect waves-light btn-large red', href:usersListUrl) {
+      a (class:'waves-effect waves-light btn-large blue', href:usersListUrl) {
         i (class:'material-icons left', 'back')
         yield 'Back'
       }
