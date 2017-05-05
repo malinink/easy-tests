@@ -1,9 +1,9 @@
 package easytests.models;
 
 import easytests.entities.PointEntity;
+import easytests.models.empty.QuizModelEmpty;
 import java.util.List;
 
-import easytests.models.empty.QuizModelEmpty;
 import lombok.Data;
 
 /**
