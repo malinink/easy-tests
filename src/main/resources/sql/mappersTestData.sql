@@ -102,7 +102,7 @@ CREATE TABLE question_types (
 
 CREATE TABLE answers (
   id SERIAL NOT NULL,
-  txt VARCHAR(250) NOT NULL,
+  txt VARCHAR(255) NOT NULL,
   question_id INTEGER NOT NULL,
   is_right BOOLEAN NOT NULL,
   PRIMARY KEY (id)--,
