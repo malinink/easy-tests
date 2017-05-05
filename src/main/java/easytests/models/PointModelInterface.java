@@ -11,13 +11,9 @@ public interface PointModelInterface extends ModelInterface {
 
     void setId(Integer id);
 
-    String getType();
+    QuestionModelInterface getQuestion();
 
-    void setType(String type);
-
-    String getText();
-
-    void setText(String text);
+    void setQuestion(QuestionModelInterface question);
 
     QuizModelInterface getQuiz();
 

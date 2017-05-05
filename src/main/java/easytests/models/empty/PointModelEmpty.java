@@ -2,10 +2,10 @@ package easytests.models.empty;
 
 import easytests.entities.PointEntity;
 import easytests.models.PointModelInterface;
+import easytests.models.QuestionModelInterface;
 import easytests.models.QuizModelInterface;
 import easytests.models.SolutionModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
-import easytests.models.exceptions.CallMethodOnEmptyModelsListException;
 
 import java.util.List;
 
@@ -24,52 +24,42 @@ public class PointModelEmpty extends AbstractModelEmpty implements PointModelInt
 
     @Override
     public void setId(Integer id) {
-        throw new CallMethodOnEmptyModelsListException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
-    public String getType() {
-        throw new CallMethodOnEmptyModelsListException();
+    public QuestionModelInterface getQuestion() {
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
-    public void setType(String type) {
-        throw new CallMethodOnEmptyModelsListException();
-    }
-
-    @Override
-    public String getText() {
-        throw new CallMethodOnEmptyModelsListException();
-    }
-
-    @Override
-    public void setText(String text) {
-        throw new CallMethodOnEmptyModelsListException();
+    public void setQuestion(QuestionModelInterface question) {
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public QuizModelInterface getQuiz() {
-        throw new CallMethodOnEmptyModelsListException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setQuiz(QuizModelInterface quiz) {
-        throw new CallMethodOnEmptyModelsListException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public List<SolutionModelInterface> getSolutions() {
-        throw new CallMethodOnEmptyModelsListException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void setSolutions(List<SolutionModelInterface> solutions) {
-        throw new CallMethodOnEmptyModelsListException();
+        throw new CallMethodOnEmptyModelException();
     }
 
     @Override
     public void map(PointEntity pointEntity) {
-        throw new CallMethodOnEmptyModelsListException();
+        throw new CallMethodOnEmptyModelException();
     }
 
 }

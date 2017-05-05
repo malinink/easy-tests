@@ -113,9 +113,6 @@ public abstract class Models {
         return testeeModel;
     }
 
-    
-
-
     public static QuestionModelInterface createQuestionModel(
             Integer id, 
             String text, 
@@ -131,16 +128,30 @@ public abstract class Models {
         return questionModel;
     }
 
-  public static IssueModelInterface createIssueModel(
+    public static IssueModelInterface createIssueModel(
            Integer id,
            String name,
            Integer authorId
-               ) {
-            final IssueModelInterface issueModel = new IssueModel();
-            issueModel.setId(id);
-            issueModel.setName(name);
-            issueModel.setAuthorId(authorId);
-            issueModel.setQuizzes(new ModelsListEmpty());
-            return issueModel;
-           }
+    ) {
+        final IssueModelInterface issueModel = new IssueModel();
+        issueModel.setId(id);
+        issueModel.setName(name);
+        issueModel.setAuthorId(authorId);
+        issueModel.setQuizzes(new ModelsListEmpty());
+        return issueModel;
+    }
+
+    public static PointModelInterface createPointModel(
+            Integer id,
+            Integer questionId,
+            Integer quizId
+    ) {
+        final PointModelInterface pointModel = new PointModel();
+        pointModel.setId(id);
+        pointModel.setQuestion(new QuestionModelEmpty(questionId));
+        pointModel.setQuiz(new QuizModelEmpty(quizId));
+        pointModel.setSolutions(new ModelsListEmpty());
+        return pointModel;
+    }
+
 }

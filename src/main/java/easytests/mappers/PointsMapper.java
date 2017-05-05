@@ -15,8 +15,7 @@ public interface PointsMapper {
         id = "Point",
         value = {
             @Result(property = "id", column = "id"),
-            @Result(property = "text", column = "text"),
-            @Result(property = "type", column = "type"),
+            @Result(property = "questionId", column = "question_id"),
             @Result(property = "quizId", column = "quiz_id")
         })
     @Select("SELECT * FROM points")
@@ -26,11 +25,11 @@ public interface PointsMapper {
     @ResultMap("Point")
     PointEntity find(Integer id);
 
-    @Insert("INSERT INTO points (text, type, quiz_id) VALUES(#{text}, #{type}, #{quizId})")
+    @Insert("INSERT INTO points (question_id, quiz_id) VALUES(#{questionId}, #{quizId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(PointEntity point);
 
-    @Update("UPDATE points SET text=#{text}, type=#{type}, quiz_id=#{quizId} WHERE id=#{id}")
+    @Update("UPDATE points SET question_id=#{questionId}, quiz_id=#{quizId} WHERE id=#{id}")
     void update(PointEntity point);
 
     @Delete("DELETE FROM points WHERE id=#{id}")

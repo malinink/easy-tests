@@ -2,16 +2,13 @@ package easytests.services;
 
 import easytests.entities.PointEntity;
 import easytests.mappers.PointsMapper;
-import easytests.models.PointModel;
-import easytests.models.PointModelInterface;
-import easytests.models.QuizModelInterface;
+import easytests.models.*;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,6 +17,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import static easytests.support.Entities.createPointEntityMock;
+import static easytests.support.Models.createPointModel;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.times;
 
@@ -39,35 +38,6 @@ public class PointsServiceTest {
 
     @Autowired
     private PointsService pointsService;
-
-    private PointModelInterface createPointModel(Integer id, String type, String text, Integer quizId) {
-
-        final QuizModelInterface quizModel = Mockito.mock(QuizModelInterface.class);
-        Mockito.when(quizModel.getId()).thenReturn(quizId);
-
-        final PointModelInterface pointModel = new PointModel();
-
-        pointModel.setId(id);
-        pointModel.setType(type);
-        pointModel.setText(text);
-        pointModel.setQuiz(quizModel);
-
-        return pointModel;
-
-    }
-
-    private PointEntity createPointEntityMock(Integer id, String type, String text, Integer quizId) {
-
-        final PointEntity pointEntity = Mockito.mock(PointEntity.class);
-
-        Mockito.when(pointEntity.getId()).thenReturn(id);
-        Mockito.when(pointEntity.getType()).thenReturn(type);
-        Mockito.when(pointEntity.getText()).thenReturn(text);
-        Mockito.when(pointEntity.getQuizId()).thenReturn(quizId);
-
-        return pointEntity;
-
-    }
 
     private PointModelInterface mapPointModel(PointEntity pointEntity) {
 
@@ -92,8 +62,8 @@ public class PointsServiceTest {
     private List<PointEntity> getPointsEntities() {
 
         final List<PointEntity> pointEntities = new ArrayList<>(2);
-        final PointEntity pointEntityFirst = this.createPointEntityMock(1, "type1", "text1", 1);
-        final PointEntity pointEntitySecond = this.createPointEntityMock(2, "type2", "text2", 2);
+        final PointEntity pointEntityFirst = createPointEntityMock(1, 1, 1);
+        final PointEntity pointEntitySecond = createPointEntityMock(2, 2, 2);
 
         pointEntities.add(pointEntityFirst);
         pointEntities.add(pointEntitySecond);
@@ -146,7 +116,7 @@ public class PointsServiceTest {
     public void testFindPresentModel() throws Exception {
 
         final Integer id = 1;
-        final PointEntity pointEntity = this.createPointEntityMock(id, "type1", "text1", 1);
+        final PointEntity pointEntity = createPointEntityMock(id, 1, 1);
 
         given(this.pointsMapper.find(id)).willReturn(pointEntity);
 
@@ -172,7 +142,7 @@ public class PointsServiceTest {
     @Test
     public void testSaveCreatesEntity() throws Exception {
 
-        final PointModelInterface pointModel = this.createPointModel(null, "type1", "text1", 1);
+        final PointModelInterface pointModel = createPointModel(null, 1, 1);
 
         this.pointsService.save(pointModel);
 
@@ -183,7 +153,7 @@ public class PointsServiceTest {
     @Test
     public void testSaveUpdatesEntity() throws Exception {
 
-        final PointModelInterface pointModel = this.createPointModel(1, "type1", "text1", 1);
+        final PointModelInterface pointModel = createPointModel(1, 1, 1);
 
         this.pointsService.save(pointModel);
 
@@ -194,7 +164,7 @@ public class PointsServiceTest {
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
 
-        final PointModelInterface pointModel = this.createPointModel(1, "type1", "text1", 1);
+        final PointModelInterface pointModel = createPointModel(1, 1, 1);
 
         this.pointsService.delete(pointModel);
 
@@ -205,7 +175,7 @@ public class PointsServiceTest {
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
 
-        final PointModelInterface pointModel = this.createPointModel(null, "type1", "text1", 1);
+        final PointModelInterface pointModel = createPointModel(null, 1, 1);
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.pointsService.delete(pointModel);

@@ -47,8 +47,7 @@ public class PointsMapperTest {
 
         Assert.assertNotNull(testPoint);
         Assert.assertEquals((Integer) 1, testPoint.getId());
-        Assert.assertEquals("type1", testPoint.getType());
-        Assert.assertEquals("text1", testPoint.getText());
+        Assert.assertEquals((Integer) 1, testPoint.getQuestionId());
         Assert.assertEquals((Integer) 1, testPoint.getQuizId());
     }
 
@@ -56,15 +55,13 @@ public class PointsMapperTest {
     public void testInsert() throws Exception {
 
         final Integer testId = this.pointsMapper.findAll().size() + 1;
-        final String testType = "Test type";
-        final String testText = "Test text";
+        final Integer testQuestionId = 1;
         final Integer testQuizId = 1;
 
         final PointEntity testPoint = Mockito.mock(PointEntity.class);
 
         Mockito.when(testPoint.getId()).thenReturn(testId);
-        Mockito.when(testPoint.getType()).thenReturn(testType);
-        Mockito.when(testPoint.getText()).thenReturn(testText);
+        Mockito.when(testPoint.getQuestionId()).thenReturn(testQuestionId);
         Mockito.when(testPoint.getQuizId()).thenReturn(testQuizId);
 
         pointsMapper.insert(testPoint);
@@ -73,8 +70,7 @@ public class PointsMapperTest {
 
         Assert.assertNotNull(readPoint);
         Assert.assertEquals(testId, readPoint.getId());
-        Assert.assertEquals(testType, readPoint.getType());
-        Assert.assertEquals(testText, readPoint.getText());
+        Assert.assertEquals(testQuestionId, readPoint.getQuestionId());
         Assert.assertEquals(testQuizId, readPoint.getQuizId());
 
     }
@@ -83,29 +79,25 @@ public class PointsMapperTest {
     public void testUpdate() throws Exception {
 
         final Integer testId = 2;
-        final String testType = "Test type";
-        final String testText = "Test text";
+        final Integer testQuestionId = 1;
         final Integer testQuizId = 1;
 
         PointEntity testPoint = this.pointsMapper.find(testId);
 
-        Assert.assertNotEquals(testType, testPoint.getType());
-        Assert.assertNotEquals(testText, testPoint.getType());
+        Assert.assertNotEquals(testQuestionId, testPoint.getQuestionId());
         Assert.assertNotEquals(testQuizId, testPoint.getQuizId());
 
         testPoint = Mockito.mock(PointEntity.class);
 
         Mockito.when(testPoint.getId()).thenReturn(testId);
-        Mockito.when(testPoint.getType()).thenReturn(testType);
-        Mockito.when(testPoint.getText()).thenReturn(testText);
+        Mockito.when(testPoint.getQuestionId()).thenReturn(testQuestionId);
         Mockito.when(testPoint.getQuizId()).thenReturn(testQuizId);
 
         this.pointsMapper.update(testPoint);
 
         final PointEntity checkUpdatePoint = pointsMapper.find(testId);
 
-        Assert.assertEquals(testType, checkUpdatePoint.getType());
-        Assert.assertEquals(testText, checkUpdatePoint.getText());
+        Assert.assertEquals(testQuestionId, checkUpdatePoint.getQuestionId());
         Assert.assertEquals(testQuizId, checkUpdatePoint.getQuizId());
 
     }

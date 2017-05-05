@@ -2,6 +2,7 @@ package easytests.models;
 
 import easytests.entities.PointEntity;
 import easytests.models.empty.ModelsListEmpty;
+import easytests.models.empty.QuestionModelEmpty;
 import easytests.models.empty.QuizModelEmpty;
 import java.util.List;
 
@@ -15,9 +16,7 @@ public class PointModel implements PointModelInterface {
 
     private Integer id;
 
-    private String type;
-
-    private String text;
+    private QuestionModelInterface question;
 
     private QuizModelInterface quiz;
 
@@ -26,8 +25,7 @@ public class PointModel implements PointModelInterface {
     public void map(PointEntity pointEntity) {
 
         this.setId(pointEntity.getId());
-        this.setType(pointEntity.getType());
-        this.setText(pointEntity.getText());
+        this.setQuestion(new QuestionModelEmpty(pointEntity.getQuestionId()));
         this.setQuiz(new QuizModelEmpty(pointEntity.getQuizId()));
         this.setSolutions(new ModelsListEmpty());
 
