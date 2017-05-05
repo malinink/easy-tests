@@ -1,9 +1,6 @@
 layout 'layout/main.tpl', title:  'User',
 content: contents {
   h4 ('User')
-  if (fields) {
-    h4 ('True')
-  }
   form (class:'col s12', method:'post') {
     input (type:'hidden', name:_csrf.parameterName, value:_csrf.token)
     div (class:'row') {
@@ -110,7 +107,7 @@ content: contents {
             yield 'Create'
           }
         }
-        a (class:'waves-effect waves-light btn-large red', href:'/admin/users/') {
+        a (class:'waves-effect waves-light btn-large red', href:usersListUrl) {
           i (class:'material-icons left', 'cancel')
           yield 'Cancel'
         }
