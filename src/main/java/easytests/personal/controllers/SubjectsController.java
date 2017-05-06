@@ -115,7 +115,7 @@ public class SubjectsController extends AbstractPersonalController {
         subject.map(subjectModel);
         model.addAttribute("subject", subject);
         model.addAttribute("issueStandardId", subjectModel.getIssueStandard().getId());
-        return "subjects/read";
+        return "subjects/view";
     }
 
     @GetMapping("update/{id}")
