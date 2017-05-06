@@ -6,8 +6,8 @@ import easytests.common.controllers.AbstractCrudController;
 import easytests.common.exceptions.NotFoundException;
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
-import easytests.options.UsersOptions;
 import easytests.options.UsersOptionsInterface;
+import easytests.options.builder.UsersOptionsBuilder;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,9 @@ import org.springframework.web.bind.annotation.*;
 public class UsersController extends AbstractCrudController {
     @Autowired
     private UserModelDtoValidator userModelDtoValidator;
+
+    @Autowired
+    private UsersOptionsBuilder usersOptionsBuilder;
 
     @GetMapping("")
     public String list(Model model) {
@@ -102,9 +105,11 @@ public class UsersController extends AbstractCrudController {
 
     @PostMapping("delete/{userId}/")
     public String delete(@PathVariable Integer userId) {
-        final UserModelInterface userModel = this.getUserModel(userId);
+        this.getUserModel(userId);
+        final UsersOptionsInterface usersOptions = this.usersOptionsBuilder.forDelete();
+        final UserModelInterface userModel = this.usersService.find(userId, usersOptions);
 
-        this.usersService.delete(userModel);
+        this.usersService.delete(userModel, usersOptions);
 
         return "redirect:/admin/users/";
     }
@@ -118,7 +123,7 @@ public class UsersController extends AbstractCrudController {
     }
 
     private UserModelInterface getUserModel(Integer id) {
-        return getUserModel(id, new UsersOptions());
+        return getUserModel(id, this.usersOptionsBuilder.forAuth());
     }
 
     @ModelAttribute("usersListUrl")
