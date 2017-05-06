@@ -39,6 +39,7 @@ public class PointsService {
         final PointEntity pointEntity = this.map(pointModel);
         if (pointEntity.getId() == null) {
             this.pointsMapper.insert(pointEntity);
+            pointModel.setId(pointEntity.getId());
             return;
         }
         this.pointsMapper.update(pointEntity);
