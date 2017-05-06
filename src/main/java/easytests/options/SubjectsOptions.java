@@ -4,12 +4,14 @@ import easytests.models.IssueStandardModelInterface;
 import easytests.models.SubjectModelInterface;
 import easytests.services.*;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 
 /**
  * @author vkpankov
  */
+@EqualsAndHashCode
 public class SubjectsOptions implements SubjectsOptionsInterface {
 
     @Setter
