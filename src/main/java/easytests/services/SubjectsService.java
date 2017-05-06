@@ -26,6 +26,9 @@ public class SubjectsService implements SubjectsServiceInterface {
     private UsersService usersService;
 
     @Autowired
+    private TopicsService topicsService;
+
+    @Autowired
     private IssueStandardsService issueStandardsService;
 
     @Override
@@ -50,7 +53,6 @@ public class SubjectsService implements SubjectsServiceInterface {
     @Override
     public SubjectModelInterface find(Integer id, SubjectsOptionsInterface subjectsOptions) {
         return this.withServices(subjectsOptions).withRelations(this.find(id));
-
     }
 
     @Override
@@ -149,7 +151,7 @@ public class SubjectsService implements SubjectsServiceInterface {
         subjectsOptions.setSubjectsService(this);
         subjectsOptions.setUsersService(this.usersService);
         subjectsOptions.setIssueStandardsService(this.issueStandardsService);
-        //subjectsOptions.setTopicsService(this.topicsService);
+        subjectsOptions.setTopicsService(this.topicsService);
         return subjectsOptions;
     }
 
