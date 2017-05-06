@@ -1,12 +1,8 @@
 package easytests.admin.dto;
 
-import easytests.common.dto.ModelDtoInterface;
 import easytests.models.UserModelInterface;
 import easytests.models.empty.ModelsListEmpty;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -16,9 +12,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author malinink
  */
 @Data
-public class UserModelDto implements ModelDtoInterface {
-    private Integer routeId;
-
+public class UserModelDto {
+    @Null
     private Integer id;
 
     @NotNull
@@ -57,7 +52,6 @@ public class UserModelDto implements ModelDtoInterface {
     private Integer state = 3;
 
     public void mapInto(UserModelInterface userModel) {
-        userModel.setId(this.getId());
         userModel.setFirstName(this.getFirstName());
         userModel.setLastName(this.getLastName());
         userModel.setSurname(this.getSurname());
@@ -68,5 +62,14 @@ public class UserModelDto implements ModelDtoInterface {
         userModel.setIsAdmin(this.getIsAdmin());
         userModel.setState(this.getState());
         userModel.setSubjects(new ModelsListEmpty());
+    }
+
+    public void map(UserModelInterface userModel) {
+        this.setFirstName(userModel.getFirstName());
+        this.setLastName(userModel.getLastName());
+        this.setSurname(userModel.getSurname());
+        this.setEmail(userModel.getEmail());
+        this.setIsAdmin(userModel.getIsAdmin());
+        this.setState(userModel.getState());
     }
 }

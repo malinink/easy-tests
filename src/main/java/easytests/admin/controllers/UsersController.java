@@ -3,23 +3,25 @@ package easytests.admin.controllers;
 import easytests.admin.dto.UserModelDto;
 import easytests.admin.validators.UserModelDtoValidator;
 import easytests.common.controllers.AbstractCrudController;
+import easytests.common.exceptions.NotFoundException;
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
+import easytests.options.UsersOptions;
+import easytests.options.UsersOptionsInterface;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
  * @author malinink
  */
 @Controller
+@SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/admin/users/")
 public class UsersController extends AbstractCrudController {
     @Autowired
@@ -32,40 +34,115 @@ public class UsersController extends AbstractCrudController {
         return "admin/users/list";
     }
 
+    @GetMapping("{userId}/")
+    public String view(Model model, @PathVariable Integer userId) {
+        final UserModelInterface userModel = this.getUserModel(userId);
+        model.addAttribute("user", userModel);
+        return "admin/users/view";
+    }
+
     @GetMapping("create/")
     public String create(Model model) {
         final UserModelDto userModelDto = new UserModelDto();
-        injectUserModelDto(model, userModelDto);
+
+        model.addAttribute("user", userModelDto);
         setCreateBehaviour(model);
-        return form();
+        return "admin/users/form";
     }
 
     @PostMapping("create/")
     public String insert(Model model, @Valid UserModelDto userModelDto, BindingResult bindingResult) {
-        userModelDto.setRouteId(null);
         this.userModelDtoValidator.validate(userModelDto, bindingResult);
+
         if (bindingResult.hasErrors()) {
-            injectUserModelDto(model, userModelDto);
-            setCreateBehaviour(model);
+            model.addAttribute("user", userModelDto);
             model.addAttribute("errors", bindingResult);
-            return form();
+            setCreateBehaviour(model);
+            return "admin/users/form";
         }
 
         final UserModelInterface userModel = new UserModel();
         userModelDto.mapInto(userModel);
         this.usersService.save(userModel);
-        return redirectToList();
+        return "redirect:/admin/users/";
     }
 
-    private static void injectUserModelDto(Model model, UserModelDto userModelDto) {
+    @GetMapping("update/{userId}/")
+    public String update(Model model, @PathVariable Integer userId) {
+        final UserModelInterface userModel = this.getUserModel(userId);
+        final UserModelDto userModelDto = new UserModelDto();
+
+        userModelDto.map(userModel);
         model.addAttribute("user", userModelDto);
-    }
-
-    private static String form() {
+        setUpdateBehaviour(model);
         return "admin/users/form";
     }
 
-    private static String redirectToList() {
+    @PostMapping("update/{userId}/")
+    public String save(
+            Model model,
+            @PathVariable Integer userId,
+            @Valid UserModelDto userModelDto,
+            BindingResult bindingResult) {
+        final UserModelInterface userModel = this.getUserModel(userId);
+        userModelDto.setId(userId);
+        this.userModelDtoValidator.validate(userModelDto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", userModelDto);
+            model.addAttribute("errors", bindingResult);
+            setUpdateBehaviour(model);
+            return "admin/users/form";
+        }
+
+        userModelDto.mapInto(userModel);
+        this.usersService.save(userModel);
         return "redirect:/admin/users/";
+    }
+
+    @PostMapping("delete/{userId}/")
+    public String delete(@PathVariable Integer userId) {
+        final UserModelInterface userModel = this.getUserModel(userId);
+
+        this.usersService.delete(userModel);
+
+        return "redirect:/admin/users/";
+    }
+
+    private UserModelInterface getUserModel(Integer id, UsersOptionsInterface userOptions) {
+        final UserModelInterface userModel = this.usersService.find(id, userOptions);
+        if (userModel == null) {
+            throw new NotFoundException();
+        }
+        return userModel;
+    }
+
+    private UserModelInterface getUserModel(Integer id) {
+        return getUserModel(id, new UsersOptions());
+    }
+
+    @ModelAttribute("usersListUrl")
+    public String getUsersListUrl() {
+        return "/admin/users/";
+    }
+
+    @ModelAttribute("usersCreateUrl")
+    public String getUsersCreateUrl() {
+        return "/admin/users/create/";
+    }
+
+    @ModelAttribute("userViewUrlTemplate")
+    public String getUserViewUrlTemplate() {
+        return "/admin/users/%d/";
+    }
+
+    @ModelAttribute("userUpdateUrlTemplate")
+    public String getUserUpdateUrlTemplate() {
+        return "/admin/users/update/%d/";
+    }
+
+    @ModelAttribute("userDeleteUrlTemplate")
+    public String getUserDeleteUrlTemplate() {
+        return "/admin/users/delete/%d/";
     }
 }

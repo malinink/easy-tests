@@ -3,12 +3,14 @@ package easytests.options;
 import easytests.models.TesteeModelInterface;
 import easytests.services.TesteesServiceInterface;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 
 /**
  * @author DoZor-80
  */
+@EqualsAndHashCode
 public class TesteesOptions implements TesteesOptionsInterface {
     @Setter
     private TesteesServiceInterface testeesService;
