@@ -2,11 +2,13 @@ package easytests.options;
 
 import easytests.models.QuestionTypeModelInterface;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 
 
 /**
  * @author malinink
  */
+@EqualsAndHashCode
 public class QuestionTypesOptions implements QuestionTypesOptionsInterface {
     @Override
     public QuestionTypeModelInterface withRelations(QuestionTypeModelInterface questionTypeModel) {
