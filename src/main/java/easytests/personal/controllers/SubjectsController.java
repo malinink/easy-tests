@@ -11,6 +11,7 @@ import easytests.models.empty.SubjectModelEmpty;
 import easytests.options.IssueStandardsOptions;
 import easytests.options.SubjectsOptions;
 import easytests.options.SubjectsOptionsInterface;
+import easytests.options.builder.SubjectsOptionsBuilder;
 import easytests.personal.dto.SubjectDto;
 import easytests.personal.validators.SubjectModelDtoValidator;
 import easytests.services.IssueStandardsService;
@@ -38,6 +39,9 @@ public class SubjectsController extends AbstractPersonalController {
 
     @Autowired
     private IssueStandardsService issueStandardsService;
+
+    @Autowired
+    private SubjectsOptionsBuilder subjectsOptionsBuilder;
 
     private SubjectModelDtoValidator subjectModelDtoValidator = new SubjectModelDtoValidator();
 
@@ -160,10 +164,8 @@ public class SubjectsController extends AbstractPersonalController {
                          BindingResult bindingResult,
                          Model model) {
         subjectModelDtoValidator.validate(subjectDto, bindingResult);
-        final SubjectsOptionsInterface subjectOptions =
-                new SubjectsOptions().withIssueStandard(new IssueStandardsOptions());
-        final SubjectModelInterface subjectModel = getSubjectModel(subjectId, subjectOptions);
-        subjectsService.delete(subjectModel, subjectOptions);
+        final SubjectModelInterface subjectModel = getSubjectModel(subjectId, subjectsOptionsBuilder.forDelete());
+        subjectsService.delete(subjectModel, subjectsOptionsBuilder.forDelete());
         return "redirect:/personal/subjects/list";
     }
 }
