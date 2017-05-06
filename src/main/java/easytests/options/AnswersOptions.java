@@ -3,12 +3,14 @@ package easytests.options;
 import easytests.models.AnswerModelInterface;
 import easytests.services.*;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 
 /**
  * @author rezenbekk
  */
+@EqualsAndHashCode
 public class AnswersOptions implements AnswersOptionsInterface {
 
     @Setter
