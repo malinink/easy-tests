@@ -5,7 +5,7 @@ ALTER TABLE points
   ADD question_id INTEGER;
 
 UPDATE points SET
-  question_id = 0;
+  question_id = 1;
 
 ALTER TABLE points
   ALTER question_id	SET NOT NULL;
