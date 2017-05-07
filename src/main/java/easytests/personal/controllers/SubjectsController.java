@@ -13,7 +13,6 @@ import easytests.options.SubjectsOptions;
 import easytests.options.SubjectsOptionsInterface;
 import easytests.options.builder.SubjectsOptionsBuilder;
 import easytests.personal.dto.SubjectDto;
-import easytests.personal.validators.SubjectModelDtoValidator;
 import easytests.services.IssueStandardsService;
 import easytests.services.SubjectsService;
 import java.util.List;
@@ -42,8 +41,6 @@ public class SubjectsController extends AbstractPersonalController {
 
     @Autowired
     private SubjectsOptionsBuilder subjectsOptionsBuilder;
-
-    private SubjectModelDtoValidator subjectModelDtoValidator = new SubjectModelDtoValidator();
 
     private void checkModel(SubjectModelInterface subjectModel) {
         if (subjectModel == null) {
@@ -140,10 +137,8 @@ public class SubjectsController extends AbstractPersonalController {
             model.addAttribute("errors", bindingResult);
             return "subjects/form";
         }
-        final SubjectModelInterface subjectModel = new SubjectModel();
+        final SubjectModelInterface subjectModel = getSubjectModel(subjectId);
         subject.mapInto(subjectModel);
-        subjectModel.setId(subjectId);
-        subjectModel.setUser(this.getCurrentUserModel());
         subjectsService.save(subjectModel);
         return "redirect:/personal/subjects/list";
     }
@@ -163,7 +158,6 @@ public class SubjectsController extends AbstractPersonalController {
                          SubjectDto subjectDto,
                          BindingResult bindingResult,
                          Model model) {
-        subjectModelDtoValidator.validate(subjectDto, bindingResult);
         final SubjectModelInterface subjectModel = getSubjectModel(subjectId, subjectsOptionsBuilder.forDelete());
         subjectsService.delete(subjectModel, subjectsOptionsBuilder.forDelete());
         return "redirect:/personal/subjects/list";
