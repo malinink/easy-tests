@@ -4,15 +4,14 @@ import easytests.entities.QuizEntity;
 import easytests.models.IssueModelInterface;
 import easytests.models.PointModelInterface;
 import easytests.models.QuizModelInterface;
+import easytests.models.TesteeModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
-
 import java.util.List;
 
 /**
  * @author nikitalpopov
  */
 public class QuizModelEmpty extends AbstractModelEmpty implements QuizModelInterface {
-
     public QuizModelEmpty() {
         super();
     }
@@ -37,16 +36,6 @@ public class QuizModelEmpty extends AbstractModelEmpty implements QuizModelInter
     }
 
     @Override
-    public List<PointModelInterface> getPoints() {
-        throw new CallMethodOnEmptyModelException();
-    }
-
-    @Override
-    public void setPoints(List<PointModelInterface> points) {
-        throw new CallMethodOnEmptyModelException();
-    }
-
-    @Override
     public IssueModelInterface getIssue() {
         throw new CallMethodOnEmptyModelException();
     }
@@ -57,8 +46,27 @@ public class QuizModelEmpty extends AbstractModelEmpty implements QuizModelInter
     }
 
     @Override
-    public void map(QuizEntity quizEntity) {
+    public List<PointModelInterface> getPoints() {
         throw new CallMethodOnEmptyModelException();
     }
 
+    @Override
+    public void setPoints(List<PointModelInterface> points) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public TesteeModelInterface getTestee() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setTestee(TesteeModelInterface testee) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void map(QuizEntity quizEntity) {
+        throw new CallMethodOnEmptyModelException();
+    }
 }

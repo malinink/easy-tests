@@ -42,6 +42,18 @@ public class TesteesMapperTest {
         Assert.assertEquals("FirstName1", testee.getFirstName());
         Assert.assertEquals("LastName1", testee.getLastName());
         Assert.assertEquals("Surname1", testee.getSurname());
+        Assert.assertEquals((long) 1, (long) testee.getQuizId());
+    }
+
+    @Test
+    public void testFindByQuizId() throws Exception {
+        final TesteeEntity testee = this.testeesMapper.findByQuizId(3);
+
+        Assert.assertEquals((long) 3, (long) testee.getId());
+        Assert.assertEquals("FirstName3", testee.getFirstName());
+        Assert.assertEquals("LastName3", testee.getLastName());
+        Assert.assertEquals("Surname3", testee.getSurname());
+        Assert.assertEquals((long) 3, (long) testee.getQuizId());
     }
 
     @Test
@@ -51,12 +63,14 @@ public class TesteesMapperTest {
         final String lastName = "LastName";
         final String surname = "Surname";
         final Integer groupNumber = 307;
+        final Integer quizId = 19;
 
         TesteeEntity testeeEntity = Mockito.mock(TesteeEntity.class);
         Mockito.when(testeeEntity.getFirstName()).thenReturn(firstName);
         Mockito.when(testeeEntity.getLastName()).thenReturn(lastName);
         Mockito.when(testeeEntity.getSurname()).thenReturn(surname);
         Mockito.when(testeeEntity.getGroupNumber()).thenReturn((groupNumber));
+        Mockito.when(testeeEntity.getQuizId()).thenReturn(quizId);
 
         this.testeesMapper.insert(testeeEntity);
 
@@ -68,6 +82,7 @@ public class TesteesMapperTest {
         Assert.assertEquals(lastName, testeeEntity.getLastName());
         Assert.assertEquals(surname, testeeEntity.getSurname());
         Assert.assertEquals(groupNumber, testeeEntity.getGroupNumber());
+        Assert.assertEquals(quizId, testeeEntity.getQuizId());
     }
 
     @Test
@@ -77,6 +92,7 @@ public class TesteesMapperTest {
         final String lastName = "NewLastName";
         final String surname = "NewSurname";
         final Integer groupNumber = 308;
+        final Integer quizId = 19;
 
         TesteeEntity testeeEntity = this.testeesMapper.find(id);
         Assert.assertNotNull(testeeEntity);
@@ -85,6 +101,7 @@ public class TesteesMapperTest {
         Assert.assertNotEquals(lastName, testeeEntity.getLastName());
         Assert.assertNotEquals(surname, testeeEntity.getSurname());
         Assert.assertNotEquals(groupNumber, testeeEntity.getGroupNumber());
+        Assert.assertNotEquals(quizId, testeeEntity.getQuizId());
 
         testeeEntity = Mockito.mock(TesteeEntity.class);
         Mockito.when(testeeEntity.getId()).thenReturn(id);
@@ -92,6 +109,7 @@ public class TesteesMapperTest {
         Mockito.when(testeeEntity.getLastName()).thenReturn(lastName);
         Mockito.when(testeeEntity.getSurname()).thenReturn(surname);
         Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
+        Mockito.when(testeeEntity.getQuizId()).thenReturn(quizId);
 
         this.testeesMapper.update(testeeEntity);
 
@@ -101,6 +119,7 @@ public class TesteesMapperTest {
         Assert.assertEquals(lastName, testeeEntity.getLastName());
         Assert.assertEquals(surname, testeeEntity.getSurname());
         Assert.assertEquals(groupNumber,testeeEntity.getGroupNumber());
+        Assert.assertEquals(quizId, testeeEntity.getQuizId());
     }
 
     @Test

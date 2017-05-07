@@ -24,5 +24,9 @@ public interface TesteeModelInterface extends ModelInterface {
 
     void setGroupNumber(Integer groupNumber);
 
+    QuizModelInterface getQuiz();
+
+    void setQuiz(QuizModelInterface quiz);
+
     void map(TesteeEntity testeeEntity);
 }

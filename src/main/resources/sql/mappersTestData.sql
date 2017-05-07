@@ -130,7 +130,9 @@ CREATE TABLE testees (
   last_name    VARCHAR(30) NOT NULL,
   surname      VARCHAR(30) NOT NULL,
   group_number INTEGER     NOT NULL,
-  PRIMARY KEY (id)
+  quiz_id      INTEGER     NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE (quiz_id)
 );
 
 CREATE TABLE points (
@@ -206,10 +208,10 @@ INSERT INTO quizzes (issue_id, invite_code) VALUES
 INSERT INTO solutions (answer_id, point_id) VALUES
   (10, 1), (20, 1), (11, 2), (21, 2), (12, 3);
 
-INSERT INTO testees (first_name, last_name, surname, group_number) VALUES
-  ('FirstName1', 'LastName1', 'Surname1', 301),
-  ('FirstName2', 'LastName2', 'Surname2', 302),
-  ('FirstName3', 'LastName3', 'Surname3', 303);
+INSERT INTO testees (first_name, last_name, surname, group_number, quiz_id) VALUES
+  ('FirstName1', 'LastName1', 'Surname1', 301, 1),
+  ('FirstName2', 'LastName2', 'Surname2', 302, 2),
+  ('FirstName3', 'LastName3', 'Surname3', 303, 3);
   
 INSERT INTO points (question_id, quiz_id) VALUES
 	(1, 1),
