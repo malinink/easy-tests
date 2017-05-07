@@ -1,7 +1,7 @@
 layout 'layout/main.tpl', title:  'Users',
 content: contents {
   h4 ('Users')
-  a (class:'right waves-effect waves-light btn-floating btn-large blue', href:'/admin/users/create/') {
+  a (class:'right waves-effect waves-light btn-floating btn-large blue', href:usersCreateUrl) {
     i (class:'material-icons left', 'add')
     yield 'Add'
   }
@@ -23,17 +23,20 @@ content: contents {
           td (user.getFirstName())
           td (user.getLastName())
           td {
-            a (class:'waves-effect waves-light btn-floating blue') {
+            a (class:'waves-effect waves-light btn-floating blue', href:String.format(userViewUrlTemplate, user.id)) {
               i (class:'material-icons left', 'pageview')
               yield 'View'
             }
-            a (class:'waves-effect waves-light btn-floating blue') {
+            a (class:'waves-effect waves-light btn-floating blue', href:String.format(userUpdateUrlTemplate, user.id)) {
               i (class:'material-icons left', 'edit')
               yield 'Edit'
             }
-            a (class:'waves-effect waves-light btn-floating red') {
-              i (class:'material-icons left', 'delete')
-              yield 'Delete'
+            form (method:'post', action:String.format(userDeleteUrlTemplate, user.id)) {
+              input (type:'hidden', name:_csrf.parameterName, value:_csrf.token)
+              button (class:'waves-effect waves-light btn-floating blue', type:'submit') {
+                i (class:'material-icons left', 'delete')
+                yield 'Delete'
+              }
             }
           }
         }

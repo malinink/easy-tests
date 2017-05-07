@@ -9,7 +9,7 @@ import easytests.models.exceptions.CallMethodOnEmptyModelException;
 import java.util.List;
 
 /**
- * @author DoZor-80
+ * @author nikitalpopov
  */
 public class QuizModelEmpty extends AbstractModelEmpty implements QuizModelInterface {
     public QuizModelEmpty() {

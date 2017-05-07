@@ -5,11 +5,13 @@ import easytests.services.IssueStandardQuestionTypeOptionsServiceInterface;
 import easytests.services.IssueStandardsServiceInterface;
 import easytests.services.QuestionTypesServiceInterface;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 /**
  * @author SingularityA
  */
+@EqualsAndHashCode
 public class IssueStandardQuestionTypeOptionsOptions implements IssueStandardQuestionTypeOptionsOptionsInterface {
 
     @Setter

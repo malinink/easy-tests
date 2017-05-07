@@ -136,10 +136,9 @@ CREATE TABLE testees (
 );
 
 CREATE TABLE points (
-  id      SERIAL  		  NOT NULL,
-  type		VARCHAR(20) 	NOT NULL,
-  text		VARCHAR(300)	NOT NULL,
-  quiz_id	INTEGER			  NOT NULL,
+  id          SERIAL    NOT NULL,
+  question_id INTEGER 	NOT NULL,
+  quiz_id	    INTEGER		NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -214,10 +213,10 @@ INSERT INTO testees (first_name, last_name, surname, group_number, quiz_id) VALU
   ('FirstName2', 'LastName2', 'Surname2', 302, 2),
   ('FirstName3', 'LastName3', 'Surname3', 303, 3);
   
-INSERT INTO points (type, text, quiz_id) VALUES
-	('type1', 'text1', 1),
-	('type2', 'text2', 2),
-	('type3', 'text3', 3);
+INSERT INTO points (question_id, quiz_id) VALUES
+	(1, 1),
+	(2, 2),
+	(3, 3);
 
 INSERT INTO issues (name, author_id) VALUES
   ('Name1', 11),
