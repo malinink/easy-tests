@@ -101,7 +101,8 @@ public abstract class Models {
             String firstName,
             String lastName,
             String surname,
-            Integer groupNumber
+            Integer groupNumber,
+            Integer quizId
     ) {
         final TesteeModelInterface testeeModel = new TesteeModel();
         testeeModel.setId(id);
@@ -109,12 +110,9 @@ public abstract class Models {
         testeeModel.setLastName(lastName);
         testeeModel.setSurname(surname);
         testeeModel.setGroupNumber(groupNumber);
-
+        testeeModel.setQuiz(new QuizModelEmpty(quizId));
         return testeeModel;
     }
-
-    
-
 
     public static QuestionModelInterface createQuestionModel(
             Integer id, 
@@ -131,16 +129,44 @@ public abstract class Models {
         return questionModel;
     }
 
-  public static IssueModelInterface createIssueModel(
+    public static QuizModelInterface createQuizModel(
+            Integer id,
+            String inviteCode,
+            Integer issueId
+    ){
+        final QuizModelInterface quizModel = new QuizModel();
+        quizModel.setId(id);
+        quizModel.setInviteCode(inviteCode);
+        quizModel.setIssue(new IssueModelEmpty(issueId));
+        quizModel.setPoints(new ModelsListEmpty());
+        quizModel.setTestee(new TesteeModelEmpty());
+        return quizModel;
+    }
+
+    public static IssueModelInterface createIssueModel(
            Integer id,
            String name,
            Integer authorId
-               ) {
-            final IssueModelInterface issueModel = new IssueModel();
-            issueModel.setId(id);
-            issueModel.setName(name);
-            issueModel.setAuthorId(authorId);
-            issueModel.setQuizzes(new ModelsListEmpty());
-            return issueModel;
-           }
+    ) {
+        final IssueModelInterface issueModel = new IssueModel();
+        issueModel.setId(id);
+        issueModel.setName(name);
+        issueModel.setAuthorId(authorId);
+        issueModel.setQuizzes(new ModelsListEmpty());
+        return issueModel;
+    }
+
+    public static PointModelInterface createPointModel(
+            Integer id,
+            Integer questionId,
+            Integer quizId
+    ) {
+        final PointModelInterface pointModel = new PointModel();
+        pointModel.setId(id);
+        pointModel.setQuestion(new QuestionModelEmpty(questionId));
+        pointModel.setQuiz(new QuizModelEmpty(quizId));
+        pointModel.setSolutions(new ModelsListEmpty());
+        return pointModel;
+    }
+
 }

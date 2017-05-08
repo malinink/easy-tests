@@ -1,11 +1,13 @@
 package easytests.mappers;
 
 import easytests.config.DatabaseConfig;
-import easytests.entities.*;
+import easytests.entities.QuizEntity;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,85 +34,95 @@ public class QuizzesMapperTest {
     @Test
     public void testFind() throws Exception {
 
-        final QuizInterface quiz = this.quizzesMapper.find(1);
+        final QuizEntity quiz = this.quizzesMapper.find(1);
 
-        Assert.assertEquals((Integer) 1, quiz.getId());
-        Assert.assertEquals((Integer)1, quiz.getIssueId());
+        Assert.assertEquals((long) 1, (long) quiz.getId());
         Assert.assertEquals("test_invite_code1", quiz.getInviteCode());
 
     }
 
-
     @Test
     public void testFindAll() throws Exception {
 
-        final List<QuizInterface> quizzes = this.quizzesMapper.findAll();
+        final List<QuizEntity> quizEntities = this.quizzesMapper.findAll();
 
-        Assert.assertNotNull(quizzes);
-        Assert.assertEquals((long) 3, (long) quizzes.size());
+        Assert.assertNotNull(quizEntities);
+        Assert.assertEquals((long) 3, (long) quizEntities.size());
 
     }
-
 
     @Test
     public void testIssueNotNull() throws Exception {
 
-        IssueInterface issue = Mockito.mock(IssueInterface.class);
-        Mockito.when(issue.getId()).thenReturn(5);
-        List<QuizInterface> quizzes = this.quizzesMapper.findByIssue(issue);
+        final List<QuizEntity> quizEntities = this.quizzesMapper.findByIssueId(4);
 
-        Assert.assertNotNull(quizzes);
-        Assert.assertEquals(0,quizzes.size());
+        Assert.assertNotNull(quizEntities);
+        Assert.assertEquals(0, quizEntities.size());
 
     }
 
-
     @Test
-    public void testFindByIssue() throws Exception {
+    public void testFindByIssueId() throws Exception {
 
-        IssueInterface issue = Mockito.mock(IssueInterface.class);
-        Mockito.when(issue.getId()).thenReturn(3);
-        List<QuizInterface> quizzes = this.quizzesMapper.findByIssue(issue);
+        final List<QuizEntity> quizEntities = this.quizzesMapper.findByIssueId(3);
 
-        Assert.assertEquals(1,quizzes.size());
-        Assert.assertEquals((Integer)3,quizzes.get(0).getIssueId());
+        Assert.assertEquals(1, quizEntities.size());
+        Assert.assertEquals("test_invite_code3", quizEntities.get(0).getInviteCode());
 
     }
 
     @Test
     public void testInsert() throws Exception {
+        final Integer id = this.quizzesMapper.findAll().size() + 1;
 
-        final Quiz testQuiz = new Quiz();
-        testQuiz.setIssueId(1);
+        final Integer testIssueId = 1;
+
+        final String testInviteCode = "test";
+
+        final QuizEntity testQuiz = Mockito.mock(QuizEntity.class);
+
+        Mockito.when(testQuiz.getId()).thenReturn(id);
+        Mockito.when(testQuiz.getInviteCode()).thenReturn(testInviteCode);
+        Mockito.when(testQuiz.getIssueId()).thenReturn(testIssueId);
+
         quizzesMapper.insert(testQuiz);
 
-        final Quiz readQuiz = quizzesMapper.find(testQuiz.getId());
-        Assert.assertNotNull(readQuiz);
+        verify(testQuiz, times(1)).setId(id);
 
+        final QuizEntity readQuiz = quizzesMapper.find(testQuiz.getId());
+
+        Assert.assertNotNull(readQuiz);
+        Assert.assertEquals(testIssueId, readQuiz.getIssueId());
+        Assert.assertEquals(testInviteCode, readQuiz.getInviteCode());
     }
 
     @Test
     public void testUpdate() throws Exception {
 
-        final QuizInterface subject = this.quizzesMapper.find(2);
-        subject.setIssueId(3);
-        this.quizzesMapper.update(subject);
+        final Integer id = 2;
+        final String inviteCode = "updated";
 
-        final Quiz readSubject = quizzesMapper.find(subject.getId());
-        Assert.assertEquals((Integer)3,readSubject.getIssueId());
+        QuizEntity quiz = this.quizzesMapper.find(id);
+
+        Assert.assertNotEquals(inviteCode, quiz.getInviteCode());
+
+        quiz = Mockito.mock(QuizEntity.class);
+
+        Mockito.when(quiz.getId()).thenReturn(id);
+        Mockito.when(quiz.getInviteCode()).thenReturn(inviteCode);
+
+        this.quizzesMapper.update(quiz);
+
+        final QuizEntity readQuiz = quizzesMapper.find(id);
+        Assert.assertEquals(inviteCode, readQuiz.getInviteCode());
 
     }
 
     @Test
     public void testDelete() throws Exception {
-
-        QuizInterface quiz = this.quizzesMapper.find(1);
+        QuizEntity quiz = this.quizzesMapper.find(1);
         Assert.assertNotNull(quiz);
-
         this.quizzesMapper.delete(quiz);
-
         quiz = this.quizzesMapper.find(1);
         Assert.assertNull(quiz);
-
-    }
-}
+    }}

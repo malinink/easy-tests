@@ -20,6 +20,10 @@ public interface QuizModelInterface extends ModelInterface {
 
     void map(QuizEntity quizEntity);
 
+    TesteeModelInterface getTestee();
+
+    void setTestee(TesteeModelInterface testee);
+
     IssueModelInterface getIssue();
 
     void setIssue(IssueModelInterface issue);

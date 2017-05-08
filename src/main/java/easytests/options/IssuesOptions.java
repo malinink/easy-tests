@@ -4,13 +4,14 @@ import easytests.models.IssueModelInterface;
 import easytests.services.IssuesServiceInterface;
 import easytests.services.QuizzesServiceInterface;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
-
 
 
 /**
  * @author fortyways
  */
+@EqualsAndHashCode
 public class IssuesOptions implements IssuesOptionsInterface {
 
     @Setter

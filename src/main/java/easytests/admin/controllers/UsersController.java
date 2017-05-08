@@ -6,16 +6,15 @@ import easytests.common.controllers.AbstractCrudController;
 import easytests.common.exceptions.NotFoundException;
 import easytests.models.UserModel;
 import easytests.models.UserModelInterface;
+import easytests.options.UsersOptionsInterface;
+import easytests.options.builder.UsersOptionsBuilder;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -28,11 +27,21 @@ public class UsersController extends AbstractCrudController {
     @Autowired
     private UserModelDtoValidator userModelDtoValidator;
 
+    @Autowired
+    private UsersOptionsBuilder usersOptionsBuilder;
+
     @GetMapping("")
     public String list(Model model) {
         final List<UserModelInterface> users = this.usersService.findAll();
         model.addAttribute("users", users);
         return "admin/users/list";
+    }
+
+    @GetMapping("{userId}/")
+    public String view(Model model, @PathVariable Integer userId) {
+        final UserModelInterface userModel = this.getUserModel(userId);
+        model.addAttribute("user", userModel);
+        return "admin/users/view";
     }
 
     @GetMapping("create/")
@@ -94,11 +103,51 @@ public class UsersController extends AbstractCrudController {
         return "redirect:/admin/users/";
     }
 
-    private UserModelInterface getUserModel(Integer id) {
-        final UserModelInterface userModel = this.usersService.find(id);
+    @PostMapping("delete/{userId}/")
+    public String delete(@PathVariable Integer userId) {
+        this.getUserModel(userId);
+        final UsersOptionsInterface usersOptions = this.usersOptionsBuilder.forDelete();
+        final UserModelInterface userModel = this.usersService.find(userId, usersOptions);
+
+        this.usersService.delete(userModel, usersOptions);
+
+        return "redirect:/admin/users/";
+    }
+
+    private UserModelInterface getUserModel(Integer id, UsersOptionsInterface userOptions) {
+        final UserModelInterface userModel = this.usersService.find(id, userOptions);
         if (userModel == null) {
             throw new NotFoundException();
         }
         return userModel;
+    }
+
+    private UserModelInterface getUserModel(Integer id) {
+        return getUserModel(id, this.usersOptionsBuilder.forAuth());
+    }
+
+    @ModelAttribute("usersListUrl")
+    public String getUsersListUrl() {
+        return "/admin/users/";
+    }
+
+    @ModelAttribute("usersCreateUrl")
+    public String getUsersCreateUrl() {
+        return "/admin/users/create/";
+    }
+
+    @ModelAttribute("userViewUrlTemplate")
+    public String getUserViewUrlTemplate() {
+        return "/admin/users/%d/";
+    }
+
+    @ModelAttribute("userUpdateUrlTemplate")
+    public String getUserUpdateUrlTemplate() {
+        return "/admin/users/update/%d/";
+    }
+
+    @ModelAttribute("userDeleteUrlTemplate")
+    public String getUserDeleteUrlTemplate() {
+        return "/admin/users/delete/%d/";
     }
 }
