@@ -23,9 +23,6 @@ public class SubjectsService implements SubjectsServiceInterface {
     private SubjectsMapper subjectsMapper;
 
     @Autowired
-    private TopicsService topicsService;
-
-    @Autowired
     private UsersService usersService;
 
     @Autowired
