@@ -10,6 +10,7 @@ import easytests.personal.validators.IssueStandardDtoValidator;
 import easytests.services.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,34 +49,6 @@ public class IssueStandardsController extends AbstractPersonalController {
     @Autowired
     private IssueStandardDtoValidator issueStandardValidator;
 
-    private IssueStandardModelInterface getIssueStandardModel(Integer issueStandardId) {
-        final IssueStandardModelInterface issueStandardModel = this.issueStandardsService.find(
-                issueStandardId,
-                new IssueStandardsOptions()
-                        .withTopicPriorities(new IssueStandardTopicPrioritiesOptions())
-                        .withQuestionTypeOptions(new IssueStandardQuestionTypeOptionsOptions()));
-        if (issueStandardModel == null) {
-            throw new NotFoundException();
-        }
-        final SubjectModelInterface subjectModel = this.getSubjectModel(issueStandardModel.getSubject().getId());
-        issueStandardModel.setSubject(subjectModel);
-        return issueStandardModel;
-    }
-
-    private SubjectModelInterface getSubjectModel(Integer subjectId) {
-        final SubjectModelInterface subjectModel = this.subjectsService.find(
-                subjectId,
-                new SubjectsOptions()
-                        .withTopics(new TopicsOptions()));
-        if (subjectModel == null) {
-            throw new NotFoundException();
-        }
-        if (!subjectModel.getUser().getId().equals(this.getCurrentUserModel().getId())) {
-            throw new ForbiddenException();
-        }
-        return subjectModel;
-    }
-
     @ModelAttribute("questionTypes")
     private List<QuestionTypeModelInterface> getQuestionTypes() {
         return this.questionTypesService.findAll();
@@ -95,16 +68,20 @@ public class IssueStandardsController extends AbstractPersonalController {
     public String read(Model model,
                        @PathVariable Integer issueStandardId) {
 
-        final IssueStandardModelInterface issueStandard = this.getIssueStandardModel(issueStandardId);
+        final IssueStandardModelInterface issueStandard = this.getIssueStandardModel(
+                issueStandardId,
+                getIssueStandardsOptions());
         model.addAttribute("issueStandard", issueStandard);
         return "issue_standards/view";
     }
 
     @GetMapping("update/{issueStandardId}/")
-    public String updateView(Model model,
-                             @PathVariable Integer issueStandardId) {
+    public String update(Model model,
+                         @PathVariable Integer issueStandardId) {
 
-        final IssueStandardModelInterface issueStandard = this.getIssueStandardModel(issueStandardId);
+        final IssueStandardModelInterface issueStandard = this.getIssueStandardModel(
+                issueStandardId,
+                getIssueStandardsOptions());
         final IssueStandardDto issueStandardDto = new IssueStandardDto();
         issueStandardDto.map(issueStandard);
 
@@ -114,11 +91,14 @@ public class IssueStandardsController extends AbstractPersonalController {
     }
 
     @PostMapping("update/{issueStandardId}/")
-    public String updateSubmit(Model model,
+    public String save(Model model,
                                @PathVariable Integer issueStandardId,
                                @Valid IssueStandardDto issueStandardDto,
                                BindingResult bindingResult) {
 
+        final IssueStandardModelInterface issueStandardModel = getIssueStandardModel(
+                issueStandardId,
+                new IssueStandardsOptions());
         issueStandardDto.setId(issueStandardId);
         issueStandardValidator.validate(issueStandardDto, bindingResult);
 
@@ -134,7 +114,6 @@ public class IssueStandardsController extends AbstractPersonalController {
             return "issue_standards/edit";
         }
 
-        final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
         issueStandardDto.mapInto(issueStandardModel);
         issueStandardModel.setId(issueStandardId);
         saveIssueStandardModel(issueStandardModel);
@@ -142,24 +121,58 @@ public class IssueStandardsController extends AbstractPersonalController {
         return "redirect:/personal/issue_standard/{issueStandardId}/";
     }
 
+    private IssueStandardModelInterface getIssueStandardModel(
+            Integer issueStandardId,
+            IssueStandardsOptionsInterface issueStandardsOptions) {
+
+        final IssueStandardModelInterface issueStandardModel = this.issueStandardsService.find(
+                issueStandardId,
+                issueStandardsOptions);
+        if (issueStandardModel == null) {
+            throw new NotFoundException();
+        }
+        final SubjectModelInterface subjectModel = this.getSubjectModel(issueStandardModel.getSubject().getId());
+        issueStandardModel.setSubject(subjectModel);
+        return issueStandardModel;
+    }
+
+    private IssueStandardsOptionsInterface getIssueStandardsOptions() {
+        return new IssueStandardsOptions()
+                .withTopicPriorities(new IssueStandardTopicPrioritiesOptions())
+                .withQuestionTypeOptions(new IssueStandardQuestionTypeOptionsOptions());
+    }
+
+    private SubjectModelInterface getSubjectModel(Integer subjectId) {
+        final SubjectModelInterface subjectModel = this.subjectsService.find(
+                subjectId,
+                new SubjectsOptions()
+                        .withTopics(new TopicsOptions()));
+        if (subjectModel == null) {
+            throw new NotFoundException();
+        }
+        if (!subjectModel.getUser().getId().equals(this.getCurrentUserModel().getId())) {
+            throw new ForbiddenException();
+        }
+        return subjectModel;
+    }
+
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     private void saveIssueStandardModel(IssueStandardModelInterface newIssueStandardModel) {
         final IssueStandardModelInterface currentIssueStandardModel
-                = this.getIssueStandardModel(newIssueStandardModel.getId());
+                = this.getIssueStandardModel(newIssueStandardModel.getId(), getIssueStandardsOptions());
+        System.out.println(currentIssueStandardModel);
 
         final List<Integer> newTopicPriorityIds
                 = new ArrayList<>(newIssueStandardModel.getTopicPriorities().size());
-        for (IssueStandardTopicPriorityModelInterface newTopicPriority
-                : newIssueStandardModel.getTopicPriorities()) {
-            newTopicPriorityIds.add(newTopicPriority.getId());
-        }
+
+        newTopicPriorityIds.addAll(newIssueStandardModel.getTopicPriorities().stream()
+                .map(IdentityInterface::getId).collect(Collectors.toList()));
 
         final List<Integer> newQuestionTypeOptionIds
                 = new ArrayList<>(newIssueStandardModel.getQuestionTypeOptions().size());
-        for (IssueStandardQuestionTypeOptionModelInterface newQuestionTypeOption
-                : newIssueStandardModel.getQuestionTypeOptions()) {
-            newQuestionTypeOptionIds.add(newQuestionTypeOption.getId());
-        }
+
+        newQuestionTypeOptionIds.addAll(newIssueStandardModel.getQuestionTypeOptions().stream()
+                .map(IdentityInterface::getId).collect(Collectors.toList()));
 
         for (IssueStandardTopicPriorityModelInterface currentTopicPriority
                 : currentIssueStandardModel.getTopicPriorities()) {
@@ -175,8 +188,6 @@ public class IssueStandardsController extends AbstractPersonalController {
             }
         }
 
-        this.issueStandardsService.save(newIssueStandardModel, new IssueStandardsOptions()
-                .withTopicPriorities(new IssueStandardTopicPrioritiesOptions())
-                .withQuestionTypeOptions(new IssueStandardQuestionTypeOptionsOptions()));
+        this.issueStandardsService.save(newIssueStandardModel, getIssueStandardsOptions());
     }
 }
