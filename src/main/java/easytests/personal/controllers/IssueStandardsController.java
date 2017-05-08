@@ -65,7 +65,7 @@ public class IssueStandardsController extends AbstractPersonalController {
     }
 
     @GetMapping("{issueStandardId}/")
-    public String read(Model model,
+    public String view(Model model,
                        @PathVariable Integer issueStandardId) {
 
         final IssueStandardModelInterface issueStandard = this.getIssueStandardModel(
