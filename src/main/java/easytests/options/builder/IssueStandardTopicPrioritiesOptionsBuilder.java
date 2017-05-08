@@ -3,10 +3,12 @@ package easytests.options.builder;
 import easytests.options.IssueStandardTopicPrioritiesOptions;
 import easytests.options.IssueStandardTopicPrioritiesOptionsInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author SingularityA
  */
+@Service
 public class IssueStandardTopicPrioritiesOptionsBuilder
         implements IssueStandardTopicPrioritiesOptionsBuilderInterface {
     @Autowired
