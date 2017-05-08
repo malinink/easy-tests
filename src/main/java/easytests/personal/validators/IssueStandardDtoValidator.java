@@ -1,6 +1,7 @@
 package easytests.personal.validators;
 
 import easytests.common.validators.AbstractDtoValidator;
+import easytests.models.IdentityInterface;
 import easytests.models.IssueStandardQuestionTypeOptionModelInterface;
 import easytests.models.IssueStandardTopicPriorityModelInterface;
 import easytests.models.empty.IssueStandardModelEmpty;
@@ -10,7 +11,10 @@ import easytests.personal.dto.IssueStandardTopicPriorityDto;
 import easytests.services.IssueStandardQuestionTypeOptionsService;
 import easytests.services.IssueStandardTopicPrioritiesService;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -57,9 +61,8 @@ public class IssueStandardDtoValidator extends AbstractDtoValidator {
                 .findByIssueStandard(new IssueStandardModelEmpty(issueStandardDto.getId()));
 
         final List<Integer> tpModelIds = new ArrayList<>(tpModels.size());
-        for (IssueStandardTopicPriorityModelInterface tpModel: tpModels) {
-            tpModelIds.add(tpModel.getId());
-        }
+        tpModelIds.addAll(tpModels.stream().map(IdentityInterface::getId).collect(Collectors.toList()));
+
         int index = 0;
         for (IssueStandardTopicPriorityDto tpDto: issueStandardDto.getTopicPriorities()) {
             if (tpDto.getId() != null && !tpModelIds.contains(tpDto.getId())) {
@@ -71,33 +74,33 @@ public class IssueStandardDtoValidator extends AbstractDtoValidator {
 
     private void validateTopicPriorityIdsAreUnique(Errors errors, IssueStandardDto issueStandardDto) {
         final List<IssueStandardTopicPriorityDto> tpDtoList = issueStandardDto.getTopicPriorities();
+        final Set<Integer> tpDtoIdSet = new HashSet<>();
 
-        for (int i = 0; i < tpDtoList.size(); i++) {
-            if (tpDtoList.get(i).getId() == null) {
+        for (int index = 0; index < tpDtoList.size(); index++) {
+            final Integer tpId = tpDtoList.get(index).getId();
+            if (tpId == null) {
                 continue;
             }
-            for (int j = 0; j < tpDtoList.size(); j++) {
-                if (i != j && tpDtoList.get(i).getId().equals(tpDtoList.get(j).getId())) {
-                    reject(errors, tpField(i, "id"), "Topic Priority id must be unique");
-                    break;
-                }
+            if (tpDtoIdSet.contains(tpId)) {
+                reject(errors, tpField(index, "id"), "Topic Priority id must be unique");
             }
+            tpDtoIdSet.add(tpId);
         }
     }
 
     private void validateTopicsAreUnique(Errors errors, IssueStandardDto issueStandardDto) {
         final List<IssueStandardTopicPriorityDto> tpDtoList = issueStandardDto.getTopicPriorities();
+        final Set<Integer> tpDtoTopicIdSet = new HashSet<>();
 
-        for (int i = 0; i < tpDtoList.size(); i++) {
-            if (tpDtoList.get(i).getTopicId() == null) {
+        for (int index = 0; index < tpDtoList.size(); index++) {
+            final Integer tpTopicId = tpDtoList.get(index).getTopicId();
+            if (tpTopicId == null) {
                 continue;
             }
-            for (int j = 0; j < tpDtoList.size(); j++) {
-                if (i != j && tpDtoList.get(i).getTopicId().equals(tpDtoList.get(j).getTopicId())) {
-                    reject(errors, tpField(i, "topicId"), "Topic must be unique");
-                    break;
-                }
+            if (tpDtoTopicIdSet.contains(tpTopicId)) {
+                reject(errors, tpField(index, "topicId"), "Topic must be unique");
             }
+            tpDtoTopicIdSet.add(tpTopicId);
         }
     }
 
@@ -108,9 +111,8 @@ public class IssueStandardDtoValidator extends AbstractDtoValidator {
                 .findByIssueStandard(new IssueStandardModelEmpty(issueStandardDto.getId()));
 
         final List<Integer> qtoModelIds = new ArrayList<>(qtoModels.size());
-        for (IssueStandardQuestionTypeOptionModelInterface qtoModel : qtoModels) {
-            qtoModelIds.add(qtoModel.getId());
-        }
+        qtoModelIds.addAll(qtoModels.stream().map(IdentityInterface::getId).collect(Collectors.toList()));
+
         int index = 0;
         for (IssueStandardQuestionTypeOptionDto qtoDto: issueStandardDto.getQuestionTypeOptions()) {
             if (qtoDto.getId() != null && !qtoModelIds.contains(qtoDto.getId())) {
@@ -122,44 +124,44 @@ public class IssueStandardDtoValidator extends AbstractDtoValidator {
 
     private void validateQuestionTypeOptionIdsAreUnique(Errors errors, IssueStandardDto issueStandardDto) {
         final List<IssueStandardQuestionTypeOptionDto> qtoDtoList = issueStandardDto.getQuestionTypeOptions();
+        final Set<Integer> qtoDtoIdSet = new HashSet<>();
 
-        for (int i = 0; i < qtoDtoList.size(); i++) {
-            if (qtoDtoList.get(i).getId() == null) {
+        for (int index = 0; index < qtoDtoList.size(); index++) {
+            final Integer qtoId = qtoDtoList.get(index).getId();
+            if (qtoId == null) {
                 continue;
             }
-            for (int j = 0; j < qtoDtoList.size(); j++) {
-                if (i != j && qtoDtoList.get(i).getId().equals(qtoDtoList.get(j).getId())) {
-                    reject(errors, qtoField(i, "id"), "Question Type Option id must be unique");
-                    break;
-                }
+            if (qtoDtoIdSet.contains(qtoId)) {
+                reject(errors, qtoField(index, "id"), "Question Type Option id must be unique");
             }
+            qtoDtoIdSet.add(qtoId);
         }
     }
 
     private void validateQuestionTypesAreUnique(Errors errors, IssueStandardDto issueStandardDto) {
         final List<IssueStandardQuestionTypeOptionDto> qtoDtoList = issueStandardDto.getQuestionTypeOptions();
+        final Set<Integer> qtoDtoQuestionTypeIdSet = new HashSet<>();
 
-        for (int i = 0; i < qtoDtoList.size(); i++) {
-            if (qtoDtoList.get(i).getQuestionTypeId() == null) {
+        for (int index = 0; index < qtoDtoList.size(); index++) {
+            final Integer qtoQuestionTypeId = qtoDtoList.get(index).getQuestionTypeId();
+            if (qtoQuestionTypeId == null) {
                 continue;
             }
-            for (int j = 0; j < qtoDtoList.size(); j++) {
-                if (i != j && qtoDtoList.get(i).getQuestionTypeId().equals(qtoDtoList.get(j).getQuestionTypeId())) {
-                    reject(errors, qtoField(i, "questionTypeId"), "Question Type must be unique");
-                    break;
-                }
+            if (qtoDtoQuestionTypeIdSet.contains(qtoQuestionTypeId)) {
+                reject(errors, qtoField(index, "questionTypeId"), "Question Type must be unique");
             }
+            qtoDtoQuestionTypeIdSet.add(qtoQuestionTypeId);
         }
     }
 
     private void validateMaxIsGreaterThanMin(Errors errors, IssueStandardDto issueStandardDto) {
         final List<IssueStandardQuestionTypeOptionDto> qtoDtoList = issueStandardDto.getQuestionTypeOptions();
 
-        for (int i = 0; i < qtoDtoList.size(); i++) {
-            final Integer minQuestions = qtoDtoList.get(i).getMinQuestions();
-            final Integer maxQuestions = qtoDtoList.get(i).getMaxQuestions();
+        for (int index = 0; index < qtoDtoList.size(); index++) {
+            final Integer minQuestions = qtoDtoList.get(index).getMinQuestions();
+            final Integer maxQuestions = qtoDtoList.get(index).getMaxQuestions();
             if (minQuestions != null && maxQuestions != null && minQuestions > maxQuestions) {
-                reject(errors, qtoField(i, "maxQuestions"), "Max Questions must be greater than Min Questions");
+                reject(errors, qtoField(index, "maxQuestions"), "Max Questions must be greater than Min Questions");
             }
         }
     }
