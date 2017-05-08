@@ -3,6 +3,7 @@ package easytests.models.empty;
 import easytests.entities.IssueStandardTopicPriorityEntity;
 import easytests.models.IssueStandardModelInterface;
 import easytests.models.IssueStandardTopicPriorityModelInterface;
+import easytests.models.TopicModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
 
 /**
@@ -26,12 +27,12 @@ public class IssueStandardTopicPriorityModelEmpty
     }
 
     @Override
-    public Integer getTopicId() {
+    public TopicModelInterface getTopic() {
         throw new CallMethodOnEmptyModelException();
     }
 
     @Override
-    public void setTopicId(Integer topicId) {
+    public void setTopic(TopicModelInterface topic) {
         throw new CallMethodOnEmptyModelException();
     }
 

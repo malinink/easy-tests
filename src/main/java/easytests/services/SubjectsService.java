@@ -65,7 +65,7 @@ public class SubjectsService implements SubjectsServiceInterface {
         UserModelInterface userModel,
         SubjectsOptionsInterface subjectsOptions
     ) {
-        return subjectsOptions.withRelations(this.map(this.subjectsMapper.findByUserId(userModel.getId())));
+        return this.withServices(subjectsOptions).withRelations(this.findByUser(userModel));
     }
 
     @Override

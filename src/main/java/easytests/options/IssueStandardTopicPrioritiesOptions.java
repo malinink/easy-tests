@@ -3,6 +3,7 @@ package easytests.options;
 import easytests.models.IssueStandardTopicPriorityModelInterface;
 import easytests.services.IssueStandardTopicPrioritiesServiceInterface;
 import easytests.services.IssueStandardsServiceInterface;
+import easytests.services.TopicsServiceInterface;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
@@ -17,9 +18,21 @@ public class IssueStandardTopicPrioritiesOptions implements IssueStandardTopicPr
     private IssueStandardTopicPrioritiesServiceInterface topicPrioritiesService;
 
     @Setter
+    private TopicsServiceInterface topicsService;
+
+    @Setter
     private IssueStandardsServiceInterface issueStandardsService;
 
+    private TopicsOptionsInterface topicsOptions;
+
     private IssueStandardsOptionsInterface issueStandardsOptions;
+
+    @Override
+    public IssueStandardTopicPrioritiesOptionsInterface
+        withTopic(TopicsOptionsInterface topicsOptions) {
+        this.topicsOptions = topicsOptions;
+        return this;
+    }
 
     @Override
     public IssueStandardTopicPrioritiesOptionsInterface
@@ -34,6 +47,10 @@ public class IssueStandardTopicPrioritiesOptions implements IssueStandardTopicPr
 
         if (topicPriorityModel == null) {
             return topicPriorityModel;
+        }
+        if (this.topicsOptions != null) {
+            topicPriorityModel.setTopic(this.topicsService
+                    .find(topicPriorityModel.getTopic().getId(), this.topicsOptions));
         }
         if (this.issueStandardsOptions != null) {
             topicPriorityModel.setIssueStandard(this.issueStandardsService
