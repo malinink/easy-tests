@@ -5,7 +5,7 @@ import easytests.options.IssueStandardQuestionTypeOptionsOptionsInterface;
 /**
  * @author SingularityA
  */
-public interface IssueStandardQuestionTypeOptionsOptionsBuilderInterface {
+public interface IssueStandardQuestionTypeOptionsOptionsBuilderInterface extends OptionsBuilderInterface {
     IssueStandardQuestionTypeOptionsOptionsInterface forDelete();
 
     IssueStandardQuestionTypeOptionsOptionsInterface forAuth();
