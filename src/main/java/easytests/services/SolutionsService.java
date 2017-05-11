@@ -84,7 +84,7 @@ public class SolutionsService {
     }
 
     private SolutionsOptionsInterface withService(SolutionsOptionsInterface solutionOptions) {
-        solutionOptions.setSolutionsService(this);
+        //solutionOptions.setSolutionsService(this);
         return solutionOptions;
     }
 }
