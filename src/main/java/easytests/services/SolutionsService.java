@@ -5,6 +5,7 @@ import easytests.mappers.SolutionsMapper;
 import easytests.models.PointModelInterface;
 import easytests.models.SolutionModel;
 import easytests.models.SolutionModelInterface;
+import easytests.models.SubjectModelInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,12 @@ public class SolutionsService {
         }
         this.solutionsMapper.insert(solutionEntity);
         solutionModel.setId(solutionEntity.getId());
+    }
+
+    public void save(List<SolutionModelInterface> solutionModels) {
+        for (SolutionModelInterface solutionModel: solutionModels) {
+            this.save(solutionModel);
+        }
     }
 
     public void delete(SolutionModelInterface solutionModel) {
