@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author loriens
  */
-public class SolutionsServiceInterface {
+public interface SolutionsServiceInterface extends ServiceInterface {
     List<SolutionModelInterface> findAll();
 
     SolutionModelInterface find(Integer id);
