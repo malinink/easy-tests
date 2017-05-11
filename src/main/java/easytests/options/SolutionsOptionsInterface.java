@@ -1,7 +1,7 @@
 package easytests.options;
 
 /**
- * @author loriens 
+ * @author loriens
  */
 public interface SolutionsOptionsInterface {
 }

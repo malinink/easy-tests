@@ -1,11 +1,8 @@
 package easytests.options;
 
-import easytests.services.AnswersServiceInterface;
-import easytests.services.SolutionServiceInterface;
+import easytests.services.SolutionsServiceInterface;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
-
-import java.util.List;
 
 /**
  * @author loriens
@@ -13,7 +10,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class SolutionsOptions implements SolutionsOptionsInterface {
     @Setter
-    private SolutionServiceInterface solutionsService;
+    private SolutionsServiceInterface solutionsService;
 
 /*    @Setter
     private PointsServiceInterface pointsService;
