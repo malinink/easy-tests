@@ -5,7 +5,6 @@ import easytests.mappers.SolutionsMapper;
 import easytests.models.PointModelInterface;
 import easytests.models.SolutionModel;
 import easytests.models.SolutionModelInterface;
-import easytests.models.SubjectModelInterface;
 import easytests.options.SolutionsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
