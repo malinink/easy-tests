@@ -11,21 +11,4 @@ import java.util.List;
  * @author malinink
  */
 public interface ServiceInterface {
-    List<SolutionModelInterface> findAll();
-
-    SolutionModelInterface find(Integer id);
-
-    List<SolutionModelInterface> findByPoint(PointModelInterface point);
-
-    void save(SolutionModelInterface solutionModel);
-
-    void save(List<SolutionModelInterface> solutionModels);
-
-    void delete(SolutionModelInterface solutionModel);
-
-    SolutionModelInterface map(SolutionEntity solutionEntity);
-
-    SolutionEntity map(SolutionModelInterface solutionModel);
-
-    List<SolutionModelInterface> map(List<SolutionEntity> solutionEntities);
 }
