@@ -23,12 +23,14 @@ public class TopicsOptionsBuilderTest {
     @MockBean
     private QuestionsOptionsBuilder questionsOptionsBuilder;
 
+    @MockBean
+    private SubjectsOptionsBuilder subjectsOptionsBuilder;
+
     @Test
     public void testForAuth() throws Exception {
-        final QuestionsOptionsInterface questionsOptions = new QuestionsOptions();
-        given(this.questionsOptionsBuilder.forAuth()).willReturn(questionsOptions);
-        Assert.assertEquals(new TopicsOptions().withQuestions(questionsOptions), this.topicsOptionsBuilder.forAuth());
-
+        final SubjectsOptionsInterface subjectsOptions = new SubjectsOptions();
+        given(this.subjectsOptionsBuilder.forDelete()).willReturn(subjectsOptions);
+        Assert.assertEquals(new TopicsOptions().withSubject(subjectsOptions), this.topicsOptionsBuilder.forAuth());
     }
 
     @Test
@@ -37,5 +39,4 @@ public class TopicsOptionsBuilderTest {
         given(this.questionsOptionsBuilder.forDelete()).willReturn(questionsOptions);
         Assert.assertEquals(new TopicsOptions().withQuestions(questionsOptions), this.topicsOptionsBuilder.forDelete());
     }
-
 }
