@@ -1,8 +1,8 @@
 package easytests.personal.dto;
 
 import easytests.models.QuestionModelInterface;
-import javax.validation.constraints.*;
 import easytests.services.QuestionTypesService;
+import javax.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
