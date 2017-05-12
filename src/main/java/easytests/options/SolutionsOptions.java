@@ -50,5 +50,5 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
 
         this.solutionsService.delete(solutionModel);
     }
-    
+
 }

@@ -42,6 +42,7 @@ public class PointsOptions {
         }
 
         if (this.solutionsOptions != null) {
+            
         }
 
         return pointModel;

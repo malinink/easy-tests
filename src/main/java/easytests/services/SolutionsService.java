@@ -62,7 +62,8 @@ public class SolutionsService {
     }
 
     @Override
-    public SolutionModelInterface save(SolutionModelInterface solutionModel, SolutionsOptionsInterface solutionsOptions) {
+    public SolutionModelInterface save(SolutionModelInterface solutionModel,
+                                       SolutionsOptionsInterface solutionsOptions) {
         return this.withServices(solutionsOptions).saveWithRelations(solutionModel);
     }
 
