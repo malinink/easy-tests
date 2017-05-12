@@ -13,7 +13,7 @@ import java.util.List;
 public interface PointsServiceInterface extends ServiceInterface {
     List<PointModelInterface> findAll();
 
-    findAll(PointsOptionsInterface pointsOptions);
+    List<PointModelInterface> findAll(PointsOptionsInterface pointsOptions);
 
     PointModelInterface find(Integer id);
 
