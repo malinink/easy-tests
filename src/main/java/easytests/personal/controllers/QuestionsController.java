@@ -13,15 +13,15 @@ import easytests.personal.dto.QuestionModelDto;
 import easytests.services.AnswersService;
 import easytests.services.QuestionTypesService;
 import easytests.services.QuestionsService;
-import java.util.*;
 import easytests.services.TopicsService;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author firkhraag
@@ -48,7 +48,8 @@ public class QuestionsController extends AbstractCrudController {
 
     @GetMapping("")
     public String list(Model model, @PathVariable("topicId") Integer topicId) {
-        final List<QuestionModelInterface> questions =  this.questionsService.findByTopic(this.getCurrentTopicModel(topicId));
+        final List<QuestionModelInterface> questions = this.questionsService
+            .findByTopic(this.getCurrentTopicModel(topicId));
         model.addAttribute("questions", questions);
         model.addAttribute("topicId", topicId);
         return "questions/list";
@@ -154,15 +155,13 @@ public class QuestionsController extends AbstractCrudController {
         final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId);
         if (answersService.findByQuestion(questionModel).isEmpty()) {
             questionsService.delete(questionModel);
-        }
-        else {
+        } else {
             questionsService.delete(questionModel, this.questionsOptionsBuilder.forDelete());
         }
         return "redirect:/personal/topics/" + topicId + "/questions/";
     }
 
-    private TopicModelInterface getCurrentTopicModel(Integer topicId)
-    {
+    private TopicModelInterface getCurrentTopicModel(Integer topicId) {
         return topicsService.find(topicId);
     }
 
@@ -185,8 +184,7 @@ public class QuestionsController extends AbstractCrudController {
         return questionModel;
     }
 
-    private void getQuestionTypes(Model model)
-    {
+    private void getQuestionTypes(Model model) {
         final List<QuestionTypeModelInterface> questionTypes = this.questionTypesService.findAll();
         model.addAttribute("questionTypes", questionTypes);
     }
