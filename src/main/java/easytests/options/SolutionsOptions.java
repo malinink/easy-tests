@@ -37,7 +37,7 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
 
     public void saveWithRelations(SolutionModelInterface solutionModel) {
         if (this.pointsOptions != null) {
-            this.pointsOptions.withSolutions(this);
+            this.pointsOptions.withSolution(this);
             this.pointsOptions.saveWithRelations(solutionModel.getPoint());
             return;
         }
@@ -46,7 +46,7 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
 
     public void deleteWithRelations(SolutionModelInterface solutionModel) {
         if (this.pointsOptions != null) {
-            this.pointsOptions.withSolutions(this);
+            this.pointsOptions.withSolution(this);
             this.pointsOptions.deleteWithRelations(solutionModel.getPoint());
             return;
         }

@@ -18,6 +18,8 @@ public interface PointsOptionsInterface {
 
     PointsOptionsInterface withQuiz(QuizzesOptionsInterface quizzesOptions);
 
+    PointsOptionsInterface withSolution(SolutionsOptionsInterface solutionsOptions);
+
     PointModelInterface withRelations(PointModelInterface pointModel);
 
     void saveWithRelations(PointModelInterface pointModel);
