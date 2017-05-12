@@ -16,6 +16,10 @@ public interface AnswerModelInterface extends ModelInterface {
 
     void setQuestion(QuestionModelInterface question);
 
+    Integer getSerialNumber();
+
+    void setSerialNumber(Integer serialNumber);
+
     Boolean getRight();
 
     void setRight(Boolean right);
