@@ -3,7 +3,6 @@ package easytests.options;
 import easytests.models.PointModelInterface;
 import easytests.services.PointsServiceInterface;
 import easytests.services.QuizzesServiceInterface;
-import easytests.services.SolutionsService;
 import easytests.services.SolutionsServiceInterface;
 import groovy.transform.EqualsAndHashCode;
 import lombok.Setter;
