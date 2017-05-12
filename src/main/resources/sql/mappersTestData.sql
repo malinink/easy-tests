@@ -196,10 +196,10 @@ INSERT INTO question_types VALUES
   (3, 'Нумерация', 3),
   (4, 'Текст', 4);
 
-INSERT INTO answers(txt, question_id, is_right) VALUES
-  ('Answer1', 1, TRUE),
-  ('Answer2', 2, FALSE),
-  ('Answer3', 3, TRUE);
+INSERT INTO answers(txt, question_id, serial_number, is_right) VALUES
+  ('Answer1', 1, 1, TRUE),
+  ('Answer2', 2, 2, FALSE),
+  ('Answer3', 3, 3, TRUE);
 
 INSERT INTO quizzes (issue_id, invite_code) VALUES
  (1, 'test_invite_code1'),
