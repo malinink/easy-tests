@@ -9,7 +9,7 @@ import easytests.personal.dto.AnswerDto;
 import easytests.personal.validators.AnswerDtoValidator;
 import easytests.services.AnswersService;
 
-import java.util.List;
+//import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +57,8 @@ public class AnswersController extends AbstractPersonalController {
     //TODO: get ALL answers related to current User
     @RequestMapping("list")
     public String list(Model model) {
-        final List<AnswerModelInterface> answers = this.answersService.findByQuestion();
-        model.addAttribute("answers", answers);
+        //final List<AnswerModelInterface> answers = this.answersService.findByQuestion();
+        //model.addAttribute("answers", answers);
         return "answers/list";
     }
 
