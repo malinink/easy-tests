@@ -23,11 +23,5 @@ public interface SolutionsServiceInterface extends ServiceInterface {
 
     void delete(SolutionModelInterface solutionModel);
 
-    SolutionModelInterface map(SolutionEntity solutionEntity);
-
-    SolutionEntity map(SolutionModelInterface solutionModel);
-
-    List<SolutionModelInterface> map(List<SolutionEntity> solutionEntities);
-
     SolutionsOptionsInterface withServices(SolutionsOptionsInterface solutionOptions);
 }
