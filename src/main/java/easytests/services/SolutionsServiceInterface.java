@@ -3,6 +3,7 @@ package easytests.services;
 import easytests.entities.SolutionEntity;
 import easytests.models.PointModelInterface;
 import easytests.models.SolutionModelInterface;
+import easytests.options.SolutionsOptionsInterface;
 
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface SolutionsServiceInterface extends ServiceInterface {
     SolutionEntity map(SolutionModelInterface solutionModel);
 
     List<SolutionModelInterface> map(List<SolutionEntity> solutionEntities);
+
+    SolutionsOptionsInterface withServices(SolutionsOptionsInterface solutionOptions);
 }
