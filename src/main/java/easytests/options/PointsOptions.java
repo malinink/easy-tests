@@ -7,6 +7,8 @@ import easytests.services.SolutionsServiceInterface;
 import groovy.transform.EqualsAndHashCode;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * @author loriens
  */
@@ -35,13 +37,22 @@ public class PointsOptions implements PointsOptionsInterface {
         return this;
     }
 
+    @Override
     public PointModelInterface withRelations(PointModelInterface pointModel) {
         if (this.quizzesOptions != null) {
-            pointModel.setPoint(this.pointsService.find(
+            pointModel.setQuiz(this.quizzesService.find(
                     pointModel.getQuiz().getId(), this.quizzesOptions));
         }
 
         return pointModel;
+    }
+
+    @Override
+    public List<PointModelInterface> withRelations(List<PointModelInterface> pointModels) {
+        for (PointModelInterface pointModel: pointModels) {
+            this.withRelations(pointModel);
+        }
+        return pointModels;
     }
 
     public void saveWithRelations(PointModelInterface pointModel) {

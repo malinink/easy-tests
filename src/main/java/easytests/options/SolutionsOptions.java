@@ -6,6 +6,8 @@ import easytests.services.SolutionsServiceInterface;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * @author loriens
  */
@@ -24,6 +26,7 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
         return this;
     }
 
+    @Override
     public SolutionModelInterface withRelations(SolutionModelInterface solutionModel) {
         if (this.pointsOptions != null) {
             solutionModel.setPoint(this.pointsService.find(
@@ -31,6 +34,16 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
         }
 
         return solutionModel;
+    }
+
+    @Override
+    public List<SolutionModelInterface> withRelations(List<SolutionModelInterface> solutionModels) {
+
+        for (SolutionModelInterface solutionModel: solutionModels) {
+            this.withRelations(solutionModel);
+        }
+        return solutionModels;
+
     }
 
     public void saveWithRelations(SolutionModelInterface solutionModel) {

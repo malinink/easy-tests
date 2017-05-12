@@ -63,7 +63,7 @@ public class PointsService implements PointsServiceInterface {
     @Override
     public void save(PointModelInterface pointModel,
                      PointsOptionsInterface pointsOptions) {
-        return this.withServices(pointsOptions).saveWithRelations(pointsOptions);
+        this.withServices(pointsOptions).saveWithRelations(pointModel);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class PointsService implements PointsServiceInterface {
 
     @Override
     public void delete(PointModelInterface pointModel, PointsOptionsInterface pointsOptions) {
-        this.withServices(pointsOptions).deleteWithRelations(pointsOptions);
+        this.withServices(pointsOptions).deleteWithRelations(pointModel);
     }
 
     private PointEntity map(PointModelInterface pointModel) {

@@ -27,6 +27,4 @@ public interface PointsServiceInterface extends ServiceInterface {
     void delete(PointModelInterface pointModel);
 
     void delete(PointModelInterface pointModel, PointsOptionsInterface pointsOptions);
-
-    PointsOptionsInterface withServices(PointsOptionsInterface pointsOptions);
 }

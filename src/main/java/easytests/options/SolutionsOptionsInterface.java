@@ -4,6 +4,8 @@ import easytests.models.SolutionModelInterface;
 import easytests.services.PointsServiceInterface;
 import easytests.services.SolutionsServiceInterface;
 
+import java.util.List;
+
 /**
  * @author loriens
  */
@@ -15,6 +17,8 @@ public interface SolutionsOptionsInterface {
     SolutionsOptionsInterface withPoint(PointsOptionsInterface pointsOptions);
 
     SolutionModelInterface withRelations(SolutionModelInterface solutionModel);
+
+    List<SolutionModelInterface> withRelations(List<SolutionModelInterface> solutionModels);
 
     void saveWithRelations(SolutionModelInterface solutionModel);
 

@@ -62,9 +62,9 @@ public class SolutionsService implements SolutionsServiceInterface {
     }
 
     @Override
-    public SolutionModelInterface save(SolutionModelInterface solutionModel,
+    public void save(SolutionModelInterface solutionModel,
                                        SolutionsOptionsInterface solutionsOptions) {
-        return this.withServices(solutionsOptions).saveWithRelations(solutionModel);
+        this.withServices(solutionsOptions).saveWithRelations(solutionModel);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class SolutionsService implements SolutionsServiceInterface {
 
     @Override
     public void delete(SolutionModelInterface solutionModel, SolutionsOptionsInterface solutionsOptions) {
-        this.withServices(solutionsOptions).deleteWithRelations(solutionsOptions);
+        this.withServices(solutionsOptions).deleteWithRelations(solutionModel);
     }
 
     private SolutionModelInterface map(SolutionEntity solutionEntity) {
