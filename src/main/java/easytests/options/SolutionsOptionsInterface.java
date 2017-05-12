@@ -1,6 +1,7 @@
 package easytests.options;
 
 import easytests.models.SolutionModelInterface;
+import easytests.services.PointsServiceInterface;
 import easytests.services.SolutionsServiceInterface;
 
 /**
@@ -13,7 +14,9 @@ public interface SolutionsOptionsInterface {
 
     SolutionsOptionsInterface withPoint(PointsOptionsInterface pointsOptions);
 
-    saveWithRelations(SolutionModelInterface solutionModel);
+    SolutionModelInterface withRelations(SolutionModelInterface solutionModel);
 
-    deleteWithRelations(SolutionModelInterface solutionModel);
+    void saveWithRelations(SolutionModelInterface solutionModel);
+
+    void deleteWithRelations(SolutionModelInterface solutionModel);
 }

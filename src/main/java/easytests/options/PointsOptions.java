@@ -35,7 +35,7 @@ public class PointsOptions {
         return this;
     }
 
-    public PointsOptionsInterface withRelations(PointModelInterface pointModel) {
+    public PointModelInterface withRelations(PointModelInterface pointModel) {
         if (this.quizzesOptions != null) {
             pointModel.setPoint(this.pointsService.find(
                     pointModel.getQuiz().getId(), this.quizzesOptions));

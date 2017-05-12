@@ -18,7 +18,7 @@ public interface PointsOptionsInterface {
 
     PointsOptionsInterface withQuiz(QuizzesOptionsInterface quizzesOptions);
 
-    PointsOptionsInterface withRelations(PointModelInterface pointModel);
+    PointModelInterface withRelations(PointModelInterface pointModel);
 
     void saveWithRelations(PointModelInterface pointModel);
 

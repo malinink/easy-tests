@@ -25,7 +25,7 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
         return this;
     }
 
-    public SolutionsOptionsInterface withRelations(SolutionModelInterface solutionModel) {
+    public SolutionModelInterface withRelations(SolutionModelInterface solutionModel) {
         if (this.pointsOptions != null) {
             solutionModel.setPoint(this.pointsService.find(
                     solutionModel.getPoint().getId(), this.pointsOptions));
