@@ -1,6 +1,7 @@
 package easytests.models;
 
 import easytests.entities.AnswerEntity;
+import easytests.models.empty.QuestionModelEmpty;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -29,6 +30,7 @@ public class AnswerModelTest {
         final Integer id = 3;
         final String txt = "Text";
         final Integer questionId = 5;
+        final Integer serialNumber = 3;
         final Boolean right = true;
         final AnswerEntity answerEntity = Mockito.mock(AnswerEntity.class);
 
@@ -38,6 +40,7 @@ public class AnswerModelTest {
         Mockito.when(answerEntity.getId()).thenReturn(id);
         Mockito.when(answerEntity.getTxt()).thenReturn(txt);
         Mockito.when(answerEntity.getQuestionId()).thenReturn(questionId);
+        Mockito.when(answerEntity.getSerialNumber()).thenReturn(serialNumber);
         Mockito.when(answerEntity.getRight()).thenReturn(right);
 
         final AnswerModel answerModel = new AnswerModel();
@@ -46,7 +49,8 @@ public class AnswerModelTest {
         Assert.assertEquals(id, answerModel.getId());
         Assert.assertEquals(txt, answerModel.getTxt());
         Assert.assertEquals(right, answerModel.getRight());
-        Assert.assertNull(answerModel.getQuestion());
+        Assert.assertEquals(serialNumber, answerModel.getSerialNumber());
+        Assert.assertEquals(new QuestionModelEmpty(questionId), answerModel.getQuestion());
     }
 }
 
