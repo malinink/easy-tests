@@ -41,10 +41,6 @@ public class PointsOptions {
                     pointModel.getQuiz().getId(), this.quizzesOptions));
         }
 
- /*       if (this.solutionsOptions != null) {
-
-        }*/
-
         return pointModel;
     }
 
