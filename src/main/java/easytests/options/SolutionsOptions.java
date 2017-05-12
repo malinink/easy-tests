@@ -20,7 +20,7 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
 
     private PointsOptionsInterface pointsOptions;
 
-    public SolutionsOptionsInterface withPoints(PointsOptionsInterface pointsOptions) {
+    public SolutionsOptionsInterface withPoint(PointsOptionsInterface pointsOptions) {
         this.pointsOptions = pointsOptions;
         return this;
     }
