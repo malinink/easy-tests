@@ -32,5 +32,5 @@ public interface PointsServiceInterface extends ServiceInterface {
 
     List<PointModelInterface> map(List<PointEntity> pointsList);
 
-    PointsOptionsInterface withServices(PointsOptionsInterface pointsOptions)
+    PointsOptionsInterface withServices(PointsOptionsInterface pointsOptions);
 }
