@@ -2,14 +2,14 @@ package easytests.options.builder;
 
 import easytests.options.TopicsOptions;
 import easytests.options.TopicsOptionsInterface;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author firkhraag
  */
 @Service
-public class TopicsOptionsBuilder implements TopicsOptionsBuilderInterface{
+public class TopicsOptionsBuilder implements TopicsOptionsBuilderInterface {
 
     @Autowired
     private SubjectsOptionsBuilder subjectsOptionsBuilder;
