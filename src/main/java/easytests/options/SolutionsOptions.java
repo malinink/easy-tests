@@ -1,6 +1,5 @@
 package easytests.options;
 
-import easytests.models.PointModel;
 import easytests.models.SolutionModelInterface;
 import easytests.services.PointsServiceInterface;
 import easytests.services.SolutionsServiceInterface;
@@ -34,7 +33,6 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
         return solutionModel;
     }
 
-
     public void saveWithRelations(SolutionModelInterface solutionModel) {
         if (this.pointsOptions != null) {
             this.pointsOptions.withSolution(this);
@@ -42,7 +40,6 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
             return;
         }
     }
-
 
     public void deleteWithRelations(SolutionModelInterface solutionModel) {
         if (this.pointsOptions != null) {
@@ -53,4 +50,5 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
 
         this.solutionsService.delete(solutionModel);
     }
+    
 }

@@ -1,7 +1,6 @@
 package easytests.options;
 
 import easytests.models.PointModelInterface;
-import easytests.services.AnswersServiceInterface;
 import easytests.services.PointsServiceInterface;
 import easytests.services.QuizzesServiceInterface;
 import easytests.services.SolutionsServiceInterface;

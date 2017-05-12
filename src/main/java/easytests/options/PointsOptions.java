@@ -44,17 +44,15 @@ public class PointsOptions {
         if (this.solutionsOptions != null) {
         }
 
-
         return pointModel;
     }
-
 
     public void saveWithRelations(PointModelInterface pointModel) {
         return;
     }
 
-
     public void deleteWithRelations(PointModelInterface pointModel) {
         this.pointsService.delete(pointModel);
     }
+
 }
