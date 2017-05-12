@@ -1,12 +1,8 @@
 layout 'layout/main.tpl', title:  'User',
 content: contents {
   h4 ('User')
-  if (fields) {
-    h4 ('True')
-  }
   form (class:'col s12', method:'post') {
     input (type:'hidden', name:_csrf.parameterName, value:_csrf.token)
-    input (type:'hidden', name:id, value:user.getId())
     div (class:'row') {
       div (class:'input-field col s4') {
         if (errors && errors.hasFieldErrors('firstName')) {
@@ -42,7 +38,7 @@ content: contents {
           input (id:'email', name:'email', type:'email', class:'validate invalid', value:errors.getFieldValue('email'))
           label (for:'email', 'data-error':errors.getFieldErrors('email')*.getDefaultMessage().join(', '), 'Email')
         } else {
-          input (id:'email', name:'email', type:'text', class:'validate', value:user.getEmail())
+          input (id:'email', name:'email', type:'email', class:'validate', value:user.getEmail())
           label (for:'email', 'email')
         }
       }
@@ -50,19 +46,19 @@ content: contents {
     div (class:'row') {
       div (class:'input-field col s6') {
         if (errors && errors.hasFieldErrors('password')) {
-          input (id:'password', name:'password', type:'text', class:'validate invalid', value:errors.getFieldValue('password'))
+          input (id:'password', name:'password', type:'password', class:'validate invalid', value:errors.getFieldValue('password'))
           label (for:'password', 'data-error':errors.getFieldErrors('password')*.getDefaultMessage().join(', '), 'Password')
         } else {
-          input (id:'password', name:'password', type:'text', class:'validate', value:user.getPassword())
+          input (id:'password', name:'password', type:'password', class:'validate', value:user.getPassword())
           label (for:'password', 'password')
         }
       }
       div (class:'input-field col s6') {
         if (errors && errors.hasFieldErrors('passwordRepeat')) {
-          input (id:'passwordRepeat', name:'passwordRepeat', type:'text', class:'validate invalid', value:errors.getFieldValue('passwordRepeat'))
+          input (id:'passwordRepeat', name:'passwordRepeat', type:'password', class:'validate invalid', value:errors.getFieldValue('passwordRepeat'))
           label (for:'passwordRepeat', 'data-error':errors.getFieldErrors('passwordRepeat')*.getDefaultMessage().join(', '), 'Password Repeat')
         } else {
-          input (id:'passwordRepeat', name:'passwordRepeat', type:'text', class:'validate', value:user.getPasswordRepeat())
+          input (id:'passwordRepeat', name:'passwordRepeat', type:'password', class:'validate', value:user.getPasswordRepeat())
           label (for:'passwordRepeat', 'passwordRepeat')
         }
       }
@@ -111,7 +107,7 @@ content: contents {
             yield 'Create'
           }
         }
-        a (class:'waves-effect waves-light btn-large red', href:'/admin/users/') {
+        a (class:'waves-effect waves-light btn-large red', href:usersListUrl) {
           i (class:'material-icons left', 'cancel')
           yield 'Cancel'
         }

@@ -2,6 +2,7 @@ package easytests.entities;
 
 import easytests.models.IssueStandardTopicPriorityModelInterface;
 import easytests.models.empty.IssueStandardModelEmpty;
+import easytests.models.empty.TopicModelEmpty;
 import org.junit.Assert;
 import org.junit.Test;
 import org.meanbean.test.BeanTester;
@@ -27,7 +28,7 @@ public class IssueStandardTopicPriorityEntityTest {
         final IssueStandardTopicPriorityModelInterface topicPriorityModel
                 = Mockito.mock(IssueStandardTopicPriorityModelInterface.class);
         Mockito.when(topicPriorityModel.getId()).thenReturn(id);
-        Mockito.when(topicPriorityModel.getTopicId()).thenReturn(topicId);
+        Mockito.when(topicPriorityModel.getTopic()).thenReturn(new TopicModelEmpty(topicId));
         Mockito.when(topicPriorityModel.getIsPreferable()).thenReturn(isPreferable);
         Mockito.when(topicPriorityModel.getIssueStandard()).thenReturn(new IssueStandardModelEmpty(issueStandardId));
 

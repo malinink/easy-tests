@@ -2,6 +2,7 @@ package easytests.services;
 
 import easytests.entities.TesteeEntity;
 import easytests.mappers.TesteesMapper;
+import easytests.models.QuizModelInterface;
 import easytests.models.TesteeModel;
 import easytests.models.TesteeModelInterface;
 import easytests.options.TesteesOptionsInterface;
@@ -11,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 /**
  * @author DoZor-80
  */
@@ -18,6 +20,24 @@ import org.springframework.stereotype.Service;
 public class TesteesService implements TesteesServiceInterface {
     @Autowired
     private TesteesMapper testeesMapper;
+
+    @Autowired
+    private QuizzesService quizzesService;
+
+    @Override
+    public TesteeModelInterface findByQuiz(QuizModelInterface quiz) {
+        final TesteeEntity testeeEntity = this.testeesMapper.findByQuizId(quiz.getId());
+        if (testeeEntity == null) {
+            return null;
+        }
+        return this.map(testeeEntity);
+    }
+
+    @Override
+    public TesteeModelInterface findByQuiz(QuizModelInterface quizModel,
+                                                     TesteesOptionsInterface testeesOptions) {
+        return this.withServices(testeesOptions).withRelations(this.findByQuiz(quizModel));
+    }
 
     @Override
     public List<TesteeModelInterface> findAll() {
@@ -71,6 +91,7 @@ public class TesteesService implements TesteesServiceInterface {
 
     private TesteesOptionsInterface withServices(TesteesOptionsInterface testeesOptions) {
         testeesOptions.setTesteesService(this);
+        testeesOptions.setQuizzesService(this.quizzesService);
         return testeesOptions;
     }
 
