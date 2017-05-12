@@ -168,7 +168,7 @@ public class QuestionsController extends AbstractCrudController {
 
     private TopicModelInterface getCurrentTopicModel(Integer topicId) {
         final TopicsOptionsInterface topicsOptions = this.topicsOptionsBuilder.forAuth();
-        TopicModelInterface topicModel = topicsService.find(topicId, topicsOptions);
+        final TopicModelInterface topicModel = topicsService.find(topicId, topicsOptions);
         checkModel(topicModel);
         return topicModel;
     }
