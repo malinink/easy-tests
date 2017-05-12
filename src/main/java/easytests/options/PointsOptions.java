@@ -3,6 +3,8 @@ package easytests.options;
 import easytests.models.PointModelInterface;
 import easytests.services.PointsServiceInterface;
 import easytests.services.QuizzesServiceInterface;
+import easytests.services.SolutionsService;
+import easytests.services.SolutionsServiceInterface;
 import groovy.transform.EqualsAndHashCode;
 import lombok.Setter;
 
@@ -17,10 +19,20 @@ public class PointsOptions {
     @Setter
     private QuizzesServiceInterface quizzesService;
 
+    @Setter
+    private SolutionsServiceInterface solutionsService;
+
     private QuizzesOptionsInterface quizzesOptions;
+
+    private SolutionsOptionsInterface solutionsOptions;
 
     public PointsOptionsInterface withQuiz(QuizzesOptionsInterface quizzesOptions) {
         this.quizzesOptions = quizzesOptions;
+        return this;
+    }
+
+    public PointsOptionsInterface withSolution(SolutionsOptionsInterface solutionsOptions) {
+        this.solutionsOptions = solutionsOptions;
         return this;
     }
 
@@ -29,6 +41,10 @@ public class PointsOptions {
             pointModel.setPoint(this.pointsService.find(
                     pointModel.getQuiz().getId(), this.quizzesOptions));
         }
+
+        if (this.solutionsOptions != null) {
+        }
+
 
         return pointModel;
     }
