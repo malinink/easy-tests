@@ -14,9 +14,11 @@ content: contents {
       }
     }
     tbody {
+      def id = 0
       questions.each { question ->
+        id++
         tr {
-          td (question.id)
+          td (id)
           td (question.text)
           td() {
             a (class:'waves-effect waves-light btn-floating blue', href:'/personal/topics/' + topicId +'/questions/' + question.id + '/') {
