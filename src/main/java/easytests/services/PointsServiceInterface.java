@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface PointsServiceInterface extends ServiceInterface {
     List<PointModelInterface> findAll();
-    
+
     PointModelInterface find(Integer id);
 }
