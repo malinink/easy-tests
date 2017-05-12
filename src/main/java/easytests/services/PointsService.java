@@ -43,7 +43,7 @@ public class PointsService {
     }
 
     @Override
-    public PointModelInterface find(Integer id, PointsOptionsInterface pointsOptions)) {
+    public PointModelInterface find(Integer id, PointsOptionsInterface pointsOptions) {
         return this.withServices(pointsOptions).withRelations(this.find(id));
     }
 
