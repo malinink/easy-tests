@@ -4,6 +4,7 @@ import easytests.entities.PointEntity;
 import easytests.mappers.PointsMapper;
 import easytests.models.PointModel;
 import easytests.models.PointModelInterface;
+import easytests.options.PointsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,17 @@ public class PointsService {
     @Autowired
     private PointsMapper pointsMapper;
 
+    @Override
     public List<PointModelInterface> findAll() {
         return this.map(this.pointsMapper.findAll());
     }
 
+    @Override
+    public List<PointModelInterface> findAll(PointsOptionsInterface pointsOptions) {
+        return this.withServices(pointsOptions).withRelations(this.findAll());
+    }
+
+    @Override
     public PointModelInterface find(Integer id) {
 
         final PointEntity pointEntity = this.pointsMapper.find(id);
@@ -34,6 +42,12 @@ public class PointsService {
 
     }
 
+    @Override
+    public PointModelInterface find(Integer id, PointsOptionsInterface pointsOptions)) {
+        return this.withServices(pointsOptions).withRelations(this.find(id));
+    }
+
+    @Override
     public void save(PointModelInterface pointModel) {
 
         final PointEntity pointEntity = this.map(pointModel);
@@ -46,6 +60,13 @@ public class PointsService {
 
     }
 
+    @Override
+    public void save(PointModelInterface pointModel,
+                     PointsOptionsInterface pointsOptions) {
+        return this.withServices(pointsOptions).saveWithRelations(pointsOptions);
+    }
+
+    @Override
     public void delete(PointModelInterface pointModel) {
 
         final PointEntity pointEntity = this.map(pointModel);
@@ -54,6 +75,11 @@ public class PointsService {
         }
         this.pointsMapper.delete(pointEntity);
 
+    }
+
+    @Override
+    public void delete(PointModelInterface pointModel, PointsOptionsInterface pointsOptions) {
+        this.withServices(pointsOptions).deleteWithRelations(pointsOptions);
     }
 
     private PointEntity map(PointModelInterface pointModel) {
@@ -80,5 +106,10 @@ public class PointsService {
         }
         return resultPointList;
 
+    }
+
+    private PointsOptionsInterface withServices(PointsOptionsInterface pointsOptions) {
+        pointsOptions.setPointsService(this);
+        return pointsOptions;
     }
 }
