@@ -1,0 +1,34 @@
+package easytests.personal.dto;
+
+import easytests.models.QuestionModelInterface;
+import javax.validation.constraints.*;
+import easytests.services.QuestionTypesService;
+import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
+
+/**
+ * @author firkhraag
+ */
+@Data
+public class QuestionModelDto {
+
+    @NotNull
+    @NotEmpty
+    @Size(max = 255)
+    private String text;
+
+    @NotNull
+    @Min(1)
+    @Max(4)
+    private Integer questionTypeId;
+
+    public void map(QuestionModelInterface questionModel) {
+        this.setText(questionModel.getText());
+        this.setQuestionTypeId(questionModel.getQuestionType().getId());
+    }
+
+    public void mapInto(QuestionModelInterface questionModel, QuestionTypesService questionTypesService) {
+        questionModel.setText(this.getText());
+        questionModel.setQuestionType(questionTypesService.find(questionTypeId));
+    }
+}
