@@ -11,7 +11,7 @@ import lombok.Setter;
  * @author loriens
  */
 @EqualsAndHashCode
-public class PointsOptions {
+public class PointsOptions implements PointsOptionsInterface {
     @Setter
     private PointsServiceInterface pointsService;
 

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * @author nikitalpopov
  */
 @Service
-public class PointsService {
+public class PointsService implements PointsServiceInterface {
 
     @Autowired
     private PointsMapper pointsMapper;

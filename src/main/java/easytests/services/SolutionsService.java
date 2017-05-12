@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @author loriens
  */
 @Service
-public class SolutionsService {
+public class SolutionsService implements SolutionsServiceInterface {
 
     @Autowired
     private SolutionsMapper solutionsMapper;
