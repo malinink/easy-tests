@@ -3,10 +3,9 @@ package easytests.options;
 import easytests.models.SolutionModelInterface;
 import easytests.services.PointsServiceInterface;
 import easytests.services.SolutionsServiceInterface;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
-
+import groovy.transform.EqualsAndHashCode;
 import java.util.List;
+import lombok.Setter;
 
 /**
  * @author loriens

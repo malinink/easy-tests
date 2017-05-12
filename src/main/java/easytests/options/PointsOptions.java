@@ -5,9 +5,9 @@ import easytests.services.PointsServiceInterface;
 import easytests.services.QuizzesServiceInterface;
 import easytests.services.SolutionsServiceInterface;
 import groovy.transform.EqualsAndHashCode;
+import java.util.List;
 import lombok.Setter;
 
-import java.util.List;
 
 /**
  * @author loriens

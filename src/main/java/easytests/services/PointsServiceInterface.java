@@ -1,7 +1,5 @@
 package easytests.services;
 
-import easytests.entities.PointEntity;
-import easytests.models.PointModel;
 import easytests.models.PointModelInterface;
 import easytests.options.PointsOptionsInterface;
 
