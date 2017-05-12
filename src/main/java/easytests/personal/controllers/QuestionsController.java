@@ -8,7 +8,9 @@ import easytests.models.QuestionModelInterface;
 import easytests.models.QuestionTypeModelInterface;
 import easytests.models.TopicModelInterface;
 import easytests.options.QuestionsOptionsInterface;
+import easytests.options.TopicsOptionsInterface;
 import easytests.options.builder.QuestionsOptionsBuilder;
+import easytests.options.builder.TopicsOptionsBuilder;
 import easytests.personal.dto.QuestionModelDto;
 import easytests.services.AnswersService;
 import easytests.services.QuestionTypesService;
@@ -45,6 +47,9 @@ public class QuestionsController extends AbstractCrudController {
 
     @Autowired
     private QuestionsOptionsBuilder questionsOptionsBuilder;
+    
+    @Autowired
+    private TopicsOptionsBuilder topicsOptionsBuilder;
 
     @GetMapping("")
     public String list(Model model, @PathVariable("topicId") Integer topicId) {
@@ -162,7 +167,10 @@ public class QuestionsController extends AbstractCrudController {
     }
 
     private TopicModelInterface getCurrentTopicModel(Integer topicId) {
-        return topicsService.find(topicId);
+        final TopicsOptionsInterface topicsOptions = this.topicsOptionsBuilder.forAuth();
+        TopicModelInterface topicModel = topicsService.find(topicId, topicsOptions);
+        checkModel(topicModel);
+        return topicModel;
     }
 
     private void checkModel(QuestionModelInterface questionModel, Integer topicId) {
@@ -172,9 +180,18 @@ public class QuestionsController extends AbstractCrudController {
         if (!questionModel.getTopic().getId().equals(this.getCurrentTopicModel(topicId).getId())) {
             throw new ForbiddenException();
         }
-        /*if (!questionModel.getTopic().getSubject().getUser().getId().equals(this.getCurrentUserModel().getId())) {
+        if (!questionModel.getTopic().getSubject().getUser().getId().equals(this.getCurrentUserModel().getId())) {
             throw new ForbiddenException();
-        }*/
+        }
+    }
+    
+    private void checkModel(TopicModelInterface topicModel) {
+        if (topicModel == null) {
+            throw new NotFoundException();
+        }
+        if (!topicModel.getSubject().getUser().getId().equals(this.getCurrentUserModel().getId())) {
+            throw new ForbiddenException();
+        }
     }
 
     private QuestionModelInterface getQuestionModel(Integer id, Integer topicId) {
