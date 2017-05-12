@@ -20,7 +20,7 @@ public interface PointsOptionsInterface {
 
     PointsOptionsInterface withRelations(PointModelInterface pointModel);
 
-    saveWithRelations(PointModelInterface pointModel);
+    void saveWithRelations(PointModelInterface pointModel);
 
-    deleteWithRelations(PointModelInterface pointModel);
+    void deleteWithRelations(PointModelInterface pointModel);
 }
