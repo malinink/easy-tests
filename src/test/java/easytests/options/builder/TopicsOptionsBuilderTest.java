@@ -29,7 +29,7 @@ public class TopicsOptionsBuilderTest {
     @Test
     public void testForAuth() throws Exception {
         final SubjectsOptionsInterface subjectsOptions = new SubjectsOptions();
-        given(this.subjectsOptionsBuilder.forDelete()).willReturn(subjectsOptions);
+        given(this.subjectsOptionsBuilder.forAuth()).willReturn(subjectsOptions);
         Assert.assertEquals(new TopicsOptions().withSubject(subjectsOptions), this.topicsOptionsBuilder.forAuth());
     }
 
