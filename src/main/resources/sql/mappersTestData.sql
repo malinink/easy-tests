@@ -104,7 +104,7 @@ CREATE TABLE answers (
   id SERIAL NOT NULL,
   txt VARCHAR(250) NOT NULL,
   question_id INTEGER NOT NULL,
-  serial_number INTEGER NOT NULL,
+  serial_number INTEGER NOT NULL DEFAULT 0,
   is_right BOOLEAN NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT CHK_serial_number CHECK (serial_number>=0)
