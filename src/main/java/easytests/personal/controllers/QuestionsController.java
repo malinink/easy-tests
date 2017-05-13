@@ -65,6 +65,7 @@ public class QuestionsController extends AbstractCrudController {
             Model model,
             @PathVariable("questionId") Integer questionId,
             @PathVariable("topicId") Integer topicId) {
+        final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
         final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId);
         getQuestionTypes(model);
         final QuestionModelDto questionModelDto = new QuestionModelDto();
@@ -76,6 +77,7 @@ public class QuestionsController extends AbstractCrudController {
 
     @GetMapping("create/")
     public String create(Model model, @PathVariable("topicId") Integer topicId) {
+        final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
         getQuestionTypes(model);
         final QuestionModelDto questionModelDto = new QuestionModelDto();
         setCreateBehaviour(model);
@@ -90,6 +92,7 @@ public class QuestionsController extends AbstractCrudController {
             @Valid @NotNull QuestionModelDto questionModelDto,
             BindingResult bindingResult,
             @PathVariable("topicId") Integer topicId) {
+        final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
         if (bindingResult.hasErrors()) {
             getQuestionTypes(model);
             setCreateBehaviour(model);
@@ -100,7 +103,7 @@ public class QuestionsController extends AbstractCrudController {
         }
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModelDto.mapInto(questionModel, questionTypesService);
-        questionModel.setTopic(getCurrentTopicModel(topicId));
+        questionModel.setTopic(topicModel);
         this.questionsService.save(questionModel);
         return "redirect:/personal/topics/" + topicId + "/questions/";
     }
@@ -110,6 +113,7 @@ public class QuestionsController extends AbstractCrudController {
             Model model,
             @PathVariable Integer questionId,
             @PathVariable("topicId") Integer topicId) {
+        final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
         final QuestionModelInterface questionModel = this.getQuestionModel(questionId, topicId);
         getQuestionTypes(model);
         final QuestionModelDto questionModelDto = new QuestionModelDto();
@@ -128,6 +132,7 @@ public class QuestionsController extends AbstractCrudController {
             @Valid @NotNull QuestionModelDto questionModelDto,
             BindingResult bindingResult,
             @PathVariable("topicId") Integer topicId) {
+        final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
         final QuestionModelInterface questionModel = this.getQuestionModel(questionId, topicId);
         if (bindingResult.hasErrors()) {
             getQuestionTypes(model);
@@ -147,6 +152,8 @@ public class QuestionsController extends AbstractCrudController {
             Model model,
             @PathVariable("questionId") Integer questionId,
             @PathVariable("topicId") Integer topicId) {
+        final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
+        final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId);
         model.addAttribute("topicId", topicId);
         model.addAttribute("questionId", questionId);
         return "questions/delete";
@@ -157,6 +164,7 @@ public class QuestionsController extends AbstractCrudController {
             Model model,
             @PathVariable("questionId") Integer questionId,
             @PathVariable("topicId") Integer topicId) {
+        final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
         final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId);
         if (answersService.findByQuestion(questionModel).isEmpty()) {
             questionsService.delete(questionModel);
@@ -178,9 +186,6 @@ public class QuestionsController extends AbstractCrudController {
             throw new NotFoundException();
         }
         if (!questionModel.getTopic().getId().equals(this.getCurrentTopicModel(topicId).getId())) {
-            throw new ForbiddenException();
-        }
-        if (!questionModel.getTopic().getSubject().getUser().getId().equals(this.getCurrentUserModel().getId())) {
             throw new ForbiddenException();
         }
     }
