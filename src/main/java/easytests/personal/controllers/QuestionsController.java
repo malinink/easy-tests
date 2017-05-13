@@ -155,7 +155,6 @@ public class QuestionsController extends AbstractCrudController {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
         final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId);
         model.addAttribute("topicId", topicId);
-        model.addAttribute("questionId", questionId);
         return "questions/delete";
     }
 
