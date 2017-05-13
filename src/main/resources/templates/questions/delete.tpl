@@ -4,7 +4,7 @@ content: contents {
   form (class:'col s12', method:'post') {
     input (type:'hidden', name:_csrf.parameterName, value:_csrf.token)
     div (class:'row') {
-       p (class: 'col s12') { yield 'Do you really want to delete Question #' + questionId + '?' }
+       p (class: 'col s12') { yield 'Do you really want to delete this question?' }
     }
     div (class:'row') {
       div (class:'col s12') {
