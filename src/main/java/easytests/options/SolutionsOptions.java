@@ -27,7 +27,7 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
 
     @Override
     public SolutionModelInterface withRelations(SolutionModelInterface solutionModel) {
-        if(solutionModel == null) {
+        if (solutionModel == null) {
             return solutionModel;
         }
 
