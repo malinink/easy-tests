@@ -27,9 +27,12 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
 
     @Override
     public SolutionModelInterface withRelations(SolutionModelInterface solutionModel) {
+        if(solutionModel == null) {
+            return solutionModel;
+        }
+
         if (this.pointsOptions != null) {
-            solutionModel.setPoint(this.pointsService.find(
-                    solutionModel.getPoint().getId(), this.pointsOptions));
+            solutionModel.setPoint(this.pointsService.find(solutionModel.getPoint().getId(), this.pointsOptions));
         }
 
         return solutionModel;
@@ -46,18 +49,16 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
     }
 
     public void saveWithRelations(SolutionModelInterface solutionModel) {
+        this.solutionsService.save(solutionModel);
+
         if (this.pointsOptions != null) {
-            this.pointsOptions.withSolution(this);
-            this.pointsOptions.saveWithRelations(solutionModel.getPoint());
-            return;
+            this.pointsService.save(solutionModel.getPoint(), this.pointsOptions);
         }
     }
 
     public void deleteWithRelations(SolutionModelInterface solutionModel) {
         if (this.pointsOptions != null) {
-            this.pointsOptions.withSolution(this);
-            this.pointsOptions.deleteWithRelations(solutionModel.getPoint());
-            return;
+            this.pointsOptions.deleteWithRelations(solutionModel.getPoint(), this.pointsOptions);
         }
 
         this.solutionsService.delete(solutionModel);
