@@ -22,6 +22,9 @@ public class SolutionsService implements SolutionsServiceInterface {
     @Autowired
     private SolutionsMapper solutionsMapper;
 
+    @Autowired
+    private PointsServiceInterface pointsService;
+
     @Override
     public List<SolutionModelInterface> findAll() {
         return this.map(this.solutionsMapper.findAll());
@@ -117,6 +120,7 @@ public class SolutionsService implements SolutionsServiceInterface {
 
     private SolutionsOptionsInterface withServices(SolutionsOptionsInterface solutionOptions) {
         solutionOptions.setSolutionsService(this);
+        solutionOptions.setPointsService(this.pointsService);
         return solutionOptions;
     }
 }
