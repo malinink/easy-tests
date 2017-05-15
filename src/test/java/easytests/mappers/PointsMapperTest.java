@@ -49,6 +49,27 @@ public class PointsMapperTest {
         Assert.assertEquals((Integer) 1, testPoint.getId());
         Assert.assertEquals((Integer) 1, testPoint.getQuestionId());
         Assert.assertEquals((Integer) 1, testPoint.getQuizId());
+
+    }
+
+    @Test
+    public void testQuizNotNull() throws Exception {
+
+        final List<PointEntity> pointEntities = this.pointsMapper.findByQuizId(1);
+
+        Assert.assertNotNull(pointEntities);
+        Assert.assertEquals(1, pointEntities.size());
+
+    }
+
+    @Test
+    public void testFindByQuizId() throws Exception {
+
+        final List<PointEntity> pointEntities = this.pointsMapper.findByQuizId(1);
+
+        Assert.assertEquals(1, pointEntities.size());
+        Assert.assertEquals((Integer)1, pointEntities.get(0).getQuestionId());
+        Assert.assertEquals((Integer)1, pointEntities.get(0).getQuizId());
     }
 
     @Test
