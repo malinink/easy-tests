@@ -36,7 +36,7 @@ public class IssuesMapperTest {
         final IssueEntity issue = this.issuesMapper.find(1);
         Assert.assertEquals((long) 1, (long) issue.getId());
         Assert.assertEquals("Name1", issue.getName());
-        Assert.assertEquals((long)11, (long)issue.getAuthorId());
+        Assert.assertEquals((long)1, (long)issue.getSubjectId());
     }
 
     @Test
@@ -58,14 +58,31 @@ public class IssuesMapperTest {
     }
 
     @Test
+    public void testSubjectNotNull() throws Exception {
+        final List<IssueEntity> issueEntities = this.issuesMapper.findBySubjectId(4);
+
+        Assert.assertNotNull(issueEntities);
+        Assert.assertEquals(0, issueEntities.size());
+    }
+
+    @Test
+    public void testFindBySubject() throws Exception {
+
+        final List<IssueEntity> issueEntities = this.issuesMapper.findBySubjectId(3);
+
+        Assert.assertEquals(1, issueEntities.size());
+        Assert.assertEquals("Name3", issueEntities.get(0).getName());
+    }
+
+    @Test
     public void testInsert() throws Exception {
         final Integer id = this.issuesMapper.findAll().size() + 1;
         final String name = "NewName";
-        final Integer authorId=14;
+        final Integer subjectId=2;
 
         IssueEntity issueEntity = Mockito.mock(IssueEntity.class);
         Mockito.when(issueEntity.getName()).thenReturn(name);
-        Mockito.when(issueEntity.getAuthorId()).thenReturn(authorId);
+        Mockito.when(issueEntity.getSubjectId()).thenReturn(subjectId);
 
         this.issuesMapper.insert(issueEntity);
 
@@ -74,32 +91,32 @@ public class IssuesMapperTest {
         issueEntity = this.issuesMapper.find(id);
         Assert.assertEquals(id, issueEntity.getId());
         Assert.assertEquals(name, issueEntity.getName());
-        Assert.assertEquals(authorId, issueEntity.getAuthorId());
+        Assert.assertEquals(subjectId, issueEntity.getSubjectId());
     }
 
     @Test
     public void testUpdate() throws Exception {
         final Integer id = 1;
         final String name = "NewName";
-        final Integer authorId=14;
+        final Integer subjectId=1;
 
         IssueEntity issueEntity = this.issuesMapper.find(id);
         Assert.assertNotNull(issueEntity);
         Assert.assertEquals(id, issueEntity.getId());
         Assert.assertNotEquals(name, issueEntity.getName());
-        Assert.assertNotEquals(authorId, issueEntity.getAuthorId());
+        Assert.assertNotEquals(subjectId, issueEntity.getSubjectId());
 
         issueEntity = Mockito.mock(IssueEntity.class);
         Mockito.when(issueEntity.getId()).thenReturn(id);
         Mockito.when(issueEntity.getName()).thenReturn(name);
-        Mockito.when(issueEntity.getAuthorId()).thenReturn(authorId);
+        Mockito.when(issueEntity.getSubjectId()).thenReturn(subjectId);
 
         this.issuesMapper.update(issueEntity);
 
         issueEntity = this.issuesMapper.find(id);
         Assert.assertEquals(id, issueEntity.getId());
         Assert.assertEquals(name, issueEntity.getName());
-        Assert.assertEquals(authorId, issueEntity.getAuthorId());
+        Assert.assertEquals(subjectId, issueEntity.getSubjectId());
     }
 
 }
