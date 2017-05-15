@@ -1,19 +1,22 @@
 package easytests.personal.controllers;
 
-import easytests.common.controllers.AbstractPersonalController;
+import easytests.common.controllers.AbstractCrudController;
 import easytests.common.exceptions.ForbiddenException;
 import easytests.common.exceptions.NotFoundException;
-import easytests.models.SubjectModel;
 import easytests.models.SubjectModelInterface;
 import easytests.models.TopicModel;
 import easytests.models.TopicModelInterface;
+import easytests.options.SubjectsOptionsInterface;
 import easytests.options.TopicsOptionsInterface;
+import easytests.options.builder.SubjectsOptionsBuilder;
+import easytests.options.builder.TopicsOptionsBuilder;
 import easytests.personal.dto.TopicDto;
-import easytests.personal.validators.TopicModelDtoValidator;
+import easytests.services.QuestionsService;
 import easytests.services.SubjectsService;
 import easytests.services.TopicsService;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,8 +31,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:ClassDataAbstractionCoupling"})
 @Controller
-@RequestMapping("/personal/topics/")
-public class TopicsController extends AbstractPersonalController {
+@RequestMapping("/personal/subjects/{subjectId}/topics")
+public class TopicsController extends AbstractCrudController {
 
     @Autowired
     private TopicsService topicsService;
@@ -37,128 +40,162 @@ public class TopicsController extends AbstractPersonalController {
     @Autowired
     private SubjectsService subjectsService;
 
-    private TopicModelDtoValidator topicModelDtoValidator = new TopicModelDtoValidator();
+    @Autowired
+    private QuestionsService questionsService;
 
-    private void checkModel(TopicModelInterface topicModel) {
+    @Autowired
+    private TopicsOptionsBuilder topicsOptionsBuilder;
+
+    @Autowired
+    private SubjectsOptionsBuilder subjectsOptionsBuilder;
+
+    private void checkModel(TopicModelInterface topicModel, Integer subjectId) {
         if (topicModel == null) {
             throw new NotFoundException();
         }
-        if (!topicModel.getSubject().getUser().getId().equals(this.getCurrentUserModel().getId())) {
+        if (!topicModel.getSubject().getId().equals(this.getCurrentSubjectModel(subjectId).getId())) {
             throw new ForbiddenException();
         }
     }
 
-    private TopicModelInterface getTopicModel(Integer id) {
-        final TopicModelInterface topicModel = this.topicsService.find(id);
-        checkModel(topicModel);
+    private void checkModel(SubjectModelInterface subjectModel) {
+        if (subjectModel == null) {
+            throw new NotFoundException();
+        }
+        if (!subjectModel.getUser().getId().equals(this.getCurrentUserModel().getId())) {
+            throw new ForbiddenException();
+        }
+    }
+
+    private TopicModelInterface getTopicModel(Integer id, Integer subjectId) {
+        final TopicsOptionsInterface topicsOptionsBuilder = this.topicsOptionsBuilder.forAuth();
+        final TopicModelInterface topicModel = this.topicsService.find(id, topicsOptionsBuilder);
+        checkModel(topicModel, subjectId);
         return topicModel;
     }
 
-    private TopicModelInterface getTopicModel(Integer id, TopicsOptionsInterface topicsOptions) {
+    private TopicModelInterface getTopicModel(Integer id, Integer subjectId, TopicsOptionsInterface topicsOptions) {
         final TopicModelInterface topicModel = this.topicsService.find(id, topicsOptions);
-        checkModel(topicModel);
+        checkModel(topicModel, subjectId);
         return topicModel;
     }
 
-    //TODO: How to get Topics related to current User?
-    @RequestMapping("list")
-    public String list(Model model) {
-        /**final List<SubjectModelInterface> subjects = this.subjectsService.findByUser(this.getCurrentUserModel());
-        final List<TopicModelInterface> topics = this.topicsService.findBySubject(subjects);
-        model.addAttribute("topics", topics);**/
+    private SubjectModelInterface getCurrentSubjectModel(Integer subjectId) {
+        final SubjectsOptionsInterface subjectsOptions = this.subjectsOptionsBuilder.forAuth();
+        final SubjectModelInterface subjectModel = subjectsService.find(subjectId, subjectsOptions);
+        checkModel(subjectModel);
+        return subjectModel;
+    }
+
+    @GetMapping("")
+    public String list(Model model, @PathVariable("subjectId") Integer subjectId) {
+        final List<TopicModelInterface> topics = this.topicsService
+                .findBySubject(this.getCurrentSubjectModel(subjectId));
+        model.addAttribute("topics", topics);
+        model.addAttribute("subjectId", subjectId);
         return "topics/list";
     }
 
-    @GetMapping("create")
-    public String create(Model model) {
-        final TopicDto topic = new TopicDto();
-        topic.setName("");
-        model.addAttribute("methodType", "create");
-        model.addAttribute("topic", topic);
-        return "topics/form";
-    }
-
-    @PostMapping("create")
-    public String create(@Valid @NotNull TopicDto topic,
-                         BindingResult bindingResult,
-                         Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("methodType", "create");
-            model.addAttribute("topic", topic);
-            model.addAttribute("errors", bindingResult);
-            return "topics/form";
-        }
-        final TopicModelInterface topicModel = new TopicModel();
-        final SubjectModelInterface subjectModel = new SubjectModel();
-        topic.mapInto(topicModel);
-        subjectModel.setUser(this.getCurrentUserModel());
-        topicModel.setSubject(subjectModel);
-        topicsService.save(topicModel);
-        return "redirect:/personal/topics/list";
-    }
-
-    @GetMapping("{id}")
-    public String read(@PathVariable("id") Integer id,
-                       Model model) {
-        final TopicModelInterface topicModel = getTopicModel(id);
+    @GetMapping("{topicId}")
+    public String read(Model model,
+                       @PathVariable("subjectId") Integer subjectId,
+                       @PathVariable("topicId") Integer topicId
+    ) {
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final TopicModelInterface topicModel = getTopicModel(topicId, subjectId);
 
         final TopicDto topic = new TopicDto();
         topic.map(topicModel);
         model.addAttribute("topic", topic);
-
-        return "topics/read";
+        model.addAttribute("subjectId", subjectId);
+        return "topics/view";
     }
 
-    @GetMapping("update/{id}")
-    public String update(@PathVariable("id") Integer id,
-                         Model model) {
-        model.addAttribute("methodType", "update");
-        final TopicModelInterface topicModel = getTopicModel(id);
+    @GetMapping("create/")
+    public String create(Model model, @PathVariable("subjectId") Integer subjectId) {
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
         final TopicDto topic = new TopicDto();
-        topic.map(topicModel);
+        setCreateBehaviour(model);
         model.addAttribute("topic", topic);
+        model.addAttribute("subjectId", subjectId);
         return "topics/form";
     }
 
-    @PostMapping("update/{id}")
-    public String update(@PathVariable("id") Integer topicId,
+    @PostMapping("create/")
+    public String create(Model model,
                          @Valid @NotNull TopicDto topic,
                          BindingResult bindingResult,
-                         Model model) {
+                         @PathVariable("subjectId") Integer subjectId) {
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("methodType", "update");
+            setCreateBehaviour(model);
             model.addAttribute("topic", topic);
+            model.addAttribute("subjectId", subjectId);
             model.addAttribute("errors", bindingResult);
             return "topics/form";
         }
         final TopicModelInterface topicModel = new TopicModel();
-        final SubjectModelInterface subjectModel = new SubjectModel();
         topic.mapInto(topicModel);
-        topicModel.setId(topicId);
-        subjectModel.setUser(this.getCurrentUserModel());
         topicModel.setSubject(subjectModel);
-        topicsService.save(topicModel);
-        return "redirect:/personal/topics/list";
+        this.topicsService.save(topicModel);
+        return "redirect:/personal/subjects/" + subjectId + "/topics/";
     }
 
-    @GetMapping("delete/{id}")
-    public String deleteConfirmation(@PathVariable("id") Integer id,
-                                     Model model) {
-        final TopicDto topicDto = new TopicDto();
-        final TopicModelInterface topicModel = getTopicModel(id);
-        topicDto.map(topicModel);
-        model.addAttribute("topic", topicDto);
+    @GetMapping("update/{topicId}/")
+    public String update(Model model,
+                         @PathVariable Integer topicId,
+                         @PathVariable("subjectId") Integer subjectId) {
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final TopicModelInterface topicModel = this.getTopicModel(topicId, subjectId);
+        final TopicDto topic = new TopicDto();
+        topic.map(topicModel);
+        setUpdateBehaviour(model);
+        model.addAttribute("topic", topic);
+        model.addAttribute("subjectId", subjectId);
+        return "topics/form";
+    }
+
+    @PostMapping("update/{topicId}/")
+    public String update(Model model,
+                         @PathVariable Integer topicId,
+                         @Valid @NotNull TopicDto topic,
+                         BindingResult bindingResult,
+                         @PathVariable("subjectId") Integer subjectId) {
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final TopicModelInterface topicModel = this.getTopicModel(topicId, subjectId);
+        if (bindingResult.hasErrors()) {
+            setUpdateBehaviour(model);
+            model.addAttribute("topic", topic);
+            model.addAttribute("subjectId", subjectId);
+            model.addAttribute("errors", bindingResult);
+            return "topics/form";
+        }
+        topic.mapInto(topicModel);
+        this.topicsService.save(topicModel);
+        return "redirect:/personal/subjects/" + subjectId + "/topics/";
+    }
+
+    @GetMapping("delete/{topicId}")
+    public String deleteConfirmation(Model model,
+                                     @PathVariable("topicId") Integer topicId,
+                                     @PathVariable("subjectId") Integer subjectId) {
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final TopicModelInterface topicModel = this.getTopicModel(topicId, subjectId);
+        model.addAttribute("subjectId", subjectId);
         return "topics/delete";
     }
 
-    @PostMapping("delete/{id}")
-    public String delete(@PathVariable("id") Integer topicId,
-                         TopicDto topicDto,
-                         BindingResult bindingResult,
-                         Model model) {
-        topicModelDtoValidator.validate(topicDto, bindingResult);
-        final TopicModelInterface topicModel = getTopicModel(topicId);
-        topicsService.delete(topicModel);
-        return "redirect:/personal/topics/list";
+    @PostMapping("delete/{topicId}")
+    public String delete(Model model,
+                         @PathVariable("topicId") Integer topicId,
+                         @PathVariable("subjectId") Integer subjectId) {
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final TopicModelInterface topicModel = getTopicModel(topicId, subjectId, topicsOptionsBuilder.forDelete());
+        if (questionsService.findByTopic(topicModel).isEmpty()) {
+            topicsService.delete(topicModel);
+        } else {
+            topicsService.delete(topicModel, this.topicsOptionsBuilder.forDelete());
+        }
+        return "redirect:/personal/subjects/" + subjectId + "/topics/";
     }
 }
