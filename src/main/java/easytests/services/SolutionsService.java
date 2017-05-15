@@ -23,7 +23,7 @@ public class SolutionsService implements SolutionsServiceInterface {
     private SolutionsMapper solutionsMapper;
 
     @Autowired
-    private PointsServiceInterface pointsService;
+    private PointsService pointsService;
 
     @Override
     public List<SolutionModelInterface> findAll() {
@@ -120,7 +120,7 @@ public class SolutionsService implements SolutionsServiceInterface {
 
     private SolutionsOptionsInterface withServices(SolutionsOptionsInterface solutionOptions) {
         solutionOptions.setSolutionsService(this);
-        solutionOptions.setPointsService(this.pointsService);
+        //solutionOptions.setPointsService(this.pointsService);
         return solutionOptions;
     }
 }
