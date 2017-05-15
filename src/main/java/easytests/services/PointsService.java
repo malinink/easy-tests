@@ -16,15 +16,17 @@ import org.springframework.stereotype.Service;
  * @author nikitalpopov
  */
 @Service
-public class PointsService {
+public class PointsService implements PointsServiceInterface {
 
     @Autowired
     private PointsMapper pointsMapper;
 
+    @Override
     public List<PointModelInterface> findAll() {
         return this.map(this.pointsMapper.findAll());
     }
 
+    @Override
     public PointModelInterface find(Integer id) {
 
         final PointEntity pointEntity = this.pointsMapper.find(id);
@@ -35,10 +37,12 @@ public class PointsService {
 
     }
 
+    @Override
     public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel) {
         return this.map(this.pointsMapper.findByQuizId(quizModel.getId()));
     }
 
+    @Override
     public void save(PointModelInterface pointModel) {
 
         final PointEntity pointEntity = this.map(pointModel);
@@ -51,6 +55,7 @@ public class PointsService {
 
     }
 
+    @Override
     public void delete(PointModelInterface pointModel) {
 
         final PointEntity pointEntity = this.map(pointModel);
