@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface IssuesMapper {
 
+    @Select("SELECT * FROM issues")
     @Results(
             id = "Issue",
             value = {
@@ -19,8 +20,6 @@ public interface IssuesMapper {
                     @Result(property = "name", column = "name"),
                     @Result(property = "subjectId", column = "subject_id")
             })
-
-    @Select("SELECT * FROM issues")
     List<IssueEntity> findAll();
 
     @Select("SELECT * FROM issues WHERE id=#{id}")
@@ -38,6 +37,6 @@ public interface IssuesMapper {
     void delete(IssueEntity issue);
 
     @Select("SELECT * FROM issues WHERE subject_id=#{subjectId}")
-    @ResultMap("Subject")
+    @ResultMap("Issue")
     List<IssueEntity> findBySubjectId(Integer subjectId);
 }
