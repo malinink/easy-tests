@@ -75,6 +75,14 @@ public class SolutionsServiceTest {
         return solutionModel;
     }
 
+    private List<SolutionModelInterface> getSolutionsModels(List<SolutionEntity> solutionsEntities) {
+        final List<SolutionModelInterface> usersModels = new ArrayList<>(2);
+        for (SolutionEntity solutionEntity: solutionsEntities) {
+            usersModels.add(this.mapSolutionModel(solutionEntity));
+        }
+        return usersModels;
+    }
+
     @Test
     public void testFindAllPresentList() throws Exception {
         final List<SolutionEntity> solutionEntities = new ArrayList<>(5);
@@ -102,6 +110,23 @@ public class SolutionsServiceTest {
 
         Assert.assertNotNull(solutionModels);
         Assert.assertEquals(0, solutionModels.size());
+    }
+
+    @Test
+    public void testFindAllWithOptions() throws Exception {
+        final List<SolutionEntity> solutionsEntities = new ArrayList<>(2);
+        solutionsEntities.add(this.createSolutionEntityMock(1, 10, 1));
+        solutionsEntities.add(this.createSolutionEntityMock(2, 20, 1));
+
+        final List<SolutionModelInterface> solutionsModels = this.getSolutionsModels(solutionsEntities);
+        final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
+        given(this.solutionsMapper.findAll()).willReturn(solutionsEntities);
+        given(solutionsOptions.withRelations(Mockito.anyList())).willReturn(solutionsModels);
+
+        final List<SolutionModelInterface> foundedSolutionsModels = this.solutionsService.findAll(solutionsOptions);
+
+        verify(solutionsOptions).withRelations(solutionsModels);
+        Assert.assertEquals(solutionsModels, foundedSolutionsModels);
     }
 
     @Test
