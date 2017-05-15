@@ -78,9 +78,7 @@ public class PointsServiceTest {
         final List<PointModelInterface> pointsModels = new ArrayList<>(2);
 
         for (PointEntity pointEntity : this.getPointsEntities()) {
-
             pointsModels.add(this.mapPointModel(pointEntity));
-
         }
 
         return pointsModels;
@@ -103,7 +101,7 @@ public class PointsServiceTest {
     }
 
     @Test
-    public void testFindAllAbsebtList() throws Exception {
+    public void testFindAllAbsentList() throws Exception {
 
         given(this.pointsMapper.findAll()).willReturn(new ArrayList<>(0));
 
@@ -137,6 +135,32 @@ public class PointsServiceTest {
         final PointModelInterface pointModel = this.pointsService.find(id);
 
         Assert.assertNull(pointModel);
+
+    }
+
+    @Test
+    public void testFindByQuiz() throws Exception {
+
+        final Integer quizId = 5;
+        final QuizModelInterface quizModel = Mockito.mock(QuizModelInterface.class);
+        Mockito.when(quizModel.getId()).thenReturn(quizId);
+
+        final PointEntity pointEntityFirst = Entities.createPointEntityMock(1, 1, 1);
+        final PointEntity pointEntitySecond = Entities.createPointEntityMock(4, 4, 4);
+        final List<PointEntity> pointEntities = new ArrayList<>();
+        pointEntities.add(pointEntityFirst);
+        pointEntities.add(pointEntitySecond);
+        given(this.pointsMapper.findByQuizId(quizId)).willReturn(pointEntities);
+
+        final List<PointModelInterface> pointModels = new ArrayList<>();
+        pointModels.add(this.mapPointModel(pointEntityFirst));
+        pointModels.add(this.mapPointModel(pointEntitySecond));
+
+        final List<PointModelInterface> foundPointModels = this.pointsService.findByQuiz(quizModel);
+
+
+        verify(this.pointsMapper).findByQuizId(quizId);
+        Assert.assertEquals(pointModels, foundPointModels);
 
     }
 
