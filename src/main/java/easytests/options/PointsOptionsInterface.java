@@ -8,7 +8,6 @@ import easytests.services.SolutionsServiceInterface;
 import java.util.List;
 
 /**
- * @author loriens
  */
 public interface PointsOptionsInterface {
     void setPointsService(PointsServiceInterface pointsService);
