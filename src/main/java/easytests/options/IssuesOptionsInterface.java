@@ -3,6 +3,7 @@ package easytests.options;
 import easytests.models.IssueModelInterface;
 import easytests.services.IssuesServiceInterface;
 import easytests.services.QuizzesServiceInterface;
+import easytests.services.SubjectsServiceInterface;
 
 import java.util.List;
 
@@ -13,7 +14,11 @@ public interface IssuesOptionsInterface {
 
     void setQuizzesService(QuizzesServiceInterface quizzesService);
 
+    void setSubjectsService(SubjectsServiceInterface subjectsService);
+
     void setIssuesService(IssuesServiceInterface issuesService);
+
+    IssuesOptionsInterface withSubject(SubjectsOptionsInterface subjectsOptions);
 
     IssuesOptionsInterface withQuizzes(QuizzesOptionsInterface quizzesService);
 
