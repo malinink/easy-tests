@@ -98,7 +98,7 @@ public class IssuesMapperTest {
     public void testUpdate() throws Exception {
         final Integer id = 1;
         final String name = "NewName";
-        final Integer subjectId=1;
+        final Integer subjectId=2;
 
         IssueEntity issueEntity = this.issuesMapper.find(id);
         Assert.assertNotNull(issueEntity);
