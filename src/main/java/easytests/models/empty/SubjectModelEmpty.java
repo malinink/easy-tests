@@ -1,10 +1,7 @@
 package easytests.models.empty;
 
 import easytests.entities.SubjectEntity;
-import easytests.models.IssueStandardModelInterface;
-import easytests.models.SubjectModelInterface;
-import easytests.models.TopicModelInterface;
-import easytests.models.UserModelInterface;
+import easytests.models.*;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
 import java.util.List;
 
@@ -81,4 +78,11 @@ public class SubjectModelEmpty extends AbstractModelEmpty implements SubjectMode
         throw new CallMethodOnEmptyModelException();
     }
 
+    @Override
+    public List<IssueModelInterface> getIssues() {
+        throw new CallMethodOnEmptyModelException(); }
+
+    @Override
+    public void setIssues(List<IssueModelInterface> issues) {
+        throw new CallMethodOnEmptyModelException(); }
 }
