@@ -5,6 +5,7 @@ import easytests.mappers.PointsMapper;
 import easytests.models.PointModel;
 import easytests.models.PointModelInterface;
 import easytests.models.QuizModelInterface;
+import easytests.options.PointsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,11 @@ public class PointsService implements PointsServiceInterface {
     }
 
     @Override
+    public List<PointModelInterface> findAll(PointsOptionsInterface pointsOptions) {
+        return this.withServices(pointsOptions).withRelations(this.findAll());
+    }
+
+    @Override
     public PointModelInterface find(Integer id) {
 
         final PointEntity pointEntity = this.pointsMapper.find(id);
@@ -38,8 +44,18 @@ public class PointsService implements PointsServiceInterface {
     }
 
     @Override
+    public PointModelInterface find(Integer id, PointsOptionsInterface pointsOptions) {
+        return this.withServices(pointsOptions).withRelations(this.find(id));
+    }
+
+    @Override
     public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel) {
         return this.map(this.pointsMapper.findByQuizId(quizModel.getId()));
+    }
+
+    @Override
+    public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel, PointsOptionsInterface pointsOptions) {
+        return this.withServices(pointsOptions).withRelations(this.findByQuiz(quizModel));
     }
 
     @Override
@@ -56,6 +72,29 @@ public class PointsService implements PointsServiceInterface {
     }
 
     @Override
+    public void save(PointModelInterface pointModel, PointsOptionsInterface pointsOptions) {
+        this.withServices(pointsOptions).saveWithRelations(pointModel);
+    }
+
+    @Override
+    public void save(List<PointModelInterface> pointsModels) {
+
+        for (PointModelInterface pointModel: pointsModels) {
+            this.save(pointModel);
+        }
+
+    }
+
+    @Override
+    public void save(List<PointModelInterface> pointsModels, PointsOptionsInterface pointsOptions) {
+
+        for (PointModelInterface pointModel: pointsModels) {
+            this.save(pointModel, pointsOptions);
+        }
+
+    }
+
+    @Override
     public void delete(PointModelInterface pointModel) {
 
         final PointEntity pointEntity = this.map(pointModel);
@@ -63,6 +102,29 @@ public class PointsService implements PointsServiceInterface {
             throw new DeleteUnidentifiedModelException();
         }
         this.pointsMapper.delete(pointEntity);
+
+    }
+
+    @Override
+    public void delete(PointModelInterface pointModel, PointsOptionsInterface pointsOptions) {
+        this.withServices(pointsOptions).deleteWithRelations(pointModel);
+    }
+
+    @Override
+    public void delete(List<PointModelInterface> pointsModels) {
+
+        for (PointModelInterface pointModel: pointsModels) {
+            this.delete(pointModel);
+        }
+
+    }
+
+    @Override
+    public void delete(List<PointModelInterface> pointsModels, PointsOptionsInterface pointsOptions) {
+
+        for (PointModelInterface pointModel: pointsModels) {
+            this.delete(pointModel, pointsOptions);
+        }
 
     }
 
@@ -91,4 +153,16 @@ public class PointsService implements PointsServiceInterface {
         return resultPointList;
 
     }
+
+    private PointsOptionsInterface withServices(PointsOptionsInterface pointsOptions) {
+
+        pointsOptions.setPointsService(this);
+        pointsOptions.setQuizzesService(this.quizzesService);
+        pointsOptions.setQuestionsService(this.questionsService);
+        pointsOptions.setSolutionsService(this.solutionsService);
+
+        return pointsOptions;
+
+    }
+
 }
