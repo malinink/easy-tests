@@ -11,8 +11,6 @@ public interface PointModelInterface extends ModelInterface {
 
     void setId(Integer id);
 
-    Integer getId();
-
     QuestionModelInterface getQuestion();
 
     void setQuestion(QuestionModelInterface question);
