@@ -21,6 +21,10 @@ public interface PointsMapper {
     @Select("SELECT * FROM points")
     List<PointEntity> findAll();
 
+    @Select("SELECT * FROM points WHERE quiz_id=#{quizId}")
+    @ResultMap("Point")
+    List<PointEntity> findByQuizId(Integer quizId);
+
     @Select("SELECT * FROM points WHERE id=#{id}")
     @ResultMap("Point")
     PointEntity find(Integer id);
