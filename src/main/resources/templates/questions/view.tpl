@@ -16,7 +16,7 @@ content: contents {
         def id = 0
         questionTypes.each { questionType ->
           id++
-          if (question.questionTypeId == id)
+          if (question.questionType.id == id)
           {
             p {
               input (id: id, type: 'radio', name: 'questionType', disabled: 'disabled', checked: 'checked')
