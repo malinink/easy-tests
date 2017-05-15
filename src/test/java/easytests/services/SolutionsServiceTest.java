@@ -25,6 +25,7 @@ import static org.mockito.BDDMockito.*;
 
 /**
  * @author SingularityA
+ * @author loriens 
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
