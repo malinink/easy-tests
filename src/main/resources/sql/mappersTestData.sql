@@ -216,7 +216,7 @@ INSERT INTO testees (first_name, last_name, surname, group_number, quiz_id) VALU
 INSERT INTO points (question_id, quiz_id) VALUES
 	(1, 1),
 	(2, 2),
-	(3, 3);
+	(3, 2);
 
 INSERT INTO issues (name, author_id) VALUES
   ('Name1', 11),
