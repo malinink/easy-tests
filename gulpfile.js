@@ -49,6 +49,17 @@ gulp.task('css', function() {
 gulp.task('img', function() {
 });
 
-gulp.task('default', ['fonts', 'js', 'css', 'img']);
+gulp.task('additional_files', function() {
+    gulp.src(config.docs + '*.html')
+        .pipe(gulp.dest(config.dest));
+
+    gulp.src(config.docs + 'css/*.css')
+        .pipe(gulp.dest(config.dest + 'css'));
+
+    gulp.src(config.docs + 'js/*.js')
+        .pipe(gulp.dest(config.dest + 'js'));
+});
+
+gulp.task('default', ['fonts', 'js', 'css', 'img', 'additional_files']);
 
 
