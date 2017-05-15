@@ -17,23 +17,27 @@ public interface IssuesMapper {
             value = {
                     @Result(property = "id", column = "id"),
                     @Result(property = "name", column = "name"),
-                    @Result(property = "authorId", column = "author_id")
+                    @Result(property = "subjectId", column = "subject_id")
             })
 
-    @Select("SELECT id,name,author_id FROM issues")
+    @Select("SELECT * FROM issues")
     List<IssueEntity> findAll();
 
-    @Select("SELECT id,name,author_id FROM issues WHERE id=#{id}")
+    @Select("SELECT * FROM issues WHERE id=#{id}")
     @ResultMap("Issue")
     IssueEntity find(Integer id);
 
-    @Insert("INSERT INTO issues (name, author_id) VALUES(#{name}, #{authorId})")
+    @Insert("INSERT INTO issues (name, subject_id) VALUES(#{name}, #{subjectId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(IssueEntity issue);
 
-    @Update("UPDATE issues SET name=#{name}, author_id=#{authorId} WHERE id=#{id}")
+    @Update("UPDATE issues SET name=#{name}, subject_id=#{subjectId} WHERE id=#{id}")
     void update(IssueEntity issue);
 
     @Delete("DELETE FROM issues WHERE id=#{id}")
     void delete(IssueEntity issue);
+
+    @Select("SELECT * FROM issues WHERE subject_id=#{subjectId}")
+    @ResultMap("Subject")
+    List<IssueEntity> findBySubjectId(Integer subjectId);
 }
