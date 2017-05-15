@@ -75,6 +75,13 @@ public class SolutionsServiceTest {
         return solutionModel;
     }
 
+    private List<SolutionEntity> getSolutionsEntities() {
+        final List<SolutionEntity> solutionsEntities = new ArrayList<>(2);
+        solutionsEntities.add(this.createSolutionEntityMock(1, 10, 1));
+        solutionsEntities.add(this.createSolutionEntityMock(2, 20, 1));
+        return solutionsEntities;
+    }
+
     private List<SolutionModelInterface> getSolutionsModels(List<SolutionEntity> solutionsEntities) {
         final List<SolutionModelInterface> usersModels = new ArrayList<>(2);
         for (SolutionEntity solutionEntity: solutionsEntities) {
@@ -114,9 +121,7 @@ public class SolutionsServiceTest {
 
     @Test
     public void testFindAllWithOptions() throws Exception {
-        final List<SolutionEntity> solutionsEntities = new ArrayList<>(2);
-        solutionsEntities.add(this.createSolutionEntityMock(1, 10, 1));
-        solutionsEntities.add(this.createSolutionEntityMock(2, 20, 1));
+        final List<SolutionEntity> solutionsEntities = this.getSolutionsEntities();
 
         final List<SolutionModelInterface> solutionsModels = this.getSolutionsModels(solutionsEntities);
         final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
@@ -185,6 +190,25 @@ public class SolutionsServiceTest {
     }
 
     @Test
+    public void testFindWithOptions() throws Exception {
+        final Integer id = 1;
+        final SolutionEntity solutionEntity = this.createSolutionEntityMock(
+                id,
+                1,
+                1
+        );
+        final SolutionModelInterface solutionModel = this.mapSolutionModel(solutionEntity);
+        final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
+        given(this.solutionsMapper.find(id)).willReturn(solutionEntity);
+        given(solutionsOptions.withRelations(solutionModel)).willReturn(solutionModel);
+
+        final SolutionModelInterface foundedSolutionModel = this.solutionsService.find(id, solutionsOptions);
+
+        Assert.assertEquals(solutionModel, foundedSolutionModel);
+        verify(solutionsOptions).withRelations(solutionModel);
+    }
+
+    @Test
     public void testSaveInsertsEntity() throws Exception {
         final SolutionModelInterface solutionModel = this.createSolutionModel(null, 13, 4);
         final Integer id = 5;
@@ -248,5 +272,19 @@ public class SolutionsServiceTest {
         exception.expect(DeleteUnidentifiedModelException.class);
 
         this.solutionsService.delete(solutionModel);
+    }
+
+    @Test
+    public void testDeleteWithOptions() throws Exception {
+        final SolutionModelInterface solutionModel = this.createSolutionModel(
+                1,
+                1,
+                1
+        );
+        final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
+
+        this.solutionsService.delete(solutionModel, solutionsOptions);
+
+        verify(solutionsOptions).deleteWithRelations(solutionModel);
     }
 }
