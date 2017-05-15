@@ -4,6 +4,7 @@ import easytests.entities.PointEntity;
 import easytests.mappers.PointsMapper;
 import easytests.models.PointModel;
 import easytests.models.PointModelInterface;
+import easytests.models.QuizModelInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,10 @@ public class PointsService {
         }
         return this.map(pointEntity);
 
+    }
+
+    public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel) {
+        return this.map(this.pointsMapper.findByQuizId(quizModel.getId()));
     }
 
     public void save(PointModelInterface pointModel) {
