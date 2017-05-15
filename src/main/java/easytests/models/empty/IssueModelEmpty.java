@@ -3,6 +3,7 @@ package easytests.models.empty;
 import easytests.entities.IssueEntity;
 import easytests.models.IssueModelInterface;
 import easytests.models.QuizModelInterface;
+import easytests.models.SubjectModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
 
 import java.util.List;
@@ -35,16 +36,6 @@ public class IssueModelEmpty extends AbstractModelEmpty implements IssueModelInt
     }
 
     @Override
-    public void setAuthorId(Integer authorId) {
-        throw new CallMethodOnEmptyModelException();
-    }
-
-    @Override
-    public Integer getAuthorId() {
-        throw new CallMethodOnEmptyModelException();
-    }
-
-    @Override
     public void map(IssueEntity issueEntity) {
         throw new CallMethodOnEmptyModelException();
     }
@@ -56,7 +47,15 @@ public class IssueModelEmpty extends AbstractModelEmpty implements IssueModelInt
 
     @Override
     public void setQuizzes(List<QuizModelInterface> quizzes) {
-        throw new CallMethodOnEmptyModelException();
-    }
+        throw new CallMethodOnEmptyModelException(); }
+
+    @Override
+    public SubjectModelInterface getSubject() {
+        throw new CallMethodOnEmptyModelException(); }
+
+    @Override
+    public void setSubject(SubjectModelInterface subject) {
+        throw new CallMethodOnEmptyModelException(); }
+
 }
 
