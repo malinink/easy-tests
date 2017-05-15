@@ -43,6 +43,7 @@ public abstract class Models {
         subjectModel.setTopics(new ModelsListEmpty());
         subjectModel.setUser(new UserModelEmpty(userId));
         subjectModel.setIssueStandard(new IssueStandardModelEmpty());
+        subjectModel.setIssues(new ModelsListEmpty());
         return subjectModel;
     }
 
