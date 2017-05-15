@@ -1,6 +1,8 @@
 package easytests.models;
 
 import easytests.entities.IssueEntity;
+import easytests.models.empty.ModelsListEmpty;
+import easytests.models.empty.SubjectModelEmpty;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,19 +31,20 @@ public class IssueModelTest {
     public void testMap() throws Exception {
         final Integer issueId = 1;
         final String name = "Name";
-        final Integer authorId = 11;
+        final Integer subjectId = 1;
         final IssueEntity issueEntity = Mockito.mock(IssueEntity.class);
 
         Mockito.when(issueEntity.getId()).thenReturn(issueId);
         Mockito.when(issueEntity.getName()).thenReturn(name);
-        Mockito.when(issueEntity.getAuthorId()).thenReturn(authorId);
+        Mockito.when(issueEntity.getSubjectId()).thenReturn(subjectId);
 
         final IssueModel issueModel = new IssueModel();
         issueModel.map(issueEntity);
 
         Assert.assertEquals(issueId, issueModel.getId());
         Assert.assertEquals(name, issueModel.getName());
-        Assert.assertEquals(authorId, issueModel.getAuthorId());
+        Assert.assertEquals(new ModelsListEmpty(), issueModel.getQuizzes());
+        Assert.assertEquals(new SubjectModelEmpty(subjectId), issueModel.getSubject());
     }
 
 }
