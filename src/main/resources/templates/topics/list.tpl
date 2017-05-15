@@ -1,8 +1,8 @@
-layout 'layout/main.tpl', title:  'Your topics list',
+layout 'layout/main.tpl', title:  'Topics',
 content: contents {
-  h4 ('Your topics list')
-  a (class:'right waves-effect waves-light btn-floating btn-large blue') {
-    i (class:'material-icons left', 'add', onclick:'document.location.href="/personal/topics/create"')
+  h4 ('Topics')
+  a (class:'right waves-effect waves-light btn-floating btn-large blue', href:'/personal/subjects/' + subjectId + '/topics/create/') {
+    i (class:'material-icons left', 'add')
     yield 'Add'
   }
   table(class: 'striped') {
@@ -14,21 +14,23 @@ content: contents {
       }
     }
     tbody {
-      topics.eachWithIndex { topic, number ->
+      def id = 0
+      topics.each { topic ->
+        id++
         tr {
-          td(number + 1)
-          td(topic.getName())
+          td (id)
+          td (topic.name)
           td() {
-            a (class:'waves-effect waves-light btn-floating blue') {
-              i (class:'material-icons left', 'pageview', onclick:'document.location.href="/personal/topics/'+topic.id + '"')
+            a (class:'waves-effect waves-light btn-floating blue', href:'/personal/subjects/' + subjectId +'/topics/' + topic.id + '/') {
+              i (class:'material-icons left', 'pageview')
               yield 'View'
             }
-            a (class:'waves-effect waves-light btn-floating blue') {
-              i (class:'material-icons left', 'edit', onclick:'document.location.href="/personal/topics/update/'+topic.id + '"')
+            a (class:'waves-effect waves-light btn-floating blue', href:'/personal/subjects/' + subjectId +'/topics/update/' + topic.id + '/') {
+              i (class:'material-icons left', 'edit')
               yield 'Edit'
             }
-            a (class:'waves-effect waves-light btn-floating red') {
-              i (class:'material-icons left', 'delete', onclick:'document.location.href="/personal/topics/delete/'+topic.id + '"')
+            a (class:'waves-effect waves-light btn-floating red', href:'/personal/subjects/' + subjectId +'/topics/delete/' + topic.id + '/') {
+              i (class:'material-icons left', 'delete')
               yield 'Delete'
             }
           }
