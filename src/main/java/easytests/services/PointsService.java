@@ -22,6 +22,15 @@ public class PointsService implements PointsServiceInterface {
     @Autowired
     private PointsMapper pointsMapper;
 
+    @Autowired
+    private QuizzesService quizzesService;
+
+    @Autowired
+    private QuestionsService questionsService;
+
+    @Autowired
+    private SolutionsService solutionsService;
+
     @Override
     public List<PointModelInterface> findAll() {
         return this.map(this.pointsMapper.findAll());
