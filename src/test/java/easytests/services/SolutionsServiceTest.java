@@ -9,6 +9,7 @@ import easytests.models.SolutionModelInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+import easytests.options.SolutionsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -172,6 +173,28 @@ public class SolutionsServiceTest {
 
         verify(this.solutionsMapper, times(1)).insert(this.mapSolutionEntity(solutionModel));
         Assert.assertEquals(id, solutionModel.getId());
+    }
+
+    @Test
+    public void testSaveEntitiesList() throws Exception {
+        final SolutionModelInterface solutionModelFirst = this.createSolutionModel(1, 13, 4);
+        final SolutionModelInterface solutionModelSecond = this.createSolutionModel(2, 10, 3);
+
+        final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
+
+        final List<SolutionModelInterface> solutionModels = new ArrayList<>();
+        solutionModels.add(solutionModelFirst);
+        solutionModels.add(solutionModelSecond);
+
+        final SolutionsServiceInterface solutionsServiceSpy = Mockito.spy(solutionsService);
+
+        solutionsServiceSpy.save(solutionModels);
+        verify(solutionsServiceSpy, times(1)).save(solutionModelFirst);
+        verify(solutionsServiceSpy, times(1)).save(solutionModelSecond);
+
+        solutionsServiceSpy.save(solutionModels, solutionsOptions);
+        verify(solutionsServiceSpy, times(1)).save(solutionModelFirst, solutionsOptions);
+        verify(solutionsServiceSpy, times(1)).save(solutionModelSecond, solutionsOptions);
     }
 
     @Test
