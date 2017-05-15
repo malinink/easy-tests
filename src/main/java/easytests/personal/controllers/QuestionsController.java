@@ -62,7 +62,7 @@ public class QuestionsController extends AbstractCrudController {
             @PathVariable("questionId") Integer questionId,
             @PathVariable("topicId") Integer topicId) {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
-        final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId);
+        final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId, false);
         injectQuestionTypeModels(model);
         model.addAttribute("question", questionModel);
         model.addAttribute("topicId", topicId);
