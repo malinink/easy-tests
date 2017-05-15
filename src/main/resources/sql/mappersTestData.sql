@@ -145,7 +145,7 @@ CREATE TABLE points (
 CREATE TABLE issues (
   id          SERIAL        NOT NULL,
   name        VARCHAR(100)  NOT NULL,
-  author_id   SERIAL        NOT NULL,
+  subject_id  INTEGER       NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -218,7 +218,7 @@ INSERT INTO points (question_id, quiz_id) VALUES
 	(2, 2),
 	(3, 3);
 
-INSERT INTO issues (name, author_id) VALUES
-  ('Name1', 11),
-  ('Name2', 12),
-  ('Name3', 13);
+INSERT INTO issues (name, subject_id) VALUES
+  ('Name1', 1),
+  ('Name2', 2),
+  ('Name3', 3);
