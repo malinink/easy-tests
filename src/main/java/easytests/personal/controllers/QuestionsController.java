@@ -12,7 +12,6 @@ import easytests.options.TopicsOptionsInterface;
 import easytests.options.builder.QuestionsOptionsBuilder;
 import easytests.options.builder.TopicsOptionsBuilder;
 import easytests.personal.dto.QuestionModelDto;
-import easytests.services.AnswersService;
 import easytests.services.QuestionTypesService;
 import easytests.services.QuestionsService;
 import easytests.services.TopicsService;
@@ -35,9 +34,6 @@ public class QuestionsController extends AbstractCrudController {
 
     @Autowired
     protected TopicsService topicsService;
-
-    @Autowired
-    protected AnswersService answersService;
 
     @Autowired
     private QuestionsService questionsService;
@@ -67,10 +63,8 @@ public class QuestionsController extends AbstractCrudController {
             @PathVariable("topicId") Integer topicId) {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
         final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId);
-        getQuestionTypes(model);
-        final QuestionModelDto questionModelDto = new QuestionModelDto();
-        questionModelDto.map(questionModel);
-        model.addAttribute("question", questionModelDto);
+        injectQuestionTypeModels(model);
+        model.addAttribute("question", questionModel);
         model.addAttribute("topicId", topicId);
         return "questions/view";
     }
@@ -78,7 +72,7 @@ public class QuestionsController extends AbstractCrudController {
     @GetMapping("create/")
     public String create(Model model, @PathVariable("topicId") Integer topicId) {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
-        getQuestionTypes(model);
+        injectQuestionTypeModels(model);
         final QuestionModelDto questionModelDto = new QuestionModelDto();
         setCreateBehaviour(model);
         model.addAttribute("question", questionModelDto);
@@ -94,7 +88,7 @@ public class QuestionsController extends AbstractCrudController {
             @PathVariable("topicId") Integer topicId) {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
         if (bindingResult.hasErrors()) {
-            getQuestionTypes(model);
+            injectQuestionTypeModels(model);
             setCreateBehaviour(model);
             model.addAttribute("question", questionModelDto);
             model.addAttribute("topicId", topicId);
@@ -114,10 +108,9 @@ public class QuestionsController extends AbstractCrudController {
             @PathVariable Integer questionId,
             @PathVariable("topicId") Integer topicId) {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
-        final QuestionModelInterface questionModel = this.getQuestionModel(questionId, topicId);
-        getQuestionTypes(model);
+        final QuestionModelInterface questionModel = this.getQuestionModel(questionId, topicId, false);
+        injectQuestionTypeModels(model);
         final QuestionModelDto questionModelDto = new QuestionModelDto();
-
         questionModelDto.map(questionModel);
         setUpdateBehaviour(model);
         model.addAttribute("question", questionModelDto);
@@ -133,9 +126,9 @@ public class QuestionsController extends AbstractCrudController {
             BindingResult bindingResult,
             @PathVariable("topicId") Integer topicId) {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
-        final QuestionModelInterface questionModel = this.getQuestionModel(questionId, topicId);
+        final QuestionModelInterface questionModel = this.getQuestionModel(questionId, topicId, false);
         if (bindingResult.hasErrors()) {
-            getQuestionTypes(model);
+            injectQuestionTypeModels(model);
             setUpdateBehaviour(model);
             model.addAttribute("question", questionModelDto);
             model.addAttribute("topicId", topicId);
@@ -153,7 +146,7 @@ public class QuestionsController extends AbstractCrudController {
             @PathVariable("questionId") Integer questionId,
             @PathVariable("topicId") Integer topicId) {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
-        final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId);
+        final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId, false);
         model.addAttribute("topicId", topicId);
         return "questions/delete";
     }
@@ -164,12 +157,8 @@ public class QuestionsController extends AbstractCrudController {
             @PathVariable("questionId") Integer questionId,
             @PathVariable("topicId") Integer topicId) {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
-        final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId);
-        if (answersService.findByQuestion(questionModel).isEmpty()) {
-            questionsService.delete(questionModel);
-        } else {
-            questionsService.delete(questionModel, this.questionsOptionsBuilder.forDelete());
-        }
+        final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId, true);
+        questionsService.delete(questionModel, this.questionsOptionsBuilder.forDelete());
         return "redirect:/personal/topics/" + topicId + "/questions/";
     }
 
@@ -198,14 +187,17 @@ public class QuestionsController extends AbstractCrudController {
         }
     }
 
-    private QuestionModelInterface getQuestionModel(Integer id, Integer topicId) {
-        final QuestionsOptionsInterface questionsOptionsBuilder = this.questionsOptionsBuilder.forAuth();
-        final QuestionModelInterface questionModel = this.questionsService.find(id, questionsOptionsBuilder);
+    private QuestionModelInterface getQuestionModel(Integer id, Integer topicId, Boolean forDelete) {
+        final QuestionsOptionsInterface questionsOptions = this.questionsOptionsBuilder.forAuth();
+        final QuestionModelInterface questionModel = this.questionsService.find(id, questionsOptions);
         checkModel(questionModel, topicId);
+        if (forDelete) {
+            return this.questionsService.find(id, this.questionsOptionsBuilder.forDelete());
+        }
         return questionModel;
     }
 
-    private void getQuestionTypes(Model model) {
+    private void injectQuestionTypeModels(Model model) {
         final List<QuestionTypeModelInterface> questionTypes = this.questionTypesService.findAll();
         model.addAttribute("questionTypes", questionTypes);
     }
