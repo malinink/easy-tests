@@ -28,7 +28,7 @@ content: contents {
         h6 ('Question type', class: 'grey-text')
         if (errors && errors.hasFieldErrors('questionTypeId')) {
           p {
-            h6 ('Please select correct type!')
+            h6 (errors.getFieldErrors('questionTypeId')*.getDefaultMessage())
           }
         }
         def id = 0
