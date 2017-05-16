@@ -1,7 +1,7 @@
 package easytests.personal.validators;
 
-import easytests.personal.dto.QuestionModelDto;
 import easytests.common.validators.AbstractDtoValidator;
+import easytests.personal.dto.QuestionModelDto;
 import easytests.services.QuestionTypesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
