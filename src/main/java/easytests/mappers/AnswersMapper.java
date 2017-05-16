@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.*;
  * @author rezenbekk
  */
 @Mapper
+@SuppressWarnings("checkstyle:linelength")
 public interface AnswersMapper {
 
     @Results(
@@ -31,13 +32,11 @@ public interface AnswersMapper {
     @ResultMap("AnswerEntity")
     List<AnswerEntity> findByQuestionId(Integer id);
 
-    @Insert("INSERT INTO answers (txt, question_id, serial_number, is_right) VALUES(#{txt},"
-            + " #{questionId}, #{serialNumber}, #{right})")
+    @Insert("INSERT INTO answers (txt, question_id, serial_number, is_right) VALUES(#{txt}, #{questionId}, #{serialNumber}, #{right})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(AnswerEntity answer);
 
-    @Update("UPDATE answers SET txt=#{txt}, question_id=#{questionId}, serial_number=#{serialNumber},"
-            + " is_right=#{right} WHERE id=#{id}")
+    @Update("UPDATE answers SET txt=#{txt}, question_id=#{questionId}, serial_number=#{serialNumber}, is_right=#{right} WHERE id=#{id}")
     void update(AnswerEntity answer);
 
     @Delete("DELETE FROM answers WHERE id=#{id}")
