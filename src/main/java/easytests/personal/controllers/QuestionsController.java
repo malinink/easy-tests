@@ -32,9 +32,6 @@ import org.springframework.web.bind.annotation.*;
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/personal/topics/{topicId}/questions")
 public class QuestionsController extends AbstractCrudController {
-    
-    @Autowired
-    private QuestionModelDtoValidator questionModelDtoValidator;
 
     @Autowired
     protected TopicsService topicsService;
@@ -50,6 +47,9 @@ public class QuestionsController extends AbstractCrudController {
     
     @Autowired
     private TopicsOptionsBuilder topicsOptionsBuilder;
+    
+    @Autowired
+    private QuestionModelDtoValidator questionModelDtoValidator;
 
     @GetMapping("")
     public String list(Model model, @PathVariable("topicId") Integer topicId) {
