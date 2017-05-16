@@ -28,10 +28,12 @@ public class QuestionModelDtoValidator extends AbstractDtoValidator {
 
     private void validateQuestionTypes(Errors errors, QuestionModelDto questionModelDto) {
         final Integer questionTypeId = questionModelDto.getQuestionTypeId();
+        final String questionTypeIdField = "questionTypeId";
         final Integer size = questionTypesService.findAll().size();
-        if (questionTypeId == null)
-            reject(errors, "questionTypeId", "Select question type");
-        else if (!((questionTypeId >= 1) && (questionTypeId <= size)))
-            reject(errors, "questionTypeId", "Wrong question type");
+        if (questionTypeId == null) {
+            reject(errors, questionTypeIdField, "Select question type");
+        } else if (!((questionTypeId >= 1) && (questionTypeId <= size))) {
+            reject(errors, questionTypeIdField, "Wrong question type");
+        }
     }
 }
