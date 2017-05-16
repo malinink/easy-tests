@@ -17,9 +17,6 @@ public class QuestionModelDto {
     @Size(max = 255)
     private String text;
 
-    @NotNull
-    @Min(1)
-    @Max(4)
     private Integer questionTypeId;
 
     public void map(QuestionModelInterface questionModel) {
