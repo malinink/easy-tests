@@ -12,6 +12,7 @@ import easytests.options.TopicsOptionsInterface;
 import easytests.options.builder.QuestionsOptionsBuilder;
 import easytests.options.builder.TopicsOptionsBuilder;
 import easytests.personal.dto.QuestionModelDto;
+import easytests.personal.validators.QuestionModelDtoValidator;
 import easytests.services.QuestionTypesService;
 import easytests.services.QuestionsService;
 import easytests.services.TopicsService;
@@ -31,6 +32,9 @@ import org.springframework.web.bind.annotation.*;
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/personal/topics/{topicId}/questions")
 public class QuestionsController extends AbstractCrudController {
+    
+    @Autowired
+    private QuestionModelDtoValidator questionModelDtoValidator;
 
     @Autowired
     protected TopicsService topicsService;
@@ -87,6 +91,7 @@ public class QuestionsController extends AbstractCrudController {
             BindingResult bindingResult,
             @PathVariable("topicId") Integer topicId) {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
+        this.questionModelDtoValidator.validate(questionModelDto, bindingResult);
         if (bindingResult.hasErrors()) {
             injectQuestionTypeModels(model);
             setCreateBehaviour(model);
@@ -127,6 +132,7 @@ public class QuestionsController extends AbstractCrudController {
             @PathVariable("topicId") Integer topicId) {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
         final QuestionModelInterface questionModel = this.getQuestionModel(questionId, topicId, false);
+        this.questionModelDtoValidator.validate(questionModelDto, bindingResult);
         if (bindingResult.hasErrors()) {
             injectQuestionTypeModels(model);
             setUpdateBehaviour(model);
