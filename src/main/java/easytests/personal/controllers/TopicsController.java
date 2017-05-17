@@ -53,7 +53,7 @@ public class TopicsController extends AbstractCrudController {
         if (topicModel == null) {
             throw new NotFoundException();
         }
-        if (!topicModel.getSubject().getId().equals(this.getCurrentSubjectModel(subjectId).getId())) {
+        if (!topicModel.getSubject().getId().equals(this.getCurrentSubjectModel(subjectId, false).getId())) {
             throw new ForbiddenException();
         }
     }
@@ -80,17 +80,21 @@ public class TopicsController extends AbstractCrudController {
         return topicModel;
     }
 
-    private SubjectModelInterface getCurrentSubjectModel(Integer subjectId) {
+    private SubjectModelInterface getCurrentSubjectModel(Integer subjectId, boolean withTopics) {
         final SubjectsOptionsInterface subjectsOptions = this.subjectsOptionsBuilder.forAuth();
         final SubjectModelInterface subjectModel = subjectsService.find(subjectId, subjectsOptions);
+        if (withTopics) {
+            final List<TopicModelInterface> topics = this.topicsService.findBySubject(subjectModel);
+            subjectModel.setTopics(topics);
+        }
         checkModel(subjectModel);
         return subjectModel;
     }
 
     @GetMapping("")
     public String list(Model model, @PathVariable("subjectId") Integer subjectId) {
-        final List<TopicModelInterface> topics = this.topicsService
-                .findBySubject(this.getCurrentSubjectModel(subjectId));
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId, true);
+        final List<TopicModelInterface> topics = subjectModel.getTopics();
         model.addAttribute("topics", topics);
         model.addAttribute("subjectId", subjectId);
         return "topics/list";
@@ -101,7 +105,7 @@ public class TopicsController extends AbstractCrudController {
                        @PathVariable("subjectId") Integer subjectId,
                        @PathVariable("topicId") Integer topicId
     ) {
-        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId, false);
         final TopicModelInterface topicModel = getTopicModel(topicId, subjectId);
         model.addAttribute("topic", topicModel);
         model.addAttribute("subjectId", subjectId);
@@ -110,7 +114,7 @@ public class TopicsController extends AbstractCrudController {
 
     @GetMapping("create/")
     public String create(Model model, @PathVariable("subjectId") Integer subjectId) {
-        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId, false);
         final TopicDto topic = new TopicDto();
         setCreateBehaviour(model);
         model.addAttribute("topic", topic);
@@ -123,7 +127,7 @@ public class TopicsController extends AbstractCrudController {
                          @Valid @NotNull TopicDto topic,
                          BindingResult bindingResult,
                          @PathVariable("subjectId") Integer subjectId) {
-        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId, false);
         if (bindingResult.hasErrors()) {
             setCreateBehaviour(model);
             model.addAttribute("topic", topic);
@@ -142,7 +146,7 @@ public class TopicsController extends AbstractCrudController {
     public String update(Model model,
                          @PathVariable Integer topicId,
                          @PathVariable("subjectId") Integer subjectId) {
-        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId, false);
         final TopicModelInterface topicModel = this.getTopicModel(topicId, subjectId);
         final TopicDto topic = new TopicDto();
         topic.map(topicModel);
@@ -158,7 +162,7 @@ public class TopicsController extends AbstractCrudController {
                          @Valid @NotNull TopicDto topic,
                          BindingResult bindingResult,
                          @PathVariable("subjectId") Integer subjectId) {
-        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId, false);
         final TopicModelInterface topicModel = this.getTopicModel(topicId, subjectId);
         if (bindingResult.hasErrors()) {
             setUpdateBehaviour(model);
@@ -176,7 +180,7 @@ public class TopicsController extends AbstractCrudController {
     public String deleteConfirmation(Model model,
                                      @PathVariable("topicId") Integer topicId,
                                      @PathVariable("subjectId") Integer subjectId) {
-        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId, false);
         final TopicModelInterface topicModel = this.getTopicModel(topicId, subjectId);
         model.addAttribute("subjectId", subjectId);
         return "topics/delete";
@@ -186,7 +190,7 @@ public class TopicsController extends AbstractCrudController {
     public String delete(Model model,
                          @PathVariable("topicId") Integer topicId,
                          @PathVariable("subjectId") Integer subjectId) {
-        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
+        final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId, false);
         final TopicModelInterface topicModel = getTopicModel(topicId, subjectId, topicsOptionsBuilder.forDelete());
         if (questionsService.findByTopic(topicModel).isEmpty()) {
             topicsService.delete(topicModel);
