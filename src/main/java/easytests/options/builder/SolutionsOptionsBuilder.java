@@ -3,21 +3,21 @@ package easytests.options.builder;
 import easytests.options.SolutionsOptionsInterface;
 
 /**
- * @author nikitalpopov
+ * @author somebody
  */
 public class SolutionsOptionsBuilder implements SolutionsOptionsBuilderInterface {
 
     @Override
     public SolutionsOptionsInterface forDelete() {
 
-        return null;
+        return new SolutionsOptions();
 
     }
 
     @Override
     public SolutionsOptionsInterface forAuth() {
 
-        return null;
+        return new SolutionsOptons();
 
     }
 
