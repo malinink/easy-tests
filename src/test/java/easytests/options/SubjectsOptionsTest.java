@@ -209,7 +209,7 @@ public class SubjectsOptionsTest {
 
         verify(subjectsModels.get(1)).setTopics(topicsModelsSecond);
         verify(subjectsModels.get(1)).setTopics(Mockito.anyList());
-        verify(subjectsModels.get(1)).setIssues(issuesModelsFirst);
+        verify(subjectsModels.get(1)).setIssues(issuesModelsSecond);
         verify(subjectsModels.get(1)).setIssues(Mockito.anyList());
         verify(subjectsModels.get(1)).setIssueStandard(issueStandardModelSecond);
         verify(subjectsModels.get(1)).setUser(userModelSecond);
@@ -235,6 +235,7 @@ public class SubjectsOptionsTest {
         subjectsOptions.setTopicsService(topicsService);
         subjectsOptions.setIssuesService(issuesService);
         subjectsOptions.setIssueStandardsService(issueStandardsService);
+        subjectsOptions.withIssues(issuesOptions);
         subjectsOptions.withTopics(topicsOptions);
         subjectsOptions.withIssueStandard(issueStandardsOptions);
 
@@ -248,7 +249,7 @@ public class SubjectsOptionsTest {
 
         subjectModel.setIssueStandard(issueStandardModel);
 
-        final InOrder inOrder = Mockito.inOrder(subjectsService, issueStandardsService, topicsService, issuesService);
+        final InOrder inOrder = Mockito.inOrder(subjectsService, issueStandardsService, topicsService, issuesService) ;
 
         subjectsOptions.saveWithRelations(subjectModel);
 
@@ -256,6 +257,7 @@ public class SubjectsOptionsTest {
         inOrder.verify(issueStandardsService).save(subjectModel.getIssueStandard(), issueStandardsOptions);
         inOrder.verify(topicsService).save(subjectModel.getTopics(), topicsOptions);
         inOrder.verify(issuesService).save(subjectModel.getIssues(), issuesOptions);
+
     }
 
     @Test
@@ -278,6 +280,7 @@ public class SubjectsOptionsTest {
         subjectsOptions.setTopicsService(topicsService);
         subjectsOptions.setIssuesService(issuesService);
         subjectsOptions.setIssueStandardsService(issueStandardsService);
+        subjectsOptions.withIssues(issuesOptions);
         subjectsOptions.withTopics(topicsOptions);
         subjectsOptions.withIssueStandard(issueStandardsOptions);
 
@@ -291,14 +294,15 @@ public class SubjectsOptionsTest {
 
         subjectModel.setIssueStandard(issueStandardModel);
 
-        final InOrder inOrder = Mockito.inOrder(issuesService, topicsService, issueStandardsService, subjectsService);
+
+
+        final InOrder inOrder = Mockito.inOrder( topicsService,  issueStandardsService, issuesService, subjectsService);
 
         subjectsOptions.deleteWithRelations(subjectModel);
 
-
-        inOrder.verify(issuesService).delete(subjectModel.getIssues(), issuesOptions);
         inOrder.verify(topicsService).delete(subjectModel.getTopics(), topicsOptions);
         inOrder.verify(issueStandardsService).delete(subjectModel.getIssueStandard(), issueStandardsOptions);
+        inOrder.verify(issuesService).delete(subjectModel.getIssues(), issuesOptions);
         inOrder.verify(subjectsService).delete(subjectModel);
 
     }
