@@ -1,23 +1,24 @@
 package easytests.options.builder;
 
+import easytests.options.QuizzesOptions;
 import easytests.options.QuizzesOptionsInterface;
 
 /**
- * @author nikitalpopov
+ * @author somebody
  */
 public class QuizzesOptionsBuilder implements QuizzesOptionsBuilderInterface {
 
     @Override
     public QuizzesOptionsInterface forDelete() {
 
-        return null;
+        return new QuizzesOptions();
 
     }
 
     @Override
     public QuizzesOptionsInterface forAuth() {
 
-        return null;
+        return new QuizzesOptions();
 
     }
 
