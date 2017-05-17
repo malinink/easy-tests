@@ -1,5 +1,7 @@
 package easytests.options.builder;
 
+import easytests.options.PointsOptionsInterface;
+
 /**
  * @author nikitalpopov
  */
