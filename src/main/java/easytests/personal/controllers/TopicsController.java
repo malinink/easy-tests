@@ -103,10 +103,7 @@ public class TopicsController extends AbstractCrudController {
     ) {
         final SubjectModelInterface subjectModel = getCurrentSubjectModel(subjectId);
         final TopicModelInterface topicModel = getTopicModel(topicId, subjectId);
-
-        final TopicDto topic = new TopicDto();
-        topic.map(topicModel);
-        model.addAttribute("topic", topic);
+        model.addAttribute("topic", topicModel);
         model.addAttribute("subjectId", subjectId);
         return "topics/view";
     }
