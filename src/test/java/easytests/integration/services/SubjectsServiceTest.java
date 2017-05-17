@@ -36,7 +36,7 @@ public class SubjectsServiceTest {
         subjectModel.setTopics(new ModelsListEmpty());
         subjectModel.setIssueStandard(new IssueStandardModelEmpty());
         subjectModel.setUser(new UserModelEmpty(userId));
-
+        subjectModel.setIssues(new ModelsListEmpty());
 
         return subjectModel;
     }
