@@ -1,11 +1,16 @@
 package easytests.options.builder;
 
+import easytests.options.PointsOptions;
+import easytests.options.PointsOptionsInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author nikitalpopov
  */
 public class PointsOptionsBuilder implements PointsOptionsBuilderInterface {
+
+    @Autowired
+    private QuizzesOptionsBuilder quizzesOptionsBuilder;
 
     @Autowired
     private SolutionsOptionsBuilder solutionsOptionsBuilder;
@@ -22,7 +27,7 @@ public class PointsOptionsBuilder implements PointsOptionsBuilderInterface {
     public PointsOptionsInterface forAuth() {
 
         return new PointsOptions()
-                .withSolutions(this.solutionsOptionsBuilder.forAuth());
+                .withQuiz(this.quizzesOptionsBuilder.forAuth());
 
     }
 
