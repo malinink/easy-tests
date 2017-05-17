@@ -14,7 +14,7 @@ public class TopicDto {
 
     @NotNull
     @NotEmpty
-    @Size(max = 255)
+    @Size(max = 30)
     private String name;
 
     public void map(TopicModelInterface topicModel) {
