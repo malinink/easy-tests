@@ -29,19 +29,17 @@ public class QuizEntityTest {
         final Integer quizId = 420;
         final Integer issueId = 2;
         final String inviteCode = "code";
-        final boolean codeExpired=false;
+        final Boolean codeExpired=false;
         final LocalDateTime startedAt=LocalDateTime.of(1,1,1,1,1);
         final LocalDateTime finishedAt=LocalDateTime.of(2,1,1,1,1);
 
         final QuizModelInterface quizModel = Mockito.mock(QuizModelInterface.class);
         Mockito.when(quizModel.getId()).thenReturn(quizId);
-
         Mockito.when(quizModel.getIssue()).thenReturn(new IssueModelEmpty(issueId));
-       // Mockito.when(quizModel.getIssue().getId()).thenReturn(issueId);
         Mockito.when(quizModel.getStartedAt()).thenReturn(startedAt);
         Mockito.when(quizModel.getInviteCode()).thenReturn(inviteCode);
         Mockito.when(quizModel.getFinishedAt()).thenReturn(finishedAt);
-        Mockito.when(quizModel.isCodeExpired()).thenReturn(codeExpired);
+        Mockito.when(quizModel.getCodeExpired()).thenReturn(codeExpired);
 
         final QuizEntity quizEntity = new QuizEntity();
         quizEntity.map(quizModel);
@@ -51,7 +49,7 @@ public class QuizEntityTest {
         Assert.assertEquals(inviteCode, quizEntity.getInviteCode());
         Assert.assertEquals(startedAt, quizEntity.getStartedAt());
         Assert.assertEquals(finishedAt, quizEntity.getFinishedAt());
-        Assert.assertEquals(codeExpired, quizEntity.isCodeExpired());
+        Assert.assertEquals(codeExpired, quizEntity.getCodeExpired());
     }
 
 }
