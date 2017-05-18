@@ -285,7 +285,6 @@ public class IssuesServiceTest {
         verify(issuesOptions).deleteWithRelations(issueModel);
     }
 
-    @Ignore
     @Test
     public void testMultipleSaveAndDelete(){
         final IssueModelInterface issueModelFirst = Models.createIssueModel(
