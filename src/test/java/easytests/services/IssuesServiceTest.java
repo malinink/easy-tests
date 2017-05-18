@@ -285,4 +285,43 @@ public class IssuesServiceTest {
         verify(issuesOptions).deleteWithRelations(issueModel);
     }
 
+    @Ignore
+    @Test
+    public void testMultipleSaveAndDelete(){
+        final IssueModelInterface issueModelFirst = Models.createIssueModel(
+                1,
+                "Name",
+                1
+        );
+        final IssueModelInterface issueModelSecond = Models.createIssueModel(
+                2,
+                "Name2",
+                2
+        );
+        final ArrayList<IssueModelInterface> issueModels=new ArrayList<>();
+        issueModels.add(issueModelFirst);
+        issueModels.add(issueModelSecond);
+        this.issuesService.save(issueModels);
+        verify(this.issuesMapper, times(1)).update(this.mapIssueEntity(issueModelFirst));
+        verify(this.issuesMapper, times(1)).update(this.mapIssueEntity(issueModelSecond));
+
+        this.issuesService.delete(issueModels);
+
+        verify(this.issuesMapper, times(1)).delete(this.mapIssueEntity(issueModelFirst));
+        verify(this.issuesMapper, times(1)).delete(this.mapIssueEntity(issueModelSecond));
+
+
+        final IssuesOptionsInterface issuesOptions = Mockito.mock(IssuesOptionsInterface.class);
+
+        this.issuesService.save(issueModels, issuesOptions);
+
+        verify(issuesOptions).saveWithRelations(issueModelFirst);
+        verify(issuesOptions).saveWithRelations(issueModelSecond);
+
+        this.issuesService.delete(issueModels, issuesOptions);
+
+        verify(issuesOptions).deleteWithRelations(issueModelFirst);
+        verify(issuesOptions).deleteWithRelations(issueModelSecond);
+    }
+
 }
