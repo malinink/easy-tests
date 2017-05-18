@@ -80,9 +80,11 @@ public class SubjectModelEmpty extends AbstractModelEmpty implements SubjectMode
 
     @Override
     public List<IssueModelInterface> getIssues() {
-        throw new CallMethodOnEmptyModelException(); }
+        throw new CallMethodOnEmptyModelException();
+    }
 
     @Override
     public void setIssues(List<IssueModelInterface> issues) {
-        throw new CallMethodOnEmptyModelException(); }
+        throw new CallMethodOnEmptyModelException();
+    }
 }
