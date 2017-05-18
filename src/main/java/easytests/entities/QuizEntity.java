@@ -16,7 +16,7 @@ public class QuizEntity {
 
     private String inviteCode;
 
-    private boolean codeExpired;
+    private Boolean codeExpired;
 
     private LocalDateTime startedAt;
 
@@ -25,7 +25,7 @@ public class QuizEntity {
     public void map(QuizModelInterface quizModel) {
 
         this.setId(quizModel.getId());
-        this.setCodeExpired(quizModel.isCodeExpired());
+        this.setCodeExpired(quizModel.getCodeExpired());
         this.setStartedAt(quizModel.getStartedAt());
         this.setFinishedAt(quizModel.getFinishedAt());
         this.setInviteCode(quizModel.getInviteCode());
