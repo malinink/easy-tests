@@ -60,7 +60,7 @@ public class TesteesServiceTest {
 
         final TesteeModelInterface testeeModel = Models.createTesteeModel(id, "FirstName1", "LastName1", "Surname1", 301, quizId);
         final QuizModelInterface quizModel = Models.createQuizModel(quizId, "test_invite_code1", 1,
-                LocalDateTime.of(2017,6,18,0,0,0),LocalDateTime.of(2017,6,19,0,0,0),false);
+                LocalDateTime.of(2003,2,1,0,0,0),LocalDateTime.of(2003,3,1,0,0,0),false);
         testeeModel.setQuiz(quizModel);
 
         final TesteeModelInterface foundedTesteeModel
