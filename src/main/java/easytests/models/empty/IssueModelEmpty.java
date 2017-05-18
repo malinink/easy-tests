@@ -47,15 +47,18 @@ public class IssueModelEmpty extends AbstractModelEmpty implements IssueModelInt
 
     @Override
     public void setQuizzes(List<QuizModelInterface> quizzes) {
-        throw new CallMethodOnEmptyModelException(); }
+        throw new CallMethodOnEmptyModelException();
+    }
 
     @Override
     public SubjectModelInterface getSubject() {
-        throw new CallMethodOnEmptyModelException(); }
+        throw new CallMethodOnEmptyModelException();
+    }
 
     @Override
     public void setSubject(SubjectModelInterface subject) {
-        throw new CallMethodOnEmptyModelException(); }
+        throw new CallMethodOnEmptyModelException();
+    }
 
 }
 
