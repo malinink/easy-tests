@@ -31,4 +31,10 @@ public class AnswersOptionsBuilderTest {
 
     }
 
+    @Test
+    public void testForDelete() throws Exception {
+        final AnswersOptionsInterface answersOptions = new AnswersOptions();
+        Assert.assertEquals(new AnswersOptions(), this.answersOptionsBuilder.forDelete());
+    }
+
 }
