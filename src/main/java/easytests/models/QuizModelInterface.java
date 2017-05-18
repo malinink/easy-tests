@@ -15,9 +15,9 @@ public interface QuizModelInterface extends ModelInterface {
 
     void setInviteCode(String inviteCode);
 
-    boolean isCodeExpired();
+    Boolean getCodeExpired();
 
-    void setCodeExpired(boolean codeExpired);
+    void setCodeExpired(Boolean codeExpired);
 
     LocalDateTime getStartedAt();
 
