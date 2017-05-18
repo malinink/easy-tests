@@ -6,6 +6,8 @@ import easytests.models.PointModelInterface;
 import easytests.models.QuizModelInterface;
 import easytests.models.TesteeModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -62,6 +64,36 @@ public class QuizModelEmpty extends AbstractModelEmpty implements QuizModelInter
 
     @Override
     public void setTestee(TesteeModelInterface testee) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setCodeExpired(boolean codeExpired) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setFinishedAt(LocalDateTime finishedAt) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setStartedAt(LocalDateTime startedAt) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public boolean isCodeExpired() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public LocalDateTime getStartedAt() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public LocalDateTime getFinishedAt() {
         throw new CallMethodOnEmptyModelException();
     }
 
