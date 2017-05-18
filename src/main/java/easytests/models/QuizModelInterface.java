@@ -2,6 +2,7 @@ package easytests.models;
 
 import easytests.entities.QuizEntity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -13,6 +14,18 @@ public interface QuizModelInterface extends ModelInterface {
     String getInviteCode();
 
     void setInviteCode(String inviteCode);
+
+    boolean isCodeExpired();
+
+    void setCodeExpired(boolean codeExpired);
+
+    LocalDateTime getStartedAt();
+
+    LocalDateTime getFinishedAt();
+
+    void setStartedAt(LocalDateTime startedAt);
+
+    void setFinishedAt(LocalDateTime finishedAt);
 
     List<PointModelInterface> getPoints();
 
