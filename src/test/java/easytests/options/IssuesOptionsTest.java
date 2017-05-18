@@ -189,10 +189,14 @@ public class IssuesOptionsTest {
     public void testSaveDeleteWithSubject(){
         final IssuesOptionsInterface issuesOptions = new IssuesOptions();
 
+
+        final IssuesServiceInterface issuesService = Mockito.mock(IssuesServiceInterface.class);
+
         final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
 
         final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
 
+        issuesOptions.setIssuesService(issuesService);
         issuesOptions.setSubjectsService(subjectsService);
         issuesOptions.withSubject(subjectsOptions);
 
@@ -202,12 +206,11 @@ public class IssuesOptionsTest {
 
         issuesOptionsSpy.saveWithRelations(issueModel);
 
-        verify(subjectsOptions, times(1)).saveWithRelations(issueModel.getSubject());
+        verify(subjectsService, times(1)).save(issueModel.getSubject(), subjectsOptions);
 
         issuesOptionsSpy.deleteWithRelations(issueModel);
 
-        verify(subjectsOptions, times(1)).deleteWithRelations(issueModel.getSubject());
-
+        verify(subjectsService, times(1)).delete(issueModel.getSubject(), subjectsOptions);
 
     }
 }
