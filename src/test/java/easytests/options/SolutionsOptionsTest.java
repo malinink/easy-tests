@@ -1,8 +1,11 @@
 package easytests.options;
 
+import easytests.models.AnswerModelInterface;
 import easytests.models.PointModelInterface;
 import easytests.models.SolutionModelInterface;
+import easytests.models.empty.AnswerModelEmpty;
 import easytests.models.empty.PointModelEmpty;
+import easytests.services.AnswersServiceInterface;
 import easytests.services.PointsServiceInterface;
 import easytests.services.SolutionsServiceInterface;
 import org.junit.Assert;
@@ -24,26 +27,35 @@ public class SolutionsOptionsTest {
 
         solutionModel.setId(1);
         given(solutionModel.getPoint()).willReturn(new PointModelEmpty(1));
+        given(solutionModel.getAnswer()).willReturn(new AnswerModelEmpty(1));
 
         final SolutionsOptionsInterface solutionsOptions = new SolutionsOptions();
         final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
+        final AnswersOptionsInterface answerOptions = Mockito.mock(AnswersOptionsInterface.class);
 
         final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
+        final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
 
         solutionsOptions.setPointsService(pointsService);
+        solutionsOptions.setAnswersService(answersService);
         solutionsOptions.withPoint(pointsOptions);
+        solutionsOptions.withAnswer(answerOptions);
 
         final PointModelInterface pointModel = Mockito.mock(PointModelInterface.class);
+        final AnswerModelInterface answerModel = Mockito.mock(AnswerModelInterface.class);
 
         given(pointsService.find(solutionModel.getPoint().getId(), pointsOptions)).willReturn(pointModel);
+        given(answersService.find(solutionModel.getAnswer().getId(), answerOptions)).willReturn(answerModel);
 
         final SolutionModelInterface solutionModelWithRelations = solutionsOptions.withRelations(solutionModel);
 
         Assert.assertEquals(solutionModel, solutionModelWithRelations);
 
         verify(pointsService).find(solutionModel.getPoint().getId(), pointsOptions);
+        verify(answersService).find(solutionModel.getAnswer().getId(), answerOptions);
 
         verify(solutionModel).setPoint(pointModel);
+        verify(solutionModel).setAnswer(answerModel);
     }
 
     @Test
@@ -52,8 +64,10 @@ public class SolutionsOptionsTest {
         final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
 
         final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
+        final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
 
         solutionsOptions.setPointsService(pointsService);
+        solutionsOptions.setAnswersService(answersService);
 
         final SolutionModelInterface nullSolutionModel = null;
         final SolutionModelInterface solutionModelWithRelations = solutionsOptions.withRelations(nullSolutionModel);
