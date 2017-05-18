@@ -22,15 +22,30 @@ gulp.task('fonts', function() {
 gulp.task('js', function() {
     gulp.src(plugins.mainBowerFiles())
         .pipe(plugins.filter('*.js'))
-        .pipe(gulp.dest(config.docs + 'js'))
+        .pipe(gulp.dest(config.docs + 'js'));
+
+    gulp.src(config.docs + 'js/*.js')
+        .pipe(gulp.dest(config.dest + 'js'))
+        .pipe(plugins.uglify())
+        .pipe(plugins.rename({
+            suffix: ".min"
+        }))
         .pipe(gulp.dest(config.dest + 'js'));
 });
 
 gulp.task('css', function() {
     gulp.src(plugins.mainBowerFiles())
         .pipe(plugins.filter('*.css'))
-        .pipe(gulp.dest(config.docs + 'css'))
-        .pipe(gulp.dest(config.dest + 'css'));
+        .pipe(gulp.dest(config.docs + 'css'));
+
+    gulp.src(config.docs + 'css/*.css')
+        .pipe(gulp.dest(config.dest + 'css'))
+        .pipe(gulp.dest(config.dest + 'css'))
+        .pipe(plugins.cleanCss())
+        .pipe(plugins.rename({
+            suffix: ".min"
+        }))
+        .pipe(gulp.dest(config.dest + 'css'))
 });
 
 gulp.task('img', function() {
