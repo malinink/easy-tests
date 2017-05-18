@@ -49,8 +49,14 @@ public class SolutionsService implements SolutionsServiceInterface {
         return this.withServices(solutionsOptions).withRelations(this.find(id));
     }
 
-    public List<SolutionModelInterface> findByPoint(PointModelInterface point) {
-        return this.map(this.solutionsMapper.findByPointId(point.getId()));
+    public List<SolutionModelInterface> findByPoint(PointModelInterface pointModel) {
+        return this.map(this.solutionsMapper.findByPointId(pointModel.getId()));
+    }
+
+    @Override
+    public List<SolutionModelInterface> findByPoint(PointModelInterface pointModel,
+                                             SolutionsOptionsInterface solutionsOptions) {
+        return this.withServices(solutionsOptions).withRelations(this.findByPoint(pointModel));
     }
 
     @Override

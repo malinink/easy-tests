@@ -20,6 +20,9 @@ public interface SolutionsServiceInterface extends ServiceInterface {
 
     List<SolutionModelInterface> findByPoint(PointModelInterface point);
 
+    List<SolutionModelInterface> findByPoint(PointModelInterface point,
+                                             SolutionsOptionsInterface solutionsOptions);
+
     void save(SolutionModelInterface solutionModel);
 
     void save(SolutionModelInterface solutionModel,
