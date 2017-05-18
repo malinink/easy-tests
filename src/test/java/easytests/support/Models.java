@@ -3,6 +3,8 @@ package easytests.support;
 import easytests.models.*;
 import easytests.models.empty.*;
 
+import java.time.LocalDateTime;
+
 /**
  * @author malinink
  */
@@ -132,11 +134,17 @@ public abstract class Models {
     public static QuizModelInterface createQuizModel(
             Integer id,
             String inviteCode,
-            Integer issueId
+            Integer issueId,
+            LocalDateTime startedAt,
+            LocalDateTime finishedAt,
+            boolean codeExpired
     ){
         final QuizModelInterface quizModel = new QuizModel();
         quizModel.setId(id);
         quizModel.setInviteCode(inviteCode);
+        quizModel.setStartedAt(startedAt);
+        quizModel.setFinishedAt(finishedAt);
+        quizModel.setCodeExpired(codeExpired);
         quizModel.setIssue(new IssueModelEmpty(issueId));
         quizModel.setPoints(new ModelsListEmpty());
         quizModel.setTestee(new TesteeModelEmpty());
@@ -168,5 +176,6 @@ public abstract class Models {
         pointModel.setSolutions(new ModelsListEmpty());
         return pointModel;
     }
+
 
 }
