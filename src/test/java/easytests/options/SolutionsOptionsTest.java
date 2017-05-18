@@ -82,23 +82,30 @@ public class SolutionsOptionsTest {
 
         final SolutionsOptionsInterface solutionsOptions = new SolutionsOptions();
         final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
+        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
 
         final SolutionsServiceInterface solutionsService = Mockito.mock(SolutionsServiceInterface.class);
         final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
+        final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
 
         solutionsOptions.setSolutionsService(solutionsService);
         solutionsOptions.setPointsService(pointsService);
         solutionsOptions.withPoint(pointsOptions);
+        solutionsOptions.setAnswersService(answersService);
+        solutionsOptions.withAnswer(answersOptions);
 
         final PointModelInterface pointModel = Mockito.mock(PointModelInterface.class);
+        final AnswerModelInterface answerModel = Mockito.mock(AnswerModelInterface.class);
         solutionModel.setPoint(pointModel);
+        solutionModel.setAnswer(answerModel);
 
-        final InOrder inOrder = Mockito.inOrder(solutionsService, pointsService);
+        final InOrder inOrder = Mockito.inOrder(solutionsService, pointsService, answersService);
 
         solutionsOptions.saveWithRelations(solutionModel);
 
         inOrder.verify(solutionsService).save(solutionModel);
         inOrder.verify(pointsService).save(solutionModel.getPoint(), pointsOptions);
+        inOrder.verify(answersService).save(solutionModel.getAnswer(), answersOptions);
 
     }
 
@@ -108,22 +115,29 @@ public class SolutionsOptionsTest {
 
         final SolutionsOptionsInterface solutionsOptions = new SolutionsOptions();
         final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
+        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
 
         final SolutionsServiceInterface solutionsService = Mockito.mock(SolutionsServiceInterface.class);
         final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
+        final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
 
         solutionsOptions.setSolutionsService(solutionsService);
         solutionsOptions.setPointsService(pointsService);
         solutionsOptions.withPoint(pointsOptions);
+        solutionsOptions.setAnswersService(answersService);
+        solutionsOptions.withAnswer(answersOptions);
 
         final PointModelInterface pointModel = Mockito.mock(PointModelInterface.class);
+        final AnswerModelInterface answerModel = Mockito.mock(AnswerModelInterface.class);
         solutionModel.setPoint(pointModel);
+        solutionModel.setAnswer(answerModel);
 
-        final InOrder inOrder = Mockito.inOrder(pointsService, solutionsService);
+        final InOrder inOrder = Mockito.inOrder(pointsService, answersService, solutionsService);
 
         solutionsOptions.deleteWithRelations(solutionModel);
 
         inOrder.verify(pointsService).delete(solutionModel.getPoint(), pointsOptions);
+        inOrder.verify(answersService).delete(solutionModel.getAnswer(), answersOptions);
         inOrder.verify(solutionsService).delete(solutionModel);
 
     }
@@ -136,10 +150,14 @@ public class SolutionsOptionsTest {
         final SolutionsServiceInterface solutionsService = Mockito.mock(SolutionsServiceInterface.class);
         final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
         final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
+        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
+        final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
 
         solutionsOptions.setSolutionsService(solutionsService);
         solutionsOptions.setPointsService(pointsService);
         solutionsOptions.withPoint(pointsOptions);
+        solutionsOptions.setAnswersService(answersService);
+        solutionsOptions.withAnswer(answersOptions);
 
         final SolutionsOptionsInterface solutionsOptionsSpy = Mockito.spy(solutionsOptions);
 
