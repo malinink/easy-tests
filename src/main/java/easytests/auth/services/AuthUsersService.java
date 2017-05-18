@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
 /**
  * @author malinink
  */
@@ -25,7 +24,7 @@ public class AuthUsersService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         final UserModelInterface userModel = usersService.findByEmail(email);
-        if (userModel == null) {
+        if (userModel == null || userModel.getState() != 1) {
             throw new UsernameNotFoundException("No user found with login: " + email);
         }
         return new User(
