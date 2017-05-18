@@ -7,9 +7,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.meanbean.test.BeanTester;
-import org.meanbean.test.EqualsMethodTester;
-import org.meanbean.test.HashCodeMethodTester;
+import org.meanbean.test.*;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,12 +18,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class IssueModelTest {
-    @Ignore
+
     @Test
     public void testCommon() throws Exception {
-        new BeanTester().testBean(IssueModel.class);
-        new EqualsMethodTester().testEqualsMethod(IssueModel.class);
-        new HashCodeMethodTester().testHashCodeMethod(IssueModel.class);
+        Configuration configuration = new ConfigurationBuilder()
+                .ignoreProperty("quizzes")
+                .ignoreProperty("subject")
+                .build();
+        new BeanTester().testBean(IssueModel.class, configuration);
     }
 
     @Test
