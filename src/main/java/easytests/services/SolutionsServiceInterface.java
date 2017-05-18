@@ -34,5 +34,9 @@ public interface SolutionsServiceInterface extends ServiceInterface {
 
     void delete(SolutionModelInterface solutionModel);
 
+    void delete(List<SolutionModelInterface> solutionsModel);
+
     void delete(SolutionModelInterface solutionModel, SolutionsOptionsInterface solutionsOptions);
+
+    void delete(List<SolutionModelInterface> solutionsModel, SolutionsOptionsInterface solutionsOptions);
 }

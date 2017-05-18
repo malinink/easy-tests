@@ -100,8 +100,22 @@ public class SolutionsService implements SolutionsServiceInterface {
     }
 
     @Override
+    public void delete(List<SolutionModelInterface> solutionsModel) {
+        for (SolutionModelInterface solutionModel: solutionsModel) {
+            this.delete(solutionModel);
+        }
+    }
+
+    @Override
     public void delete(SolutionModelInterface solutionModel, SolutionsOptionsInterface solutionsOptions) {
         this.withServices(solutionsOptions).deleteWithRelations(solutionModel);
+    }
+
+    @Override
+    public void delete(List<SolutionModelInterface> solutionsModel, SolutionsOptionsInterface solutionsOptions) {
+        for (SolutionModelInterface solutionModel: solutionsModel) {
+            this.delete(solutionModel, solutionsOptions);
+        }
     }
 
     private SolutionModelInterface map(SolutionEntity solutionEntity) {
