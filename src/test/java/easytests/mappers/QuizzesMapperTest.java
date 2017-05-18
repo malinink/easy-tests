@@ -41,7 +41,7 @@ public class QuizzesMapperTest {
         Assert.assertEquals("test_invite_code1", quiz.getInviteCode());
         Assert.assertEquals(LocalDateTime.of(2003,2,1,0,0,0), quiz.getStartedAt());
         Assert.assertEquals(LocalDateTime.of(2003,3,1,0,0,0), quiz.getFinishedAt());
-        Assert.assertEquals(false, quiz.isCodeExpired());
+        Assert.assertEquals(false, quiz.getCodeExpired());
     }
 
     @Test
@@ -73,7 +73,7 @@ public class QuizzesMapperTest {
         Assert.assertEquals("test_invite_code3", quizEntities.get(0).getInviteCode());
         Assert.assertEquals(LocalDateTime.of(2003,2,1,0,0,0), quizEntities.get(0).getStartedAt());
         Assert.assertEquals(LocalDateTime.of(2003,3,1,0,0,0), quizEntities.get(0).getFinishedAt());
-        Assert.assertEquals(true, quizEntities.get(0).isCodeExpired());
+        Assert.assertEquals(true, quizEntities.get(0).getCodeExpired());
     }
 
     @Test
@@ -98,7 +98,7 @@ public class QuizzesMapperTest {
         Mockito.when(testQuiz.getIssueId()).thenReturn(testIssueId);
         Mockito.when(testQuiz.getStartedAt()).thenReturn(testStartedAt);
         Mockito.when(testQuiz.getFinishedAt()).thenReturn(testFinishedAt);
-        Mockito.when(testQuiz.isCodeExpired()).thenReturn(testCodeExpired);
+        Mockito.when(testQuiz.getCodeExpired()).thenReturn(testCodeExpired);
 
         quizzesMapper.insert(testQuiz);
 
@@ -111,7 +111,7 @@ public class QuizzesMapperTest {
         Assert.assertEquals(testInviteCode, readQuiz.getInviteCode());
         Assert.assertEquals(testStartedAt, readQuiz.getStartedAt());
         Assert.assertEquals(testFinishedAt, readQuiz.getFinishedAt());
-        Assert.assertEquals(testCodeExpired, readQuiz.isCodeExpired());
+        Assert.assertEquals(testCodeExpired, readQuiz.getCodeExpired());
     }
 
     @Test
@@ -137,7 +137,7 @@ public class QuizzesMapperTest {
         Mockito.when(quiz.getInviteCode()).thenReturn(inviteCode);
         Mockito.when(quiz.getStartedAt()).thenReturn(testStartedAt);
         Mockito.when(quiz.getFinishedAt()).thenReturn(testFinishedAt);
-        Mockito.when(quiz.isCodeExpired()).thenReturn(testCodeExpired);
+        Mockito.when(quiz.getCodeExpired()).thenReturn(testCodeExpired);
 
         this.quizzesMapper.update(quiz);
 
@@ -145,7 +145,7 @@ public class QuizzesMapperTest {
         Assert.assertEquals(inviteCode, readQuiz.getInviteCode());
         Assert.assertEquals(testStartedAt, readQuiz.getStartedAt());
         Assert.assertEquals(testFinishedAt, readQuiz.getFinishedAt());
-        Assert.assertEquals(testCodeExpired, readQuiz.isCodeExpired());
+        Assert.assertEquals(testCodeExpired, readQuiz.getCodeExpired());
 
     }
 
