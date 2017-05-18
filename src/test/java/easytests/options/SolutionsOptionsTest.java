@@ -130,10 +130,10 @@ public class SolutionsOptionsTest {
         final SolutionsOptionsInterface solutionsOptionsSpy = Mockito.spy(solutionsOptions);
 
         solutionsOptionsSpy.deleteWithRelations(solutionModel);
-        verify(pointsOptions, times(1)).deleteWithRelations(solutionModel.getPoint(), pointsOptions);
+        verify(pointsOptions, times(1)).deleteWithRelations(solutionModel.getPoint());
 
 /*        solutionsOptionsSpy.saveWithRelations(solutionModel);
-        verify(pointsOptions, times(1)).saveWithRelations(solutionModel.getPoint(), pointsOptions);*/
+        verify(pointsOptions, times(1)).saveWithRelations(solutionModel.getPoint());*/
 
     }
 }
