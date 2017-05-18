@@ -1,15 +1,14 @@
 package easytests.personal.validators;
 
-import easytests.models.QuestionTypeModelInterface;
 import easytests.common.validators.AbstractDtoValidator;
+import easytests.models.QuestionTypeModelInterface;
 import easytests.personal.dto.QuestionModelDto;
 import easytests.services.QuestionTypesService;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * @author firkhraag
