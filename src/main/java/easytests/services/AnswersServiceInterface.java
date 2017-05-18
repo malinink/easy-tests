@@ -20,6 +20,8 @@ public interface AnswersServiceInterface extends ServiceInterface {
 
     AnswerModelInterface find(Integer id);
 
+    AnswerModelInterface find(Integer id, AnswersOptionsInterface answersOptions);
+
     void save(AnswerModelInterface answerModel);
 
     void save(AnswerModelInterface answerModel, AnswersOptionsInterface answersOptions);
