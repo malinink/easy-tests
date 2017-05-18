@@ -21,23 +21,6 @@ public class AuthUsersService implements UserDetailsService {
     @Autowired
     private UsersService usersService;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        final UserModelInterface userModel = usersService.findByEmail(email);
-        if (userModel == null || userModel.getState() != 1) {
-            throw new UsernameNotFoundException("No user found with login: " + email);
-        }
-        return new User(
-                userModel.getEmail(),
-                userModel.getPassword(),
-                true,
-                true,
-                true,
-                true,
-                this.getAuthorities(userModel)
-        );
-    }
-
     private static List<GrantedAuthority> getAuthorities(UserModelInterface userModel) {
         final List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_TESTEE"));
@@ -46,5 +29,34 @@ public class AuthUsersService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         return authorities;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        final UserModelInterface userModel = usersService.findByEmail(email);
+        if (userModel == null) {
+            throw new UsernameNotFoundException("No user found with login: " + email);
+        }
+        if (userModel.getState() == 3) {
+            return new User(
+                    userModel.getEmail(),
+                    userModel.getPassword(),
+                    true,
+                    true,
+                    true,
+                    true,
+                    this.getAuthorities(userModel)
+            );
+        } else {
+            return new User(
+                    userModel.getEmail(),
+                    userModel.getPassword(),
+                    true,
+                    true,
+                    true,
+                    false,
+                    this.getAuthorities(userModel)
+            );
+        }
     }
 }
