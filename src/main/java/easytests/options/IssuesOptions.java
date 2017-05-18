@@ -58,12 +58,13 @@ public class IssuesOptions implements IssuesOptionsInterface {
 
     @Override
     public void saveWithRelations(IssueModelInterface issueModel) {
+
         if (this.subjectsOptions != null) {
-            this.subjectsOptions.withIssues(this);
-            this.subjectsOptions.saveWithRelations(issueModel.getSubject());
-            return;
+            this.subjectsService.save(issueModel.getSubject(), this.subjectsOptions);
         }
+
         this.issuesService.save(issueModel);
+
         if (this.quizzesOptions != null) {
             this.quizzesService.save(issueModel.getQuizzes(), this.quizzesOptions);
         }
@@ -72,17 +73,17 @@ public class IssuesOptions implements IssuesOptionsInterface {
 
     @Override
     public void deleteWithRelations(IssueModelInterface issueModel) {
-        if (this.subjectsOptions != null) {
-            this.subjectsOptions.withIssues(this);
-            this.subjectsOptions.deleteWithRelations(issueModel.getSubject());
-            return;
-        }
 
         if (this.quizzesOptions != null) {
             this.quizzesService.delete(issueModel.getQuizzes(), this.quizzesOptions);
         }
 
         this.issuesService.delete(issueModel);
+
+        if (this.subjectsOptions != null) {
+            this.subjectsService.delete(issueModel.getSubject(), this.subjectsOptions);
+        }
+
     }
 
     @Override
