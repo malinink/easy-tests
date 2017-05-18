@@ -68,7 +68,7 @@ public class QuizModelEmpty extends AbstractModelEmpty implements QuizModelInter
     }
 
     @Override
-    public void setCodeExpired(boolean codeExpired) {
+    public void setCodeExpired(Boolean codeExpired) {
         throw new CallMethodOnEmptyModelException();
     }
 
@@ -83,7 +83,7 @@ public class QuizModelEmpty extends AbstractModelEmpty implements QuizModelInter
     }
 
     @Override
-    public boolean isCodeExpired() {
+    public Boolean getCodeExpired() {
         throw new CallMethodOnEmptyModelException();
     }
 
