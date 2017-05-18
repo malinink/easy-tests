@@ -3,9 +3,6 @@ package easytests.auth.controllers;
 import easytests.auth.helpers.SessionLoginStoreHelper;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
@@ -34,13 +31,18 @@ public class AuthController {
     @GetMapping("/sign-in")
     public String signIn(Model model, HttpServletRequest request) {
         final ReloadableResourceBundleMessageSource msg = messageSource();
+        final String enterLogin = new String("enter_login");
+        final String enterPassword = new String("enter_password");
+        final String forgotPassword = new String("forgot_password");
+        final String loginText = new String("login_text");
+        final String language = new String("sign-in_ru");
 
         model.addAttribute("login", new SessionLoginStoreHelper(request.getSession(false)).getLogin());
-        model.addAttribute("sign_in", msg.getMessage("text", null, "sign-in_ru", null));
-        model.addAttribute("enter_login", msg.getMessage("enter_login", null, "sign-in_ru", null));
-        model.addAttribute("enter_password", msg.getMessage("enter_password", null, "sign-in_ru", null));
-        model.addAttribute("forgot_password", msg.getMessage("forgot_password", null, "sign-in_ru", null));
-        model.addAttribute("login_text", msg.getMessage("login_text", null, "sign-in_ru", null));
+        model.addAttribute("sign_in", msg.getMessage("text", null, language, null));
+        model.addAttribute(enterLogin, msg.getMessage(enterLogin, null, language, null));
+        model.addAttribute(enterPassword, msg.getMessage(enterPassword, null, language, null));
+        model.addAttribute(forgotPassword, msg.getMessage(forgotPassword, null, language, null));
+        model.addAttribute(loginText, msg.getMessage(loginText, null, language, null));
         return "auth/sign-in";
     }
 }
