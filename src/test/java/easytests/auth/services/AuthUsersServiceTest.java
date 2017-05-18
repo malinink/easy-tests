@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
@@ -41,13 +42,16 @@ public class AuthUsersServiceTest {
         authorities.add(new SimpleGrantedAuthority("ROLE_TESTEE"));
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        username = "email1@gmail.com";
-        expectedUser = new User(username, "", true, true, true, true, authorities);
+        username = "email3@gmail.com";
+        expectedUser = new User(username, "hash3", true, true, true, true, authorities);
     }
 
     @Test
     public void testLoadUserByUsername() throws Exception {
         when(details.loadUserByUsername(username)).thenReturn(expectedUser);
-        Assert.assertEquals(expectedUser, this.authUsersService.loadUserByUsername(username));
+        final UserDetails user = this.authUsersService.loadUserByUsername(username);
+        Assert.assertEquals(expectedUser.getUsername(), user.getUsername());
+        Assert.assertEquals(expectedUser.getPassword(), user.getPassword());
+        Assert.assertEquals(expectedUser.isAccountNonLocked(), user.isAccountNonLocked());
     }
 }
