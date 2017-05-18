@@ -17,4 +17,9 @@ public class AnswersOptionsBuilder implements AnswersOptionsBuilderInterface {
     public AnswersOptionsInterface forAuth() {
         return new AnswersOptions().withQuestion(this.questionsOptionsBuilder.forAuth());
     }
+
+    @Override
+    public AnswersOptionsInterface forDelete() {
+        return new AnswersOptions();
+    }
 }
