@@ -14,6 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -21,6 +23,8 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@TestPropertySource(locations = {"classpath:database.test.properties"})
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
 public class AuthUsersServiceTest {
 
     private UserDetailsService details;
@@ -44,6 +48,6 @@ public class AuthUsersServiceTest {
     @Test
     public void testLoadUserByUsername() throws Exception {
         when(details.loadUserByUsername(username)).thenReturn(expectedUser);
-        Assert.assertEquals(expectedUser, authUsersService.loadUserByUsername(username));
+        Assert.assertEquals(expectedUser, this.authUsersService.loadUserByUsername(username));
     }
 }
