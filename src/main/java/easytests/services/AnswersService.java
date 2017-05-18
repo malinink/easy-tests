@@ -55,7 +55,7 @@ public class AnswersService implements AnswersServiceInterface {
 
     @Override
     public AnswerModelInterface find(Integer id, AnswersOptionsInterface answersOptions) {
-        this.withServices(answersOptions).withRelations(this.find(id));
+        return this.withServices(answersOptions).withRelations(this.find(id));
     }
 
     @Override
