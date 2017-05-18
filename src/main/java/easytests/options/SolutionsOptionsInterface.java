@@ -7,7 +7,7 @@ import easytests.services.SolutionsServiceInterface;
 import java.util.List;
 
 /**
- * @author loriens
+ * @author Loriens
  */
 public interface SolutionsOptionsInterface {
     void setSolutionsService(SolutionsServiceInterface solutionsService);

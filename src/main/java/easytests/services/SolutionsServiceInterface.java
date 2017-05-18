@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * @author loriens
+ * @author Loriens
  */
 public interface SolutionsServiceInterface extends ServiceInterface {
     List<SolutionModelInterface> findAll();

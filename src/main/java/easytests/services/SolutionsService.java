@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author SingularityA
- * @author loriens
+ * @author Loriens
  */
 @Service
 public class SolutionsService implements SolutionsServiceInterface {

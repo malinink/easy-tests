@@ -15,7 +15,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * @author loriens
+ * @author Loriens
  */
 public class SolutionsOptionsTest {
     @Test

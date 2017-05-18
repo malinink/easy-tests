@@ -6,7 +6,7 @@ import easytests.options.PointsOptionsInterface;
 import java.util.List;
 
 /**
- * @author loriens
+ * @author Loriens
  */
 public interface PointsServiceInterface extends ServiceInterface {
     List<PointModelInterface> findAll();

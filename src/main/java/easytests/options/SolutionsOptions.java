@@ -8,7 +8,7 @@ import java.util.List;
 import lombok.Setter;
 
 /**
- * @author loriens
+ * @author Loriens
  */
 @EqualsAndHashCode
 public class SolutionsOptions implements SolutionsOptionsInterface {
