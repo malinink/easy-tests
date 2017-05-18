@@ -3,6 +3,7 @@ package easytests.integration.services;
 import easytests.models.*;
 import easytests.models.empty.QuestionModelEmpty;
 import easytests.services.AnswersService;
+import easytests.services.QuestionsService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,9 @@ public class AnswersServiceTest {
     @Autowired
     private AnswersService answersService;
 
+    @Autowired
+    private QuestionsService questionsService;
+
     private AnswerModelInterface createAnswerModel(Integer id, String txt, Integer questionId,
                                                     Integer serialNumber, Boolean right) {
 
@@ -32,7 +36,7 @@ public class AnswersServiceTest {
         answerModel.setTxt(txt);
         answerModel.setSerialNumber(serialNumber);
         answerModel.setRight(right);
-        answerModel.setQuestion(new QuestionModelEmpty(questionId));
+        answerModel.setQuestion(questionsService.find(questionId));
 
         return answerModel;
     }
@@ -49,14 +53,6 @@ public class AnswersServiceTest {
         this.answersService.save(answerModel);
 
         final AnswerModelInterface builtAnswerModel = this.answersService.find(answerModel.getId());
-
-        if (answerModel == null) {
-            throw new ArithmeticException();
-        }
-
-        if (builtAnswerModel == null) {
-            throw new AbstractMethodError();
-        }
 
         Assert.assertEquals(answerModel, builtAnswerModel);
 
