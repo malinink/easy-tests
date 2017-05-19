@@ -25,6 +25,10 @@ content: contents {
               i (class:'material-icons left', 'pageview')
               yield 'View'
             }
+            a (class:'waves-effect waves-light btn-floating blue', href:'/personal/topics/' + topicId +'/questions/' + question.id + '/update_answers/') {
+              i (class:'material-icons left', 'thumbs_up_down')
+              yield 'Answers'
+            }
             a (class:'waves-effect waves-light btn-floating blue', href:'/personal/topics/' + topicId +'/questions/update/' + question.id + '/') {
               i (class:'material-icons left', 'edit')
               yield 'Edit'
