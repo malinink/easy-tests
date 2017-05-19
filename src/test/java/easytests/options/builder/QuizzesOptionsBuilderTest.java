@@ -4,6 +4,7 @@ import easytests.options.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,7 +37,7 @@ public class QuizzesOptionsBuilderTest {
 
     @Test
     public void testForDelete() throws Exception {
-        final PointsOptionsInterface pointsOptions = new PointsOptions();
+        final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
         given(this.pointsOptionsBuilder.forDelete()).willReturn(pointsOptions);
         final QuizzesOptionsInterface quizzesOptions = this.quizzesOptionsBuilder.forDelete();
         Assert.assertEquals(new QuizzesOptions().withPoints(pointsOptions).withTestee(new TesteesOptions()), quizzesOptions);
