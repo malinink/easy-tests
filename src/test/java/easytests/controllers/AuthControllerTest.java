@@ -33,7 +33,7 @@ public class AuthControllerTest {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
     @Test
-    public void testSignInFailed() throws Exception{
+    public void testSignInWithoutSession() throws Exception{
 
         mockMvc.perform(get("/auth/sign-in"))
                 .andExpect(status().isOk())
@@ -44,7 +44,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void testSignInSuccess() throws Exception{
+    public void testSignInWithSession() throws Exception{
 
         MockHttpSession session = new MockHttpSession();
 
