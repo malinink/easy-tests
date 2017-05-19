@@ -259,6 +259,10 @@ public class QuizzesOptionsTest {
         final IssuesOptionsInterface issuesOptions = Mockito.mock(IssuesOptionsInterface.class);
 
         final IssuesServiceInterface issuesService = Mockito.mock(IssuesServiceInterface.class);
+
+        final QuizzesServiceInterface quizzesService = Mockito.mock(QuizzesServiceInterface.class);
+
+        quizzesOptions.setQuizzesService(quizzesService);
         quizzesOptions.setIssuesService(issuesService);
         quizzesOptions.withIssue(issuesOptions);
 
@@ -268,11 +272,11 @@ public class QuizzesOptionsTest {
 
         quizzesOptionsSpy.deleteWithRelations(quizModel);
 
-        verify(issuesOptions, times(1)).deleteWithRelations(quizModel.getIssue());
+        verify(issuesService, times(1)).delete(quizModel.getIssue(), issuesOptions);
 
         quizzesOptionsSpy.saveWithRelations(quizModel);
 
-        verify(issuesOptions, times(1)).saveWithRelations(quizModel.getIssue());
+        verify(issuesService, times(1)).save(quizModel.getIssue(), issuesOptions);
 
     }
 }

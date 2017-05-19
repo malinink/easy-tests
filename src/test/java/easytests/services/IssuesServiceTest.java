@@ -8,6 +8,7 @@ import easytests.models.IssueModelInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+import easytests.models.SubjectModelInterface;
 import easytests.options.IssuesOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.Entities;
@@ -72,6 +73,54 @@ public class IssuesServiceTest {
             issuesModels.add(this.mapIssueModel(issueEntity));
         }
         return issuesModels;
+    }
+
+    @Test
+    public void testFindBySubject() throws Exception {
+        final Integer subjectId = 7;
+        final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
+        final IssueEntity issueEntityFirst = Entities.createIssueEntityMock(4, "test3", subjectId);
+        final IssueEntity issueEntitySecond = Entities.createIssueEntityMock(12, "test12", subjectId);
+        final List<IssueEntity> issuesEntities = new ArrayList<>();
+        issuesEntities.add(issueEntityFirst);
+        issuesEntities.add(issueEntitySecond);
+        Mockito.when(subjectModel.getId()).thenReturn(subjectId);
+        given(this.issuesMapper.findBySubjectId(subjectId)).willReturn(issuesEntities);
+        final List<IssueModelInterface> issuesModels = new ArrayList<>();
+        issuesModels.add(this.mapIssueModel(issueEntityFirst));
+        issuesModels.add(this.mapIssueModel(issueEntitySecond));
+
+        final List<IssueModelInterface> foundIssuesModels = this.issuesService.findBySubject(subjectModel);
+
+        verify(this.issuesMapper).findBySubjectId(subjectId);
+        Assert.assertEquals(issuesModels, foundIssuesModels);
+
+    }
+
+    @Test
+    public void testFindBySubjectWithOptions() throws Exception {
+        final Integer subjectId = 7;
+        final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
+        final IssueEntity issueEntityFirst = Entities.createIssueEntityMock(4, "test3", subjectId);
+        final IssueEntity issueEntitySecond = Entities.createIssueEntityMock(12, "test12", subjectId);
+        final List<IssueEntity> issuesEntities = new ArrayList<>();
+        issuesEntities.add(issueEntityFirst);
+        issuesEntities.add(issueEntitySecond);
+        Mockito.when(subjectModel.getId()).thenReturn(subjectId);
+        given(this.issuesMapper.findBySubjectId(subjectId)).willReturn(issuesEntities);
+        final List<IssueModelInterface> issuesModels = new ArrayList<>();
+        issuesModels.add(this.mapIssueModel(issueEntityFirst));
+        issuesModels.add(this.mapIssueModel(issueEntitySecond));
+
+        final IssuesOptionsInterface issuesOptions = Mockito.mock(IssuesOptionsInterface.class);
+        given(issuesOptions.withRelations(issuesModels)).willReturn(issuesModels);
+
+        final List<IssueModelInterface> foundIssuesModels =
+                this.issuesService.findBySubject(subjectModel,issuesOptions);
+
+        verify(this.issuesMapper).findBySubjectId(subjectId);
+        verify(issuesOptions).withRelations(issuesModels);
+        Assert.assertEquals(issuesModels, foundIssuesModels);
     }
 
     @Test
@@ -234,6 +283,44 @@ public class IssuesServiceTest {
         this.issuesService.delete(issueModel, issuesOptions);
 
         verify(issuesOptions).deleteWithRelations(issueModel);
+    }
+
+    @Test
+    public void testMultipleSaveAndDelete(){
+        final IssueModelInterface issueModelFirst = Models.createIssueModel(
+                1,
+                "Name",
+                1
+        );
+        final IssueModelInterface issueModelSecond = Models.createIssueModel(
+                2,
+                "Name2",
+                2
+        );
+        final ArrayList<IssueModelInterface> issueModels=new ArrayList<>();
+        issueModels.add(issueModelFirst);
+        issueModels.add(issueModelSecond);
+        this.issuesService.save(issueModels);
+        verify(this.issuesMapper, times(1)).update(this.mapIssueEntity(issueModelFirst));
+        verify(this.issuesMapper, times(1)).update(this.mapIssueEntity(issueModelSecond));
+
+        this.issuesService.delete(issueModels);
+
+        verify(this.issuesMapper, times(1)).delete(this.mapIssueEntity(issueModelFirst));
+        verify(this.issuesMapper, times(1)).delete(this.mapIssueEntity(issueModelSecond));
+
+
+        final IssuesOptionsInterface issuesOptions = Mockito.mock(IssuesOptionsInterface.class);
+
+        this.issuesService.save(issueModels, issuesOptions);
+
+        verify(issuesOptions).saveWithRelations(issueModelFirst);
+        verify(issuesOptions).saveWithRelations(issueModelSecond);
+
+        this.issuesService.delete(issueModels, issuesOptions);
+
+        verify(issuesOptions).deleteWithRelations(issueModelFirst);
+        verify(issuesOptions).deleteWithRelations(issueModelSecond);
     }
 
 }

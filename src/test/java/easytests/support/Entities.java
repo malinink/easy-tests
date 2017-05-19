@@ -131,12 +131,12 @@ public abstract class Entities {
     public static IssueEntity createIssueEntityMock(
             Integer id,
             String name,
-            Integer authorId
+            Integer subjectId
     ) {
         final IssueEntity issueEntity = Mockito.mock(IssueEntity.class);
         Mockito.when(issueEntity.getId()).thenReturn(id);
         Mockito.when(issueEntity.getName()).thenReturn(name);
-        Mockito.when(issueEntity.getAuthorId()).thenReturn(authorId);
+        Mockito.when(issueEntity.getSubjectId()).thenReturn(subjectId);
         return issueEntity;
     }
 

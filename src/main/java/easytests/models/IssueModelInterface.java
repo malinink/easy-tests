@@ -16,9 +16,9 @@ public interface IssueModelInterface extends ModelInterface {
 
     void setName(String name);
 
-    Integer getAuthorId();
+    SubjectModelInterface getSubject();
 
-    void setAuthorId(Integer authorId);
+    void setSubject(SubjectModelInterface subject);
 
     void map(IssueEntity issueEntity);
 

@@ -3,6 +3,7 @@ package easytests.options;
 import easytests.models.IssueModelInterface;
 import easytests.services.IssuesServiceInterface;
 import easytests.services.QuizzesServiceInterface;
+import easytests.services.SubjectsServiceInterface;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
@@ -20,6 +21,11 @@ public class IssuesOptions implements IssuesOptionsInterface {
     @Setter
     private QuizzesServiceInterface quizzesService;
 
+    @Setter
+    private SubjectsServiceInterface subjectsService;
+
+    private SubjectsOptionsInterface subjectsOptions;
+
     private QuizzesOptionsInterface quizzesOptions;
 
     @Override
@@ -36,6 +42,9 @@ public class IssuesOptions implements IssuesOptionsInterface {
         if (this.quizzesOptions != null) {
             issueModel.setQuizzes(this.quizzesService.findByIssue(issueModel, this.quizzesOptions));
         }
+        if (this.subjectsOptions != null) {
+            issueModel.setSubject(this.subjectsService.find(issueModel.getSubject().getId(), this.subjectsOptions));
+        }
         return issueModel;
     }
 
@@ -49,17 +58,38 @@ public class IssuesOptions implements IssuesOptionsInterface {
 
     @Override
     public void saveWithRelations(IssueModelInterface issueModel) {
+
+        if (this.subjectsOptions != null) {
+            this.subjectsService.save(issueModel.getSubject(), this.subjectsOptions);
+        }
+
         this.issuesService.save(issueModel);
+
         if (this.quizzesOptions != null) {
             this.quizzesService.save(issueModel.getQuizzes(), this.quizzesOptions);
         }
+
     }
 
     @Override
     public void deleteWithRelations(IssueModelInterface issueModel) {
+
         if (this.quizzesOptions != null) {
             this.quizzesService.delete(issueModel.getQuizzes(), this.quizzesOptions);
         }
+
         this.issuesService.delete(issueModel);
+
+        if (this.subjectsOptions != null) {
+            this.subjectsService.delete(issueModel.getSubject(), this.subjectsOptions);
+        }
+
     }
+
+    @Override
+    public IssuesOptionsInterface withSubject(SubjectsOptionsInterface subjectsOptions) {
+        this.subjectsOptions = subjectsOptions;
+        return this;
+    }
+
 }

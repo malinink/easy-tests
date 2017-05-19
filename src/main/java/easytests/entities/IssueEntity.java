@@ -9,16 +9,17 @@ import lombok.*;
 
 @Data
 public class IssueEntity {
+
     private Integer id;
 
     private String name;
 
-    private Integer authorId;
+    private Integer subjectId;
 
     public void map(IssueModelInterface issueModel) {
         this.setId(issueModel.getId());
         this.setName(issueModel.getName());
-        this.setAuthorId(issueModel.getAuthorId());
+        this.setSubjectId(issueModel.getSubject().getId());
     }
 
 }
