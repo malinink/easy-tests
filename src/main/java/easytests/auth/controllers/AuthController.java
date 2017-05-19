@@ -3,7 +3,6 @@ package easytests.auth.controllers;
 import easytests.auth.helpers.SessionLoginStoreHelper;
 import easytests.config.LocalizationConfig;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
