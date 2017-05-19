@@ -255,7 +255,7 @@ public class UsersServiceTest {
                 "LastName",
                 "Surname",
                 "email@gmail.com",
-                "hash",
+                "$2a$10$dNJevbOVaGaPchia3.QoHeQ0gIYlpgtd2V3gUOtBOGpRZtSxl9mzO",
                 true,
                 1
         );
