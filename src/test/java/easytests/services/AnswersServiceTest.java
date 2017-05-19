@@ -5,6 +5,7 @@ import easytests.mappers.AnswersMapper;
 import easytests.models.AnswerModel;
 import easytests.models.AnswerModelInterface;
 import easytests.models.QuestionModelInterface;
+import easytests.options.AnswersOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 
 import java.util.ArrayList;
@@ -124,6 +125,24 @@ public class AnswersServiceTest {
         final AnswerModelInterface answerModel = this.answersService.find(id);
 
         Assert.assertEquals(this.mapAnswerModel(answerEntity), answerModel);
+    }
+
+    @Test
+    public void testFindWithOptions() throws Exception {
+        final Integer id = 1;
+        final AnswerEntity answerEntity = this.createAnswerEntityMock(id, "NewAnswer", 1, 1, true);
+        final AnswerModelInterface answerModel = this.mapAnswerModel(answerEntity);
+
+        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
+        given(this.answersMapper.find(id)).willReturn(answerEntity);
+        given(answersOptions.withRelations(answerModel)).willReturn(answerModel);
+
+        final AnswerModelInterface foundedAnswerModel
+                = this.answersService.find(id, answersOptions);
+
+        verify(answersOptions).withRelations(answerModel);
+        Assert.assertNotNull(foundedAnswerModel);
+        Assert.assertEquals(answerModel, foundedAnswerModel);
     }
 
     @Test
