@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.*;
 /**
  * @author vkpankov
  */
+@Mapper
+@SuppressWarnings("checkstyle:linelength")
 public interface QuizzesMapper {
 
     @Select("SELECT * FROM quizzes")
@@ -32,13 +34,11 @@ public interface QuizzesMapper {
     @ResultMap("Quiz")
     List<QuizEntity> findByIssueId(Integer issueId);
 
-    @Insert("INSERT INTO quizzes (issue_id, invite_code, code_expired, started_at, finished_at) "
-            + "VALUES (#{issueId},#{inviteCode},#{codeExpired},#{startedAt},#{finishedAt})")
+    @Insert("INSERT INTO quizzes (issue_id, invite_code, code_expired, started_at, finished_at) VALUES (#{issueId},#{inviteCode},#{codeExpired},#{startedAt},#{finishedAt})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(QuizEntity quiz);
 
-    @Update("UPDATE quizzes SET issue_id=#{issueId}, invite_code=#{inviteCode}, code_expired=#{codeExpired},"
-            + "started_at=#{startedAt},finished_at=#{finishedAt} WHERE id=#{id}")
+    @Update("UPDATE quizzes SET issue_id=#{issueId}, invite_code=#{inviteCode}, code_expired=#{codeExpired}, started_at=#{startedAt},finished_at=#{finishedAt} WHERE id=#{id}")
     void update(QuizEntity quiz);
 
     @Delete("DELETE FROM quizzes WHERE id=#{id}")
