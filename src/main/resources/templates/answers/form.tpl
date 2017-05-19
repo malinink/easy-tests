@@ -5,7 +5,7 @@ content: contents {
   div(class: 'row') {
     h4(class: 'header', 'Related question: ' + question.text)
     h4(class: 'header', 'Question type: ' + questionTypes[question.questionType.id-1].name)
-    form(id: 'answersForm', method:'post', class: 'col s12') {
+    form(id: 'answersForm', method:'post', class: 'col s12', modelAttribute: 'answerDtoList') {
       input (id: '_csrf', type:'hidden', name:_csrf.parameterName, value:_csrf.token)
       div(id: 'answersGrid') {
           answerDtoList.eachWithIndex { answer, index ->
@@ -39,6 +39,7 @@ content: contents {
                     label(for: radioButtonId){
                         yield ' ' // Радиокнопка не рисуется, если у неё нет ярлычка
                     }
+                    input(name: rightName, type: 'hidden', value: answer.right)
                     input(name: serialNumberName, type: 'hidden', value: answer.serialNumber)
                 }
                 if (question.questionType.id == 2) {
@@ -50,6 +51,7 @@ content: contents {
                     label(for: checkBoxId){
                         yield ' ' // Чекбокс не рисуется, если у него нет ярлычка
                     }
+                    input(name: rightName, type: 'hidden', value: answer.right)
                     input(name: serialNumberName, type: 'hidden', value: answer.serialNumber)
                 }
                 if (question.questionType.id == 3) {
