@@ -1,10 +1,8 @@
 package easytests.auth.controllers;
 
 import easytests.auth.helpers.SessionLoginStoreHelper;
-import javax.servlet.http.HttpServletRequest;
-
 import easytests.config.LocalizationConfig;
-import org.springframework.context.annotation.Bean;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
