@@ -70,24 +70,31 @@ public class AnswersController extends AbstractCrudController {
     public String save(
             Model model,
             @PathVariable("questionId") Integer questionId,
-            @Valid @NotNull List<AnswerDto> answerDtoList,
+            @Valid /*@ModelAttribute("answerDtoList")*/ ArrayList<AnswerDto> answerDtoList,
             BindingResult bindingResult,
             @PathVariable("topicId") Integer topicId) {
         final QuestionModelInterface questionModel = this.getQuestionModel(questionId, false);
+        final List<AnswerModelInterface> oldAnswerList = questionModel.getAnswers();
+        //TODO: схоронить все полученные ответы, если ответа не получили, он удаляется
         final List<AnswerModelInterface> answerList = this.getAnswerModelList(answerDtoList);
+        System.out.println("DTO LIST SIZE: " + answerDtoList.size());
         for (AnswerDto answerDto
-                :
-             answerDtoList) {
+                : answerDtoList) {
+            System.out.println(answerDto.getTxt());
             this.answerDtoValidator.validate(answerDto, bindingResult);
         }
+        this.answerDtoValidator.validateWithQuestionType(answerDtoList,
+                questionModel.getQuestionType().getId(), bindingResult);
         if (bindingResult.hasErrors()) {
             setUpdateBehaviour(model);
             model.addAttribute("answerDtoList", answerDtoList);
             model.addAttribute("topicId", topicId);
             model.addAttribute("questionId", questionId);
             model.addAttribute("errors", bindingResult);
+
             return "answers/form";
         }
+
         for (Integer i = 0; i < answerDtoList.size(); i++) {
             final AnswerDto answerDto = answerDtoList.get(i);
             final AnswerModelInterface answer = answerList.get(i);
