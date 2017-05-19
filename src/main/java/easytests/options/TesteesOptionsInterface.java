@@ -1,6 +1,7 @@
 package easytests.options;
 
 import easytests.models.TesteeModelInterface;
+import easytests.services.QuizzesServiceInterface;
 import easytests.services.TesteesServiceInterface;
 import java.util.List;
 
@@ -10,6 +11,10 @@ import java.util.List;
  */
 public interface TesteesOptionsInterface {
     void setTesteesService(TesteesServiceInterface testeesService);
+
+    void setQuizzesService(QuizzesServiceInterface quizzesService);
+
+    TesteesOptionsInterface withQuiz(QuizzesOptionsInterface quizzesOptions);
 
     TesteeModelInterface withRelations(TesteeModelInterface testeeModel);
 

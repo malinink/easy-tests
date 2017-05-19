@@ -22,6 +22,9 @@ public class IssueStandardTopicPrioritiesService implements IssueStandardTopicPr
     private IssueStandardTopicPrioritiesMapper topicPrioritiesMapper;
 
     @Autowired
+    private TopicsService topicsService;
+
+    @Autowired
     private IssueStandardsService issueStandardsService;
 
     @Override
@@ -137,6 +140,7 @@ public class IssueStandardTopicPrioritiesService implements IssueStandardTopicPr
         withServices(IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions) {
 
         topicPrioritiesOptions.setTopicPrioritiesService(this);
+        topicPrioritiesOptions.setTopicsService(this.topicsService);
         topicPrioritiesOptions.setIssueStandardsService(this.issueStandardsService);
         return topicPrioritiesOptions;
     }

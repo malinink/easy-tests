@@ -1,6 +1,7 @@
 package easytests.models;
 
 import easytests.entities.TesteeEntity;
+import easytests.models.empty.QuizModelEmpty;
 import lombok.*;
 
 /**
@@ -18,11 +19,14 @@ public class TesteeModel implements TesteeModelInterface {
 
     private Integer groupNumber;
 
+    private QuizModelInterface quiz;
+
     public void map(TesteeEntity testeeEntity) {
         this.setId(testeeEntity.getId());
         this.setFirstName(testeeEntity.getFirstName());
         this.setLastName(testeeEntity.getLastName());
         this.setSurname(testeeEntity.getSurname());
         this.setGroupNumber(testeeEntity.getGroupNumber());
+        this.setQuiz(new QuizModelEmpty(testeeEntity.getQuizId()));
     }
 }

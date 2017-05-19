@@ -19,7 +19,7 @@ public class IssueStandardTopicPriorityEntity {
 
     public void map(IssueStandardTopicPriorityModelInterface topicPriorityModel) {
         this.setId(topicPriorityModel.getId());
-        this.setTopicId(topicPriorityModel.getTopicId());
+        this.setTopicId(topicPriorityModel.getTopic().getId());
         this.setIsPreferable(topicPriorityModel.getIsPreferable());
         this.setIssueStandardId(topicPriorityModel.getIssueStandard().getId());
     }

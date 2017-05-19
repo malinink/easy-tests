@@ -9,9 +9,9 @@ public interface IssueStandardTopicPriorityModelInterface extends ModelInterface
 
     void setId(Integer id);
 
-    Integer getTopicId();
+    TopicModelInterface getTopic();
 
-    void setTopicId(Integer topicId);
+    void setTopic(TopicModelInterface topic);
 
     Boolean getIsPreferable();
 

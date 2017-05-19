@@ -6,12 +6,14 @@ import easytests.services.QuestionTypesServiceInterface;
 import easytests.services.QuestionsServiceInterface;
 import easytests.services.TopicsServiceInterface;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 
 /**
  * @author firkhraag
  */
+@EqualsAndHashCode
 public class QuestionsOptions implements QuestionsOptionsInterface {
 
     @Setter
