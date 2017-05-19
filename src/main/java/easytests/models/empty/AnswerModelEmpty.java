@@ -43,6 +43,16 @@ public class AnswerModelEmpty extends AbstractModelEmpty implements AnswerModelI
     }
 
     @Override
+    public Integer getSerialNumber() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setSerialNumber(Integer serialNumber) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
     public Boolean getRight() {
         throw new CallMethodOnEmptyModelException();
     }

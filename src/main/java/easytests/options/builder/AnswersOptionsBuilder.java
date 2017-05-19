@@ -2,19 +2,24 @@ package easytests.options.builder;
 
 import easytests.options.AnswersOptions;
 import easytests.options.AnswersOptionsInterface;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * @author firkhraag
+ * @author rezenbekk
  */
 @Service
-public class AnswersOptionsBuilder {
+public class AnswersOptionsBuilder implements AnswersOptionsBuilderInterface {
+    @Autowired
+    private QuestionsOptionsBuilder questionsOptionsBuilder;
 
-    public AnswersOptionsInterface forDelete() {
-        return new AnswersOptions();
+    @Override
+    public AnswersOptionsInterface forAuth() {
+        return new AnswersOptions().withQuestion(this.questionsOptionsBuilder.forAuth());
     }
 
-    public AnswersOptionsInterface forAuth() {
+    @Override
+    public AnswersOptionsInterface forDelete() {
         return new AnswersOptions();
     }
 }

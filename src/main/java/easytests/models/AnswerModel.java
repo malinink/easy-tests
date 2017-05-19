@@ -14,11 +14,14 @@ public class AnswerModel implements AnswerModelInterface {
 
     private QuestionModelInterface question;
 
+    private Integer serialNumber;
+
     private Boolean right;
 
     public void map(AnswerEntity answerEntity) {
         this.setId(answerEntity.getId());
         this.setTxt(answerEntity.getTxt());
+        this.setSerialNumber(answerEntity.getSerialNumber());
         this.setRight(answerEntity.getRight());
     }
 }
