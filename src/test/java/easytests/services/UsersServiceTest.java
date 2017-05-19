@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.mock.mockito.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.*;
 
 /**
@@ -34,6 +35,9 @@ public class UsersServiceTest {
 
     @Autowired
     private UsersService usersService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private UserModelInterface mapUserModel(UserEntity userEntity) {
         final UserModelInterface userModel = new UserModel();
@@ -238,11 +242,11 @@ public class UsersServiceTest {
         doAnswer(invocation -> {
             final UserEntity userEntity = (UserEntity) invocation.getArguments()[0];
             userEntity.setId(5);
+            userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
             return null;
         }).when(this.usersMapper).insert(Mockito.any(UserEntity.class));
 
         this.usersService.save(userModel);
-
         verify(this.usersMapper, times(1)).insert(this.mapUserEntity(userModel));
         Assert.assertEquals((Integer) 5, userModel.getId());
     }
@@ -255,7 +259,7 @@ public class UsersServiceTest {
                 "LastName",
                 "Surname",
                 "email@gmail.com",
-                "$2a$10$dNJevbOVaGaPchia3.QoHeQ0gIYlpgtd2V3gUOtBOGpRZtSxl9mzO",
+                "hash",
                 true,
                 1
         );
