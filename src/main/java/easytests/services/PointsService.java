@@ -100,6 +100,11 @@ public class PointsService implements PointsServiceInterface {
 
     }
 
+
+    public PointModelInterface find(Integer id, PointsOptionsInterface pointsOptions) {
+        return this.find(id);
+    }
+
     private PointEntity map(PointModelInterface pointModel) {
 
         final PointEntity pointEntity = new PointEntity();
