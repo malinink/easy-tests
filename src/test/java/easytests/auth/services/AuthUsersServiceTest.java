@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,8 +43,9 @@ public class AuthUsersServiceTest {
         userModel.setState(3);
         when(usersService.findByEmail(email)).thenReturn(userModel);
         final UserDetails user = this.authUsersService.loadUserByUsername(email);
-        Assert.assertEquals(userModel.getEmail(), user.getUsername());
-        Assert.assertEquals(userModel.getPassword(), user.getPassword());
-        Assert.assertEquals(userModel.getState() == 3, user.isEnabled());
+        Assert.assertEquals(usersService.findByEmail(email).getEmail(), user.getUsername());
+        Assert.assertEquals(usersService.findByEmail(email).getPassword(), user.getPassword());
+        Assert.assertEquals(usersService.findByEmail(email).getState() == 3, user.isEnabled());
+        verify(usersService, times(3)).findByEmail(email);
     }
 }
