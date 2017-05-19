@@ -3,6 +3,7 @@ package easytests.options;
 import easytests.models.QuizModelInterface;
 import easytests.models.TesteeModelInterface;
 import easytests.services.IssuesServiceInterface;
+import easytests.services.PointsServiceInterface;
 import easytests.services.QuizzesServiceInterface;
 import easytests.services.TesteesServiceInterface;
 import java.util.List;
@@ -21,9 +22,14 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
     @Setter
     private TesteesServiceInterface testeesService;
 
+    @Setter
+    private PointsServiceInterface pointsService;
+
     private IssuesOptionsInterface issuesOptions;
 
     private TesteesOptionsInterface testeesOptions;
+
+    private PointsOptionsInterface pointsOptions;
 
     public QuizzesOptionsInterface withIssue(IssuesOptionsInterface issuesOptions) {
         this.issuesOptions = issuesOptions;
@@ -32,6 +38,11 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
 
     public QuizzesOptionsInterface withTestee(TesteesOptionsInterface testeeOptions) {
         this.testeesOptions = testeeOptions;
+        return this;
+    }
+
+    public QuizzesOptionsInterface withPoints(PointsOptionsInterface pointsOptions) {
+        this.pointsOptions = pointsOptions;
         return this;
     }
 
@@ -50,6 +61,10 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
                     this.testeesService.findByQuiz(quizModel, this.testeesOptions);
 
             quizModel.setTestee(testee);
+        }
+
+        if (this.pointsOptions != null) {
+            quizModel.setPoints(this.pointsService.findByQuiz(quizModel, this.pointsOptions));
         }
 
         return quizModel;
@@ -83,6 +98,10 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
 
         }
 
+        if (this.pointsOptions != null) {
+            this.pointsService.save(quizModel.getPoints(), this.pointsOptions);
+        }
+
     }
 
     public void deleteWithRelations(QuizModelInterface quizModel) {
@@ -91,6 +110,9 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
             this.issuesOptions.withQuizzes(this);
             this.issuesOptions.deleteWithRelations(quizModel.getIssue());
             return;
+        }
+        if (this.pointsOptions != null) {
+            this.pointsService.delete(quizModel.getPoints(), this.pointsOptions);
         }
 
         if (this.testeesOptions != null) {
