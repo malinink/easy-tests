@@ -104,8 +104,10 @@ CREATE TABLE answers (
   id SERIAL NOT NULL,
   txt VARCHAR(250) NOT NULL,
   question_id INTEGER NOT NULL,
+  serial_number INTEGER NOT NULL DEFAULT 0,
   is_right BOOLEAN NOT NULL,
-  PRIMARY KEY (id)--,
+  PRIMARY KEY (id),
+  CONSTRAINT CHK_serial_number CHECK (serial_number>=0)
   --FOREIGN KEY (question_id) REFERENCES questions(id)
 );
 
@@ -113,6 +115,10 @@ CREATE TABLE quizzes (
   id         SERIAL      NOT NULL,
   issue_id  INTEGER NOT NULL,
   invite_code VARCHAR(32),
+  started_at  TIMESTAMP,
+  finished_at TIMESTAMP,
+  code_expired BOOLEAN,
+
   PRIMARY KEY (id)
 );
 
@@ -195,15 +201,15 @@ INSERT INTO question_types VALUES
   (3, 'Нумерация', 3),
   (4, 'Текст', 4);
 
-INSERT INTO answers(txt, question_id, is_right) VALUES
-  ('Answer1', 1, TRUE),
-  ('Answer2', 2, FALSE),
-  ('Answer3', 3, TRUE);
+INSERT INTO answers(txt, question_id, serial_number, is_right) VALUES
+  ('Answer1', 1, 1, TRUE),
+  ('Answer2', 2, 2, FALSE),
+  ('Answer3', 3, 3, TRUE);
 
-INSERT INTO quizzes (issue_id, invite_code) VALUES
- (1, 'test_invite_code1'),
- (2, 'test_invite_code2'),
- (3, 'test_invite_code3');
+INSERT INTO quizzes (issue_id, invite_code,started_at,finished_at,code_expired) VALUES
+ (1, 'test_invite_code1','2003-2-1'::timestamp,'2003-3-1'::timestamp,FALSE ),
+ (2, 'test_invite_code2','2003-2-1'::timestamp,'2003-3-1'::timestamp,FALSE ),
+ (3, 'test_invite_code3','2003-2-1'::timestamp,'2003-3-1'::timestamp,TRUE );
 
 INSERT INTO solutions (answer_id, point_id) VALUES
   (10, 1), (20, 1), (11, 2), (21, 2), (12, 3);

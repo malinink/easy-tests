@@ -25,6 +25,7 @@ public class AnswerEntityTest {
         final Integer id = 3;
         final String txt = "Text";
         final Integer questionId = 5;
+        final Integer serialNumber = 3;
         final Boolean right = true;
 
         final QuestionModelInterface questionModel = Mockito.mock(QuestionModelInterface.class);
@@ -34,6 +35,7 @@ public class AnswerEntityTest {
         Mockito.when(answerModel.getId()).thenReturn(id);
         Mockito.when(answerModel.getTxt()).thenReturn(txt);
         Mockito.when(answerModel.getQuestion()).thenReturn(questionModel);
+        Mockito.when(answerModel.getSerialNumber()).thenReturn(serialNumber);
         Mockito.when(answerModel.getRight()).thenReturn(right);
 
         final AnswerEntity answerEntity = new AnswerEntity();
@@ -42,6 +44,7 @@ public class AnswerEntityTest {
         Assert.assertEquals(id, answerEntity.getId());
         Assert.assertEquals(txt, answerEntity.getTxt());
         Assert.assertEquals(questionId, answerEntity.getQuestionId());
+        Assert.assertEquals(serialNumber, answerEntity.getSerialNumber());
         Assert.assertEquals(right, answerEntity.getRight());
     }
 
