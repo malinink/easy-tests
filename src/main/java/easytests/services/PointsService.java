@@ -106,29 +106,11 @@ public class PointsService implements PointsServiceInterface {
     @Override
     public void delete(PointModelInterface pointModel) {
 
-    }
-
-    @Override
-    public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel) {
-        return null;
-    }
-
-    @Override
-    public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel, PointsOptionsInterface pointsOptions) {
-        return null;
-    }
-
-    public List<PointModelInterface> findAll() {
-        return this.map(this.pointsMapper.findAll());
-    }
-
-    public PointModelInterface find(Integer id) {
-
-        final PointEntity pointEntity = this.pointsMapper.find(id);
-        if (pointEntity == null) {
-            return null;
+        final PointEntity pointEntity = this.map(pointModel);
+        if (pointEntity.getId() == null) {
+            throw new DeleteUnidentifiedModelException();
         }
-        return this.map(pointEntity);
+        this.pointsMapper.delete(pointEntity);
 
     }
 
