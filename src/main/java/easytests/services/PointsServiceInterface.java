@@ -11,6 +11,14 @@ import java.util.List;
  */
 public interface PointsServiceInterface extends ServiceInterface {
 
+    List<PointModelInterface> findAll();
+
+    List<PointModelInterface> findAll(PointsOptionsInterface pointsOptions);
+
+    PointModelInterface find(Integer id);
+
+    PointModelInterface find(Integer id, PointsOptionsInterface pointsOptions);
+
     List<PointModelInterface> findByQuiz(QuizModelInterface quizModel);
 
     List<PointModelInterface> findByQuiz(QuizModelInterface quizModel, PointsOptionsInterface pointsOptions);

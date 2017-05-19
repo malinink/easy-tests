@@ -23,6 +23,8 @@ public interface QuizzesOptionsInterface extends OptionsInterface {
 
     QuizzesOptionsInterface withTestee(TesteesOptionsInterface testeeOptions);
 
+    QuizzesOptionsInterface withPoint(PointsOptionsInterface pointsOptions);
+
     QuizModelInterface withRelations(QuizModelInterface subjectModel);
 
     List<QuizModelInterface> withRelations(List<QuizModelInterface> subjectsModels);
