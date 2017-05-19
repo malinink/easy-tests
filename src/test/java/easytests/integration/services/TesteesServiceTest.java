@@ -15,6 +15,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
+
 
 /**
  * @author DoZor-80
@@ -57,7 +59,8 @@ public class TesteesServiceTest {
         final Integer quizId = 1;
 
         final TesteeModelInterface testeeModel = Models.createTesteeModel(id, "FirstName1", "LastName1", "Surname1", 301, quizId);
-        final QuizModelInterface quizModel = Models.createQuizModel(quizId, "test_invite_code1", 1);
+        final QuizModelInterface quizModel = Models.createQuizModel(quizId, "test_invite_code1", 1,
+                LocalDateTime.of(2003,2,1,0,0,0),LocalDateTime.of(2003,3,1,0,0,0),false);
         testeeModel.setQuiz(quizModel);
 
         final TesteeModelInterface foundedTesteeModel

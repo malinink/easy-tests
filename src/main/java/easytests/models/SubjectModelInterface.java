@@ -33,4 +33,8 @@ public interface SubjectModelInterface extends ModelInterface {
 
     void setUser(UserModelInterface user);
 
+    List<IssueModelInterface> getIssues();
+
+    void setIssues(List<IssueModelInterface> issues);
+
 }
