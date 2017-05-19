@@ -34,6 +34,7 @@ content: contents {
       }
     }
        div(class: 'row') {
+       def answersList = question.answers
         if ((question.questionType.id == 1) || (question.questionType.id == 2)) {
           answersList.each { answer ->
             div (class:'input-field col s12') {
@@ -67,7 +68,7 @@ content: contents {
         }
       }
       p {
-        a (class: 'light-blue lighten-2 waves-effect waves-light btn', href: '/personal/topics/' + topicId + '/questions/' + question.id + '/update_answers') {
+        a (class: 'light-blue lighten-2 waves-effect waves-light btn', href: '/personal/topics/' + topicId + '/questions/' + question.id + '/update_answers/') {
           i (class:'material-icons left', 'edit')
           yield 'Edit Answers'
         }

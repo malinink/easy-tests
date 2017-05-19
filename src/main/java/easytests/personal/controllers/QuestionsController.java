@@ -74,11 +74,8 @@ public class QuestionsController extends AbstractCrudController {
         final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
         final QuestionModelInterface questionModel = getQuestionModel(questionId, topicId, false);
         injectQuestionTypeModels(model);
-        final List<AnswerModelInterface> answersList = getAnswerModelList(questionModel);
-        Collections.sort(answersList, Comparator.comparingInt(AnswerModelInterface::getSerialNumber));
         model.addAttribute("question", questionModel);
         model.addAttribute("topicId", topicId);
-        model.addAttribute("answersList", answersList);
         return "questions/view";
     }
 
@@ -202,14 +199,10 @@ public class QuestionsController extends AbstractCrudController {
         }
     }
 
-    private void checkModel(AnswerModelInterface answerModel, Integer questionId) {
-        if (answerModel == null) {
-            throw new NotFoundException();
-        }
-    }
-
     private QuestionModelInterface getQuestionModel(Integer id, Integer topicId, Boolean forDelete) {
-        final QuestionsOptionsInterface questionsOptions = this.questionsOptionsBuilder.forAuth();
+        final QuestionsOptionsInterface questionsOptions = this.questionsOptionsBuilder
+                .forAuth()
+                .withAnswers(new AnswersOptions());
         final QuestionModelInterface questionModel = this.questionsService.find(id, questionsOptions);
         checkModel(questionModel, topicId);
         if (forDelete) {
@@ -221,26 +214,5 @@ public class QuestionsController extends AbstractCrudController {
     private void injectQuestionTypeModels(Model model) {
         final List<QuestionTypeModelInterface> questionTypes = this.questionTypesService.findAll();
         model.addAttribute("questionTypes", questionTypes);
-    }
-
-    private AnswerModelInterface getAnswerModel(Integer id, Integer questionId) {
-        final AnswersOptionsInterface answersOptions = this.answersOptionsBuilder.forAuth();
-        final AnswerModelInterface answerModel = this.answersService.find(id, answersOptions);
-
-        return answerModel;
-    }
-
-    private List<AnswerModelInterface> getAnswerModelList(Integer questionId) {
-        final QuestionModelInterface questionModel = questionsService.find(questionId);
-        final AnswersOptionsInterface answersOptions = this.answersOptionsBuilder.forAuth();
-        final List<AnswerModelInterface> answersList = answersService.findByQuestion(questionModel, answersOptions);
-
-        return answersList;
-    }
-
-    private List<AnswerModelInterface> getAnswerModelList(QuestionModelInterface questionModel) {
-        final AnswersOptionsInterface answersOptions = this.answersOptionsBuilder.forAuth();
-        final List<AnswerModelInterface> answersList = answersService.findByQuestion(questionModel, answersOptions);
-        return answersList;
     }
 }
