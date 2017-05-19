@@ -239,7 +239,8 @@ public class QuestionsController extends AbstractCrudController {
     }
 
     private List<AnswerModelInterface> getAnswerModelList(QuestionModelInterface questionModel) {
-        final List<AnswerModelInterface> answersList = answersService.findByQuestion(questionModel);
+        final AnswersOptionsInterface answersOptions = this.answersOptionsBuilder.forAuth();
+        final List<AnswerModelInterface> answersList = answersService.findByQuestion(questionModel, answersOptions);
         return answersList;
     }
 }
