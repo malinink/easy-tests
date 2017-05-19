@@ -36,7 +36,7 @@ public class SubjectsServiceTest {
         subjectModel.setTopics(new ModelsListEmpty());
         subjectModel.setIssueStandard(new IssueStandardModelEmpty());
         subjectModel.setUser(new UserModelEmpty(userId));
-
+        subjectModel.setIssues(new ModelsListEmpty());
 
         return subjectModel;
     }
@@ -49,7 +49,7 @@ public class SubjectsServiceTest {
         subjectModel.setTopics(new ModelsListEmpty());
         subjectModel.setIssueStandard(new IssueStandardModelEmpty());
         subjectModel.setUser(new UserModelEmpty(1));
-
+        subjectModel.setIssues(new ModelsListEmpty());
         this.subjectsService.save(subjectModel);
 
         final SubjectModelInterface foundedSubjectModel = this.subjectsService.find(subjectModel.getId());

@@ -45,7 +45,7 @@ public class SubjectEntityTest {
         Mockito.when(subjectModel.getTopics()).thenReturn(new ModelsListEmpty());
         Mockito.when(subjectModel.getUser()).thenReturn(new UserModelEmpty(subjectUserId));
         Mockito.when(subjectModel.getIssueStandard()).thenReturn(new IssueStandardModelEmpty());
-
+        Mockito.when(subjectModel.getIssues()).thenReturn(new ModelsListEmpty());
         final SubjectEntity subjectEntity = new SubjectEntity();
         subjectEntity.map(subjectModel);
 

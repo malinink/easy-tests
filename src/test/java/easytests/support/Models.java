@@ -45,6 +45,7 @@ public abstract class Models {
         subjectModel.setTopics(new ModelsListEmpty());
         subjectModel.setUser(new UserModelEmpty(userId));
         subjectModel.setIssueStandard(new IssueStandardModelEmpty());
+        subjectModel.setIssues(new ModelsListEmpty());
         return subjectModel;
     }
 
@@ -154,12 +155,12 @@ public abstract class Models {
     public static IssueModelInterface createIssueModel(
            Integer id,
            String name,
-           Integer authorId
+           Integer subjectId
     ) {
         final IssueModelInterface issueModel = new IssueModel();
         issueModel.setId(id);
         issueModel.setName(name);
-        issueModel.setAuthorId(authorId);
+        issueModel.setSubject(new SubjectModelEmpty(subjectId));
         issueModel.setQuizzes(new ModelsListEmpty());
         return issueModel;
     }
