@@ -1,10 +1,7 @@
 package easytests.options;
 
 import easytests.models.SubjectModelInterface;
-import easytests.services.IssueStandardsServiceInterface;
-import easytests.services.SubjectsServiceInterface;
-import easytests.services.TopicsServiceInterface;
-import easytests.services.UsersServiceInterface;
+import easytests.services.*;
 
 import java.util.List;
 
@@ -21,9 +18,13 @@ public interface SubjectsOptionsInterface extends OptionsInterface {
 
     void setTopicsService(TopicsServiceInterface topicsService);
 
+    void setIssuesService(IssuesServiceInterface issuesService);
+
     SubjectsOptionsInterface withUser(UsersOptionsInterface usersOptions);
 
     SubjectsOptionsInterface withIssueStandard(IssueStandardsOptionsInterface issueStandardOptions);
+
+    SubjectsOptionsInterface withIssues(IssuesOptionsInterface issuesOptions);
 
     SubjectsOptionsInterface withTopics(TopicsOptionsInterface topicsOptions);
 

@@ -3,11 +3,14 @@ package easytests.options.builder;
 import easytests.options.PointsOptions;
 import easytests.options.PointsOptionsInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
- * @author nikitalpopov
+ * @author fortyways
  */
+@Service
 public class PointsOptionsBuilder implements PointsOptionsBuilderInterface {
+
 
     @Autowired
     private QuizzesOptionsBuilder quizzesOptionsBuilder;

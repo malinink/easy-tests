@@ -4,6 +4,8 @@ import easytests.entities.PointEntity;
 import easytests.mappers.PointsMapper;
 import easytests.models.PointModel;
 import easytests.models.PointModelInterface;
+import easytests.models.QuizModelInterface;
+import easytests.options.PointsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,25 +17,48 @@ import org.springframework.stereotype.Service;
  * @author nikitalpopov
  */
 @Service
-public class PointsService {
+public class PointsService implements PointsServiceInterface {
 
     @Autowired
     private PointsMapper pointsMapper;
 
-    public List<PointModelInterface> findAll() {
-        return this.map(this.pointsMapper.findAll());
+    @Override
+    public void delete(PointModelInterface pointModel, PointsOptionsInterface pointsOptions) {
+
     }
 
-    public PointModelInterface find(Integer id) {
+    @Override
+    public void delete(List<PointModelInterface> pointModels) {
 
-        final PointEntity pointEntity = this.pointsMapper.find(id);
-        if (pointEntity == null) {
-            return null;
+    }
+
+    @Override
+    public void delete(List<PointModelInterface> pointModels, PointsOptionsInterface pointsOptions) {
+
+    }
+
+    @Override
+    public void delete(PointModelInterface pointModel) {
+
+        final PointEntity pointEntity = this.map(pointModel);
+        if (pointEntity.getId() == null) {
+            throw new DeleteUnidentifiedModelException();
         }
-        return this.map(pointEntity);
+        this.pointsMapper.delete(pointEntity);
 
     }
 
+    @Override
+    public void save(PointModelInterface pointModel, PointsOptionsInterface pointsOptions) {
+
+    }
+
+    @Override
+    public void save(List<PointModelInterface> pointModels) {
+
+    }
+
+    @Override
     public void save(PointModelInterface pointModel) {
 
         final PointEntity pointEntity = this.map(pointModel);
@@ -46,13 +71,32 @@ public class PointsService {
 
     }
 
-    public void delete(PointModelInterface pointModel) {
+    @Override
+    public void save(List<PointModelInterface> pointModels, PointsOptionsInterface pointsOptions) {
 
-        final PointEntity pointEntity = this.map(pointModel);
-        if (pointEntity.getId() == null) {
-            throw new DeleteUnidentifiedModelException();
+    }
+
+    @Override
+    public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel) {
+        return null;
+    }
+
+    @Override
+    public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel, PointsOptionsInterface pointsOptions) {
+        return null;
+    }
+
+    public List<PointModelInterface> findAll() {
+        return this.map(this.pointsMapper.findAll());
+    }
+
+    public PointModelInterface find(Integer id) {
+
+        final PointEntity pointEntity = this.pointsMapper.find(id);
+        if (pointEntity == null) {
+            return null;
         }
-        this.pointsMapper.delete(pointEntity);
+        return this.map(pointEntity);
 
     }
 

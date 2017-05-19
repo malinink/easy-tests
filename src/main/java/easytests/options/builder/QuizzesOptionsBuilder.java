@@ -2,24 +2,31 @@ package easytests.options.builder;
 
 import easytests.options.QuizzesOptions;
 import easytests.options.QuizzesOptionsInterface;
+import easytests.options.TesteesOptions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
- * @author somebody
+ * @author fortyways
  */
+@Service
 public class QuizzesOptionsBuilder implements QuizzesOptionsBuilderInterface {
 
-    @Override
-    public QuizzesOptionsInterface forDelete() {
+    @Autowired
+    private IssuesOptionsBuilder issuesOptionsBuilder;
 
-        return new QuizzesOptions();
-
-    }
+    @Autowired
+    private PointsOptionsBuilder pointsOptionsBuilder;
 
     @Override
     public QuizzesOptionsInterface forAuth() {
-
-        return new QuizzesOptions();
-
+        return new QuizzesOptions().withIssue(issuesOptionsBuilder.forAuth());
     }
 
+    @Override
+    public QuizzesOptionsInterface forDelete() {
+        return new QuizzesOptions()
+                .withPoints(pointsOptionsBuilder.forDelete())
+                .withTestee(new TesteesOptions());
+    }
 }

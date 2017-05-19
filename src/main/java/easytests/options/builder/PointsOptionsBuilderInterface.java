@@ -3,12 +3,11 @@ package easytests.options.builder;
 import easytests.options.PointsOptionsInterface;
 
 /**
- * @author nikitalpopov
+ * @author fortyways
  */
 public interface PointsOptionsBuilderInterface extends OptionsBuilderInterface {
 
-    PointsOptionsInterface forDelete();
-
     PointsOptionsInterface forAuth();
 
+    PointsOptionsInterface forDelete();
 }

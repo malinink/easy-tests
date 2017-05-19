@@ -3,12 +3,12 @@ package easytests.options.builder;
 import easytests.options.QuizzesOptionsInterface;
 
 /**
- * @author nikitalpopov
+ * @author fortyways
  */
 public interface QuizzesOptionsBuilderInterface extends OptionsBuilderInterface {
 
-    QuizzesOptionsInterface forDelete();
-
     QuizzesOptionsInterface forAuth();
+
+    QuizzesOptionsInterface forDelete();
 
 }

@@ -4,6 +4,7 @@ import easytests.entities.IssueEntity;
 import easytests.mappers.IssuesMapper;
 import easytests.models.IssueModel;
 import easytests.models.IssueModelInterface;
+import easytests.models.SubjectModelInterface;
 import easytests.options.IssuesOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class IssuesService implements IssuesServiceInterface {
 
     @Autowired
     private QuizzesService quizzesService;
+
+    @Autowired
+    private SubjectsService subjectsService;
 
     @Override
     public List<IssueModelInterface> findAll() {
@@ -61,6 +65,20 @@ public class IssuesService implements IssuesServiceInterface {
     }
 
     @Override
+    public void save(List<IssueModelInterface> issuesModels) {
+        for (IssueModelInterface issueModel: issuesModels) {
+            this.save(issueModel);
+        }
+    }
+
+    @Override
+    public void save(List<IssueModelInterface> issuesModels, IssuesOptionsInterface issueOptions) {
+        for (IssueModelInterface issueModel: issuesModels) {
+            this.save(issueModel, issueOptions);
+        }
+    }
+
+    @Override
     public void delete(IssueModelInterface issueModel) {
         final IssueEntity issueEntity = this.map(issueModel);
         if (issueEntity.getId() == null) {
@@ -70,8 +88,33 @@ public class IssuesService implements IssuesServiceInterface {
     }
 
     @Override
+    public void delete(List<IssueModelInterface> issuesModels) {
+        for (IssueModelInterface issueModel: issuesModels) {
+            this.delete(issueModel);
+        }
+    }
+
+    @Override
+    public void delete(List<IssueModelInterface> issuesModels, IssuesOptionsInterface issueOptions) {
+        for (IssueModelInterface issueModel: issuesModels) {
+            this.delete(issueModel, issueOptions);
+        }
+    }
+
+    @Override
     public void delete(IssueModelInterface issueModel, IssuesOptionsInterface issuesOptions) {
         this.withServices(issuesOptions).deleteWithRelations(issueModel);
+    }
+
+    @Override
+    public List<IssueModelInterface> findBySubject(SubjectModelInterface subjectModel) {
+        return this.map(this.issuesMapper.findBySubjectId(subjectModel.getId()));
+    }
+
+    @Override
+    public List<IssueModelInterface> findBySubject(SubjectModelInterface subjectModel,
+                                                   IssuesOptionsInterface issueOptions) {
+        return this.withServices(issueOptions).withRelations(this.findBySubject(subjectModel));
     }
 
     private IssueModelInterface map(IssueEntity issueEntity) {
@@ -100,6 +143,7 @@ public class IssuesService implements IssuesServiceInterface {
     private IssuesOptionsInterface withServices(IssuesOptionsInterface issuesOptions) {
         issuesOptions.setIssuesService(this);
         issuesOptions.setQuizzesService(this.quizzesService);
+        issuesOptions.setSubjectsService(this.subjectsService);
         return issuesOptions;
     }
 

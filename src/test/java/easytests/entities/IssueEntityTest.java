@@ -1,6 +1,7 @@
 package easytests.entities;
 
 import easytests.models.IssueModelInterface;
+import easytests.models.empty.SubjectModelEmpty;
 import org.junit.Assert;
 import org.junit.Test;
 import org.meanbean.test.BeanTester;
@@ -23,19 +24,19 @@ public class IssueEntityTest {
     public void testMap() throws Exception {
         final Integer issueId = 420;
         final String name = "Name";
-        final Integer authorId = 13;
+        final Integer subjectId = 13;
 
 
         final IssueModelInterface issueModel = Mockito.mock(IssueModelInterface.class);
         Mockito.when(issueModel.getId()).thenReturn(issueId);
         Mockito.when(issueModel.getName()).thenReturn(name);
-        Mockito.when(issueModel.getAuthorId()).thenReturn(authorId);
+        Mockito.when(issueModel.getSubject()).thenReturn(new SubjectModelEmpty(subjectId));
 
         final IssueEntity issueEntity = new IssueEntity();
         issueEntity.map(issueModel);
 
         Assert.assertEquals(issueId, issueEntity.getId());
         Assert.assertEquals(name, issueEntity.getName());
-        Assert.assertEquals(authorId, issueEntity.getAuthorId());
+        Assert.assertEquals(subjectId, issueEntity.getSubjectId());
     }
 }
