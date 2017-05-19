@@ -3,10 +3,12 @@ package easytests.options;
 import easytests.models.IssueModelInterface;
 import easytests.models.PointModelInterface;
 import easytests.models.QuizModelInterface;
+import easytests.models.TesteeModelInterface;
 import easytests.models.empty.IssueModelEmpty;
 import easytests.services.IssuesServiceInterface;
 import easytests.services.PointsServiceInterface;
 import easytests.services.QuizzesServiceInterface;
+import easytests.services.TesteesServiceInterface;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,14 +41,18 @@ public class QuizzesOptionsTest {
         final QuizzesOptionsInterface quizzesOptions = new QuizzesOptions();
 
         final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
+        final TesteesServiceInterface testeeService = Mockito.mock(TesteesServiceInterface.class);
         final IssuesServiceInterface issuesService = Mockito.mock(IssuesServiceInterface.class);
 
         final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
+        final TesteesOptionsInterface testeeOptions = Mockito.mock(TesteesOptionsInterface.class);
         final IssuesOptionsInterface issuesOptions = Mockito.mock(IssuesOptionsInterface.class);
 
         quizzesOptions.setPointsService(pointsService);
         quizzesOptions.setIssuesService(issuesService);
+        quizzesOptions.setTesteesService(testeeService);
 
+        quizzesOptions.withTestee(testeeOptions);
         quizzesOptions.withPoints(pointsOptions);
         quizzesOptions.withIssue(issuesOptions);
 
@@ -55,6 +61,9 @@ public class QuizzesOptionsTest {
 
         final IssueModelInterface issueModel = Mockito.mock(IssueModelInterface.class);
 
+        final TesteeModelInterface testeeModel = Mockito.mock(TesteeModelInterface.class);
+
+        given(testeeService.findByQuiz(quizModel, testeeOptions)).willReturn(testeeModel);
         given(pointsService.findByQuiz(quizModel, pointsOptions)).willReturn(pointsModels);
         given(issuesService.find(quizModel.getIssue().getId(), issuesOptions)).willReturn(issueModel);
 
@@ -62,9 +71,11 @@ public class QuizzesOptionsTest {
 
         Assert.assertEquals(quizModel, quizModelWithRelations);
 
+        verify(testeeService).findByQuiz(quizModel, testeeOptions);
         verify(pointsService).findByQuiz(quizModel, pointsOptions);
         verify(issuesService).find(1, issuesOptions);
 
+        verify(quizModel).setTestee(testeeModel);
         verify(quizModel).setPoints(pointsModels);
         verify(quizModel).setIssue(issueModel);
     }
@@ -74,16 +85,19 @@ public class QuizzesOptionsTest {
 
         final QuizzesOptionsInterface quizzesOptions = new QuizzesOptions();
 
+        final TesteesServiceInterface testeesService = Mockito.mock(TesteesServiceInterface.class);
         final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
         final IssuesServiceInterface issuesService = Mockito.mock(IssuesServiceInterface.class);
 
+        final TesteesOptionsInterface testeesOptions = Mockito.mock(TesteesOptionsInterface.class);
         final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
         final IssuesOptionsInterface issueOptions = Mockito.mock(IssuesOptionsInterface.class);
 
+        quizzesOptions.setTesteesService(testeesService);
         quizzesOptions.setPointsService(pointsService);
         quizzesOptions.setIssuesService(issuesService);
 
-        quizzesOptions.withPoints(pointsOptions).withIssue(issueOptions);
+        quizzesOptions.withPoints(pointsOptions).withIssue(issueOptions).withTestee(testeesOptions);
 
         final QuizModelInterface nullQuizModel = null;
         final QuizModelInterface quizModelWithRelations = quizzesOptions.withRelations(nullQuizModel);
@@ -107,15 +121,20 @@ public class QuizzesOptionsTest {
 
         final QuizzesOptionsInterface quizzesOptions = new QuizzesOptions();
 
+        final TesteesServiceInterface testeesService = Mockito.mock(TesteesServiceInterface.class);
+        final TesteesOptionsInterface testeesOptions = Mockito.mock(TesteesOptionsInterface.class);
+
         final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
         final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
 
         final IssuesServiceInterface issuesService = Mockito.mock(IssuesServiceInterface.class);
         final IssuesOptionsInterface issueOptions = Mockito.mock(IssuesOptionsInterface.class);
 
+        quizzesOptions.setTesteesService(testeesService);
         quizzesOptions.setPointsService(pointsService);
         quizzesOptions.setIssuesService(issuesService);
 
+        quizzesOptions.withTestee(testeesOptions);
         quizzesOptions.withPoints(pointsOptions);
         quizzesOptions.withIssue(issueOptions);
 
@@ -134,72 +153,100 @@ public class QuizzesOptionsTest {
         given(issuesService.find(1, issueOptions)).willReturn(issueModelFirst);
         given(issuesService.find(2, issueOptions)).willReturn(issueModelSecond);
 
+        final TesteeModelInterface testeeModelFirst = Mockito.mock(TesteeModelInterface.class);
+        final TesteeModelInterface testeeModelSecond = Mockito.mock(TesteeModelInterface.class);
+
+        given(testeesService.findByQuiz(quizModelFirst, testeesOptions)).willReturn(testeeModelFirst);
+        given(testeesService.findByQuiz(quizModelSecond, testeesOptions)).willReturn(testeeModelSecond);
+
+
         final List<QuizModelInterface> quizzesModelsWithRelations = quizzesOptions.withRelations(quizzesModels);
 
         Assert.assertEquals(quizzesModelsWithRelations, quizzesModels);
+        verify(testeesService).findByQuiz(quizModelFirst, testeesOptions);
         verify(pointsService).findByQuiz(quizModelFirst, pointsOptions);
         verify(issuesService).find(1, issueOptions);
 
         verify(quizzesModels.get(0)).setPoints(pointsModelsFirst);
         verify(quizzesModels.get(0)).setPoints(Mockito.anyList());
         verify(quizzesModels.get(0)).setIssue(issueModelFirst);
+        verify(quizzesModels.get(0)).setTestee(testeeModelFirst);
 
+        verify(testeesService).findByQuiz(quizModelSecond, testeesOptions);
         verify(pointsService).findByQuiz(quizModelSecond, pointsOptions);
         verify(issuesService).find(2, issueOptions);
 
         verify(quizzesModels.get(1)).setPoints(pointsModelsSecond);
         verify(quizzesModels.get(1)).setPoints(Mockito.anyList());
         verify(quizzesModels.get(1)).setIssue(issueModelSecond);
+        verify(quizzesModels.get(1)).setTestee(testeeModelSecond);
     }
 
     @Test
     public void testSaveWithRelations() throws Exception {
         final QuizModelInterface quizModel = Mockito.mock(QuizModelInterface.class);
 
+        final TesteesServiceInterface testeesService = Mockito.mock(TesteesServiceInterface.class);
+        final TesteesOptionsInterface testeesOptions = Mockito.mock(TesteesOptionsInterface.class);
+
         final QuizzesServiceInterface quizzesService = Mockito.mock(QuizzesServiceInterface.class);
         final QuizzesOptionsInterface quizzesOptions = new QuizzesOptions();
 
         final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
         final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
 
+        quizzesOptions.setTesteesService(testeesService);
         quizzesOptions.setQuizzesService(quizzesService);
         quizzesOptions.setPointsService(pointsService);
+        quizzesOptions.withTestee(testeesOptions);
         quizzesOptions.withPoints(pointsOptions);
 
         final List<PointModelInterface> pointsModels = new ArrayList<>();
         quizModel.setPoints(pointsModels);
 
-        final InOrder inOrder = Mockito.inOrder(quizzesService, pointsService);
+        final TesteeModelInterface testeeModel = Mockito.mock(TesteeModelInterface.class);
+        quizModel.setTestee(testeeModel);
+
+        final InOrder inOrder = Mockito.inOrder(quizzesService, testeesService, pointsService);
 
         quizzesOptions.saveWithRelations(quizModel);
 
         inOrder.verify(quizzesService).save(quizModel);
+        inOrder.verify(testeesService).save(quizModel.getTestee(),testeesOptions);
         inOrder.verify(pointsService).save(quizModel.getPoints(), pointsOptions);
-
     }
 
     @Test
     public void testDeleteWithRelations() throws Exception {
         final QuizModelInterface quizModel = Mockito.mock(QuizModelInterface.class);
 
+        final TesteesServiceInterface testeesService = Mockito.mock(TesteesServiceInterface.class);
+        final TesteesOptionsInterface testeesOptions = Mockito.mock(TesteesOptionsInterface.class);
+
         final QuizzesServiceInterface quizzesService = Mockito.mock(QuizzesServiceInterface.class);
         final QuizzesOptionsInterface quizzesOptions = new QuizzesOptions();
 
         final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
         final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
 
+        quizzesOptions.setTesteesService(testeesService);
         quizzesOptions.setQuizzesService(quizzesService);
         quizzesOptions.setPointsService(pointsService);
         quizzesOptions.withPoints(pointsOptions);
+        quizzesOptions.withTestee(testeesOptions);
 
         final List<PointModelInterface> pointsModels = new ArrayList<>();
         quizModel.setPoints(pointsModels);
 
-        final InOrder inOrder = Mockito.inOrder(pointsService, quizzesService);
+        final TesteeModelInterface testeeModel = Mockito.mock(TesteeModelInterface.class);
+        quizModel.setTestee(testeeModel);
+
+        final InOrder inOrder = Mockito.inOrder(pointsService, testeesService, quizzesService);
 
         quizzesOptions.deleteWithRelations(quizModel);
 
         inOrder.verify(pointsService).delete(quizModel.getPoints(), pointsOptions);
+        inOrder.verify(testeesService).delete(quizModel.getTestee(),testeesOptions);
         inOrder.verify(quizzesService).delete(quizModel);
 
     }
