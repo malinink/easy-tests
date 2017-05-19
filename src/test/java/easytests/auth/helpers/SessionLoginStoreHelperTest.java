@@ -42,4 +42,10 @@ public class SessionLoginStoreHelperTest {
         storeHelper.removeLogin();
         Assert.assertNull(storeHelper.getLogin());
     }
+
+    @Test
+    public void testRemoveAbsentLogin() throws Exception {
+        storeHelper.removeLogin();
+        Assert.assertNull(storeHelper.getLogin());
+    }
 }
