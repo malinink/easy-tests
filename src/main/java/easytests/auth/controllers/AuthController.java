@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthController {
     @GetMapping("/sign-in")
     public String signIn(Model model, HttpServletRequest request) {
-        model.addAttribute("login", "" + new SessionLoginStoreHelper(request.getSession(false)).getLogin());
+        model.addAttribute("login", new SessionLoginStoreHelper(request.getSession(false)).getLogin());
         return "auth/sign-in";
     }
 }
