@@ -24,6 +24,7 @@ public class AnswerDto {
     @Size(max = 255)
     private String txt;
 
+    @NotNull
     private Boolean right;
 
     @NotNull
