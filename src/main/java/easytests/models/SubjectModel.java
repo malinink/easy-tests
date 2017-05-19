@@ -25,6 +25,8 @@ public class SubjectModel implements SubjectModelInterface {
 
     private IssueStandardModelInterface issueStandard;
 
+    private List<IssueModelInterface> issues;
+
     public void map(SubjectEntity subjectEntity) {
 
         this.setId(subjectEntity.getId());
@@ -33,5 +35,6 @@ public class SubjectModel implements SubjectModelInterface {
         this.setTopics(new ModelsListEmpty());
         this.setUser(new UserModelEmpty(subjectEntity.getUserId()));
         this.setIssueStandard(new IssueStandardModelEmpty());
+        this.setIssues(new ModelsListEmpty());
     }
 }

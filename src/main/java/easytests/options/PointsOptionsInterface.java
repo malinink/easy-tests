@@ -8,9 +8,10 @@ import easytests.services.SolutionsServiceInterface;
 import java.util.List;
 
 /**
+ * @author fortyways
  * @author Loriens
  */
-public interface PointsOptionsInterface {
+public interface PointsOptionsInterface extends OptionsInterface {
     void setPointsService(PointsServiceInterface pointsService);
 
     void setSolutionsService(SolutionsServiceInterface solutionsService);

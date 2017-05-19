@@ -14,7 +14,7 @@ public interface QuizzesServiceInterface extends ServiceInterface {
 
     List<QuizModelInterface> findAll(QuizzesOptionsInterface quizzesOptions);
 
-    //QuizModelInterface find(Integer id);
+    QuizModelInterface find(Integer id);
 
     QuizModelInterface find(Integer id, QuizzesOptionsInterface quizzesOptions);
 
