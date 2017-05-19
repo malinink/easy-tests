@@ -15,6 +15,9 @@ public class QuizzesOptionsBuilder implements QuizzesOptionsBuilderInterface {
     @Autowired
     private IssuesOptionsBuilder issuesOptionsBuilder;
 
+    @Autowired
+    private PointsOptionsBuilder pointsOptionsBuilder;
+
     @Override
     public QuizzesOptionsInterface forAuth() {
         return new QuizzesOptions().withIssue(issuesOptionsBuilder.forAuth());
@@ -23,6 +26,7 @@ public class QuizzesOptionsBuilder implements QuizzesOptionsBuilderInterface {
     @Override
     public QuizzesOptionsInterface forDelete() {
         return new QuizzesOptions()
+                .withPoints(pointsOptionsBuilder.forDelete())
                 .withTestee(new TesteesOptions());
     }
 }
