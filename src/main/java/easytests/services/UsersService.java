@@ -64,6 +64,7 @@ public class UsersService implements UsersServiceInterface {
             userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
             this.usersMapper.insert(userEntity);
             userModel.setId(userEntity.getId());
+            userModel.setPassword(userEntity.getPassword());
             return;
         }
         this.usersMapper.update(userEntity);
