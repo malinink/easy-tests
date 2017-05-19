@@ -45,7 +45,9 @@ public class SessionLoginStoreHelperTest {
 
     @Test
     public void testRemoveAbsentLogin() throws Exception {
-        storeHelper.removeLogin();
-        Assert.assertNull(storeHelper.getLogin());
+        SessionLoginStoreHelper absentSessionLoginStoreHelper = new SessionLoginStoreHelper(null);
+        absentSessionLoginStoreHelper.removeLogin();
+        Assert.assertEquals(false, absentSessionLoginStoreHelper.exists());
+        Assert.assertNull(absentSessionLoginStoreHelper.getLogin());
     }
 }
