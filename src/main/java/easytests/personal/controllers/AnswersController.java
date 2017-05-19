@@ -70,14 +70,14 @@ public class AnswersController extends AbstractCrudController {
     public String save(
             Model model,
             @PathVariable("questionId") Integer questionId,
-            @Valid /*@ModelAttribute("answerDtoList")*/ ArrayList<AnswerDto> answerDtoList,
+            /*@Valid*/ @ModelAttribute("answerDtoList") ArrayList<AnswerDto> answerDtoList,
             BindingResult bindingResult,
             @PathVariable("topicId") Integer topicId) {
+        System.out.println("DTO LIST SIZE: " + answerDtoList.size());
         final QuestionModelInterface questionModel = this.getQuestionModel(questionId, false);
         final List<AnswerModelInterface> oldAnswerList = questionModel.getAnswers();
         //TODO: схоронить все полученные ответы, если ответа не получили, он удаляется
         final List<AnswerModelInterface> answerList = this.getAnswerModelList(answerDtoList);
-        System.out.println("DTO LIST SIZE: " + answerDtoList.size());
         for (AnswerDto answerDto
                 : answerDtoList) {
             System.out.println(answerDto.getTxt());
@@ -103,47 +103,6 @@ public class AnswersController extends AbstractCrudController {
         }
         return "redirect:/personal/topics/" + topicId + "/questions/" + questionId + "/update_answers/";
     }
-    /*
-    @GetMapping("update")
-    public String update(
-            Model model,
-            @PathVariable Integer questionId,
-            @PathVariable("topicId") Integer topicId) {
-        final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
-        final QuestionModelInterface questionModel = this.getQuestionModel(questionId, topicId, false);
-        injectQuestionTypeModels(model);
-        final QuestionModelDto questionModelDto = new QuestionModelDto();
-        questionModelDto.map(questionModel);
-        setUpdateBehaviour(model);
-        model.addAttribute("question", questionModelDto);
-        model.addAttribute("topicId", topicId);
-        return "questions/form";
-    }
-    */
-    /*
-    @PostMapping("update")
-    public String save(
-            Model model,
-            @PathVariable Integer questionId,
-            @Valid @NotNull QuestionModelDto questionModelDto,
-            BindingResult bindingResult,
-            @PathVariable("topicId") Integer topicId) {
-        final TopicModelInterface topicModel = getCurrentTopicModel(topicId);
-        final QuestionModelInterface questionModel = this.getQuestionModel(questionId, topicId, false);
-        this.questionModelDtoValidator.validate(questionModelDto, bindingResult);
-        if (bindingResult.hasErrors()) {
-            injectQuestionTypeModels(model);
-            setUpdateBehaviour(model);
-            model.addAttribute("question", questionModelDto);
-            model.addAttribute("topicId", topicId);
-            model.addAttribute("errors", bindingResult);
-            return "questions/form";
-        }
-        questionModelDto.mapInto(questionModel, questionTypesService);
-        this.questionsService.save(questionModel);
-        return "redirect:/personal/topics/" + topicId + "/questions/";
-    }
-    */
     /*
     private TopicModelInterface getCurrentTopicModel(Integer topicId) {
         final TopicsOptionsInterface topicsOptions = this.topicsOptionsBuilder.forAuth();
