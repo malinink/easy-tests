@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class PointsOptionsBuilder implements PointsOptionsBuilderInterface {
 
-
     @Autowired
     private QuizzesOptionsBuilder quizzesOptionsBuilder;
 
