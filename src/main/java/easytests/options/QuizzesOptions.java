@@ -7,11 +7,14 @@ import easytests.services.PointsServiceInterface;
 import easytests.services.QuizzesServiceInterface;
 import easytests.services.TesteesServiceInterface;
 import java.util.List;
+
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 /**
  * @author DoZor-80
  */
+@EqualsAndHashCode
 public class QuizzesOptions implements QuizzesOptionsInterface {
     @Setter
     private IssuesServiceInterface issuesService;
@@ -84,9 +87,7 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
 
         if (this.issuesOptions != null) {
 
-            this.issuesOptions.withQuizzes(this);
-            this.issuesOptions.saveWithRelations(quizModel.getIssue());
-            return;
+            this.issuesService.save(quizModel.getIssue(), this.issuesOptions);
 
         }
 
@@ -106,20 +107,19 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
 
     public void deleteWithRelations(QuizModelInterface quizModel) {
 
-        if (this.issuesOptions != null) {
-            this.issuesOptions.withQuizzes(this);
-            this.issuesOptions.deleteWithRelations(quizModel.getIssue());
-            return;
-        }
         if (this.pointsOptions != null) {
             this.pointsService.delete(quizModel.getPoints(), this.pointsOptions);
+        }
+
+        this.quizzesService.delete(quizModel);
+
+        if (this.issuesOptions != null) {
+            this.issuesService.delete(quizModel.getIssue(), this.issuesOptions);
         }
 
         if (this.testeesOptions != null) {
             this.testeesService.delete(quizModel.getTestee(), this.testeesOptions);
         }
-
-        this.quizzesService.delete(quizModel);
 
     }
 }
