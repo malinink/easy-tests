@@ -11,10 +11,6 @@ import java.util.List;
  */
 public interface PointsServiceInterface extends ServiceInterface {
 
- * @author nikitalpopov
- */
-public interface PointsServiceInterface extends ServiceInterface {
-
     List<PointModelInterface> findAll();
 
     List<PointModelInterface> findAll(PointsOptionsInterface pointsOptions);
