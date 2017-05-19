@@ -11,6 +11,7 @@ import static org.mockito.Mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -46,6 +47,12 @@ public class AuthUsersServiceTest {
         Assert.assertEquals(usersService.findByEmail(email).getEmail(), user.getUsername());
         Assert.assertEquals(usersService.findByEmail(email).getPassword(), user.getPassword());
         Assert.assertEquals(usersService.findByEmail(email).getState() == 3, user.isEnabled());
+        Assert.assertEquals(3, user.getAuthorities().size());
         verify(usersService, times(3)).findByEmail(email);
+    }
+
+    @Test(expected = UsernameNotFoundException.class)
+    public void testException() throws UsernameNotFoundException {
+        this.authUsersService.loadUserByUsername("wrong@email.com");
     }
 }
