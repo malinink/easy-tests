@@ -3,7 +3,9 @@ package easytests.auth.controllers;
 import easytests.auth.helpers.SessionLoginStoreHelper;
 import javax.servlet.http.HttpServletRequest;
 
+import easytests.config.LocalizationConfig;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,21 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/auth")
+@Import(LocalizationConfig.class)
 public class AuthController {
-    @Bean
-    public ReloadableResourceBundleMessageSource messageSource() {
-        final ReloadableResourceBundleMessageSource resourseBundle = new
-                ReloadableResourceBundleMessageSource();
-        resourseBundle.setBasename("classpath:/locales/sign-in");
-        resourseBundle.setCacheSeconds(1);
-        resourseBundle.setDefaultEncoding("UTF-8");
-        return resourseBundle;
-    }
+
+    final LocalizationConfig localization = new LocalizationConfig();
 
     @GetMapping("/sign-in")
     public String signIn(Model model, HttpServletRequest request) {
-        final ReloadableResourceBundleMessageSource msg = messageSource();
-        final String enterLogin = new String("enter_login");
+        final ReloadableResourceBundleMessageSource msg = localization.messageSource();
+        final String enterEmail = new String("enter_email");
         final String enterPassword = new String("enter_password");
         final String forgotPassword = new String("forgot_password");
         final String loginText = new String("login_text");
@@ -39,7 +35,7 @@ public class AuthController {
 
         model.addAttribute("login", new SessionLoginStoreHelper(request.getSession(false)).getLogin());
         model.addAttribute("sign_in", msg.getMessage("text", null, language, null));
-        model.addAttribute(enterLogin, msg.getMessage(enterLogin, null, language, null));
+        model.addAttribute(enterEmail, msg.getMessage(enterEmail, null, language, null));
         model.addAttribute(enterPassword, msg.getMessage(enterPassword, null, language, null));
         model.addAttribute(forgotPassword, msg.getMessage(forgotPassword, null, language, null));
         model.addAttribute(loginText, msg.getMessage(loginText, null, language, null));
