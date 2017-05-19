@@ -241,13 +241,13 @@ public class QuizzesOptionsTest {
         final TesteeModelInterface testeeModel = Mockito.mock(TesteeModelInterface.class);
         quizModel.setTestee(testeeModel);
 
-        final InOrder inOrder = Mockito.inOrder(pointsService, testeesService, quizzesService);
+        final InOrder inOrder = Mockito.inOrder(pointsService, quizzesService, testeesService);
 
         quizzesOptions.deleteWithRelations(quizModel);
 
         inOrder.verify(pointsService).delete(quizModel.getPoints(), pointsOptions);
-        inOrder.verify(testeesService).delete(quizModel.getTestee(),testeesOptions);
         inOrder.verify(quizzesService).delete(quizModel);
+        inOrder.verify(testeesService).delete(quizModel.getTestee(),testeesOptions);
 
     }
 
