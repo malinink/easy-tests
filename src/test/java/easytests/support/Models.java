@@ -3,6 +3,8 @@ package easytests.support;
 import easytests.models.*;
 import easytests.models.empty.*;
 
+import java.time.LocalDateTime;
+
 /**
  * @author malinink
  */
@@ -43,6 +45,7 @@ public abstract class Models {
         subjectModel.setTopics(new ModelsListEmpty());
         subjectModel.setUser(new UserModelEmpty(userId));
         subjectModel.setIssueStandard(new IssueStandardModelEmpty());
+        subjectModel.setIssues(new ModelsListEmpty());
         return subjectModel;
     }
 
@@ -132,11 +135,17 @@ public abstract class Models {
     public static QuizModelInterface createQuizModel(
             Integer id,
             String inviteCode,
-            Integer issueId
+            Integer issueId,
+            LocalDateTime startedAt,
+            LocalDateTime finishedAt,
+            boolean codeExpired
     ){
         final QuizModelInterface quizModel = new QuizModel();
         quizModel.setId(id);
         quizModel.setInviteCode(inviteCode);
+        quizModel.setStartedAt(startedAt);
+        quizModel.setFinishedAt(finishedAt);
+        quizModel.setCodeExpired(codeExpired);
         quizModel.setIssue(new IssueModelEmpty(issueId));
         quizModel.setPoints(new ModelsListEmpty());
         quizModel.setTestee(new TesteeModelEmpty());
@@ -146,12 +155,12 @@ public abstract class Models {
     public static IssueModelInterface createIssueModel(
            Integer id,
            String name,
-           Integer authorId
+           Integer subjectId
     ) {
         final IssueModelInterface issueModel = new IssueModel();
         issueModel.setId(id);
         issueModel.setName(name);
-        issueModel.setAuthorId(authorId);
+        issueModel.setSubject(new SubjectModelEmpty(subjectId));
         issueModel.setQuizzes(new ModelsListEmpty());
         return issueModel;
     }
@@ -168,5 +177,6 @@ public abstract class Models {
         pointModel.setSolutions(new ModelsListEmpty());
         return pointModel;
     }
+
 
 }

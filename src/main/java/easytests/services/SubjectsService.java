@@ -29,6 +29,9 @@ public class SubjectsService implements SubjectsServiceInterface {
     private TopicsService topicsService;
 
     @Autowired
+    private IssuesService issuesService;
+
+    @Autowired
     private IssueStandardsService issueStandardsService;
 
     @Override
@@ -148,6 +151,7 @@ public class SubjectsService implements SubjectsServiceInterface {
     }
 
     private SubjectsOptionsInterface withServices(SubjectsOptionsInterface subjectsOptions) {
+        subjectsOptions.setIssuesService(this.issuesService);
         subjectsOptions.setSubjectsService(this);
         subjectsOptions.setUsersService(this.usersService);
         subjectsOptions.setIssueStandardsService(this.issueStandardsService);

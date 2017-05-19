@@ -49,7 +49,7 @@ public class SubjectModelTest {
         Assert.assertEquals(new ModelsListEmpty(), subjectModel.getTopics());
         Assert.assertEquals(new UserModelEmpty(subjectUserId), subjectModel.getUser());
         Assert.assertEquals(new IssueStandardModelEmpty(), subjectModel.getIssueStandard());
-
+        Assert.assertEquals(new ModelsListEmpty(), subjectModel.getIssues());
     }
 
 }

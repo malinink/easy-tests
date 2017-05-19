@@ -3,6 +3,8 @@ package easytests.support;
 import easytests.entities.*;
 import org.mockito.Mockito;
 
+import java.time.LocalDateTime;
+
 
 /**
  * @author malinink
@@ -129,12 +131,12 @@ public abstract class Entities {
     public static IssueEntity createIssueEntityMock(
             Integer id,
             String name,
-            Integer authorId
+            Integer subjectId
     ) {
         final IssueEntity issueEntity = Mockito.mock(IssueEntity.class);
         Mockito.when(issueEntity.getId()).thenReturn(id);
         Mockito.when(issueEntity.getName()).thenReturn(name);
-        Mockito.when(issueEntity.getAuthorId()).thenReturn(authorId);
+        Mockito.when(issueEntity.getSubjectId()).thenReturn(subjectId);
         return issueEntity;
     }
 
@@ -149,6 +151,25 @@ public abstract class Entities {
         Mockito.when(pointEntity.getQuizId()).thenReturn(quizId);
         return pointEntity;
     }
+
+    public static QuizEntity createQuizEntityMock(
+            Integer id,
+            Integer issueId,
+            String inviteCode,
+            LocalDateTime startedAt,
+            LocalDateTime finishedAt,
+            boolean codeExpired
+    ) {
+        final QuizEntity quizEntity = Mockito.mock(QuizEntity.class);
+        Mockito.when(quizEntity.getId()).thenReturn(id);
+        Mockito.when(quizEntity.getIssueId()).thenReturn(issueId);
+        Mockito.when(quizEntity.getInviteCode()).thenReturn(inviteCode);
+        Mockito.when(quizEntity.getStartedAt()).thenReturn(startedAt);
+        Mockito.when(quizEntity.getFinishedAt()).thenReturn(finishedAt);
+        Mockito.when(quizEntity.getCodeExpired()).thenReturn(codeExpired);
+        return quizEntity;
+    }
+
 
 }
 

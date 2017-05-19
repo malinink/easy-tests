@@ -115,6 +115,10 @@ CREATE TABLE quizzes (
   id         SERIAL      NOT NULL,
   issue_id  INTEGER NOT NULL,
   invite_code VARCHAR(32),
+  started_at  TIMESTAMP,
+  finished_at TIMESTAMP,
+  code_expired BOOLEAN,
+
   PRIMARY KEY (id)
 );
 
@@ -147,7 +151,7 @@ CREATE TABLE points (
 CREATE TABLE issues (
   id          SERIAL        NOT NULL,
   name        VARCHAR(100)  NOT NULL,
-  author_id   SERIAL        NOT NULL,
+  subject_id  INTEGER       NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -202,10 +206,10 @@ INSERT INTO answers(txt, question_id, serial_number, is_right) VALUES
   ('Answer2', 2, 2, FALSE),
   ('Answer3', 3, 3, TRUE);
 
-INSERT INTO quizzes (issue_id, invite_code) VALUES
- (1, 'test_invite_code1'),
- (2, 'test_invite_code2'),
- (3, 'test_invite_code3');
+INSERT INTO quizzes (issue_id, invite_code,started_at,finished_at,code_expired) VALUES
+ (1, 'test_invite_code1','2003-2-1'::timestamp,'2003-3-1'::timestamp,FALSE ),
+ (2, 'test_invite_code2','2003-2-1'::timestamp,'2003-3-1'::timestamp,FALSE ),
+ (3, 'test_invite_code3','2003-2-1'::timestamp,'2003-3-1'::timestamp,TRUE );
 
 INSERT INTO solutions (answer_id, point_id) VALUES
   (10, 1), (20, 1), (11, 2), (21, 2), (12, 3);
@@ -220,7 +224,7 @@ INSERT INTO points (question_id, quiz_id) VALUES
 	(2, 2),
 	(3, 2);
 
-INSERT INTO issues (name, author_id) VALUES
-  ('Name1', 11),
-  ('Name2', 12),
-  ('Name3', 13);
+INSERT INTO issues (name, subject_id) VALUES
+  ('Name1', 1),
+  ('Name2', 2),
+  ('Name3', 3);

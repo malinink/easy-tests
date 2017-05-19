@@ -16,6 +16,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -38,7 +39,9 @@ public class QuizzesMapperTest {
 
         Assert.assertEquals((long) 1, (long) quiz.getId());
         Assert.assertEquals("test_invite_code1", quiz.getInviteCode());
-
+        Assert.assertEquals(LocalDateTime.of(2003,2,1,0,0,0), quiz.getStartedAt());
+        Assert.assertEquals(LocalDateTime.of(2003,3,1,0,0,0), quiz.getFinishedAt());
+        Assert.assertEquals(false, quiz.getCodeExpired());
     }
 
     @Test
@@ -68,7 +71,9 @@ public class QuizzesMapperTest {
 
         Assert.assertEquals(1, quizEntities.size());
         Assert.assertEquals("test_invite_code3", quizEntities.get(0).getInviteCode());
-
+        Assert.assertEquals(LocalDateTime.of(2003,2,1,0,0,0), quizEntities.get(0).getStartedAt());
+        Assert.assertEquals(LocalDateTime.of(2003,3,1,0,0,0), quizEntities.get(0).getFinishedAt());
+        Assert.assertEquals(true, quizEntities.get(0).getCodeExpired());
     }
 
     @Test
@@ -79,11 +84,21 @@ public class QuizzesMapperTest {
 
         final String testInviteCode = "test";
 
+        final LocalDateTime testStartedAt = LocalDateTime.of(2017,5,18,12,1,0);
+
+        final LocalDateTime testFinishedAt = LocalDateTime.of(2017,5,18,13,0,0);
+
+        final boolean testCodeExpired = false;
+
+
         final QuizEntity testQuiz = Mockito.mock(QuizEntity.class);
 
         Mockito.when(testQuiz.getId()).thenReturn(id);
         Mockito.when(testQuiz.getInviteCode()).thenReturn(testInviteCode);
         Mockito.when(testQuiz.getIssueId()).thenReturn(testIssueId);
+        Mockito.when(testQuiz.getStartedAt()).thenReturn(testStartedAt);
+        Mockito.when(testQuiz.getFinishedAt()).thenReturn(testFinishedAt);
+        Mockito.when(testQuiz.getCodeExpired()).thenReturn(testCodeExpired);
 
         quizzesMapper.insert(testQuiz);
 
@@ -94,13 +109,23 @@ public class QuizzesMapperTest {
         Assert.assertNotNull(readQuiz);
         Assert.assertEquals(testIssueId, readQuiz.getIssueId());
         Assert.assertEquals(testInviteCode, readQuiz.getInviteCode());
+        Assert.assertEquals(testStartedAt, readQuiz.getStartedAt());
+        Assert.assertEquals(testFinishedAt, readQuiz.getFinishedAt());
+        Assert.assertEquals(testCodeExpired, readQuiz.getCodeExpired());
     }
 
     @Test
     public void testUpdate() throws Exception {
 
         final Integer id = 2;
+
         final String inviteCode = "updated";
+
+        final LocalDateTime testStartedAt = LocalDateTime.of(2017,5,18,12,1,0);
+
+        final LocalDateTime testFinishedAt = LocalDateTime.of(2017,5,18,13,0,0);
+
+        final boolean testCodeExpired = false;
 
         QuizEntity quiz = this.quizzesMapper.find(id);
 
@@ -110,11 +135,17 @@ public class QuizzesMapperTest {
 
         Mockito.when(quiz.getId()).thenReturn(id);
         Mockito.when(quiz.getInviteCode()).thenReturn(inviteCode);
+        Mockito.when(quiz.getStartedAt()).thenReturn(testStartedAt);
+        Mockito.when(quiz.getFinishedAt()).thenReturn(testFinishedAt);
+        Mockito.when(quiz.getCodeExpired()).thenReturn(testCodeExpired);
 
         this.quizzesMapper.update(quiz);
 
         final QuizEntity readQuiz = quizzesMapper.find(id);
         Assert.assertEquals(inviteCode, readQuiz.getInviteCode());
+        Assert.assertEquals(testStartedAt, readQuiz.getStartedAt());
+        Assert.assertEquals(testFinishedAt, readQuiz.getFinishedAt());
+        Assert.assertEquals(testCodeExpired, readQuiz.getCodeExpired());
 
     }
 

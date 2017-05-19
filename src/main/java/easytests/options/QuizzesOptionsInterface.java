@@ -2,13 +2,21 @@ package easytests.options;
 
 import easytests.models.QuizModelInterface;
 import easytests.services.IssuesServiceInterface;
+import easytests.services.PointsServiceInterface;
 import easytests.services.QuizzesServiceInterface;
 import java.util.List;
 
 /**
  * @author fortyways
  */
-public interface QuizzesOptionsInterface {
+public interface QuizzesOptionsInterface extends OptionsInterface {
+
+    QuizzesOptionsInterface withIssue(IssuesOptionsInterface issuesOptions);
+
+    QuizzesOptionsInterface withPoints(PointsOptionsInterface pointsOptions);
+
+    void setPointsService(PointsServiceInterface pointsService);
+
     void setQuizzesService(QuizzesServiceInterface quizzesService);
 
     void setIssuesService(IssuesServiceInterface issuesService);
