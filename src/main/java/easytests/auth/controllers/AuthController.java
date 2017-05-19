@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/auth")
-@Import(LocalizationConfig.class)
 public class AuthController {
 
     private final LocalizationConfig localization = new LocalizationConfig();
