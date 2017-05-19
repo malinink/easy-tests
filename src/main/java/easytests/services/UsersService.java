@@ -61,11 +61,11 @@ public class UsersService implements UsersServiceInterface {
     public void save(UserModelInterface userModel) {
         final UserEntity userEntity = this.map(userModel);
         if (userEntity.getId() == null) {
+            userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
             this.usersMapper.insert(userEntity);
             userModel.setId(userEntity.getId());
             return;
         }
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         this.usersMapper.update(userEntity);
     }
 
