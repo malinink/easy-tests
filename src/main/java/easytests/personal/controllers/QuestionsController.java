@@ -4,9 +4,7 @@ import easytests.common.controllers.AbstractCrudController;
 import easytests.common.exceptions.ForbiddenException;
 import easytests.common.exceptions.NotFoundException;
 import easytests.models.*;
-import easytests.options.AnswersOptionsInterface;
-import easytests.options.QuestionsOptionsInterface;
-import easytests.options.TopicsOptionsInterface;
+import easytests.options.*;
 import easytests.options.builder.AnswersOptionsBuilder;
 import easytests.options.builder.QuestionsOptionsBuilder;
 import easytests.options.builder.TopicsOptionsBuilder;
@@ -29,7 +27,9 @@ import org.springframework.web.bind.annotation.*;
  * @author firkhraag
  */
 @Controller
-@SuppressWarnings("checkstyle:MultipleStringLiterals")
+@SuppressWarnings({
+                "checkstyle:MultipleStringLiterals",
+                "checkstyle:ClassFanOutComplexity"})
 @RequestMapping("/personal/topics/{topicId}/questions")
 public class QuestionsController extends AbstractCrudController {
 
@@ -239,9 +239,7 @@ public class QuestionsController extends AbstractCrudController {
     }
 
     private List<AnswerModelInterface> getAnswerModelList(QuestionModelInterface questionModel) {
-        final AnswersOptionsInterface answersOptions = this.answersOptionsBuilder.forAuth();
-        final List<AnswerModelInterface> answersList = answersService.findByQuestion(questionModel, answersOptions);
-
+        final List<AnswerModelInterface> answersList = answersService.findByQuestion(questionModel);
         return answersList;
     }
 }
