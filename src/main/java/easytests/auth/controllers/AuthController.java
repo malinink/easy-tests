@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Import(LocalizationConfig.class)
 public class AuthController {
 
-    final LocalizationConfig localization = new LocalizationConfig();
+    private final LocalizationConfig localization = new LocalizationConfig();
 
     @GetMapping("/sign-in")
     public String signIn(Model model, HttpServletRequest request) {
