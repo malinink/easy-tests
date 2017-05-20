@@ -8,9 +8,9 @@ import easytests.entities.SolutionEntity;
 public interface SolutionModelInterface extends ModelInterface {
     void setId(Integer id);
 
-    void setSort(Integer sort);
+    //void setSort(Integer sort);
 
-    Integer getSort(Integer sort);
+    //Integer getSort(Integer sort);
 
     AnswerModelInterface getAnswer();
 

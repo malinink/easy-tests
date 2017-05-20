@@ -35,7 +35,7 @@ public class SolutionModelTest {
 
         SolutionEntity solutionEntity = Mockito.mock(SolutionEntity.class);
         Mockito.when(solutionEntity.getId()).thenReturn(id);
-        Mockito.when(solutionEntity.getSort()).thenReturn(sort);
+        //Mockito.when(solutionEntity.getSort()).thenReturn(sort);
         Mockito.when(solutionEntity.getAnswerId()).thenReturn(answerId);
         Mockito.when(solutionEntity.getPointId()).thenReturn(pointId);
 
@@ -43,7 +43,7 @@ public class SolutionModelTest {
         solutionModel.map(solutionEntity);
 
         Assert.assertEquals(id, solutionModel.getId());
-        Assert.assertEquals(sort, solutionModel.getSort());
+        //Assert.assertEquals(sort, solutionModel.getSort());
         Assert.assertNull(solutionModel.getPoint());
         Assert.assertNull(solutionModel.getAnswer());
     }

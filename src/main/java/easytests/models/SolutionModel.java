@@ -15,7 +15,7 @@ public class SolutionModel implements SolutionModelInterface {
 
     private PointModelInterface point;
 
-    private Integer sort;
+    //private Integer sort;
 
     public void map(SolutionEntity solutionEntity) {
         this.setId(solutionEntity.getId());

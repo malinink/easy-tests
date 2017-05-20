@@ -11,7 +11,7 @@ public class SolutionEntity {
 
     private Integer id;
 
-    private Integer sort;
+    //private Integer sort;
 
     private Integer answerId;
 
