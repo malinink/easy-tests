@@ -24,7 +24,7 @@ content: contents {
 
                 div(class: 'input-field col s4') {
                     input(id: answerTextId, name: answerTextName, type: 'text', value: answer.txt)
-                    label(class: 'active', for: answerTextId, 'Original answer: ' + oldDtoList.answersList[index].txt)
+                    label(class: 'active', for: answerTextId, 'Original answer: ' + answer.txt)//oldDtoList.answersList[index].txt)
                 }
                 if (question.questionType.id == 1) {
                     //Пока что чекбокс, валидатор поправит. Проблема в том, что имена должны быть разные для
@@ -55,7 +55,7 @@ content: contents {
                 if (question.questionType.id == 3) {
                     div(class: 'input-field col s1') {
                     input(id: serialNumberId, name: serialNumberName, type: 'text', value: answer.serialNumber)
-                    label(class: 'active', for: serialNumberId, 'Was ' + oldDtoList.answersList[index].serialNumber)
+                    label(class: 'active', for: serialNumberId, 'Was ' + answer.serialNumber)//oldDtoList.answersList[index].serialNumber)
                     input(name: idName, type: 'hidden', value: answer.id)
                     input(name: rightName, type: 'hidden', value: answer.right)
                     }
