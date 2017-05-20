@@ -143,4 +143,19 @@ public abstract class Models {
             issueModel.setQuizzes(new ModelsListEmpty());
             return issueModel;
            }
+    public static AnswerModelInterface createAnswerModel(
+            Integer id,
+            String txt,
+            Integer serialNumber,
+            Integer questionId,
+            Boolean right
+    ) {
+        final AnswerModelInterface answerModel = new AnswerModel();
+        answerModel.setId(id);
+        answerModel.setTxt(txt);
+        answerModel.setSerialNumber(serialNumber);
+        answerModel.setRight(right);
+        answerModel.setQuestion(new QuestionModelEmpty(questionId));
+        return answerModel;
+    }
 }
