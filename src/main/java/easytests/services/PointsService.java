@@ -100,7 +100,6 @@ public class PointsService implements PointsServiceInterface {
 
     }
 
-
     public PointModelInterface find(Integer id, PointsOptionsInterface pointsOptions) {
         return this.find(id);
     }
