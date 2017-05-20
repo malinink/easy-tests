@@ -23,6 +23,7 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 /**
  * @author nikitalpopov
@@ -252,6 +253,31 @@ public class PointsOptionsTest {
         inOrder.verify(solutionsService).delete(solutionsModels, solutionsOptions);
         inOrder.verify(pointsService).delete(pointModel);
         inOrder.verify(quizzesService).delete(quizModel, quizOptions);
+
+    }
+
+    @Test
+    public void testSaveDeleteWithQuiz() {
+
+        final PointsOptionsInterface pointsOptions = new PointsOptions();
+
+        final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
+        pointsOptions.withQuiz(quizzesOptions);
+
+        final QuizzesServiceInterface quizzesService = Mockito.mock(QuizzesServiceInterface.class);
+        pointsOptions.setQuizzesService(quizzesService);
+
+        final PointModelInterface pointModel = Mockito.mock(PointModelInterface.class);
+
+        final PointsOptionsInterface pointsOptionsSpy = Mockito.spy(pointsOptions);
+
+        pointsOptionsSpy.deleteWithRelations(pointModel);
+
+        verify(quizzesOptions, times(1)).deleteWithRelations(pointModel.getQuiz());
+
+        pointsOptionsSpy.saveWithRelations(pointModel);
+
+        verify(quizzesOptions, times(1)).saveWithRelations(pointModel.getQuiz());
 
     }
 
