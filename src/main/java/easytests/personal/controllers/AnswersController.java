@@ -64,6 +64,7 @@ public class AnswersController extends AbstractCrudController {
         model.addAttribute("questionId", questionId);
         model.addAttribute("question", questionModel);
         model.addAttribute("answerDtoList", answerDtoList);
+        model.addAttribute("oldDtoList", answerDtoList);
         model.addAttribute("topicId", topicId);
         return "answers/form";
     }
@@ -92,7 +93,8 @@ public class AnswersController extends AbstractCrudController {
             setUpdateBehaviour(model);
             final AnswerListDto oldDtoList = new AnswerListDto();
             oldDtoList.map(questionModel);
-            model.addAttribute("answerDtoList", oldDtoList);
+            model.addAttribute("answerDtoList", answerDtoList);
+            model.addAttribute("oldDtoList", oldDtoList);
             model.addAttribute("topicId", topicId);
             model.addAttribute("question", questionModel);
 

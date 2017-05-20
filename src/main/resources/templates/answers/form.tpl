@@ -16,11 +16,6 @@ content: contents {
                 def checkBoxId = 'checkBox_' + index.toString()
                 def serialNumberId = 'serialNumber_' + index.toString()
 
-                //def answerTextName = 'question.answers['+index+'].txt'
-                //def rightName = 'question.answers['+index+'].right'
-                //def serialNumberName = 'question.answers['+index+'].serialNumber'
-                //def questionIdName = 'question.answers['+index+'].questionId'
-
                 def idName = 'answersList['+index+'].id'
                 def answerTextName = 'answersList['+index+'].txt'
                 def rightName = 'answersList['+index+'].right'
@@ -29,7 +24,7 @@ content: contents {
 
                 div(class: 'input-field col s4') {
                     input(id: answerTextId, name: answerTextName, type: 'text', value: answer.txt)
-                    label(class: 'active', for: answerTextId, 'Original answer: ' + answer.txt)
+                    label(class: 'active', for: answerTextId, 'Original answer: ' + oldDtoList.answersList[index].txt)
                 }
                 if (question.questionType.id == 1) {
                     //Пока что чекбокс, валидатор поправит. Проблема в том, что имена должны быть разные для
@@ -60,7 +55,7 @@ content: contents {
                 if (question.questionType.id == 3) {
                     div(class: 'input-field col s1') {
                     input(id: serialNumberId, name: serialNumberName, type: 'text', value: answer.serialNumber)
-                    label(class: 'active', for: serialNumberId, 'Was ' + answer.serialNumber)
+                    label(class: 'active', for: serialNumberId, 'Was ' + oldDtoList.answersList[index].serialNumber)
                     input(name: idName, type: 'hidden', value: answer.id)
                     input(name: rightName, type: 'hidden', value: answer.right)
                     }
