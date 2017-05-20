@@ -99,7 +99,7 @@ $(document).ready(function() {
 
         var tpIdName = tpFieldName(rowIndex, "id");
         var tpTopicIdName = tpFieldName(rowIndex, "topicId");
-        var tpIsPreferableName = tpFieldName(rowIndex, "isPreferable")
+        var tpIsPreferableName = tpFieldName(rowIndex, "isPreferable");
 
         var newRow =
             '<div class="topicPriorityForm row">'

@@ -3,16 +3,14 @@ package easytests.personal.controllers;
 import easytests.common.controllers.AbstractCrudController;
 import easytests.common.exceptions.ForbiddenException;
 import easytests.common.exceptions.NotFoundException;
-import easytests.models.QuestionModel;
-import easytests.models.QuestionModelInterface;
-import easytests.models.QuestionTypeModelInterface;
-import easytests.models.TopicModelInterface;
-import easytests.options.QuestionsOptionsInterface;
-import easytests.options.TopicsOptionsInterface;
+import easytests.models.*;
+import easytests.options.*;
+import easytests.options.builder.AnswersOptionsBuilder;
 import easytests.options.builder.QuestionsOptionsBuilder;
 import easytests.options.builder.TopicsOptionsBuilder;
 import easytests.personal.dto.QuestionModelDto;
 import easytests.personal.validators.QuestionModelDtoValidator;
+import easytests.services.AnswersService;
 import easytests.services.QuestionTypesService;
 import easytests.services.QuestionsService;
 import easytests.services.TopicsService;
@@ -27,9 +25,12 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @author firkhraag
+ * @author rezenbekk
  */
 @Controller
-@SuppressWarnings("checkstyle:MultipleStringLiterals")
+@SuppressWarnings({
+                "checkstyle:MultipleStringLiterals",
+                "checkstyle:ClassFanOutComplexity"})
 @RequestMapping("/personal/topics/{topicId}/questions")
 public class QuestionsController extends AbstractCrudController {
 
@@ -50,6 +51,12 @@ public class QuestionsController extends AbstractCrudController {
     
     @Autowired
     private QuestionModelDtoValidator questionModelDtoValidator;
+
+    @Autowired
+    private AnswersOptionsBuilder answersOptionsBuilder;
+
+    @Autowired
+    private AnswersService answersService;
 
     @GetMapping("")
     public String list(Model model, @PathVariable("topicId") Integer topicId) {
@@ -194,7 +201,9 @@ public class QuestionsController extends AbstractCrudController {
     }
 
     private QuestionModelInterface getQuestionModel(Integer id, Integer topicId, Boolean forDelete) {
-        final QuestionsOptionsInterface questionsOptions = this.questionsOptionsBuilder.forAuth();
+        final QuestionsOptionsInterface questionsOptions = this.questionsOptionsBuilder
+                .forAuth()
+                .withAnswers(new AnswersOptions());
         final QuestionModelInterface questionModel = this.questionsService.find(id, questionsOptions);
         checkModel(questionModel, topicId);
         if (forDelete) {
