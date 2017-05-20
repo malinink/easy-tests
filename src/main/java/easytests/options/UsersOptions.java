@@ -4,12 +4,14 @@ import easytests.models.UserModelInterface;
 import easytests.services.SubjectsServiceInterface;
 import easytests.services.UsersServiceInterface;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 
 /**
  * @author malinink
  */
+@EqualsAndHashCode
 public class UsersOptions implements UsersOptionsInterface {
     @Setter
     private UsersServiceInterface usersService;

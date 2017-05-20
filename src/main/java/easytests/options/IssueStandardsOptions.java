@@ -6,11 +6,13 @@ import easytests.services.IssueStandardTopicPrioritiesServiceInterface;
 import easytests.services.IssueStandardsServiceInterface;
 import easytests.services.SubjectsServiceInterface;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 /**
  * @author SingularityA
  */
+@EqualsAndHashCode
 public class IssueStandardsOptions implements IssueStandardsOptionsInterface {
 
     @Setter

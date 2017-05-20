@@ -4,12 +4,14 @@ import easytests.models.IssueStandardModelInterface;
 import easytests.models.SubjectModelInterface;
 import easytests.services.*;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 
 /**
  * @author vkpankov
  */
+@EqualsAndHashCode
 public class SubjectsOptions implements SubjectsOptionsInterface {
 
     @Setter
@@ -22,13 +24,23 @@ public class SubjectsOptions implements SubjectsOptionsInterface {
     private TopicsServiceInterface topicsService;
 
     @Setter
+    private IssuesServiceInterface issuesService;
+
+    @Setter
     private IssueStandardsServiceInterface issueStandardsService;
 
     private UsersOptionsInterface usersOptions;
 
     private TopicsOptionsInterface topicsOptions;
 
+    private IssuesOptionsInterface issuesOptions;
+
     private IssueStandardsOptionsInterface issueStandardsOptions;
+
+    public SubjectsOptionsInterface withIssues(IssuesOptionsInterface issuesOptions) {
+        this.issuesOptions = issuesOptions;
+        return this;
+    }
 
     public SubjectsOptionsInterface withUser(UsersOptionsInterface usersOptions) {
         this.usersOptions = usersOptions;
@@ -62,6 +74,9 @@ public class SubjectsOptions implements SubjectsOptionsInterface {
                     this.issueStandardsService.findBySubject(subjectModel, this.issueStandardsOptions);
 
             subjectModel.setIssueStandard(issueStandard);
+        }
+        if (this.issuesOptions != null) {
+            subjectModel.setIssues(this.issuesService.findBySubject(subjectModel, this.issuesOptions));
         }
 
         return subjectModel;
@@ -100,6 +115,10 @@ public class SubjectsOptions implements SubjectsOptionsInterface {
             this.topicsService.save(subjectModel.getTopics(), this.topicsOptions);
 
         }
+        if (this.issuesOptions != null) {
+
+            this.issuesService.save(subjectModel.getIssues(), this.issuesOptions);
+        }
 
     }
 
@@ -117,6 +136,10 @@ public class SubjectsOptions implements SubjectsOptionsInterface {
         }
         if (this.issueStandardsOptions != null) {
             this.issueStandardsService.delete(subjectModel.getIssueStandard(), this.issueStandardsOptions);
+        }
+
+        if (this.issuesOptions != null) {
+            this.issuesService.delete(subjectModel.getIssues(), this.issuesOptions);
         }
 
         this.subjectsService.delete(subjectModel);

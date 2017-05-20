@@ -5,12 +5,14 @@ import easytests.services.QuestionsServiceInterface;
 import easytests.services.SubjectsServiceInterface;
 import easytests.services.TopicsServiceInterface;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 
 /**
  * @author malinink
  */
+@EqualsAndHashCode
 public class TopicsOptions implements TopicsOptionsInterface {
     @Setter
     private TopicsServiceInterface topicsService;

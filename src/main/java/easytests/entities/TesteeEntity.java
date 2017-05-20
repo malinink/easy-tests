@@ -19,11 +19,14 @@ public class TesteeEntity {
 
     private Integer groupNumber;
 
+    private Integer quizId;
+
     public void map(TesteeModelInterface testeeModel) {
         this.setId(testeeModel.getId());
         this.setFirstName(testeeModel.getFirstName());
         this.setLastName(testeeModel.getLastName());
         this.setSurname(testeeModel.getSurname());
         this.setGroupNumber(testeeModel.getGroupNumber());
+        this.setQuizId(testeeModel.getQuiz().getId());
     }
 }

@@ -2,6 +2,7 @@ package easytests.models;
 
 import easytests.entities.IssueEntity;
 import easytests.models.empty.ModelsListEmpty;
+import easytests.models.empty.SubjectModelEmpty;
 import java.util.List;
 import lombok.Data;
 
@@ -16,14 +17,14 @@ public class IssueModel implements IssueModelInterface {
 
     private String name;
 
-    private Integer authorId;
+    private SubjectModelInterface subject;
 
     private List<QuizModelInterface> quizzes;
 
     public void map(IssueEntity issueEntity) {
         this.setId(issueEntity.getId());
         this.setName(issueEntity.getName());
-        this.setAuthorId(issueEntity.getAuthorId());
+        this.setSubject(new SubjectModelEmpty(issueEntity.getSubjectId()));
         this.setQuizzes(new ModelsListEmpty());
     }
 

@@ -1,45 +1,47 @@
 package easytests.mappers;
 
-import easytests.entities.IssueInterface;
-import easytests.entities.Quiz;
-import easytests.entities.QuizInterface;
+import easytests.entities.QuizEntity;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
-
 
 /**
  * @author vkpankov
  */
 @Mapper
+@SuppressWarnings("checkstyle:linelength")
 public interface QuizzesMapper {
 
-    @Select("SELECT * FROM quizzes WHERE id=#{quizId}")
+    @Select("SELECT * FROM quizzes")
     @Results(
             id = "Quiz",
             value = {
                     @Result(property = "id", column = "id"),
                     @Result(property = "issueId", column = "issue_id"),
-                    @Result(property = "inviteCode", column = "invite_code")
-
+                    @Result(property = "inviteCode", column = "invite_code"),
+                    @Result(property = "codeExpired", column = "code_expired"),
+                    @Result(property = "startedAt", column = "started_at", javaType = LocalDateTime.class),
+                    @Result(property = "finishedAt", column = "finished_at", javaType = LocalDateTime.class)
             })
-    Quiz find(Integer quizId);
+    List<QuizEntity> findAll();
 
-    @Select("SELECT * FROM quizzes")
+    @Select("SELECT * FROM quizzes WHERE id=#{id}")
     @ResultMap("Quiz")
-    List<QuizInterface> findAll();
+    QuizEntity find(Integer id);
 
-    @Select("SELECT * FROM quizzes WHERE issue_id=#{id}")
+    @Select("SELECT * FROM quizzes WHERE issue_id=#{issueId}")
     @ResultMap("Quiz")
-    List<QuizInterface> findByIssue(IssueInterface issue);
+    List<QuizEntity> findByIssueId(Integer issueId);
 
-    @Insert("INSERT INTO quizzes (issue_id, invite_code) VALUES (#{issueId},#{inviteCode})")
+    @Insert("INSERT INTO quizzes (issue_id, invite_code, code_expired, started_at, finished_at) VALUES (#{issueId},#{inviteCode},#{codeExpired},#{startedAt},#{finishedAt})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
-    void insert(QuizInterface quiz);
+    void insert(QuizEntity quiz);
 
-    @Update("UPDATE quizzes SET issue_id=#{issueId}, invite_code=#{inviteCode} WHERE id=#{id}")
-    void update(QuizInterface quiz);
+    @Update("UPDATE quizzes SET issue_id=#{issueId}, invite_code=#{inviteCode}, code_expired=#{codeExpired}, started_at=#{startedAt},finished_at=#{finishedAt} WHERE id=#{id}")
+    void update(QuizEntity quiz);
 
     @Delete("DELETE FROM quizzes WHERE id=#{id}")
-    void delete(QuizInterface quiz);
+    void delete(QuizEntity quiz);
 
 }

@@ -3,6 +3,8 @@ package easytests.support;
 import easytests.entities.*;
 import org.mockito.Mockito;
 
+import java.time.LocalDateTime;
+
 
 /**
  * @author malinink
@@ -84,7 +86,8 @@ public abstract class Entities {
             String firstName,
             String lastName,
             String surname,
-            Integer groupNumber
+            Integer groupNumber,
+            Integer quizId
     ) {
         final TesteeEntity testeeEntity = Mockito.mock(TesteeEntity.class);
         Mockito.when(testeeEntity.getId()).thenReturn(id);
@@ -92,10 +95,15 @@ public abstract class Entities {
         Mockito.when(testeeEntity.getLastName()).thenReturn(lastName);
         Mockito.when(testeeEntity.getSurname()).thenReturn(surname);
         Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
+        Mockito.when(testeeEntity.getQuizId()).thenReturn(quizId);
         return testeeEntity;
     }
 
-    public static TopicEntity createTopicEntityMock(Integer id, Integer subjectId, String name) {
+    public static TopicEntity createTopicEntityMock(
+            Integer id,
+            Integer subjectId,
+            String name
+    ) {
 
         final TopicEntity topicEntity = Mockito.mock(TopicEntity.class);
 
@@ -106,7 +114,7 @@ public abstract class Entities {
 
     }
 
-   public static QuestionEntity createQuestionEntityMock(
+    public static QuestionEntity createQuestionEntityMock(
             Integer id, 
             String text, 
             Integer questionTypeId, 
@@ -120,17 +128,48 @@ public abstract class Entities {
         return questionEntity;
     }
 
-
-public static IssueEntity createIssueEntityMock(
-                   Integer id,
-                    String name,
-                   Integer authorId
-          ) {
-                final IssueEntity issueEntity = Mockito.mock(IssueEntity.class);
-                Mockito.when(issueEntity.getId()).thenReturn(id);
-                Mockito.when(issueEntity.getName()).thenReturn(name);
-                Mockito.when(issueEntity.getAuthorId()).thenReturn(authorId);
-                return issueEntity;
-            }
+    public static IssueEntity createIssueEntityMock(
+            Integer id,
+            String name,
+            Integer subjectId
+    ) {
+        final IssueEntity issueEntity = Mockito.mock(IssueEntity.class);
+        Mockito.when(issueEntity.getId()).thenReturn(id);
+        Mockito.when(issueEntity.getName()).thenReturn(name);
+        Mockito.when(issueEntity.getSubjectId()).thenReturn(subjectId);
+        return issueEntity;
     }
+
+    public static PointEntity createPointEntityMock(
+            Integer id,
+            Integer questionId,
+            Integer quizId
+    ) {
+        final PointEntity pointEntity = Mockito.mock(PointEntity.class);
+        Mockito.when(pointEntity.getId()).thenReturn(id);
+        Mockito.when(pointEntity.getQuestionId()).thenReturn(questionId);
+        Mockito.when(pointEntity.getQuizId()).thenReturn(quizId);
+        return pointEntity;
+    }
+
+    public static QuizEntity createQuizEntityMock(
+            Integer id,
+            Integer issueId,
+            String inviteCode,
+            LocalDateTime startedAt,
+            LocalDateTime finishedAt,
+            boolean codeExpired
+    ) {
+        final QuizEntity quizEntity = Mockito.mock(QuizEntity.class);
+        Mockito.when(quizEntity.getId()).thenReturn(id);
+        Mockito.when(quizEntity.getIssueId()).thenReturn(issueId);
+        Mockito.when(quizEntity.getInviteCode()).thenReturn(inviteCode);
+        Mockito.when(quizEntity.getStartedAt()).thenReturn(startedAt);
+        Mockito.when(quizEntity.getFinishedAt()).thenReturn(finishedAt);
+        Mockito.when(quizEntity.getCodeExpired()).thenReturn(codeExpired);
+        return quizEntity;
+    }
+
+
+}
 

@@ -23,7 +23,6 @@ public class UserModelDtoValidator extends AbstractDtoValidator {
 
     public void validate(Object obj, Errors errors) {
         final UserModelDto userModelDto = (UserModelDto) obj;
-        this.validateIdEquals(errors, userModelDto);
         this.validateEmailIsUnique(errors, userModelDto);
         this.validatePassword(errors, userModelDto);
         this.validatePasswordRepeat(errors, userModelDto);
@@ -31,7 +30,7 @@ public class UserModelDtoValidator extends AbstractDtoValidator {
 
     private void validateEmailIsUnique(Errors errors, UserModelDto userModelDto) {
         final UserModelInterface userModel = this.usersService.findByEmail(userModelDto.getEmail());
-        if (userModel != null) {
+        if ((userModel != null) && !userModel.getId().equals(userModelDto.getId())) {
             reject(errors, "email", "This Email already present");
         }
     }
@@ -40,7 +39,8 @@ public class UserModelDtoValidator extends AbstractDtoValidator {
         final String password = userModelDto.getPassword();
         final String passwordField = "password";
         if ("".equals(password) || (password == null)) {
-            if (userModelDto.getRouteId() == null) {
+            // It's not a good idea to check whether we creating object by its id
+            if (userModelDto.getId() == null) {
                 reject(errors, passwordField, "Password is required on creating user procedure");
             }
             return;

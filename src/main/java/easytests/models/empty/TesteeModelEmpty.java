@@ -1,6 +1,7 @@
 package easytests.models.empty;
 
 import easytests.entities.TesteeEntity;
+import easytests.models.QuizModelInterface;
 import easytests.models.TesteeModelInterface;
 import easytests.models.exceptions.CallMethodOnEmptyModelException;
 
@@ -58,6 +59,16 @@ public class TesteeModelEmpty extends AbstractModelEmpty implements TesteeModelI
 
     @Override
     public void setGroupNumber(Integer groupNumber) {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public QuizModelInterface getQuiz() {
+        throw new CallMethodOnEmptyModelException();
+    }
+
+    @Override
+    public void setQuiz(QuizModelInterface quiz) {
         throw new CallMethodOnEmptyModelException();
     }
 
