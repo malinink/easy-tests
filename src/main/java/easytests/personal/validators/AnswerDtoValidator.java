@@ -48,7 +48,7 @@ public class AnswerDtoValidator extends AbstractDtoValidator {
 
     public void validateWithQuestionType(Object object, Integer questionType, Errors errors) {
         final List<AnswerDto> answers = (List<AnswerDto>) object;
-        if (answers.size() == 0) {
+        if (answers == null) {
             return;
         }
         Integer rightCount = 0;
