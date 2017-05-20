@@ -27,6 +27,9 @@ public class QuizzesService implements QuizzesServiceInterface {
     @Autowired
     private PointsService pointsService;
 
+    @Autowired
+    private TesteesService testeesService;
+
     @Override
     public List<QuizModelInterface> findAll() {
         return this.map(this.quizzesMapper.findAll());
@@ -146,6 +149,7 @@ public class QuizzesService implements QuizzesServiceInterface {
         quizzesOptions.setQuizzesService(this);
         quizzesOptions.setIssuesService(this.issuesService);
         quizzesOptions.setPointsService(this.pointsService);
+        quizzesOptions.setTesteesService(this.testeesService);
         return quizzesOptions;
     }
 }

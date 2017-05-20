@@ -41,7 +41,8 @@ public class AnswersService implements AnswersServiceInterface {
             QuestionModelInterface questionModel,
             AnswersOptionsInterface answersOptions
     ) {
-        return answersOptions.withRelations(this.map(this.answersMapper.findByQuestionId(questionModel.getId())));
+        return this.withServices(answersOptions).withRelations(this.map(
+                this.answersMapper.findByQuestionId(questionModel.getId())));
     }
 
     @Override
