@@ -1,5 +1,6 @@
 package easytests.personal.validators;
 
+import easytests.common.exceptions.NotFoundException;
 import easytests.common.validators.AbstractDtoValidator;
 import easytests.personal.dto.AnswerDto;
 import easytests.services.QuestionsService;
@@ -35,25 +36,30 @@ public class AnswerDtoValidator extends AbstractDtoValidator {
         final String invalidQuestionError = "invalidQuestion";
 
         if (answerDto.getTxt() == null || answerDto.getTxt().isEmpty()) {
-            reject(errors, emptyTextError, "Answer text can not be empty");
+            errors.reject(emptyTextError, "Answer text can not be empty");
         }
         if (answerDto.getTxt().length() > 255) {
-            reject(errors, textTooLongError, "Answer text too long");
+            errors.reject(textTooLongError, "Answer text too long");
         }
         if (answerDto.getQuestionId() == null || questionsService.find(answerDto.getQuestionId()) == null) {
-            reject(errors, invalidQuestionError, "Invalid question settings");
+            errors.reject(invalidQuestionError, "Invalid question settings");
         }
     }
 
     public void validateWithQuestionType(Object object, Integer questionType, Errors errors) {
         final List<AnswerDto> answers = (List<AnswerDto>) object;
+        if (answers.size() == 0) {
+            return;
+        }
         Integer rightCount = 0;
         Boolean serialNumbersConflict = false;
         final Set<Integer> serialNumbers = new HashSet<Integer>();
         for (AnswerDto answer
                 : answers) {
-            if (answer.getRight()) {
-                rightCount = rightCount + 1;
+            if (answer.getRight() != null) {
+                if (answer.getRight().equals("on")) {
+                    rightCount = rightCount + 1;
+                }
             }
             if (serialNumbers.contains(answer.getSerialNumber()) || answer.getSerialNumber() == null) {
                 serialNumbersConflict = true;
@@ -61,15 +67,14 @@ public class AnswerDtoValidator extends AbstractDtoValidator {
                 serialNumbers.add(answer.getSerialNumber());
             }
         }
-        final String rightCountError = "rightCount";
-        final String serialNumberConflictError = "serialNumberConflict";
+        final String rightCountError = "right";
+        final String serialNumberConflictError = "serialNumber";
         final String answersCountError = "answersCount";
-        final String unknownQuestionTypeError = "questionType";
         switch (questionType) {
             //Один ответ
             case 1:
                 if (rightCount != 1) {
-                    reject(errors, rightCountError, "Not one answer in an one-answer question");
+                    errors.reject(rightCountError, "Not one answer in an one-answer question");
                 }
                 break;
             //Много ответов
@@ -78,18 +83,17 @@ public class AnswerDtoValidator extends AbstractDtoValidator {
             //Нумерация
             case 3:
                 if (serialNumbersConflict) {
-                    reject(errors, serialNumberConflictError, "Invalid numeration. Check for repeating and missing order values");
+                    errors.reject(serialNumberConflictError, "Invalid numeration. Check for repeating and missing order values");
                 }
                 break;
             //Текст
             case 4:
                 if (answers.size() != 1) {
-                    reject(errors, answersCountError, "There is more or less than one answer");
+                    errors.reject(answersCountError, "There is more than one answer");
                 }
                 break;
             default:
-                reject(errors, unknownQuestionTypeError, "Unknown question type");
-                break;
+                throw new NotFoundException();
         }
     }
 }
