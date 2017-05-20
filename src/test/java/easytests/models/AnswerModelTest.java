@@ -1,6 +1,7 @@
 package easytests.models;
 
 import easytests.entities.AnswerEntity;
+import easytests.models.empty.QuestionModelEmpty;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class AnswerModelTest {
         Assert.assertEquals(txt, answerModel.getTxt());
         Assert.assertEquals(right, answerModel.getRight());
         Assert.assertEquals(serialNumber, answerModel.getSerialNumber());
-        Assert.assertNull(answerModel.getQuestion());
+        Assert.assertEquals(new QuestionModelEmpty(questionId), answerModel.getQuestion());
     }
 }
 

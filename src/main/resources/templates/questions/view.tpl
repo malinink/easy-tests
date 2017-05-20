@@ -33,14 +33,49 @@ content: contents {
         }
       }
     }
-  }
-  p {
-    button (href: '#', class: ' light-blue lighten-2 waves-effect waves-light btn') {
-      yield 'Answers'
-    }
-  }
-  a (class:'waves-effect waves-light btn-large red', href:'/personal/topics/' + topicId +'/questions/') {
-    i (class:'material-icons left', 'cancel')
-    yield 'Back'
-  }
+       div(class: 'row') {
+       def answersList = question.answers
+        if ((question.questionType.id == 1) || (question.questionType.id == 2)) {
+          answersList.each { answer ->
+            div (class:'input-field col s12') {
+                if (answer.right == true) {
+                  input (id:'answer_' + answer.id, type:'checkbox', checked: 'checked', disabled: 'disabled')
+                }
+                else {
+                  input (id:'answer_' + answer.id, type:'checkbox', disabled: 'disabled')
+                }
+                  label (for:'answer_' + answer.id, class: 'grey-text', answer.txt)
+             }
+          }
+        }
+        if (question.questionType.id == 3) {
+          answersList.each { answer ->
+            div (class:'input-field col s12') {
+                def serialText = answer.serialNumber.toString() + ': ' + answer.txt
+                yield serialText
+             }
+          }
+        }
+        if (question.questionType.id == 4) {
+          answersList.each { answer ->
+            div (class:'input-field col s12') {
+              textarea (id:'answer_text', class:'materialize-textarea black-text', readonly: 'readonly') {
+              yield answer.txt
+              }
+              label (for:'answer_text', class: 'grey-text', 'Answer')
+            }
+          }
+        }
+      }
+      p {
+        a (class: 'light-blue lighten-2 waves-effect waves-light btn', href: '/personal/topics/' + topicId + '/questions/' + question.id + '/update_answers/') {
+          i (class:'material-icons left', 'edit')
+          yield 'Edit Answers'
+        }
+      }
+      a (class:'waves-effect waves-light btn red', href:'/personal/topics/' + topicId +'/questions/') {
+        i (class:'material-icons left', 'cancel')
+        yield 'Back'
+      }
+   }
 }
