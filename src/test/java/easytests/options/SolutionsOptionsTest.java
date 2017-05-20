@@ -137,7 +137,7 @@ public class SolutionsOptionsTest {
         solutionsOptions.deleteWithRelations(solutionModel);
 
         inOrder.verify(pointsService).delete(solutionModel.getPoint(), pointsOptions);
-        inOrder.verify(answersService).delete(solutionModel.getAnswer(), answersOptions);
+        //inOrder.verify(answersService).delete(solutionModel.getAnswer(), answersOptions);
         inOrder.verify(solutionsService).delete(solutionModel);
 
     }
