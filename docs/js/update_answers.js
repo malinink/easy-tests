@@ -16,25 +16,27 @@ $(document).ready(function(){
 
         var rowNumber = newListSize - 1;
 
+
         var answerTextId = answerTextIdCreate(rowNumber);
         var answerRowId = answerRowIdCreate(rowNumber);
         var radioButtonId = radioButtonIdCreate(rowNumber);
         var checkBoxId = checkBoxIdCreate(rowNumber);
         var serialNumberId = serialNumberIdCreate(rowNumber);
 
-        var answerTextName = 'answerDtoList['+rowNumber+'].txt';
-        var rightName = 'answerDtoList['+rowNumber+'].right';
-        var serialNumberName = 'answerDtoList['+rowNumber+'].serialNumber';
-        var questionIdName = 'answerDtoList['+rowNumber+'].questionId';
+        var idName = 'answersList['+rowNumber+'].id';
+        var answerTextName = 'answersList['+rowNumber+'].txt';
+        var rightName = 'answersList['+rowNumber+'].right';
+        var serialNumberName = 'answersList['+rowNumber+'].serialNumber';
+        var questionIdName = 'answersList['+rowNumber+'].questionId';
         var conditionalInput = '';
 
         switch (questionTypeId) {
             // Один ответ
             case 1:
-                conditionalInput = '<input type="radio" name="'+rightName+'" class="with-gap" id="' +radioButtonId+ '">'
+                conditionalInput = '<input type="checkbox" name="'+rightName+'" class="with-gap" id="' +radioButtonId+ '">'
                                 + '<label for="'+radioButtonId+ '">'
                                 + ' </label>' //Пробел поставлен специально, иначе радиокнопка не отрисовывается
-                                + '<input name="'+rightName+'" type="hidden" value="false">'
+                                + '<input name="'+idName+'" type="hidden" value="">'
                                 + '<input name="'+serialNumberName+'" type="hidden" value="10">';
                 break;
             // Много ответов
@@ -42,7 +44,7 @@ $(document).ready(function(){
                 conditionalInput = '<input type="checkbox" name="'+rightName+'" id="' +checkBoxId+ '">'
                     + '<label for="'+checkBoxId+ '">'
                     + ' </label>' //Пробел поставлен специально, иначе чекбокс не отрисовывается
-                    + '<input name="'+rightName+'" type="hidden" value="false">'
+                    + '<input name="'+idName+'" type="hidden" value="">'
                     + '<input name="'+serialNumberName+'" type="hidden" value="10">';
                 break;
             // Нумерация
@@ -51,12 +53,14 @@ $(document).ready(function(){
                     + '<input type="text" name="'+serialNumberName+'" id="' +serialNumberId+ '">'
                     + '<label for="'+serialNumberId+ '">'
                     + ' </label>'
-                    + '<input name="'+rightName+'" type="hidden" value="false">'
+                    + '<input name="'+idName+'" type="hidden" value="">'
+                    + '<input name="'+rightName+'" type="hidden" value="">'
                     + '</div>';
                 break;
             // Текст
             case 4:
-                conditionalInput = '<input name="'+rightName+'" type="hidden" value="false">'
+                conditionalInput = '<input name="'+rightName+'" type="hidden" value="">'
+                    + '<input name="'+idName+'" type="hidden" value="">'
                     + '<input name="'+serialNumberName+'" type="hidden" value="10">';
                 break;
             default:
