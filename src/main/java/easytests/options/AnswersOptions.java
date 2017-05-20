@@ -30,6 +30,10 @@ public class AnswersOptions implements AnswersOptionsInterface {
     @Override
     public AnswerModelInterface withRelations(AnswerModelInterface answerModel) {
 
+        if (answerModel == null) {
+            return answerModel;
+        }
+
         if (this.questionsOptions != null) {
             answerModel.setQuestion(this.questionsService.find(
                     answerModel.getQuestion().getId(), this.questionsOptions));

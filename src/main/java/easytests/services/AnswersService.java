@@ -41,7 +41,8 @@ public class AnswersService implements AnswersServiceInterface {
             QuestionModelInterface questionModel,
             AnswersOptionsInterface answersOptions
     ) {
-        return answersOptions.withRelations(this.map(this.answersMapper.findByQuestionId(questionModel.getId())));
+        return this.withServices(answersOptions).withRelations(this.map(
+                this.answersMapper.findByQuestionId(questionModel.getId())));
     }
 
     @Override
@@ -51,6 +52,12 @@ public class AnswersService implements AnswersServiceInterface {
             return null;
         }
         return this.map(answerEntity);
+    }
+
+    @Override
+    public AnswerModelInterface find(Integer id, AnswersOptionsInterface answersOptions) {
+        return this.withServices(answersOptions).withRelations(this.find(id));
+
     }
 
     @Override
