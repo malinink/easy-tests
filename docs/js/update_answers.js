@@ -106,7 +106,7 @@ $(document).ready(function(){
             switch (questionTypeId) {
                 // Один ответ
                 case 1:
-                    var radioButtonIdCurrent = $(this).find("input[type = 'radio']");
+                    var radioButtonIdCurrent = $(this).find("input[type = 'checkbox']");
                     radioButtonIdCurrent.attr("id", radioButtonIdCreate(index));
                     break;
                 // Много ответов
