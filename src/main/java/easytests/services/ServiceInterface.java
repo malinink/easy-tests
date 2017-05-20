@@ -1,6 +1,5 @@
 package easytests.services;
 
-
 /**
  * @author malinink
  */

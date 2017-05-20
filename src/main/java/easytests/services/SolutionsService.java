@@ -5,6 +5,7 @@ import easytests.mappers.SolutionsMapper;
 import easytests.models.PointModelInterface;
 import easytests.models.SolutionModel;
 import easytests.models.SolutionModelInterface;
+import easytests.options.SolutionsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author SingularityA
+ * @author loriens
  */
 @Service
 public class SolutionsService {
@@ -46,6 +48,12 @@ public class SolutionsService {
         solutionModel.setId(solutionEntity.getId());
     }
 
+    public void save(List<SolutionModelInterface> solutionModels) {
+        for (SolutionModelInterface solutionModel: solutionModels) {
+            this.save(solutionModel);
+        }
+    }
+
     public void delete(SolutionModelInterface solutionModel) {
         final SolutionEntity solutionEntity = this.map(solutionModel);
         if (solutionEntity.getId() == null) {
@@ -72,5 +80,10 @@ public class SolutionsService {
             solutionModels.add(this.map(solutionEntity));
         }
         return solutionModels;
+    }
+
+    private SolutionsOptionsInterface withService(SolutionsOptionsInterface solutionOptions) {
+        //solutionOptions.setSolutionsService(this);
+        return solutionOptions;
     }
 }
