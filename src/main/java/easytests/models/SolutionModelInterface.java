@@ -10,6 +10,8 @@ public interface SolutionModelInterface extends ModelInterface {
 
     void setSort(Integer sort);
 
+    Integer getSort(Integer sort);
+
     AnswerModelInterface getAnswer();
 
     void setAnswer(AnswerModelInterface answer);
