@@ -76,14 +76,14 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
     }
 
     public void deleteWithRelations(SolutionModelInterface solutionModel) {
-        if (this.pointsOptions != null) {
-            this.pointsService.delete(solutionModel.getPoint(), this.pointsOptions);
-            this.pointsOptions.deleteWithRelations(solutionModel.getPoint());
-        }
-
         if (this.answersOptions != null) {
             this.answersService.delete(solutionModel.getAnswer(), this.answersOptions);
             this.answersOptions.deleteWithRelations(solutionModel.getAnswer());
+        }
+
+        if (this.pointsOptions != null) {
+            this.pointsService.delete(solutionModel.getPoint(), this.pointsOptions);
+            this.pointsOptions.deleteWithRelations(solutionModel.getPoint());
         }
 
         this.solutionsService.delete(solutionModel);
