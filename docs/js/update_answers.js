@@ -92,39 +92,82 @@ $(document).ready(function(){
         var currentIndex = extractIndex(currentSelectId);
         var formRowsAfter = formRow.nextAll().filter(".answerRow");
 
-        console.log(formRowsAfter);
+        var currentListSizeElem = $("#answerDtoListSize");
+        var currentListSize = Number(currentListSizeElem.text());
+        currentListSizeElem.text(currentListSize-1);
 
         var index = currentIndex;
         formRowsAfter.each(function () {
 
+            id1 = index + 1;
+
+            var idNameOld = 'answersList['+id1+'].id';
+            var answerTextNameOld = 'answersList['+id1+'].txt';
+            var rightNameOld = 'answersList['+id1+'].right';
+            var serialNumberNameOld = 'answersList['+id1+'].serialNumber';
+            var questionIdNameOld = 'answersList['+id1+'].questionId';
+
+            var idName = 'answersList['+index+'].id';
+            var answerTextName = 'answersList['+index+'].txt';
+            var rightName = 'answersList['+index+'].right';
+            var serialNumberName = 'answersList['+index+'].serialNumber';
+            var questionIdName = 'answersList['+index+'].questionId';
+
             // answerRow
             $(this).attr("id", answerRowIdCreate(index));
-
-            var answerTextIdCurrent = $(this).find("input[type = 'text']").eq(0);
+            var answerTextIdCurrent = $(this).find("input[name='"+answerTextNameOld+"']");
             answerTextIdCurrent.attr("id", answerTextIdCreate(index));
+            answerTextIdCurrent.attr("name", answerTextName);
 
             switch (questionTypeId) {
                 // Один ответ
                 case 1:
-                    var radioButtonIdCurrent = $(this).find("input[type = 'checkbox']");
+                    var radioButtonIdCurrent = $(this).find("input[name='"+rightNameOld+"']");
                     radioButtonIdCurrent.attr("id", radioButtonIdCreate(index));
+                    radioButtonIdCurrent.attr("name", rightName);
+                    break;
+                    var idCurrent = $(this).find("input[name='"+idNameOld+"']");
+                    idCurrent.attr("name", idName);
+                    break;
+                    var serialNumberCurrent = $(this).find("input[name='"+serialNumberNameOld+"']");
+                    serialNumberCurrent.attr("name", serialNumberName);
                     break;
                 // Много ответов
                 case 2:
-                    var checkBoxIdCurrent = $(this).find("input[type = 'checkbox']");
+                    var checkBoxIdCurrent = $(this).find("input[name='"+rightNameOld+"']");
                     checkBoxIdCurrent.attr("id", checkBoxIdCreate(index));
+                    checkBoxIdCurrent.attr("name", rightName);
+                    idCurrent = $(this).find("input[name='"+idNameOld+"']");
+                    idCurrent.attr("name", idName);
+                    break;
+                    serialNumberCurrent = $(this).find("input[name='"+serialNumberNameOld+"']");
+                    serialNumberCurrent.attr("name", serialNumberName);
                     break;
                 // Нумерация
                 case 3:
-                    var serialNumberIdCurrent = $(this).find("input[type = 'text']").eq(1);
+                    var serialNumberIdCurrent = $(this).find("input[name = '"+serialNumberNameOld+"']");
+                    console.log(serialNumberIdCurrent);
                     serialNumberIdCurrent.attr("id", serialNumberIdCreate(index));
+                    serialNumberIdCurrent.attr("name", serialNumberName);
+                    idCurrent = $(this).find("input[name='"+idNameOld+"']");
+                    idCurrent.attr("name", idName);
+                    var rightCurrent = $(this).find("input[name='"+rightNameOld+"']");
+                    rightCurrent.attr("name", rightName);
                     break;
                 // Текст
                 case 4:
+                    idCurrent = $(this).find("input[name='"+idNameOld+"']");
+                    idCurrent.attr("name", idName);
+                    rightCurrent = $(this).find("input[name='"+rightNameOld+"']");
+                    rightCurrent.attr("name", rightName);
+                    serialNumberIdCurrent.attr("id", serialNumberIdCreate(index));
+                    serialNumberIdCurrent.attr("name", serialNumberName);
                     break;
                 default:
                     break;
             }
+            var questionIdCurrent = $(this).find("input[name='"+questionIdNameOld+"']");
+            questionIdCurrent.attr("name", questionIdName);
 
             index = index + 1;
         });
