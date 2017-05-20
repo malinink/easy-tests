@@ -4,6 +4,8 @@ import easytests.models.QuizModelInterface;
 import easytests.services.IssuesServiceInterface;
 import easytests.services.PointsServiceInterface;
 import easytests.services.QuizzesServiceInterface;
+import easytests.services.TesteesServiceInterface;
+
 import java.util.List;
 
 /**
@@ -20,6 +22,8 @@ public interface QuizzesOptionsInterface extends OptionsInterface {
     void setQuizzesService(QuizzesServiceInterface quizzesService);
 
     void setIssuesService(IssuesServiceInterface issuesService);
+
+    void setTesteesService(TesteesServiceInterface testeesService);
 
     QuizzesOptionsInterface withTestee(TesteesOptionsInterface testeeOptions);
 
