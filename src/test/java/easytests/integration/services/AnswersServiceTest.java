@@ -15,16 +15,35 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
+
 /**
  * @author rezenbekk
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@SuppressWarnings("checkstyle:multiplestringliterals")
 @TestPropertySource(locations = {"classpath:database.test.properties"})
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
 public class AnswersServiceTest {
     @Autowired
     private AnswersService answersService;
+
+    @Test
+    public void testSaveModel() throws Exception {
+
+        final AnswerModelInterface answerModel = new AnswerModel();
+        answerModel.setTxt("Answer text");
+        answerModel.setSerialNumber(1);
+        answerModel.setQuestion(new QuestionModelEmpty(1));
+        answerModel.setRight(true);
+
+        this.answersService.save(answerModel);
+
+        final AnswerModelInterface builtAnswerModel = this.answersService.find(answerModel.getId());
+
+        Assert.assertEquals(answerModel, builtAnswerModel);
+
+    }
 
     @Test
     public void testFindAbsentModel() throws Exception {
@@ -43,10 +62,10 @@ public class AnswersServiceTest {
         final QuestionModelInterface questionModel = Models.createQuestionModel(questionId, "test1", 1, 1);
         answerModel.setQuestion(questionModel);
 
-        final AnswerModelInterface buildAnswerModel
+        final AnswerModelInterface builtAnswerModel
                 = this.answersService.find(id, new AnswersOptions().withQuestion(new QuestionsOptions()));
 
-        Assert.assertEquals(answerModel, buildAnswerModel);
+        Assert.assertEquals(answerModel, builtAnswerModel);
         Assert.assertEquals(questionModel, answerModel.getQuestion());
     }
 
@@ -71,21 +90,5 @@ public class AnswersServiceTest {
         this.answersService.save(answerModel);
 
         Assert.assertEquals(answerModel, this.answersService.find(id));
-
-        Assert.assertEquals(answerModel, builtAnswerModel);
-
-    }
-
-    @Test
-    public void testFindPresentModel() throws Exception {
-        final Integer id = 1;
-        final AnswerModelInterface answerModel = this.createAnswerModel(id, "Answer1", 1, 1, true);
-
-        final AnswerModelInterface builtAnswerModel = this.answersService.find(id);
-
-        Assert.assertEquals(answerModel.getId(), builtAnswerModel.getId());
-        Assert.assertEquals(answerModel.getTxt(), builtAnswerModel.getTxt());
-        Assert.assertEquals(answerModel.getSerialNumber(), builtAnswerModel.getSerialNumber());
-        Assert.assertEquals(answerModel.getRight(), builtAnswerModel.getRight());
     }
 }
