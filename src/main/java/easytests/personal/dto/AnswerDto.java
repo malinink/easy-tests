@@ -1,31 +1,29 @@
 package easytests.personal.dto;
 
 import easytests.models.AnswerModelInterface;
-import easytests.services.AnswersService;
-
+import easytests.models.empty.QuestionModelEmpty;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author rezenbekk
  */
 @Data
+@SuppressWarnings("checkstyle:MultipleStringLiterals")
 public class AnswerDto {
 
-    @Autowired
-    private AnswersService answersService;
+    private Integer id;
 
     @NotNull
     @NotEmpty
     @Size(max = 255)
     private String txt;
 
-    @NotNull
-    private Boolean right;
+    @Size(max = 2)
+    private String right;
 
     @NotNull
     @Min(0)
@@ -36,16 +34,24 @@ public class AnswerDto {
     private Integer serialNumber;
 
     public void map(AnswerModelInterface answerModel) {
+        this.setId(answerModel.getId());
         this.setTxt(answerModel.getTxt());
-        this.setRight(answerModel.getRight());
+        if (answerModel.getRight()) {
+            this.right = "on";
+        }
         this.setQuestionId(answerModel.getQuestion().getId());
         this.setSerialNumber(answerModel.getSerialNumber());
     }
 
     public void mapInto(AnswerModelInterface answerModel) {
+        answerModel.setId(this.getId());
         answerModel.setTxt(this.getTxt());
-        answerModel.setRight(this.getRight());
-        answerModel.setQuestion(answersService.find(this.getQuestionId()).getQuestion());
+        if ("on".equals(this.right)) {
+            answerModel.setRight(true);
+        } else {
+            answerModel.setRight(false);
+        }
+        answerModel.setQuestion(new QuestionModelEmpty(getQuestionId()));
         answerModel.setSerialNumber(this.getSerialNumber());
     }
 }
