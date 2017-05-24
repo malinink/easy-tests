@@ -9,23 +9,22 @@ import easytests.services.SolutionsServiceInterface;
 import java.util.List;
 
 /**
- * @author nikitalpopov
+ * @author Loriens
  */
 public interface PointsOptionsInterface extends OptionsInterface {
-
     void setPointsService(PointsServiceInterface pointsService);
-
-    void setQuizzesService(QuizzesServiceInterface quizzesService);
-
-    void setQuestionsService(QuestionsServiceInterface questionsService);
 
     void setSolutionsService(SolutionsServiceInterface solutionsService);
 
-    PointsOptionsInterface withQuiz(QuizzesOptionsInterface quizzesOptions);
+    void setQuestionsService(QuestionsServiceInterface questionsService);
+
+    void setQuizzesService(QuizzesServiceInterface quizzesService);
+
+    PointsOptionsInterface withSolutions(SolutionsOptionsInterface solutionsOptions);
 
     PointsOptionsInterface withQuestion(QuestionsOptionsInterface questionsOptions);
 
-    PointsOptionsInterface withSolutions(SolutionsOptionsInterface solutionsOptions);
+    PointsOptionsInterface withQuiz(QuizzesOptionsInterface quizzesOptions);
 
     PointModelInterface withRelations(PointModelInterface pointModel);
 
@@ -34,5 +33,4 @@ public interface PointsOptionsInterface extends OptionsInterface {
     void saveWithRelations(PointModelInterface pointModel);
 
     void deleteWithRelations(PointModelInterface pointModel);
-
 }
