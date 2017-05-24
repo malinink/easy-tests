@@ -12,11 +12,6 @@ import java.util.List;
  * @author fortyways
  */
 public interface QuizzesOptionsInterface extends OptionsInterface {
-
-    QuizzesOptionsInterface withIssue(IssuesOptionsInterface issuesOptions);
-
-    QuizzesOptionsInterface withPoints(PointsOptionsInterface pointsOptions);
-
     void setPointsService(PointsServiceInterface pointsService);
 
     void setQuizzesService(QuizzesServiceInterface quizzesService);
@@ -25,9 +20,11 @@ public interface QuizzesOptionsInterface extends OptionsInterface {
 
     void setTesteesService(TesteesServiceInterface testeesService);
 
-    QuizzesOptionsInterface withTestee(TesteesOptionsInterface testeeOptions);
+    QuizzesOptionsInterface withIssue(IssuesOptionsInterface issuesOptions);
 
-    QuizzesOptionsInterface withPoint(PointsOptionsInterface pointsOptions);
+    QuizzesOptionsInterface withPoints(PointsOptionsInterface pointsOptions);
+
+    QuizzesOptionsInterface withTestee(TesteesOptionsInterface testeeOptions);
 
     QuizModelInterface withRelations(QuizModelInterface subjectModel);
 

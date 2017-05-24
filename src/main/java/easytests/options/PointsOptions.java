@@ -61,9 +61,7 @@ public class PointsOptions implements PointsOptionsInterface {
     public PointModelInterface withRelations(PointModelInterface pointModel) {
 
         if (pointModel == null) {
-
             return pointModel;
-
         }
 
         if (this.quizzesOptions != null) {
@@ -95,16 +93,12 @@ public class PointsOptions implements PointsOptionsInterface {
     public void saveWithRelations(PointModelInterface pointModel) {
 
         if (this.quizzesOptions != null) {
-            this.quizzesOptions.withPoint(this);
+            this.quizzesOptions.withPoints(this);
             this.quizzesOptions.saveWithRelations(pointModel.getQuiz());
 
         }
 
         this.pointsService.save(pointModel);
-
-        if (this.questionsOptions != null) {
-            this.questionsService.save(pointModel.getQuestion(), this.questionsOptions);
-        }
 
         if (this.solutionsOptions != null) {
             this.solutionsService.save(pointModel.getSolutions(), this.solutionsOptions);
@@ -118,12 +112,9 @@ public class PointsOptions implements PointsOptionsInterface {
             this.solutionsService.delete(pointModel.getSolutions(), this.solutionsOptions);
         }
 
-        if (questionsOptions != null) {
-            this.questionsService.delete(pointModel.getQuestion(), this.questionsOptions);
-        }
+        this.pointsService.delete(pointModel);
 
         if (this.quizzesOptions != null) {
-            this.quizzesOptions.withPoint(this);
             this.quizzesOptions.deleteWithRelations(pointModel.getQuiz());
         }
 

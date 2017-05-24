@@ -65,7 +65,7 @@ public class PointsOptionsTest {
 
         given(quizzesService.find(pointModel.getQuiz().getId(), quizOptions)).willReturn(quizModel);
         given(questionsService.find(pointModel.getQuestion().getId(), questionOptions)).willReturn(questionModel);
-        given(solutionsService.findByPoint(pointModel, pointsOptions)).willReturn(solutionsModels);
+        given(solutionsService.findByPoint(pointModel, solutionsOptions)).willReturn(solutionsModels);
 
         final PointModelInterface pointModelWithRelations = pointsOptions.withRelations(pointModel);
 
