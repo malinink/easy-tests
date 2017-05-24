@@ -8,20 +8,27 @@ import java.util.List;
 
 /**
  * @author fortyways
+ * @author Loriens
  */
 public interface PointsServiceInterface extends ServiceInterface {
+    List<PointModelInterface> findAll();
 
-    List<PointModelInterface> findByQuiz(QuizModelInterface quizModel);
+    PointModelInterface find(Integer id);
 
-    List<PointModelInterface> findByQuiz(QuizModelInterface quizModel, PointsOptionsInterface pointsOptions);
+    PointModelInterface find(Integer id, PointsOptionsInterface pointsOptions);
 
     void save(PointModelInterface pointModel);
 
-    void save(PointModelInterface pointModel, PointsOptionsInterface pointsOptions);
+    void save(PointModelInterface pointModel,
+              PointsOptionsInterface pointsOptions);
 
     void save(List<PointModelInterface> pointModels);
 
     void save(List<PointModelInterface> pointModels, PointsOptionsInterface pointsOptions);
+
+    List<PointModelInterface> findByQuiz(QuizModelInterface quizModel);
+
+    List<PointModelInterface> findByQuiz(QuizModelInterface quizModel, PointsOptionsInterface pointsOptions);
 
     void delete(PointModelInterface pointModel);
 
@@ -30,5 +37,4 @@ public interface PointsServiceInterface extends ServiceInterface {
     void delete(List<PointModelInterface> pointModels);
 
     void delete(List<PointModelInterface> pointModels, PointsOptionsInterface pointsOptions);
-
 }
