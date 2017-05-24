@@ -11,6 +11,7 @@ import easytests.support.Models;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -167,6 +168,7 @@ public class PointsServiceTest {
     }
 
     @Test
+    @Ignore
     public void testFindByQuizWithOptions() throws Exception {
 
         final Integer quizId = 5;
@@ -295,6 +297,7 @@ public class PointsServiceTest {
     }
 
     @Test
+    @Ignore
     public void testDeleteModelsList() throws Exception {
 
         final PointModelInterface pointModelFirst = Models.createPointModel(2, 2, 2);
