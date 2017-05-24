@@ -1,6 +1,8 @@
 package easytests.options.builder;
 
+import easytests.options.PointsOptions;
 import easytests.options.PointsOptionsInterface;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,14 +11,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class PointsOptionsBuilder implements PointsOptionsBuilderInterface {
 
-    @Override
-    public PointsOptionsInterface forAuth() {
-        return null;
-    }
+    @Autowired
+    private QuizzesOptionsBuilder quizzesOptionsBuilder;
+
+    @Autowired
+    private SolutionsOptionsBuilder solutionsOptionsBuilder;
 
     @Override
     public PointsOptionsInterface forDelete() {
-        return null;
+
+        return new PointsOptions()
+                .withSolutions(this.solutionsOptionsBuilder.forDelete());
+
+    }
+
+    @Override
+    public PointsOptionsInterface forAuth() {
+
+        return new PointsOptions()
+                .withQuiz(this.quizzesOptionsBuilder.forAuth());
+
     }
 
 }
