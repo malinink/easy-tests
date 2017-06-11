@@ -260,16 +260,18 @@ public class PointsOptionsTest {
     }
 
     @Test
-    @Ignore
     public void testSaveDeleteWithQuiz() {
 
         final PointsOptionsInterface pointsOptions = new PointsOptions();
 
-        final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
-        pointsOptions.withQuiz(quizzesOptions);
+        final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
+        pointsOptions.setPointsService(pointsService);
 
         final QuizzesServiceInterface quizzesService = Mockito.mock(QuizzesServiceInterface.class);
         pointsOptions.setQuizzesService(quizzesService);
+
+        final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
+        pointsOptions.withQuiz(quizzesOptions);
 
         final PointModelInterface pointModel = Mockito.mock(PointModelInterface.class);
 
@@ -277,11 +279,11 @@ public class PointsOptionsTest {
 
         pointsOptionsSpy.deleteWithRelations(pointModel);
 
-        verify(quizzesOptions, times(1)).deleteWithRelations(pointModel.getQuiz());
+        verify(quizzesService, times(1)).delete(pointModel.getQuiz(), quizzesOptions);
 
         pointsOptionsSpy.saveWithRelations(pointModel);
 
-        verify(quizzesOptions, times(1)).saveWithRelations(pointModel.getQuiz());
+        verify(quizzesService, times(1)).save(pointModel.getQuiz(), quizzesOptions);
 
     }
 
