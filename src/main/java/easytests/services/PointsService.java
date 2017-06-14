@@ -22,40 +22,49 @@ public class PointsService implements PointsServiceInterface {
     @Autowired
     private PointsMapper pointsMapper;
 
-    @Override
-    public void delete(PointModelInterface pointModel, PointsOptionsInterface pointsOptions) {
+    @Autowired
+    private QuizzesService quizzesService;
 
+    @Autowired
+    private QuestionsService questionsService;
+
+    @Autowired
+    private SolutionsService solutionsService;
+
+    @Override
+    public List<PointModelInterface> findAll() {
+        return this.map(this.pointsMapper.findAll());
     }
 
     @Override
-    public void delete(List<PointModelInterface> pointModels) {
-
+    public List<PointModelInterface> findAll(PointsOptionsInterface pointsOptions) {
+        return this.withServices(pointsOptions).withRelations(this.findAll());
     }
 
     @Override
-    public void delete(List<PointModelInterface> pointModels, PointsOptionsInterface pointsOptions) {
+    public PointModelInterface find(Integer id) {
 
-    }
-
-    @Override
-    public void delete(PointModelInterface pointModel) {
-
-        final PointEntity pointEntity = this.map(pointModel);
-        if (pointEntity.getId() == null) {
-            throw new DeleteUnidentifiedModelException();
+        final PointEntity pointEntity = this.pointsMapper.find(id);
+        if (pointEntity == null) {
+            return null;
         }
-        this.pointsMapper.delete(pointEntity);
+        return this.map(pointEntity);
 
     }
 
     @Override
-    public void save(PointModelInterface pointModel, PointsOptionsInterface pointsOptions) {
-
+    public PointModelInterface find(Integer id, PointsOptionsInterface pointsOptions) {
+        return this.withServices(pointsOptions).withRelations(this.find(id));
     }
 
     @Override
-    public void save(List<PointModelInterface> pointModels) {
+    public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel) {
+        return this.map(this.pointsMapper.findByQuizId(quizModel.getId()));
+    }
 
+    @Override
+    public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel, PointsOptionsInterface pointsOptions) {
+        return this.withServices(pointsOptions).withRelations(this.findByQuiz(quizModel));
     }
 
     @Override
@@ -72,31 +81,59 @@ public class PointsService implements PointsServiceInterface {
     }
 
     @Override
-    public void save(List<PointModelInterface> pointModels, PointsOptionsInterface pointsOptions) {
-
+    public void save(PointModelInterface pointModel, PointsOptionsInterface pointsOptions) {
+        this.withServices(pointsOptions).saveWithRelations(pointModel);
     }
 
     @Override
-    public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel) {
-        return null;
-    }
+    public void save(List<PointModelInterface> pointsModels) {
 
-    @Override
-    public List<PointModelInterface> findByQuiz(QuizModelInterface quizModel, PointsOptionsInterface pointsOptions) {
-        return null;
-    }
-
-    public List<PointModelInterface> findAll() {
-        return this.map(this.pointsMapper.findAll());
-    }
-
-    public PointModelInterface find(Integer id) {
-
-        final PointEntity pointEntity = this.pointsMapper.find(id);
-        if (pointEntity == null) {
-            return null;
+        for (PointModelInterface pointModel: pointsModels) {
+            this.save(pointModel);
         }
-        return this.map(pointEntity);
+
+    }
+
+    @Override
+    public void save(List<PointModelInterface> pointsModels, PointsOptionsInterface pointsOptions) {
+
+        for (PointModelInterface pointModel: pointsModels) {
+            this.save(pointModel, pointsOptions);
+        }
+
+    }
+
+    @Override
+    public void delete(PointModelInterface pointModel) {
+
+        final PointEntity pointEntity = this.map(pointModel);
+        if (pointEntity.getId() == null) {
+            throw new DeleteUnidentifiedModelException();
+        }
+        this.pointsMapper.delete(pointEntity);
+
+    }
+
+    @Override
+    public void delete(PointModelInterface pointModel, PointsOptionsInterface pointsOptions) {
+        this.withServices(pointsOptions).deleteWithRelations(pointModel);
+    }
+
+    @Override
+    public void delete(List<PointModelInterface> pointsModels) {
+
+        for (PointModelInterface pointModel: pointsModels) {
+            this.delete(pointModel);
+        }
+
+    }
+
+    @Override
+    public void delete(List<PointModelInterface> pointsModels, PointsOptionsInterface pointsOptions) {
+
+        for (PointModelInterface pointModel: pointsModels) {
+            this.delete(pointModel, pointsOptions);
+        }
 
     }
 
@@ -125,4 +162,16 @@ public class PointsService implements PointsServiceInterface {
         return resultPointList;
 
     }
+
+    private PointsOptionsInterface withServices(PointsOptionsInterface pointsOptions) {
+
+        pointsOptions.setPointsService(this);
+        pointsOptions.setQuizzesService(this.quizzesService);
+        pointsOptions.setQuestionsService(this.questionsService);
+        pointsOptions.setSolutionsService(this.solutionsService);
+
+        return pointsOptions;
+
+    }
+
 }

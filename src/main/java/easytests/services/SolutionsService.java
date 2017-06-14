@@ -5,6 +5,7 @@ import easytests.mappers.SolutionsMapper;
 import easytests.models.PointModelInterface;
 import easytests.models.SolutionModel;
 import easytests.models.SolutionModelInterface;
+import easytests.options.SolutionsOptionsInterface;
 import easytests.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,17 +14,28 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author SingularityA
+ * @author Loriens
  */
 @Service
-public class SolutionsService {
+public class SolutionsService implements SolutionsServiceInterface {
 
     @Autowired
     private SolutionsMapper solutionsMapper;
 
+    @Autowired
+    private PointsService pointsService;
+
+    @Override
     public List<SolutionModelInterface> findAll() {
         return this.map(this.solutionsMapper.findAll());
     }
 
+    @Override
+    public List<SolutionModelInterface> findAll(SolutionsOptionsInterface solutionsOptions) {
+        return this.withServices(solutionsOptions).withRelations(this.findAll());
+    }
+
+    @Override
     public SolutionModelInterface find(Integer id) {
         final SolutionEntity solutionEntity = this.solutionsMapper.find(id);
         if (solutionEntity == null) {
@@ -32,10 +44,22 @@ public class SolutionsService {
         return this.map(solutionEntity);
     }
 
-    public List<SolutionModelInterface> findByPoint(PointModelInterface point) {
-        return this.map(this.solutionsMapper.findByPointId(point.getId()));
+    @Override
+    public SolutionModelInterface find(Integer id, SolutionsOptionsInterface solutionsOptions) {
+        return this.withServices(solutionsOptions).withRelations(this.find(id));
     }
 
+    public List<SolutionModelInterface> findByPoint(PointModelInterface pointModel) {
+        return this.map(this.solutionsMapper.findByPointId(pointModel.getId()));
+    }
+
+    @Override
+    public List<SolutionModelInterface> findByPoint(PointModelInterface pointModel,
+                                             SolutionsOptionsInterface solutionsOptions) {
+        return this.withServices(solutionsOptions).withRelations(this.findByPoint(pointModel));
+    }
+
+    @Override
     public void save(SolutionModelInterface solutionModel) {
         final SolutionEntity solutionEntity = this.map(solutionModel);
         if (solutionEntity.getId() != null) {
@@ -46,12 +70,52 @@ public class SolutionsService {
         solutionModel.setId(solutionEntity.getId());
     }
 
+    @Override
+    public void save(SolutionModelInterface solutionModel,
+                                       SolutionsOptionsInterface solutionsOptions) {
+        this.withServices(solutionsOptions).saveWithRelations(solutionModel);
+    }
+
+    @Override
+    public void save(List<SolutionModelInterface> solutionModels) {
+        for (SolutionModelInterface solutionModel: solutionModels) {
+            this.save(solutionModel);
+        }
+    }
+
+    @Override
+    public void save(List<SolutionModelInterface> solutionModels, SolutionsOptionsInterface solutionsOptions) {
+        for (SolutionModelInterface solutionModel: solutionModels) {
+            this.save(solutionModel, solutionsOptions);
+        }
+    }
+
+    @Override
     public void delete(SolutionModelInterface solutionModel) {
         final SolutionEntity solutionEntity = this.map(solutionModel);
         if (solutionEntity.getId() == null) {
             throw new DeleteUnidentifiedModelException();
         }
         this.solutionsMapper.delete(solutionEntity);
+    }
+
+    @Override
+    public void delete(List<SolutionModelInterface> solutionsModel) {
+        for (SolutionModelInterface solutionModel: solutionsModel) {
+            this.delete(solutionModel);
+        }
+    }
+
+    @Override
+    public void delete(SolutionModelInterface solutionModel, SolutionsOptionsInterface solutionsOptions) {
+        this.withServices(solutionsOptions).deleteWithRelations(solutionModel);
+    }
+
+    @Override
+    public void delete(List<SolutionModelInterface> solutionsModel, SolutionsOptionsInterface solutionsOptions) {
+        for (SolutionModelInterface solutionModel: solutionsModel) {
+            this.delete(solutionModel, solutionsOptions);
+        }
     }
 
     private SolutionModelInterface map(SolutionEntity solutionEntity) {
@@ -72,5 +136,11 @@ public class SolutionsService {
             solutionModels.add(this.map(solutionEntity));
         }
         return solutionModels;
+    }
+
+    private SolutionsOptionsInterface withServices(SolutionsOptionsInterface solutionOptions) {
+        solutionOptions.setSolutionsService(this);
+        //solutionOptions.setPointsService(this.pointsService);
+        return solutionOptions;
     }
 }
