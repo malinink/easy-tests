@@ -186,7 +186,6 @@ public class PointsOptionsTest {
     }
 
     @Test
-    @Ignore
     public void testSaveWithRelations() throws Exception {
 
         final PointModelInterface pointModel = Mockito.mock(PointModelInterface.class);
@@ -209,8 +208,10 @@ public class PointsOptionsTest {
         final QuizModelInterface quizModel = Mockito.mock(QuizModelInterface.class);
         final List<SolutionModelInterface> solutionsModels = new ArrayList<>();
 
-        pointModel.setQuiz(quizModel);
-        pointModel.setSolutions(solutionsModels);
+        solutionsModels.add(Mockito.mock(SolutionModelInterface.class));
+
+        given(pointModel.getQuiz()).willReturn(quizModel);
+        given(pointModel.getSolutions()).willReturn(solutionsModels);
 
         final InOrder inOrder = Mockito.inOrder(quizzesService, pointsService, solutionsService);
 
@@ -223,7 +224,6 @@ public class PointsOptionsTest {
     }
 
     @Test
-    @Ignore
     public void testDeleteWithRelations() throws Exception {
 
         final PointModelInterface pointModel = Mockito.mock(PointModelInterface.class);
@@ -246,8 +246,10 @@ public class PointsOptionsTest {
         final QuizModelInterface quizModel = Mockito.mock(QuizModelInterface.class);
         final List<SolutionModelInterface> solutionsModels = new ArrayList<>();
 
-        pointModel.setQuiz(quizModel);
-        pointModel.setSolutions(solutionsModels);
+        solutionsModels.add(Mockito.mock(SolutionModelInterface.class));
+
+        given(pointModel.getQuiz()).willReturn(quizModel);
+        given(pointModel.getSolutions()).willReturn(solutionsModels);
 
         final InOrder inOrder = Mockito.inOrder(solutionsService, pointsService, quizzesService);
 
