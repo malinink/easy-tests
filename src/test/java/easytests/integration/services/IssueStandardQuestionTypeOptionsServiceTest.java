@@ -1,10 +1,10 @@
 package easytests.integration.services;
 
-import easytests.models.IssueStandardModelInterface;
-import easytests.models.IssueStandardQuestionTypeOptionModelInterface;
-import easytests.options.IssueStandardQuestionTypeOptionsOptions;
-import easytests.options.IssueStandardsOptions;
-import easytests.services.IssueStandardQuestionTypeOptionsService;
+import easytests.core.models.IssueStandardModelInterface;
+import easytests.core.models.IssueStandardQuestionTypeOptionModelInterface;
+import easytests.core.options.IssueStandardQuestionTypeOptionsOptions;
+import easytests.core.options.IssueStandardsOptions;
+import easytests.core.services.IssueStandardQuestionTypeOptionsService;
 import easytests.support.Models;
 import org.junit.Assert;
 import org.junit.Test;

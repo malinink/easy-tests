@@ -1,9 +1,9 @@
 package easytests.personal.validators;
 
 import easytests.common.validators.AbstractDtoValidator;
-import easytests.models.QuestionTypeModelInterface;
+import easytests.core.models.QuestionTypeModelInterface;
+import easytests.core.services.QuestionTypesService;
 import easytests.personal.dto.QuestionModelDto;
-import easytests.services.QuestionTypesService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

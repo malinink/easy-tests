@@ -1,10 +1,10 @@
 package easytests.integration.services;
 
-import easytests.models.IssueStandardModelInterface;
-import easytests.models.IssueStandardTopicPriorityModelInterface;
-import easytests.options.IssueStandardTopicPrioritiesOptions;
-import easytests.options.IssueStandardsOptions;
-import easytests.services.IssueStandardTopicPrioritiesService;
+import easytests.core.models.IssueStandardModelInterface;
+import easytests.core.models.IssueStandardTopicPriorityModelInterface;
+import easytests.core.options.IssueStandardTopicPrioritiesOptions;
+import easytests.core.options.IssueStandardsOptions;
+import easytests.core.services.IssueStandardTopicPrioritiesService;
 import easytests.support.Models;
 import org.junit.Assert;
 import org.junit.Test;

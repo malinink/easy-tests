@@ -1,7 +1,7 @@
 package easytests.personal.dto;
 
-import easytests.models.AnswerModelInterface;
-import easytests.models.empty.QuestionModelEmpty;
+import easytests.core.models.AnswerModelInterface;
+import easytests.core.models.empty.QuestionModelEmpty;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

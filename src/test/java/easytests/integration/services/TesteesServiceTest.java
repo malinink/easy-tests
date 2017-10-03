@@ -1,10 +1,10 @@
 package easytests.integration.services;
 
-import easytests.models.TesteeModelInterface;
-import easytests.models.QuizModelInterface;
-import easytests.options.TesteesOptions;
-import easytests.options.QuizzesOptions;
-import easytests.services.TesteesService;
+import easytests.core.models.TesteeModelInterface;
+import easytests.core.models.QuizModelInterface;
+import easytests.core.options.TesteesOptions;
+import easytests.core.options.QuizzesOptions;
+import easytests.core.services.TesteesService;
 import easytests.support.Models;
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,6 +1,6 @@
 package easytests.personal.dto;
 
-import easytests.models.TopicModelInterface;
+import easytests.core.models.TopicModelInterface;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;

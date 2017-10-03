@@ -1,7 +1,7 @@
 package easytests.admin.dto;
 
-import easytests.models.UserModelInterface;
-import easytests.models.empty.ModelsListEmpty;
+import easytests.core.models.UserModelInterface;
+import easytests.core.models.empty.ModelsListEmpty;
 import javax.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;

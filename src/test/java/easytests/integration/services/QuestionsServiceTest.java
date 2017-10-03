@@ -1,10 +1,10 @@
 package easytests.integration.services;
 
-import easytests.models.*;
-import easytests.models.empty.ModelsListEmpty;
-import easytests.models.empty.QuestionTypeModelEmpty;
-import easytests.models.empty.TopicModelEmpty;
-import easytests.services.QuestionsService;
+import easytests.core.models.*;
+import easytests.core.models.empty.ModelsListEmpty;
+import easytests.core.models.empty.QuestionTypeModelEmpty;
+import easytests.core.models.empty.TopicModelEmpty;
+import easytests.core.services.QuestionsService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,6 +1,6 @@
 package easytests.support;
 
-import easytests.entities.*;
+import easytests.core.entities.*;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
