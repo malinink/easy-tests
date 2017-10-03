@@ -16,7 +16,7 @@ script:
 - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V --quiet
 - ./mvnw checkstyle:check --quiet
 - ./mvnw migration:up --quiet
-- ./mvnw migration:status -Dmigration.env=test --quiet
+- ./mvnw migration:up -Dmigration.env=test --quiet
 - ./mvnw test jacoco:report --quiet
 after_success:
 - ./mvnw coveralls:report --quiet
