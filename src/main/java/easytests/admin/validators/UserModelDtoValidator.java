@@ -2,8 +2,8 @@ package easytests.admin.validators;
 
 import easytests.admin.dto.UserModelDto;
 import easytests.common.validators.AbstractDtoValidator;
-import easytests.models.UserModelInterface;
-import easytests.services.UsersService;
+import easytests.core.models.UserModelInterface;
+import easytests.core.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;

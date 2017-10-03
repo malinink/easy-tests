@@ -1,7 +1,7 @@
 package easytests.support;
 
-import easytests.models.*;
-import easytests.models.empty.*;
+import easytests.core.models.*;
+import easytests.core.models.empty.*;
 
 import java.time.LocalDateTime;
 

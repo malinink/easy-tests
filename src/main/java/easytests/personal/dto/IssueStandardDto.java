@@ -1,7 +1,7 @@
 package easytests.personal.dto;
 
-import easytests.models.*;
-import easytests.models.empty.SubjectModelEmpty;
+import easytests.core.models.*;
+import easytests.core.models.empty.SubjectModelEmpty;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;

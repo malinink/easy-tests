@@ -1,7 +1,7 @@
 package easytests.auth.services;
 
-import easytests.models.UserModelInterface;
-import easytests.services.UsersService;
+import easytests.core.models.UserModelInterface;
+import easytests.core.services.UsersService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

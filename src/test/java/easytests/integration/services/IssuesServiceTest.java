@@ -1,10 +1,10 @@
 package easytests.integration.services;
 
-import easytests.models.IssueModel;
-import easytests.models.IssueModelInterface;
-import easytests.models.empty.ModelsListEmpty;
-import easytests.models.empty.SubjectModelEmpty;
-import easytests.services.IssuesService;
+import easytests.core.models.IssueModel;
+import easytests.core.models.IssueModelInterface;
+import easytests.core.models.empty.ModelsListEmpty;
+import easytests.core.models.empty.SubjectModelEmpty;
+import easytests.core.services.IssuesService;
 import easytests.support.Models;
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package easytests.integration.services;
 
-import easytests.models.UserModelInterface;
-import easytests.services.UsersService;
+import easytests.core.models.UserModelInterface;
+import easytests.core.services.UsersService;
 import easytests.support.Models;
 import org.junit.Assert;
 import org.junit.Test;

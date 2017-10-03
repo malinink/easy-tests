@@ -1,8 +1,8 @@
 package easytests.auth.services;
 
-import easytests.models.UserModel;
-import easytests.models.UserModelInterface;
-import easytests.services.UsersServiceInterface;
+import easytests.core.models.UserModel;
+import easytests.core.models.UserModelInterface;
+import easytests.core.services.UsersServiceInterface;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

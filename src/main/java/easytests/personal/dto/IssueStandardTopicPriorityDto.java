@@ -1,8 +1,8 @@
 package easytests.personal.dto;
 
-import easytests.models.IssueStandardTopicPriorityModelInterface;
-import easytests.models.empty.IssueStandardModelEmpty;
-import easytests.models.empty.TopicModelEmpty;
+import easytests.core.models.IssueStandardTopicPriorityModelInterface;
+import easytests.core.models.empty.IssueStandardModelEmpty;
+import easytests.core.models.empty.TopicModelEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 

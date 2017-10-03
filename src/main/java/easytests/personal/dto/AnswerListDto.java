@@ -1,8 +1,8 @@
 package easytests.personal.dto;
 
-import easytests.models.AnswerModel;
-import easytests.models.AnswerModelInterface;
-import easytests.models.QuestionModelInterface;
+import easytests.core.models.AnswerModel;
+import easytests.core.models.AnswerModelInterface;
+import easytests.core.models.QuestionModelInterface;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;

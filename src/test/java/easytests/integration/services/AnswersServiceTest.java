@@ -1,10 +1,10 @@
 package easytests.integration.services;
 
-import easytests.models.*;
-import easytests.models.empty.QuestionModelEmpty;
-import easytests.options.AnswersOptions;
-import easytests.options.QuestionsOptions;
-import easytests.services.AnswersService;
+import easytests.core.models.*;
+import easytests.core.models.empty.QuestionModelEmpty;
+import easytests.core.options.AnswersOptions;
+import easytests.core.options.QuestionsOptions;
+import easytests.core.services.AnswersService;
 import easytests.support.Models;
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,15 +1,13 @@
 package easytests.integration.services;
 
-import easytests.models.*;
-import easytests.models.empty.IssueStandardModelEmpty;
-import easytests.models.empty.ModelsListEmpty;
-import easytests.models.empty.UserModelEmpty;
-import easytests.services.SubjectsService;
-import easytests.services.UsersService;
+import easytests.core.models.*;
+import easytests.core.models.empty.IssueStandardModelEmpty;
+import easytests.core.models.empty.ModelsListEmpty;
+import easytests.core.models.empty.UserModelEmpty;
+import easytests.core.services.SubjectsService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;

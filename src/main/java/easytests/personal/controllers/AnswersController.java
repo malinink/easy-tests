@@ -1,18 +1,18 @@
 package easytests.personal.controllers;
 
 import easytests.common.controllers.AbstractCrudController;
-import easytests.models.*;
-import easytests.options.AnswersOptions;
-import easytests.options.AnswersOptionsInterface;
-import easytests.options.QuestionsOptionsInterface;
-import easytests.options.builder.AnswersOptionsBuilder;
-import easytests.options.builder.QuestionsOptionsBuilder;
+import easytests.core.models.*;
+import easytests.core.options.AnswersOptions;
+import easytests.core.options.AnswersOptionsInterface;
+import easytests.core.options.QuestionsOptionsInterface;
+import easytests.core.options.builder.AnswersOptionsBuilder;
+import easytests.core.options.builder.QuestionsOptionsBuilder;
+import easytests.core.services.AnswersService;
+import easytests.core.services.QuestionTypesService;
+import easytests.core.services.QuestionsService;
 import easytests.personal.dto.AnswerDto;
 import easytests.personal.dto.AnswerListDto;
 import easytests.personal.validators.AnswerDtoValidator;
-import easytests.services.AnswersService;
-import easytests.services.QuestionTypesService;
-import easytests.services.QuestionsService;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.validation.Valid;

@@ -1,20 +1,22 @@
 package easytests.personal.validators;
 
 import easytests.common.validators.AbstractDtoValidator;
-import easytests.models.IdentityInterface;
-import easytests.models.IssueStandardQuestionTypeOptionModelInterface;
-import easytests.models.IssueStandardTopicPriorityModelInterface;
-import easytests.models.empty.IssueStandardModelEmpty;
+import easytests.core.models.IdentityInterface;
+import easytests.core.models.IssueStandardQuestionTypeOptionModelInterface;
+import easytests.core.models.IssueStandardTopicPriorityModelInterface;
+import easytests.core.models.empty.IssueStandardModelEmpty;
+import easytests.core.services.IssueStandardQuestionTypeOptionsService;
+import easytests.core.services.IssueStandardTopicPrioritiesService;
 import easytests.personal.dto.IssueStandardDto;
 import easytests.personal.dto.IssueStandardQuestionTypeOptionDto;
 import easytests.personal.dto.IssueStandardTopicPriorityDto;
-import easytests.services.IssueStandardQuestionTypeOptionsService;
-import easytests.services.IssueStandardTopicPrioritiesService;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -64,7 +66,7 @@ public class IssueStandardDtoValidator extends AbstractDtoValidator {
         tpModelIds.addAll(tpModels.stream().map(IdentityInterface::getId).collect(Collectors.toList()));
 
         int index = 0;
-        for (IssueStandardTopicPriorityDto tpDto: issueStandardDto.getTopicPriorities()) {
+        for (IssueStandardTopicPriorityDto tpDto : issueStandardDto.getTopicPriorities()) {
             if (tpDto.getId() != null && !tpModelIds.contains(tpDto.getId())) {
                 reject(errors, tpField(index, "id"), "Foreign topicPriority id for IssueStandard entity");
             }
@@ -105,7 +107,7 @@ public class IssueStandardDtoValidator extends AbstractDtoValidator {
     }
 
     private void validateQuestionTypeOptionDtoIdBelongsToIssueStandard(Errors errors,
-                                                                      IssueStandardDto issueStandardDto) {
+                                                                       IssueStandardDto issueStandardDto) {
         final List<IssueStandardQuestionTypeOptionModelInterface> qtoModels
                 = this.questionTypeOptionsService
                 .findByIssueStandard(new IssueStandardModelEmpty(issueStandardDto.getId()));
@@ -114,7 +116,7 @@ public class IssueStandardDtoValidator extends AbstractDtoValidator {
         qtoModelIds.addAll(qtoModels.stream().map(IdentityInterface::getId).collect(Collectors.toList()));
 
         int index = 0;
-        for (IssueStandardQuestionTypeOptionDto qtoDto: issueStandardDto.getQuestionTypeOptions()) {
+        for (IssueStandardQuestionTypeOptionDto qtoDto : issueStandardDto.getQuestionTypeOptions()) {
             if (qtoDto.getId() != null && !qtoModelIds.contains(qtoDto.getId())) {
                 reject(errors, qtoField(index, "id"), "Foreign questionTypeOption id for IssueStandard entity");
             }
