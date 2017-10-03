@@ -22,6 +22,16 @@ public class AuthUsersService implements UserDetailsService {
     @Autowired
     private UsersService usersService;
 
+    private static List<GrantedAuthority> getAuthorities(UserModelInterface userModel) {
+        final List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_TESTEE"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        if (userModel.getIsAdmin()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        return authorities;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         final UserModelInterface userModel = usersService.findByEmail(email);
@@ -31,21 +41,11 @@ public class AuthUsersService implements UserDetailsService {
         return new User(
                 userModel.getEmail(),
                 userModel.getPassword(),
-                true,
+                userModel.getState() == 3 ? true : false,
                 true,
                 true,
                 true,
                 this.getAuthorities(userModel)
         );
-    }
-
-    private static List<GrantedAuthority> getAuthorities(UserModelInterface userModel) {
-        final List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_TESTEE"));
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        if (userModel.getIsAdmin()) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        }
-        return authorities;
     }
 }

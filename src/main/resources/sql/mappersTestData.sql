@@ -29,7 +29,7 @@ TRUNCATE TABLE topics RESTART IDENTITY;
 INSERT INTO users (first_name, last_name, surname, email, password, is_admin, state) VALUES
   ('FirstName1', 'LastName1', 'Surname1', 'email1@gmail.com', 'hash1', TRUE, 1),
   ('FirstName2', 'LastName2', 'Surname2', 'email2@gmail.com', 'hash2', FALSE, 2),
-  ('FirstName3', 'LastName3', 'Surname3', 'email3@gmail.com', 'hash3', FALSE, 1);
+  ('FirstName3', 'LastName3', 'Surname3', 'email3@gmail.com', 'hash3', TRUE, 3);
 
 INSERT INTO issue_standards (time_limit, questions_number, subject_id) VALUES
   (300, 30, 1),
