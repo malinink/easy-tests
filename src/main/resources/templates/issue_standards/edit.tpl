@@ -49,7 +49,7 @@ content: contents {
               }
               div(class: 'col s4') {
                 def checkboxAttrs = [id: isPreferableId, name: isPreferableName, type: 'checkbox']
-                if (topicPriority.isPreferable == "on") checkboxAttrs += [checked: true]
+                if (topicPriority.isPreferable) checkboxAttrs += [checked: true]
                 p {
                   input(checkboxAttrs)
                   label(for: isPreferableId, 'isPreferable')

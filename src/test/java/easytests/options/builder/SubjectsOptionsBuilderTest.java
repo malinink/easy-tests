@@ -21,6 +21,9 @@ public class SubjectsOptionsBuilderTest {
     private SubjectsOptionsBuilder subjectsOptionsBuilder;
 
     @MockBean
+    private IssueStandardsOptionsBuilder issueStandardsOptionsBuilder;
+
+    @MockBean
     private TopicsOptionsBuilder topicsOptionsBuilder;
 
     @MockBean
@@ -36,10 +39,14 @@ public class SubjectsOptionsBuilderTest {
 
     @Test
     public void testForDelete() throws Exception {
+        final IssueStandardsOptionsInterface issueStandardsOptions = new IssueStandardsOptions();
+        given(this.issueStandardsOptionsBuilder.forDelete()).willReturn(issueStandardsOptions);
+
         final TopicsOptionsInterface topicsOptions = new TopicsOptions();
         given(this.topicsOptionsBuilder.forDelete()).willReturn(topicsOptions);
+
         final SubjectsOptionsInterface subjectsOptions = this.subjectsOptionsBuilder.forDelete();
-        Assert.assertEquals(new SubjectsOptions().withTopics(topicsOptions).withIssueStandard(new IssueStandardsOptions()), subjectsOptions);
+        Assert.assertEquals(new SubjectsOptions().withTopics(topicsOptions).withIssueStandard(issueStandardsOptions), subjectsOptions);
     }
 
 }
