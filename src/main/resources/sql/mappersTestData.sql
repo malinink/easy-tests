@@ -5,156 +5,23 @@
 -- ALTER TABLE topic_priorities DROP CONSTRAINT topic_priorities_issue_standard_id_fkey;
 
 ----------------------
--- DROP TABLES
+-- TRUNCATE TABLES
 ----------------------
-DROP TABLE IF EXISTS question_type_options;
-DROP TABLE IF EXISTS topic_priorities;
-DROP TABLE IF EXISTS issue_standards;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS subjects;
-DROP TABLE IF EXISTS questions;
-DROP TABLE IF EXISTS question_types;
-DROP TABLE IF EXISTS answers;
-DROP TABLE IF EXISTS quizzes;
-DROP TABLE IF EXISTS solutions;
-DROP TABLE IF EXISTS testees;
-DROP TABLE IF EXISTS points;
-DROP TABLE IF EXISTS issues;
-DROP TABLE IF EXISTS topics;
 
-
-----------------------
--- CREATE TABLES
-----------------------
-CREATE TABLE users (
-  id         SERIAL      NOT NULL,
-  first_name VARCHAR(30) NOT NULL,
-  last_name  VARCHAR(30) NOT NULL,
-  surname    VARCHAR(30) NOT NULL,
-  email      VARCHAR(30) NOT NULL UNIQUE,
-  password   VARCHAR(60) NOT NULL,
-  is_admin   BOOLEAN     NOT NULL DEFAULT FALSE,
-  state      SMALLINT    NOT NULL DEFAULT 1,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE issue_standards (
-  id                SERIAL   NOT NULL,
-  time_limit        INTEGER,
-  questions_number  INTEGER,
-  subject_id        INTEGER  NOT NULL,
-  CONSTRAINT positiveness CHECK (questions_number > 0 AND time_limit > 0),
-  PRIMARY KEY (id),
-  UNIQUE (subject_id)
-);
-
-CREATE TABLE topic_priorities (
-  id                 SERIAL   NOT NULL,
-  topic_id           INTEGER  NOT NULL,
-  is_preferable      BOOLEAN  NOT NULL,
-  issue_standard_id  INTEGER  NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE (topic_id, issue_standard_id)
-);
-
-CREATE TABLE question_type_options (
-  id                 SERIAL   NOT NULL,
-  question_type_id   INTEGER  NOT NULL,
-  min_number         INTEGER,
-  max_number         INTEGER,
-  time_limit         INTEGER,
-  issue_standard_id  INTEGER  NOT NULL,
-  CONSTRAINT positiveness CHECK (min_number >= 0 AND max_number > 0 AND time_limit > 0),
-  CONSTRAINT check_limits CHECK (max_number >= min_number),
-  PRIMARY KEY (id),
-  UNIQUE (question_type_id, issue_standard_id)
-);
-
-CREATE TABLE subjects (
-  id        SERIAL       NOT NULL,
-  name      VARCHAR(255) NOT NULL,
-  description TEXT,
-  user_id   INTEGER      NOT NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE topics (
-  id         SERIAL      NOT NULL,
-  name       VARCHAR(30) NOT NULL,
-  subject_id INTEGER     NOT NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE questions (
-  id                      SERIAL        NOT NULL,
-  text                    VARCHAR(255)  NOT NULL,
-  question_type_id        INTEGER       NOT NULL,
-  topic_id                INTEGER       NOT NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE question_types (
-  id         INTEGER     NOT NULL,
-  name       VARCHAR(30) NOT NULL,
-  sort       INTEGER     NOT NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE answers (
-  id SERIAL NOT NULL,
-  txt VARCHAR(255) NOT NULL,
-  question_id INTEGER NOT NULL,
-  serial_number INTEGER NOT NULL DEFAULT 0,
-  is_right BOOLEAN NOT NULL,
-  PRIMARY KEY (id),
-  CONSTRAINT CHK_serial_number CHECK (serial_number>=0)
-  --FOREIGN KEY (question_id) REFERENCES questions(id)
-);
-
-CREATE TABLE quizzes (
-  id         SERIAL      NOT NULL,
-  issue_id  INTEGER NOT NULL,
-  invite_code VARCHAR(32),
-  started_at  TIMESTAMP,
-  finished_at TIMESTAMP,
-  code_expired BOOLEAN,
-
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE solutions (
-  id        SERIAL  NOT NULL,
-  answer_id INTEGER,
-  point_id  INTEGER NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE (answer_id, point_id)
-);
-
-CREATE TABLE testees (
-  id           SERIAL      NOT NULL,
-  first_name   VARCHAR(30) NOT NULL,
-  last_name    VARCHAR(30) NOT NULL,
-  surname      VARCHAR(30) NOT NULL,
-  group_number INTEGER     NOT NULL,
-  quiz_id      INTEGER     NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE (quiz_id)
-);
-
-CREATE TABLE points (
-  id          SERIAL    NOT NULL,
-  question_id INTEGER 	NOT NULL,
-  quiz_id	    INTEGER		NOT NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE issues (
-  id          SERIAL        NOT NULL,
-  name        VARCHAR(100)  NOT NULL,
-  subject_id  INTEGER       NOT NULL,
-  PRIMARY KEY (id)
-);
-
+TRUNCATE TABLE question_type_options RESTART IDENTITY;
+TRUNCATE TABLE topic_priorities RESTART IDENTITY;
+TRUNCATE TABLE issue_standards RESTART IDENTITY;
+TRUNCATE TABLE users RESTART IDENTITY;
+TRUNCATE TABLE subjects RESTART IDENTITY;
+TRUNCATE TABLE questions RESTART IDENTITY;
+TRUNCATE TABLE question_types RESTART IDENTITY;
+TRUNCATE TABLE answers RESTART IDENTITY;
+TRUNCATE TABLE quizzes RESTART IDENTITY;
+TRUNCATE TABLE solutions RESTART IDENTITY;
+TRUNCATE TABLE testees RESTART IDENTITY;
+TRUNCATE TABLE points RESTART IDENTITY;
+TRUNCATE TABLE issues RESTART IDENTITY;
+TRUNCATE TABLE topics RESTART IDENTITY;
 
 ----------------------
 -- INSERT DATA
