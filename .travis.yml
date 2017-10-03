@@ -8,11 +8,15 @@ install:
 - cp src/main/resources/database.travis.properties src/main/resources/database.properties
 - cp src/main/resources/database.test.travis.properties src/main/resources/database.test.properties
 - cp src/main/resources/migrations/environments/development.travis.properties src/main/resources/migrations/environments/development.properties
+- cp src/main/resources/migrations/environments/test.travis.properties src/main/resources/migrations/environments/test.properties
 before_script:
 - psql -c 'create database easytests;' -U postgres
 - psql -c 'create database easyteststest;' -U postgres
 script:
-- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-- ./mvnw checkstyle:check
-- ./mvnw migration:up
-- ./mvnw test -B
+- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V --quiet
+- ./mvnw checkstyle:check --quiet
+- ./mvnw migration:up --quiet
+- ./mvnw migration:up -Dmigration.env=test --quiet
+- ./mvnw test jacoco:report --quiet
+after_success:
+- ./mvnw coveralls:report --quiet

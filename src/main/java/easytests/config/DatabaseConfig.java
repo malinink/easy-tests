@@ -16,7 +16,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
  * @author malinink
  */
 @Configuration
-@MapperScan("easytests.mappers")
+@MapperScan("easytests.core.mappers")
 @PropertySource("classpath:database.properties")
 public class DatabaseConfig {
 
