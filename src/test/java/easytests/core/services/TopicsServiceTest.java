@@ -46,6 +46,17 @@ public class TopicsServiceTest {
         return topicModel;
     }
 
+    private TopicEntity getTopicEntity() {
+        final TopicEntity topicEntity = Entities.createTopicEntityMock(6,3, "testentity");
+        return topicEntity;
+
+    }
+
+    private TopicModelInterface getTopicModel() {
+        final TopicModelInterface topicModel = mapTopicModel(this.getTopicEntity());
+        return topicModel;
+    }
+
     private List<TopicEntity> getTopicsEntities() {
         final TopicEntity topicEntityFirst = Entities.createTopicEntityMock(4, 3, "testfirst");
         final TopicEntity topicEntitySecond = Entities.createTopicEntityMock(5, 3, "testsecond");
@@ -61,6 +72,24 @@ public class TopicsServiceTest {
             topicsModels.add(this.mapTopicModel(topicEntity));
         }
         return topicsModels;
+    }
+
+//    private
+    @Test
+    public void testFind() throws Exception{
+        final Integer id = 6;
+//        final TopicsOptionsInterface topicOptions = Mockito.mock(TopicsOptionsInterface.class);
+//        final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
+        final TopicModelInterface topicModel = getTopicModel();
+        final TopicEntity topicEntity = this.getTopicEntity();
+
+
+        given(this.topicsMapper.find(id)).willReturn(topicEntity);
+        final TopicModelInterface foundedTopicModel = this.topicsService.find(id);
+
+        verify(this.topicsMapper).find(id);
+        Assert.assertEquals(topicModel,foundedTopicModel);
+
     }
 
     @Test
