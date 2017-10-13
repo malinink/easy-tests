@@ -74,12 +74,9 @@ public class TopicsServiceTest {
         return topicsModels;
     }
 
-//    private
     @Test
     public void testFind() throws Exception{
         final Integer id = 6;
-//        final TopicsOptionsInterface topicOptions = Mockito.mock(TopicsOptionsInterface.class);
-//        final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
         final TopicModelInterface topicModel = getTopicModel();
         final TopicEntity topicEntity = this.getTopicEntity();
 
@@ -90,6 +87,18 @@ public class TopicsServiceTest {
         verify(this.topicsMapper).find(id);
         Assert.assertEquals(topicModel,foundedTopicModel);
 
+    }
+    @Test
+    public void testFindAll() throws Exception {
+        final List<TopicEntity> topicsEntities = this.getTopicsEntities();
+        final List<TopicModelInterface> topicsModels = getTopicsModels();
+
+
+        given(this.topicsMapper.findAll()).willReturn(topicsEntities);
+        final List<TopicModelInterface> foundedTopicsModels = this.topicsService.findAll();
+
+        verify(this.topicsMapper).findAll();
+        Assert.assertEquals(topicsModels, foundedTopicsModels);
     }
 
     @Test
