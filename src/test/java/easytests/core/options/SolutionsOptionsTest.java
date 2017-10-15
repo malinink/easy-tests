@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
+import java.util.List;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -58,23 +60,6 @@ public class SolutionsOptionsTest {
         verify(solutionModel).setAnswer(answerModel);
     }
 
-    @Test
-    public void testWithRelationsOnNull() throws Exception {
-
-        final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
-
-        final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
-        final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
-
-        solutionsOptions.setPointsService(pointsService);
-        solutionsOptions.setAnswersService(answersService);
-
-        final SolutionModelInterface nullSolutionModel = null;
-        final SolutionModelInterface solutionModelWithRelations = solutionsOptions.withRelations(nullSolutionModel);
-
-        Assert.assertNull(solutionModelWithRelations);
-
-    }
 
     @Test
     public void testSaveWithRelations() throws Exception {
@@ -163,9 +148,48 @@ public class SolutionsOptionsTest {
 
         solutionsOptionsSpy.deleteWithRelations(solutionModel);
         verify(pointsOptions, times(1)).deleteWithRelations(solutionModel.getPoint());
-
-/*        solutionsOptionsSpy.saveWithRelations(solutionModel);
+        /*solutionsOptionsSpy.saveWithRelations(solutionModel);
         verify(pointsOptions, times(1)).saveWithRelations(solutionModel.getPoint());*/
 
+    }
+
+    @Test
+    public void testWithRelations() {
+        final SolutionModelInterface solutionModel = Mockito.mock(SolutionModelInterface.class);
+
+        solutionModel.setId(1);
+        given(solutionModel.getPoint()).willReturn(new PointModelEmpty(1));
+        given(solutionModel.getAnswer()).willReturn(new AnswerModelEmpty(1));
+
+        final SolutionsOptionsInterface solutionsOptions = new SolutionsOptions();
+        final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
+        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
+
+        final SolutionsServiceInterface solutionsService = Mockito.mock(SolutionsServiceInterface.class);
+        final PointsServiceInterface pointsService = Mockito.mock(PointsServiceInterface.class);
+        final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
+
+        solutionsOptions.setSolutionsService(solutionsService);
+        solutionsOptions.setPointsService(pointsService);
+        solutionsOptions.withPoint(pointsOptions);
+        solutionsOptions.setAnswersService(answersService);
+        solutionsOptions.withAnswer(answersOptions);
+
+        final List<SolutionModelInterface> solutionModels = new ArrayList<SolutionModelInterface>();
+
+        final PointModelInterface pointModel = Mockito.mock(PointModelInterface.class);
+        final AnswerModelInterface answerModel = Mockito.mock(AnswerModelInterface.class);
+
+        given(pointsService.find(solutionModel.getPoint().getId(), pointsOptions)).willReturn(pointModel);
+        given(answersService.find(solutionModel.getAnswer().getId(), answersOptions)).willReturn(answerModel);
+
+
+        solutionModel.setPoint(pointModel);
+        solutionModel.setAnswer(answerModel);
+
+
+        solutionModels.add(solutionModel);
+        solutionModels.add(null);
+        final List<SolutionModelInterface> solutionModelWithRelations = solutionsOptions.withRelations(solutionModels);
     }
 }
