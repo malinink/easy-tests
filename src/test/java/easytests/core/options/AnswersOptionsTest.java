@@ -2,6 +2,7 @@ package easytests.core.options;
 
 import easytests.core.models.*;
 import easytests.core.models.empty.QuestionModelEmpty;
+import easytests.core.services.AnswersServiceInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +117,32 @@ public class AnswersOptionsTest {
 
         verify(answersModels.get(1)).setQuestion(questionModelSecond);
     }
+    @Test
+    public void testSaveWithRelations() throws Exception {
 
+        final AnswerModelInterface answerModel = Mockito.mock(AnswerModelInterface.class);
+
+        final AnswersOptionsInterface answersOptions = new AnswersOptions();
+
+        answersOptions.saveWithRelations(answerModel);
+
+
+    }
+
+    @Test
+    public void testDeleteWithRelations() throws Exception {
+
+        final AnswerModelInterface answerModel = Mockito.mock(AnswerModelInterface.class);
+
+        final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
+        final AnswersOptionsInterface answersOptions = new AnswersOptions();
+        answersOptions.setAnswersService(answersService);
+        answersOptions.deleteWithRelations(answerModel);
+
+
+
+
+    }
     @Test
     public void testSaveDeleteWithQuestion() {
 
