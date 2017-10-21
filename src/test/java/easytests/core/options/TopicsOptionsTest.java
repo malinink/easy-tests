@@ -65,8 +65,8 @@ public class TopicsOptionsTest {
         verify(subjectsService).find(1, subjectsOptions);
         verify(questionsService).findByTopic(topicModel, questionsOptions);
 
-        verify(topicModel).setSubject(subjectModel);
-        verify(topicModel).setQuestions(questionModel);
+        verify(topicModelWithRelations).setSubject(subjectModel);
+        verify(topicModelWithRelations).setQuestions(questionModel);
     }
 
     @Test
@@ -147,14 +147,14 @@ public class TopicsOptionsTest {
         verify(subjectsService).find(topicModelFirst.getSubject().getId(), subjectsOptions);
         verify(questionsService).findByTopic(topicModelFirst, questionsOptions);
 
-        verify(topicsModels.get(0)).setSubject(subjectModelFirst);
-        verify(topicsModels.get(0)).setQuestions(questionsModelsFirst);
+        verify(topicsModelsWithRelations.get(0)).setSubject(subjectModelFirst);
+        verify(topicsModelsWithRelations.get(0)).setQuestions(questionsModelsFirst);
 
         verify(subjectsService).find(topicModelSecond.getSubject().getId(), subjectsOptions);
         verify(questionsService).findByTopic(topicModelSecond, questionsOptions);
 
-        verify(topicsModels.get(1)).setSubject(subjectModelSecond);
-        verify(topicsModels.get(1)).setQuestions(questionsModelsSecond);
+        verify(topicsModelsWithRelations.get(1)).setSubject(subjectModelSecond);
+        verify(topicsModelsWithRelations.get(1)).setQuestions(questionsModelsSecond);
     }
 
     @Test
