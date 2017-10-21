@@ -34,7 +34,6 @@ public class TopicsOptionsTest {
         final TopicsOptionsInterface topicsOptions = new TopicsOptions();
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
 
-        //topicModel.setId(1);
         given(topicModel.getSubject()).willReturn(new SubjectModelEmpty(1));
 
         final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
@@ -99,11 +98,9 @@ public class TopicsOptionsTest {
     public void testWithRelationsOnList() throws Exception{
 
         final TopicModelInterface topicModelFirst = Mockito.mock(TopicModelInterface.class);
-        //topicModelFirst.setId(1);
         given(topicModelFirst.getSubject()).willReturn(new SubjectModelEmpty(1));
 
         final TopicModelInterface topicModelSecond = Mockito.mock(TopicModelInterface.class);
-        //topicModelSecond.setId(2);
         given(topicModelSecond.getSubject()).willReturn(new SubjectModelEmpty(2));
 
         final List<TopicModelInterface> topicsModels = new ArrayList<>(2);
@@ -163,7 +160,6 @@ public class TopicsOptionsTest {
         final TopicsOptionsInterface topicsOptions = new TopicsOptions();
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
 
-        //topicModel.setId(1);
         given(topicModel.getSubject()).willReturn(new SubjectModelEmpty(1));
 
         final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
@@ -199,8 +195,7 @@ public class TopicsOptionsTest {
 
         final TopicsOptionsInterface topicsOptions = new TopicsOptions();
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-
-        //topicModel.setId(1);
+        
         given(topicModel.getSubject()).willReturn(new SubjectModelEmpty(1));
 
         final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
