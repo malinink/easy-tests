@@ -230,4 +230,22 @@ public class TopicsOptionsTest {
         inOrder.verify(questionsService).save(topicModel.getQuestions(), questionsOptions);
         inOrder.verify(subjectsService).save(topicModel.getSubject(), subjectsOptions);
     }
+
+    @Test
+    public void testWithSubject() throws Exception {
+        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        final TopicsOptionsInterface topicsOptionsWithSubject = topicsOptions.withSubject(subjectsOptions);
+        Assert.assertEquals(topicsOptionsWithSubject, topicsOptions);
+    }
+
+    @Test
+    public void testWithQuestions() throws Exception {
+        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
+        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
+
+        final TopicsOptionsInterface topicsOptionsWithQuestions = topicsOptions.withQuestions(questionsOptions);
+        Assert.assertEquals(topicsOptionsWithQuestions, topicsOptions);
+    }
 }
