@@ -138,7 +138,7 @@ public class AnswersOptionsTest {
         final AnswersOptionsInterface answersOptions = new AnswersOptions();
         answersOptions.setAnswersService(answersService);
         answersOptions.deleteWithRelations(answerModel);
-
+        verify(answersService).delete(answerModel);
 
 
 
