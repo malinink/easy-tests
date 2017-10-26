@@ -4,7 +4,6 @@ import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.SubjectModel;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
-import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
@@ -20,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -284,4 +284,57 @@ public class TopicsOptionsTest {
         final TopicsOptionsInterface topicsOptionsWithQuestions = topicsOptions.withQuestions(questionsOptions);
         Assert.assertEquals(topicsOptionsWithQuestions, topicsOptions);
     }
+
+    @Test
+    public void testSaveDeleteWithRelationsSubject() {
+
+        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
+        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
+        final SubjectModelInterface subjectModelId = Mockito.mock(SubjectModelInterface.class);
+        given(topicModel.getSubject()).willReturn(subjectModelId);
+
+        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
+        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
+        topicsOptions.setSubjectsService(subjectsService);
+        topicsOptions.setTopicsService(topicsService);
+
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        topicsOptions.withSubject(subjectsOptions);
+
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        topicModel.setSubject(subjectModel);
+
+        topicsOptions.saveWithRelations(topicModel);
+        verify(topicsService).save(topicModel);
+
+        topicsOptions.deleteWithRelations(topicModel);
+        verify(topicsService).delete(topicModel);
+
+        verify(subjectsService, times(2)).save(topicModel.getSubject(), subjectsOptions);
+    }
+
+    @Test
+    public void testSaveDeleteWithRelationsQuestion() throws Exception{
+
+        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
+        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
+        final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
+        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
+        topicsOptions.setQuestionsService(questionsService);
+        topicsOptions.setTopicsService(topicsService);
+
+        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
+        topicsOptions.withQuestions(questionsOptions);
+
+        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
+        topicModel.setQuestions(questionsModels);
+
+        topicsOptions.saveWithRelations((topicModel));
+        verify(topicsService).save(topicModel);
+
+        topicsOptions.deleteWithRelations(topicModel);
+        verify(topicsService).delete(topicModel);
+        verify(questionsService, times(2)).save(topicModel.getQuestions(), questionsOptions);
+    }
+
 }
