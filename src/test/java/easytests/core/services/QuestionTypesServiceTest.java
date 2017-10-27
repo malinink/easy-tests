@@ -4,10 +4,14 @@ import easytests.core.entities.QuestionTypeEntity;
 import easytests.core.mappers.QuestionTypesMapper;
 import easytests.core.models.QuestionTypeModel;
 import easytests.core.models.QuestionTypeModelInterface;
+import easytests.core.options.QuestionTypesOptionsInterface;
 import easytests.support.Entities;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,13 +22,15 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 
-
 /**
  * @author ielay
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class QuestionTypesServiceTest {
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
+
     @MockBean
     private QuestionTypesMapper questionTypesMapper;
 
@@ -40,7 +46,7 @@ public class QuestionTypesServiceTest {
     @Test
     public void testFindById() throws Exception {
         final Integer id = 1;
-        final QuestionTypeEntity questionTypeEntityMock = Entities.createQuestionTypeEntity(
+        final QuestionTypeEntity questionTypeEntityMock = Entities.createQuestionTypeEntityMock(
                 id,
                 "name"
         );
@@ -82,13 +88,35 @@ public class QuestionTypesServiceTest {
         Assert.assertEquals(0, questionTypeModels.size());
     }
 
+    @Test
+    public void testFindByIdWithOptions() throws Exception {
+        final Integer id = 7;
+        final QuestionTypeEntity questionTypeEntity = Entities.createQuestionTypeEntityMock(
+                id,
+                "name"
+        );
+
+        final QuestionTypeModelInterface questionTypeModel = this.mapQuestionTypeModel(questionTypeEntity);
+        final QuestionTypesOptionsInterface questionTypeOptions = Mockito.mock(QuestionTypesOptionsInterface.class);
+
+        given(this.questionTypesMapper.find(id)).willReturn(questionTypeEntity);
+        given(questionTypeOptions.withRelations(questionTypeModel)).willReturn(questionTypeModel);
+
+        final QuestionTypeModelInterface foundedQuestionTypeModel =
+                this.questionTypesService.find(id, questionTypeOptions);
+
+        Assert.assertEquals(foundedQuestionTypeModel, questionTypeModel);
+
+        Mockito.verify(questionTypeOptions).withRelations(questionTypeModel);
+    }
+
     private List<QuestionTypeEntity> getQuestionTypeEntities(){
         final List<QuestionTypeEntity> questionTypeEntities = new ArrayList<>(2);
-        questionTypeEntities.add(Entities.createQuestionTypeEntity(
+        questionTypeEntities.add(Entities.createQuestionTypeEntityMock(
                 1,
                 "name1"
         ));
-        questionTypeEntities.add(Entities.createQuestionTypeEntity(
+        questionTypeEntities.add(Entities.createQuestionTypeEntityMock(
                 2,
                 "name2"
         ));
@@ -102,5 +130,4 @@ public class QuestionTypesServiceTest {
         }
         return questionTypeModels;
     }
-
 }

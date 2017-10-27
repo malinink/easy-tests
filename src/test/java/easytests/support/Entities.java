@@ -1,7 +1,6 @@
 package easytests.support;
 
 import easytests.core.entities.*;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
@@ -171,7 +170,7 @@ public abstract class Entities {
         return quizEntity;
     }
 
-    public static QuestionTypeEntity createQuestionTypeEntity(
+    public static QuestionTypeEntity createQuestionTypeEntityMock(
             Integer id,
             String name
     ) {
