@@ -4,6 +4,7 @@ import easytests.core.entities.QuestionTypeEntity;
 import easytests.core.mappers.QuestionTypesMapper;
 import easytests.core.models.QuestionTypeModel;
 import easytests.core.models.QuestionTypeModelInterface;
+import easytests.core.models.UserModelInterface;
 import easytests.support.Entities;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,6 +47,17 @@ public class QuestionTypesServiceTest {
         final QuestionTypeModelInterface questionTypeModel = this.questionTypesService.find(id);
 
         Assert.assertEquals(this.mapQuestionTypeModel(questionTypeEntityMock), questionTypeModel);
+    }
+
+    @Test
+    public void testFindByIdReturnsNull() throws Exception {
+        final Integer id = 10;
+
+        given(this.questionTypesMapper.find(id)).willReturn(null);
+
+        final QuestionTypeModelInterface questionTypeModel = this.questionTypesService.find(id);
+
+        Assert.assertEquals(null, questionTypeModel);
     }
 
 }
