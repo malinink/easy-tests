@@ -110,6 +110,24 @@ public class QuestionTypesServiceTest {
         Mockito.verify(questionTypeOptions).withRelations(questionTypeModel);
     }
 
+    @Test
+    public void findAllWithOptions() throws Exception {
+        final List<QuestionTypeEntity> questionTypeEntities = this.getQuestionTypeEntities();
+        final List<QuestionTypeModelInterface> questionTypeModels = this.getQuestionTypeModels();
+        final QuestionTypesOptionsInterface questionTypesOptionsMock =
+                Mockito.mock(QuestionTypesOptionsInterface.class);
+
+        given(this.questionTypesMapper.findAll()).willReturn(questionTypeEntities);
+        given(questionTypesOptionsMock.withRelations(questionTypeModels)).willReturn(questionTypeModels);
+
+        final List<QuestionTypeModelInterface> foundedQuestionTypeModel =
+                this.questionTypesService.findAll(questionTypesOptionsMock);
+
+        Assert.assertEquals(questionTypeModels, foundedQuestionTypeModel);
+
+        Mockito.verify(questionTypesOptionsMock).withRelations(questionTypeModels);
+    }
+
     private List<QuestionTypeEntity> getQuestionTypeEntities(){
         final List<QuestionTypeEntity> questionTypeEntities = new ArrayList<>(2);
         questionTypeEntities.add(Entities.createQuestionTypeEntityMock(
