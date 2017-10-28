@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -93,7 +94,7 @@ public class TopicsOptionsTest {
     }
 
     @Test
-    public void testWithRelationsSubjectOnListWithMock() throws Exception{
+    public void testWithRelationsSubjectOnList() throws Exception{
 
         final TopicModelInterface topicModelFirst = Mockito.mock(TopicModelInterface.class);
         final TopicModelInterface topicModelSecond = Mockito.mock(TopicModelInterface.class);
@@ -190,10 +191,12 @@ public class TopicsOptionsTest {
         final SubjectModelInterface subjectModel = new SubjectModel();
         topicModel.setSubject(subjectModel);
 
+        final InOrder inOrder = Mockito.inOrder(subjectsService, topicsService);
+
         topicsOptions.saveWithRelations(topicModel);
 
-        verify(subjectsService).save(topicModel.getSubject(), subjectsOptions);
-        verify(topicsService).save(topicModel);
+        inOrder.verify(subjectsService).save(topicModel.getSubject(), subjectsOptions);
+        inOrder.verify(topicsService).save(topicModel);
     }
 
     @Test
@@ -212,10 +215,12 @@ public class TopicsOptionsTest {
         final List<QuestionModelInterface> questionsModels = new ArrayList<>();
         topicModel.setQuestions(questionsModels);
 
+        final InOrder inOrder = Mockito.inOrder(topicsService, questionsService);
+
         topicsOptions.saveWithRelations(topicModel);
 
-        verify(topicsService).save(topicModel);
-        verify(questionsService).save(topicModel.getQuestions(), questionsOptions);
+        inOrder.verify(topicsService).save(topicModel);
+        inOrder.verify(questionsService).save(topicModel.getQuestions(), questionsOptions);
     }
 
     @Test
@@ -237,10 +242,12 @@ public class TopicsOptionsTest {
         final SubjectModelInterface subjectModel = new SubjectModel();
         topicModel.setSubject(subjectModel);
 
+        final InOrder inOrder = Mockito.inOrder(topicsService, subjectsService);
+
         topicsOptions.deleteWithRelations(topicModel);
 
-        verify(topicsService).delete(topicModel);
-        verify(subjectsService).save(topicModel.getSubject(), subjectsOptions);
+        inOrder.verify(topicsService).delete(topicModel);
+        inOrder.verify(subjectsService).save(topicModel.getSubject(), subjectsOptions);
     }
 
     @Test
@@ -259,10 +266,12 @@ public class TopicsOptionsTest {
         final List<QuestionModelInterface> questionsModels = new ArrayList<>();
         topicModel.setQuestions(questionsModels);
 
+        final InOrder inOrder = Mockito.inOrder(questionsService, topicsService);
+
         topicsOptions.deleteWithRelations(topicModel);
 
-        verify(questionsService).save(topicModel.getQuestions(), questionsOptions);
-        verify(topicsService).delete(topicModel);
+        inOrder.verify(questionsService).save(topicModel.getQuestions(), questionsOptions);
+        inOrder.verify(topicsService).delete(topicModel);
     }
 
     @Test
@@ -334,6 +343,7 @@ public class TopicsOptionsTest {
 
         topicsOptions.deleteWithRelations(topicModel);
         verify(topicsService).delete(topicModel);
+        
         verify(questionsService, times(2)).save(topicModel.getQuestions(), questionsOptions);
     }
 
