@@ -1,7 +1,5 @@
 package easytests.core.mappers.testschecker;
 
-import easytests.config.DatabaseConfig;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -10,8 +8,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,13 +17,13 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.type.filter.RegexPatternTypeFilter;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.sql.DataSource;
 
 
 /**
@@ -36,7 +32,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
+@Transactional
 public class CheckMappersTests {
     private static final String MAPPER_PACKAGE_NAME = "easytests.core.mappers";
 
@@ -44,7 +40,7 @@ public class CheckMappersTests {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private SqlSessionFactory sqlSessionFactory;
+    private DataSource dataSource;
 
     private Set<BeanDefinition> getMappers() throws ClassNotFoundException {
         return new InterfaceComponentProvider().findCandidateComponents(MAPPER_PACKAGE_NAME);
@@ -57,10 +53,8 @@ public class CheckMappersTests {
         return provider.findCandidateComponents(MAPPER_PACKAGE_NAME);
     }
 
-    private void resetTestData() throws Exception {
-        final SqlSession sqlSession = sqlSessionFactory.openSession();
-        ScriptUtils.executeSqlScript(sqlSession.getConnection(), new ClassPathResource("sql/mappersTestData.sql"));
-        sqlSession.close();
+    private void rollbackTestData() throws Exception {
+        DataSourceUtils.getConnection(dataSource).rollback();
     }
 
     private Field findMapperFieldInTest(Class test) throws Exception {
@@ -88,8 +82,11 @@ public class CheckMappersTests {
                 continue;
             }
             if (annotations[0].annotationType().equals(Test.class)) {
-                resetTestData();
-                method.invoke(test);
+                try {
+                    method.invoke(test);
+                } catch (Exception mapperException) {
+                }
+                rollbackTestData();
             }
         }
     }
