@@ -1,18 +1,18 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.*;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,8 +22,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
+@Transactional
 public class PointsMapperTest {
 
     @Autowired
@@ -74,22 +73,24 @@ public class PointsMapperTest {
     @Test
     public void testInsert() throws Exception {
 
-        final Integer testId = this.pointsMapper.findAll().size() + 1;
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final Integer testQuestionId = 1;
         final Integer testQuizId = 1;
 
         final PointEntity testPoint = Mockito.mock(PointEntity.class);
 
-        Mockito.when(testPoint.getId()).thenReturn(testId);
         Mockito.when(testPoint.getQuestionId()).thenReturn(testQuestionId);
         Mockito.when(testPoint.getQuizId()).thenReturn(testQuizId);
 
         pointsMapper.insert(testPoint);
 
-        final PointEntity readPoint = pointsMapper.find(testPoint.getId());
+        verify(testPoint, times(1)).setId(id.capture());
 
+        Assert.assertNotNull(id.getValue());
+
+        final PointEntity readPoint = pointsMapper.find(id.getValue());
         Assert.assertNotNull(readPoint);
-        Assert.assertEquals(testId, readPoint.getId());
+        Assert.assertEquals(id.getValue(), readPoint.getId());
         Assert.assertEquals(testQuestionId, readPoint.getQuestionId());
         Assert.assertEquals(testQuizId, readPoint.getQuizId());
 

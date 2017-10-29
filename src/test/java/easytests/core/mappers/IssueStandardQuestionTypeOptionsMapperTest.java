@@ -1,19 +1,18 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.IssueStandardQuestionTypeOptionEntity;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.*;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.*;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -23,8 +22,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
+@Transactional
 public class IssueStandardQuestionTypeOptionsMapperTest {
 
     @Autowired
@@ -70,7 +68,7 @@ public class IssueStandardQuestionTypeOptionsMapperTest {
 
     @Test
     public void testInsert() throws Exception {
-        final Integer id = this.questionTypeOptionMapper.findAll().size() + 1;
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final Integer questionTypeId = 2;
         final Integer minQuestions = 10;
         final Integer maxQuestions = 20;
@@ -88,10 +86,13 @@ public class IssueStandardQuestionTypeOptionsMapperTest {
 
         this.questionTypeOptionMapper.insert(questionTypeOptionEntity);
 
-        verify(questionTypeOptionEntity, times(1)).setId(id);
+        verify(questionTypeOptionEntity, times(1)).setId(id.capture());
 
-        questionTypeOptionEntity = this.questionTypeOptionMapper.find(id);
+        Assert.assertNotNull(id.getValue());
+
+        questionTypeOptionEntity = this.questionTypeOptionMapper.find(id.getValue());
         Assert.assertNotNull(questionTypeOptionEntity);
+        Assert.assertEquals(id.getValue(), questionTypeOptionEntity.getId());
         Assert.assertEquals(questionTypeId, questionTypeOptionEntity.getQuestionTypeId());
         Assert.assertEquals(minQuestions, questionTypeOptionEntity.getMinQuestions());
         Assert.assertEquals(maxQuestions, questionTypeOptionEntity.getMaxQuestions());
