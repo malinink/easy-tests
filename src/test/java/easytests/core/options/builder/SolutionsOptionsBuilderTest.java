@@ -23,20 +23,16 @@ public class SolutionsOptionsBuilderTest {
     @Autowired
     private SolutionsOptionsBuilder solutionsOptionsBuilder;
 
-    @MockBean
-    private SolutionsOptions solutionsOptions;
 
     @Test
     public void testForAuth() throws Exception {
-        final SolutionsOptions solutionsOptions = new SolutionsOptions();
-        given(this.solutionsOptionsBuilder.forAuth()).willReturn(solutionsOptions);
-        Assert.assertEquals(new SolutionsOptions(), this.solutionsOptionsBuilder.forAuth());
+        final SolutionsOptionsInterface solutionsOptions = this.solutionsOptionsBuilder.forAuth();
+        Assert.assertEquals(new SolutionsOptions().getClass(), solutionsOptions.getClass());
     }
 
     @Test
     public void testForDelete() throws Exception {
-        final SolutionsOptions solutionsOptions = new SolutionsOptions();
-        given(this.solutionsOptionsBuilder.forDelete()).willReturn(solutionsOptions);
-        Assert.assertEquals(new SolutionsOptions(), this.solutionsOptionsBuilder.forDelete());
+        final SolutionsOptionsInterface solutionsOptions = this.solutionsOptionsBuilder.forDelete();
+        Assert.assertEquals(new SolutionsOptions().getClass(), solutionsOptions.getClass());
     }
 }
