@@ -1,30 +1,21 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.QuizEntity;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author vkpankov
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@Transactional
-public class QuizzesMapperTest {
+public class QuizzesMapperTest extends AbstractMapperTest {
 
     @Autowired
     private QuizzesMapper quizzesMapper;

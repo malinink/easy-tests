@@ -1,35 +1,20 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.SubjectEntity;
 import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
  * @author vkpankov
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@Transactional
-public class SubjectsMapperTest {
+public class SubjectsMapperTest extends AbstractMapperTest {
 
     @Autowired
     private SubjectsMapper subjectsMapper;

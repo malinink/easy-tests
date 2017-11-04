@@ -4,25 +4,16 @@ import easytests.core.entities.QuestionEntity;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.*;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.*;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author firkhraag
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@Transactional
-public class QuestionsMapperTest {
+public class QuestionsMapperTest extends AbstractMapperTest {
 
     @Autowired
     private QuestionsMapper questionsMapper;

@@ -4,26 +4,17 @@ import easytests.core.entities.*;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.*;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.*;
-import org.springframework.transaction.annotation.Transactional;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  * @author SingularityA
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@Transactional
-public class IssueStandardTopicPrioritiesMapperTest {
+public class IssueStandardTopicPrioritiesMapperTest extends AbstractMapperTest {
 
     @Autowired
     private IssueStandardTopicPrioritiesMapper topicPriorityMapper;

@@ -4,22 +4,13 @@ import easytests.core.entities.QuestionTypeEntity;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
  * @author malinink
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@Transactional
-public class QuestionTypesMapperTest {
+public class QuestionTypesMapperTest extends AbstractMapperTest {
     @Autowired
     private QuestionTypesMapper questionTypesMapper;
 
