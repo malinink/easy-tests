@@ -1,33 +1,19 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.UserEntity;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.*;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.*;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 
 /**
  * @author malinink
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class UsersMapperTest {
+public class UsersMapperTest extends AbstractMapperTest {
     @Autowired
     private UsersMapper usersMapper;
 
@@ -65,7 +51,7 @@ public class UsersMapperTest {
 
     @Test
     public void testInsert() throws Exception {
-        final Integer id = this.usersMapper.findAll().size() + 1;
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final String firstName = "FirstName";
         final String lastName = "LastName";
         final String surname = "Surname";
@@ -74,7 +60,7 @@ public class UsersMapperTest {
         final Boolean isAdmin = true;
         final Integer state = 1;
 
-        UserEntity userEntity = Mockito.mock(UserEntity.class);
+        final UserEntity userEntity = Mockito.mock(UserEntity.class);
         Mockito.when(userEntity.getFirstName()).thenReturn(firstName);
         Mockito.when(userEntity.getLastName()).thenReturn(lastName);
         Mockito.when(userEntity.getSurname()).thenReturn(surname);
@@ -85,17 +71,20 @@ public class UsersMapperTest {
 
         this.usersMapper.insert(userEntity);
 
-        verify(userEntity, times(1)).setId(id);
+        verify(userEntity, times(1)).setId(id.capture());
 
-        userEntity = this.usersMapper.find(id);
-        Assert.assertEquals(id, userEntity.getId());
-        Assert.assertEquals(firstName, userEntity.getFirstName());
-        Assert.assertEquals(lastName, userEntity.getLastName());
-        Assert.assertEquals(surname, userEntity.getSurname());
-        Assert.assertEquals(email, userEntity.getEmail());
-        Assert.assertEquals(password, userEntity.getPassword());
-        Assert.assertEquals(isAdmin, userEntity.getIsAdmin());
-        Assert.assertEquals(state, userEntity.getState());
+        Assert.assertNotNull(id.getValue());
+
+        final UserEntity userEntityInserted = this.usersMapper.find(id.getValue());
+        Assert.assertEquals(id.getValue(), userEntityInserted.getId());
+        Assert.assertEquals(firstName, userEntityInserted.getFirstName());
+        Assert.assertEquals(lastName, userEntityInserted.getLastName());
+        Assert.assertEquals(surname, userEntityInserted.getSurname());
+        Assert.assertEquals(email, userEntityInserted.getEmail());
+        Assert.assertEquals(password, userEntityInserted.getPassword());
+        Assert.assertEquals(isAdmin, userEntityInserted.getIsAdmin());
+        Assert.assertEquals(state, userEntityInserted.getState());
+
     }
 
     @Test

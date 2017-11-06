@@ -1,36 +1,20 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.SubjectEntity;
 import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-
 
 
 /**
  * @author vkpankov
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class SubjectsMapperTest {
+public class SubjectsMapperTest extends AbstractMapperTest {
 
     @Autowired
     private SubjectsMapper subjectsMapper;
@@ -79,27 +63,26 @@ public class SubjectsMapperTest {
 
     @Test
     public void testInsert() throws Exception {
-        final Integer id = this.subjectsMapper.findAll().size() + 1;
-
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final Integer testUserId = 1;
-
         final String testName = "test";
         final String testDescription = "testSubject.description";
 
         final SubjectEntity testSubject = Mockito.mock(SubjectEntity.class);
 
-        Mockito.when(testSubject.getId()).thenReturn(id);
         Mockito.when(testSubject.getName()).thenReturn(testName);
         Mockito.when(testSubject.getDescription()).thenReturn(testDescription);
         Mockito.when(testSubject.getUserId()).thenReturn(testUserId);
 
         subjectsMapper.insert(testSubject);
 
-        verify(testSubject, times(1)).setId(id);
+        verify(testSubject, times(1)).setId(id.capture());
 
-        final SubjectEntity readSubject = subjectsMapper.find(testSubject.getId());
+        Assert.assertNotNull(id.getValue());
 
+        final SubjectEntity readSubject = subjectsMapper.find(id.getValue());
         Assert.assertNotNull(readSubject);
+        Assert.assertEquals(id.getValue(), readSubject.getId());
         Assert.assertEquals(testUserId, readSubject.getUserId());
         Assert.assertEquals(testName, readSubject.getName());
         Assert.assertEquals(testDescription, readSubject.getDescription());
