@@ -2,7 +2,7 @@ package easytests.core.models;
 
 import easytests.core.entities.UserEntity;
 import easytests.core.models.empty.ModelsListEmpty;
-import easytests.support.Entities;
+import easytests.support.UsersSupport;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,12 +10,16 @@ import org.meanbean.test.BeanTester;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+
 /**
  * @author malinink
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserModelTest {
+
+    private UsersSupport usersSupport = new UsersSupport();
+
     @Test
     public void testCommon() throws Exception {
         new BeanTester().testBean(UserModel.class);
@@ -31,7 +35,7 @@ public class UserModelTest {
         final String password = "password";
         final Boolean isAdmin = false;
         final Integer state = 2;
-        final UserEntity userEntity = Entities.createUserEntityMock(
+        final UserEntity userEntity =  this.usersSupport.getEntityMock(
                 userId,
                 firstName,
                 lastName,

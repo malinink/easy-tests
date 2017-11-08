@@ -2,7 +2,7 @@ package easytests.integration.services;
 
 import easytests.core.models.UserModelInterface;
 import easytests.core.services.UsersService;
-import easytests.support.Models;
+import easytests.support.UsersSupport;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,10 +24,12 @@ public class UsersServiceTest {
     @Autowired
     private UsersService usersService;
 
+    private UsersSupport usersSupport = new UsersSupport();
+
     @Test
     public void testFindPresentModel() throws Exception {
         final Integer id = 1;
-        final UserModelInterface userModel = Models.createUserModel(
+        final UserModelInterface userModel = this.usersSupport.getModelMock(
                 id,
                 "FirstName1",
                 "LastName1",
