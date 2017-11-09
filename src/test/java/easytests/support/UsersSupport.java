@@ -57,7 +57,7 @@ public class UsersSupport {
         return userModel;
     }
 
-    public void asertEqualsWithId(UserEntity first, UserEntity second) {
+    public void asertEquals(UserEntity first, UserEntity second) {
         assertEquals(first, second, false);
     }
 
@@ -78,7 +78,7 @@ public class UsersSupport {
         Assert.assertEquals(first.getState(), second.getState());
     }
 
-    public void asertNotEqualsWithId(UserEntity first, UserEntity second) {
+    public void asertNotEquals(UserEntity first, UserEntity second) {
         assertNotEquals(first, second, false);
     }
 
@@ -97,6 +97,18 @@ public class UsersSupport {
         Assert.assertNotEquals(first.getPassword(), second.getPassword());
         Assert.assertNotEquals(first.getIsAdmin(), second.getIsAdmin());
         Assert.assertNotEquals(first.getState(), second.getState());
+    }
+
+    public void assertEquals(UserModelInterface first, UserModelInterface second) {
+        Assert.assertEquals(first.getId(), second.getId());
+        Assert.assertEquals(first.getFirstName(), second.getFirstName());
+        Assert.assertEquals(first.getLastName(), second.getLastName());
+        Assert.assertEquals(first.getSurname(), second.getSurname());
+        Assert.assertEquals(first.getEmail(), second.getEmail());
+        Assert.assertEquals(first.getPassword(), second.getPassword());
+        Assert.assertEquals(first.getIsAdmin(), second.getIsAdmin());
+        Assert.assertEquals(first.getState(), second.getState());
+        // TODO should we check Subjects here ?
     }
 
     public void assertEquals(UserModelInterface first, UserEntity second) {
