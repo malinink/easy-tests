@@ -8,21 +8,13 @@ import easytests.core.services.IssueStandardsService;
 import easytests.support.Models;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * @author SingularityA
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class IssueStandardsServiceTest {
+public class IssueStandardsServiceTest extends AbstractServiceTest {
 
     @Autowired
     private IssueStandardsService issueStandardsService;
@@ -62,11 +54,13 @@ public class IssueStandardsServiceTest {
 
     @Test
     public void testSaveInsertsModel() throws Exception {
-        final Integer id = this.issueStandardsService.findAll().size() + 1;
         final IssueStandardModelInterface issueStandardModel = Models.createIssueStandardModel(null, 200, 20, 2);
 
         this.issueStandardsService.save(issueStandardModel);
-        IssueStandardModelInterface foundedIssueStandardModel = this.issueStandardsService.find(id);
+
+        Assert.assertNotNull(issueStandardModel.getId());
+
+        final IssueStandardModelInterface foundedIssueStandardModel = this.issueStandardsService.find(issueStandardModel.getId());
 
         Assert.assertEquals(issueStandardModel, foundedIssueStandardModel);
     }
