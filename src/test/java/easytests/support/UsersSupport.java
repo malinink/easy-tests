@@ -12,6 +12,85 @@ import org.mockito.Mockito;
  */
 public class UsersSupport {
 
+    protected static Object[][] fixtures = new Object[][]{
+            {
+                    1,
+                    "FirstName1",
+                    "LastName1",
+                    "Surname1",
+                    "email1@gmail.com",
+                    "hash1",
+                    true,
+                    1
+            },
+            {
+                    2,
+                    "FirstName2",
+                    "LastName2",
+                    "Surname2",
+                    "email2@gmail.com",
+                    "hash2",
+                    false,
+                    2
+            },
+            {
+                    3,
+                    "FirstName3",
+                    "LastName3",
+                    "Surname3",
+                    "email3@gmail.com",
+                    "hash3",
+                    true,
+                    3
+            },
+    };
+
+    protected static Object[][] additional = new Object[][]{
+            {
+                    // for insert entity
+                    null,
+                    "FirstName",
+                    "LastName",
+                    "Surname",
+                    "mail@mail.ru",
+                    "password",
+                    true,
+                    1
+            },
+            {
+                    // for update entity with id = 1
+                    1,
+                    "NewFirstName",
+                    "NewLastName",
+                    "NewSurname4",
+                    "new.mail@mail.ru",
+                    "new.hash",
+                    false,
+                    2
+            },
+    };
+
+    public UserEntity getEntityFixtureMock(Integer index) {
+        return this.getEntityMock(fixtures[index]);
+    }
+
+    public UserEntity getEntityAdditionalMock(Integer index) {
+        return this.getEntityMock(additional[index]);
+    }
+
+    private UserEntity getEntityMock(Object[] fixture) {
+        return this.getEntityMock(
+                (Integer) fixture[0],
+                (String) fixture[1],
+                (String) fixture[2],
+                (String) fixture[3],
+                (String) fixture[4],
+                (String) fixture[5],
+                (Boolean) fixture[6],
+                (Integer) fixture[7]
+        );
+    }
+
     public UserEntity getEntityMock(
             Integer id,
             String firstName,
@@ -32,6 +111,27 @@ public class UsersSupport {
         Mockito.when(userEntity.getIsAdmin()).thenReturn(isAdmin);
         Mockito.when(userEntity.getState()).thenReturn(state);
         return userEntity;
+    }
+
+    public UserModelInterface getModelFixtureMock(Integer index) {
+        return this.getModelMock(fixtures[index]);
+    }
+
+    public UserModelInterface getModelAdditionalMock(Integer index) {
+        return this.getModelMock(additional[index]);
+    }
+
+    private UserModelInterface getModelMock(Object[] fixture) {
+        return this.getModelMock(
+                (Integer) fixture[0],
+                (String) fixture[1],
+                (String) fixture[2],
+                (String) fixture[3],
+                (String) fixture[4],
+                (String) fixture[5],
+                (Boolean) fixture[6],
+                (Integer) fixture[7]
+        );
     }
 
     public UserModelInterface getModelMock(
@@ -57,16 +157,16 @@ public class UsersSupport {
         return userModel;
     }
 
-    public void asertEquals(UserEntity first, UserEntity second) {
+    public void assertEquals(UserEntity first, UserEntity second) {
         assertEquals(first, second, false);
     }
 
-    public void asertEqualsWithoutId(UserEntity first, UserEntity second) {
+    public void assertEqualsWithoutId(UserEntity first, UserEntity second) {
         assertEquals(first, second, true);
     }
 
     private void assertEquals(UserEntity first, UserEntity second, Boolean exceptId) {
-        if (exceptId) {
+        if (!exceptId) {
             Assert.assertEquals(first.getId(), second.getId());
         }
         Assert.assertEquals(first.getFirstName(), second.getFirstName());
@@ -78,16 +178,16 @@ public class UsersSupport {
         Assert.assertEquals(first.getState(), second.getState());
     }
 
-    public void asertNotEquals(UserEntity first, UserEntity second) {
+    public void assertNotEquals(UserEntity first, UserEntity second) {
         assertNotEquals(first, second, false);
     }
 
-    public void asertNotEqualsWithoutId(UserEntity first, UserEntity second) {
+    public void assertNotEqualsWithoutId(UserEntity first, UserEntity second) {
         assertNotEquals(first, second, true);
     }
 
     private void assertNotEquals(UserEntity first, UserEntity second, Boolean exceptId) {
-        if (exceptId) {
+        if (!exceptId) {
             Assert.assertNotEquals(first.getId(), second.getId());
         }
         Assert.assertNotEquals(first.getFirstName(), second.getFirstName());
