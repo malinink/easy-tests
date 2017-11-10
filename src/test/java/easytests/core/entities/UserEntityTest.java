@@ -9,27 +9,18 @@ import org.meanbean.test.BeanTester;
 /**
  * @author malinink
  */
-public class UserEntityTest {
+public class UserEntityTest extends AbstractEntityTest {
 
     private UsersSupport usersSupport = new UsersSupport();
 
     @Test
     public void testCommon() throws Exception {
-        new BeanTester().testBean(UserEntity.class);
+        new BeanTester().testBean(UserEntity.class, this.getConfiguration());
     }
 
     @Test
     public void testMap() throws Exception {
-        final UserModelInterface userModel = this.usersSupport.getModelMock(
-                1,
-                "FirstName",
-                "LastName",
-                "Surname",
-                "mail@mail.ru",
-                "password",
-                true,
-                1
-        );
+        final UserModelInterface userModel = this.usersSupport.getModelAdditionalMock(0);
         final UserEntity userEntity = new UserEntity();
         userEntity.map(userModel);
 
