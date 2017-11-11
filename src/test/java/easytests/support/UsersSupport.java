@@ -208,7 +208,7 @@ public class UsersSupport {
         Assert.assertEquals(first.getPassword(), second.getPassword());
         Assert.assertEquals(first.getIsAdmin(), second.getIsAdmin());
         Assert.assertEquals(first.getState(), second.getState());
-        // TODO should we check Subjects here ?
+        Assert.assertEquals(first.getSubjects(), second.getSubjects());
     }
 
     public void assertEquals(UserModelInterface first, UserEntity second) {
@@ -220,11 +220,11 @@ public class UsersSupport {
         Assert.assertEquals(first.getPassword(), second.getPassword());
         Assert.assertEquals(first.getIsAdmin(), second.getIsAdmin());
         Assert.assertEquals(first.getState(), second.getState());
-        // TODO should we check Subjects here ?
     }
 
     public void assertEquals(UserEntity first, UserModelInterface second) {
         assertEquals(second, first);
+        Assert.assertEquals(new ModelsListEmpty(), second.getSubjects());
     }
 
 }
