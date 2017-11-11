@@ -37,16 +37,16 @@ public class UsersMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFind() throws Exception {
-        final UserEntity userEntity = this.usersMapper.find(1);
         final UserEntity userFixtureEntity = this.usersSupport.getEntityFixtureMock(0);
+        final UserEntity userEntity = this.usersMapper.find(userFixtureEntity.getId());
 
         this.usersSupport.assertEquals(userFixtureEntity, userEntity);
     }
 
     @Test
     public void testFindByEmail() throws Exception {
-        final UserEntity userEntity = this.usersMapper.findByEmail("email2@gmail.com");
-        final UserEntity userFixtureEntity = this.usersSupport.getEntityFixtureMock(1);
+        final UserEntity userFixtureEntity = this.usersSupport.getEntityFixtureMock(0);
+        final UserEntity userEntity = this.usersMapper.findByEmail(userFixtureEntity.getEmail());
 
         this.usersSupport.assertEquals(userFixtureEntity, userEntity);
     }
@@ -83,7 +83,7 @@ public class UsersMapperTest extends AbstractMapperTest {
 
     @Test
     public void testDelete() throws Exception {
-        final Integer id = 1;
+        final Integer id = this.usersSupport.getEntityFixtureMock(0).getId();
         UserEntity userEntity = this.usersMapper.find(id);
 
         Assert.assertNotNull(userEntity);
