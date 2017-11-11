@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public abstract class AbstractEntityTest {
 
-
     protected Configuration getConfiguration() {
         return new ConfigurationBuilder().iterations(10).build();
     }
