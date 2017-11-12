@@ -78,16 +78,16 @@ public class UsersSupport {
         return this.getEntityMock(additional[index]);
     }
 
-    private UserEntity getEntityMock(Object[] fixture) {
+    private UserEntity getEntityMock(Object[] data) {
         return this.getEntityMock(
-                (Integer) fixture[0],
-                (String) fixture[1],
-                (String) fixture[2],
-                (String) fixture[3],
-                (String) fixture[4],
-                (String) fixture[5],
-                (Boolean) fixture[6],
-                (Integer) fixture[7]
+                (Integer) data[0],
+                (String) data[1],
+                (String) data[2],
+                (String) data[3],
+                (String) data[4],
+                (String) data[5],
+                (Boolean) data[6],
+                (Integer) data[7]
         );
     }
 
@@ -121,16 +121,16 @@ public class UsersSupport {
         return this.getModelMock(additional[index]);
     }
 
-    private UserModelInterface getModelMock(Object[] fixture) {
+    private UserModelInterface getModelMock(Object[] data) {
         return this.getModelMock(
-                (Integer) fixture[0],
-                (String) fixture[1],
-                (String) fixture[2],
-                (String) fixture[3],
-                (String) fixture[4],
-                (String) fixture[5],
-                (Boolean) fixture[6],
-                (Integer) fixture[7]
+                (Integer) data[0],
+                (String) data[1],
+                (String) data[2],
+                (String) data[3],
+                (String) data[4],
+                (String) data[5],
+                (Boolean) data[6],
+                (Integer) data[7]
         );
     }
 
