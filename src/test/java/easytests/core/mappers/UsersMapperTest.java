@@ -24,7 +24,7 @@ public class UsersMapperTest extends AbstractMapperTest {
     public void testFindAll() throws Exception {
         final List<UserEntity> usersEntities = this.usersMapper.findAll();
 
-        Assert.assertEquals((long) 3, (long) usersEntities.size());
+        Assert.assertEquals(3, usersEntities.size());
 
         Integer index = 0;
         for (UserEntity userEntity: usersEntities) {
@@ -63,6 +63,7 @@ public class UsersMapperTest extends AbstractMapperTest {
 
         final UserEntity userInsertedEntity = this.usersMapper.find(id.getValue());
 
+        Assert.assertNotNull(userInsertedEntity);
         this.usersSupport.assertEqualsWithoutId(userAdditionalEntity, userInsertedEntity);
     }
 
