@@ -51,7 +51,7 @@ public class SubjectsServiceTest extends AbstractServiceTest {
     @Test
     public void testFindPresentModel() throws Exception {
         final Integer id = 1;
-        final SubjectModelInterface subjectModel = this.createSubjectModel(id, "test1" , 1);
+        final SubjectModelInterface subjectModel = this.createSubjectModel(id, "Subject1" , 1);
 
         final SubjectModelInterface foundedSubjectModel = this.subjectsService.find(id);
 

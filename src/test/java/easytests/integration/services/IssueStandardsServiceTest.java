@@ -42,7 +42,7 @@ public class IssueStandardsServiceTest extends AbstractServiceTest {
         final Integer subjectId = 1;
 
         final IssueStandardModelInterface issueStandardModel = Models.createIssueStandardModel(id, 300, 30, subjectId);
-        final SubjectModelInterface subjectModel = Models.createSubjectModel(subjectId, "test1", "testdescription1", 2);
+        final SubjectModelInterface subjectModel = Models.createSubjectModel(subjectId, "Subject1", "Subject Description 1", 2);
         issueStandardModel.setSubject(subjectModel);
 
         final IssueStandardModelInterface foundedIssueStandardModel
