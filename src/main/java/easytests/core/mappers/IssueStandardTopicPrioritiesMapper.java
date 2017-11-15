@@ -4,10 +4,12 @@ import easytests.core.entities.IssueStandardTopicPriorityEntity;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 
+
 /**
  * @author SingularityA
  */
 @Mapper
+@SuppressWarnings("checkstyle:linelength")
 public interface IssueStandardTopicPrioritiesMapper {
 
     @Results(
@@ -29,13 +31,11 @@ public interface IssueStandardTopicPrioritiesMapper {
     @ResultMap("IssueStandardTopicPriority")
     List<IssueStandardTopicPriorityEntity> findByIssueStandardId(Integer issueStandardId);
 
-    @Insert("INSERT INTO topic_priorities (topic_id, is_preferable, issue_standard_id)"
-            + " VALUES (#{topicId}, #{isPreferable}, #{issueStandardId})")
+    @Insert("INSERT INTO topic_priorities (topic_id, is_preferable, issue_standard_id) VALUES (#{topicId}, #{isPreferable}, #{issueStandardId})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     void insert(IssueStandardTopicPriorityEntity issueStandardTopicPriority);
 
-    @Update("UPDATE topic_priorities SET topic_id=#{topicId}, is_preferable=#{isPreferable},"
-            + " issue_standard_id=#{issueStandardId} WHERE id=#{id}")
+    @Update("UPDATE topic_priorities SET topic_id=#{topicId}, is_preferable=#{isPreferable}, issue_standard_id=#{issueStandardId} WHERE id=#{id}")
     void update(IssueStandardTopicPriorityEntity issueStandardTopicPriority);
 
     @Delete("DELETE FROM topic_priorities WHERE id=#{id}")

@@ -7,7 +7,7 @@ import lombok.*;
  * @author vkpankov
  */
 @Data
-public class SubjectEntity {
+public class SubjectEntity implements EntityInterface {
 
     private Integer id;
 
@@ -24,4 +24,5 @@ public class SubjectEntity {
         this.setDescription(subjectModel.getDescription());
         this.setUserId(subjectModel.getUser().getId());
     }
+
 }
