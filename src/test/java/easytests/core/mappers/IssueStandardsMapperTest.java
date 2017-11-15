@@ -1,32 +1,20 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.IssueStandardEntity;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.*;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.*;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  * @author SingularityA
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class IssueStandardsMapperTest {
+public class IssueStandardsMapperTest extends AbstractMapperTest {
 
     @Autowired
     private IssueStandardsMapper issueStandardsMapper;
@@ -61,7 +49,7 @@ public class IssueStandardsMapperTest {
 
     @Test
     public void testInsert() throws Exception {
-        final Integer id = this.issueStandardsMapper.findAll().size() + 1;
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final Integer timeLimit = 3600;
         final Integer questionsNumber = 20;
         final Integer subjectId = 2;
@@ -73,10 +61,12 @@ public class IssueStandardsMapperTest {
 
         this.issueStandardsMapper.insert(issueStandardEntity);
 
-        verify(issueStandardEntity, times(1)).setId(id);
+        verify(issueStandardEntity, times(1)).setId(id.capture());
 
-        issueStandardEntity = this.issueStandardsMapper.find(id);
-        Assert.assertEquals(id, issueStandardEntity.getId());
+        Assert.assertNotNull(id.getValue());
+
+        issueStandardEntity = this.issueStandardsMapper.find(id.getValue());
+        Assert.assertEquals(id.getValue(), issueStandardEntity.getId());
         Assert.assertEquals(timeLimit, issueStandardEntity.getTimeLimit());
         Assert.assertEquals(questionsNumber, issueStandardEntity.getQuestionsNumber());
         Assert.assertEquals(subjectId, issueStandardEntity.getSubjectId());

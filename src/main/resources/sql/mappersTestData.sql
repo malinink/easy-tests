@@ -48,9 +48,9 @@ INSERT INTO question_type_options (question_type_id, min_number, max_number, tim
   (3, 5, NULL, 300, 2);
 
 INSERT INTO subjects (name, description, user_id) VALUES
-  ('test1', 'testdescription1', 2),
-  ('test2', 'testdescription2', 2),
-  ('test3', 'testdescription3', 3);
+  ('Subject1', 'Subject Description 1', 2),
+  ('Subject2', 'Subject Description 2', 2),
+  ('Subject3', 'Subject Description 3', 3);
 
 INSERT INTO topics (name, subject_id) VALUES
   ('Name1', 2),
