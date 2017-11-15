@@ -13,6 +13,8 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
 import static org.mockito.BDDMockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
@@ -38,6 +40,12 @@ public class UsersServiceTest {
 
     private UsersSupport usersSupport = new UsersSupport();
 
+    @Captor
+    private ArgumentCaptor<List<UserEntity>> usersEntitiesListCaptor;
+
+    @Captor
+    private ArgumentCaptor<List<UserModelInterface>> usersModelsListCaptor;
+
     private UserModelInterface mapUserModel(UserEntity userEntity) {
         final UserModelInterface userModel = new UserModel();
         userModel.map(userEntity);
@@ -52,52 +60,39 @@ public class UsersServiceTest {
 
     private List<UserEntity> getUsersEntities() {
         final List<UserEntity> usersEntities = new ArrayList<>(2);
-        final UserEntity userEntityFirst = this.usersSupport.getEntityMock(
-                1,
-                "FirstName1",
-                "LastName1",
-                "Surname1",
-                "email1@gmail.com",
-                "hash1",
-                true,
-                1
-        );
-        final UserEntity userEntitySecond = this.usersSupport.getEntityMock(
-                2,
-                "FirstName2",
-                "LastName2",
-                "Surname2",
-                "email2@gmail.com",
-                "hash2",
-                false,
-                2
-        );
-        usersEntities.add(userEntityFirst);
-        usersEntities.add(userEntitySecond);
+        usersEntities.add(this.usersSupport.getEntityFixtureMock(0));
+        usersEntities.add(this.usersSupport.getEntityFixtureMock(1));
         return usersEntities;
     }
 
     private List<UserModelInterface> getUsersModels() {
         final List<UserModelInterface> usersModels = new ArrayList<>(2);
-        for (UserEntity userEntity: this.getUsersEntities()) {
-            usersModels.add(this.mapUserModel(userEntity));
-        }
+        usersModels.add(this.usersSupport.getModelFixtureMock(0));
+        usersModels.add(this.usersSupport.getModelFixtureMock(1));
         return usersModels;
+    }
+
+    private void assertEquals(List<UserModelInterface> first, List<UserModelInterface> second) {
+        Assert.assertEquals(first.size(), second.size());
+        Integer i = 0;
+        for (UserModelInterface userModel: first) {
+            this.usersSupport.assertEquals(userModel, second.get(i));
+            i++;
+        }
     }
 
     @Test
     public void testFindAllPresentList() throws Exception {
         final List<UserEntity> usersEntities = this.getUsersEntities();
-        given(this.usersMapper.findAll()).willReturn(usersEntities);
+        when(this.usersMapper.findAll()).thenReturn(usersEntities);
 
         final List<UserModelInterface> usersModels = this.usersService.findAll();
 
-        Assert.assertEquals(this.getUsersModels(), usersModels);
+        this.assertEquals(this.getUsersModels(), usersModels);
     }
-
     @Test
     public void testFindAllAbsentList() throws Exception {
-        given(this.usersMapper.findAll()).willReturn(new ArrayList<>(0));
+        when(this.usersMapper.findAll()).thenReturn(new ArrayList<>(0));
 
         final List<UserModelInterface> usersModels = this.usersService.findAll();
 
@@ -108,36 +103,27 @@ public class UsersServiceTest {
     public void testFindAllWithOptions() throws Exception {
         final List<UserEntity> usersEntities = this.getUsersEntities();
         final List<UserModelInterface> usersModels = this.getUsersModels();
-        final UsersOptionsInterface usersOptions = Mockito.mock(UsersOptionsInterface.class);
-        given(this.usersMapper.findAll()).willReturn(usersEntities);
-        given(usersOptions.withRelations(Mockito.anyList())).willReturn(usersModels);
+        final UsersOptionsInterface usersOptions = mock(UsersOptionsInterface.class);
+        when(this.usersMapper.findAll()).thenReturn(usersEntities);
+        when(usersOptions.withRelations(this.usersModelsListCaptor.capture())).thenReturn(usersModels);
 
         final List<UserModelInterface> foundedUsersModels = this.usersService.findAll(usersOptions);
 
-        verify(usersOptions).withRelations(usersModels);
-        Assert.assertEquals(usersModels, foundedUsersModels);
+        this.assertEquals(usersModels, this.usersModelsListCaptor.getValue());
+        Assert.assertSame(usersModels, foundedUsersModels);
     }
 
     @Test
     public void testFindPresentModel() throws Exception {
-        final Integer id = 1;
-        final UserEntity userEntity = this.usersSupport.getEntityMock(
-                id,
-                "NewFirstName",
-                "NewLastName1",
-                "NewSurname1",
-                "new.email@gmail.com",
-                "newhash1",
-                false,
-                3
-        );
-        given(this.usersMapper.find(id)).willReturn(userEntity);
+        final UserEntity userEntity = this.usersSupport.getEntityFixtureMock(0);
+        when(this.usersMapper.find(userEntity.getId())).thenReturn(userEntity);
 
-        final UserModelInterface userModel = this.usersService.find(id);
+        final UserModelInterface userModel = this.usersService.find(userEntity.getId());
 
-        Assert.assertEquals(this.mapUserModel(userEntity), userModel);
+        this.usersSupport.assertEquals(this.usersSupport.getModelFixtureMock(0), userModel);
     }
 
+    // TODO refactor from here
     @Test
     public void testFindAbsentModel() throws Exception {
         final Integer id = 10;
