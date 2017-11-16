@@ -8,21 +8,13 @@ import easytests.core.services.IssueStandardQuestionTypeOptionsService;
 import easytests.support.Models;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
  * @author SingularityA
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class IssueStandardQuestionTypeOptionsServiceTest {
+public class IssueStandardQuestionTypeOptionsServiceTest extends AbstractServiceTest {
 
     @Autowired
     private IssueStandardQuestionTypeOptionsService questionTypeOptionsService;
@@ -68,13 +60,15 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
 
     @Test
     public void testSaveInsertsModel() throws Exception {
-        final Integer id = this.questionTypeOptionsService.findAll().size() + 1;
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
                 = Models.createQuestionTypeOptionModel(null, 3, 10, 20, 300, 4);
 
         this.questionTypeOptionsService.save(questionTypeOptionModel);
+
+        Assert.assertNotNull(questionTypeOptionModel.getId());
+
         final IssueStandardQuestionTypeOptionModelInterface foundedQuestionTypeOptionModel
-                = this.questionTypeOptionsService.find(id);
+                = this.questionTypeOptionsService.find(questionTypeOptionModel.getId());
 
         Assert.assertEquals(questionTypeOptionModel, foundedQuestionTypeOptionModel);
     }

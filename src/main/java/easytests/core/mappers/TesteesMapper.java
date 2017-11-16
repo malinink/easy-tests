@@ -4,12 +4,14 @@ import easytests.core.entities.TesteeEntity;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 
+
 /**
  * @author DoZor-80
  */
 @Mapper
 @SuppressWarnings("checkstyle:linelength")
 public interface TesteesMapper {
+
     @Results(
             id = "Testee",
             value = {
@@ -40,4 +42,5 @@ public interface TesteesMapper {
 
     @Delete("DELETE FROM testees WHERE id=#{id}")
     void delete(TesteeEntity testee);
+
 }

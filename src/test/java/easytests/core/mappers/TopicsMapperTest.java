@@ -1,32 +1,20 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.TopicEntity;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 
 /**
  * @author malinink
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class TopicsMapperTest {
+public class TopicsMapperTest extends AbstractMapperTest {
     @Autowired
     private TopicsMapper topicsMapper;
 
@@ -53,7 +41,7 @@ public class TopicsMapperTest {
 
     @Test
     public void testInsert() throws Exception {
-        final Integer id = this.topicsMapper.findAll().size() + 1;
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final String name = "FirstName";
         final Integer subjectId = 3;
 
@@ -63,10 +51,12 @@ public class TopicsMapperTest {
 
         this.topicsMapper.insert(topicEntity);
 
-        verify(topicEntity, times(1)).setId(id);
+        verify(topicEntity, times(1)).setId(id.capture());
 
-        topicEntity = this.topicsMapper.find(id);
-        Assert.assertEquals(id, topicEntity.getId());
+        Assert.assertNotNull(id.getValue());
+
+        topicEntity = this.topicsMapper.find(id.getValue());
+        Assert.assertEquals(id.getValue(), topicEntity.getId());
         Assert.assertEquals(name, topicEntity.getName());
         Assert.assertEquals(subjectId, topicEntity.getSubjectId());
     }
