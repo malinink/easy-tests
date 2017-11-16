@@ -1,0 +1,238 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: QuestionsService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">easytests.core.services</a> ]
+</div>
+
+<h1>Coverage Summary for Class: QuestionsService (easytests.core.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">QuestionsService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5,3%
+  </span>
+  <span class="absValue">
+    (1/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    1,8%
+  </span>
+  <span class="absValue">
+    (1/ 57)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package easytests.core.services;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import easytests.core.entities.QuestionEntity;
+<i>4</i>&nbsp;import easytests.core.mappers.QuestionsMapper;
+<i>5</i>&nbsp;import easytests.core.models.QuestionModel;
+<i>6</i>&nbsp;import easytests.core.models.QuestionModelInterface;
+<i>7</i>&nbsp;import easytests.core.models.TopicModelInterface;
+<i>8</i>&nbsp;import easytests.core.options.QuestionsOptionsInterface;
+<i>9</i>&nbsp;import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+<i>10</i>&nbsp;import java.util.ArrayList;
+<i>11</i>&nbsp;import java.util.List;
+<i>12</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>13</i>&nbsp;import org.springframework.stereotype.Service;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * @author firkhraag
+<i>17</i>&nbsp; */
+<i>18</i>&nbsp;@Service
+<b class="fc"><i>19</i>&nbsp;public class QuestionsService implements QuestionsServiceInterface {</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    @Autowired
+<i>22</i>&nbsp;    private QuestionsMapper questionsMapper;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    @Autowired
+<i>25</i>&nbsp;    private AnswersService answersService;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    @Autowired
+<i>28</i>&nbsp;    private TopicsService topicsService;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    @Autowired
+<i>31</i>&nbsp;    private QuestionTypesService questionTypesService;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    @Override
+<i>34</i>&nbsp;    public List&lt;QuestionModelInterface&gt; findAll() {
+<b class="nc"><i>35</i>&nbsp;        return this.map(this.questionsMapper.findAll());</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    @Override
+<i>39</i>&nbsp;    public List&lt;QuestionModelInterface&gt; findAll(QuestionsOptionsInterface questionsOptions) {
+<b class="nc"><i>40</i>&nbsp;        return this.withServices(questionsOptions).withRelations(this.findAll());</b>
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    @Override
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    public QuestionModelInterface find(Integer id) {
+<b class="nc"><i>46</i>&nbsp;        return this.map(this.questionsMapper.find(id));</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    @Override
+<i>50</i>&nbsp;    public QuestionModelInterface find(Integer id, QuestionsOptionsInterface questionsOptions) {
+<b class="nc"><i>51</i>&nbsp;        return this.withServices(questionsOptions).withRelations(this.find(id));</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    @Override
+<i>55</i>&nbsp;    public List&lt;QuestionModelInterface&gt; findByTopic(TopicModelInterface topicModel) {
+<b class="nc"><i>56</i>&nbsp;        return this.map(this.questionsMapper.findByTopicId(topicModel.getId()));</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    @Override
+<i>60</i>&nbsp;    public List&lt;QuestionModelInterface&gt; findByTopic(
+<i>61</i>&nbsp;            TopicModelInterface topicModel,
+<i>62</i>&nbsp;            QuestionsOptionsInterface questionsOptions
+<i>63</i>&nbsp;    ) {
+<b class="nc"><i>64</i>&nbsp;        return questionsOptions.withRelations(this.map(this.questionsMapper.findByTopicId(topicModel.getId())));</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    @Override
+<i>68</i>&nbsp;    public void save(QuestionModelInterface questionModel) {
+<b class="nc"><i>69</i>&nbsp;        final QuestionEntity questionEntity = this.map(questionModel);</b>
+<b class="nc"><i>70</i>&nbsp;        if (questionEntity.getId() == null) {</b>
+<b class="nc"><i>71</i>&nbsp;            this.questionsMapper.insert(questionEntity);</b>
+<b class="nc"><i>72</i>&nbsp;            questionModel.setId(questionEntity.getId());</b>
+<b class="nc"><i>73</i>&nbsp;            return;</b>
+<i>74</i>&nbsp;        }
+<b class="nc"><i>75</i>&nbsp;        this.questionsMapper.update(questionEntity);</b>
+<b class="nc"><i>76</i>&nbsp;    }</b>
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    @Override
+<i>79</i>&nbsp;    public void save(QuestionModelInterface questionModel, QuestionsOptionsInterface questionsOptions) {
+<b class="nc"><i>80</i>&nbsp;        this.withServices(questionsOptions).saveWithRelations(questionModel);</b>
+<b class="nc"><i>81</i>&nbsp;    }</b>
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    @Override
+<i>84</i>&nbsp;    public void save(List&lt;QuestionModelInterface&gt; questionsModels) {
+<b class="nc"><i>85</i>&nbsp;        for (QuestionModelInterface questionModel: questionsModels) {</b>
+<b class="nc"><i>86</i>&nbsp;            this.save(questionModel);</b>
+<b class="nc"><i>87</i>&nbsp;        }</b>
+<b class="nc"><i>88</i>&nbsp;    }</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    @Override
+<i>91</i>&nbsp;    public void save(List&lt;QuestionModelInterface&gt; questionsModels, QuestionsOptionsInterface questionsOptions) {
+<b class="nc"><i>92</i>&nbsp;        for (QuestionModelInterface questionModel: questionsModels) {</b>
+<b class="nc"><i>93</i>&nbsp;            this.save(questionModel, questionsOptions);</b>
+<b class="nc"><i>94</i>&nbsp;        }</b>
+<b class="nc"><i>95</i>&nbsp;    }</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    @Override
+<i>98</i>&nbsp;    public void delete(QuestionModelInterface questionModel) {
+<b class="nc"><i>99</i>&nbsp;        final QuestionEntity questionEntity = this.map(questionModel);</b>
+<b class="nc"><i>100</i>&nbsp;        if (questionEntity.getId() == null) {</b>
+<b class="nc"><i>101</i>&nbsp;            throw new DeleteUnidentifiedModelException();</b>
+<i>102</i>&nbsp;        }
+<b class="nc"><i>103</i>&nbsp;        this.questionsMapper.delete(questionEntity);</b>
+<b class="nc"><i>104</i>&nbsp;    }</b>
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    @Override
+<i>107</i>&nbsp;    public void delete(QuestionModelInterface questionModel, QuestionsOptionsInterface questionsOptions) {
+<b class="nc"><i>108</i>&nbsp;        this.withServices(questionsOptions).deleteWithRelations(questionModel);</b>
+<b class="nc"><i>109</i>&nbsp;    }</b>
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    @Override
+<i>112</i>&nbsp;    public void delete(List&lt;QuestionModelInterface&gt; questionsModels) {
+<b class="nc"><i>113</i>&nbsp;        for (QuestionModelInterface questionModel: questionsModels) {</b>
+<b class="nc"><i>114</i>&nbsp;            this.delete(questionModel);</b>
+<b class="nc"><i>115</i>&nbsp;        }</b>
+<b class="nc"><i>116</i>&nbsp;    }</b>
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;    @Override
+<i>119</i>&nbsp;    public void delete(List&lt;QuestionModelInterface&gt; questionsModels, QuestionsOptionsInterface questionsOptions) {
+<b class="nc"><i>120</i>&nbsp;        for (QuestionModelInterface questionModel: questionsModels) {</b>
+<b class="nc"><i>121</i>&nbsp;            this.delete(questionModel, questionsOptions);</b>
+<b class="nc"><i>122</i>&nbsp;        }</b>
+<b class="nc"><i>123</i>&nbsp;    }</b>
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    private QuestionsOptionsInterface withServices(QuestionsOptionsInterface questionsOptions) {
+<b class="nc"><i>126</i>&nbsp;        questionsOptions.setQuestionsService(this);</b>
+<b class="nc"><i>127</i>&nbsp;        questionsOptions.setAnswersService(this.answersService);</b>
+<b class="nc"><i>128</i>&nbsp;        questionsOptions.setTopicsService(this.topicsService);</b>
+<b class="nc"><i>129</i>&nbsp;        questionsOptions.setQuestionTypesService(this.questionTypesService);</b>
+<b class="nc"><i>130</i>&nbsp;        return questionsOptions;</b>
+<i>131</i>&nbsp;    }
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;    private QuestionModelInterface map(QuestionEntity questionEntity) {
+<b class="nc"><i>134</i>&nbsp;        if (questionEntity == null) {</b>
+<b class="nc"><i>135</i>&nbsp;            return null;</b>
+<i>136</i>&nbsp;        }
+<b class="nc"><i>137</i>&nbsp;        final QuestionModelInterface questionModel = new QuestionModel();</b>
+<b class="nc"><i>138</i>&nbsp;        questionModel.map(questionEntity);</b>
+<b class="nc"><i>139</i>&nbsp;        return questionModel;</b>
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    private QuestionEntity map(QuestionModelInterface questionModel) {
+<b class="nc"><i>143</i>&nbsp;        final QuestionEntity questionEntity = new QuestionEntity();</b>
+<b class="nc"><i>144</i>&nbsp;        questionEntity.map(questionModel);</b>
+<b class="nc"><i>145</i>&nbsp;        return questionEntity;</b>
+<i>146</i>&nbsp;    }
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;    private List&lt;QuestionModelInterface&gt; map(List&lt;QuestionEntity&gt; questionsList) {
+<b class="nc"><i>149</i>&nbsp;        final List&lt;QuestionModelInterface&gt; resultQuestionList = new ArrayList(questionsList.size());</b>
+<b class="nc"><i>150</i>&nbsp;        for (QuestionEntity question: questionsList) {</b>
+<b class="nc"><i>151</i>&nbsp;            resultQuestionList.add(this.map(question));</b>
+<b class="nc"><i>152</i>&nbsp;        }</b>
+<b class="nc"><i>153</i>&nbsp;        return resultQuestionList;</b>
+<i>154</i>&nbsp;    }
+<i>155</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-11-10 01:17</div>
+</div>
+</body>
+</html>

@@ -5,6 +5,7 @@ import easytests.core.mappers.PointsMapper;
 import easytests.core.models.*;
 import easytests.core.options.PointsOptions;
 import easytests.core.options.PointsOptionsInterface;
+import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.Entities;
 import easytests.support.Models;
@@ -167,25 +168,27 @@ public class PointsServiceTest {
     }
 
     @Test
-    @Ignore
     public void testFindByQuizWithOptions() throws Exception {
-
         final Integer quizId = 5;
         final QuizModelInterface quizModel = Mockito.mock(QuizModelInterface.class);
-        Mockito.when(quizModel.getId()).thenReturn(quizId);
+       Mockito.when(quizModel.getId()).thenReturn(quizId);
 
         final PointEntity pointEntityFirst = Entities.createPointEntityMock(1, 1, 1);
+        PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
         final PointEntity pointEntitySecond = Entities.createPointEntityMock(4, 4, 4);
         final List<PointEntity> pointsEntities = new ArrayList<>();
         pointsEntities.add(pointEntityFirst);
         pointsEntities.add(pointEntitySecond);
         given(this.pointsMapper.findByQuizId(quizId)).willReturn(pointsEntities);
+        given(quizModel.getId()).willReturn(quizId);
+        final PointModelInterface foundedPointModel
+                = (PointModelInterface) this.pointsService.findByQuiz((QuizModelInterface) quizModel.getPoints(), pointsOptions);
 
         final List<PointModelInterface> pointsModels = new ArrayList<>();
         pointsModels.add(this.mapPointModel(pointEntityFirst));
         pointsModels.add(this.mapPointModel(pointEntitySecond));
 
-        final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptions.class);
+        pointsOptions = Mockito.mock(PointsOptions.class);
         given(pointsOptions.withRelations(pointsModels)).willReturn(pointsModels);
 
         final List<PointModelInterface> foundPointsModels = this.pointsService.findByQuiz(quizModel);
@@ -193,7 +196,19 @@ public class PointsServiceTest {
         verify(this.pointsMapper).findByQuizId(quizId);
         verify(pointsOptions).withRelations(pointsModels);
         Assert.assertEquals(pointsModels, foundPointsModels);
+/*
+        final Integer pointId=3;
+        final PointEntity pointEntity=Entities.createPointEntityMock(1,1,1);
+        final PointModelInterface pointModel=this.mapPointModel(pointEntity);
+        final PointsOptionsInterface pointsOptions=Mockito.mock(PointsOptionsInterface.class);
+        given(this.pointsMapper.findByQuizId(pointId)).willReturn((List<PointEntity>) pointEntity);
+        given(pointsOptions.withRelations(pointModel)).willReturn(pointModel);
+        final List<PointModelInterface> foundedPointModel = this.pointsService.findByQuiz(pointModel.getQuiz(),pointsOptions);
+        verify(pointsOptions).withRelations(pointModel);
+        Assert.assertNotNull(foundedPointModel);
+        Assert.assertEquals(pointModel,foundedPointModel);
 
+*/
     }
 
     @Test
@@ -202,7 +217,7 @@ public class PointsServiceTest {
         final Integer id = 1;
         final Integer questionId = 1;
         final Integer quizId = 2;
-        final PointEntity pointEntity = Entities.createPointEntityMock(4, questionId, quizId);
+        final PointEntity pointEntity = Entities.createPointEntityMock(id, questionId, quizId);
         final PointModelInterface pointModel = this.mapPointModel(pointEntity);
         final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
 
@@ -263,6 +278,27 @@ public class PointsServiceTest {
     }
 
     @Test
+    public void testSavePointsList() throws Exception {
+
+        final PointModelInterface pointModelFirst = Models.createPointModel(null, 1, 1);
+        final PointModelInterface pointModelSecond = Models.createPointModel(null,  2, 1);
+        final PointsOptionsInterface pointsOptions = Mockito.mock(PointsOptionsInterface.class);
+
+        final List<PointModelInterface> pointsModels = new ArrayList<>();
+        pointsModels.add(pointModelFirst);
+        pointsModels.add(pointModelSecond);
+
+        final PointsServiceInterface pointsServiceSpy = Mockito.spy(pointsService);
+
+        pointsServiceSpy.save(pointsModels);
+        verify(pointsServiceSpy, times(1)).save(pointModelFirst);
+        verify(pointsServiceSpy, times(1)).save(pointModelSecond);
+
+        pointsServiceSpy.save(pointsModels, pointsOptions);
+        verify(pointsServiceSpy, times(1)).save(pointModelFirst, pointsOptions);
+        verify(pointsServiceSpy, times(1)).save(pointModelSecond, pointsOptions);
+    }
+    @Test
     public void testSaveWithOptions() throws Exception {
 
         final PointModelInterface pointModel = Models.createPointModel(null, 1,1);
@@ -296,7 +332,7 @@ public class PointsServiceTest {
     }
 
     @Test
-    @Ignore
+
     public void testDeleteModelsList() throws Exception {
 
         final PointModelInterface pointModelFirst = Models.createPointModel(2, 2, 2);

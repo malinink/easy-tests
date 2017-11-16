@@ -1,0 +1,98 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: IssueStandardTopicPrioritiesServiceInterface</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">easytests.core.services</a> ]
+</div>
+
+<h1>Coverage Summary for Class: IssueStandardTopicPrioritiesServiceInterface (easytests.core.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">IssueStandardTopicPrioritiesServiceInterface</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package easytests.core.services;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import easytests.core.models.IssueStandardModelInterface;
+<i>4</i>&nbsp;import easytests.core.models.IssueStandardTopicPriorityModelInterface;
+<i>5</i>&nbsp;import easytests.core.options.IssueStandardTopicPrioritiesOptionsInterface;
+<i>6</i>&nbsp;import java.util.List;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * @author SingularityA
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public interface IssueStandardTopicPrioritiesServiceInterface extends ServiceInterface {
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    List&lt;IssueStandardTopicPriorityModelInterface&gt; findAll();
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    List&lt;IssueStandardTopicPriorityModelInterface&gt; findAll(
+<i>16</i>&nbsp;            IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions);
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    IssueStandardTopicPriorityModelInterface find(
+<i>19</i>&nbsp;            Integer id);
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    IssueStandardTopicPriorityModelInterface find(
+<i>22</i>&nbsp;            Integer id,
+<i>23</i>&nbsp;            IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions);
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    List&lt;IssueStandardTopicPriorityModelInterface&gt; findByIssueStandard(
+<i>26</i>&nbsp;            IssueStandardModelInterface issueStandard);
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    List&lt;IssueStandardTopicPriorityModelInterface&gt; findByIssueStandard(
+<i>29</i>&nbsp;            IssueStandardModelInterface issueStandard,
+<i>30</i>&nbsp;            IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions);
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    void save(IssueStandardTopicPriorityModelInterface topicPriorityModel);
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    void save(List&lt;IssueStandardTopicPriorityModelInterface&gt; topicPriorityModels);
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    void save(IssueStandardTopicPriorityModelInterface topicPriorityModel,
+<i>37</i>&nbsp;              IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions);
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    void save(List&lt;IssueStandardTopicPriorityModelInterface&gt; topicPriorityModels,
+<i>40</i>&nbsp;              IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions);
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    void delete(IssueStandardTopicPriorityModelInterface topicPriorityModel);
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    void delete(List&lt;IssueStandardTopicPriorityModelInterface&gt; topicPriorityModels);
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    void delete(IssueStandardTopicPriorityModelInterface topicPriorityModel,
+<i>47</i>&nbsp;                IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions);
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    void delete(List&lt;IssueStandardTopicPriorityModelInterface&gt; topicPriorityModels,
+<i>50</i>&nbsp;                IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions);
+<i>51</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-11-10 01:17</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: QuestionsServiceInterface</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">easytests.core.services</a> ]
+</div>
+
+<h1>Coverage Summary for Class: QuestionsServiceInterface (easytests.core.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">QuestionsServiceInterface</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package easytests.core.services;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import easytests.core.models.QuestionModelInterface;
+<i>4</i>&nbsp;import easytests.core.models.TopicModelInterface;
+<i>5</i>&nbsp;import easytests.core.options.QuestionsOptionsInterface;
+<i>6</i>&nbsp;import java.util.List;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * @author firkhraag
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public interface QuestionsServiceInterface extends ServiceInterface {
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    List&lt;QuestionModelInterface&gt; findAll();
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    List&lt;QuestionModelInterface&gt; findAll(QuestionsOptionsInterface questionsOptions);
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    List&lt;QuestionModelInterface&gt; findByTopic(TopicModelInterface topicModel);
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    List&lt;QuestionModelInterface&gt; findByTopic(
+<i>20</i>&nbsp;            TopicModelInterface topicModel, 
+<i>21</i>&nbsp;            QuestionsOptionsInterface questionsOptions);
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    QuestionModelInterface find(Integer id);
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    QuestionModelInterface find(Integer id, QuestionsOptionsInterface questionsOptions);
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    void save(QuestionModelInterface questionModel);
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    void save(QuestionModelInterface questionModel, QuestionsOptionsInterface questionsOptions);
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    void save(List&lt;QuestionModelInterface&gt; questionModel);
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    void save(List&lt;QuestionModelInterface&gt; questionModel, QuestionsOptionsInterface questionsOptions);
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    void delete(QuestionModelInterface questionModel);
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    void delete(QuestionModelInterface questionModel, QuestionsOptionsInterface questionsOptions);
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    void delete(List&lt;QuestionModelInterface&gt; questionModel);
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    void delete(List&lt;QuestionModelInterface&gt; questionModel, QuestionsOptionsInterface questionsOptions);
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-11-10 01:17</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TopicsServiceInterface</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">easytests.core.services</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TopicsServiceInterface (easytests.core.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">TopicsServiceInterface</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package easytests.core.services;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import easytests.core.models.SubjectModelInterface;
+<i>4</i>&nbsp;import easytests.core.models.TopicModelInterface;
+<i>5</i>&nbsp;import easytests.core.options.TopicsOptionsInterface;
+<i>6</i>&nbsp;import java.util.List;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * @author malinink
+<i>11</i>&nbsp; */
+<i>12</i>&nbsp;public interface TopicsServiceInterface extends ServiceInterface {
+<i>13</i>&nbsp;    List&lt;TopicModelInterface&gt; findAll();
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    List&lt;TopicModelInterface&gt; findAll(TopicsOptionsInterface topicsOptions);
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    TopicModelInterface find(Integer id);
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    TopicModelInterface find(Integer id, TopicsOptionsInterface topicsOptions);
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    List&lt;TopicModelInterface&gt; findBySubject(SubjectModelInterface subjectModel, TopicsOptionsInterface topicsOptions);
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    List&lt;TopicModelInterface&gt; findBySubject(SubjectModelInterface subjectModel);
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    void save(TopicModelInterface topicModel);
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    void save(TopicModelInterface topicModel, TopicsOptionsInterface topicsOptions);
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    void save(List&lt;TopicModelInterface&gt; topicsModels);
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    void save(List&lt;TopicModelInterface&gt; topicsModels, TopicsOptionsInterface topicsOptions);
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    void delete(TopicModelInterface topicModel);
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    void delete(TopicModelInterface topicModel, TopicsOptionsInterface topicsOptions);
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    void delete(List&lt;TopicModelInterface&gt; topicsModels);
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    void delete(List&lt;TopicModelInterface&gt; topicsModels, TopicsOptionsInterface topicsOptions);
+<i>40</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-11-10 01:17</div>
+</div>
+</body>
+</html>
