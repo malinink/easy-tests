@@ -4,10 +4,12 @@ import easytests.core.entities.SolutionEntity;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 
+
 /**
  * @author SingularityA
  */
 @Mapper
+@SuppressWarnings("checkstyle:linelength")
 public interface SolutionsMapper {
 
     @Results(

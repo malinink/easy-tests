@@ -5,11 +5,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.*;
 
 
-
 /**
  * @author fortyways
  */
 @Mapper
+@SuppressWarnings("checkstyle:linelength")
 public interface IssuesMapper {
 
     @Select("SELECT * FROM issues")
@@ -39,4 +39,5 @@ public interface IssuesMapper {
     @Select("SELECT * FROM issues WHERE subject_id=#{subjectId}")
     @ResultMap("Issue")
     List<IssueEntity> findBySubjectId(Integer subjectId);
+
 }

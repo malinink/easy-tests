@@ -5,10 +5,12 @@ import easytests.core.entities.PointEntity;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 
+
 /**
  * @author nikitalpopov
  */
 @Mapper
+@SuppressWarnings("checkstyle:linelength")
 public interface PointsMapper {
 
     @Results(

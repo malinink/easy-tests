@@ -7,22 +7,14 @@ import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.services.QuestionsService;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
 
 
 /**
  * @author firkhraag
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class QuestionsServiceTest {
+public class QuestionsServiceTest extends AbstractServiceTest {
+
     @Autowired
     private QuestionsService questionsService;
 
