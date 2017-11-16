@@ -1,31 +1,20 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.*;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.*;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.*;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
 
 /**
  * @author SingularityA
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class SolutionsMapperTest {
+public class SolutionsMapperTest extends AbstractMapperTest {
 
     @Autowired
     private SolutionsMapper solutionsMapper;
@@ -55,21 +44,23 @@ public class SolutionsMapperTest {
 
     @Test
     public void testInsert() throws Exception {
-        final Integer id = this.solutionsMapper.findAll().size() + 1;
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final Integer answerId = 13;
         final Integer pointId = 4;
 
         SolutionEntity solutionEntity = Mockito.mock(SolutionEntity.class);
         Mockito.when(solutionEntity.getAnswerId()).thenReturn(answerId);
-        Mockito.when((solutionEntity.getPointId())).thenReturn(pointId);
+        Mockito.when(solutionEntity.getPointId()).thenReturn(pointId);
 
         this.solutionsMapper.insert(solutionEntity);
 
-        verify(solutionEntity, times(1)).setId(id);
+        verify(solutionEntity, times(1)).setId(id.capture());
 
-        solutionEntity = this.solutionsMapper.find(6);
+        Assert.assertNotNull(id.getValue());
+
+        solutionEntity = this.solutionsMapper.find(id.getValue());
         Assert.assertNotNull(solutionEntity);
-        Assert.assertEquals(id, solutionEntity.getId());
+        Assert.assertEquals(id.getValue(), solutionEntity.getId());
         Assert.assertEquals(answerId, solutionEntity.getAnswerId());
         Assert.assertEquals(pointId, solutionEntity.getPointId());
     }
