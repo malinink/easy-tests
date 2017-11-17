@@ -75,9 +75,9 @@ public class TopicsServiceTest {
     }
 
     @Test
-    public void testFind() throws Exception{
+    public void testFind() throws Exception {
         final Integer id = 6;
-        final TopicModelInterface topicModel = getTopicModel();
+        final TopicModelInterface topicModel = this.getTopicModel();
         final TopicEntity topicEntity = this.getTopicEntity();
 
 
@@ -86,12 +86,12 @@ public class TopicsServiceTest {
 
         verify(this.topicsMapper).find(id);
         Assert.assertEquals(topicModel,foundedTopicModel);
-
     }
+
     @Test
     public void testFindAll() throws Exception {
         final List<TopicEntity> topicsEntities = this.getTopicsEntities();
-        final List<TopicModelInterface> topicsModels = getTopicsModels();
+        final List<TopicModelInterface> topicsModels = this.getTopicsModels();
 
 
         given(this.topicsMapper.findAll()).willReturn(topicsEntities);
