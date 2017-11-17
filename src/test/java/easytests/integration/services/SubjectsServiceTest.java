@@ -7,22 +7,14 @@ import easytests.core.models.empty.UserModelEmpty;
 import easytests.core.services.SubjectsService;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
 
 
 /**
  * @author vkpankov
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class SubjectsServiceTest {
+public class SubjectsServiceTest extends AbstractServiceTest {
+
     @Autowired
     private SubjectsService subjectsService;
 
@@ -59,7 +51,7 @@ public class SubjectsServiceTest {
     @Test
     public void testFindPresentModel() throws Exception {
         final Integer id = 1;
-        final SubjectModelInterface subjectModel = this.createSubjectModel(id, "test1" , 1);
+        final SubjectModelInterface subjectModel = this.createSubjectModel(id, "Subject1" , 1);
 
         final SubjectModelInterface foundedSubjectModel = this.subjectsService.find(id);
 

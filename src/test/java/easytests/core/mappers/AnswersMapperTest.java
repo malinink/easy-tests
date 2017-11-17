@@ -1,34 +1,20 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.AnswerEntity;
-import easytests.core.models.QuestionModelInterface;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 /**
- * @author rezenbekk
+ * @author malinink
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class AnswersMapperTest {
+public class AnswersMapperTest extends AbstractMapperTest {
+
     @Autowired
     private AnswersMapper answersMapper;
 
@@ -61,7 +47,7 @@ public class AnswersMapperTest {
 
     @Test
     public void testInsert() throws Exception {
-        final Integer id = this.answersMapper.findAll().size() + 1;
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final String txt = "Text";
         final Integer questionId = 1;
         final Boolean right = true;
@@ -73,10 +59,13 @@ public class AnswersMapperTest {
 
         this.answersMapper.insert(answerEntity);
 
-        verify(answerEntity, times(1)).setId(id);
+        verify(answerEntity, times(1)).setId(id.capture());
 
-        answerEntity = this.answersMapper.find(id);
-        Assert.assertEquals(id, answerEntity.getId());
+        Assert.assertNotNull(id.getValue());
+
+        answerEntity = this.answersMapper.find(id.getValue());
+        Assert.assertNotNull(answerEntity);
+        Assert.assertEquals(id.getValue(), answerEntity.getId());
         Assert.assertEquals(txt, answerEntity.getTxt());
         Assert.assertEquals(questionId, answerEntity.getQuestionId());
         Assert.assertEquals(right, answerEntity.getRight());
@@ -85,19 +74,16 @@ public class AnswersMapperTest {
     @Test
     public void testUpdate() throws Exception {
         final Integer id = 1;
-        final String txt = "Answer1";
-        final Integer questionId = 1;
-        final Boolean right = true;
-
-        final QuestionModelInterface questionModel = Mockito.mock(QuestionModelInterface.class);
-        Mockito.when(questionModel.getId()).thenReturn(questionId);
+        final String txt = "NewAnswer";
+        final Integer questionId = 2;
+        final Boolean right = false;
 
         AnswerEntity answerEntity = this.answersMapper.find(id);
         Assert.assertNotNull(answerEntity);
         Assert.assertEquals(id, answerEntity.getId());
-        Assert.assertEquals(txt, answerEntity.getTxt());
-        Assert.assertEquals(questionId, answerEntity.getQuestionId());
-        Assert.assertEquals(right, answerEntity.getRight());
+        Assert.assertNotEquals(txt, answerEntity.getTxt());
+        Assert.assertNotEquals(questionId, answerEntity.getQuestionId());
+        Assert.assertNotEquals(right, answerEntity.getRight());
 
         answerEntity = Mockito.mock(AnswerEntity.class);
         Mockito.when(answerEntity.getId()).thenReturn(id);
@@ -108,6 +94,7 @@ public class AnswersMapperTest {
         this.answersMapper.update(answerEntity);
 
         answerEntity = this.answersMapper.find(id);
+        Assert.assertNotNull(answerEntity);
         Assert.assertEquals(id, answerEntity.getId());
         Assert.assertEquals(txt, answerEntity.getTxt());
         Assert.assertEquals(questionId, answerEntity.getQuestionId());
