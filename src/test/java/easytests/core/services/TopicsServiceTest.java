@@ -46,6 +46,17 @@ public class TopicsServiceTest {
         return topicModel;
     }
 
+    private TopicEntity getTopicEntity() {
+        final TopicEntity topicEntity = Entities.createTopicEntityMock(6,3, "testentity");
+        return topicEntity;
+
+    }
+
+    private TopicModelInterface getTopicModel() {
+        final TopicModelInterface topicModel = mapTopicModel(this.getTopicEntity());
+        return topicModel;
+    }
+
     private List<TopicEntity> getTopicsEntities() {
         final TopicEntity topicEntityFirst = Entities.createTopicEntityMock(4, 3, "testfirst");
         final TopicEntity topicEntitySecond = Entities.createTopicEntityMock(5, 3, "testsecond");
@@ -61,6 +72,33 @@ public class TopicsServiceTest {
             topicsModels.add(this.mapTopicModel(topicEntity));
         }
         return topicsModels;
+    }
+
+    @Test
+    public void testFind() throws Exception {
+        final Integer id = 6;
+        final TopicModelInterface topicModel = this.getTopicModel();
+        final TopicEntity topicEntity = this.getTopicEntity();
+
+
+        given(this.topicsMapper.find(id)).willReturn(topicEntity);
+        final TopicModelInterface foundedTopicModel = this.topicsService.find(id);
+
+        verify(this.topicsMapper).find(id);
+        Assert.assertEquals(topicModel,foundedTopicModel);
+    }
+
+    @Test
+    public void testFindAll() throws Exception {
+        final List<TopicEntity> topicsEntities = this.getTopicsEntities();
+        final List<TopicModelInterface> topicsModels = this.getTopicsModels();
+
+
+        given(this.topicsMapper.findAll()).willReturn(topicsEntities);
+        final List<TopicModelInterface> foundedTopicsModels = this.topicsService.findAll();
+
+        verify(this.topicsMapper).findAll();
+        Assert.assertEquals(topicsModels, foundedTopicsModels);
     }
 
     @Test
