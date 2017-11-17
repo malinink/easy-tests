@@ -1,33 +1,21 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.QuizEntity;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author vkpankov
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class QuizzesMapperTest {
+public class QuizzesMapperTest extends AbstractMapperTest {
 
     @Autowired
     private QuizzesMapper quizzesMapper;
@@ -78,7 +66,7 @@ public class QuizzesMapperTest {
 
     @Test
     public void testInsert() throws Exception {
-        final Integer id = this.quizzesMapper.findAll().size() + 1;
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
 
         final Integer testIssueId = 1;
 
@@ -93,7 +81,6 @@ public class QuizzesMapperTest {
 
         final QuizEntity testQuiz = Mockito.mock(QuizEntity.class);
 
-        Mockito.when(testQuiz.getId()).thenReturn(id);
         Mockito.when(testQuiz.getInviteCode()).thenReturn(testInviteCode);
         Mockito.when(testQuiz.getIssueId()).thenReturn(testIssueId);
         Mockito.when(testQuiz.getStartedAt()).thenReturn(testStartedAt);
@@ -102,11 +89,13 @@ public class QuizzesMapperTest {
 
         quizzesMapper.insert(testQuiz);
 
-        verify(testQuiz, times(1)).setId(id);
+        verify(testQuiz, times(1)).setId(id.capture());
 
-        final QuizEntity readQuiz = quizzesMapper.find(testQuiz.getId());
+        Assert.assertNotNull(id.getValue());
 
+        final QuizEntity readQuiz = quizzesMapper.find(id.getValue());
         Assert.assertNotNull(readQuiz);
+        Assert.assertEquals(id.getValue(), readQuiz.getId());
         Assert.assertEquals(testIssueId, readQuiz.getIssueId());
         Assert.assertEquals(testInviteCode, readQuiz.getInviteCode());
         Assert.assertEquals(testStartedAt, readQuiz.getStartedAt());

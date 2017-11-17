@@ -1,31 +1,20 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.TesteeEntity;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import java.util.List;
 
 /**
  * @author DoZor-80
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class TesteesMapperTest {
+public class TesteesMapperTest extends AbstractMapperTest {
+
     @Autowired
     private TesteesMapper testeesMapper;
 
@@ -58,7 +47,7 @@ public class TesteesMapperTest {
 
     @Test
     public void testInsert() throws Exception{
-        final Integer id = this.testeesMapper.findAll().size() + 1;
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final String firstName = "FirstName";
         final String lastName = "LastName";
         final String surname = "Surname";
@@ -69,15 +58,17 @@ public class TesteesMapperTest {
         Mockito.when(testeeEntity.getFirstName()).thenReturn(firstName);
         Mockito.when(testeeEntity.getLastName()).thenReturn(lastName);
         Mockito.when(testeeEntity.getSurname()).thenReturn(surname);
-        Mockito.when(testeeEntity.getGroupNumber()).thenReturn((groupNumber));
+        Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
         Mockito.when(testeeEntity.getQuizId()).thenReturn(quizId);
 
         this.testeesMapper.insert(testeeEntity);
 
-        verify(testeeEntity, times(1)).setId(id);
+        verify(testeeEntity, times(1)).setId(id.capture());
 
-        testeeEntity = this.testeesMapper.find(id);
-        Assert.assertEquals(id, testeeEntity.getId());
+        Assert.assertNotNull(id.getValue());
+
+        testeeEntity = this.testeesMapper.find(id.getValue());
+        Assert.assertEquals(id.getValue(), testeeEntity.getId());
         Assert.assertEquals(firstName, testeeEntity.getFirstName());
         Assert.assertEquals(lastName, testeeEntity.getLastName());
         Assert.assertEquals(surname, testeeEntity.getSurname());

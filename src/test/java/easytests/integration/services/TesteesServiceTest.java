@@ -1,31 +1,22 @@
 package easytests.integration.services;
 
-import easytests.core.models.TesteeModelInterface;
 import easytests.core.models.QuizModelInterface;
-import easytests.core.options.TesteesOptions;
+import easytests.core.models.TesteeModelInterface;
 import easytests.core.options.QuizzesOptions;
+import easytests.core.options.TesteesOptions;
 import easytests.core.services.TesteesService;
 import easytests.support.Models;
+import java.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import java.time.LocalDateTime;
 
 
 /**
  * @author DoZor-80
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class TesteesServiceTest {
+public class TesteesServiceTest extends AbstractServiceTest {
+
     @Autowired
     private TesteesService testeesService;
 
@@ -72,11 +63,13 @@ public class TesteesServiceTest {
 
     @Test
     public void testSaveInsertsModel() throws Exception {
-        final Integer id = this.testeesService.findAll().size() + 1;
         final TesteeModelInterface testeeModel = Models.createTesteeModel(null, "FirstName2", "LastName2", "Surname2", 302, 19);
 
         this.testeesService.save(testeeModel);
-        TesteeModelInterface foundedTesteeModel = this.testeesService.find(id);
+
+        Assert.assertNotNull(testeeModel.getId());
+
+        final TesteeModelInterface foundedTesteeModel = this.testeesService.find(testeeModel.getId());
 
         Assert.assertEquals(testeeModel, foundedTesteeModel);
     }
