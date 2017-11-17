@@ -2,6 +2,7 @@ package easytests.core.entities;
 
 import easytests.core.models.QuizModelInterface;
 import easytests.core.models.empty.IssueModelEmpty;
+import easytests.support.QuizzesSupport;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -13,43 +14,24 @@ import org.mockito.Mockito;
 import java.time.LocalDateTime;
 
 /**
- * @author fortyways
+ * @author miron97
  */
-public class QuizEntityTest {
+public class QuizEntityTest extends AbstractEntityTest {
+
+    private QuizzesSupport quizSupport = new QuizzesSupport();
+
     @Ignore
     @Test
     public void testCommon() throws Exception {
-        new BeanTester().testBean(QuizEntity.class);
-        new EqualsMethodTester().testEqualsMethod(QuizEntity.class);
-        new HashCodeMethodTester().testHashCodeMethod(QuizEntity.class);
+        this.testCommon(QuizEntity.class);
     }
 
     @Test
     public void testMap() throws Exception {
-        final Integer quizId = 420;
-        final Integer issueId = 2;
-        final String inviteCode = "code";
-        final Boolean codeExpired=false;
-        final LocalDateTime startedAt=LocalDateTime.of(1,1,1,1,1);
-        final LocalDateTime finishedAt=LocalDateTime.of(2,1,1,1,1);
-
-        final QuizModelInterface quizModel = Mockito.mock(QuizModelInterface.class);
-        Mockito.when(quizModel.getId()).thenReturn(quizId);
-        Mockito.when(quizModel.getIssue()).thenReturn(new IssueModelEmpty(issueId));
-        Mockito.when(quizModel.getStartedAt()).thenReturn(startedAt);
-        Mockito.when(quizModel.getInviteCode()).thenReturn(inviteCode);
-        Mockito.when(quizModel.getFinishedAt()).thenReturn(finishedAt);
-        Mockito.when(quizModel.getCodeExpired()).thenReturn(codeExpired);
-
+        final QuizModelInterface quizModel = this.quizSupport.getModelAdditionalMock(0);
         final QuizEntity quizEntity = new QuizEntity();
         quizEntity.map(quizModel);
-
-        Assert.assertEquals(quizId, quizEntity.getId());
-        Assert.assertEquals(issueId, quizEntity.getIssueId());
-        Assert.assertEquals(inviteCode, quizEntity.getInviteCode());
-        Assert.assertEquals(startedAt, quizEntity.getStartedAt());
-        Assert.assertEquals(finishedAt, quizEntity.getFinishedAt());
-        Assert.assertEquals(codeExpired, quizEntity.getCodeExpired());
+        this.quizSupport.assertEquals(quizModel, quizEntity);
     }
 
 }
