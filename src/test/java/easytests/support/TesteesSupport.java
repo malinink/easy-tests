@@ -33,7 +33,8 @@ public class TesteesSupport {
                 (String) data[1],
                 (String) data[2],
                 (String) data[3],
-                (Integer) data[4]
+                (Integer) data[4],
+                (Integer) data[5]
         );
     }
 
@@ -42,14 +43,16 @@ public class TesteesSupport {
             String firstName,
             String lastName,
             String surName,
+            Integer groupNumber,
             Integer quizId
-    ){
+    )
+    {
         TesteeEntity testeeEntity = Mockito.mock(TesteeEntity.class);
         Mockito.when(testeeEntity.getId()).thenReturn(id);
         Mockito.when(testeeEntity.getFirstName()).thenReturn(firstName);
         Mockito.when(testeeEntity.getLastName()).thenReturn(lastName);
         Mockito.when(testeeEntity.getSurname()).thenReturn(surName);
-//        Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
+        Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
         Mockito.when(testeeEntity.getQuizId()).thenReturn(quizId);
         return testeeEntity;
     }
@@ -59,7 +62,6 @@ public class TesteesSupport {
                 Assert.assertEquals(first.getLastName(), second.getLastName());
                 Assert.assertEquals(first.getSurname(), second.getSurname());
                 Assert.assertEquals(first.getQuizId(), second.getQuizId());
-
     }
 
 

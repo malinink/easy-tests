@@ -68,7 +68,6 @@ public class SubjectsSupport {
                 (Integer) data[3]
         );
     }
-    //TODO Why it is public? @janchk
     public SubjectEntity getEntityMock(
             Integer id,
             String name,
@@ -99,7 +98,6 @@ public class SubjectsSupport {
                 (Integer) data[3]
         );
     }
-    //TODO Why it is public? @janchk
     public SubjectModelInterface getModelMock(
             Integer id,
             String name,
