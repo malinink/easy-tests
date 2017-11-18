@@ -95,6 +95,8 @@ public class UsersServiceTest {
 
         this.assertEquals(usersFixturesModels, this.usersModelsListCaptor.getValue());
         Assert.assertSame(usersFixturesModels, foundedUsersModels);
+        verify(this.usersMapper, times(1)).findAll();
+        verifyNoMoreInteractions(this.usersMapper);
     }
 
     @Test
@@ -119,7 +121,7 @@ public class UsersServiceTest {
     }
 
     @Test
-    public void testFindWithOptionsPresentModel() throws Exception {
+    public void testFindWithOptions() throws Exception {
         final Integer presentId = 1;
         final ArgumentCaptor<UserModelInterface> userModelCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
         final UserModelInterface userFixtureModel = this.usersSupport.getModelFixtureMock(0);
@@ -132,21 +134,10 @@ public class UsersServiceTest {
 
         this.usersSupport.assertEquals(userFixtureModel, userModelCaptor.getValue());
         Assert.assertSame(userFixtureModel, foundedUserModel);
+        verify(this.usersMapper, times(1)).find(presentId);
+        verifyNoMoreInteractions(this.usersMapper);
     }
 
-    @Test
-    public void testFindWithOptionsAbsentModel() throws Exception {
-        final Integer absentId = 12;
-        final ArgumentCaptor<UserModelInterface> userModelCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
-        final UsersOptionsInterface usersOptions = mock(UsersOptionsInterface.class);
-        when(this.usersMapper.find(absentId)).thenReturn(null);
-        when(usersOptions.withRelations(userModelCaptor.capture())).thenReturn(null);
-
-        final UserModelInterface foundedUserModel = this.usersService.find(absentId, usersOptions);
-
-        Assert.assertNull(userModelCaptor.getValue());
-        Assert.assertNull(foundedUserModel);
-    }
 
     @Test
     public void testFindByEmailPresentModel() throws Exception {
@@ -182,6 +173,8 @@ public class UsersServiceTest {
 
         this.usersSupport.assertEquals(userFixtureModel, userModelCaptor.getValue());
         Assert.assertSame(userFixtureModel, foundedUserModel);
+        verify(this.usersMapper, times(1)).findByEmail(presentEmail);
+        verifyNoMoreInteractions(this.usersMapper);
     }
 
     @Test
@@ -195,7 +188,7 @@ public class UsersServiceTest {
     }
 
     @Test
-    public void testSaveNewEntityUpdatesItsId() throws Exception {
+    public void testSaveNewEntitySetId() throws Exception {
         final UserModelInterface userAdditionalModel = this.usersSupport.getModelAdditionalMock(0);
         doAnswer(invocation -> {
             final UserEntity userEntity = (UserEntity) invocation.getArguments()[0];
@@ -225,7 +218,7 @@ public class UsersServiceTest {
         this.usersService.save(userFixtureModel, usersOptions);
 
         verify(usersOptions, times(1)).saveWithRelations(userFixtureModel);
-        verify(this.usersMapper, times(0)).update(any(UserEntity.class));
+        verifyNoMoreInteractions(this.usersMapper);
     }
 
     @Test
@@ -253,7 +246,7 @@ public class UsersServiceTest {
         this.usersService.delete(userFixtureModel, usersOptions);
 
         verify(usersOptions, times(1)).deleteWithRelations(userFixtureModel);
-        verify(this.usersMapper, times(0)).delete(any(UserEntity.class));
+        verifyNoMoreInteractions(this.usersMapper);
     }
 
 }
