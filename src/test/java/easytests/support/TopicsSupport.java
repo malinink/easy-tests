@@ -34,7 +34,7 @@ public class TopicsSupport {
         );
     }
 
-    public TopicEntity getEntityMock (
+    private TopicEntity getEntityMock (
             Integer id,
             String name,
             Integer subjectId
@@ -49,10 +49,10 @@ public class TopicsSupport {
     }
 
     public TopicModelInterface getModelAdditionalMock(Integer index) {
-        return this.getModelMock(additional[0]);
+        return this.getModelMock(additional[index]);
     }
 
-    public TopicModelInterface getModelMock(Object[] data) {
+    private TopicModelInterface getModelMock(Object[] data) {
         return this.getModelMock(
                 (Integer) data[0],
                 (String)  data[1],
