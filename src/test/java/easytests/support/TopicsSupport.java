@@ -13,14 +13,42 @@ import org.mockito.Mockito;
  */
 public class TopicsSupport {
 
+    protected static Object[][] fixtures = new Object[][]{
+            {
+                    1,
+                    "Name1",
+                    2
+            },
+            {
+                    2,
+                    "Name2",
+                    2
+            },
+            {
+                    3,
+                    "Name3",
+                    3
+            }
+    };
+
     protected static Object[][] additional = new Object[][]{
             {
                     // for insert entity
                     null,
                     "name",
                     1
+            },
+            {
+                    // for update entity with id = 1
+                    1,
+                    "newName",
+                    5
             }
     };
+
+    public TopicEntity getEntityFixtureMock(Integer index) {
+        return this.getEntityMock(fixtures[index]);
+    }
 
     public TopicEntity getEntityAdditionalMock(Integer index) {
         return this.getEntityMock(additional[index]);
@@ -46,6 +74,10 @@ public class TopicsSupport {
         Mockito.when(topicEntityMock.getSubjectId()).thenReturn(subjectId);
 
         return topicEntityMock;
+    }
+
+    public TopicModelInterface getModelFixtureMock(Integer index) {
+        return this.getModelMock(fixtures[index]);
     }
 
     public TopicModelInterface getModelAdditionalMock(Integer index) {
@@ -76,9 +108,46 @@ public class TopicsSupport {
         return topicModelMock;
     }
 
+    private void assertEquals(TopicEntity first, TopicEntity second, Boolean exceptId) {
+        if (!exceptId) {
+            Assert.assertEquals(first.getId(), second.getId());
+        }
+        Assert.assertEquals(first.getName(), second.getName());
+        Assert.assertEquals(first.getSubjectId(), second.getSubjectId());
+    }
+
+    public void assertEquals(TopicEntity first, TopicEntity second) {
+        this.assertEquals(first, second, false);
+    }
+
+    public void assertEqualsWithoutId(TopicEntity first, TopicEntity second) {
+        this.assertEquals(first, second, true);
+    }
+
+    public void assertNotEquals(TopicEntity first, TopicEntity second) {
+        this.assertNotEquals(first, second, false);
+    }
+
+    public void assertNotEqualsWithoutId(TopicEntity first, TopicEntity second) {
+        this.assertNotEquals(first, second, true);
+    }
+
+    private void assertNotEquals(TopicEntity first, TopicEntity second, Boolean exceptId) {
+        if (!exceptId) {
+            Assert.assertNotEquals(first.getId(), second.getId());
+        }
+        Assert.assertNotEquals(first.getName(), second.getName());
+        Assert.assertNotEquals(first.getSubjectId(), second.getSubjectId());
+    }
+
     public void assertEquals(TopicModelInterface first, TopicEntity second) {
         Assert.assertEquals(first.getId(), second.getId());
         Assert.assertEquals(first.getName(), second.getName());
         Assert.assertEquals(first.getSubject().getId(), second.getSubjectId());
+    }
+
+    public void assertEquals(TopicEntity first, TopicModelInterface second) {
+        this.assertEquals(second, first);
+        Assert.assertEquals(new ModelsListEmpty(), second.getQuestions());
     }
 }
