@@ -64,11 +64,6 @@ public class TopicsServiceTest {
     }
 
     @Test
-<<<<<<< HEAD
-=======
-
-    @Test
->>>>>>> ac72125... Refactored "testFind" in TesteesMapperTest.java
     public void testFindBySubject() throws Exception {
         final Integer subjectId = 3;
         final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
