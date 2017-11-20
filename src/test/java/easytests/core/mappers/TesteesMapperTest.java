@@ -1,6 +1,7 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.TesteeEntity;
+import easytests.support.TesteesSupport;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,10 +11,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 /**
  * @author DoZor-80
  */
 public class TesteesMapperTest extends AbstractMapperTest {
+
+    protected TesteesSupport testeesSupport = new TesteesSupport();
 
     @Autowired
     private TesteesMapper testeesMapper;
@@ -27,11 +31,9 @@ public class TesteesMapperTest extends AbstractMapperTest {
     @Test
     public void testFind() throws Exception {
         final TesteeEntity testee = this.testeesMapper.find(1);
-        Assert.assertEquals((long) 1, (long) testee.getId());
-        Assert.assertEquals("FirstName1", testee.getFirstName());
-        Assert.assertEquals("LastName1", testee.getLastName());
-        Assert.assertEquals("Surname1", testee.getSurname());
-        Assert.assertEquals((long) 1, (long) testee.getQuizId());
+        final TesteeEntity testeeFixtureEntity = this.testeesSupport.getTesteeFixtureMock(0);
+
+        this.testeesSupport.assertEquals(testee, testeeFixtureEntity);
     }
 
     @Test
