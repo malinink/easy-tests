@@ -2,6 +2,7 @@ package easytests.core.entities;
 
 import easytests.core.models.TesteeModelInterface;
 
+import easytests.support.TesteesSupport;
 import org.junit.Test;
 
 /**

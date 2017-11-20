@@ -1,12 +1,9 @@
 package easytests.support;
 
 import easytests.core.entities.TesteeEntity;
+import easytests.core.models.TesteeModelInterface;
+import easytests.core.models.empty.QuizModelEmpty;
 import org.junit.Assert;
-import easytests.core.entities.SubjectEntity;
-import easytests.core.models.SubjectModelInterface;
-import easytests.core.models.empty.IssueStandardModelEmpty;
-import easytests.core.models.empty.ModelsListEmpty;
-import easytests.core.models.empty.UserModelEmpty;
 import org.mockito.Mockito;
 
 public class TesteesSupport {
@@ -17,18 +14,35 @@ public class TesteesSupport {
                     "FirstName1",
                     "LastName1",
                     "Surname1",
+                    301,
                     1
+            },
+            {
+                    2,
+                    "FirstName2",
+                    "LastName2",
+                    "Surname2",
+                    302,
+                    2
+            },
+            {
+                    3,
+                    "FirstName3",
+                    "LastName3",
+                    "Surname3",
+                    303,
+                    3
             }
 
     };
 
-    public TesteeEntity getTesteeFixtureMock(Integer index) {
-        return this.getTesteeMock(fixtures[index]);
+    public TesteeEntity getEntityFixtureMock(Integer index) {
+        return this.getEntityMock(fixtures[index]);
 
     }
 
-    private TesteeEntity getTesteeMock(Object[] data) {
-        return this.getTesteeMock(
+    private TesteeEntity getEntityMock(Object[] data) {
+        return this.getEntityMock(
                 (Integer) data[0],
                 (String) data[1],
                 (String) data[2],
@@ -38,7 +52,7 @@ public class TesteesSupport {
         );
     }
 
-    private TesteeEntity getTesteeMock(
+    private TesteeEntity getEntityMock(
             Integer id,
             String firstName,
             String lastName,
@@ -56,6 +70,41 @@ public class TesteesSupport {
         Mockito.when(testeeEntity.getQuizId()).thenReturn(quizId);
         return testeeEntity;
     }
+
+    public TesteeModelInterface getModelFixtureMock(Integer index) {
+        return this.getModelMock(fixtures[index]);
+    }
+
+    private TesteeModelInterface getModelMock(Object[] data) {
+        return this.getModelMock(
+                (Integer) data[0],
+                (String) data[1],
+                (String) data[2],
+                (String) data[3],
+                (Integer) data[4],
+                (Integer) data[5]
+        );
+    }
+
+    private TesteeModelInterface getModelMock(
+            Integer id,
+            String firstName,
+            String lastName,
+            String surName,
+            Integer groupNumber,
+            Integer quizId
+             )
+    {
+        TesteeModelInterface testeeModel = Mockito.mock(TesteeModelInterface.class);
+        Mockito.when(testeeModel.getId()).thenReturn(id);
+        Mockito.when(testeeModel.getFirstName()).thenReturn(firstName);
+        Mockito.when(testeeModel.getLastName()).thenReturn(lastName);
+        Mockito.when(testeeModel.getSurname()).thenReturn(surName);
+        Mockito.when(testeeModel.getGroupNumber()).thenReturn(groupNumber);
+        Mockito.when(testeeModel.getQuiz()).thenReturn(new QuizModelEmpty(quizId));
+        return testeeModel;
+    }
+
     public void assertEquals(TesteeEntity first, TesteeEntity second){
                 Assert.assertEquals(first.getId(), second.getId());
                 Assert.assertEquals(first.getFirstName(), second.getFirstName());
@@ -64,5 +113,11 @@ public class TesteesSupport {
                 Assert.assertEquals(first.getQuizId(), second.getQuizId());
     }
 
-
+    public void assertEquals(TesteeModelInterface first, TesteeEntity second){
+                Assert.assertEquals(first.getId(), second.getId());
+                Assert.assertEquals(first.getFirstName(), second.getFirstName());
+                Assert.assertEquals(first.getLastName(), second.getLastName());
+                Assert.assertEquals(first.getSurname(), second.getSurname());
+                Assert.assertEquals(first.getGroupNumber(), second.getGroupNumber());
+    }
 }
