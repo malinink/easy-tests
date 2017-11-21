@@ -13,7 +13,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
 import static org.mockito.BDDMockito.*;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
@@ -38,9 +37,6 @@ public class UsersServiceTest {
     private UsersService usersService;
 
     private UsersSupport usersSupport = new UsersSupport();
-
-    @Captor
-    private ArgumentCaptor<List<UserModelInterface>> usersModelsListCaptor;
 
     private List<UserEntity> getUsersFixturesEntities() {
         final List<UserEntity> usersEntities = new ArrayList<>(2);
@@ -85,15 +81,16 @@ public class UsersServiceTest {
 
     @Test
     public void testFindAllWithOptions() throws Exception {
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
         final List<UserModelInterface> usersFixturesModels = this.getUsersFixturesModels();
         final List<UserEntity> usersFixturesEntities = this.getUsersFixturesEntities();
         final UsersOptionsInterface usersOptions = mock(UsersOptionsInterface.class);
         when(this.usersMapper.findAll()).thenReturn(usersFixturesEntities);
-        when(usersOptions.withRelations(this.usersModelsListCaptor.capture())).thenReturn(usersFixturesModels);
+        when(usersOptions.withRelations(listCaptor.capture())).thenReturn(usersFixturesModels);
 
         final List<UserModelInterface> foundedUsersModels = this.usersService.findAll(usersOptions);
 
-        this.assertEquals(usersFixturesModels, this.usersModelsListCaptor.getValue());
+        this.assertEquals(usersFixturesModels, listCaptor.getValue());
         Assert.assertSame(usersFixturesModels, foundedUsersModels);
         verify(this.usersMapper, times(1)).findAll();
         verifyNoMoreInteractions(this.usersMapper);
