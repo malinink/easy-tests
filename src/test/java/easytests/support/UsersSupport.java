@@ -91,7 +91,7 @@ public class UsersSupport {
         );
     }
 
-    public UserEntity getEntityMock(
+    private UserEntity getEntityMock(
             Integer id,
             String firstName,
             String lastName,
@@ -134,7 +134,7 @@ public class UsersSupport {
         );
     }
 
-    public UserModelInterface getModelMock(
+    private UserModelInterface getModelMock(
             Integer id,
             String firstName,
             String lastName,

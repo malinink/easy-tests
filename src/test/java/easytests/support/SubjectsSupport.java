@@ -69,7 +69,7 @@ public class SubjectsSupport {
         );
     }
 
-    public SubjectEntity getEntityMock(
+    private SubjectEntity getEntityMock(
             Integer id,
             String name,
             String description,
@@ -100,7 +100,7 @@ public class SubjectsSupport {
         );
     }
 
-    public SubjectModelInterface getModelMock(
+    private SubjectModelInterface getModelMock(
             Integer id,
             String name,
             String description,
