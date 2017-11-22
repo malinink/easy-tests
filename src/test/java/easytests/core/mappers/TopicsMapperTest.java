@@ -28,9 +28,9 @@ public class TopicsMapperTest extends AbstractMapperTest {
         Assert.assertEquals(3, topicEntities.size());
 
         Integer index = 0;
-        for(TopicEntity eachTopicEntity: topicEntities) {
+        for(TopicEntity topicEntity: topicEntities) {
 
-            this.topicsSupport.assertEquals(eachTopicEntity, this.topicsSupport.getEntityFixtureMock(index));
+            this.topicsSupport.assertEquals(this.topicsSupport.getEntityFixtureMock(index), topicEntity);
 
             index++;
         }
@@ -39,8 +39,9 @@ public class TopicsMapperTest extends AbstractMapperTest {
     @Test
     public void testFind() throws Exception {
         final TopicEntity topicFixtureEntity = this.topicsSupport.getEntityFixtureMock(0);
+        final TopicEntity topicEntity = this.topicsMapper.find(topicFixtureEntity.getId());
 
-        this.topicsSupport.assertEquals(topicFixtureEntity, this.topicsMapper.find(topicFixtureEntity.getId()));
+        this.topicsSupport.assertEquals(topicFixtureEntity, topicEntity);
     }
 
     @Test
@@ -54,9 +55,9 @@ public class TopicsMapperTest extends AbstractMapperTest {
         Assert.assertEquals(2, topicEntities.size());
 
         Integer index = 0;
-        for(TopicEntity eachTopicEntity: topicEntities) {
+        for(TopicEntity topicEntity: topicEntities) {
 
-            this.topicsSupport.assertEquals(eachTopicEntity, this.topicsSupport.getEntityFixtureMock(index));
+            this.topicsSupport.assertEquals(this.topicsSupport.getEntityFixtureMock(index), topicEntity);
 
             index++;
         }
