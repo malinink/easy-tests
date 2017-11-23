@@ -46,12 +46,8 @@ public class TopicsMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFindBySubjectId() throws Exception {
-        List<TopicEntity> topicEntities = this.topicsMapper.findBySubjectId(3);
-        Assert.assertEquals(1, topicEntities.size());
+        List<TopicEntity> topicEntities = this.topicsMapper.findBySubjectId(2);
 
-        this.topicsSupport.assertEquals(topicEntities.get(0), this.topicsSupport.getEntityFixtureMock(2));
-
-        topicEntities = this.topicsMapper.findBySubjectId(2);
         Assert.assertEquals(2, topicEntities.size());
 
         Integer index = 0;
@@ -61,6 +57,13 @@ public class TopicsMapperTest extends AbstractMapperTest {
 
             index++;
         }
+    }
+
+    @Test
+    public void testFindBySubjectIdWithoutTopics() throws Exception {
+        List<TopicEntity> topicEntities = this.topicsMapper.findBySubjectId(10);
+
+        Assert.assertEquals(0, topicEntities.size());
     }
 
     @Test
@@ -75,7 +78,7 @@ public class TopicsMapperTest extends AbstractMapperTest {
 
         final TopicEntity topicInsertedEntity = this.topicsMapper.find(id.getValue());
 
-        Assert.assertNotNull(topicAdditionalEntity);
+        Assert.assertNotNull(topicInsertedEntity);
         this.topicsSupport.assertEqualsWithoutId(topicAdditionalEntity, topicInsertedEntity);
     }
 
