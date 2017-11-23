@@ -7,7 +7,8 @@ import lombok.*;
  * @author malinink
  */
 @Data
-public class UserEntity {
+public class UserEntity implements EntityInterface {
+
     private Integer id;
 
     private String firstName;
@@ -34,4 +35,5 @@ public class UserEntity {
         this.setIsAdmin(userModel.getIsAdmin());
         this.setState(userModel.getState());
     }
+
 }

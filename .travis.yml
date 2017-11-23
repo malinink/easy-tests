@@ -17,6 +17,7 @@ script:
 - ./mvnw checkstyle:check --quiet
 - ./mvnw migration:up --quiet
 - ./mvnw migration:up -Dmigration.env=test --quiet
+- psql -d easyteststest -U postgres < src/main/resources/sql/mappersTestData.sql
 - ./mvnw test jacoco:report --quiet
 after_success:
 - ./mvnw coveralls:report --quiet

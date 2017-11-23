@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 @SuppressWarnings("checkstyle:linelength")
 public interface UsersMapper {
+
     @Results(
         id = "User",
         value = {
@@ -43,4 +44,5 @@ public interface UsersMapper {
 
     @Delete("DELETE FROM users WHERE id=#{id}")
     void delete(UserEntity user);
+
 }

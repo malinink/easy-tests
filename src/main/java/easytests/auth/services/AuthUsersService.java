@@ -22,7 +22,7 @@ public class AuthUsersService implements UserDetailsService {
     @Autowired
     private UsersService usersService;
 
-    private static List<GrantedAuthority> getAuthorities(UserModelInterface userModel) {
+    private List<GrantedAuthority> getAuthorities(UserModelInterface userModel) {
         final List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_TESTEE"));
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
