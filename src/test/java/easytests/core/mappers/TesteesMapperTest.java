@@ -2,6 +2,8 @@ package easytests.core.mappers;
 
 import easytests.core.entities.TesteeEntity;
 import easytests.support.TesteesSupport;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,7 +32,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
         Integer index = 0;
         for (TesteeEntity testeeEntity: testeesEntities){
             final TesteeEntity testeeFixtureEntity = this.testeesSupport.getTesteeFixtureMock(index);
-            this.testeesSupport.assertEquals(testeeEntity, testeeFixtureEntity);
+            this.testeesSupport.assertEquals(testeeFixtureEntity, testeeEntity);
             index++;
         }
     }
@@ -40,17 +42,22 @@ public class TesteesMapperTest extends AbstractMapperTest {
         final TesteeEntity testee = this.testeesMapper.find(1);
         final TesteeEntity testeeFixtureEntity = this.testeesSupport.getTesteeFixtureMock(0);
 
-        this.testeesSupport.assertEquals(testee, testeeFixtureEntity);
+        this.testeesSupport.assertEquals(testeeFixtureEntity, testee);
     }
 
     @Test
-    //20min
-    // Возможно надо реализовать в support классе метод поиска по id Quiz'a, чтобы логику соблюсти.
+    //50min
     public void testFindByQuizId() throws Exception {
         final TesteeEntity testee = this.testeesMapper.findByQuizId(3);
-        final TesteeEntity testeeFixtureEntity = this.testeesSupport.getTesteeFixtureMock(2);
-
-        this.testeesSupport.assertEquals(testeeFixtureEntity, testee);
+        final List<TesteeEntity> testeeFixtureEntities = new ArrayList<>();
+        for(Integer index = 0; index < 2; index++){
+            testeeFixtureEntities.add(this.testeesSupport.getTesteeFixtureMock(index));
+        }
+        for (TesteeEntity testeeFixtureEntity: testeeFixtureEntities){
+            if (testeeFixtureEntity.getQuizId() == 3){
+                this.testeesSupport.assertEquals(testeeFixtureEntity, testee);
+            }
+        }
     }
 
     @Test
