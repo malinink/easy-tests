@@ -34,11 +34,34 @@ public class TesteesSupport {
                     3
             }
 
+
     };
 
-    public TesteeEntity getEntityFixtureMock(Integer index) {
-        return this.getEntityMock(fixtures[index]);
+    protected static Object[][] additional = new Object[][]{
+            {
+                    // for insert entity
+                    null,
+                    "FirstName",
+                    "LastName",
+                    "Surname",
+                    302,
+                    2
+            },
+            {
+                    // for update entity with id = 1
+                    1,
+                    "newfirstName",
+                    "NewLastName",
+                    "NewSurname",
+                    301,
+                    1
+            },
+    };
 
+    public TesteeEntity getEntityFixtureMock(Integer index) { return this.getEntityMock(fixtures[index]); }
+
+    public TesteeEntity getEntityAdditionalMock(Integer index) {
+        return this.getEntityMock(additional[index]);
     }
 
     private TesteeEntity getEntityMock(Object[] data) {
@@ -71,8 +94,10 @@ public class TesteesSupport {
         return testeeEntity;
     }
 
-    public TesteeModelInterface getModelFixtureMock(Integer index) {
-        return this.getModelMock(fixtures[index]);
+    public TesteeModelInterface getModelFixtureMock(Integer index) { return this.getModelMock(fixtures[index]); }
+
+    public TesteeModelInterface getModelAdditionalMock(Integer index) {
+        return this.getModelMock(additional[index]);
     }
 
     private TesteeModelInterface getModelMock(Object[] data) {
@@ -105,19 +130,33 @@ public class TesteesSupport {
         return testeeModel;
     }
 
-    public void assertEquals(TesteeEntity first, TesteeEntity second){
-                Assert.assertEquals(first.getId(), second.getId());
-                Assert.assertEquals(first.getFirstName(), second.getFirstName());
-                Assert.assertEquals(first.getLastName(), second.getLastName());
-                Assert.assertEquals(first.getSurname(), second.getSurname());
-                Assert.assertEquals(first.getQuizId(), second.getQuizId());
+    public void assertEquals(TesteeEntity first, TesteeEntity second) {assertEquals(first, second, false);}
+
+    public void assertEqualsWithoutId(TesteeEntity first, TesteeEntity second) {assertEquals(first, second, true);}
+
+    public void assertEquals(TesteeEntity first, TesteeEntity second, Boolean exceptId){
+        if (!exceptId) {
+            Assert.assertEquals(first.getId(), second.getId());
+        }
+        Assert.assertEquals(first.getFirstName(), second.getFirstName());
+        Assert.assertEquals(first.getLastName(), second.getLastName());
+        Assert.assertEquals(first.getSurname(), second.getSurname());
+        Assert.assertEquals(first.getGroupNumber(), second.getGroupNumber());
+        Assert.assertEquals(first.getQuizId(), second.getQuizId());
     }
 
+
     public void assertEquals(TesteeModelInterface first, TesteeEntity second){
-                Assert.assertEquals(first.getId(), second.getId());
-                Assert.assertEquals(first.getFirstName(), second.getFirstName());
-                Assert.assertEquals(first.getLastName(), second.getLastName());
-                Assert.assertEquals(first.getSurname(), second.getSurname());
-                Assert.assertEquals(first.getGroupNumber(), second.getGroupNumber());
+        Assert.assertEquals(first.getId(), second.getId());
+        Assert.assertEquals(first.getFirstName(), second.getFirstName());
+        Assert.assertEquals(first.getLastName(), second.getLastName());
+        Assert.assertEquals(first.getSurname(), second.getSurname());
+        Assert.assertEquals(first.getGroupNumber(), second.getGroupNumber());
+    }
+
+    public void assertEquals(TesteeEntity first, TesteeModelInterface second)
+    {
+        assertEquals(second,first);
+        Assert.assertEquals(new QuizModelEmpty(first.getQuizId()), second.getQuiz());
     }
 }
