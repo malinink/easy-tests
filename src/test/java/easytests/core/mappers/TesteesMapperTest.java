@@ -31,7 +31,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
 
         Integer index = 0;
         for (TesteeEntity testeeEntity: testeesEntities){
-            final TesteeEntity testeeFixtureEntity = this.testeesSupport.getTesteeFixtureMock(index);
+            final TesteeEntity testeeFixtureEntity = this.testeesSupport.getEntityFixtureMock(index);
             this.testeesSupport.assertEquals(testeeFixtureEntity, testeeEntity);
             index++;
         }
@@ -40,7 +40,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
     @Test
     public void testFind() throws Exception {
         final TesteeEntity testee = this.testeesMapper.find(1);
-        final TesteeEntity testeeFixtureEntity = this.testeesSupport.getTesteeFixtureMock(0);
+        final TesteeEntity testeeFixtureEntity = this.testeesSupport.getEntityFixtureMock(0);
 
         this.testeesSupport.assertEquals(testeeFixtureEntity, testee);
     }
@@ -51,7 +51,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
         final TesteeEntity testee = this.testeesMapper.findByQuizId(3);
         final List<TesteeEntity> testeeFixtureEntities = new ArrayList<>();
         for(Integer index = 0; index < 2; index++){
-            testeeFixtureEntities.add(this.testeesSupport.getTesteeFixtureMock(index));
+            testeeFixtureEntities.add(this.testeesSupport.getEntityFixtureMock(index));
         }
         for (TesteeEntity testeeFixtureEntity: testeeFixtureEntities){
             if (testeeFixtureEntity.getQuizId() == 3){
@@ -64,7 +64,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
     //1hr
     public void testInsert() throws Exception{
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
-        final TesteeEntity testeeAdditionalEntity = this.testeesSupport.getTesteeAdditionalMock(0);
+        final TesteeEntity testeeAdditionalEntity = this.testeesSupport.getEntityAdditionalMock(0);
         this.testeesMapper.insert(testeeAdditionalEntity);
 
         verify(testeeAdditionalEntity, times(1)).setId(id.capture());
@@ -80,7 +80,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
     @Test
     // 1hr
     public void testUpdate() throws Exception{
-        final TesteeEntity testeeAdditionalEntity = this.testeesSupport.getTesteeAdditionalMock(1);
+        final TesteeEntity testeeAdditionalEntity = this.testeesSupport.getEntityAdditionalMock(1);
         final Integer id = testeeAdditionalEntity.getId();
         final TesteeEntity testeeEntity = this.testeesMapper.find(id);
 

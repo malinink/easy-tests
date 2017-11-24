@@ -57,18 +57,18 @@ public class TesteesSupport {
 
     };
 
-    public TesteeEntity getTesteeFixtureMock(Integer index) {
-        return this.getTesteeMock(fixtures[index]);
+    public TesteeEntity getEntityFixtureMock(Integer index) {
+        return this.getEntityMock(fixtures[index]);
 
     }
 
-    public TesteeEntity getTesteeAdditionalMock(Integer index) {
-        return this.getTesteeMock(additional[index]);
+    public TesteeEntity getEntityAdditionalMock(Integer index) {
+        return this.getEntityMock(additional[index]);
     }
 
 
-    private TesteeEntity getTesteeMock(Object[] data) {
-        return this.getTesteeMock(
+    private TesteeEntity getEntityMock(Object[] data) {
+        return this.getEntityMock(
                 (Integer) data[0],
                 (String) data[1],
                 (String) data[2],
@@ -78,7 +78,7 @@ public class TesteesSupport {
         );
     }
 
-    private TesteeEntity getTesteeMock(
+    private TesteeEntity getEntityMock(
             Integer id,
             String firstName,
             String lastName,
