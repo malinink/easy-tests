@@ -66,9 +66,6 @@ public class TesteesSupport {
         return this.getTesteeMock(additional[index]);
     }
 
-//    public TesteeEntity getTesteeFixtureMockByQuizId(Integer QuizId){
-//        return this.getTesteeMock(fixtures[])
-//    }
 
     private TesteeEntity getTesteeMock(Object[] data) {
         return this.getTesteeMock(
