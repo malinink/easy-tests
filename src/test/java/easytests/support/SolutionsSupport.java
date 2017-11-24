@@ -3,7 +3,6 @@ package easytests.support;
 import easytests.core.entities.SolutionEntity;
 import easytests.core.models.SolutionModelInterface;
 import easytests.core.models.empty.AnswerModelEmpty;
-import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.PointModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
@@ -159,3 +158,4 @@ public class SolutionsSupport {
 
 
 }
+
