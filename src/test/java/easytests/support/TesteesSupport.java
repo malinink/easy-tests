@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 
 public class TesteesSupport {
 
-    protected static Object[][] fixtures = new Object[][]{
+    private static Object[][] fixtures = new Object[][]{
             {
                     1,
                     "FirstName1",
@@ -34,35 +34,33 @@ public class TesteesSupport {
                     3
             }
 
-
     };
 
-    protected static Object[][] additional = new Object[][]{
+    private static  Object[][] additional = new Object[][]{
+            // for insert
             {
-                    // for insert entity
                     null,
-                    "FirstName",
-                    "LastName",
-                    "Surname",
-                    302,
-                    2
+                    "FirstName5",
+                    "LastName5",
+                    "Surname5",
+                    308,
+                    38
             },
+            // for update
             {
-                    // for update entity with id = 1
                     1,
-                    "newfirstName",
-                    "NewLastName",
-                    "NewSurname",
-                    301,
-                    1
-            },
+                    "UpdatedFirstName4",
+                    "UpdatedLastNme4",
+                    "UpdatedSurname4",
+                    304,
+                    34
+            }
     };
+
 
     public TesteeEntity getEntityFixtureMock(Integer index) { return this.getEntityMock(fixtures[index]); }
 
-    public TesteeEntity getEntityAdditionalMock(Integer index) {
-        return this.getEntityMock(additional[index]);
-    }
+    public TesteeEntity getEntityAdditionalMock(Integer index) { return this.getEntityMock(additional[index]); }
 
     private TesteeEntity getEntityMock(Object[] data) {
         return this.getEntityMock(
@@ -96,9 +94,7 @@ public class TesteesSupport {
 
     public TesteeModelInterface getModelFixtureMock(Integer index) { return this.getModelMock(fixtures[index]); }
 
-    public TesteeModelInterface getModelAdditionalMock(Integer index) {
-        return this.getModelMock(additional[index]);
-    }
+    public TesteeModelInterface getModelAdditionalMock(Integer index) { return this.getModelMock(additional[index]); }
 
     private TesteeModelInterface getModelMock(Object[] data) {
         return this.getModelMock(
@@ -158,5 +154,13 @@ public class TesteesSupport {
     {
         assertEquals(second,first);
         Assert.assertEquals(new QuizModelEmpty(first.getQuizId()), second.getQuiz());
+    }
+  
+      public void assertNotEqualsWithoutId(TesteeEntity first, TesteeEntity second){
+        Assert.assertNotEquals(first.getFirstName(), second.getFirstName());
+        Assert.assertNotEquals(first.getLastName(), second.getLastName());
+        Assert.assertNotEquals(first.getSurname(), second.getSurname());
+        Assert.assertNotEquals(first.getQuizId(), second.getQuizId());
+        Assert.assertNotEquals(first.getGroupNumber(), second.getGroupNumber());
     }
 }

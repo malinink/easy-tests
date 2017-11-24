@@ -2,18 +2,19 @@ package easytests.core.mappers;
 
 import easytests.core.entities.TesteeEntity;
 import easytests.support.TesteesSupport;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
- * @author DoZor-80
+ * @author janchk
  */
 public class TesteesMapperTest extends AbstractMapperTest {
 
@@ -23,9 +24,17 @@ public class TesteesMapperTest extends AbstractMapperTest {
     private TesteesMapper testeesMapper;
 
     @Test
+    // 20min
     public void testFindAll() throws Exception {
         final List<TesteeEntity> testeesEntities = this.testeesMapper.findAll();
         Assert.assertEquals(3, testeesEntities.size());
+
+        Integer index = 0;
+        for (TesteeEntity testeeEntity: testeesEntities){
+            final TesteeEntity testeeFixtureEntity = this.testeesSupport.getEntityFixtureMock(index);
+            this.testeesSupport.assertEquals(testeeFixtureEntity, testeeEntity);
+            index++;
+        }
     }
 
     @Test
@@ -33,86 +42,55 @@ public class TesteesMapperTest extends AbstractMapperTest {
         final TesteeEntity testee = this.testeesMapper.find(1);
         final TesteeEntity testeeFixtureEntity = this.testeesSupport.getEntityFixtureMock(0);
 
-        this.testeesSupport.assertEquals(testee, testeeFixtureEntity);
+        this.testeesSupport.assertEquals(testeeFixtureEntity, testee);
     }
 
     @Test
+    //50min
     public void testFindByQuizId() throws Exception {
         final TesteeEntity testee = this.testeesMapper.findByQuizId(3);
-
-        Assert.assertEquals((long) 3, (long) testee.getId());
-        Assert.assertEquals("FirstName3", testee.getFirstName());
-        Assert.assertEquals("LastName3", testee.getLastName());
-        Assert.assertEquals("Surname3", testee.getSurname());
-        Assert.assertEquals((long) 3, (long) testee.getQuizId());
+        final List<TesteeEntity> testeeFixtureEntities = new ArrayList<>();
+        for(Integer index = 0; index < 2; index++){
+            testeeFixtureEntities.add(this.testeesSupport.getEntityFixtureMock(index));
+        }
+        for (TesteeEntity testeeFixtureEntity: testeeFixtureEntities){
+            if (testeeFixtureEntity.getQuizId() == 3){
+                this.testeesSupport.assertEquals(testeeFixtureEntity, testee);
+            }
+        }
     }
 
     @Test
+    //1hr
     public void testInsert() throws Exception{
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
-        final String firstName = "FirstName";
-        final String lastName = "LastName";
-        final String surname = "Surname";
-        final Integer groupNumber = 307;
-        final Integer quizId = 19;
+        final TesteeEntity testeeAdditionalEntity = this.testeesSupport.getEntityAdditionalMock(0);
+        this.testeesMapper.insert(testeeAdditionalEntity);
 
-        TesteeEntity testeeEntity = Mockito.mock(TesteeEntity.class);
-        Mockito.when(testeeEntity.getFirstName()).thenReturn(firstName);
-        Mockito.when(testeeEntity.getLastName()).thenReturn(lastName);
-        Mockito.when(testeeEntity.getSurname()).thenReturn(surname);
-        Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
-        Mockito.when(testeeEntity.getQuizId()).thenReturn(quizId);
-
-        this.testeesMapper.insert(testeeEntity);
-
-        verify(testeeEntity, times(1)).setId(id.capture());
-
+        verify(testeeAdditionalEntity, times(1)).setId(id.capture());
         Assert.assertNotNull(id.getValue());
 
-        testeeEntity = this.testeesMapper.find(id.getValue());
-        Assert.assertEquals(id.getValue(), testeeEntity.getId());
-        Assert.assertEquals(firstName, testeeEntity.getFirstName());
-        Assert.assertEquals(lastName, testeeEntity.getLastName());
-        Assert.assertEquals(surname, testeeEntity.getSurname());
-        Assert.assertEquals(groupNumber, testeeEntity.getGroupNumber());
-        Assert.assertEquals(quizId, testeeEntity.getQuizId());
+        final TesteeEntity testeeInsertedEntity = this.testeesMapper.find(id.getValue());
+
+        Assert.assertNotNull(testeeInsertedEntity);
+        this.testeesSupport.assertEqualsWithoutId(testeeAdditionalEntity, testeeInsertedEntity);
+
     }
 
     @Test
+    // 1hr
     public void testUpdate() throws Exception{
-        final Integer id = 1;
-        final String firstName = "NewFirstName";
-        final String lastName = "NewLastName";
-        final String surname = "NewSurname";
-        final Integer groupNumber = 308;
-        final Integer quizId = 19;
+        final TesteeEntity testeeAdditionalEntity = this.testeesSupport.getEntityAdditionalMock(1);
+        final Integer id = testeeAdditionalEntity.getId();
+        final TesteeEntity testeeEntity = this.testeesMapper.find(id);
 
-        TesteeEntity testeeEntity = this.testeesMapper.find(id);
         Assert.assertNotNull(testeeEntity);
-        Assert.assertEquals(id, testeeEntity.getId());
-        Assert.assertNotEquals(firstName, testeeEntity.getFirstName());
-        Assert.assertNotEquals(lastName, testeeEntity.getLastName());
-        Assert.assertNotEquals(surname, testeeEntity.getSurname());
-        Assert.assertNotEquals(groupNumber, testeeEntity.getGroupNumber());
-        Assert.assertNotEquals(quizId, testeeEntity.getQuizId());
+        this.testeesSupport.assertNotEqualsWithoutId(testeeAdditionalEntity, testeeEntity);
 
-        testeeEntity = Mockito.mock(TesteeEntity.class);
-        Mockito.when(testeeEntity.getId()).thenReturn(id);
-        Mockito.when(testeeEntity.getFirstName()).thenReturn(firstName);
-        Mockito.when(testeeEntity.getLastName()).thenReturn(lastName);
-        Mockito.when(testeeEntity.getSurname()).thenReturn(surname);
-        Mockito.when(testeeEntity.getGroupNumber()).thenReturn(groupNumber);
-        Mockito.when(testeeEntity.getQuizId()).thenReturn(quizId);
+        this.testeesMapper.update(testeeAdditionalEntity);
+        final TesteeEntity updatedTesteeEntity = this.testeesMapper.find(id);
 
-        this.testeesMapper.update(testeeEntity);
-
-        testeeEntity = this.testeesMapper.find(id);
-        Assert.assertEquals(id, testeeEntity.getId());
-        Assert.assertEquals(firstName, testeeEntity.getFirstName());
-        Assert.assertEquals(lastName, testeeEntity.getLastName());
-        Assert.assertEquals(surname, testeeEntity.getSurname());
-        Assert.assertEquals(groupNumber,testeeEntity.getGroupNumber());
-        Assert.assertEquals(quizId, testeeEntity.getQuizId());
+        this.testeesSupport.assertEquals(testeeAdditionalEntity, updatedTesteeEntity);
     }
 
     @Test
