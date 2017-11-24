@@ -1,32 +1,33 @@
-package easytests.core.mappers.testschecker;
+package easytests.core.mappers.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
 import lombok.Getter;
 
 
 /**
- * @author vkpankov
+ * @author malinink
  */
 public final class InterceptInvocationsProxy implements InvocationHandler {
 
     @Getter
-    private final List<Method> methodList;
+    private final Set<Method> methods;
 
     private final Object mapperBean;
 
     public InterceptInvocationsProxy(Object originalMapper) {
-        methodList = new ArrayList<>();
+        methods = new HashSet<>();
         mapperBean = originalMapper;
     }
 
-    public Object invoke(Object proxy, Method m, Object[] args) {
-        methodList.add(m);
+    public Object invoke(Object proxy, Method method, Object[] args) {
+        methods.add(method);
         try {
-            return m.invoke(mapperBean, args);
-        } catch (Exception anyException) {
+            return method.invoke(mapperBean, args);
+        } catch (Exception exception) {
             return null;
         }
     }
