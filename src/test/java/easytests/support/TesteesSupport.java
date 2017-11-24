@@ -2,22 +2,57 @@ package easytests.support;
 
 import easytests.core.entities.TesteeEntity;
 import org.junit.Assert;
-import easytests.core.entities.SubjectEntity;
-import easytests.core.models.SubjectModelInterface;
-import easytests.core.models.empty.IssueStandardModelEmpty;
-import easytests.core.models.empty.ModelsListEmpty;
-import easytests.core.models.empty.UserModelEmpty;
 import org.mockito.Mockito;
 
 public class TesteesSupport {
 
-    protected static Object[][] fixtures = new Object[][]{
+    private static Object[][] fixtures = new Object[][]{
             {
                     1,
                     "FirstName1",
                     "LastName1",
                     "Surname1",
+                    301,
                     1
+            },
+            {
+                    2,
+                    "FirstName2",
+                    "LastName2",
+                    "Surname2",
+                    302,
+                    2
+            },
+            {
+                    3,
+                    "FirstName3",
+                    "LastName3",
+                    "Surname3",
+                    303,
+                    3
+            }
+
+    };
+
+    private static  Object[][] additional = new Object[][]{
+            // for insert
+            {
+                    null,
+                    "FirstName5",
+                    "LastName5",
+                    "Surname5",
+                    308,
+                    38
+            },
+            // for update
+            {
+                    1,
+                    "UpdatedFirstName4",
+                    "UpdatedLastNme4",
+                    "UpdatedSurname4",
+                    304,
+                    34
+
             }
 
     };
@@ -26,6 +61,14 @@ public class TesteesSupport {
         return this.getTesteeMock(fixtures[index]);
 
     }
+
+    public TesteeEntity getTesteeAdditionalMock(Integer index) {
+        return this.getTesteeMock(additional[index]);
+    }
+
+//    public TesteeEntity getTesteeFixtureMockByQuizId(Integer QuizId){
+//        return this.getTesteeMock(fixtures[])
+//    }
 
     private TesteeEntity getTesteeMock(Object[] data) {
         return this.getTesteeMock(
@@ -56,12 +99,30 @@ public class TesteesSupport {
         Mockito.when(testeeEntity.getQuizId()).thenReturn(quizId);
         return testeeEntity;
     }
+
     public void assertEquals(TesteeEntity first, TesteeEntity second){
                 Assert.assertEquals(first.getId(), second.getId());
                 Assert.assertEquals(first.getFirstName(), second.getFirstName());
                 Assert.assertEquals(first.getLastName(), second.getLastName());
                 Assert.assertEquals(first.getSurname(), second.getSurname());
                 Assert.assertEquals(first.getQuizId(), second.getQuizId());
+                Assert.assertEquals(first.getGroupNumber(), second.getGroupNumber());
+    }
+
+    public void assertNotEqualsWithoutId(TesteeEntity first, TesteeEntity second){
+        Assert.assertNotEquals(first.getFirstName(), second.getFirstName());
+        Assert.assertNotEquals(first.getLastName(), second.getLastName());
+        Assert.assertNotEquals(first.getSurname(), second.getSurname());
+        Assert.assertNotEquals(first.getQuizId(), second.getQuizId());
+        Assert.assertNotEquals(first.getGroupNumber(), second.getGroupNumber());
+    }
+
+    public void assertEqualsWithoutId(TesteeEntity first, TesteeEntity second){
+        Assert.assertEquals(first.getFirstName(), second.getFirstName());
+        Assert.assertEquals(first.getLastName(), second.getLastName());
+        Assert.assertEquals(first.getSurname(), second.getSurname());
+        Assert.assertEquals(first.getQuizId(), second.getQuizId());
+        Assert.assertEquals(first.getGroupNumber(), second.getGroupNumber());
     }
 
 
