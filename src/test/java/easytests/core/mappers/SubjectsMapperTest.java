@@ -44,14 +44,6 @@ public class SubjectsMapperTest extends AbstractMapperTest {
         this.subjectsSupport.assertEquals(subjectFixtureEntity, subjectEntity);
     }
 
-
-    @Test
-    public void testFindByUserIdWithoutSubjects() throws Exception {
-        final List<SubjectEntity> subjectsEntities = this.subjectsMapper.findByUserId(1);
-
-        Assert.assertEquals(0, subjectsEntities.size());
-    }
-
     @Test
     public void testFindByUserId() throws Exception {
         final List<SubjectEntity> subjectsFixturesEntity = new ArrayList<>();
