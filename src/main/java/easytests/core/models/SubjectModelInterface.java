@@ -1,8 +1,8 @@
 package easytests.core.models;
 
 import easytests.core.entities.SubjectEntity;
-
 import java.util.List;
+
 
 /**
  * @author malinink
@@ -19,22 +19,22 @@ public interface SubjectModelInterface extends ModelInterface {
 
     void setDescription(String description);
 
+    UserModelInterface getUser();
+
+    void setUser(UserModelInterface user);
+
     List<TopicModelInterface> getTopics();
 
     void setTopics(List<TopicModelInterface> topics);
-
-    void map(SubjectEntity subjectEntity);
 
     IssueStandardModelInterface getIssueStandard();
 
     void setIssueStandard(IssueStandardModelInterface issueStandard);
 
-    UserModelInterface getUser();
-
-    void setUser(UserModelInterface user);
-
     List<IssueModelInterface> getIssues();
 
     void setIssues(List<IssueModelInterface> issues);
+
+    void map(SubjectEntity subjectEntity);
 
 }

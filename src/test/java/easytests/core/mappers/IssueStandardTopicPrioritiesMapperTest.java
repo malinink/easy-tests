@@ -1,32 +1,20 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.*;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.*;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.*;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  * @author SingularityA
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class IssueStandardTopicPrioritiesMapperTest {
+public class IssueStandardTopicPrioritiesMapperTest extends AbstractMapperTest {
 
     @Autowired
     private IssueStandardTopicPrioritiesMapper topicPriorityMapper;
@@ -67,7 +55,7 @@ public class IssueStandardTopicPrioritiesMapperTest {
 
     @Test
     public void testInsert() throws Exception {
-        final Integer id = this.topicPriorityMapper.findAll().size() + 1;
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final Integer topicId = 4;
         final Boolean isPreferable = true;
         final Integer issueStandardId = 2;
@@ -79,10 +67,12 @@ public class IssueStandardTopicPrioritiesMapperTest {
 
         this.topicPriorityMapper.insert(topicPriorityEntity);
 
-        verify(topicPriorityEntity, times(1)).setId(id);
+        verify(topicPriorityEntity, times(1)).setId(id.capture());
 
-        topicPriorityEntity = this.topicPriorityMapper.find(id);
-        Assert.assertEquals(id, topicPriorityEntity.getId());
+        Assert.assertNotNull(id.getValue());
+
+        topicPriorityEntity = this.topicPriorityMapper.find(id.getValue());
+        Assert.assertEquals(id.getValue(), topicPriorityEntity.getId());
         Assert.assertEquals(topicId, topicPriorityEntity.getTopicId());
         Assert.assertEquals(isPreferable, topicPriorityEntity.getIsPreferable());
         Assert.assertEquals(issueStandardId, topicPriorityEntity.getIssueStandardId());
