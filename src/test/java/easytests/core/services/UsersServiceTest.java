@@ -66,18 +66,19 @@ public class UsersServiceTest {
         final List<UserEntity> usersEntities = this.getUsersFixturesEntities();
         when(this.usersMapper.findAll()).thenReturn(usersEntities);
 
-        final List<UserModelInterface> usersModels = this.usersService.findAll();
+        final List<UserModelInterface> usersFoundedModels = this.usersService.findAll();
 
-        this.assertEquals(this.getUsersFixturesModels(), usersModels);
+        this.assertEquals(this.getUsersFixturesModels(), usersFoundedModels);
     }
 
     @Test
     public void testFindAllAbsentList() throws Exception {
         when(this.usersMapper.findAll()).thenReturn(new ArrayList<>(0));
 
-        final List<UserModelInterface> usersModels = this.usersService.findAll();
+        final List<UserModelInterface> usersFoundedModels = this.usersService.findAll();
 
-        Assert.assertEquals(0, usersModels.size());
+        Assert.assertNotNull(usersFoundedModels);
+        Assert.assertEquals(0, usersFoundedModels.size());
     }
 
     @Test
@@ -99,11 +100,10 @@ public class UsersServiceTest {
 
     @Test
     public void testFindPresentModel() throws Exception {
-        final Integer presentId = 1;
         final UserEntity userEntity = this.usersSupport.getEntityFixtureMock(0);
-        when(this.usersMapper.find(presentId)).thenReturn(userEntity);
+        when(this.usersMapper.find(userEntity.getId())).thenReturn(userEntity);
 
-        final UserModelInterface userFoundedModel = this.usersService.find(presentId);
+        final UserModelInterface userFoundedModel = this.usersService.find(userEntity.getId());
 
         this.usersSupport.assertEquals(this.usersSupport.getModelFixtureMock(0), userFoundedModel);
     }
@@ -200,6 +200,7 @@ public class UsersServiceTest {
     @Test
     public void testSaveUpdatesEntity() throws Exception {
         final ArgumentCaptor<UserEntity> userEntityCaptor = ArgumentCaptor.forClass(UserEntity.class);
+
         this.usersService.save(this.usersSupport.getModelFixtureMock(0));
 
         verify(this.usersMapper, times(1)).update(userEntityCaptor.capture());
@@ -220,6 +221,7 @@ public class UsersServiceTest {
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
         final ArgumentCaptor<UserEntity> userEntityCaptor = ArgumentCaptor.forClass(UserEntity.class);
+
         this.usersService.delete(this.usersSupport.getModelFixtureMock(0));
 
         verify(this.usersMapper, times(1)).delete(userEntityCaptor.capture());
