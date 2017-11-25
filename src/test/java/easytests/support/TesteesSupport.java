@@ -126,47 +126,47 @@ public class TesteesSupport {
         return testeeModel;
     }
 
-    public void assertEquals(TesteeEntity first, TesteeEntity second) {assertEquals(first, second, false);}
+    public void assertEquals(TesteeEntity expected, TesteeEntity actual) {assertEquals(expected, actual, false);}
 
-    public void assertEqualsWithoutId(TesteeEntity first, TesteeEntity second) {assertEquals(first, second, true);}
+    public void assertEqualsWithoutId(TesteeEntity expected, TesteeEntity actual) {assertEquals(expected, actual, true);}
 
-    public void assertEquals(TesteeEntity first, TesteeEntity second, Boolean exceptId){
+    public void assertEquals(TesteeEntity expected, TesteeEntity actual, Boolean exceptId){
         if (!exceptId) {
-            Assert.assertEquals(first.getId(), second.getId());
+            Assert.assertEquals(expected.getId(), actual.getId());
         }
-        Assert.assertEquals(first.getFirstName(), second.getFirstName());
-        Assert.assertEquals(first.getLastName(), second.getLastName());
-        Assert.assertEquals(first.getSurname(), second.getSurname());
-        Assert.assertEquals(first.getGroupNumber(), second.getGroupNumber());
-        Assert.assertEquals(first.getQuizId(), second.getQuizId());
+        Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
+        Assert.assertEquals(expected.getLastName(), actual.getLastName());
+        Assert.assertEquals(expected.getSurname(), actual.getSurname());
+        Assert.assertEquals(expected.getGroupNumber(), actual.getGroupNumber());
+        Assert.assertEquals(expected.getQuizId(), actual.getQuizId());
     }
 
-    public void assertNotEquals(TesteeEntity first, TesteeEntity second) { assertNotEquals(first, second, false);}
+    public void assertNotEquals(TesteeEntity expected, TesteeEntity actual) { assertNotEquals(expected, actual, false);}
 
-    public void assertNotEqualsWithoutId(TesteeEntity first, TesteeEntity second) {assertNotEquals(first, second, true);}
+    public void assertNotEqualsWithoutId(TesteeEntity expected, TesteeEntity actual) {assertNotEquals(expected, actual, true);}
 
-    public void assertNotEquals(TesteeEntity first, TesteeEntity second, Boolean exceptId){
+    public void assertNotEquals(TesteeEntity expected, TesteeEntity actual, Boolean exceptId){
         if (!exceptId) {
-            Assert.assertNotEquals(first.getId(), second.getId());
+            Assert.assertNotEquals(expected.getId(), actual.getId());
         }
-        Assert.assertNotEquals(first.getFirstName(), second.getFirstName());
-        Assert.assertNotEquals(first.getLastName(), second.getLastName());
-        Assert.assertNotEquals(first.getSurname(), second.getSurname());
-        Assert.assertNotEquals(first.getQuizId(), second.getQuizId());
-        Assert.assertNotEquals(first.getGroupNumber(), second.getGroupNumber());
+        Assert.assertNotEquals(expected.getFirstName(), actual.getFirstName());
+        Assert.assertNotEquals(expected.getLastName(), actual.getLastName());
+        Assert.assertNotEquals(expected.getSurname(), actual.getSurname());
+        Assert.assertNotEquals(expected.getQuizId(), actual.getQuizId());
+        Assert.assertNotEquals(expected.getGroupNumber(), actual.getGroupNumber());
     }
 
-    public void assertEquals(TesteeModelInterface first, TesteeEntity second){
-        Assert.assertEquals(first.getId(), second.getId());
-        Assert.assertEquals(first.getFirstName(), second.getFirstName());
-        Assert.assertEquals(first.getLastName(), second.getLastName());
-        Assert.assertEquals(first.getSurname(), second.getSurname());
-        Assert.assertEquals(first.getGroupNumber(), second.getGroupNumber());
+    public void assertEquals(TesteeModelInterface expected, TesteeEntity actual){
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
+        Assert.assertEquals(expected.getLastName(), actual.getLastName());
+        Assert.assertEquals(expected.getSurname(), actual.getSurname());
+        Assert.assertEquals(expected.getGroupNumber(), actual.getGroupNumber());
     }
 
-    public void assertEquals(TesteeEntity first, TesteeModelInterface second)
+    public void assertEquals(TesteeEntity expected, TesteeModelInterface actual)
     {
-        assertEquals(second,first);
-        Assert.assertEquals(new QuizModelEmpty(first.getQuizId()), second.getQuiz());
+        assertEquals(actual,expected);
+        Assert.assertEquals(new QuizModelEmpty(expected.getQuizId()), actual.getQuiz());
     }
 }
