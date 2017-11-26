@@ -3,6 +3,7 @@ package easytests.core.models;
 import easytests.core.entities.TopicEntity;
 import easytests.support.TopicsSupport;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author lelay
@@ -13,7 +14,7 @@ public class TopicModelTest extends AbstractModelTest {
 
     @Test
     public void testCommon() throws Exception {
-        this.testCommon(TopicModel.class);
+        this.testCommon(TopicEntity.class);
     }
 
     @Test
