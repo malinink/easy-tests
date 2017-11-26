@@ -23,12 +23,12 @@ public class TopicsMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFindAll() throws Exception {
-        final List<TopicEntity> topicEntities = this.topicsMapper.findAll();
+        final List<TopicEntity> topicsFoundedEntities = this.topicsMapper.findAll();
 
-        Assert.assertEquals(3, topicEntities.size());
+        Assert.assertEquals(3, topicsFoundedEntities.size());
 
         Integer index = 0;
-        for(TopicEntity topicEntity: topicEntities) {
+        for(TopicEntity topicEntity: topicsFoundedEntities) {
 
             this.topicsSupport.assertEquals(this.topicsSupport.getEntityFixtureMock(index), topicEntity);
 
@@ -39,19 +39,19 @@ public class TopicsMapperTest extends AbstractMapperTest {
     @Test
     public void testFind() throws Exception {
         final TopicEntity topicFixtureEntity = this.topicsSupport.getEntityFixtureMock(0);
-        final TopicEntity topicEntity = this.topicsMapper.find(topicFixtureEntity.getId());
+        final TopicEntity topicFoundedEntity = this.topicsMapper.find(topicFixtureEntity.getId());
 
-        this.topicsSupport.assertEquals(topicFixtureEntity, topicEntity);
+        this.topicsSupport.assertEquals(topicFixtureEntity, topicFoundedEntity);
     }
 
     @Test
     public void testFindBySubjectId() throws Exception {
-        List<TopicEntity> topicEntities = this.topicsMapper.findBySubjectId(2);
+        List<TopicEntity> topicsFoundedEntities = this.topicsMapper.findBySubjectId(2);
 
-        Assert.assertEquals(2, topicEntities.size());
+        Assert.assertEquals(2, topicsFoundedEntities.size());
 
         Integer index = 0;
-        for(TopicEntity topicEntity: topicEntities) {
+        for(TopicEntity topicEntity: topicsFoundedEntities) {
 
             this.topicsSupport.assertEquals(this.topicsSupport.getEntityFixtureMock(index), topicEntity);
 
@@ -60,52 +60,43 @@ public class TopicsMapperTest extends AbstractMapperTest {
     }
 
     @Test
-    public void testFindBySubjectIdWithoutTopics() throws Exception {
-        List<TopicEntity> topicEntities = this.topicsMapper.findBySubjectId(10);
-
-        Assert.assertEquals(0, topicEntities.size());
-    }
-
-    @Test
     public void testInsert() throws Exception {
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
-        final TopicEntity topicAdditionalEntity = this.topicsSupport.getEntityAdditionalMock(0);
+        final TopicEntity topicUnidentifiedEntity = this.topicsSupport.getEntityAdditionalMock(0);
 
-        this.topicsMapper.insert(topicAdditionalEntity);
+        this.topicsMapper.insert(topicUnidentifiedEntity);
 
-        verify(topicAdditionalEntity, times(1)).setId(id.capture());
+        verify(topicUnidentifiedEntity, times(1)).setId(id.capture());
         Assert.assertNotNull(id.getValue());
 
         final TopicEntity topicInsertedEntity = this.topicsMapper.find(id.getValue());
 
         Assert.assertNotNull(topicInsertedEntity);
-        this.topicsSupport.assertEqualsWithoutId(topicAdditionalEntity, topicInsertedEntity);
+        this.topicsSupport.assertEqualsWithoutId(topicUnidentifiedEntity, topicInsertedEntity);
     }
 
     @Test
     public void testUpdate() throws Exception {
-        final TopicEntity topicAdditionalEntity = this.topicsSupport.getEntityAdditionalMock(1);
-        final Integer id = topicAdditionalEntity.getId();
-        final TopicEntity topicEntity = this.topicsMapper.find(id);
+        final TopicEntity topicChangedEntity = this.topicsSupport.getEntityAdditionalMock(1);
+        final TopicEntity topicBeforeUpdateEntity = this.topicsMapper.find(topicChangedEntity.getId());
 
-        Assert.assertNotNull(topicEntity);
-        this.topicsSupport.assertNotEqualsWithoutId(topicAdditionalEntity, topicEntity);
+        Assert.assertNotNull(topicBeforeUpdateEntity);
+        this.topicsSupport.assertNotEqualsWithoutId(topicChangedEntity, topicBeforeUpdateEntity);
 
-        this.topicsMapper.update(topicAdditionalEntity);
+        this.topicsMapper.update(topicChangedEntity);
 
-        this.topicsSupport.assertEquals(topicAdditionalEntity, this.topicsMapper.find(id));
+        this.topicsSupport.assertEquals(topicChangedEntity, this.topicsMapper.find(topicChangedEntity.getId()));
     }
 
     @Test
     public void testDelete() throws Exception {
         final Integer id = this.topicsSupport.getEntityFixtureMock(0).getId();
-        TopicEntity topicEntity = this.topicsMapper.find(id);
+        TopicEntity topicFoundedEntity = this.topicsMapper.find(id);
 
-        Assert.assertNotNull(topicEntity);
+        Assert.assertNotNull(topicFoundedEntity);
 
-        this.topicsMapper.delete(topicEntity);
-        topicEntity = this.topicsMapper.find(id);
+        this.topicsMapper.delete(topicFoundedEntity);
 
-        Assert.assertNull(topicEntity);
+        Assert.assertNull(this.topicsMapper.find(id));
     }
 }

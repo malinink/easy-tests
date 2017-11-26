@@ -18,7 +18,7 @@ public class TopicEntityTest extends AbstractEntityTest {
 
     @Test
     public void testMap() throws Exception {
-        final TopicModelInterface topicModelMock = this.topicsSupport.getModelAdditionalMock(0);
+        final TopicModelInterface topicModelMock = this.topicsSupport.getModelFixtureMock(0);
         final TopicEntity topicEntity = new TopicEntity();
         topicEntity.map(topicModelMock);
 
