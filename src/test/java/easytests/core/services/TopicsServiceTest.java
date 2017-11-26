@@ -61,7 +61,7 @@ public class TopicsServiceTest {
     }
 
     @Test
-    public void testFindAllPresentList() throws Exception {
+    public void testFindAllPresentModel() throws Exception {
         final List<TopicEntity> topicsEntities = this.getTopicsFixturesEntities();
         when(this.topicsMapper.findAll()).thenReturn(topicsEntities);
 
@@ -71,7 +71,7 @@ public class TopicsServiceTest {
     }
 
     @Test
-    public void testFindAllAbsentList() throws Exception {
+    public void testFindAllAbsentModel() throws Exception {
         when(this.topicsMapper.findAll()).thenReturn(new ArrayList<>(0));
 
         final List<TopicModelInterface> topicsFoundedModels = this.topicsService.findAll();
@@ -81,17 +81,40 @@ public class TopicsServiceTest {
     }
 
     @Test
-    public void testFindAllAbsentListWithOptions() throws Exception {
-        throw new Exception("Isn't done yet");
+    public void testFindAllWithOptions() throws Exception {
+        //TODO: this test
+        Assert.assertEquals(true, false);
     }
 
     @Test
-    public void testFindAbsentList() throws Exception {
+    public void testFindPresentList() throws Exception {
         final TopicEntity topicExistentEntity = this.topicsSupport.getEntityFixtureMock(0);
         when(this.topicsMapper.find(topicExistentEntity.getId())).thenReturn(topicExistentEntity);
 
         final TopicModelInterface topicFoundedModel = this.topicsService.find(topicExistentEntity.getId());
 
         this.topicsSupport.assertEquals(this.topicsSupport.getModelFixtureMock(0), topicFoundedModel);
+    }
+
+    @Test
+    public void testFindAbsentList() throws Exception {
+        final Integer absentId = 7;
+        when(this.topicsMapper.find(absentId)).thenReturn(null);
+
+        final TopicModelInterface topicFoundedModel = this.topicsService.find(absentId);
+
+        Assert.assertNull(topicFoundedModel);
+    }
+
+    @Test
+    public void testFindWithOptions() throws Exception {
+        //TODO: this one test
+        Assert.assertEquals(true, false);
+    }
+
+    @Test
+    public void testFindBySubject() throws Exception {
+        final TopicModelInterface topicExistentModel = this.topicsSupport.getModelFixtureMock(0);
+        //when()
     }
 }
