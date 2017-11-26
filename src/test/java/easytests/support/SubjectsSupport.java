@@ -69,7 +69,7 @@ public class SubjectsSupport {
         );
     }
 
-    public SubjectEntity getEntityMock(
+    private SubjectEntity getEntityMock(
             Integer id,
             String name,
             String description,
@@ -100,7 +100,7 @@ public class SubjectsSupport {
         );
     }
 
-    public SubjectModelInterface getModelMock(
+    private SubjectModelInterface getModelMock(
             Integer id,
             String name,
             String description,
@@ -117,65 +117,65 @@ public class SubjectsSupport {
         return subjectModel;
     }
 
-    public void assertEquals(SubjectEntity first, SubjectEntity second) {
-        assertEquals(first, second, false);
+    public void assertEquals(SubjectEntity expected, SubjectEntity actual) {
+        assertEquals(expected, actual, false);
     }
 
-    public void assertEqualsWithoutId(SubjectEntity first, SubjectEntity second) {
-        assertEquals(first, second, true);
+    public void assertEqualsWithoutId(SubjectEntity expected, SubjectEntity actual) {
+        assertEquals(expected, actual, true);
     }
 
-    private void assertEquals(SubjectEntity first, SubjectEntity second, Boolean exceptId) {
+    private void assertEquals(SubjectEntity expected, SubjectEntity actual, Boolean exceptId) {
         if (!exceptId) {
-            Assert.assertEquals(first.getId(), second.getId());
+            Assert.assertEquals(expected.getId(), actual.getId());
         }
-        Assert.assertEquals(first.getName(), second.getName());
-        Assert.assertEquals(first.getDescription(), second.getDescription());
-        Assert.assertEquals(first.getUserId(), second.getUserId());
+        Assert.assertEquals(expected.getName(), actual.getName());
+        Assert.assertEquals(expected.getDescription(), actual.getDescription());
+        Assert.assertEquals(expected.getUserId(), actual.getUserId());
     }
 
-    public void assertNotEquals(SubjectEntity first, SubjectEntity second) {
-        assertNotEquals(first, second, false);
+    public void assertNotEquals(SubjectEntity unexpected, SubjectEntity actual) {
+        assertNotEquals(unexpected, actual, false);
     }
 
-    public void assertNotEqualsWithoutId(SubjectEntity first, SubjectEntity second) {
-        assertNotEquals(first, second, true);
+    public void assertNotEqualsWithoutId(SubjectEntity unexpected, SubjectEntity actual) {
+        assertNotEquals(unexpected, actual, true);
     }
 
-    private void assertNotEquals(SubjectEntity first, SubjectEntity second, Boolean exceptId) {
+    private void assertNotEquals(SubjectEntity unexpected, SubjectEntity actual, Boolean exceptId) {
         if (!exceptId) {
-            Assert.assertNotEquals(first.getId(), second.getId());
+            Assert.assertNotEquals(unexpected.getId(), actual.getId());
         }
-        Assert.assertNotEquals(first.getName(), second.getName());
-        Assert.assertNotEquals(first.getDescription(), second.getDescription());
-        Assert.assertNotEquals(first.getUserId(), second.getUserId());
+        Assert.assertNotEquals(unexpected.getName(), actual.getName());
+        Assert.assertNotEquals(unexpected.getDescription(), actual.getDescription());
+        Assert.assertNotEquals(unexpected.getUserId(), actual.getUserId());
     }
 
-    public void assertEquals(SubjectModelInterface first, SubjectModelInterface second) {
-        Assert.assertEquals(first.getId(), second.getId());
-        Assert.assertEquals(first.getName(), second.getName());
-        Assert.assertEquals(first.getDescription(), second.getDescription());
+    public void assertEquals(SubjectModelInterface expected, SubjectModelInterface actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getName(), actual.getName());
+        Assert.assertEquals(expected.getDescription(), actual.getDescription());
         // TODO is it a good idea to assertEquals on models list and models objects here ? @malinink
-        Assert.assertEquals(first.getUser(), second.getUser());
-        Assert.assertEquals(first.getTopics(), second.getTopics());
-        Assert.assertEquals(first.getIssueStandard(), second.getIssueStandard());
-        Assert.assertEquals(first.getIssues(), second.getIssues());
+        Assert.assertEquals(expected.getUser(), actual.getUser());
+        Assert.assertEquals(expected.getTopics(), actual.getTopics());
+        Assert.assertEquals(expected.getIssueStandard(), actual.getIssueStandard());
+        Assert.assertEquals(expected.getIssues(), actual.getIssues());
     }
 
-    public void assertEquals(SubjectModelInterface first, SubjectEntity second) {
-        Assert.assertEquals(first.getId(), second.getId());
-        Assert.assertEquals(first.getName(), second.getName());
-        Assert.assertEquals(first.getDescription(), second.getDescription());
-        Assert.assertEquals(first.getUser().getId(), second.getUserId());
+    public void assertEquals(SubjectModelInterface expected, SubjectEntity actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getName(), actual.getName());
+        Assert.assertEquals(expected.getDescription(), actual.getDescription());
+        Assert.assertEquals(expected.getUser().getId(), actual.getUserId());
 
     }
 
-    public void assertEquals(SubjectEntity first, SubjectModelInterface second) {
-        assertEquals(second, first);
-        Assert.assertEquals(new UserModelEmpty(first.getUserId()), second.getUser());
-        Assert.assertEquals(new ModelsListEmpty(), second.getTopics());
-        Assert.assertEquals(new IssueStandardModelEmpty(), second.getIssueStandard());
-        Assert.assertEquals(new ModelsListEmpty(), second.getIssues());
+    public void assertEquals(SubjectEntity expected, SubjectModelInterface actual) {
+        assertEquals(actual, expected);
+        Assert.assertEquals(new UserModelEmpty(expected.getUserId()), actual.getUser());
+        Assert.assertEquals(new ModelsListEmpty(), actual.getTopics());
+        Assert.assertEquals(new IssueStandardModelEmpty(), actual.getIssueStandard());
+        Assert.assertEquals(new ModelsListEmpty(), actual.getIssues());
     }
 
 }
