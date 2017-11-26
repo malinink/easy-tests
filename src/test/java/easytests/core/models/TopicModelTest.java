@@ -14,7 +14,7 @@ public class TopicModelTest extends AbstractModelTest {
 
     @Test
     public void testCommon() throws Exception {
-        this.testCommon(TopicEntity.class);
+        this.testCommon(TopicModel.class);
     }
 
     @Test
