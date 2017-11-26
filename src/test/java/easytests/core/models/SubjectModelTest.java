@@ -3,6 +3,7 @@ package easytests.core.models;
 import easytests.core.entities.SubjectEntity;
 import easytests.support.SubjectsSupport;
 import org.junit.Test;
+import org.meanbean.test.ConfigurationBuilder;
 
 
 /**
@@ -12,9 +13,16 @@ public class SubjectModelTest extends AbstractModelTest {
 
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
+    @Override
+    protected ConfigurationBuilder getConfigurationBuilder() {
+        return super.getConfigurationBuilder()
+                .ignoreProperty("user")
+                .ignoreProperty("issueStandard");
+    }
+
     @Test
     public void testCommon() throws Exception {
-        this.testCommon(SubjectEntity.class);
+        this.testCommon(SubjectModel.class);
     }
 
     @Test
