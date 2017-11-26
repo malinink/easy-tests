@@ -54,7 +54,7 @@ public class TopicsSupport {
         return this.getEntityMock(additional[index]);
     }
 
-    public TopicEntity getEntityMock(Object[] data) {
+    private TopicEntity getEntityMock(Object[] data) {
         return this.getEntityMock(
                 (Integer) data[0],
                 (String)  data[1],
@@ -92,7 +92,7 @@ public class TopicsSupport {
         );
     }
 
-    public TopicModelInterface getModelMock(
+    private TopicModelInterface getModelMock(
         Integer id,
         String name,
         Integer subjectId
@@ -108,46 +108,46 @@ public class TopicsSupport {
         return topicModelMock;
     }
 
-    private void assertEquals(TopicEntity first, TopicEntity second, Boolean exceptId) {
+    private void assertEquals(TopicEntity expected, TopicEntity actual, Boolean exceptId) {
         if (!exceptId) {
-            Assert.assertEquals(first.getId(), second.getId());
+            Assert.assertEquals(expected.getId(), actual.getId());
         }
-        Assert.assertEquals(first.getName(), second.getName());
-        Assert.assertEquals(first.getSubjectId(), second.getSubjectId());
+        Assert.assertEquals(expected.getName(), actual.getName());
+        Assert.assertEquals(expected.getSubjectId(), actual.getSubjectId());
     }
 
-    public void assertEquals(TopicEntity first, TopicEntity second) {
-        this.assertEquals(first, second, false);
+    public void assertEquals(TopicEntity expected, TopicEntity actual) {
+        this.assertEquals(expected, actual, false);
     }
 
-    public void assertEqualsWithoutId(TopicEntity first, TopicEntity second) {
-        this.assertEquals(first, second, true);
+    public void assertEqualsWithoutId(TopicEntity expected, TopicEntity actual) {
+        this.assertEquals(expected, actual, true);
     }
 
-    public void assertNotEquals(TopicEntity first, TopicEntity second) {
-        this.assertNotEquals(first, second, false);
+    public void assertNotEquals(TopicEntity unexpected, TopicEntity actual) {
+        this.assertNotEquals(unexpected, actual, false);
     }
 
-    public void assertNotEqualsWithoutId(TopicEntity first, TopicEntity second) {
-        this.assertNotEquals(first, second, true);
+    public void assertNotEqualsWithoutId(TopicEntity unexpected, TopicEntity actual) {
+        this.assertNotEquals(unexpected, actual, true);
     }
 
-    private void assertNotEquals(TopicEntity first, TopicEntity second, Boolean exceptId) {
+    private void assertNotEquals(TopicEntity unexpected, TopicEntity actual, Boolean exceptId) {
         if (!exceptId) {
-            Assert.assertNotEquals(first.getId(), second.getId());
+            Assert.assertNotEquals(unexpected.getId(), actual.getId());
         }
-        Assert.assertNotEquals(first.getName(), second.getName());
-        Assert.assertNotEquals(first.getSubjectId(), second.getSubjectId());
+        Assert.assertNotEquals(unexpected.getName(), actual.getName());
+        Assert.assertNotEquals(unexpected.getSubjectId(), actual.getSubjectId());
     }
 
-    public void assertEquals(TopicModelInterface first, TopicEntity second) {
-        Assert.assertEquals(first.getId(), second.getId());
-        Assert.assertEquals(first.getName(), second.getName());
-        Assert.assertEquals(first.getSubject().getId(), second.getSubjectId());
+    public void assertEquals(TopicModelInterface expected, TopicEntity actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getName(), actual.getName());
+        Assert.assertEquals(expected.getSubject().getId(), actual.getSubjectId());
     }
 
-    public void assertEquals(TopicEntity first, TopicModelInterface second) {
-        this.assertEquals(second, first);
-        Assert.assertEquals(new ModelsListEmpty(), second.getQuestions());
+    public void assertEquals(TopicEntity expected, TopicModelInterface actual) {
+        this.assertEquals(actual, expected);
+        Assert.assertEquals(new ModelsListEmpty(), actual.getQuestions());
     }
 }
