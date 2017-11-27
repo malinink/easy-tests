@@ -46,14 +46,18 @@ public class SubjectsMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFindByUserId() throws Exception {
-        final List<SubjectEntity> subjectsFixturesEntity = new ArrayList<>();
-        subjectsFixturesEntity.add(this.subjectsSupport.getEntityFixtureMock(0));
-        subjectsFixturesEntity.add(this.subjectsSupport.getEntityFixtureMock(1));
+        final List<SubjectEntity> subjectsFixtureEntities = new ArrayList<>();
+        subjectsFixtureEntities.add(this.subjectsSupport.getEntityFixtureMock(0));
+        subjectsFixtureEntities.add(this.subjectsSupport.getEntityFixtureMock(1));
         final List<SubjectEntity> subjectsFoundedEntities = this.subjectsMapper.findByUserId(2);
 
         Assert.assertEquals(2, subjectsFoundedEntities.size());
-        this.subjectsSupport.assertEquals(subjectsFixturesEntity.get(0), subjectsFoundedEntities.get(0));
-        this.subjectsSupport.assertEquals(subjectsFixturesEntity.get(1), subjectsFoundedEntities.get(1));
+
+        Integer index = 0;
+        for (SubjectEntity subjectEntity: subjectsFoundedEntities) {
+            this.subjectsSupport.assertEquals(subjectsFixtureEntities.get(index), subjectEntity);
+            index++;
+        }
     }
 
     @Test
