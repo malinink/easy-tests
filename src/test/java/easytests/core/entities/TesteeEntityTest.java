@@ -11,6 +11,7 @@ import org.junit.Test;
 public class TesteeEntityTest extends AbstractEntityTest{
 
     protected TesteesSupport testeesSupport = new TesteesSupport();
+
     @Test
     public void testCommon() throws Exception {
        this.testCommon(TesteeEntity.class);
