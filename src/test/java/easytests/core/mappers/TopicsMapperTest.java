@@ -2,6 +2,7 @@ package easytests.core.mappers;
 
 import easytests.core.entities.TopicEntity;
 import easytests.support.TopicsSupport;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,10 +29,8 @@ public class TopicsMapperTest extends AbstractMapperTest {
         Assert.assertEquals(3, topicsFoundedEntities.size());
 
         Integer index = 0;
-        for(TopicEntity topicEntity: topicsFoundedEntities) {
-
+        for (TopicEntity topicEntity: topicsFoundedEntities) {
             this.topicsSupport.assertEquals(this.topicsSupport.getEntityFixtureMock(index), topicEntity);
-
             index++;
         }
     }
@@ -39,6 +38,7 @@ public class TopicsMapperTest extends AbstractMapperTest {
     @Test
     public void testFind() throws Exception {
         final TopicEntity topicFixtureEntity = this.topicsSupport.getEntityFixtureMock(0);
+
         final TopicEntity topicFoundedEntity = this.topicsMapper.find(topicFixtureEntity.getId());
 
         this.topicsSupport.assertEquals(topicFixtureEntity, topicFoundedEntity);
@@ -46,15 +46,16 @@ public class TopicsMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFindBySubjectId() throws Exception {
-        List<TopicEntity> topicsFoundedEntities = this.topicsMapper.findBySubjectId(2);
+        final List<TopicEntity> topicsFixtureEntities = new ArrayList<>();
+        topicsFixtureEntities.add(this.topicsSupport.getEntityFixtureMock(0));
+        topicsFixtureEntities.add(this.topicsSupport.getEntityFixtureMock(1));
+        final List<TopicEntity> topicsFoundedEntities = this.topicsMapper.findBySubjectId(2);
 
-        Assert.assertEquals(2, topicsFoundedEntities.size());
+        Assert.assertEquals(topicsFixtureEntities.size(), topicsFoundedEntities.size());
 
         Integer index = 0;
-        for(TopicEntity topicEntity: topicsFoundedEntities) {
-
-            this.topicsSupport.assertEquals(this.topicsSupport.getEntityFixtureMock(index), topicEntity);
-
+        for (TopicEntity topicEntity: topicsFoundedEntities) {
+            this.topicsSupport.assertEquals(topicsFixtureEntities.get(index), topicEntity);
             index++;
         }
     }
@@ -91,7 +92,7 @@ public class TopicsMapperTest extends AbstractMapperTest {
     @Test
     public void testDelete() throws Exception {
         final Integer id = this.topicsSupport.getEntityFixtureMock(0).getId();
-        TopicEntity topicFoundedEntity = this.topicsMapper.find(id);
+        final TopicEntity topicFoundedEntity = this.topicsMapper.find(id);
 
         Assert.assertNotNull(topicFoundedEntity);
 
