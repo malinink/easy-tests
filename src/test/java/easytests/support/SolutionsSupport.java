@@ -97,7 +97,6 @@ public class SolutionsSupport {
                 (Integer) data[0],
                 (Integer) data[1],
                 (Integer) data[2]
-
         );
     }
 
