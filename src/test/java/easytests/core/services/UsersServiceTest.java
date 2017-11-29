@@ -52,11 +52,11 @@ public class UsersServiceTest {
         return usersModels;
     }
 
-    private void assertEquals(List<UserModelInterface> first, List<UserModelInterface> second) {
-        Assert.assertEquals(first.size(), second.size());
+    private void assertEquals(List<UserModelInterface> expected, List<UserModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (UserModelInterface userModel: first) {
-            this.usersSupport.assertEquals(userModel, second.get(i));
+        for (UserModelInterface userModel: expected) {
+            this.usersSupport.assertEquals(userModel, actual.get(i));
             i++;
         }
     }
