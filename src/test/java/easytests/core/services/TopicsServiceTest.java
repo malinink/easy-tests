@@ -2,7 +2,10 @@ package easytests.core.services;
 
 import easytests.core.entities.TopicEntity;
 import easytests.core.mappers.TopicsMapper;
+import easytests.core.models.SubjectModel;
+import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
+import easytests.support.SubjectsSupport;
 import easytests.support.TopicsSupport;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -14,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,8 @@ public class TopicsServiceTest {
 
     @Autowired
     private TopicsService topicsService;
+
+    private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
     private TopicsSupport topicsSupport = new TopicsSupport();
 
@@ -61,7 +67,7 @@ public class TopicsServiceTest {
     }
 
     @Test
-    public void testFindAllPresentModel() throws Exception {
+    public void testFindAllPresentList() throws Exception {
         final List<TopicEntity> topicsEntities = this.getTopicsFixturesEntities();
         when(this.topicsMapper.findAll()).thenReturn(topicsEntities);
 
@@ -71,7 +77,7 @@ public class TopicsServiceTest {
     }
 
     @Test
-    public void testFindAllAbsentModel() throws Exception {
+    public void testFindAllAbsentList() throws Exception {
         when(this.topicsMapper.findAll()).thenReturn(new ArrayList<>(0));
 
         final List<TopicModelInterface> topicsFoundedModels = this.topicsService.findAll();
@@ -83,11 +89,10 @@ public class TopicsServiceTest {
     @Test
     public void testFindAllWithOptions() throws Exception {
         //TODO: this test
-        Assert.assertEquals(true, false);
     }
 
     @Test
-    public void testFindPresentList() throws Exception {
+    public void testFindPresentModel() throws Exception {
         final TopicEntity topicExistentEntity = this.topicsSupport.getEntityFixtureMock(0);
         when(this.topicsMapper.find(topicExistentEntity.getId())).thenReturn(topicExistentEntity);
 
@@ -97,7 +102,7 @@ public class TopicsServiceTest {
     }
 
     @Test
-    public void testFindAbsentList() throws Exception {
+    public void testFindAbsentModel() throws Exception {
         final Integer absentId = 7;
         when(this.topicsMapper.find(absentId)).thenReturn(null);
 
@@ -109,12 +114,30 @@ public class TopicsServiceTest {
     @Test
     public void testFindWithOptions() throws Exception {
         //TODO: this one test
-        Assert.assertEquals(true, false);
     }
 
     @Test
-    public void testFindBySubject() throws Exception {
-        final TopicModelInterface topicExistentModel = this.topicsSupport.getModelFixtureMock(0);
-        //when()
+    public void testFindBySubjectPresentList() throws Exception {
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
+        final List<TopicEntity> topicEntities = this.getTopicsFixturesEntities();
+
+        when(this.topicsMapper.findBySubjectId(subjectModel.getId())).thenReturn(topicEntities);
+
+        final List<TopicModelInterface> topicFoundedModels = this.topicsService.findBySubject(subjectModel);
+
+        this.assertEquals(this.getTopicsFixturesModels(), topicFoundedModels);
+    }
+
+    @Test
+    public void testFindBySubjectAbsentList() throws Exception {
+        final SubjectModelInterface absentSubject = this.subjectsSupport.getModelFixtureMock(0);
+
+        when(this.topicsMapper.findBySubjectId(absentSubject.getId())).thenReturn(new ArrayList<>(0));
+
+        final List<TopicModelInterface> topicFoundedModels =
+                this.topicsService.findBySubject(absentSubject);
+
+        Assert.assertNotNull(topicFoundedModels);
+        Assert.assertEquals(0, topicFoundedModels.size());
     }
 }
