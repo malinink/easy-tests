@@ -11,6 +11,7 @@ import static org.mockito.Mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+
 public class SolutionsMapperTest extends AbstractMapperTest {
 
     protected SolutionsSupport solutionsSupport = new SolutionsSupport();
