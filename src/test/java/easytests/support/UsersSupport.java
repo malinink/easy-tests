@@ -91,7 +91,7 @@ public class UsersSupport {
         );
     }
 
-    public UserEntity getEntityMock(
+    private UserEntity getEntityMock(
             Integer id,
             String firstName,
             String lastName,
@@ -134,7 +134,7 @@ public class UsersSupport {
         );
     }
 
-    public UserModelInterface getModelMock(
+    private UserModelInterface getModelMock(
             Integer id,
             String firstName,
             String lastName,
@@ -157,74 +157,74 @@ public class UsersSupport {
         return userModel;
     }
 
-    public void assertEquals(UserEntity first, UserEntity second) {
-        assertEquals(first, second, false);
+    public void assertEquals(UserEntity expected, UserEntity actual) {
+        assertEquals(expected, actual, false);
     }
 
-    public void assertEqualsWithoutId(UserEntity first, UserEntity second) {
-        assertEquals(first, second, true);
+    public void assertEqualsWithoutId(UserEntity expected, UserEntity actual) {
+        assertEquals(expected, actual, true);
     }
 
-    private void assertEquals(UserEntity first, UserEntity second, Boolean exceptId) {
+    private void assertEquals(UserEntity expected, UserEntity actual, Boolean exceptId) {
         if (!exceptId) {
-            Assert.assertEquals(first.getId(), second.getId());
+            Assert.assertEquals(expected.getId(), actual.getId());
         }
-        Assert.assertEquals(first.getFirstName(), second.getFirstName());
-        Assert.assertEquals(first.getLastName(), second.getLastName());
-        Assert.assertEquals(first.getSurname(), second.getSurname());
-        Assert.assertEquals(first.getEmail(), second.getEmail());
-        Assert.assertEquals(first.getPassword(), second.getPassword());
-        Assert.assertEquals(first.getIsAdmin(), second.getIsAdmin());
-        Assert.assertEquals(first.getState(), second.getState());
+        Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
+        Assert.assertEquals(expected.getLastName(), actual.getLastName());
+        Assert.assertEquals(expected.getSurname(), actual.getSurname());
+        Assert.assertEquals(expected.getEmail(), actual.getEmail());
+        Assert.assertEquals(expected.getPassword(), actual.getPassword());
+        Assert.assertEquals(expected.getIsAdmin(), actual.getIsAdmin());
+        Assert.assertEquals(expected.getState(), actual.getState());
     }
 
-    public void assertNotEquals(UserEntity first, UserEntity second) {
-        assertNotEquals(first, second, false);
+    public void assertNotEquals(UserEntity unexpected, UserEntity actual) {
+        assertNotEquals(unexpected, actual, false);
     }
 
-    public void assertNotEqualsWithoutId(UserEntity first, UserEntity second) {
-        assertNotEquals(first, second, true);
+    public void assertNotEqualsWithoutId(UserEntity unexpected, UserEntity actual) {
+        assertNotEquals(unexpected, actual, true);
     }
 
-    private void assertNotEquals(UserEntity first, UserEntity second, Boolean exceptId) {
+    private void assertNotEquals(UserEntity unexpected, UserEntity actual, Boolean exceptId) {
         if (!exceptId) {
-            Assert.assertNotEquals(first.getId(), second.getId());
+            Assert.assertNotEquals(unexpected.getId(), actual.getId());
         }
-        Assert.assertNotEquals(first.getFirstName(), second.getFirstName());
-        Assert.assertNotEquals(first.getLastName(), second.getLastName());
-        Assert.assertNotEquals(first.getSurname(), second.getSurname());
-        Assert.assertNotEquals(first.getEmail(), second.getEmail());
-        Assert.assertNotEquals(first.getPassword(), second.getPassword());
-        Assert.assertNotEquals(first.getIsAdmin(), second.getIsAdmin());
-        Assert.assertNotEquals(first.getState(), second.getState());
+        Assert.assertNotEquals(unexpected.getFirstName(), actual.getFirstName());
+        Assert.assertNotEquals(unexpected.getLastName(), actual.getLastName());
+        Assert.assertNotEquals(unexpected.getSurname(), actual.getSurname());
+        Assert.assertNotEquals(unexpected.getEmail(), actual.getEmail());
+        Assert.assertNotEquals(unexpected.getPassword(), actual.getPassword());
+        Assert.assertNotEquals(unexpected.getIsAdmin(), actual.getIsAdmin());
+        Assert.assertNotEquals(unexpected.getState(), actual.getState());
     }
 
-    public void assertEquals(UserModelInterface first, UserModelInterface second) {
-        Assert.assertEquals(first.getId(), second.getId());
-        Assert.assertEquals(first.getFirstName(), second.getFirstName());
-        Assert.assertEquals(first.getLastName(), second.getLastName());
-        Assert.assertEquals(first.getSurname(), second.getSurname());
-        Assert.assertEquals(first.getEmail(), second.getEmail());
-        Assert.assertEquals(first.getPassword(), second.getPassword());
-        Assert.assertEquals(first.getIsAdmin(), second.getIsAdmin());
-        Assert.assertEquals(first.getState(), second.getState());
-        Assert.assertEquals(first.getSubjects(), second.getSubjects());
+    public void assertEquals(UserModelInterface expected, UserModelInterface actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
+        Assert.assertEquals(expected.getLastName(), actual.getLastName());
+        Assert.assertEquals(expected.getSurname(), actual.getSurname());
+        Assert.assertEquals(expected.getEmail(), actual.getEmail());
+        Assert.assertEquals(expected.getPassword(), actual.getPassword());
+        Assert.assertEquals(expected.getIsAdmin(), actual.getIsAdmin());
+        Assert.assertEquals(expected.getState(), actual.getState());
+        Assert.assertEquals(expected.getSubjects(), actual.getSubjects());
     }
 
-    public void assertEquals(UserModelInterface first, UserEntity second) {
-        Assert.assertEquals(first.getId(), second.getId());
-        Assert.assertEquals(first.getFirstName(), second.getFirstName());
-        Assert.assertEquals(first.getLastName(), second.getLastName());
-        Assert.assertEquals(first.getSurname(), second.getSurname());
-        Assert.assertEquals(first.getEmail(), second.getEmail());
-        Assert.assertEquals(first.getPassword(), second.getPassword());
-        Assert.assertEquals(first.getIsAdmin(), second.getIsAdmin());
-        Assert.assertEquals(first.getState(), second.getState());
+    public void assertEquals(UserModelInterface expected, UserEntity actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
+        Assert.assertEquals(expected.getLastName(), actual.getLastName());
+        Assert.assertEquals(expected.getSurname(), actual.getSurname());
+        Assert.assertEquals(expected.getEmail(), actual.getEmail());
+        Assert.assertEquals(expected.getPassword(), actual.getPassword());
+        Assert.assertEquals(expected.getIsAdmin(), actual.getIsAdmin());
+        Assert.assertEquals(expected.getState(), actual.getState());
     }
 
-    public void assertEquals(UserEntity first, UserModelInterface second) {
-        assertEquals(second, first);
-        Assert.assertEquals(new ModelsListEmpty(), second.getSubjects());
+    public void assertEquals(UserEntity expected, UserModelInterface actual) {
+        assertEquals(actual, expected);
+        Assert.assertEquals(new ModelsListEmpty(), actual.getSubjects());
     }
 
 }
