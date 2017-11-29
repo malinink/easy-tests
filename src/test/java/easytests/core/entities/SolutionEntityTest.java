@@ -4,6 +4,10 @@ import easytests.core.models.SolutionModelInterface;
 import easytests.support.SolutionsSupport;
 import org.junit.Test;
 
+
+/**
+ * @author SvetlanaTselikova
+ */
 public class SolutionEntityTest extends AbstractEntityTest {
 
     private SolutionsSupport solutionsSupport = new SolutionsSupport();
@@ -21,4 +25,5 @@ public class SolutionEntityTest extends AbstractEntityTest {
 
         this.solutionsSupport.assertEquals(solutionModel, solutionEntity);
     }
+
 }

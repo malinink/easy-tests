@@ -6,6 +6,11 @@ import easytests.core.models.empty.AnswerModelEmpty;
 import easytests.core.models.empty.PointModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
+
+
+/**
+ * @author SvetlanaTselikova
+ */
 public class SolutionsSupport {
 
     protected static Object[][] fixtures = new Object[][]{
@@ -78,6 +83,7 @@ public class SolutionsSupport {
         Mockito.when(solutionEntity.getPointId()).thenReturn(pointId);
         return solutionEntity;
     }
+
     public SolutionModelInterface getModelFixtureMock(Integer index) {
         return this.getModelMock(fixtures[index]);
     }
@@ -107,55 +113,51 @@ public class SolutionsSupport {
         return solutionModel;
     }
 
-    public void assertEquals(SolutionEntity first, SolutionEntity second) {
-        assertEquals(first, second, false);
+    public void assertEquals(SolutionEntity expected, SolutionEntity actual) {
+        assertEquals(expected, actual, false);
     }
 
-    public void assertEqualsWithoutId(SolutionEntity first, SolutionEntity second) { assertEquals(first, second, true); }
+    public void assertEqualsWithoutId(SolutionEntity expected, SolutionEntity actual) { assertEquals(expected, actual, true); }
 
-    private void assertEquals(SolutionEntity first, SolutionEntity second, Boolean exceptId) {
+    private void assertEquals(SolutionEntity expected, SolutionEntity actual, Boolean exceptId) {
         if (!exceptId) {
-            Assert.assertEquals(first.getId(), second.getId());
+            Assert.assertEquals(expected.getId(), actual.getId());
         }
-        Assert.assertEquals(first.getAnswerId(), second.getAnswerId());
-        Assert.assertEquals(first.getPointId(), second.getPointId());
+        Assert.assertEquals(expected.getAnswerId(), actual.getAnswerId());
+        Assert.assertEquals(expected.getPointId(), actual.getPointId());
     }
 
-    public void assertNotEquals(SolutionEntity first, SolutionEntity second) {
-        assertNotEquals(first, second, false);
+    public void assertNotEquals(SolutionEntity unexpected, SolutionEntity actual) {
+        assertNotEquals(unexpected, actual, false);
     }
 
     public void assertNotEqualsWithoutId(SolutionEntity first, SolutionEntity second) {
         assertNotEquals(first, second, true);
     }
 
-    private void assertNotEquals(SolutionEntity first, SolutionEntity second, Boolean exceptId) {
+    private void assertNotEquals(SolutionEntity unexpected, SolutionEntity actual, Boolean exceptId) {
         if (!exceptId) {
-            Assert.assertNotEquals(first.getId(), second.getId());
+            Assert.assertNotEquals(unexpected.getId(), actual.getId());
         }
-        Assert.assertNotEquals(first.getAnswerId(), second.getAnswerId());
-        Assert.assertNotEquals(first.getPointId(), second.getPointId());
+        Assert.assertNotEquals(unexpected.getAnswerId(), actual.getAnswerId());
+        Assert.assertNotEquals(unexpected.getPointId(), actual.getPointId());
     }
 
-    public void assertEquals(SolutionModelInterface first, SolutionModelInterface second) {
-        Assert.assertEquals(first.getId(), second.getId());
-        Assert.assertEquals(first.getAnswer(), second.getAnswer());
-        Assert.assertEquals(first.getPoint(), second.getPoint());
+    public void assertEquals(SolutionModelInterface expected, SolutionModelInterface actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getAnswer(), actual.getAnswer());
+        Assert.assertEquals(expected.getPoint(), actual.getPoint());
     }
 
-    public void assertEquals(SolutionModelInterface first, SolutionEntity second) {
-        Assert.assertEquals(first.getId(), second.getId());
-        Assert.assertEquals(first.getAnswer().getId(), second.getAnswerId());
-        Assert.assertEquals(first.getPoint().getId(), second.getPointId());
+    public void assertEquals(SolutionModelInterface expected, SolutionEntity actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getAnswer().getId(), actual.getAnswerId());
+        Assert.assertEquals(expected.getPoint().getId(), actual.getPointId());
     }
 
-    public void assertEquals(SolutionEntity first, SolutionModelInterface second) {
-        assertEquals(second, first);
-
+    public void assertEquals(SolutionEntity expected, SolutionModelInterface actual) {
+        assertEquals(actual, expected);
     }
-
-
-
 
 }
 

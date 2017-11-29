@@ -3,7 +3,6 @@ package easytests.core.models;
 import easytests.core.entities.UserEntity;
 import easytests.support.UsersSupport;
 import org.junit.Test;
-import org.meanbean.test.BeanTester;
 
 
 /**
@@ -15,7 +14,7 @@ public class UserModelTest extends AbstractModelTest {
 
     @Test
     public void testCommon() throws Exception {
-        new BeanTester().testBean(UserModel.class);
+        this.testCommon(UserModel.class);
     }
 
     @Test

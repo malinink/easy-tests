@@ -20,28 +20,17 @@ public class UsersServiceTest extends AbstractServiceTest {
 
     @Test
     public void testFindPresentModel() throws Exception {
-        final Integer id = 1;
-        final UserModelInterface userModel = this.usersSupport.getModelMock(
-                id,
-                "FirstName1",
-                "LastName1",
-                "Surname1",
-                "email1@gmail.com",
-                "hash1",
-                true,
-                1
-        );
+        final UserModelInterface userFixtureModel = this.usersSupport.getModelFixtureMock(0);
 
-        final UserModelInterface foundedUserModel = this.usersService.find(id);
+        final UserModelInterface foundedUserModel = this.usersService.find(userFixtureModel.getId());
 
-        this.usersSupport.assertEquals(userModel, foundedUserModel);
+        this.usersSupport.assertEquals(userFixtureModel, foundedUserModel);
     }
 
     @Test
     public void testFindAbsentModel() throws Exception {
-        final Integer id = 10;
-        final UserModelInterface userModel = this.usersService.find(id);
+        final UserModelInterface userModel = this.usersService.find(10);
 
-        Assert.assertEquals(null, userModel);
+        Assert.assertNull(userModel);
     }
 }
