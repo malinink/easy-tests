@@ -3,6 +3,7 @@ package easytests.core.models;
 import easytests.core.entities.TopicEntity;
 import easytests.support.TopicsSupport;
 import org.junit.Test;
+import org.meanbean.test.ConfigurationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -11,6 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TopicModelTest extends AbstractModelTest {
 
     private TopicsSupport topicsSupport = new TopicsSupport();
+
+    @Override
+    protected ConfigurationBuilder getConfigurationBuilder() {
+        return super.getConfigurationBuilder()
+                .ignoreProperty("subject");
+    }
 
     @Test
     public void testCommon() throws Exception {
