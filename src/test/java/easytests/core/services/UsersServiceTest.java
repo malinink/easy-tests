@@ -52,15 +52,6 @@ public class UsersServiceTest {
         return usersModels;
     }
 
-    private void assertEquals(List<UserModelInterface> expected, List<UserModelInterface> actual) {
-        Assert.assertEquals(expected.size(), actual.size());
-        Integer i = 0;
-        for (UserModelInterface userModel: expected) {
-            this.usersSupport.assertEquals(userModel, actual.get(i));
-            i++;
-        }
-    }
-
     @Test
     public void testFindAllPresentList() throws Exception {
         final List<UserEntity> usersEntities = this.getUsersFixturesEntities();
@@ -68,7 +59,7 @@ public class UsersServiceTest {
 
         final List<UserModelInterface> usersFoundedModels = this.usersService.findAll();
 
-        this.assertEquals(this.getUsersFixturesModels(), usersFoundedModels);
+        this.usersSupport.assertModelsListEquals(this.getUsersFixturesModels(), usersFoundedModels);
     }
 
     @Test
@@ -92,7 +83,7 @@ public class UsersServiceTest {
 
         final List<UserModelInterface> usersFoundedModels = this.usersService.findAll(usersOptions);
 
-        this.assertEquals(usersModels, listCaptor.getValue());
+        this.usersSupport.assertModelsListEquals(usersModels, listCaptor.getValue());
         Assert.assertSame(usersModels, usersFoundedModels);
         verify(this.usersMapper, times(1)).findAll();
         verifyNoMoreInteractions(this.usersMapper);
