@@ -2,9 +2,10 @@ package easytests.core.services;
 
 import easytests.core.entities.TopicEntity;
 import easytests.core.mappers.TopicsMapper;
-import easytests.core.models.SubjectModel;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
+import easytests.core.options.TopicsOptions;
+import easytests.core.options.TopicsOptionsInterface;
 import easytests.support.SubjectsSupport;
 import easytests.support.TopicsSupport;
 import org.junit.Assert;
@@ -12,16 +13,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author lelay
@@ -88,7 +89,22 @@ public class TopicsServiceTest {
 
     @Test
     public void testFindAllWithOptions() throws Exception {
-        //TODO: this test
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        // Why mockito's 'when' crashing if I want to pass 'this.get...Entitites()' as a parameter
+        // instead of passing predetermined 'topicEntities' ?
+        final List<TopicEntity> topicEntities = this.getTopicsFixturesEntities();
+        final List<TopicModelInterface> topicModels = this.getTopicsFixturesModels();
+        final TopicsOptionsInterface topicsOptions = mock(TopicsOptionsInterface.class);
+
+        when(this.topicsMapper.findAll()).thenReturn(topicEntities);
+        when(topicsOptions.withRelations(listCaptor.capture())).thenReturn(topicModels);
+
+        final List<TopicModelInterface> topicFoundedModels = this.topicsService.findAll(topicsOptions);
+
+        this.assertEquals(topicModels, listCaptor.getValue());
+        Assert.assertSame(topicModels, topicFoundedModels);
+        verify(this.topicsMapper, times(1)).findAll();
+        verifyNoMoreInteractions(this.topicsMapper);
     }
 
     @Test
@@ -113,7 +129,20 @@ public class TopicsServiceTest {
 
     @Test
     public void testFindWithOptions() throws Exception {
-        //TODO: this one test
+        final ArgumentCaptor<TopicModelInterface> topicModelCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
+        final TopicEntity topicEntity = this.topicsSupport.getEntityFixtureMock(0);
+        final TopicModelInterface topicModel = this.topicsSupport.getModelFixtureMock(0);
+        final TopicsOptionsInterface topicOptions = mock(TopicsOptionsInterface.class);
+
+        when(this.topicsMapper.find(topicModel.getId())).thenReturn(topicEntity);
+        when(topicOptions.withRelations(topicModelCaptor.capture())).thenReturn(topicModel);
+
+        final TopicModelInterface topicFoundedModel = this.topicsService.find(topicModel.getId(), topicOptions);
+
+        this.topicsSupport.assertEquals(topicModel, topicModelCaptor.getValue());
+        Assert.assertSame(topicModel, topicFoundedModel);
+        verify(this.topicsMapper, times(1)).find(topicModel.getId());
+        verifyNoMoreInteractions(this.topicsMapper);
     }
 
     @Test
@@ -139,5 +168,47 @@ public class TopicsServiceTest {
 
         Assert.assertNotNull(topicFoundedModels);
         Assert.assertEquals(0, topicFoundedModels.size());
+    }
+
+    @Test
+    public void testFindBySubjectWithOptions() throws Exception {
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final List<TopicEntity> topicEntities = this.getTopicsFixturesEntities();
+        final List<TopicModelInterface> topicModels = this.getTopicsFixturesModels();
+        final TopicsOptionsInterface topicOptions = mock(TopicsOptionsInterface.class);
+
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
+
+        when(this.topicsMapper.findBySubjectId(subjectModel.getId()))
+                .thenReturn(topicEntities);
+        when(topicOptions.withRelations(listCaptor.capture())).thenReturn(topicModels);
+
+        final List<TopicModelInterface> topicFoundedModels =
+                this.topicsService.findBySubject(subjectModel, topicOptions);
+
+        this.assertEquals(topicModels, listCaptor.getValue());
+        Assert.assertSame(topicModels, topicFoundedModels);
+        verify(this.topicsMapper, times(1)).findBySubjectId(subjectModel.getId());
+        verifyNoMoreInteractions(this.topicsMapper);
+    }
+
+    @Test
+    public void testSave() throws Exception {
+        //TODO: this test
+    }
+
+    @Test
+    public void testSaveWithOptions() throws Exception {
+        //TODO: this test
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        //TODO: this test
+    }
+
+    @Test
+    public void testDeleteWithOptions() throws Exception {
+        //TODO: this one
     }
 }
