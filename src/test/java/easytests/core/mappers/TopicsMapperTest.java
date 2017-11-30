@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
- * @author ielay
+ * @author Ielay
  */
 public class TopicsMapperTest extends AbstractMapperTest {
 
