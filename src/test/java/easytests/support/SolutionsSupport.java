@@ -116,7 +116,9 @@ public class SolutionsSupport {
         assertEquals(expected, actual, false);
     }
 
-    public void assertEqualsWithoutId(SolutionEntity expected, SolutionEntity actual) { assertEquals(expected, actual, true); }
+    public void assertEqualsWithoutId(SolutionEntity expected, SolutionEntity actual) {
+        assertEquals(expected, actual, true);
+    }
 
     private void assertEquals(SolutionEntity expected, SolutionEntity actual, Boolean exceptId) {
         if (!exceptId) {
@@ -130,8 +132,8 @@ public class SolutionsSupport {
         assertNotEquals(unexpected, actual, false);
     }
 
-    public void assertNotEqualsWithoutId(SolutionEntity first, SolutionEntity second) {
-        assertNotEquals(first, second, true);
+    public void assertNotEqualsWithoutId(SolutionEntity unexpected, SolutionEntity actual) {
+        assertNotEquals(unexpected, actual, true);
     }
 
     private void assertNotEquals(SolutionEntity unexpected, SolutionEntity actual, Boolean exceptId) {
@@ -159,4 +161,3 @@ public class SolutionsSupport {
     }
 
 }
-
