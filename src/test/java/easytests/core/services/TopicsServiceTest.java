@@ -4,8 +4,8 @@ import easytests.core.entities.TopicEntity;
 import easytests.core.mappers.TopicsMapper;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
-import easytests.core.options.TopicsOptions;
 import easytests.core.options.TopicsOptionsInterface;
+import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.SubjectsSupport;
 import easytests.support.TopicsSupport;
 import org.junit.Assert;
@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,7 +33,7 @@ import static org.mockito.Mockito.*;
 public class TopicsServiceTest {
 
     @Rule
-    public final ExpectedException expected = ExpectedException.none();
+    public final ExpectedException exception = ExpectedException.none();
 
     @MockBean
     private TopicsMapper topicsMapper;
@@ -193,22 +194,77 @@ public class TopicsServiceTest {
     }
 
     @Test
-    public void testSave() throws Exception {
-        //TODO: this test
+    public void testSaveCreatesEntity() throws Exception {
+        final ArgumentCaptor<TopicEntity> topicEntityCaptor = ArgumentCaptor.forClass(TopicEntity.class);
+
+        this.topicsService.save(this.topicsSupport.getModelAdditionalMock(0));
+
+        verify(this.topicsMapper, times(1)).insert(topicEntityCaptor.capture());
+        this.topicsSupport.assertEquals(this.topicsSupport.getEntityAdditionalMock(0), topicEntityCaptor.getValue());
+    }
+
+    @Test
+    public void testSaveUpdatesEntityIdOnCreation() throws Exception {
+        final TopicModelInterface topicAdditionalModel = this.topicsSupport.getModelAdditionalMock(0);
+        final Integer updatedId = 10;
+        doAnswer(invocation -> {
+            final TopicEntity topicEntity = invocation.getArgument(0);
+            topicEntity.setId(updatedId);
+            return null;
+        }).when(this.topicsMapper).insert(Mockito.any(TopicEntity.class));
+
+        this.topicsService.save(topicAdditionalModel);
+
+        verify(topicAdditionalModel, times(1)).setId(updatedId);
+    }
+
+    @Test
+    public void testSaveUpdatesEntity() throws Exception {
+        final ArgumentCaptor<TopicEntity> topicEntityCaptor = ArgumentCaptor.forClass(TopicEntity.class);
+
+        this.topicsService.save(this.topicsSupport.getModelFixtureMock(0));
+
+        verify(this.topicsMapper, times(1)).update(topicEntityCaptor.capture());
+        this.topicsSupport.assertEquals(this.topicsSupport.getModelFixtureMock(0), topicEntityCaptor.getValue());
     }
 
     @Test
     public void testSaveWithOptions() throws Exception {
-        //TODO: this test
+        final TopicModelInterface topicModel = this.topicsSupport.getModelFixtureMock(0);
+        final TopicsOptionsInterface topicOptions = mock(TopicsOptionsInterface.class);
+
+        this.topicsService.save(topicModel, topicOptions);
+
+        verify(topicOptions, times(1)).saveWithRelations(topicModel);
+        verifyNoMoreInteractions(this.topicsMapper);
     }
 
     @Test
-    public void testDelete() throws Exception {
-        //TODO: this test
+    public void testDeleteIdentifiedModel() throws Exception {
+        final ArgumentCaptor<TopicEntity> topicEntityCaptor = ArgumentCaptor.forClass(TopicEntity.class);
+
+        this.topicsService.delete(this.topicsSupport.getModelFixtureMock(0));
+
+        verify(this.topicsMapper, times(1)).delete(topicEntityCaptor.capture());
+        this.topicsSupport.assertEquals(this.topicsSupport.getModelFixtureMock(0), topicEntityCaptor.getValue());
+    }
+
+    @Test
+    public void testDeleteUnidentifiedModelThrowsException() throws Exception {
+        final TopicModelInterface topicModel = this.topicsSupport.getModelAdditionalMock(0);
+
+        exception.expect(DeleteUnidentifiedModelException.class);
+        this.topicsService.delete(topicModel);
     }
 
     @Test
     public void testDeleteWithOptions() throws Exception {
-        //TODO: this one
+        final TopicModelInterface topicModel = this.topicsSupport.getModelFixtureMock(0);
+        final TopicsOptionsInterface topicOptions = mock(TopicsOptionsInterface.class);
+
+        this.topicsService.delete(topicModel, topicOptions);
+
+        verify(topicOptions, times(1)).deleteWithRelations(topicModel);
+        verifyNoMoreInteractions(this.topicsMapper);
     }
 }
