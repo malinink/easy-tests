@@ -22,12 +22,12 @@ public class UsersMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFindAll() throws Exception {
-        final List<UserEntity> usersEntities = this.usersMapper.findAll();
+        final List<UserEntity> usersFoundedEntities = this.usersMapper.findAll();
 
-        Assert.assertEquals(3, usersEntities.size());
+        Assert.assertEquals(3, usersFoundedEntities.size());
 
         Integer index = 0;
-        for (UserEntity userEntity: usersEntities) {
+        for (UserEntity userEntity: usersFoundedEntities) {
             final UserEntity userFixtureEntity = this.usersSupport.getEntityFixtureMock(index);
 
             this.usersSupport.assertEquals(userFixtureEntity, userEntity);
@@ -38,61 +38,61 @@ public class UsersMapperTest extends AbstractMapperTest {
     @Test
     public void testFind() throws Exception {
         final UserEntity userFixtureEntity = this.usersSupport.getEntityFixtureMock(0);
-        final UserEntity userEntity = this.usersMapper.find(userFixtureEntity.getId());
 
-        this.usersSupport.assertEquals(userFixtureEntity, userEntity);
+        final UserEntity userFoundedEntity = this.usersMapper.find(userFixtureEntity.getId());
+
+        this.usersSupport.assertEquals(userFixtureEntity, userFoundedEntity);
     }
 
     @Test
     public void testFindByEmail() throws Exception {
         final UserEntity userFixtureEntity = this.usersSupport.getEntityFixtureMock(0);
-        final UserEntity userEntity = this.usersMapper.findByEmail(userFixtureEntity.getEmail());
 
-        this.usersSupport.assertEquals(userFixtureEntity, userEntity);
+        final UserEntity userFoundedEntity = this.usersMapper.findByEmail(userFixtureEntity.getEmail());
+
+        this.usersSupport.assertEquals(userFixtureEntity, userFoundedEntity);
     }
 
     @Test
     public void testInsert() throws Exception {
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
-        final UserEntity userAdditionalEntity = this.usersSupport.getEntityAdditionalMock(0);
+        final UserEntity userUnidentifiedEntity = this.usersSupport.getEntityAdditionalMock(0);
 
-        this.usersMapper.insert(userAdditionalEntity);
+        this.usersMapper.insert(userUnidentifiedEntity);
 
-        verify(userAdditionalEntity, times(1)).setId(id.capture());
+        verify(userUnidentifiedEntity, times(1)).setId(id.capture());
         Assert.assertNotNull(id.getValue());
 
         final UserEntity userInsertedEntity = this.usersMapper.find(id.getValue());
 
         Assert.assertNotNull(userInsertedEntity);
-        this.usersSupport.assertEqualsWithoutId(userAdditionalEntity, userInsertedEntity);
+        this.usersSupport.assertEqualsWithoutId(userUnidentifiedEntity, userInsertedEntity);
     }
 
     @Test
     public void testUpdate() throws Exception {
-        final UserEntity userAdditionalEntity = this.usersSupport.getEntityAdditionalMock(1);
-        final Integer id = userAdditionalEntity.getId();
-        final UserEntity userEntity = this.usersMapper.find(id);
+        final UserEntity userChangedEntity = this.usersSupport.getEntityAdditionalMock(1);
+        final UserEntity userBeforeUpdateEntity = this.usersMapper.find(userChangedEntity.getId());
 
-        Assert.assertNotNull(userEntity);
-        this.usersSupport.assertNotEqualsWithoutId(userAdditionalEntity, userEntity);
+        Assert.assertNotNull(userBeforeUpdateEntity);
+        this.usersSupport.assertNotEqualsWithoutId(userChangedEntity, userBeforeUpdateEntity);
 
-        this.usersMapper.update(userAdditionalEntity);
-        final UserEntity userUpdatedEntity = this.usersMapper.find(id);
+        this.usersMapper.update(userChangedEntity);
+        final UserEntity userFoundedEntity = this.usersMapper.find(userChangedEntity.getId());
 
-        this.usersSupport.assertEquals(userAdditionalEntity, userUpdatedEntity);
+        this.usersSupport.assertEquals(userChangedEntity, userFoundedEntity);
     }
 
     @Test
     public void testDelete() throws Exception {
         final Integer id = this.usersSupport.getEntityFixtureMock(0).getId();
-        UserEntity userEntity = this.usersMapper.find(id);
+        final UserEntity userFoundedEntity = this.usersMapper.find(id);
 
-        Assert.assertNotNull(userEntity);
+        Assert.assertNotNull(userFoundedEntity);
 
-        this.usersMapper.delete(userEntity);
-        userEntity = this.usersMapper.find(id);
+        this.usersMapper.delete(userFoundedEntity);
 
-        Assert.assertNull(userEntity);
+        Assert.assertNull(this.usersMapper.find(id));
     }
 
 }

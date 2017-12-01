@@ -1,8 +1,7 @@
 package easytests.core.models;
 
 import org.junit.runner.RunWith;
-import org.meanbean.test.Configuration;
-import org.meanbean.test.ConfigurationBuilder;
+import org.meanbean.test.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -14,11 +13,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public abstract class AbstractModelTest {
 
-    protected Configuration getConfiguration() {
-        return new ConfigurationBuilder().iterations(10).build();
+    protected ConfigurationBuilder getConfigurationBuilder() {
+        return new ConfigurationBuilder().iterations(10);
     }
 
     public abstract void testCommon() throws Exception;
+
+    protected void testCommon(Class entityClass) {
+        final Configuration configuration = this.getConfigurationBuilder().build();
+        new BeanTester().testBean(entityClass, configuration);
+    }
 
     public abstract void testMap() throws Exception;
 
