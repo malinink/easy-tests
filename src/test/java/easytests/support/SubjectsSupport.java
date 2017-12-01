@@ -68,6 +68,7 @@ public class SubjectsSupport {
                 (Integer) data[3]
         );
     }
+
     public SubjectEntity getEntityMock(
             Integer id,
             String name,

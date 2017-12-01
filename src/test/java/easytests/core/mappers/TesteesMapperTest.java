@@ -2,7 +2,6 @@ package easytests.core.mappers;
 
 import easytests.core.entities.TesteeEntity;
 import easytests.support.TesteesSupport;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -24,7 +23,6 @@ public class TesteesMapperTest extends AbstractMapperTest {
     private TesteesMapper testeesMapper;
 
     @Test
-    // 20min
     public void testFindAll() throws Exception {
         final List<TesteeEntity> testeesEntities = this.testeesMapper.findAll();
         Assert.assertEquals(3, testeesEntities.size());
@@ -46,7 +44,6 @@ public class TesteesMapperTest extends AbstractMapperTest {
     }
 
     @Test
-    //50min
     public void testFindByQuizId() throws Exception {
         final TesteeEntity testee = this.testeesMapper.findByQuizId(3);
         final List<TesteeEntity> testeeFixtureEntities = new ArrayList<>();
@@ -61,7 +58,6 @@ public class TesteesMapperTest extends AbstractMapperTest {
     }
 
     @Test
-    //1hr
     public void testInsert() throws Exception{
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final TesteeEntity testeeAdditionalEntity = this.testeesSupport.getEntityAdditionalMock(0);
@@ -78,7 +74,6 @@ public class TesteesMapperTest extends AbstractMapperTest {
     }
 
     @Test
-    // 1hr
     public void testUpdate() throws Exception{
         final TesteeEntity testeeAdditionalEntity = this.testeesSupport.getEntityAdditionalMock(1);
         final Integer id = testeeAdditionalEntity.getId();
@@ -95,11 +90,14 @@ public class TesteesMapperTest extends AbstractMapperTest {
 
     @Test
     public void testDelete() throws Exception{
-        TesteeEntity testeeEntity= this.testeesMapper.find(1);
+        final Integer id = this.testeesSupport.getEntityFixtureMock(0).getId();
+        TesteeEntity testeeEntity = this.testeesMapper.find(id);
+
         Assert.assertNotNull(testeeEntity);
 
         this.testeesMapper.delete(testeeEntity);
-        testeeEntity = this.testeesMapper.find(1);
+
+        testeeEntity = this.testeesMapper.find(id);
         Assert.assertNull(testeeEntity);
     }
 

@@ -1,5 +1,4 @@
 package easytests.support;
-
 import easytests.core.entities.TesteeEntity;
 import easytests.core.models.TesteeModelInterface;
 import easytests.core.models.empty.QuizModelEmpty;
@@ -58,9 +57,13 @@ public class TesteesSupport {
     };
 
 
-    public TesteeEntity getEntityFixtureMock(Integer index) { return this.getEntityMock(fixtures[index]); }
+    public TesteeEntity getEntityFixtureMock(Integer index) {
+        return this.getEntityMock(fixtures[index]);
+    }
 
-    public TesteeEntity getEntityAdditionalMock(Integer index) { return this.getEntityMock(additional[index]); }
+    public TesteeEntity getEntityAdditionalMock(Integer index) {
+        return this.getEntityMock(additional[index]);
+    }
 
     private TesteeEntity getEntityMock(Object[] data) {
         return this.getEntityMock(
@@ -92,9 +95,13 @@ public class TesteesSupport {
         return testeeEntity;
     }
 
-    public TesteeModelInterface getModelFixtureMock(Integer index) { return this.getModelMock(fixtures[index]); }
+    public TesteeModelInterface getModelFixtureMock(Integer index) {
+        return this.getModelMock(fixtures[index]);
+    }
 
-    public TesteeModelInterface getModelAdditionalMock(Integer index) { return this.getModelMock(additional[index]); }
+    public TesteeModelInterface getModelAdditionalMock(Integer index) {
+        return this.getModelMock(additional[index]);
+    }
 
     private TesteeModelInterface getModelMock(Object[] data) {
         return this.getModelMock(
@@ -126,11 +133,15 @@ public class TesteesSupport {
         return testeeModel;
     }
 
-    public void assertEquals(TesteeEntity expected, TesteeEntity actual) {assertEquals(expected, actual, false);}
+    public void assertEquals(TesteeEntity expected, TesteeEntity actual) {
+        assertEquals(expected, actual, false);
+    }
 
-    public void assertEqualsWithoutId(TesteeEntity expected, TesteeEntity actual) {assertEquals(expected, actual, true);}
+    public void assertEqualsWithoutId(TesteeEntity expected, TesteeEntity actual) {
+        assertEquals(expected, actual, true);
+    }
 
-    public void assertEquals(TesteeEntity expected, TesteeEntity actual, Boolean exceptId){
+    public void assertEquals(TesteeEntity expected, TesteeEntity actual, Boolean exceptId) {
         if (!exceptId) {
             Assert.assertEquals(expected.getId(), actual.getId());
         }
@@ -141,9 +152,13 @@ public class TesteesSupport {
         Assert.assertEquals(expected.getQuizId(), actual.getQuizId());
     }
 
-    public void assertNotEquals(TesteeEntity expected, TesteeEntity actual) { assertNotEquals(expected, actual, false);}
+    public void assertNotEquals(TesteeEntity expected, TesteeEntity actual) {
+        assertNotEquals(expected, actual, false);
+    }
 
-    public void assertNotEqualsWithoutId(TesteeEntity expected, TesteeEntity actual) {assertNotEquals(expected, actual, true);}
+    public void assertNotEqualsWithoutId(TesteeEntity expected, TesteeEntity actual) {
+        assertNotEquals(expected, actual, true);
+    }
 
     public void assertNotEquals(TesteeEntity expected, TesteeEntity actual, Boolean exceptId){
         if (!exceptId) {
