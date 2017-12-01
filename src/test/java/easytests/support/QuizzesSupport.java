@@ -1,19 +1,15 @@
 package easytests.support;
 
-import easytests.core.entities.IssueEntity;
 import easytests.core.entities.QuizEntity;
-import easytests.core.models.IssueModelInterface;
 import easytests.core.models.QuizModel;
 import easytests.core.models.QuizModelInterface;
-import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.empty.IssueModelEmpty;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.TesteeModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
-
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 public class QuizzesSupport {
 
@@ -71,7 +67,7 @@ public class QuizzesSupport {
         return this.getEntityMock(additional[index]);
     }
 
-    private QuizEntity getEntityMock(Object[] data){
+    private QuizEntity getEntityMock(Object[] data) {
         return this.getEntityMock(
                 (Integer) data[0],
                 (Integer) data[1],
@@ -89,7 +85,7 @@ public class QuizzesSupport {
             Boolean codeExpired,
             LocalDateTime startedAt,
             LocalDateTime finishedAt
-    ){
+    ) {
         final QuizEntity quizEntity = Mockito.mock(QuizEntity.class);
         Mockito.when(quizEntity.getId()).thenReturn(id);
         Mockito.when(quizEntity.getIssueId()).thenReturn(issueId);
@@ -108,7 +104,7 @@ public class QuizzesSupport {
                 return this.getModelMock(additional[index]);
     }
 
-    private QuizModelInterface getModelMock(Object[] data){
+    private QuizModelInterface getModelMock(Object[] data) {
         return this.getModelMock(
                 (Integer) data[0],
                 (Integer) data[1],
@@ -126,7 +122,7 @@ public class QuizzesSupport {
             Boolean codeExpired,
             LocalDateTime startedAt,
             LocalDateTime finishedAt
-    ){
+    ) {
         final QuizModelInterface quizModel = Mockito.mock(QuizModelInterface.class);
         Mockito.when(quizModel.getId()).thenReturn(id);
         Mockito.when(quizModel.getInviteCode()).thenReturn(inviteCode);
@@ -134,48 +130,57 @@ public class QuizzesSupport {
         Mockito.when(quizModel.getStartedAt()).thenReturn(startedAt);
         Mockito.when(quizModel.getFinishedAt()).thenReturn(finishedAt);
         Mockito.when(quizModel.getIssue()).thenReturn(new IssueModelEmpty(issueId));
-        //Mockito.when(quizModel.getPoints()).thenReturn(new ModelsListEmpty());
-        //Mockito.when(quizModel.getTestee()).thenReturn(new TesteeModelEmpty(id));
+        Mockito.when(quizModel.getPoints()).thenReturn(new ModelsListEmpty());
+        Mockito.when(quizModel.getTestee()).thenReturn(new TesteeModelEmpty(id));
         return quizModel;
     }
 
-    public void assertNotEqualsWithoutIds(QuizEntity first, QuizEntity second){
-        assertNotEqualsWithoutIds(first, second, true);
+    public void assertNotEqualsWithoutIds(QuizEntity unexpected, QuizEntity actual) {
+        assertNotEqualsWithoutIds(unexpected, actual, true);
     }
 
-    private void assertNotEqualsWithoutIds(QuizEntity first, QuizEntity second, Boolean exceptId){
+    private void assertNotEqualsWithoutIds(QuizEntity unexpected, QuizEntity actual, Boolean exceptId) {
         if(!exceptId){
-            Assert.assertNotEquals(first.getId(), second.getId());
+            Assert.assertNotEquals(unexpected.getId(), actual.getId());
         }
-        Assert.assertNotEquals(first.getInviteCode(), second.getInviteCode());
-        Assert.assertNotEquals(first.getCodeExpired(), second.getCodeExpired());
-        Assert.assertNotEquals(first.getStartedAt(), second.getStartedAt());
-        Assert.assertNotEquals(first.getFinishedAt(), second.getFinishedAt());
+        Assert.assertNotEquals(unexpected.getInviteCode(), actual.getInviteCode());
+        Assert.assertNotEquals(unexpected.getCodeExpired(), actual.getCodeExpired());
+        Assert.assertNotEquals(unexpected.getStartedAt(), actual.getStartedAt());
+        Assert.assertNotEquals(unexpected.getFinishedAt(), actual.getFinishedAt());
     }
 
-    public void assertEquals(QuizModelInterface first, QuizEntity second){
-        Assert.assertEquals(first.getId(), second.getId());
-        Assert.assertEquals(first.getIssue().getId(), second.getIssueId());
-        Assert.assertEquals(first.getInviteCode(), second.getInviteCode());
-        Assert.assertEquals(first.getCodeExpired(), second.getCodeExpired());
-        Assert.assertEquals(first.getStartedAt(), second.getStartedAt());
-        Assert.assertEquals(first.getFinishedAt(), second.getFinishedAt());
+    public void assertEquals(QuizModelInterface expected, QuizEntity actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getIssue().getId(), actual.getIssueId());
+        Assert.assertEquals(expected.getInviteCode(), actual.getInviteCode());
+        Assert.assertEquals(expected.getCodeExpired(), actual.getCodeExpired());
+        Assert.assertEquals(expected.getStartedAt(), actual.getStartedAt());
+        Assert.assertEquals(expected.getFinishedAt(), actual.getFinishedAt());
     }
 
-    public void assertEquals(QuizEntity first, QuizEntity second){
-        Assert.assertEquals(first.getId(), second.getId());
-        Assert.assertEquals(first.getIssueId(), second.getIssueId());
-        Assert.assertEquals(first.getInviteCode(), second.getInviteCode());
-        Assert.assertEquals(first.getCodeExpired(), second.getCodeExpired());
-        Assert.assertEquals(first.getStartedAt(), second.getStartedAt());
-        Assert.assertEquals(first.getFinishedAt(), second.getFinishedAt());
+    public void assertEquals(QuizEntity expected, QuizModelInterface actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getIssueId(), actual.getIssue().getId());
+        Assert.assertEquals(expected.getInviteCode(), actual.getInviteCode());
+        Assert.assertEquals(expected.getCodeExpired(), actual.getCodeExpired());
+        Assert.assertEquals(expected.getStartedAt(), actual.getStartedAt());
+        Assert.assertEquals(expected.getFinishedAt(), actual.getFinishedAt());
     }
 
-    public void assertEqualsWithoutId(QuizEntity first, QuizEntity second){
-        Assert.assertEquals(first.getIssueId(), second.getIssueId());
-        Assert.assertEquals(first.getInviteCode(), second.getInviteCode());
-        Assert.assertEquals(first.getCodeExpired(), second.getCodeExpired());
-        Assert.assertEquals(first.getStartedAt(), second.getStartedAt());
-        Assert.assertEquals(first.getFinishedAt(), second.getFinishedAt());
+    public void assertEquals(QuizEntity expected, QuizEntity actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getIssueId(), actual.getIssueId());
+        Assert.assertEquals(expected.getInviteCode(), actual.getInviteCode());
+        Assert.assertEquals(expected.getCodeExpired(), actual.getCodeExpired());
+        Assert.assertEquals(expected.getStartedAt(), actual.getStartedAt());
+        Assert.assertEquals(expected.getFinishedAt(), actual.getFinishedAt());
+    }
+
+    public void assertEqualsWithoutId(QuizEntity expected, QuizEntity actual) {
+        Assert.assertEquals(expected.getIssueId(), actual.getIssueId());
+        Assert.assertEquals(expected.getInviteCode(), actual.getInviteCode());
+        Assert.assertEquals(expected.getCodeExpired(), actual.getCodeExpired());
+        Assert.assertEquals(expected.getStartedAt(), actual.getStartedAt());
+        Assert.assertEquals(expected.getFinishedAt(), actual.getFinishedAt());
     }
 }
