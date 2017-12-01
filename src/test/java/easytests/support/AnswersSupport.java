@@ -176,7 +176,7 @@ public class AnswersSupport {
 
     public void assertEquals(AnswerModelInterface expected, AnswerEntity actual) {
         Assert.assertEquals(expected.getId(), actual.getId());
-        Assert.assertEquals(expected.getTxt(), actual.getId());
+        Assert.assertEquals(expected.getTxt(), actual.getTxt());
         Assert.assertEquals(expected.getQuestion().getId(), actual.getQuestionId());
         Assert.assertEquals(expected.getSerialNumber(), actual.getSerialNumber());
         Assert.assertEquals(expected.getRight(), actual.getRight());
