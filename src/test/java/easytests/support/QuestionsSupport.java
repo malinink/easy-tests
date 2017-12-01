@@ -14,44 +14,44 @@ public class QuestionsSupport {
     protected static Object[][] fixtures = new Object[][]{
             {
                     1,
-                    "Text 1",
+                    "test1",
                     1,
                     1
             },
             {
                     2,
-                    "Text 2",
+                    "test2",
                     2,
-                    2
+                    3
             },
             {
                     3,
-                    "Text 3",
+                    "test3",
                     3,
-                    3
+                    2
             },
     };
     protected static Object[][] additional = new Object[][]{
             {
                     // for insert entity
                     null,
-                    "Text",
+                    "text1",
                     1,
-                    2
+                    1
             },
             {
                     // for update entity with id = 1
                     1,
-                    "newText",
-                    1,
-                    1
+                    "text2",
+                    2,
+                    2
             },
     };
-    private QuestionEntity getEntityFixtureMock(Integer index) {
+    public QuestionEntity getEntityFixtureMock(Integer index) {
         return this.getEntityMock(fixtures[index]);
     }
 
-    private QuestionEntity getEntityAdditionalMock(Integer index) {
+    public QuestionEntity getEntityAdditionalMock(Integer index) {
         return this.getEntityMock(additional[index]);
     }
 
