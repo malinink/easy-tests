@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.meanbean.test.BeanTester;
+import org.meanbean.test.ConfigurationBuilder;
 import org.meanbean.test.EqualsMethodTester;
 import org.meanbean.test.HashCodeMethodTester;
 import org.mockito.Mockito;
@@ -20,7 +21,13 @@ public class QuizEntityTest extends AbstractEntityTest {
 
     private QuizzesSupport quizSupport = new QuizzesSupport();
 
-    @Ignore
+    @Override
+    protected ConfigurationBuilder getConfigurationBuilder(){
+        return super.getConfigurationBuilder()
+                .ignoreProperty("startedAt")
+                .ignoreProperty("finishedAt");
+    }
+
     @Test
     public void testCommon() throws Exception {
         this.testCommon(QuizEntity.class);
@@ -28,7 +35,7 @@ public class QuizEntityTest extends AbstractEntityTest {
 
     @Test
     public void testMap() throws Exception {
-        final QuizModelInterface quizModel = this.quizSupport.getModelAdditionalMock(0);
+        final QuizModelInterface quizModel = this.quizSupport.getModelFixtureMock(0);
         final QuizEntity quizEntity = new QuizEntity();
         quizEntity.map(quizModel);
         this.quizSupport.assertEquals(quizModel, quizEntity);
