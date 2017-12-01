@@ -7,6 +7,9 @@ import easytests.core.models.empty.QuestionModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
+/**
+ * @author sakhprace
+ */
 public class AnswersSupport {
 
     protected static Object[][] fixtures = new Object[][] {
