@@ -143,7 +143,7 @@ public class SubjectsService implements SubjectsServiceInterface {
     }
 
     private List<SubjectModelInterface> map(List<SubjectEntity> subjectsList) {
-        final List<SubjectModelInterface> resultSubjectList = new ArrayList(subjectsList.size());
+        final List<SubjectModelInterface> resultSubjectList = new ArrayList<>(subjectsList.size());
         for (SubjectEntity subject: subjectsList) {
             resultSubjectList.add(this.map(subject));
         }
