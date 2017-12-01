@@ -99,6 +99,7 @@ public class SubjectsSupport {
                 (Integer) data[3]
         );
     }
+
     public SubjectModelInterface getModelMock(
             Integer id,
             String name,
