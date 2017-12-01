@@ -152,7 +152,7 @@ public class QuestionsSupport {
     public void assertEquals(QuestionModelInterface expected, QuestionEntity actual) {
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getText(), actual.getText());
-        Assert.assertEquals(expected.getQuestionType(), actual.getQuestionTypeId());
+        Assert.assertEquals(expected.getQuestionType().getId(), actual.getQuestionTypeId());
         Assert.assertEquals(expected.getTopic().getId(), actual.getTopicId());
     }
 
