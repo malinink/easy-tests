@@ -8,6 +8,8 @@ import easytests.core.models.empty.SubjectModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
+import java.util.List;
+
 /**
  * @author lelay
  */
@@ -157,5 +159,14 @@ public class TopicsSupport {
     public void assertEquals(TopicEntity expected, TopicModelInterface actual) {
         this.assertEquals(actual, expected);
         Assert.assertEquals(new ModelsListEmpty(), actual.getQuestions());
+    }
+
+    public void assertModelsListEquals(List<TopicModelInterface> expected, List<TopicModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+
+        Integer i = 0;
+        for(TopicModelInterface topicModel: expected) {
+            this.assertEquals(topicModel, actual.get(i++));
+        }
     }
 }
