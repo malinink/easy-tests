@@ -46,7 +46,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFindByQuizId() throws Exception {
-        final TesteeEntity testeeFixtureEntitiy = this.testeesSupport.getEntityFixtureMock(2);
+        final TesteeEntity testeeFixtureEntity = this.testeesSupport.getEntityFixtureMock(2);
         
         final TesteeEntity testeeFoundedEntity = this.testeesMapper.findByQuizId(3);
 
