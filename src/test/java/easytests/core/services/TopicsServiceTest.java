@@ -4,6 +4,8 @@ import easytests.core.entities.TopicEntity;
 import easytests.core.mappers.TopicsMapper;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
+import easytests.core.options.QuestionsOptionsInterface;
+import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.SubjectsSupport;
@@ -59,13 +61,10 @@ public class TopicsServiceTest {
         return topicsModels;
     }
 
-    private void assertEquals(List<TopicModelInterface> expected, List<TopicModelInterface> actual) {
-        Assert.assertEquals(expected.size(), actual.size());
-
-        Integer i = 0;
-        for(TopicModelInterface topicModel: expected) {
-            this.topicsSupport.assertEquals(topicModel, actual.get(i++));
-        }
+    private void assertServiceSet(TopicsOptionsInterface topicOptions) throws Exception {
+        verify(topicOptions, times(1)).setTopicsService(any(TopicsServiceInterface.class));
+        verify(topicOptions, times(1)).setSubjectsService(any(SubjectsServiceInterface.class));
+        verify(topicOptions, times(1)).setQuestionsService(any(QuestionsServiceInterface.class));
     }
 
     @Test
@@ -75,7 +74,7 @@ public class TopicsServiceTest {
 
         final List<TopicModelInterface> topicsFoundedModels = this.topicsService.findAll();
 
-        this.assertEquals(topicsFoundedModels, this.getTopicsFixturesModels());
+        this.topicsSupport.assertModelsListEquals(topicsFoundedModels, this.getTopicsFixturesModels());
     }
 
     @Test
@@ -102,10 +101,9 @@ public class TopicsServiceTest {
 
         final List<TopicModelInterface> topicFoundedModels = this.topicsService.findAll(topicsOptions);
 
-        this.assertEquals(topicModels, listCaptor.getValue());
+        this.topicsSupport.assertModelsListEquals(topicModels, listCaptor.getValue());
         Assert.assertSame(topicModels, topicFoundedModels);
-        verify(this.topicsMapper, times(1)).findAll();
-        verifyNoMoreInteractions(this.topicsMapper);
+        this.assertServiceSet(topicsOptions);
     }
 
     @Test
@@ -142,8 +140,7 @@ public class TopicsServiceTest {
 
         this.topicsSupport.assertEquals(topicModel, topicModelCaptor.getValue());
         Assert.assertSame(topicModel, topicFoundedModel);
-        verify(this.topicsMapper, times(1)).find(topicModel.getId());
-        verifyNoMoreInteractions(this.topicsMapper);
+        this.assertServiceSet(topicOptions);
     }
 
     @Test
@@ -155,7 +152,7 @@ public class TopicsServiceTest {
 
         final List<TopicModelInterface> topicFoundedModels = this.topicsService.findBySubject(subjectModel);
 
-        this.assertEquals(this.getTopicsFixturesModels(), topicFoundedModels);
+        this.topicsSupport.assertModelsListEquals(this.getTopicsFixturesModels(), topicFoundedModels);
     }
 
     @Test
@@ -180,17 +177,15 @@ public class TopicsServiceTest {
 
         final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
 
-        when(this.topicsMapper.findBySubjectId(subjectModel.getId()))
-                .thenReturn(topicEntities);
+        when(this.topicsMapper.findBySubjectId(subjectModel.getId())).thenReturn(topicEntities);
         when(topicOptions.withRelations(listCaptor.capture())).thenReturn(topicModels);
 
         final List<TopicModelInterface> topicFoundedModels =
                 this.topicsService.findBySubject(subjectModel, topicOptions);
 
-        this.assertEquals(topicModels, listCaptor.getValue());
+        this.topicsSupport.assertModelsListEquals(topicModels, listCaptor.getValue());
         Assert.assertSame(topicModels, topicFoundedModels);
-        verify(this.topicsMapper, times(1)).findBySubjectId(subjectModel.getId());
-        verifyNoMoreInteractions(this.topicsMapper);
+        this.assertServiceSet(topicOptions);
     }
 
     @Test
@@ -236,7 +231,7 @@ public class TopicsServiceTest {
         this.topicsService.save(topicModel, topicOptions);
 
         verify(topicOptions, times(1)).saveWithRelations(topicModel);
-        verifyNoMoreInteractions(this.topicsMapper);
+        this.assertServiceSet(topicOptions);
     }
 
     @Test
@@ -265,6 +260,6 @@ public class TopicsServiceTest {
         this.topicsService.delete(topicModel, topicOptions);
 
         verify(topicOptions, times(1)).deleteWithRelations(topicModel);
-        verifyNoMoreInteractions(this.topicsMapper);
+        this.assertServiceSet(topicOptions);
     }
 }
