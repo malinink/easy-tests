@@ -46,17 +46,11 @@ public class TesteesMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFindByQuizId() throws Exception {
-        final List<TesteeEntity> testeeFixtureEntities = new ArrayList<>();
+        final TesteeEntity testeeFixtureEntitiy = this.testeesSupport.getEntityFixtureMock(2);
+        
         final TesteeEntity testeeFoundedEntity = this.testeesMapper.findByQuizId(3);
 
-        for(Integer index = 0; index < 2; index++){
-            testeeFixtureEntities.add(this.testeesSupport.getEntityFixtureMock(index));
-        }
-        for (TesteeEntity testeeFixtureEntity: testeeFixtureEntities){
-            if (testeeFixtureEntity.getQuizId() == 3){
-                this.testeesSupport.assertEquals(testeeFixtureEntity, testeeFoundedEntity);
-            }
-        }
+        this.testeesSupport.assertEquals(testeeFixtureEntity, testeeFoundedEntity);
     }
 
     @Test
