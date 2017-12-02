@@ -51,7 +51,7 @@ public class TopicsService implements TopicsServiceInterface {
     public List<TopicModelInterface> findBySubject(
             SubjectModelInterface subjectModel,
             TopicsOptionsInterface topicsOptions) {
-        return topicsOptions.withRelations(this.map(this.topicsMapper.findBySubjectId(subjectModel.getId())));
+        return this.withServices(topicsOptions).withRelations(this.findBySubject(subjectModel));
     }
 
     @Override
