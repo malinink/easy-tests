@@ -145,9 +145,9 @@ public class TopicsSupport {
     public void assertEquals(TopicModelInterface expected, TopicModelInterface actual) {
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getName(), actual.getName());
-        // TODO: think about the code down there
-        //Assert.assertEquals(expected.getSubject(), actual.getSubject());
-        //Assert.assertEquals(expected.getQuestions(), actual.getQuestions());
+
+        Assert.assertEquals(expected.getSubject(), actual.getSubject());
+        Assert.assertEquals(expected.getQuestions(), actual.getQuestions());
     }
 
     public void assertEquals(TopicModelInterface expected, TopicEntity actual) {
