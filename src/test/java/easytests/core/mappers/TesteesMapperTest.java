@@ -24,11 +24,11 @@ public class TesteesMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFindAll() throws Exception {
-        final List<TesteeEntity> testeesEntities = this.testeesMapper.findAll();
-        Assert.assertEquals(3, testeesEntities.size());
+        final List<TesteeEntity> testeesFoundedEntities = this.testeesMapper.findAll();
+        Assert.assertEquals(3, testeesFoundedEntities.size());
 
         Integer index = 0;
-        for (TesteeEntity testeeEntity: testeesEntities){
+        for (TesteeEntity testeeEntity: testeesFoundedEntities){
             final TesteeEntity testeeFixtureEntity = this.testeesSupport.getEntityFixtureMock(index);
             this.testeesSupport.assertEquals(testeeFixtureEntity, testeeEntity);
             index++;
@@ -37,22 +37,23 @@ public class TesteesMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFind() throws Exception {
-        final TesteeEntity testee = this.testeesMapper.find(1);
         final TesteeEntity testeeFixtureEntity = this.testeesSupport.getEntityFixtureMock(0);
+        final TesteeEntity testeeFoundedUntity = this.testeesMapper.find(1);
 
-        this.testeesSupport.assertEquals(testeeFixtureEntity, testee);
+        this.testeesSupport.assertEquals(testeeFixtureEntity, testeeFoundedUntity);
     }
 
     @Test
     public void testFindByQuizId() throws Exception {
-        final TesteeEntity testee = this.testeesMapper.findByQuizId(3);
         final List<TesteeEntity> testeeFixtureEntities = new ArrayList<>();
+        final TesteeEntity testeeFoundedEntity = this.testeesMapper.findByQuizId(3);
+
         for(Integer index = 0; index < 2; index++){
             testeeFixtureEntities.add(this.testeesSupport.getEntityFixtureMock(index));
         }
         for (TesteeEntity testeeFixtureEntity: testeeFixtureEntities){
             if (testeeFixtureEntity.getQuizId() == 3){
-                this.testeesSupport.assertEquals(testeeFixtureEntity, testee);
+                this.testeesSupport.assertEquals(testeeFixtureEntity, testeeFoundedEntity);
             }
         }
     }
@@ -60,45 +61,45 @@ public class TesteesMapperTest extends AbstractMapperTest {
     @Test
     public void testInsert() throws Exception{
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
-        final TesteeEntity testeeAdditionalEntity = this.testeesSupport.getEntityAdditionalMock(0);
-        this.testeesMapper.insert(testeeAdditionalEntity);
+        final TesteeEntity testeeUnidentifiedEntity = this.testeesSupport.getEntityAdditionalMock(0);
+        this.testeesMapper.insert(testeeUnidentifiedEntity);
 
-        verify(testeeAdditionalEntity, times(1)).setId(id.capture());
+        verify(testeeUnidentifiedEntity, times(1)).setId(id.capture());
         Assert.assertNotNull(id.getValue());
 
         final TesteeEntity testeeInsertedEntity = this.testeesMapper.find(id.getValue());
 
         Assert.assertNotNull(testeeInsertedEntity);
-        this.testeesSupport.assertEqualsWithoutId(testeeAdditionalEntity, testeeInsertedEntity);
+        this.testeesSupport.assertEqualsWithoutId(testeeUnidentifiedEntity, testeeInsertedEntity);
 
     }
 
     @Test
     public void testUpdate() throws Exception{
-        final TesteeEntity testeeAdditionalEntity = this.testeesSupport.getEntityAdditionalMock(1);
-        final Integer id = testeeAdditionalEntity.getId();
-        final TesteeEntity testeeEntity = this.testeesMapper.find(id);
+        final TesteeEntity testeeChangedEntity = this.testeesSupport.getEntityAdditionalMock(1);
+        final Integer id = testeeChangedEntity.getId();
+        final TesteeEntity testeeBeforeUpdateEntity = this.testeesMapper.find(id);
 
-        Assert.assertNotNull(testeeEntity);
-        this.testeesSupport.assertNotEqualsWithoutId(testeeAdditionalEntity, testeeEntity);
+        Assert.assertNotNull(testeeBeforeUpdateEntity);
+        this.testeesSupport.assertNotEqualsWithoutId(testeeChangedEntity, testeeBeforeUpdateEntity);
 
-        this.testeesMapper.update(testeeAdditionalEntity);
-        final TesteeEntity updatedTesteeEntity = this.testeesMapper.find(id);
+        this.testeesMapper.update(testeeChangedEntity);
+        final TesteeEntity testeeUpdatedEntity = this.testeesMapper.find(id);
 
-        this.testeesSupport.assertEquals(testeeAdditionalEntity, updatedTesteeEntity);
+        this.testeesSupport.assertEquals(testeeChangedEntity, testeeUpdatedEntity);
     }
 
     @Test
     public void testDelete() throws Exception{
         final Integer id = this.testeesSupport.getEntityFixtureMock(0).getId();
-        TesteeEntity testeeEntity = this.testeesMapper.find(id);
+        TesteeEntity testeeFoundedEntity = this.testeesMapper.find(id);
 
-        Assert.assertNotNull(testeeEntity);
+        Assert.assertNotNull(testeeFoundedEntity);
 
-        this.testeesMapper.delete(testeeEntity);
+        this.testeesMapper.delete(testeeFoundedEntity);
 
-        testeeEntity = this.testeesMapper.find(id);
-        Assert.assertNull(testeeEntity);
+        testeeFoundedEntity = this.testeesMapper.find(id);
+        Assert.assertNull(testeeFoundedEntity);
     }
 
 }
