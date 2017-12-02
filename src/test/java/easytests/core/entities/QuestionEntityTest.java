@@ -4,12 +4,10 @@ import easytests.core.models.QuestionModelInterface;
 import easytests.support.QuestionsSupport;
 import org.junit.Test;
 
+
 /**
- * @author firkhraag
- * refactor:
  * @author RisaMagpie
  */
-
 public class QuestionEntityTest extends AbstractEntityTest {
 
     protected QuestionsSupport questionsSupport = new QuestionsSupport();
@@ -23,6 +21,7 @@ public class QuestionEntityTest extends AbstractEntityTest {
     public void testMap() throws Exception {
         final QuestionModelInterface questionModel = this.questionsSupport.getModelFixtureMock(0);
         final QuestionEntity questionEntity = new QuestionEntity();
+
         questionEntity.map(questionModel);
 
         this.questionsSupport.assertEquals(questionModel, questionEntity);
