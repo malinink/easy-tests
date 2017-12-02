@@ -38,9 +38,10 @@ public class TesteesMapperTest extends AbstractMapperTest {
     @Test
     public void testFind() throws Exception {
         final TesteeEntity testeeFixtureEntity = this.testeesSupport.getEntityFixtureMock(0);
-        final TesteeEntity testeeFoundedUntity = this.testeesMapper.find(1);
 
-        this.testeesSupport.assertEquals(testeeFixtureEntity, testeeFoundedUntity);
+        final TesteeEntity testeeFoundedEntity = this.testeesMapper.find(1);
+
+        this.testeesSupport.assertEquals(testeeFixtureEntity, testeeFoundedEntity);
     }
 
     @Test
