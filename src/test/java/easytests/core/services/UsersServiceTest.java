@@ -11,8 +11,8 @@ import java.util.List;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
-import static org.mockito.BDDMockito.*;
 import org.mockito.ArgumentCaptor;
+import static org.mockito.BDDMockito.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
@@ -52,6 +52,15 @@ public class UsersServiceTest {
         return usersModels;
     }
 
+    private void assertServicesSet(UsersOptionsInterface usersOptions) throws Exception {
+        this.assertServicesSet(usersOptions, 1);
+    }
+
+    private void assertServicesSet(UsersOptionsInterface usersOptions, Integer times) throws Exception {
+        verify(usersOptions, times(times)).setSubjectsService(any(SubjectsServiceInterface.class));
+        verify(usersOptions, times(times)).setUsersService(this.usersService);
+    }
+
     @Test
     public void testFindAllPresentList() throws Exception {
         final List<UserEntity> usersEntities = this.getUsersFixturesEntities();
@@ -83,10 +92,9 @@ public class UsersServiceTest {
 
         final List<UserModelInterface> usersFoundedModels = this.usersService.findAll(usersOptions);
 
+        this.assertServicesSet(usersOptions);
         this.usersSupport.assertModelsListEquals(usersModels, listCaptor.getValue());
         Assert.assertSame(usersModels, usersFoundedModels);
-        verify(this.usersMapper, times(1)).findAll();
-        verifyNoMoreInteractions(this.usersMapper);
     }
 
     @Test
@@ -120,10 +128,9 @@ public class UsersServiceTest {
 
         final UserModelInterface userFoundedModel = this.usersService.find(userModel.getId(), usersOptions);
 
+        this.assertServicesSet(usersOptions);
         this.usersSupport.assertEquals(userModel, userModelCaptor.getValue());
         Assert.assertSame(userModel, userFoundedModel);
-        verify(this.usersMapper, times(1)).find(userModel.getId());
-        verifyNoMoreInteractions(this.usersMapper);
     }
 
 
@@ -158,10 +165,9 @@ public class UsersServiceTest {
 
         final UserModelInterface userFoundedModel = this.usersService.findByEmail(userEntity.getEmail(), usersOptions);
 
+        this.assertServicesSet(usersOptions);
         this.usersSupport.assertEquals(userModel, userModelCaptor.getValue());
         Assert.assertSame(userModel, userFoundedModel);
-        verify(this.usersMapper, times(1)).findByEmail(userEntity.getEmail());
-        verifyNoMoreInteractions(this.usersMapper);
     }
 
     @Test
@@ -205,6 +211,7 @@ public class UsersServiceTest {
 
         this.usersService.save(userModel, usersOptions);
 
+        this.assertServicesSet(usersOptions);
         verify(usersOptions, times(1)).saveWithRelations(userModel);
         verifyNoMoreInteractions(this.usersMapper);
     }
@@ -234,6 +241,7 @@ public class UsersServiceTest {
 
         this.usersService.delete(userModel, usersOptions);
 
+        this.assertServicesSet(usersOptions);
         verify(usersOptions, times(1)).deleteWithRelations(userModel);
         verifyNoMoreInteractions(this.usersMapper);
     }
