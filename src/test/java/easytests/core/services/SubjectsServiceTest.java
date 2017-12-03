@@ -57,6 +57,18 @@ public class SubjectsServiceTest {
         return subjectsModels;
     }
 
+    private void assertServicesSet(SubjectsOptionsInterface subjectsOptions) {
+        this.assertServicesSet(subjectsOptions, 1);
+    }
+
+    private void assertServicesSet(SubjectsOptionsInterface subjectsOptions, Integer times) {
+        verify(subjectsOptions, times(times)).setIssuesService(any(IssuesServiceInterface.class));
+        verify(subjectsOptions, times(times)).setSubjectsService(this.subjectsService);
+        verify(subjectsOptions, times(times)).setUsersService(any(UsersServiceInterface.class));
+        verify(subjectsOptions, times(times)).setIssueStandardsService(any(IssueStandardsServiceInterface.class));
+        verify(subjectsOptions, times(times)).setTopicsService(any(TopicsServiceInterface.class));
+    }
+
     @Test
     public void testFindAllPresentList() throws Exception {
         final List<SubjectEntity> subjectsEntities = this.getSubjectsFixturesEntities();
@@ -87,10 +99,9 @@ public class SubjectsServiceTest {
 
         final List<SubjectModelInterface> subjectsFoundedModels = this.subjectsService.findAll(subjectsOptions);
 
+        this.assertServicesSet(subjectsOptions);
         this.subjectsSupport.assertModelsListEquals(subjectsModels, listCaptor.getValue());
         Assert.assertSame(subjectsModels, subjectsFoundedModels);
-        verify(this.subjectsMapper, times(1)).findAll();
-        verifyNoMoreInteractions(this.subjectsMapper);
     }
 
     @Test
@@ -124,10 +135,9 @@ public class SubjectsServiceTest {
 
         final SubjectModelInterface subjectFoundedModel = this.subjectsService.find(subjectModel.getId(), subjectsOptions);
 
+        this.assertServicesSet(subjectsOptions);
         this.subjectsSupport.assertEquals(subjectModel, subjectModelCaptor.getValue());
         Assert.assertSame(subjectModel, subjectFoundedModel);
-        verify(this.subjectsMapper, times(1)).find(subjectModel.getId());
-        verifyNoMoreInteractions(this.subjectsMapper);
     }
 
     @Test
@@ -158,15 +168,14 @@ public class SubjectsServiceTest {
         final List<SubjectEntity> subjectsEntities = this.getSubjectsFixturesEntities();
         when(this.subjectsMapper.findByUserId(userModel.getId())).thenReturn(subjectsEntities);
         final List<SubjectModelInterface> subjectsModels = this.getSubjectsFixturesModels();
-        final SubjectsOptionsInterface subjectOptions = Mockito.mock(SubjectsOptionsInterface.class);
-        when(subjectOptions.withRelations(listCaptor.capture())).thenReturn(subjectsModels);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        when(subjectsOptions.withRelations(listCaptor.capture())).thenReturn(subjectsModels);
 
-        final List<SubjectModelInterface> subjectsFoundedModels = this.subjectsService.findByUser(userModel, subjectOptions);
+        final List<SubjectModelInterface> subjectsFoundedModels = this.subjectsService.findByUser(userModel, subjectsOptions);
 
+        this.assertServicesSet(subjectsOptions);
         this.subjectsSupport.assertModelsListEquals(subjectsModels, listCaptor.getValue());
         Assert.assertSame(subjectsModels, subjectsFoundedModels);
-        verify(this.subjectsMapper, times(1)).findByUserId(userModel.getId());
-        verifyNoMoreInteractions(this.subjectsMapper);
     }
 
     @Test
@@ -213,6 +222,7 @@ public class SubjectsServiceTest {
 
         this.subjectsService.save(subjectModel, subjectsOptions);
 
+        this.assertServicesSet(subjectsOptions);
         verify(subjectsOptions, times(1)).saveWithRelations(subjectModel);
         verifyNoMoreInteractions(this.subjectsMapper);
     }
@@ -236,6 +246,7 @@ public class SubjectsServiceTest {
 
         this.subjectsService.save(subjectsModels, subjectsOptions);
 
+        this.assertServicesSet(subjectsOptions, subjectsModels.size());
         verify(subjectsOptions, times(subjectsModels.size())).saveWithRelations(subjectModelCaptor.capture());
         this.subjectsSupport.assertModelsListEquals(subjectsModels, subjectModelCaptor.getAllValues());
         verifyNoMoreInteractions(this.subjectsMapper);
@@ -266,6 +277,7 @@ public class SubjectsServiceTest {
 
         this.subjectsService.delete(subjectModel, subjectsOptions);
 
+        this.assertServicesSet(subjectsOptions);
         verify(subjectsOptions, times(1)).deleteWithRelations(subjectModel);
         verifyNoMoreInteractions(this.subjectsMapper);
     }
@@ -289,6 +301,7 @@ public class SubjectsServiceTest {
 
         this.subjectsService.delete(subjectsModels, subjectsOptions);
 
+        this.assertServicesSet(subjectsOptions, subjectsModels.size());
         verify(subjectsOptions, times(subjectsModels.size())).deleteWithRelations(subjectModelCaptor.capture());
         this.subjectsSupport.assertModelsListEquals(subjectsModels, subjectModelCaptor.getAllValues());
         verifyNoMoreInteractions(this.subjectsMapper);
