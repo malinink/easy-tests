@@ -1,4 +1,5 @@
 package easytests.support;
+
 import easytests.core.entities.TesteeEntity;
 import easytests.core.models.TesteeModelInterface;
 import easytests.core.models.empty.QuizModelEmpty;
@@ -83,8 +84,7 @@ public class TesteesSupport {
             String surName,
             Integer groupNumber,
             Integer quizId
-    )
-    {
+    ) {
         TesteeEntity testeeEntity = Mockito.mock(TesteeEntity.class);
         Mockito.when(testeeEntity.getId()).thenReturn(id);
         Mockito.when(testeeEntity.getFirstName()).thenReturn(firstName);
@@ -121,8 +121,7 @@ public class TesteesSupport {
             String surName,
             Integer groupNumber,
             Integer quizId
-             )
-    {
+    ) {
         TesteeModelInterface testeeModel = Mockito.mock(TesteeModelInterface.class);
         Mockito.when(testeeModel.getId()).thenReturn(id);
         Mockito.when(testeeModel.getFirstName()).thenReturn(firstName);
