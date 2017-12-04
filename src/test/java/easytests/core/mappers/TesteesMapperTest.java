@@ -25,11 +25,13 @@ public class TesteesMapperTest extends AbstractMapperTest {
     @Test
     public void testFindAll() throws Exception {
         final List<TesteeEntity> testeesFoundedEntities = this.testeesMapper.findAll();
+
         Assert.assertEquals(3, testeesFoundedEntities.size());
 
         Integer index = 0;
         for (TesteeEntity testeeEntity: testeesFoundedEntities){
             final TesteeEntity testeeFixtureEntity = this.testeesSupport.getEntityFixtureMock(index);
+
             this.testeesSupport.assertEquals(testeeFixtureEntity, testeeEntity);
             index++;
         }
@@ -57,6 +59,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
     public void testInsert() throws Exception{
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final TesteeEntity testeeUnidentifiedEntity = this.testeesSupport.getEntityAdditionalMock(0);
+
         this.testeesMapper.insert(testeeUnidentifiedEntity);
 
         verify(testeeUnidentifiedEntity, times(1)).setId(id.capture());
@@ -66,7 +69,6 @@ public class TesteesMapperTest extends AbstractMapperTest {
 
         Assert.assertNotNull(testeeInsertedEntity);
         this.testeesSupport.assertEqualsWithoutId(testeeUnidentifiedEntity, testeeInsertedEntity);
-
     }
 
     @Test
@@ -93,8 +95,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
 
         this.testeesMapper.delete(testeeFoundedEntity);
 
-        testeeFoundedEntity = this.testeesMapper.find(id);
-        Assert.assertNull(testeeFoundedEntity);
+        Assert.assertNull(this.testeesMapper.find(id));
     }
 
 }
