@@ -248,7 +248,7 @@ public class TopicsServiceTest {
     public void testSaveModelsListWithOptions() throws Exception {
         final ArgumentCaptor<TopicModelInterface> topicModelCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
         final List<TopicModelInterface> topicsModels = this.getTopicsFixturesModels();
-        final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
+        final TopicsOptionsInterface topicsOptions = mock(TopicsOptionsInterface.class);
 
         this.topicsService.save(topicsModels, topicsOptions);
 
@@ -303,7 +303,7 @@ public class TopicsServiceTest {
     public void testDeleteModelsListWithOptions() throws Exception {
         final ArgumentCaptor<TopicModelInterface> topicModelCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
         final List<TopicModelInterface> topicsModels = this.getTopicsFixturesModels();
-        final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
+        final TopicsOptionsInterface topicsOptions = mock(TopicsOptionsInterface.class);
 
         this.topicsService.delete(topicsModels, topicsOptions);
 
