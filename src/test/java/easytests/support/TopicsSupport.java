@@ -166,7 +166,18 @@ public class TopicsSupport {
 
         Integer i = 0;
         for(TopicModelInterface topicModel: expected) {
-            this.assertEquals(topicModel, actual.get(i++));
+            this.assertEquals(topicModel, actual.get(i));
+            i++;
+        }
+    }
+
+    public void assertEntitiesListEquals(List<TopicEntity> expected, List<TopicEntity> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+
+        Integer i = 0;
+        for(TopicEntity topicEntity: expected) {
+            this.assertEquals(topicEntity, actual.get(i));
+            i++;
         }
     }
 }
