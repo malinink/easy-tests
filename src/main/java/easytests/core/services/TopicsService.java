@@ -140,7 +140,7 @@ public class TopicsService implements TopicsServiceInterface {
     }
 
     private List<TopicModelInterface> map(List<TopicEntity> topicsList) {
-        final List<TopicModelInterface> resultUsersList = new ArrayList(topicsList.size());
+        final List<TopicModelInterface> resultUsersList = new ArrayList<>(topicsList.size());
         for (TopicEntity topic: topicsList) {
             resultUsersList.add(this.map(topic));
         }
