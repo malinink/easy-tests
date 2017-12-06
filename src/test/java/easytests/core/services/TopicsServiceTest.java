@@ -8,22 +8,20 @@ import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.SubjectsSupport;
 import easytests.support.TopicsSupport;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.*;
 
 /**
  * @author lelay
@@ -206,7 +204,7 @@ public class TopicsServiceTest {
             final TopicEntity topicEntity = invocation.getArgument(0);
             topicEntity.setId(updatedId);
             return null;
-        }).when(this.topicsMapper).insert(Mockito.any(TopicEntity.class));
+        }).when(this.topicsMapper).insert(any(TopicEntity.class));
 
         this.topicsService.save(topicAdditionalModel);
 
