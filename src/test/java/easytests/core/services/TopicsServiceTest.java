@@ -218,7 +218,7 @@ public class TopicsServiceTest {
         this.topicsService.save(this.topicsSupport.getModelFixtureMock(0));
 
         verify(this.topicsMapper, times(1)).update(topicEntityCaptor.capture());
-        this.topicsSupport.assertEquals(this.topicsSupport.getModelFixtureMock(0), topicEntityCaptor.getValue());
+        this.topicsSupport.assertEquals(this.topicsSupport.getEntityFixtureMock(0), topicEntityCaptor.getValue());
     }
 
     @Test
