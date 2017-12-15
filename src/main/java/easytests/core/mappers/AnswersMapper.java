@@ -21,14 +21,14 @@ public interface AnswersMapper {
                     @Result(property = "serialNumber", column = "serial_number"),
                     @Result(property = "right", column = "is_right")
             })
-    @Select("SELECT id, txt, question_id, serial_number, is_right FROM answers")
+    @Select("SELECT * FROM answers")
     List<AnswerEntity> findAll();
 
-    @Select("SELECT id, txt, question_id, serial_number, is_right FROM answers where id=#{id}")
+    @Select("SELECT * FROM answers where id=#{id}")
     @ResultMap("AnswerEntity")
     AnswerEntity find(Integer id);
 
-    @Select("SELECT id, txt, question_id, serial_number, is_right FROM answers WHERE"
+    @Select("SELECT * FROM answers WHERE"
             + " question_id=#{questionId}")
     @ResultMap("AnswerEntity")
     List<AnswerEntity> findByQuestionId(Integer id);
