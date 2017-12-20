@@ -59,11 +59,11 @@ public class QuizzesSupport {
             }
     };
 
-    public QuizEntity getEntityFixtureMock(Integer index){
+    public QuizEntity getEntityFixtureMock(Integer index) {
         return this.getEntityMock(fixtures[index]);
     }
 
-    public QuizEntity getEntityAdditionalMock(Integer index){
+    public QuizEntity getEntityAdditionalMock(Integer index) {
         return this.getEntityMock(additional[index]);
     }
 
@@ -96,11 +96,11 @@ public class QuizzesSupport {
         return quizEntity;
     }
 
-    public QuizModelInterface getModelFixtureMock(Integer index){
+    public QuizModelInterface getModelFixtureMock(Integer index) {
         return this.getModelMock(fixtures[index]);
     }
 
-    public QuizModelInterface getModelAdditionalMock(Integer index){
+    public QuizModelInterface getModelAdditionalMock(Integer index) {
                 return this.getModelMock(additional[index]);
     }
 

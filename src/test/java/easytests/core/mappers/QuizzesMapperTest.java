@@ -1,18 +1,15 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.QuizEntity;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import easytests.core.entities.UserEntity;
 import easytests.support.QuizzesSupport;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.util.ArrayList;
+import java.util.List;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -35,7 +32,7 @@ public class QuizzesMapperTest extends AbstractMapperTest {
 
         Integer index = 0;
         for(QuizEntity quizEntity: quizFoundedEntities){
-            final QuizEntity quizFixtureEntity= this.quizzesSupport.getEntityFixtureMock(index);
+            final QuizEntity quizFixtureEntity = this.quizzesSupport.getEntityFixtureMock(index);
 
             this.quizzesSupport.assertEquals(quizFixtureEntity, quizEntity);
             index++;
@@ -60,7 +57,11 @@ public class QuizzesMapperTest extends AbstractMapperTest {
         final List<QuizEntity> quizzesFoundedEntities = this.quizzesMapper.findByIssueId(2);
 
         Assert.assertEquals(1, quizzesFoundedEntities.size());
-        this.quizzesSupport.assertEquals(quizzesFixtureEntities.get(0), quizzesFoundedEntities.get(0));
+        Integer i = 0;
+        for(QuizEntity quizEntity: quizzesFoundedEntities) {
+            this.quizzesSupport.assertEquals(quizzesFixtureEntities.get(i), quizzesFoundedEntities.get(i));
+            i++;
+        }
     }
 
     @Test
