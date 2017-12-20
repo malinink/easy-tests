@@ -6,10 +6,7 @@ import easytests.support.QuizzesSupport;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.meanbean.test.BeanTester;
-import org.meanbean.test.ConfigurationBuilder;
-import org.meanbean.test.EqualsMethodTester;
-import org.meanbean.test.HashCodeMethodTester;
+import org.meanbean.test.*;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
@@ -22,10 +19,17 @@ public class QuizEntityTest extends AbstractEntityTest {
     private QuizzesSupport quizSupport = new QuizzesSupport();
 
     @Override
-    protected ConfigurationBuilder getConfigurationBuilder(){
-        return super.getConfigurationBuilder()
+    protected Configuration getConfiguration(){
+        return new ConfigurationBuilder().iterations(10)
                 .ignoreProperty("startedAt")
-                .ignoreProperty("finishedAt");
+                .ignoreProperty("finishedAt")
+                .build();
+    }
+
+    @Override
+    protected void testCommon(Class entityClass) {
+        final Configuration configuration = this.getConfiguration();
+        new BeanTester().testBean(entityClass, configuration);
     }
 
     @Test

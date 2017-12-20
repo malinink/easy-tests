@@ -13,15 +13,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public abstract class AbstractEntityTest {
 
-    protected ConfigurationBuilder getConfigurationBuilder() {
-        return new ConfigurationBuilder().iterations(10);
+    protected Configuration getConfiguration() {
+        return new ConfigurationBuilder().iterations(10).build();
     }
 
     public abstract void testCommon() throws Exception;
 
     protected void testCommon(Class entityClass) {
-        final Configuration configuration = this.getConfigurationBuilder().build();
+        final Configuration configuration = this.getConfiguration();
         new BeanTester().testBean(entityClass, configuration);
+        new EqualsMethodTester().testEqualsMethod(entityClass, configuration);
+        new HashCodeMethodTester().testHashCodeMethod(entityClass);
     }
 
     public abstract void testMap() throws Exception;
