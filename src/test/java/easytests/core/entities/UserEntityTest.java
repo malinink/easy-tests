@@ -19,8 +19,9 @@ public class UserEntityTest extends AbstractEntityTest {
 
     @Test
     public void testMap() throws Exception {
-        final UserModelInterface userModel = this.usersSupport.getModelAdditionalMock(0);
+        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
         final UserEntity userEntity = new UserEntity();
+
         userEntity.map(userModel);
 
         this.usersSupport.assertEquals(userModel, userEntity);
