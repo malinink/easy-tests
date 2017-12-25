@@ -51,7 +51,7 @@ public class TopicsService implements TopicsServiceInterface {
     public List<TopicModelInterface> findBySubject(
             SubjectModelInterface subjectModel,
             TopicsOptionsInterface topicsOptions) {
-        return topicsOptions.withRelations(this.map(this.topicsMapper.findBySubjectId(subjectModel.getId())));
+        return this.withServices(topicsOptions).withRelations(this.findBySubject(subjectModel));
     }
 
     @Override
@@ -140,10 +140,10 @@ public class TopicsService implements TopicsServiceInterface {
     }
 
     private List<TopicModelInterface> map(List<TopicEntity> topicsList) {
-        final List<TopicModelInterface> resultUsersList = new ArrayList(topicsList.size());
+        final List<TopicModelInterface> resultTopicsList = new ArrayList<>(topicsList.size());
         for (TopicEntity topic: topicsList) {
-            resultUsersList.add(this.map(topic));
+            resultTopicsList.add(this.map(topic));
         }
-        return resultUsersList;
+        return resultTopicsList;
     }
 }

@@ -2,19 +2,20 @@ package easytests.core.services;
 
 import easytests.core.entities.SubjectEntity;
 import easytests.core.mappers.SubjectsMapper;
-import easytests.core.models.IssueStandardModelInterface;
-import easytests.core.models.SubjectModel;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+import easytests.support.SubjectsSupport;
+import easytests.support.UsersSupport;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
-
+import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
@@ -23,7 +24,7 @@ import org.springframework.test.context.junit4.*;
 
 
 /**
- * @author vkpankov
+ * @author malinink
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -38,308 +39,272 @@ public class SubjectsServiceTest {
     @Autowired
     private SubjectsService subjectsService;
 
-    private SubjectModelInterface createSubjectModel(Integer id, String name,
-                                                     String description, Integer userId, Integer issueStandardId) {
+    private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
-        final SubjectModelInterface subjectModel = new SubjectModel();
-        subjectModel.setId(id);
-        subjectModel.setName(name);
-        subjectModel.setDescription(description);
+    private UsersSupport usersSupport = new UsersSupport();
 
-        final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
-        Mockito.when(userModel.getId()).thenReturn(userId);
-
-        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
-        Mockito.when(issueStandardModel.getId()).thenReturn(issueStandardId);
-
-        subjectModel.setUser(userModel);
-        subjectModel.setIssueStandard(issueStandardModel);
-
-        return subjectModel;
-
+    private List<SubjectEntity> getSubjectsFixturesEntities() {
+        final List<SubjectEntity> usersEntities = new ArrayList<>(2);
+        usersEntities.add(this.subjectsSupport.getEntityFixtureMock(0));
+        usersEntities.add(this.subjectsSupport.getEntityFixtureMock(1));
+        return usersEntities;
     }
 
-    private SubjectEntity createSubjectEntityMock(Integer id, String name, String description, Integer userId) {
-
-        final SubjectEntity subjectEntity = Mockito.mock(SubjectEntity.class);
-
-        Mockito.when(subjectEntity.getId()).thenReturn(id);
-        Mockito.when(subjectEntity.getName()).thenReturn(name);
-        Mockito.when(subjectEntity.getDescription()).thenReturn(description);
-        Mockito.when(subjectEntity.getUserId()).thenReturn(userId);
-
-        return subjectEntity;
-
-    }
-
-    private SubjectModelInterface mapSubjectModel(SubjectEntity subjectEntity) {
-
-        final SubjectModelInterface subjectModel = new SubjectModel();
-        subjectModel.map(subjectEntity);
-        return subjectModel;
-
-    }
-
-    private SubjectEntity mapSubjectEntity(SubjectModelInterface subjectModel) {
-
-        final SubjectEntity subjectEntity = new SubjectEntity();
-        subjectEntity.map(subjectModel);
-        return subjectEntity;
-
-    }
-
-    private List<SubjectEntity> getSubjectsEntities() {
-        final List<SubjectEntity> subjectsEntities = new ArrayList<>(2);
-        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(1, "test1", "description1", 1);
-        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(2,  "test2", "description2", 2);
-        subjectsEntities.add(subjectEntityFirst);
-        subjectsEntities.add(subjectEntitySecond);
-        return subjectsEntities;
-    }
-
-    private List<SubjectModelInterface> getUsersModels() {
-        final List<SubjectModelInterface> subjectsModels = new ArrayList<>(2);
-        for (SubjectEntity subjectEntity : this.getSubjectsEntities()) {
-            subjectsModels.add(this.mapSubjectModel(subjectEntity));
-        }
+    private List<SubjectModelInterface> getSubjectsFixturesModels() {
+        final List<SubjectModelInterface> subjectsModels = new ArrayList<>(3);
+        subjectsModels.add(this.subjectsSupport.getModelFixtureMock(0));
+        subjectsModels.add(this.subjectsSupport.getModelFixtureMock(1));
         return subjectsModels;
+    }
+
+    private void assertServicesSet(SubjectsOptionsInterface subjectsOptions) {
+        this.assertServicesSet(subjectsOptions, 1);
+    }
+
+    private void assertServicesSet(SubjectsOptionsInterface subjectsOptions, Integer times) {
+        verify(subjectsOptions, times(times)).setIssuesService(any(IssuesServiceInterface.class));
+        verify(subjectsOptions, times(times)).setSubjectsService(this.subjectsService);
+        verify(subjectsOptions, times(times)).setUsersService(any(UsersServiceInterface.class));
+        verify(subjectsOptions, times(times)).setIssueStandardsService(any(IssueStandardsServiceInterface.class));
+        verify(subjectsOptions, times(times)).setTopicsService(any(TopicsServiceInterface.class));
     }
 
     @Test
     public void testFindAllPresentList() throws Exception {
-
-        final List<SubjectEntity> subjectsEntities = getSubjectsEntities();
-
-        given(this.subjectsMapper.findAll()).willReturn(subjectsEntities);
+        final List<SubjectEntity> subjectsEntities = this.getSubjectsFixturesEntities();
+        when(this.subjectsMapper.findAll()).thenReturn(subjectsEntities);
 
         final List<SubjectModelInterface> subjectsModels = this.subjectsService.findAll();
 
-        Assert.assertEquals(2, subjectsModels.size());
-        Assert.assertEquals(subjectsModels.get(0), this.mapSubjectModel(subjectsEntities.get(0)));
-        Assert.assertEquals(subjectsModels.get(1), this.mapSubjectModel(subjectsEntities.get(1)));
-
+        this.subjectsSupport.assertModelsListEquals(this.getSubjectsFixturesModels(), subjectsModels);
     }
 
     @Test
     public void testFindAllAbsentList() throws Exception {
-
-        given(this.subjectsMapper.findAll()).willReturn(new ArrayList<>(0));
+        when(this.subjectsMapper.findAll()).thenReturn(new ArrayList<>(0));
 
         final List<SubjectModelInterface> subjectsModels = this.subjectsService.findAll();
 
         Assert.assertEquals(0, subjectsModels.size());
-
-    }
-
-    @Test
-    public void testFindPresentModel() throws Exception {
-
-        final Integer id = 1;
-        final SubjectEntity subjectEntity = this.createSubjectEntityMock(id, "test", "description", 1);
-        given(this.subjectsMapper.find(id)).willReturn(subjectEntity);
-
-        final SubjectModelInterface subjectModel = this.subjectsService.find(id);
-
-        Assert.assertEquals(this.mapSubjectModel(subjectEntity), subjectModel);
-
-    }
-
-    @Test
-    public void testFindAbsentModel() throws Exception {
-
-        final Integer id = 10;
-        given(this.subjectsMapper.find(id)).willReturn(null);
-
-        final SubjectModelInterface subjectModel = this.subjectsService.find(id);
-
-        Assert.assertEquals(null, subjectModel);
-
-    }
-
-    @Test
-    public void testFindByUser() throws Exception {
-        final Integer userId = 7;
-        final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
-        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(3, "test3", "description3", userId);
-        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(12, "test12", "description12", userId);
-        final List<SubjectEntity> subjectsEntities = new ArrayList<>();
-        subjectsEntities.add(subjectEntityFirst);
-        subjectsEntities.add(subjectEntitySecond);
-        Mockito.when(userModel.getId()).thenReturn(userId);
-        given(this.subjectsMapper.findByUserId(userId)).willReturn(subjectsEntities);
-        final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
-        subjectsModels.add(this.mapSubjectModel(subjectEntityFirst));
-        subjectsModels.add(this.mapSubjectModel(subjectEntitySecond));
-
-        final List<SubjectModelInterface> foundedSubjectsModels = this.subjectsService.findByUser(userModel);
-
-        verify(this.subjectsMapper).findByUserId(userId);
-        Assert.assertEquals(subjectsModels, foundedSubjectsModels);
-    }
-
-    @Test
-    public void testFindByUserWithOptions() throws Exception {
-        final Integer userId = 7;
-        final UserModelInterface userModel = Mockito.mock(UserModelInterface.class);
-        final SubjectEntity subjectEntityFirst = this.createSubjectEntityMock(3, "test3", "description3", userId);
-        final SubjectEntity subjectEntitySecond = this.createSubjectEntityMock(12, "test12", "description12", userId);
-        final List<SubjectEntity> subjectsEntities = new ArrayList<>();
-        subjectsEntities.add(subjectEntityFirst);
-        subjectsEntities.add(subjectEntitySecond);
-        given(userModel.getId()).willReturn(userId);
-        given(this.subjectsMapper.findByUserId(userId)).willReturn(subjectsEntities);
-        final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
-        subjectsModels.add(this.mapSubjectModel(subjectEntityFirst));
-        subjectsModels.add(this.mapSubjectModel(subjectEntitySecond));
-        final SubjectsOptionsInterface subjectOptions = Mockito.mock(SubjectsOptionsInterface.class);
-        given(subjectOptions.withRelations(subjectsModels)).willReturn(subjectsModels);
-
-        final List<SubjectModelInterface> foundedSubjectsModels =
-                this.subjectsService.findByUser(userModel, subjectOptions);
-
-        verify(this.subjectsMapper).findByUserId(userId);
-        verify(subjectOptions).withRelations(subjectsModels);
-        Assert.assertEquals(subjectsModels, foundedSubjectsModels);
-    }
-
-    @Test
-    public void testSaveCreatesEntity() throws Exception {
-
-        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", "description", 1, 1);
-
-        this.subjectsService.save(subjectModel);
-
-        verify(this.subjectsMapper, times(1)).insert(this.mapSubjectEntity(subjectModel));
-
-    }
-
-    @Test
-    public void testSaveUpdatesEntity() throws Exception {
-
-        final SubjectModelInterface subjectModel = this.createSubjectModel(1, "test", "description", 1, 1);
-
-        this.subjectsService.save(subjectModel);
-
-        verify(this.subjectsMapper, times(1)).update(this.mapSubjectEntity(subjectModel));
-
-    }
-
-    @Test
-    public void testSaveEntitiesList() throws Exception {
-
-        final SubjectModelInterface subjectModelFirst = this.createSubjectModel(null, "test1", "description1", 1, 1);
-        final SubjectModelInterface subjectModelSecond = this.createSubjectModel(null, "test2", "description2", 2, 2);
-
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-
-        final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
-        subjectsModels.add(subjectModelFirst);
-        subjectsModels.add(subjectModelSecond);
-
-        final SubjectsServiceInterface subjectsServiceSpy = Mockito.spy(subjectsService);
-
-        subjectsServiceSpy.save(subjectsModels);
-        verify(subjectsServiceSpy, times(1)).save(subjectModelFirst);
-        verify(subjectsServiceSpy, times(1)).save(subjectModelSecond);
-
-        subjectsServiceSpy.save(subjectsModels, subjectsOptions);
-        verify(subjectsServiceSpy, times(1)).save(subjectModelFirst, subjectsOptions);
-        verify(subjectsServiceSpy, times(1)).save(subjectModelSecond, subjectsOptions);
-
-    }
-
-    @Test
-    public void testDeleteIdentifiedModel() throws Exception {
-
-        final SubjectModelInterface subjectModel = this.createSubjectModel(1, "test", "description", 1, 1);
-
-        this.subjectsService.delete(subjectModel);
-
-        verify(this.subjectsMapper, times(1)).delete(this.mapSubjectEntity(subjectModel));
-
-    }
-
-    @Test
-    public void testDeleteModelsList() throws Exception {
-
-        final SubjectModelInterface subjectModelFirst = this.createSubjectModel(2, "test2", "description2", 1, 1);
-        final SubjectModelInterface subjectModelSecond = this.createSubjectModel(3, "test3", "description3", 2, 2);
-
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-
-        final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
-        subjectsModels.add(subjectModelFirst);
-        subjectsModels.add(subjectModelSecond);
-
-        final SubjectsServiceInterface subjectsServiceSpy = Mockito.spy(subjectsService);
-
-        subjectsServiceSpy.delete(subjectsModels);
-        verify(subjectsServiceSpy, times(1)).delete(subjectModelFirst);
-        verify(subjectsServiceSpy, times(1)).delete(subjectModelSecond);
-
-        subjectsServiceSpy.delete(subjectsModels, subjectsOptions);
-        verify(subjectsServiceSpy, times(1)).delete(subjectModelFirst, subjectsOptions);
-        verify(subjectsServiceSpy, times(1)).delete(subjectModelSecond, subjectsOptions);
-    }
-
-    @Test
-    public void testDeleteUnidentifiedModel() throws Exception {
-
-        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", "description", 1, 1);
-
-        exception.expect(DeleteUnidentifiedModelException.class);
-        this.subjectsService.delete(subjectModel);
-
-    }
-
-    @Test
-    public void testFindWithOptions() throws Exception {
-        final Integer id = 1;
-        final Integer userId = 1;
-        final SubjectEntity subjectEntity = this.createSubjectEntityMock(4, "test3", "description3", userId);
-        final SubjectModelInterface subjectModel = this.mapSubjectModel(subjectEntity);
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-        given(this.subjectsMapper.find(id)).willReturn(subjectEntity);
-        given(subjectsOptions.withRelations(subjectModel)).willReturn(subjectModel);
-
-        final SubjectModelInterface foundedSubjectModel = this.subjectsService.find(id, subjectsOptions);
-
-        Assert.assertEquals(subjectModel, foundedSubjectModel);
-        verify(subjectsOptions).withRelations(subjectModel);
     }
 
     @Test
     public void testFindAllWithOptions() throws Exception {
-        final List<SubjectEntity> subjectsEntities = this.getSubjectsEntities();
-        final List<SubjectModelInterface> subjectsModels = this.getUsersModels();
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final List<SubjectEntity> subjectsEntities = this.getSubjectsFixturesEntities();
+        final List<SubjectModelInterface> subjectsModels = this.getSubjectsFixturesModels();
         final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-        given(this.subjectsMapper.findAll()).willReturn(subjectsEntities);
-        given(subjectsOptions.withRelations(Mockito.anyList())).willReturn(subjectsModels);
+        when(this.subjectsMapper.findAll()).thenReturn(subjectsEntities);
+        when(subjectsOptions.withRelations(listCaptor.capture())).thenReturn(subjectsModels);
 
-        final List<SubjectModelInterface> foundedSubjectsModels = this.subjectsService.findAll(subjectsOptions);
+        final List<SubjectModelInterface> subjectsFoundedModels = this.subjectsService.findAll(subjectsOptions);
 
-        verify(subjectsOptions).withRelations(foundedSubjectsModels);
-        Assert.assertEquals(subjectsModels, foundedSubjectsModels);
+        this.assertServicesSet(subjectsOptions);
+        this.subjectsSupport.assertModelsListEquals(subjectsModels, listCaptor.getValue());
+        Assert.assertSame(subjectsModels, subjectsFoundedModels);
+    }
+
+    @Test
+    public void testFindPresentModel() throws Exception {
+        final SubjectEntity subjectEntity = this.subjectsSupport.getEntityFixtureMock(0);
+        when(this.subjectsMapper.find(subjectEntity.getId())).thenReturn(subjectEntity);
+
+        final SubjectModelInterface subjectFoundedModel = this.subjectsService.find(subjectEntity.getId());
+
+        this.subjectsSupport.assertEquals(this.subjectsSupport.getModelFixtureMock(0), subjectFoundedModel);
+    }
+
+    @Test
+    public void testFindAbsentModel() throws Exception {
+        final Integer id = 10;
+        when(this.subjectsMapper.find(id)).thenReturn(null);
+
+        final SubjectModelInterface subjectFoundedModel = this.subjectsService.find(id);
+
+        Assert.assertNull(subjectFoundedModel);
+    }
+
+    @Test
+    public void testFindWithOptions() throws Exception {
+        final ArgumentCaptor<SubjectModelInterface> subjectModelCaptor = ArgumentCaptor.forClass(SubjectModelInterface.class);
+        final SubjectEntity subjectEntity = this.subjectsSupport.getEntityFixtureMock(0);
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        when(this.subjectsMapper.find(subjectModel.getId())).thenReturn(subjectEntity);
+        when(subjectsOptions.withRelations(subjectModelCaptor.capture())).thenReturn(subjectModel);
+
+        final SubjectModelInterface subjectFoundedModel = this.subjectsService.find(subjectModel.getId(), subjectsOptions);
+
+        this.assertServicesSet(subjectsOptions);
+        this.subjectsSupport.assertEquals(subjectModel, subjectModelCaptor.getValue());
+        Assert.assertSame(subjectModel, subjectFoundedModel);
+    }
+
+    @Test
+    public void testFindByUserPresentList() throws Exception {
+        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
+        final List<SubjectEntity> subjectsEntities = this.getSubjectsFixturesEntities();
+        when(this.subjectsMapper.findByUserId(userModel.getId())).thenReturn(subjectsEntities);
+
+        final List<SubjectModelInterface> subjectsFoundedModels = this.subjectsService.findByUser(userModel);
+
+        this.subjectsSupport.assertModelsListEquals(this.getSubjectsFixturesModels(), subjectsFoundedModels);
+    }
+
+    @Test
+    public void testFindByUserAbsentList() throws Exception {
+        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
+        when(this.subjectsMapper.findByUserId(userModel.getId())).thenReturn(new ArrayList<>(0));
+
+        final List<SubjectModelInterface> subjectsFoundedModels = this.subjectsService.findByUser(userModel);
+
+        Assert.assertEquals(0, subjectsFoundedModels.size());
+    }
+
+    @Test
+    public void testFindByUserWithOptions() throws Exception {
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
+        final List<SubjectEntity> subjectsEntities = this.getSubjectsFixturesEntities();
+        when(this.subjectsMapper.findByUserId(userModel.getId())).thenReturn(subjectsEntities);
+        final List<SubjectModelInterface> subjectsModels = this.getSubjectsFixturesModels();
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        when(subjectsOptions.withRelations(listCaptor.capture())).thenReturn(subjectsModels);
+
+        final List<SubjectModelInterface> subjectsFoundedModels = this.subjectsService.findByUser(userModel, subjectsOptions);
+
+        this.assertServicesSet(subjectsOptions);
+        this.subjectsSupport.assertModelsListEquals(subjectsModels, listCaptor.getValue());
+        Assert.assertSame(subjectsModels, subjectsFoundedModels);
+    }
+
+    @Test
+    public void testSaveCreatesEntity() throws Exception {
+        final ArgumentCaptor<SubjectEntity> subjectEntityCaptor = ArgumentCaptor.forClass(SubjectEntity.class);
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelAdditionalMock(0);
+
+        this.subjectsService.save(subjectModel);
+
+        verify(this.subjectsMapper, times(1)).insert(subjectEntityCaptor.capture());
+        this.subjectsSupport.assertEquals(this.subjectsSupport.getEntityAdditionalMock(0), subjectEntityCaptor.getValue());
+    }
+
+    @Test
+    public void testSaveUpdateEntityIdOnCreation() throws Exception {
+        final Integer id = 5;
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelAdditionalMock(0);
+        doAnswer(invocation -> {
+            final SubjectEntity subjectEntity = (SubjectEntity) invocation.getArguments()[0];
+            subjectEntity.setId(id);
+            return null;
+        }).when(this.subjectsMapper).insert(any());
+
+        this.subjectsService.save(subjectModel);
+
+        verify(subjectModel, times(1)).setId(id);
+    }
+
+    @Test
+    public void testSaveUpdatesEntity() throws Exception {
+        final ArgumentCaptor<SubjectEntity> subjectEntityCaptor = ArgumentCaptor.forClass(SubjectEntity.class);
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
+
+        this.subjectsService.save(subjectModel);
+
+        verify(this.subjectsMapper, times(1)).update(subjectEntityCaptor.capture());
+        this.subjectsSupport.assertEquals(this.subjectsSupport.getEntityFixtureMock(0), subjectEntityCaptor.getValue());
     }
 
     @Test
     public void testSaveWithOptions() throws Exception {
-        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", "description", 1, 1);
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
         final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
 
         this.subjectsService.save(subjectModel, subjectsOptions);
 
-        verify(subjectsOptions).saveWithRelations(subjectModel);
+        this.assertServicesSet(subjectsOptions);
+        verify(subjectsOptions, times(1)).saveWithRelations(subjectModel);
+        verifyNoMoreInteractions(this.subjectsMapper);
+    }
+
+    @Test
+    public void testSaveModelsList() throws Exception {
+        final ArgumentCaptor<SubjectEntity> subjectEntityCaptor = ArgumentCaptor.forClass(SubjectEntity.class);
+        final List<SubjectModelInterface> subjectsModels = this.getSubjectsFixturesModels();
+
+        this.subjectsService.save(subjectsModels);
+
+        verify(this.subjectsMapper, times(subjectsModels.size())).update(subjectEntityCaptor.capture());
+        this.subjectsSupport.assertEntitiesListEquals(this.getSubjectsFixturesEntities(), subjectEntityCaptor.getAllValues());
+    }
+
+    @Test
+    public void testSaveModelsListWithOptions() throws Exception {
+        final ArgumentCaptor<SubjectModelInterface> subjectModelCaptor = ArgumentCaptor.forClass(SubjectModelInterface.class);
+        final List<SubjectModelInterface> subjectsModels = this.getSubjectsFixturesModels();
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        this.subjectsService.save(subjectsModels, subjectsOptions);
+
+        this.assertServicesSet(subjectsOptions, subjectsModels.size());
+        verify(subjectsOptions, times(subjectsModels.size())).saveWithRelations(subjectModelCaptor.capture());
+        this.subjectsSupport.assertModelsListEquals(subjectsModels, subjectModelCaptor.getAllValues());
+        verifyNoMoreInteractions(this.subjectsMapper);
+    }
+
+    @Test
+    public void testDeleteIdentifiedModel() throws Exception {
+        final ArgumentCaptor<SubjectEntity> subjectEntityCaptor = ArgumentCaptor.forClass(SubjectEntity.class);
+
+        this.subjectsService.delete(this.subjectsSupport.getModelFixtureMock(0));
+
+        verify(this.subjectsMapper, times(1)).delete(subjectEntityCaptor.capture());
+        this.subjectsSupport.assertEquals(this.subjectsSupport.getEntityFixtureMock(0), subjectEntityCaptor.getValue());
+    }
+
+    @Test
+    public void testDeleteUnidentifiedModel() throws Exception {
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelAdditionalMock(0);
+
+        exception.expect(DeleteUnidentifiedModelException.class);
+        this.subjectsService.delete(subjectModel);
     }
 
     @Test
     public void testDeleteWithOptions() throws Exception {
-        final SubjectModelInterface subjectModel = this.createSubjectModel(null, "test", "description", 1, 1);
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
         final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
 
         this.subjectsService.delete(subjectModel, subjectsOptions);
 
-        verify(subjectsOptions).deleteWithRelations(subjectModel);
+        this.assertServicesSet(subjectsOptions);
+        verify(subjectsOptions, times(1)).deleteWithRelations(subjectModel);
+        verifyNoMoreInteractions(this.subjectsMapper);
+    }
+
+    @Test
+    public void testDeleteModelsList() throws Exception {
+        final ArgumentCaptor<SubjectEntity> subjectEntityCaptor = ArgumentCaptor.forClass(SubjectEntity.class);
+        final List<SubjectModelInterface> subjectsModels = this.getSubjectsFixturesModels();
+
+        this.subjectsService.delete(subjectsModels);
+
+        verify(this.subjectsMapper, times(subjectsModels.size())).delete(subjectEntityCaptor.capture());
+        this.subjectsSupport.assertEntitiesListEquals(this.getSubjectsFixturesEntities(), subjectEntityCaptor.getAllValues());
+    }
+
+    @Test
+    public void testDeleteModelsListWithOptions() throws Exception {
+        final ArgumentCaptor<SubjectModelInterface> subjectModelCaptor = ArgumentCaptor.forClass(SubjectModelInterface.class);
+        final List<SubjectModelInterface> subjectsModels = this.getSubjectsFixturesModels();
+        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+
+        this.subjectsService.delete(subjectsModels, subjectsOptions);
+
+        this.assertServicesSet(subjectsOptions, subjectsModels.size());
+        verify(subjectsOptions, times(subjectsModels.size())).deleteWithRelations(subjectModelCaptor.capture());
+        this.subjectsSupport.assertModelsListEquals(subjectsModels, subjectModelCaptor.getAllValues());
+        verifyNoMoreInteractions(this.subjectsMapper);
     }
 
 }
