@@ -1,6 +1,9 @@
 package easytests.support;
 
 import easytests.core.entities.IssueStandardEntity;
+import easytests.core.models.IssueStandardModelInterface;
+import easytests.core.models.empty.ModelsListEmpty;
+import easytests.core.models.empty.SubjectModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -18,6 +21,12 @@ public class IssueStandardSupport {
                     15,
                     3
             },
+            {
+                    5,
+                    3600,
+                    30,
+                    3
+            }
     };
 
     protected static Object[][] additional = new Object[][]{
@@ -69,8 +78,45 @@ public class IssueStandardSupport {
         return issueStandardEntity;
     }
 
+    public IssueStandardModelInterface getModelFixtureMock(Integer index){
+        return this.getModelMock(fixtures[index]);
+    }
+
+    private IssueStandardModelInterface getModelMock(Object[] data) {
+        return this.getModelMock(
+                (Integer) data[0],
+                (Integer) data[1],
+                (Integer) data[2],
+                (Integer) data[3]
+        );
+    }
+
+    private IssueStandardModelInterface getModelMock(
+            Integer id,
+            Integer timeLimit,
+            Integer questionsNumber,
+            Integer subjectId
+    ) {
+        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
+        Mockito.when(issueStandardModel.getId()).thenReturn(id);
+        Mockito.when(issueStandardModel.getTimeLimit()).thenReturn(timeLimit);
+        Mockito.when(issueStandardModel.getQuestionsNumber()).thenReturn(questionsNumber);
+        Mockito.when(issueStandardModel.getTopicPriorities()).thenReturn(new ModelsListEmpty());
+        Mockito.when(issueStandardModel.getQuestionTypeOptions()).thenReturn(new ModelsListEmpty());
+        Mockito.when(issueStandardModel.getSubject()).thenReturn(new SubjectModelEmpty(subjectId));
+        return issueStandardModel;
+    }
+
     public void assertEquals(IssueStandardEntity expected, IssueStandardEntity actual){
                 assertEquals(expected, actual, false);
+    }
+
+    public void assertEquals(IssueStandardModelInterface expected, IssueStandardEntity actual){
+
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getTimeLimit(), actual.getTimeLimit());
+        Assert.assertEquals(expected.getQuestionsNumber(), actual.getQuestionsNumber());
+        Assert.assertEquals(expected.getSubject().getId(), actual.getSubjectId());
     }
 
     public void assertEqualsWithoutId(IssueStandardEntity expected, IssueStandardEntity actual){
