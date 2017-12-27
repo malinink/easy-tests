@@ -1,21 +1,17 @@
 package easytests.support;
 
 import easytests.core.entities.QuestionTypeEntity;
-import easytests.core.entities.UserEntity;
-import easytests.core.models.QuestionTypeModel;
 import easytests.core.models.QuestionTypeModelInterface;
-import easytests.core.models.empty.ModelsListEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
 import java.util.List;
 
+
 /**
  * @author Vlasovigor
  */
-
-
-public class QuestionTypeSupport {
+public class QuestionTypesSupport {
 
     protected static Object[][] fixtures = new Object[][]{
             {
@@ -31,7 +27,7 @@ public class QuestionTypeSupport {
                     "Нумерация",
             },
             {
-                4,
+                    4,
                     "Текст",
             },
     };
@@ -51,10 +47,10 @@ public class QuestionTypeSupport {
             Integer id,
             String name
     ) {
-        final QuestionTypeEntity questiontypeEntity = Mockito.mock(QuestionTypeEntity.class);
-        Mockito.when(questiontypeEntity.getId()).thenReturn(id);
-        Mockito.when(questiontypeEntity.getName()).thenReturn(name);
-        return questiontypeEntity;
+        final QuestionTypeEntity question_typeEntity = Mockito.mock(QuestionTypeEntity.class);
+        Mockito.when(question_typeEntity.getId()).thenReturn(id);
+        Mockito.when(question_typeEntity.getName()).thenReturn(name);
+        return question_typeEntity;
     }
 
     public QuestionTypeModelInterface getModelFixtureMock(Integer index) {
@@ -72,10 +68,10 @@ public class QuestionTypeSupport {
             Integer id,
             String name
     ) {
-        final QuestionTypeModelInterface questiontypeModel = Mockito.mock(QuestionTypeModelInterface.class);
-        Mockito.when(questiontypeModel.getId()).thenReturn(id);
-        Mockito.when(questiontypeModel.getName()).thenReturn(name);
-        return questiontypeModel;
+        final QuestionTypeModelInterface question_typeModel = Mockito.mock(QuestionTypeModelInterface.class);
+        Mockito.when(question_typeModel.getId()).thenReturn(id);
+        Mockito.when(question_typeModel.getName()).thenReturn(name);
+        return question_typeModel;
     }
 
     public void assertEquals(QuestionTypeEntity expected, QuestionTypeEntity actual){assertEquals(expected, actual, false);}
@@ -121,8 +117,8 @@ public class QuestionTypeSupport {
     public void assertModelsListEquals(List<QuestionTypeModelInterface> expected, List<QuestionTypeModelInterface> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (QuestionTypeModelInterface questiontypeModel: expected) {
-            this.assertEquals(questiontypeModel, actual.get(i));
+        for (QuestionTypeModelInterface question_typeModel: expected) {
+            this.assertEquals(question_typeModel, actual.get(i));
             i++;
         }
     }
@@ -130,8 +126,8 @@ public class QuestionTypeSupport {
     public void assertEntitiesListEquals(List<QuestionTypeEntity> expected, List<QuestionTypeEntity> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (QuestionTypeEntity questiontypeEntity: expected) {
-            this.assertEquals(questiontypeEntity, actual.get(i));
+        for (QuestionTypeEntity question_typeEntity: expected) {
+            this.assertEquals(question_typeEntity, actual.get(i));
             i++;
         }
     }
