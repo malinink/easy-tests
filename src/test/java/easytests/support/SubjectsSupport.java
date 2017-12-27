@@ -5,6 +5,7 @@ import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.empty.IssueStandardModelEmpty;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.UserModelEmpty;
+import java.util.List;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -176,6 +177,24 @@ public class SubjectsSupport {
         Assert.assertEquals(new ModelsListEmpty(), actual.getTopics());
         Assert.assertEquals(new IssueStandardModelEmpty(), actual.getIssueStandard());
         Assert.assertEquals(new ModelsListEmpty(), actual.getIssues());
+    }
+
+    public void assertModelsListEquals(List<SubjectModelInterface> expected, List<SubjectModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (SubjectModelInterface subjectModel: expected) {
+            this.assertEquals(subjectModel, actual.get(i));
+            i++;
+        }
+    }
+
+    public void assertEntitiesListEquals(List<SubjectEntity> expected, List<SubjectEntity> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (SubjectEntity subjectEntity: expected) {
+            this.assertEquals(subjectEntity, actual.get(i));
+            i++;
+        }
     }
 
 }

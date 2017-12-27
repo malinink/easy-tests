@@ -39,6 +39,7 @@ public class SubjectsMapperTest extends AbstractMapperTest {
     @Test
     public void testFind() throws Exception {
         final SubjectEntity subjectFixtureEntity = this.subjectsSupport.getEntityFixtureMock(0);
+
         final SubjectEntity subjectFoundedEntity = this.subjectsMapper.find(1);
 
         this.subjectsSupport.assertEquals(subjectFixtureEntity, subjectFoundedEntity);
@@ -49,6 +50,7 @@ public class SubjectsMapperTest extends AbstractMapperTest {
         final List<SubjectEntity> subjectsFixtureEntities = new ArrayList<>();
         subjectsFixtureEntities.add(this.subjectsSupport.getEntityFixtureMock(0));
         subjectsFixtureEntities.add(this.subjectsSupport.getEntityFixtureMock(1));
+
         final List<SubjectEntity> subjectsFoundedEntities = this.subjectsMapper.findByUserId(2);
 
         Assert.assertEquals(2, subjectsFoundedEntities.size());
@@ -64,6 +66,7 @@ public class SubjectsMapperTest extends AbstractMapperTest {
     public void testInsert() throws Exception {
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final SubjectEntity subjectUnidentifiedEntity = this.subjectsSupport.getEntityAdditionalMock(0);
+
         this.subjectsMapper.insert(subjectUnidentifiedEntity);
 
         verify(subjectUnidentifiedEntity, times(1)).setId(id.capture());
