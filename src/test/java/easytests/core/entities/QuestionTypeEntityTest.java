@@ -1,17 +1,16 @@
 package easytests.core.entities;
 
 import easytests.core.models.QuestionTypeModelInterface;
-import easytests.support.QuestionTypeSupport;
+import easytests.support.QuestionTypesSupport;
 import org.junit.Test;
 
 
 /**
  * @author VlasovIgor
  */
-
 public class QuestionTypeEntityTest extends AbstractEntityTest {
 
-    private QuestionTypeSupport questiontypesSupport = new QuestionTypeSupport();
+    private QuestionTypesSupport question_typesSupport = new QuestionTypesSupport();
 
     @Test
     public void testCommon() throws Exception {
@@ -20,12 +19,12 @@ public class QuestionTypeEntityTest extends AbstractEntityTest {
 
     @Test
     public void testMap() throws Exception {
-        final QuestionTypeModelInterface questiontypeModel = this.questiontypesSupport.getModelFixtureMock(0);
+        final QuestionTypeModelInterface question_typeModel = this.question_typesSupport.getModelFixtureMock(0);
         final QuestionTypeEntity questiontypeEntity = new QuestionTypeEntity();
 
-        questiontypeEntity.map(questiontypeModel);
+        questiontypeEntity.map(question_typeModel);
 
-        this.questiontypesSupport.assertEquals(questiontypeModel,questiontypeEntity );
+        this.question_typesSupport.assertEquals(question_typeModel,questiontypeEntity );
     }
 
 }
