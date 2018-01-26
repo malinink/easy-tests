@@ -1,49 +1,30 @@
 package easytests.core.entities;
 
-import easytests.core.models.AnswerModelInterface;
-import easytests.core.models.PointModelInterface;
 import easytests.core.models.SolutionModelInterface;
+import easytests.support.SolutionsSupport;
 import org.junit.Test;
-import org.meanbean.test.BeanTester;
-import org.meanbean.test.EqualsMethodTester;
-import org.meanbean.test.HashCodeMethodTester;
-import org.mockito.Mockito;
-import static org.junit.Assert.assertEquals;
+
 
 /**
- * @author SingularityA
+ * @author SvetlanaTselikova
  */
-public class SolutionEntityTest {
+public class SolutionEntityTest extends AbstractEntityTest {
+
+    private SolutionsSupport solutionsSupport = new SolutionsSupport();
 
     @Test
     public void testCommon() throws Exception {
-        new BeanTester().testBean(SolutionEntity.class);
-        new EqualsMethodTester().testEqualsMethod(SolutionEntity.class);
-        new HashCodeMethodTester().testHashCodeMethod(SolutionEntity.class);
+        this.testCommon(SolutionEntity.class);
     }
 
     @Test
     public void testMap() throws Exception {
-        final Integer id = 1;
-        final Integer answerId = 10;
-        final Integer pointId = 3;
-
-        final AnswerModelInterface answerModel = Mockito.mock(AnswerModelInterface.class);
-        Mockito.when(answerModel.getId()).thenReturn(answerId);
-
-        final PointModelInterface pointModel = Mockito.mock(PointModelInterface.class);
-        Mockito.when(pointModel.getId()).thenReturn(pointId);
-
-        final SolutionModelInterface solutionModel = Mockito.mock(SolutionModelInterface.class);
-        Mockito.when(solutionModel.getId()).thenReturn(id);
-        Mockito.when(solutionModel.getAnswer()).thenReturn(answerModel);
-        Mockito.when(solutionModel.getPoint()).thenReturn(pointModel);
-
+        final SolutionModelInterface solutionModel = this.solutionsSupport.getModelFixtureMock(0);
         final SolutionEntity solutionEntity = new SolutionEntity();
+
         solutionEntity.map(solutionModel);
 
-        assertEquals(id, solutionEntity.getId());
-        assertEquals(answerId, solutionEntity.getAnswerId());
-        assertEquals(pointId, solutionEntity.getPointId());
+        this.solutionsSupport.assertEquals(solutionModel, solutionEntity);
     }
+
 }
