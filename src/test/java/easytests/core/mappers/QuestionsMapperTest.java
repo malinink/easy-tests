@@ -51,15 +51,13 @@ public class QuestionsMapperTest extends AbstractMapperTest {
     public void testFindByTopicId() throws Exception {
         final List<QuestionEntity> questionsFixtureEntities = new ArrayList<>();
 
-        questionsFixtureEntities.add(this.questionsSupport.getEntityFixtureMock(0));
-        questionsFixtureEntities.add(this.questionsSupport.getEntityFixtureMock(1));
         questionsFixtureEntities.add(this.questionsSupport.getEntityFixtureMock(2));
 
         final List<QuestionEntity> questionsFoundedEntities = this.questionsMapper.findByTopicId(2);
 
         Assert.assertEquals(1, questionsFoundedEntities.size());
 
-        Integer index = 2;
+        Integer index = 0;
         for (QuestionEntity questionEntity: questionsFoundedEntities) {
             this.questionsSupport.assertEquals(questionsFixtureEntities.get(index), questionEntity);
             index++;
