@@ -11,9 +11,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 /**
- * @author firkhraag
- * refactor:
  * @author RisaMagpie
  */
 public class QuestionsMapperTest extends AbstractMapperTest {
@@ -39,7 +38,6 @@ public class QuestionsMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFind() throws Exception {
-
         final QuestionEntity questionFixtureEntity = this.questionsSupport.getEntityFixtureMock(0);
 
         final QuestionEntity questionFoundedEntity = this.questionsMapper.find(1);

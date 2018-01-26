@@ -6,10 +6,10 @@ import easytests.core.models.empty.*;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
+
 /**
  * @author RisaMagpie
  */
-
 public class QuestionsSupport {
     protected static Object[][] fixtures = new Object[][]{
             {
@@ -47,6 +47,7 @@ public class QuestionsSupport {
                     2
             },
     };
+
     public QuestionEntity getEntityFixtureMock(Integer index) {
         return this.getEntityMock(fixtures[index]);
     }
@@ -81,7 +82,9 @@ public class QuestionsSupport {
         return this.getModelMock(fixtures[index]);
     }
 
-    public QuestionModelInterface getModelAdditionalMock(Integer index) { return this.getModelMock(additional[index]); }
+    public QuestionModelInterface getModelAdditionalMock(Integer index) {
+        return this.getModelMock(additional[index]);
+    }
 
     private QuestionModelInterface getModelMock(Object[] data) {
         return this.getModelMock(
