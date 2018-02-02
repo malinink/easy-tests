@@ -6,6 +6,8 @@ import easytests.core.models.empty.ModelsListEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
+import java.util.List;
+
 
 /**
  * @author malinink
@@ -225,6 +227,24 @@ public class UsersSupport {
     public void assertEquals(UserEntity expected, UserModelInterface actual) {
         assertEquals(actual, expected);
         Assert.assertEquals(new ModelsListEmpty(), actual.getSubjects());
+    }
+
+    public void assertModelsListEquals(List<UserModelInterface> expected, List<UserModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (UserModelInterface userModel: expected) {
+            this.assertEquals(userModel, actual.get(i));
+            i++;
+        }
+    }
+
+    public void assertEntitiesListEquals(List<UserEntity> expected, List<UserEntity> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (UserEntity userEntity: expected) {
+            this.assertEquals(userEntity, actual.get(i));
+            i++;
+        }
     }
 
 }
