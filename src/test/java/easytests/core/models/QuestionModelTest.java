@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.meanbean.test.ConfigurationBuilder;
 
 /**
- * @author risa_magpie //22 min
+ * @author risa_magpie
  */
 public class QuestionModelTest extends AbstractModelTest {
 
@@ -15,9 +15,9 @@ public class QuestionModelTest extends AbstractModelTest {
     @Override
     protected ConfigurationBuilder getConfigurationBuilder() {
         return super.getConfigurationBuilder()
+                .ignoreProperty("questionType")
                 .ignoreProperty("topic")
-                .ignoreProperty("answers")
-                .ignoreProperty("questionType");
+                .ignoreProperty("answers");
     }
 
     @Test

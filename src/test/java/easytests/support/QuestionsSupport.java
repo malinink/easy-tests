@@ -161,7 +161,6 @@ public class QuestionsSupport {
 
     public void assertEquals(QuestionEntity expected, QuestionModelInterface actual) {
         assertEquals(actual, expected);
-        Assert.assertEquals(new QuestionModelEmpty(expected.getQuestionTypeId()), actual.getQuestionType());/**Do we need it?**/
         Assert.assertEquals(new ModelsListEmpty(), actual.getAnswers());
     }
 
