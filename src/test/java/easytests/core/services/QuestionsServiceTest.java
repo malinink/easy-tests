@@ -2,27 +2,29 @@ package easytests.core.services;
 
 import easytests.core.entities.QuestionEntity;
 import easytests.core.mappers.QuestionsMapper;
-import easytests.core.models.QuestionModel;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
-import easytests.support.Models;
-import easytests.support.Entities;
+import easytests.support.QuestionsSupport;
+import easytests.support.TopicsSupport;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.mock.mockito.*;
 import org.springframework.test.context.junit4.*;
 
+
 /**
- * @author firkhraag
+ * @author risa_magpie 29 min
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,34 +39,44 @@ public class QuestionsServiceTest {
     @Autowired
     private QuestionsService questionsService;
 
-    private QuestionModelInterface mapQuestionModel(QuestionEntity questionEntity) {
-        final QuestionModelInterface questionModel = new QuestionModel();
-        questionModel.map(questionEntity);
-        return questionModel;
-    }
+    //new:
 
-    private QuestionEntity mapQuestionEntity(QuestionModelInterface questionModel) {
-        final QuestionEntity questionEntity = new QuestionEntity();
-        questionEntity.map(questionModel);
-        return questionEntity;
-    }
+    private QuestionsSupport questionsSupport = new QuestionsSupport();
 
-    private List<QuestionEntity> getQuestionsEntities() {
+    private TopicsSupport topicsSupport = new TopicsSupport();
+
+    ///don't forget to check others Support classes
+
+    private List<QuestionEntity> getQuestionsFixturesEntities() {
         final List<QuestionEntity> questionsEntities = new ArrayList<>(2);
-        final QuestionEntity questionEntityFirst = Entities.createQuestionEntityMock(1, "test1", 1, 1);
-        final QuestionEntity questionEntitySecond = Entities.createQuestionEntityMock(2, "test2", 2, 1);
-        questionsEntities.add(questionEntityFirst);
-        questionsEntities.add(questionEntitySecond);
+        questionsEntities.add(this.questionsSupport.getEntityFixtureMock(0));
+        questionsEntities.add(this.questionsSupport.getEntityFixtureMock(1));
         return questionsEntities;
     }
 
-    private List<QuestionModelInterface> getQuestionsModels() {
+    private List<QuestionModelInterface> getQuestionsFixturesModels() {
         final List<QuestionModelInterface> questionsModels = new ArrayList<>(2);
-        for (QuestionEntity questionEntity: this.getQuestionsEntities()) {
-            questionsModels.add(this.mapQuestionModel(questionEntity));
-        }
+        questionsModels.add(this.questionsSupport.getModelFixtureMock(0));
+        questionsModels.add(this.questionsSupport.getModelFixtureMock(1));
         return questionsModels;
     }
+
+    private void assertServicesSet(QuestionsOptionsInterface questionsOptions) throws Exception  {
+        this.assertServicesSet(questionsOptions, 1);
+    }
+
+    private void assertServicesSet(QuestionsOptionsInterface questionsOptions, Integer times) {
+        verify(questionsOptions, times(times)).setQuestionsService(this.questionsService);
+        verify(questionsOptions, times(times)).setAnswersService(any(AnswersServiceInterface.class));
+        verify(questionsOptions, times(times)).setTopicsService(any(TopicsServiceInterface.class));
+        verify(questionsOptions, times(times)).setQuestionTypesService(any(QuestionTypesServiceInterface.class));
+    }
+
+    //there must be tests:
+
+
+
+    //was:
 
     @Test
     public void testFindAllPresentList() throws Exception {
