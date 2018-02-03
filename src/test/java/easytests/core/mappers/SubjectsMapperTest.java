@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class SubjectsMapperTest extends AbstractMapperTest {
 
-    protected SubjectsSupport subjectsSupport = new SubjectsSupport();
+    private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
     @Autowired
     private SubjectsMapper subjectsMapper;
@@ -28,10 +28,10 @@ public class SubjectsMapperTest extends AbstractMapperTest {
         Assert.assertEquals(3, subjectsFoundedEntities.size());
 
         Integer index = 0;
-        for (SubjectEntity subbjectEntity: subjectsFoundedEntities) {
+        for (SubjectEntity subjectEntity: subjectsFoundedEntities) {
             final SubjectEntity subjectFixtureEntity = this.subjectsSupport.getEntityFixtureMock(index);
 
-            this.subjectsSupport.assertEquals(subjectFixtureEntity, subbjectEntity);
+            this.subjectsSupport.assertEquals(subjectFixtureEntity, subjectEntity);
             index++;
         }
     }
