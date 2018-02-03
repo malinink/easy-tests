@@ -57,8 +57,12 @@ public class QuizzesMapperTest extends AbstractMapperTest {
         final List<QuizEntity> quizzesFoundedEntities = this.quizzesMapper.findByIssueId(2);
 
         Assert.assertEquals(1, quizzesFoundedEntities.size());
-        this.quizzesSupport.assertEquals(quizzesFixtureEntities.get(0), quizzesFoundedEntities.get(0));
 
+        Integer index = 0;
+        for(QuizEntity quizEntity: quizzesFoundedEntities) {
+            this.quizzesSupport.assertEquals(quizzesFixtureEntities.get(index), quizEntity);
+            index++;
+        }
     }
 
     @Test
