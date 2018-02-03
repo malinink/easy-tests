@@ -22,4 +22,5 @@ public abstract class AbstractEntityTest extends AbstractMeanBeanTest {
     }
 
     public abstract void testMap() throws Exception;
+
 }
