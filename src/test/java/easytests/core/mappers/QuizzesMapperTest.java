@@ -24,11 +24,9 @@ public class QuizzesMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFindAll() throws Exception {
-
         final List<QuizEntity> quizFoundedEntities = this.quizzesMapper.findAll();
 
-        Assert.assertNotNull(quizFoundedEntities);
-        Assert.assertEquals((long) 3, (long) quizFoundedEntities.size());
+        Assert.assertEquals(3, quizFoundedEntities.size());
 
         Integer index = 0;
         for(QuizEntity quizEntity: quizFoundedEntities){
@@ -37,13 +35,12 @@ public class QuizzesMapperTest extends AbstractMapperTest {
             this.quizzesSupport.assertEquals(quizFixtureEntity, quizEntity);
             index++;
         }
-
     }
 
     @Test
     public void testFind() throws Exception {
-
         final QuizEntity quizFixtureEntity = this.quizzesSupport.getEntityFixtureMock(1);
+
         final QuizEntity quizFoundedEntity = this.quizzesMapper.find(quizFixtureEntity.getId());
 
         this.quizzesSupport.assertEquals(quizFixtureEntity, quizFoundedEntity);
@@ -70,19 +67,19 @@ public class QuizzesMapperTest extends AbstractMapperTest {
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final QuizEntity quizUnidentifiedEntity = this.quizzesSupport.getEntityAdditionalMock(0);
 
-        quizzesMapper.insert(quizUnidentifiedEntity);
+        this.quizzesMapper.insert(quizUnidentifiedEntity);
 
         verify(quizUnidentifiedEntity, times(1)).setId(id.capture());
         Assert.assertNotNull(id.getValue());
 
         final QuizEntity quizInsertedEntity = quizzesMapper.find(id.getValue());
 
+        Assert.assertNotNull(quizInsertedEntity);
         this.quizzesSupport.assertEqualsWithoutId(quizUnidentifiedEntity, quizInsertedEntity);
     }
 
     @Test
     public void testUpdate() throws Exception {
-
         final QuizEntity quizChangedEntity = this.quizzesSupport.getEntityAdditionalMock(1);
         final QuizEntity quizBeforeUpdateEntity = this.quizzesMapper.find(quizChangedEntity.getId());
 
@@ -103,6 +100,8 @@ public class QuizzesMapperTest extends AbstractMapperTest {
         Assert.assertNotNull(quizFoundedEntity);
 
         this.quizzesMapper.delete(quizFoundedEntity);
-        quizFoundedEntity = this.quizzesMapper.find(id);
-        Assert.assertNull(quizFoundedEntity);
-    }}
+
+        Assert.assertNull(this.quizzesMapper.find(id));
+    }
+
+}
