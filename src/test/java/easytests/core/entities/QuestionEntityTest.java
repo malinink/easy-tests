@@ -24,7 +24,7 @@ public class QuestionEntityTest {
         final String text = "test1";
         final Integer questionTypeId = 1;
         final Integer topicId = 1;
-        
+
         final TopicModelInterface topic = Mockito.mock(TopicModelInterface.class);
         Mockito.when(topic.getId()).thenReturn(topicId);
 
