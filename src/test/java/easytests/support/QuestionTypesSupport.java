@@ -4,6 +4,7 @@ import easytests.core.entities.QuestionTypeEntity;
 import easytests.core.models.QuestionTypeModelInterface;
 import org.junit.Assert;
 import org.mockito.Mockito;
+
 import java.util.List;
 
 
@@ -46,10 +47,10 @@ public class QuestionTypesSupport {
             Integer id,
             String name
     ) {
-        final QuestionTypeEntity questionTypeEntity = Mockito.mock(QuestionTypeEntity.class);
-        Mockito.when(questionTypeEntity.getId()).thenReturn(id);
-        Mockito.when(questionTypeEntity.getName()).thenReturn(name);
-        return questionTypeEntity;
+        final QuestionTypeEntity question_typeEntity = Mockito.mock(QuestionTypeEntity.class);
+        Mockito.when(question_typeEntity.getId()).thenReturn(id);
+        Mockito.when(question_typeEntity.getName()).thenReturn(name);
+        return question_typeEntity;
     }
 
     public QuestionTypeModelInterface getModelFixtureMock(Integer index) {
@@ -67,61 +68,57 @@ public class QuestionTypesSupport {
             Integer id,
             String name
     ) {
-        final QuestionTypeModelInterface questionTypeModel = Mockito.mock(QuestionTypeModelInterface.class);
-        Mockito.when(questionTypeModel.getId()).thenReturn(id);
-        Mockito.when(questionTypeModel.getName()).thenReturn(name);
-        return questionTypeModel;
+        final QuestionTypeModelInterface question_typeModel = Mockito.mock(QuestionTypeModelInterface.class);
+        Mockito.when(question_typeModel.getId()).thenReturn(id);
+        Mockito.when(question_typeModel.getName()).thenReturn(name);
+        return question_typeModel;
     }
 
-    public void assertEquals(QuestionTypeEntity expected, QuestionTypeEntity actual) {
-        assertEquals(expected, actual, false);
-    }
+    public void assertEquals(QuestionTypeEntity expected, QuestionTypeEntity actual){assertEquals(expected, actual, false);}
 
-    public void assertEqualsWithoutId(QuestionTypeEntity expected, QuestionTypeEntity actual) {
-        assertEquals(expected, actual, true);
-    }
+    public void assertEqualsWithoutId(QuestionTypeEntity expected, QuestionTypeEntity actual) { assertEquals(expected, actual, true); }
 
-    private void assertEquals(QuestionTypeEntity expected, QuestionTypeEntity actual, Boolean expectId) {
+    private void assertEquals(QuestionTypeEntity expected, QuestionTypeEntity actual, Boolean expectId){
         if (!expectId){
             Assert.assertEquals(expected.getId(),actual.getId());
         }
         Assert.assertEquals(expected.getName(),actual.getName());
     }
 
-    public void assertNotEquals(QuestionTypeEntity unexpected, QuestionTypeEntity actual) {
+    public void assertNotEquals(QuestionTypeEntity unexpected, QuestionTypeEntity actual){
         assertNotEquals(unexpected,actual,false);
     }
 
-    public void assertNotEqualsWithoutId(QuestionTypeEntity unexpected, QuestionTypeEntity actual) {
+    public void assertNotEqualsWithoutId(QuestionTypeEntity unexpected, QuestionTypeEntity actual){
         assertEquals(unexpected,actual,true);
     }
 
-    private void assertNotEquals(QuestionTypeEntity unexpected, QuestionTypeEntity actual, boolean expectedId) {
+    private void assertNotEquals(QuestionTypeEntity unexpected, QuestionTypeEntity actual, boolean expectedId){
         if (!expectedId){
             Assert.assertNotEquals(unexpected.getId(),actual.getId());
         }
         Assert.assertNotEquals(unexpected.getName(),actual.getName());
     }
 
-    public void assertEquals(QuestionTypeModelInterface expected, QuestionTypeModelInterface actual) {
+    public void assertEquals(QuestionTypeModelInterface expected, QuestionTypeModelInterface actual){
         Assert.assertEquals(expected.getId(),actual.getId());
         Assert.assertEquals(expected.getName(),actual.getName());
     }
 
-    public void assertEquals(QuestionTypeModelInterface expected,QuestionTypeEntity actual) {
+    public void assertEquals(QuestionTypeModelInterface expected,QuestionTypeEntity actual){
         Assert.assertEquals(expected.getId(),actual.getId());
         Assert.assertEquals(expected.getName(),actual.getName());
     }
 
-    public void assertEquals(QuestionTypeEntity expected,QuestionTypeModelInterface actual) {
+    public void assertEquals(QuestionTypeEntity expected,QuestionTypeModelInterface actual){
         assertEquals(actual,expected);
     }
 
     public void assertModelsListEquals(List<QuestionTypeModelInterface> expected, List<QuestionTypeModelInterface> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (QuestionTypeModelInterface questionTypeModel: expected) {
-            this.assertEquals(questionTypeModel, actual.get(i));
+        for (QuestionTypeModelInterface question_typeModel: expected) {
+            this.assertEquals(question_typeModel, actual.get(i));
             i++;
         }
     }
@@ -129,8 +126,8 @@ public class QuestionTypesSupport {
     public void assertEntitiesListEquals(List<QuestionTypeEntity> expected, List<QuestionTypeEntity> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (QuestionTypeEntity questionTypeEntity: expected) {
-            this.assertEquals(questionTypeEntity, actual.get(i));
+        for (QuestionTypeEntity question_typeEntity: expected) {
+            this.assertEquals(question_typeEntity, actual.get(i));
             i++;
         }
     }
