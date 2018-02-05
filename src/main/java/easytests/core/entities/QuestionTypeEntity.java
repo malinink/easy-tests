@@ -5,7 +5,7 @@ import lombok.Data;
 
 
 /**
- * @author malinink
+ * @author Vlasovigor
  */
 @Data
 public class QuestionTypeEntity {
