@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.meanbean.test.ConfigurationBuilder;
 
 /**
- * @author DoZor-80
+ * @author Yarik2308
  */
 public class TesteeModelTest extends AbstractModelTest{
 

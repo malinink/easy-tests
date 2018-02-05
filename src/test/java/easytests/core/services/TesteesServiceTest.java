@@ -9,6 +9,7 @@ import easytests.core.options.TesteesOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.Entities;
 import easytests.support.Models;
+import easytests.support.TesteesSupport;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,6 +39,7 @@ public class TesteesServiceTest {
     @Autowired
     private TesteesService testeesService;
 
+    private TesteesSupport testeesSupport = new TesteesSupport();
 
     private TesteeModelInterface mapTesteeModel(TesteeEntity testeeEntity) {
         final TesteeModelInterface testeeModel = new TesteeModel();
