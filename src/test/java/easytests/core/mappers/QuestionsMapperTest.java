@@ -1,106 +1,111 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.QuestionEntity;
-import easytests.support.QuestionsSupport;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 /**
- * @author RisaMagpie
+ * @author firkhraag
  */
 public class QuestionsMapperTest extends AbstractMapperTest {
-
-    protected QuestionsSupport questionsSupport = new QuestionsSupport();
 
     @Autowired
     private QuestionsMapper questionsMapper;
 
     @Test
     public void testFindAll() throws Exception {
-        final List<QuestionEntity> questionsFoundedEntities = this.questionsMapper.findAll();
-        Assert.assertEquals( 3,  questionsFoundedEntities.size());
-
-        Integer index = 0;
-        for (QuestionEntity questionEntity: questionsFoundedEntities) {
-            final QuestionEntity questionFixtureEntity = this.questionsSupport.getEntityFixtureMock(index);
-
-            this.questionsSupport.assertEquals(questionFixtureEntity, questionEntity);
-            index++;
-        }
+        final List<QuestionEntity> questionsEntities = this.questionsMapper.findAll();
+        Assert.assertEquals((long) 3, (long) questionsEntities.size());
     }
 
     @Test
     public void testFind() throws Exception {
-        final QuestionEntity questionFixtureEntity = this.questionsSupport.getEntityFixtureMock(0);
-
-        final QuestionEntity questionFoundedEntity = this.questionsMapper.find(1);
-
-        this.questionsSupport.assertEquals(questionFixtureEntity, questionFoundedEntity);
+        final QuestionEntity question = this.questionsMapper.find(1);
+        Assert.assertEquals((long) 1, (long) question.getId());
+        Assert.assertEquals("test1", question.getText());
+        Assert.assertEquals((long) 1, (long) question.getQuestionTypeId());
+        Assert.assertEquals((long) 1, (long) question.getTopicId());
     }
 
     @Test
     public void testFindByTopicId() throws Exception {
-        final List<QuestionEntity> questionsFixtureEntities = new ArrayList<>();
+        final List<QuestionEntity> questions = this.questionsMapper.findByTopicId(2);
+        Assert.assertEquals((Integer) 1, (Integer) questions.size());
+        final QuestionEntity question = questions.get(0);
 
-        questionsFixtureEntities.add(this.questionsSupport.getEntityFixtureMock(2));
-
-        final List<QuestionEntity> questionsFoundedEntities = this.questionsMapper.findByTopicId(2);
-
-        Assert.assertEquals(1, questionsFoundedEntities.size());
-
-        Integer index = 0;
-        for (QuestionEntity questionEntity: questionsFoundedEntities) {
-            this.questionsSupport.assertEquals(questionsFixtureEntities.get(index), questionEntity);
-            index++;
-        }
+        Assert.assertEquals((Integer) 3, question.getId());
+        Assert.assertEquals("test3", question.getText());
+        Assert.assertEquals((Integer) 3, question.getQuestionTypeId());
+        Assert.assertEquals((Integer) 2, question.getTopicId());
     }
 
     @Test
     public void testInsert() throws Exception {
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
-        final QuestionEntity questionUnidentifiedEntity = this.questionsSupport.getEntityAdditionalMock(0);
+        final String text = "text1";
+        final Integer questionTypeId = 1;
+        final Integer topicId = 1;
 
-        this.questionsMapper.insert(questionUnidentifiedEntity);
+        QuestionEntity questionEntity = Mockito.mock(QuestionEntity.class);
+        Mockito.when(questionEntity.getText()).thenReturn(text);
+        Mockito.when(questionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
+        Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
 
-        verify(questionUnidentifiedEntity, times(1)).setId(id.capture());
+        this.questionsMapper.insert(questionEntity);
+
+        verify(questionEntity, times(1)).setId(id.capture());
+
         Assert.assertNotNull(id.getValue());
 
-        final QuestionEntity questionInsertedEntity = this.questionsMapper.find(id.getValue());
-
-        Assert.assertNotNull(questionInsertedEntity);
-        this.questionsSupport.assertEqualsWithoutId(questionUnidentifiedEntity, questionInsertedEntity);
+        questionEntity = this.questionsMapper.find(id.getValue());
+        Assert.assertEquals(id.getValue(), questionEntity.getId());
+        Assert.assertEquals(text, questionEntity.getText());
+        Assert.assertEquals(questionTypeId, questionEntity.getQuestionTypeId());
+        Assert.assertEquals(topicId, questionEntity.getTopicId());
     }
 
     @Test
     public void testUpdate() throws Exception {
-        final QuestionEntity questionChangedEntity = this.questionsSupport.getEntityAdditionalMock(1);
-        final QuestionEntity questionBeforeUpdateEntity = this.questionsMapper.find(questionChangedEntity.getId());
+        final Integer id = 1;
+        final String text = "text2";
+        final Integer questionTypeId = 2;
+        final Integer topicId = 2;
 
-        Assert.assertNotNull(questionBeforeUpdateEntity);
-        this.questionsSupport.assertNotEqualsWithoutId(questionChangedEntity, questionBeforeUpdateEntity);
+        QuestionEntity questionEntity = this.questionsMapper.find(id);
+        Assert.assertNotNull(questionEntity);
+        Assert.assertEquals(id, questionEntity.getId());
+        Assert.assertNotEquals(text, questionEntity.getText());
+        Assert.assertNotEquals(questionTypeId, questionEntity.getQuestionTypeId());
+        Assert.assertNotEquals(topicId, questionEntity.getTopicId());
 
-        this.questionsMapper.update(questionChangedEntity);
-        final QuestionEntity questionUpdatedEntity = this.questionsMapper.find(questionChangedEntity.getId());
+        questionEntity = Mockito.mock(QuestionEntity.class);
+        Mockito.when(questionEntity.getId()).thenReturn(id);
+        Mockito.when(questionEntity.getText()).thenReturn(text);
+        Mockito.when(questionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
+        Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
 
-        this.questionsSupport.assertEquals(questionChangedEntity, questionUpdatedEntity);
+        this.questionsMapper.update(questionEntity);
+
+        questionEntity = this.questionsMapper.find(id);
+        Assert.assertEquals(id, questionEntity.getId());
+        Assert.assertEquals(text, questionEntity.getText());
+        Assert.assertEquals(questionTypeId, questionEntity.getQuestionTypeId());
+        Assert.assertEquals(topicId, questionEntity.getTopicId());
     }
 
     @Test
     public void testDelete() throws Exception {
-        final Integer id = this.questionsSupport.getEntityFixtureMock(0).getId();
-        final QuestionEntity questionFoundedEntity = this.questionsMapper.find(id);
+        QuestionEntity questionEntity = this.questionsMapper.find(1);
+        Assert.assertNotNull(questionEntity);
 
-        Assert.assertNotNull(questionFoundedEntity);
-
-        this.questionsMapper.delete(questionFoundedEntity);
-
-        Assert.assertNull(this.questionsMapper.find(id));
+        this.questionsMapper.delete(questionEntity);
+        questionEntity = this.questionsMapper.find(1);
+        Assert.assertNull(questionEntity);
     }
 }

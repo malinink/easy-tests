@@ -13,33 +13,33 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class QuestionTypesMapperTest extends AbstractMapperTest {
 
-    private QuestionTypesSupport questionTypesSupport = new QuestionTypesSupport();
+    private QuestionTypesSupport question_typesSupport = new QuestionTypesSupport();
 
     @Autowired
-    private QuestionTypesMapper questionTypesMapper;
+    private QuestionTypesMapper question_typesMapper;
 
     @Test
     public void testFindAll() throws Exception {
-        final List<QuestionTypeEntity> questionTypesFoundedEntities = this.questionTypesMapper.findAll();
+        final List<QuestionTypeEntity> question_typesFoundedEntities = this.question_typesMapper.findAll();
 
-        Assert.assertEquals(4, questionTypesFoundedEntities.size());
+        Assert.assertEquals(4, question_typesFoundedEntities.size());
 
         Integer index = 0;
-        for (QuestionTypeEntity questionTypeEntity: questionTypesFoundedEntities) {
-            final QuestionTypeEntity questionTypeFixtureEntity = this.questionTypesSupport.getEntityFixtureMock(index);
+        for (QuestionTypeEntity question_typeEntity: question_typesFoundedEntities) {
+            final QuestionTypeEntity question_typeFixtureEntity = this.question_typesSupport.getEntityFixtureMock(index);
 
-            this.questionTypesSupport.assertEquals(questionTypeFixtureEntity, questionTypeEntity);
+            this.question_typesSupport.assertEquals(question_typeFixtureEntity, question_typeEntity);
             index++;
         }
     }
 
     @Test
     public void testFind() throws Exception {
-        final QuestionTypeEntity questionTypeFixtureEntity = this.questionTypesSupport.getEntityFixtureMock(0);
+        final QuestionTypeEntity question_typeFixtureEntity = this.question_typesSupport.getEntityFixtureMock(0);
 
-        final QuestionTypeEntity questionTypeFoundedEntity = this.questionTypesMapper.find(questionTypeFixtureEntity.getId());
+        final QuestionTypeEntity question_typeFoundedEntity = this.question_typesMapper.find(question_typeFixtureEntity.getId());
 
-        this.questionTypesSupport.assertEquals(questionTypeFixtureEntity, questionTypeFoundedEntity);
+        this.question_typesSupport.assertEquals(question_typeFixtureEntity, question_typeFoundedEntity);
     }
 
 }

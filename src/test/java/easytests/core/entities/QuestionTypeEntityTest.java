@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 public class QuestionTypeEntityTest extends AbstractEntityTest {
 
-    private QuestionTypesSupport questionTypesSupport = new QuestionTypesSupport();
+    private QuestionTypesSupport question_typesSupport = new QuestionTypesSupport();
 
     @Test
     public void testCommon() throws Exception {
@@ -19,12 +19,14 @@ public class QuestionTypeEntityTest extends AbstractEntityTest {
 
     @Test
     public void testMap() throws Exception {
-        final QuestionTypeModelInterface questionTypeModel = this.questionTypesSupport.getModelFixtureMock(0);
-        final QuestionTypeEntity questionTypeEntity = new QuestionTypeEntity();
+        final QuestionTypeModelInterface question_typeModel = this.question_typesSupport.getModelFixtureMock(0);
+        final QuestionTypeEntity questiontypeEntity = new QuestionTypeEntity();
 
-        questionTypeEntity.map(questionTypeModel);
+        questiontypeEntity.map(question_typeModel);
 
-        this.questionTypesSupport.assertEquals(questionTypeModel,questionTypeEntity );
+        this.question_typesSupport.assertEquals(question_typeModel,questiontypeEntity );
     }
 
 }
+
+
