@@ -8,7 +8,7 @@ import org.junit.Test;
 /**
  * @author VlasovIgor
  */
-public class QuestionTypeEntityTest extends AbstractEntityTes {
+public class QuestionTypeEntityTest extends AbstractEntityTest {
 
     private QuestionTypesSupport questionTypesSupport = new QuestionTypesSupport();
 
