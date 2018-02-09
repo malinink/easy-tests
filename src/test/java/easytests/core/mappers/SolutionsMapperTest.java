@@ -1,103 +1,107 @@
 package easytests.core.mappers;
 
-import easytests.core.entities.*;
+import easytests.core.entities.SolutionEntity;
+import easytests.support.SolutionsSupport;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
- * @author SingularityA
+ * @author Vlasovigor
  */
 public class SolutionsMapperTest extends AbstractMapperTest {
+
+    protected SolutionsSupport solutionsSupport = new SolutionsSupport();
 
     @Autowired
     private SolutionsMapper solutionsMapper;
 
     @Test
     public void testFindAll() throws Exception {
-        List<SolutionEntity> solutions = this.solutionsMapper.findAll();
-        Assert.assertNotNull(solutions);
-        Assert.assertEquals(5, solutions.size());
+        final List<SolutionEntity> solutionsFoundedEntities = this.solutionsMapper.findAll();
+
+        Assert.assertEquals(5, solutionsFoundedEntities.size());
+
+        Integer index = 0;
+        for (SolutionEntity solutionEntity: solutionsFoundedEntities) {
+            final SolutionEntity solutionFixtureEntity = this.solutionsSupport.getEntityFixtureMock(index);
+
+            this.solutionsSupport.assertEquals(solutionFixtureEntity, solutionEntity);
+            index++;
+        }
     }
 
     @Test
     public void testFind() throws Exception {
-        SolutionEntity solution = this.solutionsMapper.find(1);
-        Assert.assertNotNull(solution);
-        Assert.assertEquals((Integer) 1, solution.getId());
-        Assert.assertEquals((Integer) 10, solution.getAnswerId());
-        Assert.assertEquals((Integer) 1, solution.getPointId());
+        final SolutionEntity solutionFixtureEntity = this.solutionsSupport.getEntityFixtureMock(0);
+
+        final SolutionEntity solutionFoundedEntity = this.solutionsMapper.find(solutionFixtureEntity.getId());
+
+        this.solutionsSupport.assertEquals(solutionFixtureEntity, solutionFoundedEntity);
     }
 
     @Test
     public void testFindByPointId() throws Exception {
-        List<SolutionEntity> solutions = this.solutionsMapper.findByPointId(1);
-        Assert.assertNotNull(solutions);
-        Assert.assertEquals(2, solutions.size());
+        final List<SolutionEntity> solutionsFixtureEntities = new ArrayList<>();
+        solutionsFixtureEntities.add(this.solutionsSupport.getEntityFixtureMock(0));
+        solutionsFixtureEntities.add(this.solutionsSupport.getEntityFixtureMock(1));
+
+        final List<SolutionEntity> solutionFoundedEntities = this.solutionsMapper.findByPointId(1);
+
+        Assert.assertEquals(2, solutionFoundedEntities.size());
+
+        Integer index = 0;
+        for (SolutionEntity solutionEntity: solutionFoundedEntities) {
+            this.solutionsSupport.assertEquals(solutionsFixtureEntities.get(index), solutionEntity);
+            index++;
+        }
     }
 
     @Test
     public void testInsert() throws Exception {
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
-        final Integer answerId = 13;
-        final Integer pointId = 4;
+        final SolutionEntity solutionUnidentifiedEntity = this.solutionsSupport.getEntityAdditionalMock(0);
 
-        SolutionEntity solutionEntity = Mockito.mock(SolutionEntity.class);
-        Mockito.when(solutionEntity.getAnswerId()).thenReturn(answerId);
-        Mockito.when(solutionEntity.getPointId()).thenReturn(pointId);
+        this.solutionsMapper.insert(solutionUnidentifiedEntity);
 
-        this.solutionsMapper.insert(solutionEntity);
-
-        verify(solutionEntity, times(1)).setId(id.capture());
-
+        verify(solutionUnidentifiedEntity, times(1)).setId(id.capture());
         Assert.assertNotNull(id.getValue());
 
-        solutionEntity = this.solutionsMapper.find(id.getValue());
-        Assert.assertNotNull(solutionEntity);
-        Assert.assertEquals(id.getValue(), solutionEntity.getId());
-        Assert.assertEquals(answerId, solutionEntity.getAnswerId());
-        Assert.assertEquals(pointId, solutionEntity.getPointId());
+        final SolutionEntity solutionInsertedEntity = this.solutionsMapper.find(id.getValue());
+
+        Assert.assertNotNull(solutionInsertedEntity);
+        this.solutionsSupport.assertEqualsWithoutId(solutionUnidentifiedEntity, solutionInsertedEntity);
     }
 
     @Test
     public void testUpdate() throws Exception {
-        final Integer id = 1;
-        final Integer answerId = 13;
-        final Integer pointId = 4;
+        final SolutionEntity solutionChangedEntity = this.solutionsSupport.getEntityAdditionalMock(1);
+        final SolutionEntity solutionBeforeUpdateEntity = this.solutionsMapper.find(solutionChangedEntity.getId());
 
-        SolutionEntity solutionEntity = this.solutionsMapper.find(id);
-        Assert.assertNotNull(solutionEntity);
-        Assert.assertEquals(id, solutionEntity.getId());
-        Assert.assertNotEquals(answerId, solutionEntity.getAnswerId());
-        Assert.assertNotEquals(pointId, solutionEntity.getPointId());
+        Assert.assertNotNull(solutionBeforeUpdateEntity);
+        this.solutionsSupport.assertNotEqualsWithoutId(solutionChangedEntity, solutionBeforeUpdateEntity);
 
-        solutionEntity = Mockito.mock(SolutionEntity.class);
-        Mockito.when(solutionEntity.getId()).thenReturn(id);
-        Mockito.when(solutionEntity.getAnswerId()).thenReturn(answerId);
-        Mockito.when(solutionEntity.getPointId()).thenReturn(pointId);
+        this.solutionsMapper.update(solutionChangedEntity);
+        final SolutionEntity solutionUpdatedEntity = this.solutionsMapper.find(solutionChangedEntity.getId());
 
-        this.solutionsMapper.update(solutionEntity);
-
-        solutionEntity = this.solutionsMapper.find(id);
-        Assert.assertNotNull(solutionEntity);
-        Assert.assertEquals(id, solutionEntity.getId());
-        Assert.assertEquals(answerId, solutionEntity.getAnswerId());
-        Assert.assertEquals(pointId, solutionEntity.getPointId());
+        this.solutionsSupport.assertEquals(solutionChangedEntity, solutionUpdatedEntity);
     }
 
     @Test
     public void testDelete() throws Exception {
-        SolutionEntity solution = this.solutionsMapper.find(1);
-        Assert.assertNotNull(solution);
+        final Integer id = this.solutionsSupport.getEntityFixtureMock(0).getId();
+        final SolutionEntity solutionFoundedEntity = this.solutionsMapper.find(id);
 
-        this.solutionsMapper.delete(solution);
-        solution = this.solutionsMapper.find(1);
-        Assert.assertNull(solution);
+        Assert.assertNotNull(solutionFoundedEntity);
+
+        this.solutionsMapper.delete(solutionFoundedEntity);
+
+        Assert.assertNull(this.solutionsMapper.find(id));
     }
+
 }

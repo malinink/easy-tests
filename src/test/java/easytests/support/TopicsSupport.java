@@ -5,8 +5,10 @@ import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.SubjectModelEmpty;
+import java.util.List;
 import org.junit.Assert;
 import org.mockito.Mockito;
+
 
 /**
  * @author lelay
@@ -140,6 +142,14 @@ public class TopicsSupport {
         Assert.assertNotEquals(unexpected.getSubjectId(), actual.getSubjectId());
     }
 
+    public void assertEquals(TopicModelInterface expected, TopicModelInterface actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getName(), actual.getName());
+
+        Assert.assertEquals(expected.getSubject(), actual.getSubject());
+        Assert.assertEquals(expected.getQuestions(), actual.getQuestions());
+    }
+
     public void assertEquals(TopicModelInterface expected, TopicEntity actual) {
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getName(), actual.getName());
@@ -149,5 +159,25 @@ public class TopicsSupport {
     public void assertEquals(TopicEntity expected, TopicModelInterface actual) {
         this.assertEquals(actual, expected);
         Assert.assertEquals(new ModelsListEmpty(), actual.getQuestions());
+    }
+
+    public void assertModelsListEquals(List<TopicModelInterface> expected, List<TopicModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+
+        Integer i = 0;
+        for(TopicModelInterface topicModel: expected) {
+            this.assertEquals(topicModel, actual.get(i));
+            i++;
+        }
+    }
+
+    public void assertEntitiesListEquals(List<TopicEntity> expected, List<TopicEntity> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+
+        Integer i = 0;
+        for(TopicEntity topicEntity: expected) {
+            this.assertEquals(topicEntity, actual.get(i));
+            i++;
+        }
     }
 }
