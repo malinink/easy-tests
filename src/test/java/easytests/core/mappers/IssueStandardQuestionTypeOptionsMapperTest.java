@@ -51,6 +51,7 @@ public class IssueStandardQuestionTypeOptionsMapperTest extends AbstractMapperTe
         final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionFixtureEntities = new ArrayList<>();
         questionTypeOptionFixtureEntities.add(this.issueStandardQuestionTypeOptionsSupport.getEntityFixtureMock(0));
         questionTypeOptionFixtureEntities.add(this.issueStandardQuestionTypeOptionsSupport.getEntityFixtureMock(1));
+        questionTypeOptionFixtureEntities.add(this.issueStandardQuestionTypeOptionsSupport.getEntityFixtureMock(2));
 
         final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionFoundedEntities
                 = this.questionTypeOptionMapper.findByIssueStandardId(1);

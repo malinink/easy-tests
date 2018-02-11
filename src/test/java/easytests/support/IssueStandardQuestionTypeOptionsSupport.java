@@ -84,6 +84,7 @@ public class IssueStandardQuestionTypeOptionsSupport {
         return this.getEntityMock(additional[index]);
     }
 
+
     private IssueStandardQuestionTypeOptionEntity getEntityMock(Object[] data) {
         return this.getEntityMock(
                 (Integer) data[0],
@@ -95,7 +96,7 @@ public class IssueStandardQuestionTypeOptionsSupport {
         );
     }
 
-    public IssueStandardQuestionTypeOptionEntity getEntityMock(
+    private IssueStandardQuestionTypeOptionEntity getEntityMock(
             Integer id,
             Integer questionType,
             Integer minQuestions,
@@ -132,7 +133,7 @@ public class IssueStandardQuestionTypeOptionsSupport {
         );
     }
 
-    public IssueStandardQuestionTypeOptionModelInterface getModelMock(
+    private IssueStandardQuestionTypeOptionModelInterface getModelMock(
             Integer id,
             Integer questionType,
             Integer minQuestions,
@@ -151,7 +152,7 @@ public class IssueStandardQuestionTypeOptionsSupport {
     }
 
     public void assertEquals(IssueStandardQuestionTypeOptionEntity expected, IssueStandardQuestionTypeOptionEntity actual) {
-        assertEquals(expected, actual, false);
+        assertEquals(expected, actual,false);
     }
 
     public void assertEqualsWithoutId(IssueStandardQuestionTypeOptionEntity expected, IssueStandardQuestionTypeOptionEntity actual) {
@@ -181,11 +182,11 @@ public class IssueStandardQuestionTypeOptionsSupport {
         if (!exceptId) {
             Assert.assertNotEquals(unexpected.getId(), actual.getId());
         }
-        Assert.assertEquals(unexpected.getQuestionTypeId(), actual.getQuestionTypeId());
-        Assert.assertEquals(unexpected.getMinQuestions(), actual.getMinQuestions());
-        Assert.assertEquals(unexpected.getMaxQuestions(), actual.getMaxQuestions());
-        Assert.assertEquals(unexpected.getTimeLimit(), actual.getTimeLimit());
-        Assert.assertEquals(unexpected.getIssueStandardId(), actual.getIssueStandardId());
+        Assert.assertNotEquals(unexpected.getQuestionTypeId(), actual.getQuestionTypeId());
+        Assert.assertNotEquals(unexpected.getMinQuestions(), actual.getMinQuestions());
+        Assert.assertNotEquals(unexpected.getMaxQuestions(), actual.getMaxQuestions());
+        Assert.assertNotEquals(unexpected.getTimeLimit(), actual.getTimeLimit());
+        Assert.assertNotEquals(unexpected.getIssueStandardId(), actual.getIssueStandardId());
     }
 
     public void assertEquals(IssueStandardQuestionTypeOptionModelInterface expected, IssueStandardQuestionTypeOptionModelInterface actual) {
