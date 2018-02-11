@@ -9,6 +9,7 @@ import easytests.core.models.empty.TesteeModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 public class QuizzesSupport {
@@ -42,7 +43,7 @@ public class QuizzesSupport {
 
     protected static Object additional[][] = new Object[][]{
             {
-                420,
+                null,
                 1,
                 "code",
                 false,
@@ -131,7 +132,7 @@ public class QuizzesSupport {
         Mockito.when(quizModel.getFinishedAt()).thenReturn(finishedAt);
         Mockito.when(quizModel.getIssue()).thenReturn(new IssueModelEmpty(issueId));
         Mockito.when(quizModel.getPoints()).thenReturn(new ModelsListEmpty());
-        Mockito.when(quizModel.getTestee()).thenReturn(new TesteeModelEmpty(id));
+        Mockito.when(quizModel.getTestee()).thenReturn(new TesteeModelEmpty());
         return quizModel;
     }
 
@@ -147,6 +148,15 @@ public class QuizzesSupport {
         Assert.assertNotEquals(unexpected.getCodeExpired(), actual.getCodeExpired());
         Assert.assertNotEquals(unexpected.getStartedAt(), actual.getStartedAt());
         Assert.assertNotEquals(unexpected.getFinishedAt(), actual.getFinishedAt());
+    }
+
+    public void assertEquals(QuizModelInterface expected, QuizModelInterface actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getIssue().getId(), actual.getIssue().getId());
+        Assert.assertEquals(expected.getInviteCode(), actual.getInviteCode());
+        Assert.assertEquals(expected.getCodeExpired(), actual.getCodeExpired());
+        Assert.assertEquals(expected.getStartedAt(), actual.getStartedAt());
+        Assert.assertEquals(expected.getFinishedAt(), actual.getFinishedAt());
     }
 
     public void assertEquals(QuizModelInterface expected, QuizEntity actual) {
@@ -182,5 +192,24 @@ public class QuizzesSupport {
         Assert.assertEquals(expected.getCodeExpired(), actual.getCodeExpired());
         Assert.assertEquals(expected.getStartedAt(), actual.getStartedAt());
         Assert.assertEquals(expected.getFinishedAt(), actual.getFinishedAt());
+    }
+
+    public void assertModelsListEquals(List<QuizModelInterface> expected,
+                                       List<QuizModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for(QuizModelInterface quizModel: expected) {
+            this.assertEquals(quizModel, actual.get(i));
+            i++;
+        }
+    }
+
+    public void assertEntitiesListEquals(List<QuizEntity> expected, List<QuizEntity> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for(QuizEntity quizEntity: expected) {
+            this.assertEquals(quizEntity, actual.get(i));
+            i++;
+        }
     }
 }
