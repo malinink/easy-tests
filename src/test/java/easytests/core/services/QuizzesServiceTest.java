@@ -155,7 +155,6 @@ public class QuizzesServiceTest {
     @Test
     public void testFindByIssueAbsentList() throws Exception {
         final IssueModelInterface issueModel = Mockito.mock(IssueModelInterface.class);
-        final List<QuizEntity> quizzesEntities = this.getQuizzesFixturesEntities();
         when(this.quizzesMapper.findByIssueId(issueModel.getId())).thenReturn(new ArrayList<>(0));
 
         final List<QuizModelInterface> quizzesFoundedModels = this.quizzesService.findByIssue(issueModel);
@@ -176,7 +175,7 @@ public class QuizzesServiceTest {
         final List<QuizModelInterface> quizzesFoundedModels =
                 this.quizzesService.findByIssue(issueModel, quizzesOptions);
 
-        //this.assertServicesSet(quizzesOptions); I don't know why, but there is an error.
+        this.assertServicesSet(quizzesOptions);
         this.quizzesSupport.assertModelsListEquals(quizzesModels, listCaptor.getValue());
         Assert.assertSame(quizzesModels, quizzesFoundedModels);
     }
