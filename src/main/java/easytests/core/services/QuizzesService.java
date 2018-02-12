@@ -64,7 +64,8 @@ public class QuizzesService implements QuizzesServiceInterface {
             IssueModelInterface issueModel,
             QuizzesOptionsInterface quizzesOptions
     ) {
-        return this.withServices(quizzesOptions).withRelations(this.map(this.quizzesMapper.findByIssueId(issueModel.getId())));
+        return this.withServices(quizzesOptions)
+                .withRelations(this.map(this.quizzesMapper.findByIssueId(issueModel.getId())));
     }
 
     @Override
