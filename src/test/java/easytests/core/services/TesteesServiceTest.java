@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
-
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +84,7 @@ public class TesteesServiceTest {
 
     @Test
     public void testFindAllAbsentList() throws Exception {
-        given(this.testeesMapper.findAll()).willReturn(new ArrayList<>(0));
+        when(this.testeesMapper.findAll()).thenReturn(new ArrayList<>(0));
 
         final List<TesteeModelInterface> testeesModels = this.testeesService.findAll();
 

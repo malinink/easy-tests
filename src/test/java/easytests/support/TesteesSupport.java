@@ -1,13 +1,10 @@
 package easytests.support;
 
 import easytests.core.entities.TesteeEntity;
-import easytests.core.models.SubjectModel;
-import easytests.core.models.TesteeModel;
 import easytests.core.models.TesteeModelInterface;
 import easytests.core.models.empty.QuizModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
-
 import java.util.List;
 
 /**
