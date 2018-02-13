@@ -1,7 +1,7 @@
 package easytests.core.entities;
 
+import easytests.core.AbstractMeanBeanTest;
 import org.junit.runner.RunWith;
-import org.meanbean.test.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -11,19 +11,14 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public abstract class AbstractEntityTest {
-
-    protected Configuration getConfiguration() {
-        return new ConfigurationBuilder().iterations(10).build();
-    }
+public abstract class AbstractEntityTest extends AbstractMeanBeanTest {
 
     public abstract void testCommon() throws Exception;
 
     protected void testCommon(Class entityClass) {
-        final Configuration configuration = this.getConfiguration();
-        new BeanTester().testBean(entityClass, configuration);
-        new EqualsMethodTester().testEqualsMethod(entityClass, configuration);
-        new HashCodeMethodTester().testHashCodeMethod(entityClass);
+        this.getBeanTester().testBean(entityClass, this.getConfiguration());
+        this.getEqualsMethodTester().testEqualsMethod(entityClass, this.getConfiguration());
+        this.getHashCodeMethodTester().testHashCodeMethod(entityClass);
     }
 
     public abstract void testMap() throws Exception;
