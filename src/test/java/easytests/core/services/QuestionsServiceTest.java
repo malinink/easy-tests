@@ -25,7 +25,7 @@ import org.springframework.test.context.junit4.*;
 
 
 /**
- * @author risa_magpie 3h 28 min
+ * @author risa_magpie
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
