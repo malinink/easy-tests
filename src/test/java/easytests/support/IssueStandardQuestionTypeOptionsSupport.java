@@ -57,7 +57,7 @@ public class IssueStandardQuestionTypeOptionsSupport {
             {
                     // for insert entity
                     null,
-                    1,
+                    4,
                     2,
                     6,
                     150,
@@ -71,7 +71,7 @@ public class IssueStandardQuestionTypeOptionsSupport {
                     2,
                     7,
                     200,
-                    2
+                    3
             },
     };
 
