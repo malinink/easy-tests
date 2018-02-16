@@ -2,7 +2,6 @@ package easytests.core.mappers;
 
 import easytests.core.entities.IssueStandardEntity;
 import java.util.List;
-
 import easytests.support.IssueStandardSupport;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
@@ -26,14 +25,13 @@ public class IssueStandardsMapperTest extends AbstractMapperTest {
 
     @Test
     public void testFindAll() throws Exception {
-        List<IssueStandardEntity> issueStandatrsFoundedEntities = this.issueStandardsMapper.findAll();
+        List<IssueStandardEntity> issueStandardsFoundedEntities = this.issueStandardsMapper.findAll();
 
-        Assert.assertNotNull(issueStandatrsFoundedEntities);
-        Assert.assertEquals(2, issueStandatrsFoundedEntities.size());
+        Assert.assertEquals(2, issueStandardsFoundedEntities.size());
 
         Integer index = 0;
 
-        for (IssueStandardEntity issueStandardEntity: issueStandatrsFoundedEntities) {
+        for (IssueStandardEntity issueStandardEntity: issueStandardsFoundedEntities) {
             final IssueStandardEntity issueStandartFixtureEntity = this.issueStandardSupport.getEntityFixtureMock(index);
 
             this.issueStandardSupport.assertEquals(issueStandartFixtureEntity, issueStandardEntity);
@@ -78,15 +76,13 @@ public class IssueStandardsMapperTest extends AbstractMapperTest {
     public void testUpdate() throws Exception {
         final IssueStandardEntity issueStandardChengedEntity = this.issueStandardSupport.getEntityAdditionalMock(1);
 
-        final Integer id = issueStandardChengedEntity.getId();
-
-        final IssueStandardEntity issueStandardBeforeUpdateEntity = this.issueStandardsMapper.find(id);
+        final IssueStandardEntity issueStandardBeforeUpdateEntity = this.issueStandardsMapper.find(issueStandardChengedEntity.getId());
         Assert.assertNotNull(issueStandardBeforeUpdateEntity);
 
         this.issueStandardSupport.assertNotEqualsWithoutId(issueStandardChengedEntity, issueStandardBeforeUpdateEntity);
 
         this.issueStandardsMapper.update(issueStandardChengedEntity);
-        final IssueStandardEntity issueStandardUpdatedEntity = this.issueStandardsMapper.find(id);
+        final IssueStandardEntity issueStandardUpdatedEntity = this.issueStandardsMapper.find(issueStandardChengedEntity.getId());
 
         this.issueStandardSupport.assertEquals(issueStandardChengedEntity, issueStandardUpdatedEntity);
     }

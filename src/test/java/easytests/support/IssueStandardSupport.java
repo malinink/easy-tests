@@ -7,6 +7,7 @@ import easytests.core.models.empty.SubjectModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
+
 public class IssueStandardSupport {
     protected static Object[][] fixtures = new Object[][]{
             {
@@ -46,15 +47,15 @@ public class IssueStandardSupport {
             },
     };
 
-    public IssueStandardEntity getEntityFixtureMock(Integer index){
+    public IssueStandardEntity getEntityFixtureMock(Integer index) {
         return this.getEntityMock(fixtures[index]);
     }
 
-    public IssueStandardEntity getEntityAdditionalMock(Integer index){
+    public IssueStandardEntity getEntityAdditionalMock(Integer index) {
         return this.getEntityMock(additional[index]);
     }
 
-    private IssueStandardEntity getEntityMock(Object[] data){
+    private IssueStandardEntity getEntityMock(Object[] data) {
         return this.getEntityMock(
                 (Integer) data[0],
                 (Integer) data[1],
@@ -68,7 +69,7 @@ public class IssueStandardSupport {
             Integer timeLimit,
             Integer questionsNumber,
             Integer subjectId
-    ){
+    ) {
         final IssueStandardEntity issueStandardEntity = Mockito.mock(IssueStandardEntity.class);
 
         Mockito.when(issueStandardEntity.getId()).thenReturn(id);
@@ -78,7 +79,7 @@ public class IssueStandardSupport {
         return issueStandardEntity;
     }
 
-    public IssueStandardModelInterface getModelFixtureMock(Integer index){
+    public IssueStandardModelInterface getModelFixtureMock(Integer index) {
         return this.getModelMock(fixtures[index]);
     }
 
@@ -107,11 +108,11 @@ public class IssueStandardSupport {
         return issueStandardModel;
     }
 
-    public void assertEquals(IssueStandardEntity expected, IssueStandardEntity actual){
+    public void assertEquals(IssueStandardEntity expected, IssueStandardEntity actual) {
                 assertEquals(expected, actual, false);
     }
 
-    public void assertEquals(IssueStandardModelInterface expected, IssueStandardEntity actual){
+    public void assertEquals(IssueStandardModelInterface expected, IssueStandardEntity actual) {
 
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getTimeLimit(), actual.getTimeLimit());
@@ -119,20 +120,20 @@ public class IssueStandardSupport {
         Assert.assertEquals(expected.getSubject().getId(), actual.getSubjectId());
     }
 
-    public void assertEqualsWithoutId(IssueStandardEntity expected, IssueStandardEntity actual){
+    public void assertEqualsWithoutId(IssueStandardEntity expected, IssueStandardEntity actual) {
         assertEquals(expected, actual, true);
     }
 
-    public void assertNotEquals (IssueStandardEntity expected, IssueStandardEntity actual){
+    public void assertNotEquals (IssueStandardEntity expected, IssueStandardEntity actual) {
         assertNotEquals(expected, actual, false);
     }
 
-    public void assertNotEqualsWithoutId(IssueStandardEntity expected, IssueStandardEntity actual){
+    public void assertNotEqualsWithoutId(IssueStandardEntity expected, IssueStandardEntity actual) {
         assertNotEquals(expected, actual, true);
     }
 
 
-    private void assertEquals(IssueStandardEntity expected, IssueStandardEntity actual, Boolean expectId){
+    private void assertEquals(IssueStandardEntity expected, IssueStandardEntity actual, Boolean expectId) {
         if(!expectId){
             Assert.assertEquals(expected.getId(),actual.getId());
         }
@@ -141,7 +142,7 @@ public class IssueStandardSupport {
         Assert.assertEquals(expected.getSubjectId(), actual.getSubjectId());
     }
 
-    private void assertNotEquals(IssueStandardEntity expected, IssueStandardEntity actual, Boolean expectId){
+    private void assertNotEquals(IssueStandardEntity expected, IssueStandardEntity actual, Boolean expectId) {
         if(!expectId){
             Assert.assertNotEquals(expected.getId(),actual.getId());
         }
