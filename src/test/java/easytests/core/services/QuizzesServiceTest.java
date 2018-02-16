@@ -13,14 +13,12 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
-
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -230,7 +228,7 @@ public class QuizzesServiceTest {
     }
 
     @Test
-    public void testSaveEntitiesList() throws Exception {
+    public void testSaveModelsList() throws Exception {
         final ArgumentCaptor<QuizEntity> quizEntityCaptor = ArgumentCaptor.forClass(QuizEntity.class);
         final List<QuizModelInterface> quizzesModels = this.getQuizzesFixturesModels();
 
@@ -242,7 +240,7 @@ public class QuizzesServiceTest {
     }
 
     @Test
-    public void testSaveEntitiesListWithOptions() throws Exception {
+    public void testSaveModelsListWithOptions() throws Exception {
         final ArgumentCaptor<QuizModelInterface> quizModelCaptor =
                 ArgumentCaptor.forClass(QuizModelInterface.class);
         final List<QuizModelInterface> quizzesModels = this.getQuizzesFixturesModels();
