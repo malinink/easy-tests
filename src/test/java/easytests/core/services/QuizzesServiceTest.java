@@ -84,6 +84,22 @@ public class QuizzesServiceTest {
         Assert.assertNotNull(quizzesFoundedModels);
         Assert.assertEquals(0, quizzesFoundedModels.size());
     }
+    
+    @Test
+    public void testFindAllWithOptions() throws Exception {
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final List<QuizEntity> quizzesEntities = this.getQuizzesFixturesEntities();
+        final List<QuizModelInterface> quizzesModels = this.getQuizzesFixturesModels();
+        final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
+        when(this.quizzesMapper.findAll()).thenReturn(quizzesEntities);
+        when(quizzesOptions.withRelations(listCaptor.capture())).thenReturn(quizzesModels);
+
+        final List<QuizModelInterface> quizzesFoundedModels = this.quizzesService.findAll(quizzesOptions);
+
+        this.assertServicesSet(quizzesOptions);
+        this.quizzesSupport.assertModelsListEquals(quizzesModels, listCaptor.getValue());
+        Assert.assertSame(quizzesModels, quizzesFoundedModels);
+    }
 
     @Test
     public void testFindPresentModel() throws Exception {
@@ -120,22 +136,6 @@ public class QuizzesServiceTest {
         this.assertServicesSet(quizzesOptions);
         this.quizzesSupport.assertEquals(quizModel, quizModelCaptor.getValue());
         Assert.assertSame(quizModel, quizFoundedModel);
-    }
-
-    @Test
-    public void testFindAllWithOptions() throws Exception {
-        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
-        final List<QuizEntity> quizzesEntities = this.getQuizzesFixturesEntities();
-        final List<QuizModelInterface> quizzesModels = this.getQuizzesFixturesModels();
-        final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
-        when(this.quizzesMapper.findAll()).thenReturn(quizzesEntities);
-        when(quizzesOptions.withRelations(listCaptor.capture())).thenReturn(quizzesModels);
-
-        final List<QuizModelInterface> quizzesFoundedModels = this.quizzesService.findAll(quizzesOptions);
-
-        this.assertServicesSet(quizzesOptions);
-        this.quizzesSupport.assertModelsListEquals(quizzesModels, listCaptor.getValue());
-        Assert.assertSame(quizzesModels, quizzesFoundedModels);
     }
 
     @Test

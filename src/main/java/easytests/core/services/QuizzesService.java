@@ -139,7 +139,7 @@ public class QuizzesService implements QuizzesServiceInterface {
     }
 
     private List<QuizModelInterface> map(List<QuizEntity> quizzesList) {
-        final List<QuizModelInterface> resultQuizList = new ArrayList(quizzesList.size());
+        final List<QuizModelInterface> resultQuizList = new ArrayList<>(quizzesList.size());
         for (QuizEntity quiz: quizzesList) {
             resultQuizList.add(this.map(quiz));
         }
