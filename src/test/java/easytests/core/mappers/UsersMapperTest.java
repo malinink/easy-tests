@@ -25,11 +25,9 @@ public class UsersMapperTest extends AbstractMapperTest {
         final List<UserEntity> usersFoundedEntities = this.usersMapper.findAll();
 
         Assert.assertEquals(3, usersFoundedEntities.size());
-
         Integer index = 0;
         for (UserEntity userEntity: usersFoundedEntities) {
             final UserEntity userFixtureEntity = this.usersSupport.getEntityFixtureMock(index);
-
             this.usersSupport.assertEquals(userFixtureEntity, userEntity);
             index++;
         }
@@ -62,9 +60,7 @@ public class UsersMapperTest extends AbstractMapperTest {
 
         verify(userUnidentifiedEntity, times(1)).setId(id.capture());
         Assert.assertNotNull(id.getValue());
-
         final UserEntity userInsertedEntity = this.usersMapper.find(id.getValue());
-
         Assert.assertNotNull(userInsertedEntity);
         this.usersSupport.assertEqualsWithoutId(userUnidentifiedEntity, userInsertedEntity);
     }
@@ -73,13 +69,12 @@ public class UsersMapperTest extends AbstractMapperTest {
     public void testUpdate() throws Exception {
         final UserEntity userChangedEntity = this.usersSupport.getEntityAdditionalMock(1);
         final UserEntity userBeforeUpdateEntity = this.usersMapper.find(userChangedEntity.getId());
-
         Assert.assertNotNull(userBeforeUpdateEntity);
         this.usersSupport.assertNotEqualsWithoutId(userChangedEntity, userBeforeUpdateEntity);
 
         this.usersMapper.update(userChangedEntity);
-        final UserEntity userFoundedEntity = this.usersMapper.find(userChangedEntity.getId());
 
+        final UserEntity userFoundedEntity = this.usersMapper.find(userChangedEntity.getId());
         this.usersSupport.assertEquals(userChangedEntity, userFoundedEntity);
     }
 
@@ -87,7 +82,6 @@ public class UsersMapperTest extends AbstractMapperTest {
     public void testDelete() throws Exception {
         final Integer id = this.usersSupport.getEntityFixtureMock(0).getId();
         final UserEntity userFoundedEntity = this.usersMapper.find(id);
-
         Assert.assertNotNull(userFoundedEntity);
 
         this.usersMapper.delete(userFoundedEntity);
