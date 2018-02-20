@@ -8,13 +8,13 @@ import org.junit.Test;
 /**
  * @author VeronikaRevjakina
  */
-public class IssueStandardQuestionTypeOptionEntityTest  extends AbstractEntityTest {
+public class IssueStandardQuestionTypeOptionEntityTest extends AbstractEntityTest {
 
     private IssueStandardQuestionTypeOptionsSupport issueStandardQuestionTypeOptionsSupport = new IssueStandardQuestionTypeOptionsSupport();
 
     @Test
     public void testCommon() throws Exception {
-        this.testCommon( IssueStandardQuestionTypeOptionEntity.class);
+        this.testCommon(IssueStandardQuestionTypeOptionEntity.class);
     }
 
     @Test
@@ -26,5 +26,4 @@ public class IssueStandardQuestionTypeOptionEntityTest  extends AbstractEntityTe
 
         this.issueStandardQuestionTypeOptionsSupport.assertEquals(issueStandardQuestionTypeOptionsModel, issueStandardQuestionTypeOptionEntity);
     }
-
 }
