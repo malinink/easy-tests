@@ -8,6 +8,9 @@ import org.junit.Assert;
 import org.mockito.Mockito;
 
 
+/**
+ * @author VeronikaRevjakina
+ */
 public class IssueStandardQuestionTypeOptionsSupport {
 
     protected static Object[][] fixtures = new Object[][]{
@@ -152,7 +155,7 @@ public class IssueStandardQuestionTypeOptionsSupport {
     }
 
     public void assertEquals(IssueStandardQuestionTypeOptionEntity expected, IssueStandardQuestionTypeOptionEntity actual) {
-        assertEquals(expected, actual,false);
+        assertEquals(expected, actual, false);
     }
 
     public void assertEqualsWithoutId(IssueStandardQuestionTypeOptionEntity expected, IssueStandardQuestionTypeOptionEntity actual) {
@@ -212,8 +215,4 @@ public class IssueStandardQuestionTypeOptionsSupport {
         Assert.assertEquals(new QuestionTypeModelEmpty(expected.getQuestionTypeId()), actual.getQuestionType());
         Assert.assertEquals(new IssueStandardModelEmpty(expected.getIssueStandardId()), actual.getIssueStandard());
     }
-
-
 }
-
-
