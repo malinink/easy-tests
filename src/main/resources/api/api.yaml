@@ -7,7 +7,6 @@ host: "api.easy-tests"
 basePath: "/v1"
 tags:
   - name: "users"
-  description: "Users"
 schemes:
   - http
 consumes:
