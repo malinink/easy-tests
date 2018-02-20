@@ -23,11 +23,9 @@ public class QuestionTypesMapperTest extends AbstractMapperTest {
         final List<QuestionTypeEntity> questionTypesFoundedEntities = this.questionTypesMapper.findAll();
 
         Assert.assertEquals(4, questionTypesFoundedEntities.size());
-
         Integer index = 0;
         for (QuestionTypeEntity questionTypeEntity: questionTypesFoundedEntities) {
             final QuestionTypeEntity questionTypeFixtureEntity = this.questionTypesSupport.getEntityFixtureMock(index);
-
             this.questionTypesSupport.assertEquals(questionTypeFixtureEntity, questionTypeEntity);
             index++;
         }
@@ -41,5 +39,4 @@ public class QuestionTypesMapperTest extends AbstractMapperTest {
 
         this.questionTypesSupport.assertEquals(questionTypeFixtureEntity, questionTypeFoundedEntity);
     }
-
 }
