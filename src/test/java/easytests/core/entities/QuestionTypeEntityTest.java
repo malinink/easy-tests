@@ -24,7 +24,6 @@ public class QuestionTypeEntityTest extends AbstractEntityTest {
 
         questionTypeEntity.map(questionTypeModel);
 
-        this.questionTypesSupport.assertEquals(questionTypeModel,questionTypeEntity );
+        this.questionTypesSupport.assertEquals(questionTypeModel, questionTypeEntity);
     }
-
 }
