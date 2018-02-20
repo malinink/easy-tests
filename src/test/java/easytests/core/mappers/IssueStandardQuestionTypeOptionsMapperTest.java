@@ -26,11 +26,9 @@ public class IssueStandardQuestionTypeOptionsMapperTest extends AbstractMapperTe
         final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionFoundedEntities = this.questionTypeOptionMapper.findAll();
 
         Assert.assertEquals(5, questionTypeOptionFoundedEntities.size());
-
         Integer index = 0;
         for (IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity : questionTypeOptionFoundedEntities) {
             final IssueStandardQuestionTypeOptionEntity questionTypeOptionFixtureEntity = this.issueStandardQuestionTypeOptionsSupport.getEntityFixtureMock(index);
-
             this.issueStandardQuestionTypeOptionsSupport.assertEquals(questionTypeOptionFixtureEntity, questionTypeOptionEntity);
             index++;
         }
@@ -43,7 +41,6 @@ public class IssueStandardQuestionTypeOptionsMapperTest extends AbstractMapperTe
         final IssueStandardQuestionTypeOptionEntity questionTypeOptionFoundedEntity = this.questionTypeOptionMapper.find(1);
 
         this.issueStandardQuestionTypeOptionsSupport.assertEquals(questionTypeOptionFixtureEntity, questionTypeOptionFoundedEntity);
-
     }
 
     @Test
@@ -57,12 +54,10 @@ public class IssueStandardQuestionTypeOptionsMapperTest extends AbstractMapperTe
                 = this.questionTypeOptionMapper.findByIssueStandardId(1);
 
         Assert.assertEquals(3, questionTypeOptionFoundedEntities.size());
-
         Integer index = 0;
         for (IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity : questionTypeOptionFoundedEntities) {
             this.issueStandardQuestionTypeOptionsSupport.assertEquals(questionTypeOptionFixtureEntities.get(index), questionTypeOptionEntity);
             index++;
-
         }
     }
 
@@ -73,28 +68,23 @@ public class IssueStandardQuestionTypeOptionsMapperTest extends AbstractMapperTe
 
         this.questionTypeOptionMapper.insert(questionTypeOptionUnidentifiedEntity);
 
-
         verify(questionTypeOptionUnidentifiedEntity, times(1)).setId(id.capture());
         Assert.assertNotNull(id.getValue());
-
         final IssueStandardQuestionTypeOptionEntity questionTypeOptionInsertedEntity = this.questionTypeOptionMapper.find(id.getValue());
-
         Assert.assertNotNull(questionTypeOptionInsertedEntity);
         this.issueStandardQuestionTypeOptionsSupport.assertEqualsWithoutId(questionTypeOptionUnidentifiedEntity, questionTypeOptionInsertedEntity);
-
     }
 
     @Test
     public void testUpdate() throws Exception {
         final IssueStandardQuestionTypeOptionEntity questionTypeOptionChangedEntity = this.issueStandardQuestionTypeOptionsSupport.getEntityAdditionalMock(1);
         final IssueStandardQuestionTypeOptionEntity questionTypeOptionBeforeUpdateEntity = this.questionTypeOptionMapper.find(questionTypeOptionChangedEntity.getId());
-
         Assert.assertNotNull(questionTypeOptionBeforeUpdateEntity);
-        this.issueStandardQuestionTypeOptionsSupport.assertNotEqualsWithoutId(questionTypeOptionChangedEntity,questionTypeOptionBeforeUpdateEntity);
+        this.issueStandardQuestionTypeOptionsSupport.assertNotEqualsWithoutId(questionTypeOptionChangedEntity, questionTypeOptionBeforeUpdateEntity);
 
         this.questionTypeOptionMapper.update(questionTypeOptionChangedEntity);
-        final IssueStandardQuestionTypeOptionEntity questionTypeOptionUpdatedEntity = this.questionTypeOptionMapper.find(questionTypeOptionChangedEntity.getId());
 
+        final IssueStandardQuestionTypeOptionEntity questionTypeOptionUpdatedEntity = this.questionTypeOptionMapper.find(questionTypeOptionChangedEntity.getId());
         this.issueStandardQuestionTypeOptionsSupport.assertEquals(questionTypeOptionChangedEntity, questionTypeOptionUpdatedEntity);
     }
 
@@ -102,12 +92,10 @@ public class IssueStandardQuestionTypeOptionsMapperTest extends AbstractMapperTe
     public void testDelete() throws Exception {
         final Integer id = this.issueStandardQuestionTypeOptionsSupport.getEntityFixtureMock(0).getId();
         final IssueStandardQuestionTypeOptionEntity questionTypeOptionFoundedEntity = this.questionTypeOptionMapper.find(id);
-
         Assert.assertNotNull(questionTypeOptionFoundedEntity);
 
         this.questionTypeOptionMapper.delete(questionTypeOptionFoundedEntity);
 
         Assert.assertNull(this.questionTypeOptionMapper.find(id));
     }
-
 }
