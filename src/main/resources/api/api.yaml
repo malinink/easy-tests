@@ -6,14 +6,14 @@ info:
 host: "api.easy-tests"
 basePath: "/v1"
 tags:
-- name: "users"
+  - name: "users"
   description: "Users"
 schemes:
-- http
+  - http
 consumes:
-- application/json
+  - application/json
 produces:
-- application/json
+  - application/json
 paths:
   /users:
     get:
