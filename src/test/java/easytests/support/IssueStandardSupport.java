@@ -8,6 +8,9 @@ import org.junit.Assert;
 import org.mockito.Mockito;
 
 
+/**
+ * @author Yarik2308
+ */
 public class IssueStandardSupport {
     protected static Object[][] fixtures = new Object[][]{
             {
@@ -109,11 +112,10 @@ public class IssueStandardSupport {
     }
 
     public void assertEquals(IssueStandardEntity expected, IssueStandardEntity actual) {
-                assertEquals(expected, actual, false);
+        assertEquals(expected, actual, false);
     }
 
     public void assertEquals(IssueStandardModelInterface expected, IssueStandardEntity actual) {
-
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getTimeLimit(), actual.getTimeLimit());
         Assert.assertEquals(expected.getQuestionsNumber(), actual.getQuestionsNumber());
@@ -124,7 +126,7 @@ public class IssueStandardSupport {
         assertEquals(expected, actual, true);
     }
 
-    public void assertNotEquals (IssueStandardEntity expected, IssueStandardEntity actual) {
+    public void assertNotEquals(IssueStandardEntity expected, IssueStandardEntity actual) {
         assertNotEquals(expected, actual, false);
     }
 
@@ -132,10 +134,9 @@ public class IssueStandardSupport {
         assertNotEquals(expected, actual, true);
     }
 
-
     private void assertEquals(IssueStandardEntity expected, IssueStandardEntity actual, Boolean expectId) {
-        if(!expectId){
-            Assert.assertEquals(expected.getId(),actual.getId());
+        if (!expectId){
+            Assert.assertEquals(expected.getId(), actual.getId());
         }
         Assert.assertEquals(expected.getTimeLimit(), actual.getTimeLimit());
         Assert.assertEquals(expected.getQuestionsNumber(), actual.getQuestionsNumber());
@@ -143,12 +144,11 @@ public class IssueStandardSupport {
     }
 
     private void assertNotEquals(IssueStandardEntity expected, IssueStandardEntity actual, Boolean expectId) {
-        if(!expectId){
-            Assert.assertNotEquals(expected.getId(),actual.getId());
+        if (!expectId){
+            Assert.assertNotEquals(expected.getId(), actual.getId());
         }
         Assert.assertNotEquals(expected.getTimeLimit(), actual.getTimeLimit());
         Assert.assertNotEquals(expected.getQuestionsNumber(), actual.getQuestionsNumber());
         Assert.assertNotEquals(expected.getSubjectId(), actual.getSubjectId());
     }
-
 }
