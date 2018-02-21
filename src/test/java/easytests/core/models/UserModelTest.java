@@ -14,7 +14,7 @@ public class UserModelTest extends AbstractModelTest {
 
     @Test
     public void testCommon() throws Exception {
-        this.testCommon(UserModel.class);
+        super.testCommon(UserModel.class);
     }
 
     @Test
