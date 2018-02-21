@@ -33,5 +33,4 @@ public class SubjectModelTest extends AbstractModelTest {
 
         this.subjectsSupport.assertEquals(subjectEntity, subjectModel);
     }
-
 }
