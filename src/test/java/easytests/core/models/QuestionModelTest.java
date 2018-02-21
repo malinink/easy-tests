@@ -3,26 +3,18 @@ package easytests.core.models;
 import easytests.core.entities.QuestionEntity;
 import easytests.support.QuestionsSupport;
 import org.junit.Test;
-import org.meanbean.test.ConfigurationBuilder;
+
 
 /**
- * @author risa_magpie
+ * @author RisaMagpie
  */
 public class QuestionModelTest extends AbstractModelTest {
 
     private QuestionsSupport questionsSupport = new QuestionsSupport();
 
-    @Override
-    protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder()
-                .ignoreProperty("questionType")
-                .ignoreProperty("topic")
-                .ignoreProperty("answers");
-    }
-
     @Test
     public void testCommon() throws Exception {
-        this.testCommon(QuestionModel.class);
+        super.testCommon(QuestionModel.class);
     }
 
     @Test
