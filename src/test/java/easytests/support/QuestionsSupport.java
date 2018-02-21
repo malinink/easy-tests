@@ -14,6 +14,7 @@ import org.mockito.Mockito;
  * @author RisaMagpie
  */
 public class QuestionsSupport {
+
     protected static Object[][] fixtures = new Object[][]{
             {
                     1,
@@ -34,6 +35,7 @@ public class QuestionsSupport {
                     2
             },
     };
+
     protected static Object[][] additional = new Object[][]{
             {
                     // for insert entity
@@ -184,5 +186,4 @@ public class QuestionsSupport {
             i++;
         }
     }
-
 }
