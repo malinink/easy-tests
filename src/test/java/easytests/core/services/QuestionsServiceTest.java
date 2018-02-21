@@ -2,7 +2,6 @@ package easytests.core.services;
 
 import easytests.core.entities.QuestionEntity;
 import easytests.core.mappers.QuestionsMapper;
-import easytests.core.models.QuestionModel;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.QuestionsOptionsInterface;
@@ -25,7 +24,7 @@ import org.springframework.test.context.junit4.*;
 
 
 /**
- * @author risa_magpie
+ * @author RisaMagpie
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -173,7 +172,7 @@ public class QuestionsServiceTest {
 
         final List<QuestionModelInterface> questionsFoundedModels = this.questionsService.findByTopic(topicModel, questionsOptions);
 
-        this.assertServicesSet(questionsOptions);//there is an error and I don't know why
+        this.assertServicesSet(questionsOptions);
         this.questionsSupport.assertModelsListEquals(questionsModels, listCaptor.getValue());
         Assert.assertSame(questionsModels, questionsFoundedModels);
     }
@@ -216,6 +215,18 @@ public class QuestionsServiceTest {
     }
 
     @Test
+    public void testSaveWithOptions() throws Exception {
+        final QuestionModelInterface questionModel = this.questionsSupport.getModelFixtureMock(0);
+        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
+
+        this.questionsService.save(questionModel, questionsOptions);
+
+        this.assertServicesSet(questionsOptions);
+        verify(questionsOptions, times(1)).saveWithRelations(questionModel);
+        verifyNoMoreInteractions(this.questionsMapper);
+    }
+
+    @Test
     public void testSaveModelsList() throws Exception {
         final ArgumentCaptor<QuestionEntity> questionEntityCaptor = ArgumentCaptor.forClass(QuestionEntity.class);
         final List<QuestionModelInterface> questionsModels = this.getQuestionsFixturesModels();
@@ -240,19 +251,6 @@ public class QuestionsServiceTest {
         verifyNoMoreInteractions(this.questionsMapper);
     }
 
-
-    @Test
-    public void testSaveWithOptions() throws Exception {
-        final QuestionModelInterface questionModel = this.questionsSupport.getModelFixtureMock(0);
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-
-        this.questionsService.save(questionModel, questionsOptions);
-
-        this.assertServicesSet(questionsOptions);
-        verify(questionsOptions, times(1)).saveWithRelations(questionModel);
-        verifyNoMoreInteractions(this.questionsMapper);
-    }
-
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
         final ArgumentCaptor<QuestionEntity> questionEntityCaptor = ArgumentCaptor.forClass(QuestionEntity.class);
@@ -272,17 +270,6 @@ public class QuestionsServiceTest {
     }
 
     @Test
-    public void testDeleteModelsList() throws Exception {
-        final ArgumentCaptor<QuestionEntity> questionEntityCaptor = ArgumentCaptor.forClass(QuestionEntity.class);
-        final List<QuestionModelInterface> questionsModels = this.getQuestionsFixturesModels();
-
-        this.questionsService.delete(questionsModels);
-
-        verify(this.questionsMapper, times(questionsModels.size())).delete(questionEntityCaptor.capture());
-        this.questionsSupport.assertEntitiesListEquals(this.getQuestionsFixturesEntities(), questionEntityCaptor.getAllValues());
-    }
-
-    @Test
     public void testDeleteWithOptions() throws Exception {
         final QuestionModelInterface questionModel = this.questionsSupport.getModelFixtureMock(0);
         final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
@@ -292,6 +279,17 @@ public class QuestionsServiceTest {
         this.assertServicesSet(questionsOptions);
         verify(questionsOptions, times(1)).deleteWithRelations(questionModel);
         verifyNoMoreInteractions(this.questionsMapper);
+    }
+
+    @Test
+    public void testDeleteModelsList() throws Exception {
+        final ArgumentCaptor<QuestionEntity> questionEntityCaptor = ArgumentCaptor.forClass(QuestionEntity.class);
+        final List<QuestionModelInterface> questionsModels = this.getQuestionsFixturesModels();
+
+        this.questionsService.delete(questionsModels);
+
+        verify(this.questionsMapper, times(questionsModels.size())).delete(questionEntityCaptor.capture());
+        this.questionsSupport.assertEntitiesListEquals(this.getQuestionsFixturesEntities(), questionEntityCaptor.getAllValues());
     }
 
     @Test
