@@ -2,7 +2,10 @@ package easytests.support;
 
 import easytests.core.entities.QuestionEntity;
 import easytests.core.models.QuestionModelInterface;
-import easytests.core.models.empty.*;
+import easytests.core.models.empty.ModelsListEmpty;
+import easytests.core.models.empty.QuestionTypeModelEmpty;
+import easytests.core.models.empty.TopicModelEmpty;
+import java.util.List;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -147,7 +150,7 @@ public class QuestionsSupport {
     public void assertEquals(QuestionModelInterface expected, QuestionModelInterface actual) {
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getText(), actual.getText());
-        Assert.assertNotEquals(expected.getQuestionType(), actual.getQuestionType());
+        Assert.assertEquals(expected.getQuestionType(), actual.getQuestionType());
         Assert.assertEquals(expected.getTopic(), actual.getTopic());
         Assert.assertEquals(expected.getAnswers(), actual.getAnswers());
     }
@@ -161,8 +164,25 @@ public class QuestionsSupport {
 
     public void assertEquals(QuestionEntity expected, QuestionModelInterface actual) {
         assertEquals(actual, expected);
-        Assert.assertEquals(new QuestionModelEmpty(expected.getQuestionTypeId()), actual.getQuestionType());/**Do we need it?**/
         Assert.assertEquals(new ModelsListEmpty(), actual.getAnswers());
+    }
+
+    public void assertModelsListEquals(List<QuestionModelInterface> expected, List<QuestionModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (QuestionModelInterface questionModel: expected) {
+            this.assertEquals(questionModel, actual.get(i));
+            i++;
+        }
+    }
+
+    public void assertEntitiesListEquals(List<QuestionEntity> expected, List<QuestionEntity> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (QuestionEntity questionEntity: expected) {
+            this.assertEquals(questionEntity, actual.get(i));
+            i++;
+        }
     }
 
 }
