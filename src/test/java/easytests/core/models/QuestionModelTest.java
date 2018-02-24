@@ -1,56 +1,28 @@
 package easytests.core.models;
 
 import easytests.core.entities.QuestionEntity;
-import easytests.core.models.empty.ModelsListEmpty;
-import easytests.core.models.empty.QuestionTypeModelEmpty;
-import easytests.core.models.empty.TopicModelEmpty;
-import org.junit.Assert;
+import easytests.support.QuestionsSupport;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.meanbean.test.BeanTester;
-import org.meanbean.test.Configuration;
-import org.meanbean.test.ConfigurationBuilder;
-import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 /**
- * @author firkhraag
+ * @author RisaMagpie
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class QuestionModelTest {
+public class QuestionModelTest extends AbstractModelTest {
+
+    private QuestionsSupport questionsSupport = new QuestionsSupport();
 
     @Test
     public void testCommon() throws Exception {
-        Configuration configuration = new ConfigurationBuilder()
-                .ignoreProperty("topic")
-                .ignoreProperty("answers")
-                .ignoreProperty("questionType")
-                .build();
-        new BeanTester().testBean(QuestionModel.class, configuration);
+        super.testCommon(QuestionModel.class);
     }
 
     @Test
     public void testMap() throws Exception {
-        final Integer questionId = 1;
-        final String text = "test1";
-        final Integer questionTypeId = 1;
-        final Integer topicId = 1;
-        final QuestionEntity questionEntity = Mockito.mock(QuestionEntity.class);
-
-        Mockito.when(questionEntity.getId()).thenReturn(questionId);
-        Mockito.when(questionEntity.getText()).thenReturn(text);
-        Mockito.when(questionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
-        Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
-
-        final QuestionModel questionModel = new QuestionModel();
+        final QuestionEntity questionEntity = this.questionsSupport.getEntityFixtureMock(0);
+        final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.map(questionEntity);
 
-        Assert.assertEquals(questionId, questionModel.getId());
-        Assert.assertEquals(text, questionModel.getText());
-        Assert.assertEquals(new QuestionTypeModelEmpty(questionEntity.getQuestionTypeId()), questionModel.getQuestionType());
-        Assert.assertEquals(new ModelsListEmpty(), questionModel.getAnswers());
-        Assert.assertEquals(new TopicModelEmpty(questionEntity.getTopicId()), questionModel.getTopic());
+        this.questionsSupport.assertEquals(questionEntity, questionModel);
     }
 }

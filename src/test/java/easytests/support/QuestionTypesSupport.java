@@ -2,8 +2,8 @@ package easytests.support;
 
 import easytests.core.entities.QuestionTypeEntity;
 import easytests.core.models.QuestionTypeModelInterface;
-import org.junit.Assert;
 import java.util.List;
+import org.junit.Assert;
 import org.mockito.Mockito;
 
 
