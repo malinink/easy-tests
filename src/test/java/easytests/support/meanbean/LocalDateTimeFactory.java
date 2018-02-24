@@ -1,9 +1,12 @@
 package easytests.support.meanbean;
 
-import org.meanbean.lang.Factory;
 import java.time.LocalDateTime;
+import org.meanbean.lang.Factory;
 
 
+/**
+ * @author malinink
+ */
 public class LocalDateTimeFactory implements Factory<LocalDateTime> {
 
     @Override
@@ -11,5 +14,4 @@ public class LocalDateTimeFactory implements Factory<LocalDateTime> {
     {
         return LocalDateTime.now();
     }
-
 }

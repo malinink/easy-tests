@@ -1,12 +1,32 @@
 package easytests.core;
 
-import easytests.support.meanbean.LocalDateTimeFactory;
+import easytests.core.models.*;
+import easytests.support.meanbean.*;
+import easytests.support.meanbean.models.*;
+import java.time.LocalDateTime;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.*;
-import java.time.LocalDateTime;
 
 
+/**
+ * @author malinink
+ */
 public class AbstractMeanBeanTest {
+
+    private static Object[][] mappedFactories = new Object[][]{
+            {
+                    LocalDateTime.class,
+                    new LocalDateTimeFactory()
+            },
+            {
+                    TopicModelInterface.class,
+                    new TopicModelFactory()
+            },
+            {
+                    QuestionTypeModelInterface.class,
+                    new QuestionTypeModelFactory()
+            }
+    };
 
     private BeanTester beanTester;
 
@@ -29,7 +49,9 @@ public class AbstractMeanBeanTest {
     }
 
     protected void addBeanTesterFactories() {
-        this.addBeanTesterFactory(LocalDateTime.class, new LocalDateTimeFactory());
+        for (Object[] mappedFactory: mappedFactories) {
+            this.addBeanTesterFactory((Class) mappedFactory[0], (Factory) mappedFactory[1]);
+        }
     }
 
     protected BeanTester getBeanTester() {
@@ -46,7 +68,9 @@ public class AbstractMeanBeanTest {
     }
 
     protected void addEqualsMethodTesterFactories() {
-        this.addEqualsMethodTesterFactory(LocalDateTime.class, new LocalDateTimeFactory());
+        for (Object[] mappedFactory: mappedFactories) {
+            this.addEqualsMethodTesterFactory((Class) mappedFactory[0], (Factory) mappedFactory[1]);
+        }
     }
 
     protected EqualsMethodTester getEqualsMethodTester() {
@@ -63,7 +87,9 @@ public class AbstractMeanBeanTest {
     }
 
     protected void addHashCodeMethodTesterFactories() {
-        this.addHashCodeMethodTesterFactory(LocalDateTime.class, new LocalDateTimeFactory());
+        for (Object[] mappedFactory: mappedFactories) {
+            this.addHashCodeMethodTesterFactory((Class) mappedFactory[0], (Factory) mappedFactory[1]);
+        }
     }
 
     protected HashCodeMethodTester getHashCodeMethodTester() {
