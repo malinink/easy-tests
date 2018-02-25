@@ -22,7 +22,7 @@ public class SubjectModelTest extends AbstractModelTest {
 
     @Test
     public void testCommon() throws Exception {
-        this.testCommon(SubjectModel.class);
+        super.testCommon(SubjectModel.class);
     }
 
     @Test
@@ -33,5 +33,4 @@ public class SubjectModelTest extends AbstractModelTest {
 
         this.subjectsSupport.assertEquals(subjectEntity, subjectModel);
     }
-
 }

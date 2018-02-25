@@ -61,7 +61,9 @@ public class QuestionsService implements QuestionsServiceInterface {
             TopicModelInterface topicModel,
             QuestionsOptionsInterface questionsOptions
     ) {
-        return questionsOptions.withRelations(this.map(this.questionsMapper.findByTopicId(topicModel.getId())));
+
+        return this.withServices(questionsOptions)
+                .withRelations(this.map(this.questionsMapper.findByTopicId(topicModel.getId())));
     }
 
     @Override
