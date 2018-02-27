@@ -31,7 +31,7 @@ public class AnswersSupport {
             {
                     3,
                     "Answer3",
-                    3,
+                    1,
                     3,
                     true
             },
@@ -47,7 +47,7 @@ public class AnswersSupport {
                     true
             },
             {
-                    // for update intity with id = 1
+                    // for update entity with id = 1
                     1,
                     "NewAnswer",
                     2,
@@ -138,7 +138,6 @@ public class AnswersSupport {
         if (!exceptId) {
             Assert.assertEquals(expected.getId(), actual.getId());
         }
-        Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getTxt(), actual.getTxt());
         Assert.assertEquals(expected.getQuestionId(), actual.getQuestionId());
         Assert.assertEquals(expected.getSerialNumber(), actual.getSerialNumber());
@@ -157,7 +156,6 @@ public class AnswersSupport {
         if (!exceptId) {
             Assert.assertNotEquals(unexpected.getId(), actual.getId());
         }
-        Assert.assertNotEquals(unexpected.getId(), actual.getId());
         Assert.assertNotEquals(unexpected.getTxt(), actual.getTxt());
         Assert.assertNotEquals(unexpected.getQuestionId(), actual.getQuestionId());
         Assert.assertNotEquals(unexpected.getSerialNumber(), actual.getSerialNumber());

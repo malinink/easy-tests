@@ -31,7 +31,7 @@ public interface AnswersMapper {
     @Select("SELECT * FROM answers WHERE"
             + " question_id=#{questionId}")
     @ResultMap("AnswerEntity")
-    List<AnswerEntity> findByQuestionId(Integer id);
+    List<AnswerEntity> findByQuestionId(Integer questionId);
 
     @Insert("INSERT INTO answers (txt, question_id, serial_number, is_right) VALUES(#{txt}, #{questionId}, #{serialNumber}, #{right})")
     @Options(useGeneratedKeys = true, keyColumn = "id")

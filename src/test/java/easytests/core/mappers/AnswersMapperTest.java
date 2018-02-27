@@ -1,19 +1,21 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.AnswerEntity;
+import easytests.support.AnswersSupport;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @author malinink
+ * @author anyamaz
  */
 public class AnswersMapperTest extends AbstractMapperTest {
+
+    private AnswersSupport  answersSupport = new AnswersSupport();
 
     @Autowired
     private AnswersMapper answersMapper;
@@ -22,92 +24,75 @@ public class AnswersMapperTest extends AbstractMapperTest {
     public void testFindAll() throws Exception {
         final List<AnswerEntity> answersEntities = this.answersMapper.findAll();
         Assert.assertEquals((long) 3, (long) answersEntities.size());
+
+        Integer index = 0;
+        for (AnswerEntity answerEntity: answersEntities) {
+            final AnswerEntity answerFixtureEntity = this.answersSupport.getEntityFixtureMock(index);
+
+            this.answersSupport.assertEquals(answerFixtureEntity, answerEntity);
+            index++;
+        }
     }
 
     @Test
     public void testFind() throws Exception {
-        final AnswerEntity answer = this.answersMapper.find(1);
-        Assert.assertEquals((Integer) 1, answer.getId());
-        Assert.assertEquals("Answer1", answer.getTxt());
-        Assert.assertEquals((Integer) 1, answer.getQuestionId());
-        Assert.assertEquals(true, answer.getRight());
+
+        final AnswerEntity answerFixtureEntity = this.answersSupport.getEntityFixtureMock(0);
+
+        final AnswerEntity answerFoundedEntity = this.answersMapper.find(answerFixtureEntity.getId());
+
+        this.answersSupport.assertEquals(answerFixtureEntity, answerFoundedEntity);
     }
     
     @Test
     public void testFindByQuestionId() throws Exception {
-        final List<AnswerEntity> answers = this.answersMapper.findByQuestionId(1);
-        Assert.assertEquals((Integer) 1, (Integer) answers.size());
-        final AnswerEntity answer = answers.get(0);
-
-        Assert.assertEquals((Integer) 1, answer.getId());
-        Assert.assertEquals("Answer1", answer.getTxt());
-        Assert.assertEquals((Integer) 1, answer.getQuestionId());
-        Assert.assertEquals(true, answer.getRight());
+        final List<AnswerEntity> answerFixtureEntityList = Arrays.asList(this.answersSupport.getEntityFixtureMock(0), this.answersSupport.getEntityFixtureMock(2));
+        final List<AnswerEntity> answerFoundedEntityList = this.answersMapper.findByQuestionId(answerFixtureEntityList.get(0).getQuestionId());
+        for(int i = 0; i < answerFixtureEntityList.size(); i++)
+            this.answersSupport.assertEquals(answerFixtureEntityList.get(i), answerFoundedEntityList.get(i));
     }
 
     @Test
     public void testInsert() throws Exception {
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
-        final String txt = "Text";
-        final Integer questionId = 1;
-        final Boolean right = true;
+        final AnswerEntity answerUnidentifiedEntity = this.answersSupport.getEntityAdditionalMock(0);
 
-        AnswerEntity answerEntity = Mockito.mock(AnswerEntity.class);
-        Mockito.when(answerEntity.getTxt()).thenReturn(txt);
-        Mockito.when(answerEntity.getQuestionId()).thenReturn(questionId);
-        Mockito.when(answerEntity.getRight()).thenReturn(right);
 
-        this.answersMapper.insert(answerEntity);
+        this.answersMapper.insert(answerUnidentifiedEntity);
 
-        verify(answerEntity, times(1)).setId(id.capture());
+        verify(answerUnidentifiedEntity, times(1)).setId(id.capture());
 
         Assert.assertNotNull(id.getValue());
 
-        answerEntity = this.answersMapper.find(id.getValue());
-        Assert.assertNotNull(answerEntity);
-        Assert.assertEquals(id.getValue(), answerEntity.getId());
-        Assert.assertEquals(txt, answerEntity.getTxt());
-        Assert.assertEquals(questionId, answerEntity.getQuestionId());
-        Assert.assertEquals(right, answerEntity.getRight());
+        final AnswerEntity answerInsertedEntity = this.answersMapper.find(id.getValue());
+
+        Assert.assertNotNull(answerInsertedEntity);
+        this.answersSupport.assertEqualsWithoutId(answerUnidentifiedEntity, answerInsertedEntity);
     }
 
     @Test
     public void testUpdate() throws Exception {
-        final Integer id = 1;
-        final String txt = "NewAnswer";
-        final Integer questionId = 2;
-        final Boolean right = false;
+        final AnswerEntity answerChangedEntity = this.answersSupport.getEntityAdditionalMock(1);
+        final AnswerEntity answerBeforeUpdateEntity = this.answersMapper.find(answerChangedEntity.getId());
 
-        AnswerEntity answerEntity = this.answersMapper.find(id);
-        Assert.assertNotNull(answerEntity);
-        Assert.assertEquals(id, answerEntity.getId());
-        Assert.assertNotEquals(txt, answerEntity.getTxt());
-        Assert.assertNotEquals(questionId, answerEntity.getQuestionId());
-        Assert.assertNotEquals(right, answerEntity.getRight());
+        Assert.assertNotNull(answerBeforeUpdateEntity);
+        this.answersSupport.assertNotEqualsWithoutId(answerChangedEntity, answerBeforeUpdateEntity);
 
-        answerEntity = Mockito.mock(AnswerEntity.class);
-        Mockito.when(answerEntity.getId()).thenReturn(id);
-        Mockito.when(answerEntity.getTxt()).thenReturn(txt);
-        Mockito.when(answerEntity.getQuestionId()).thenReturn(questionId);
-        Mockito.when(answerEntity.getRight()).thenReturn(right);
+        this.answersMapper.update(answerChangedEntity);
+        final AnswerEntity answerFoundedEntity = this.answersMapper.find(answerChangedEntity.getId());
 
-        this.answersMapper.update(answerEntity);
-
-        answerEntity = this.answersMapper.find(id);
-        Assert.assertNotNull(answerEntity);
-        Assert.assertEquals(id, answerEntity.getId());
-        Assert.assertEquals(txt, answerEntity.getTxt());
-        Assert.assertEquals(questionId, answerEntity.getQuestionId());
-        Assert.assertEquals(right, answerEntity.getRight());
+        this.answersSupport.assertEquals(answerChangedEntity, answerFoundedEntity);
     }
 
     @Test
     public void testDelete() throws Exception {
-        AnswerEntity answerEntity = this.answersMapper.find(1);
-        Assert.assertNotNull(answerEntity);
+        final Integer id = this.answersSupport.getEntityFixtureMock(0).getId();
+        final AnswerEntity answerFoundedEntity = this.answersMapper.find(id);
 
-        this.answersMapper.delete(answerEntity);
-        answerEntity = this.answersMapper.find(1);
-        Assert.assertNull(answerEntity);
+        Assert.assertNotNull(answerFoundedEntity);
+
+        this.answersMapper.delete(answerFoundedEntity);
+
+        Assert.assertNull(this.answersMapper.find(0));
     }
 }
