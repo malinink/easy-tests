@@ -32,7 +32,6 @@ public class AnswersMapperTest extends AbstractMapperTest {
 
             this.answersSupport.assertEquals(answerFixtureEntity, answerEntity);
             index++;
-            System.out.println(index);
         }
     }
 
