@@ -15,22 +15,24 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class AnswersMapperTest extends AbstractMapperTest {
 
-    private AnswersSupport  answersSupport = new AnswersSupport();
+    private AnswersSupport answersSupport = new AnswersSupport();
 
     @Autowired
     private AnswersMapper answersMapper;
 
     @Test
     public void testFindAll() throws Exception {
-        final List<AnswerEntity> answersEntities = this.answersMapper.findAll();
-        Assert.assertEquals((long) 3, (long) answersEntities.size());
+        final List<AnswerEntity> answersFoundedEntities = this.answersMapper.findAll();
+
+        Assert.assertEquals(3, answersFoundedEntities.size());
 
         Integer index = 0;
-        for (AnswerEntity answerEntity: answersEntities) {
+        for (AnswerEntity answerEntity: answersFoundedEntities) {
             final AnswerEntity answerFixtureEntity = this.answersSupport.getEntityFixtureMock(index);
 
             this.answersSupport.assertEquals(answerFixtureEntity, answerEntity);
             index++;
+            System.out.println(index);
         }
     }
 
