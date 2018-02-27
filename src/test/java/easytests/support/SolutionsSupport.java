@@ -159,6 +159,8 @@ public class SolutionsSupport {
 
     public void assertEquals(SolutionEntity expected, SolutionModelInterface actual) {
         assertEquals(actual, expected);
+        Assert.assertEquals(new PointModelEmpty(expected.getPointId()), actual.getPoint());
+        Assert.assertEquals(new AnswerModelEmpty(expected.getAnswerId()), actual.getAnswer());
     }
 
     public void assertModelsListEquals(List<SolutionModelInterface> expected, List<SolutionModelInterface> actual) {

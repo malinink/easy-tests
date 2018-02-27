@@ -140,7 +140,7 @@ public class SolutionsService implements SolutionsServiceInterface {
 
     private SolutionsOptionsInterface withServices(SolutionsOptionsInterface solutionOptions) {
         solutionOptions.setSolutionsService(this);
-        //solutionOptions.setPointsService(this.pointsService);
+        solutionOptions.setPointsService(this.pointsService);
         return solutionOptions;
     }
 }

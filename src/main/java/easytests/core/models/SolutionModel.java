@@ -1,6 +1,8 @@
 package easytests.core.models;
 
 import easytests.core.entities.SolutionEntity;
+import easytests.core.models.empty.AnswerModelEmpty;
+import easytests.core.models.empty.PointModelEmpty;
 import lombok.*;
 
 /**
@@ -19,5 +21,7 @@ public class SolutionModel implements SolutionModelInterface {
 
     public void map(SolutionEntity solutionEntity) {
         this.setId(solutionEntity.getId());
+        this.setAnswer(new AnswerModelEmpty(solutionEntity.getAnswerId()));
+        this.setPoint(new PointModelEmpty(solutionEntity.getPointId()));
     }
 }
