@@ -26,11 +26,9 @@ public class SubjectsMapperTest extends AbstractMapperTest {
         final List<SubjectEntity> subjectsFoundedEntities = this.subjectsMapper.findAll();
 
         Assert.assertEquals(3, subjectsFoundedEntities.size());
-
         Integer index = 0;
         for (SubjectEntity subjectEntity: subjectsFoundedEntities) {
             final SubjectEntity subjectFixtureEntity = this.subjectsSupport.getEntityFixtureMock(index);
-
             this.subjectsSupport.assertEquals(subjectFixtureEntity, subjectEntity);
             index++;
         }
@@ -54,7 +52,6 @@ public class SubjectsMapperTest extends AbstractMapperTest {
         final List<SubjectEntity> subjectsFoundedEntities = this.subjectsMapper.findByUserId(2);
 
         Assert.assertEquals(2, subjectsFoundedEntities.size());
-
         Integer index = 0;
         for (SubjectEntity subjectEntity: subjectsFoundedEntities) {
             this.subjectsSupport.assertEquals(subjectsFixtureEntities.get(index), subjectEntity);
@@ -71,9 +68,7 @@ public class SubjectsMapperTest extends AbstractMapperTest {
 
         verify(subjectUnidentifiedEntity, times(1)).setId(id.capture());
         Assert.assertNotNull(id.getValue());
-
         final SubjectEntity subjectInsertedEntity = this.subjectsMapper.find(id.getValue());
-
         Assert.assertNotNull(subjectInsertedEntity);
         this.subjectsSupport.assertEqualsWithoutId(subjectUnidentifiedEntity, subjectInsertedEntity);
     }
@@ -82,13 +77,12 @@ public class SubjectsMapperTest extends AbstractMapperTest {
     public void testUpdate() throws Exception {
         final SubjectEntity subjectChangedEntity = this.subjectsSupport.getEntityAdditionalMock(1);
         final SubjectEntity subjectBeforeUpdateEntity = this.subjectsMapper.find(subjectChangedEntity.getId());
-
         Assert.assertNotNull(subjectBeforeUpdateEntity);
         this.subjectsSupport.assertNotEqualsWithoutId(subjectChangedEntity, subjectBeforeUpdateEntity);
 
         this.subjectsMapper.update(subjectChangedEntity);
-        final SubjectEntity subjectUpdatedEntity = this.subjectsMapper.find(subjectChangedEntity.getId());
 
+        final SubjectEntity subjectUpdatedEntity = this.subjectsMapper.find(subjectChangedEntity.getId());
         this.subjectsSupport.assertEquals(subjectChangedEntity, subjectUpdatedEntity);
     }
 
@@ -96,12 +90,10 @@ public class SubjectsMapperTest extends AbstractMapperTest {
     public void testDelete() throws Exception {
         final Integer id = this.subjectsSupport.getEntityFixtureMock(0).getId();
         final SubjectEntity subjectFoundedEntity = this.subjectsMapper.find(id);
-
         Assert.assertNotNull(subjectFoundedEntity);
 
         this.subjectsMapper.delete(subjectFoundedEntity);
 
         Assert.assertNull(this.subjectsMapper.find(id));
     }
-
 }
