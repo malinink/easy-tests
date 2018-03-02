@@ -7,20 +7,21 @@ import easytests.core.models.QuizModelInterface;
 import easytests.core.options.QuizzesOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.QuizzesSupport;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import static org.mockito.BDDMockito.*;
 import org.mockito.ArgumentCaptor;
+import static org.mockito.BDDMockito.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * @author miron97
@@ -185,8 +186,10 @@ public class QuizzesServiceTest {
         this.quizzesService.save(this.quizzesSupport.getModelAdditionalMock(0));
 
         verify(this.quizzesMapper, times(1)).insert(quizEntityCaptor.capture());
-        this.quizzesSupport.assertEquals(this.quizzesSupport.getModelAdditionalMock(0),
-                quizEntityCaptor.getValue());
+        this.quizzesSupport.assertEquals(
+                this.quizzesSupport.getModelAdditionalMock(0),
+                quizEntityCaptor.getValue()
+        );
     }
 
     @Test
@@ -210,8 +213,10 @@ public class QuizzesServiceTest {
         this.quizzesService.save(this.quizzesSupport.getModelFixtureMock(0));
 
         verify(this.quizzesMapper, times(1)).update(quizEntityCaptor.capture());
-        this.quizzesSupport.assertEquals(this.quizzesSupport.getEntityFixtureMock(0),
-                quizEntityCaptor.getValue());
+        this.quizzesSupport.assertEquals(
+                this.quizzesSupport.getEntityFixtureMock(0),
+                quizEntityCaptor.getValue()
+        );
 
     }
 
@@ -235,8 +240,10 @@ public class QuizzesServiceTest {
         this.quizzesService.save(quizzesModels);
 
         verify(this.quizzesMapper, times(quizzesModels.size())).update(quizEntityCaptor.capture());
-        this.quizzesSupport.assertEntitiesListEquals(this.getQuizzesFixturesEntities(),
-                quizEntityCaptor.getAllValues());
+        this.quizzesSupport.assertEntitiesListEquals(
+                this.getQuizzesFixturesEntities(),
+                quizEntityCaptor.getAllValues()
+        );
     }
 
     @Test
