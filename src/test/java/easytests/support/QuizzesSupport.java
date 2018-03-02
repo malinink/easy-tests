@@ -1,62 +1,64 @@
 package easytests.support;
 
 import easytests.core.entities.QuizEntity;
-import easytests.core.models.QuizModel;
 import easytests.core.models.QuizModelInterface;
 import easytests.core.models.empty.IssueModelEmpty;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.TesteeModelEmpty;
-import org.junit.Assert;
-import org.mockito.Mockito;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.Assert;
+import org.mockito.Mockito;
 
 
+/**
+ * @author miron97
+ */
 public class QuizzesSupport {
 
-    protected static Object fixtures[][] = new Object[][]{
+    protected static Object[][] fixtures = new Object[][]{
             {
-                1,
-                1,
-                "test_invite_code1",
-                false,
-                LocalDateTime.of(2003,2,1,0,0,0),
-                LocalDateTime.of(2003,3,1,0,0,0)
+                    1,
+                    1,
+                    "test_invite_code1",
+                    false,
+                    LocalDateTime.of(2003,2,1,0,0,0),
+                    LocalDateTime.of(2003,3,1,0,0,0)
             },
             {
-                2,
-                2,
-                "test_invite_code2",
-                false,
-                LocalDateTime.of(2003,2,1,0,0,0),
-                LocalDateTime.of(2003,3,1,0,0,0)
+                    2,
+                    2,
+                    "test_invite_code2",
+                    false,
+                    LocalDateTime.of(2003,2,1,0,0,0),
+                    LocalDateTime.of(2003,3,1,0,0,0)
             },
             {
-                3,
-                3,
-                "test_invite_code3",
-                true,
-                LocalDateTime.of(2003,2,1,0,0,0),
-                LocalDateTime.of(2003,3,1,0,0,0)
+                    3,
+                    3,
+                    "test_invite_code3",
+                    true,
+                    LocalDateTime.of(2003,2,1,0,0,0),
+                    LocalDateTime.of(2003,3,1,0,0,0)
             }
     };
 
-    protected static Object additional[][] = new Object[][]{
+    protected static Object[][] additional = new Object[][]{
             {
-                null,
-                1,
-                "code",
-                false,
-                LocalDateTime.of(1,1,1,1,1),
-                LocalDateTime.of(2,2,2,2,2)
+                    null,
+                    1,
+                    "code",
+                    false,
+                    LocalDateTime.of(1,1,1,1,1),
+                    LocalDateTime.of(2,2,2,2,2)
             },
             {
-                2,
-                2,
-                "updated",
-                true,
-                LocalDateTime.of(2017,5,18,12,1,0),
-                LocalDateTime.of(2017,5,18,13,0,0)
+                    2,
+                    2,
+                    "updated",
+                    true,
+                    LocalDateTime.of(2017,5,18,12,1,0),
+                    LocalDateTime.of(2017,5,18,13,0,0)
             }
     };
 
@@ -194,20 +196,25 @@ public class QuizzesSupport {
         Assert.assertEquals(expected.getFinishedAt(), actual.getFinishedAt());
     }
 
-    public void assertModelsListEquals(List<QuizModelInterface> expected,
-                                       List<QuizModelInterface> actual) {
+    public void assertModelsListEquals(
+            List<QuizModelInterface> expected,
+            List<QuizModelInterface> actual
+    ) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for(QuizModelInterface quizModel: expected) {
+        for (QuizModelInterface quizModel: expected) {
             this.assertEquals(quizModel, actual.get(i));
             i++;
         }
     }
 
-    public void assertEntitiesListEquals(List<QuizEntity> expected, List<QuizEntity> actual) {
+    public void assertEntitiesListEquals(
+            List<QuizEntity> expected,
+            List<QuizEntity> actual
+    ) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for(QuizEntity quizEntity: expected) {
+        for (QuizEntity quizEntity: expected) {
             this.assertEquals(quizEntity, actual.get(i));
             i++;
         }
