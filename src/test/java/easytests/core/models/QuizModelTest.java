@@ -34,5 +34,4 @@ public class QuizModelTest extends AbstractModelTest {
 
         this.quizzesSupport.assertEquals(quizEntity, quizModel);
     }
-
 }

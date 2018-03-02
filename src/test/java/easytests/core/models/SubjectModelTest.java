@@ -29,6 +29,7 @@ public class SubjectModelTest extends AbstractModelTest {
     public void testMap() throws Exception {
         final SubjectEntity subjectEntity = this.subjectsSupport.getEntityFixtureMock(0);
         final SubjectModelInterface subjectModel = new SubjectModel();
+
         subjectModel.map(subjectEntity);
 
         this.subjectsSupport.assertEquals(subjectEntity, subjectModel);
