@@ -3,16 +3,17 @@ package easytests.core.services;
 import easytests.core.entities.QuizEntity;
 import easytests.core.mappers.QuizzesMapper;
 import easytests.core.models.IssueModelInterface;
-import easytests.core.models.QuizModel;
 import easytests.core.models.QuizModelInterface;
 import easytests.core.options.QuizzesOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+import easytests.support.QuizzesSupport;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author vkpankov
+ * @author miron97
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,300 +38,273 @@ public class QuizzesServiceTest {
     @MockBean
     private QuizzesMapper quizzesMapper;
 
-    private QuizModelInterface createQuizModel(Integer id, String inviteCode, Integer issueId) {
+    private QuizzesSupport quizzesSupport = new QuizzesSupport();
 
-        final QuizModelInterface quizModel = new QuizModel();
-        quizModel.setId(id);
-        quizModel.setInviteCode(inviteCode);
-
-        final IssueModelInterface issueModel = Mockito.mock(IssueModelInterface.class);
-        Mockito.when(issueModel.getId()).thenReturn(issueId);
-
-        quizModel.setIssue(issueModel);
-
-        return quizModel;
-
-    }
-
-    private QuizEntity createQuizEntityMock(Integer id, String inviteCode, Integer issueId) {
-
-        final QuizEntity quizEntity = Mockito.mock(QuizEntity.class);
-
-        Mockito.when(quizEntity.getId()).thenReturn(id);
-        Mockito.when(quizEntity.getInviteCode()).thenReturn(inviteCode);
-        Mockito.when(quizEntity.getIssueId()).thenReturn(issueId);
-
-        return quizEntity;
-
-    }
-
-    private QuizModelInterface mapQuizModel(QuizEntity quizEntity) {
-
-        final QuizModelInterface quizModel = new QuizModel();
-        quizModel.map(quizEntity);
-        return quizModel;
-
-    }
-
-    private QuizEntity mapQuizEntity(QuizModelInterface quizModel) {
-
-        final QuizEntity quizEntity = new QuizEntity();
-        quizEntity.map(quizModel);
-        return quizEntity;
-
-    }
-
-    private List<QuizEntity> getQuizzesEntities() {
+    private List<QuizEntity> getQuizzesFixturesEntities() {
         final List<QuizEntity> quizzesEntities = new ArrayList<>(2);
-        final QuizEntity quizEntityFirst = this.createQuizEntityMock(1, "test1", 1);
-        final QuizEntity quizEntitySecond = this.createQuizEntityMock(2,  "test2", 2);
-        quizzesEntities.add(quizEntityFirst);
-        quizzesEntities.add(quizEntitySecond);
+        quizzesEntities.add(this.quizzesSupport.getEntityFixtureMock(0));
+        quizzesEntities.add(this.quizzesSupport.getEntityFixtureMock(1));
         return quizzesEntities;
     }
 
-    private List<QuizModelInterface> getIssuesModels() {
+    private List<QuizModelInterface> getQuizzesFixturesModels() {
         final List<QuizModelInterface> quizzesModels = new ArrayList<>(2);
-        for (QuizEntity quizEntity : this.getQuizzesEntities()) {
-            quizzesModels.add(this.mapQuizModel(quizEntity));
-        }
+        quizzesModels.add(this.quizzesSupport.getModelFixtureMock(0));
+        quizzesModels.add(this.quizzesSupport.getModelFixtureMock(1));
         return quizzesModels;
+    }
+
+    private void assertServicesSet(QuizzesOptionsInterface quizzesOptions) throws Exception {
+        this.assertServicesSet(quizzesOptions, 1);
+    }
+
+    private void assertServicesSet(QuizzesOptionsInterface quizzesOptions, Integer times) throws Exception {
+        verify(quizzesOptions, times(times)).setIssuesService(any(IssuesServiceInterface.class));
+        verify(quizzesOptions, times(times)).setPointsService(any(PointsServiceInterface.class));
+        verify(quizzesOptions, times(times)).setTesteesService(any(TesteesServiceInterface.class));
+        verify(quizzesOptions, times(times)).setQuizzesService(this.quizzesService);
     }
 
     @Test
     public void testFindAllPresentList() throws Exception {
+        final List<QuizEntity> quizzesEntities = getQuizzesFixturesEntities();
+        when(this.quizzesMapper.findAll()).thenReturn(quizzesEntities);
 
-        final List<QuizEntity> quizzesEntities = getQuizzesEntities();
+        final List<QuizModelInterface> quizzesFoundedModels = this.quizzesService.findAll();
 
-        given(this.quizzesMapper.findAll()).willReturn(quizzesEntities);
-
-        final List<QuizModelInterface> quizzesModels = this.quizzesService.findAll();
-
-        Assert.assertEquals(2, quizzesModels.size());
-        Assert.assertEquals(quizzesModels.get(0), this.mapQuizModel(quizzesEntities.get(0)));
-        Assert.assertEquals(quizzesModels.get(1), this.mapQuizModel(quizzesEntities.get(1)));
-
+        this.quizzesSupport.assertModelsListEquals(this.getQuizzesFixturesModels(), quizzesFoundedModels);
     }
 
     @Test
     public void testFindAllAbsentList() throws Exception {
+        when(this.quizzesMapper.findAll()).thenReturn(new ArrayList<>(0));
 
-        given(this.quizzesMapper.findAll()).willReturn(new ArrayList<>(0));
+        final List<QuizModelInterface> quizzesFoundedModels = this.quizzesService.findAll();
 
-        final List<QuizModelInterface> quizzesModels = this.quizzesService.findAll();
+        Assert.assertNotNull(quizzesFoundedModels);
+        Assert.assertEquals(0, quizzesFoundedModels.size());
+    }
+    
+    @Test
+    public void testFindAllWithOptions() throws Exception {
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final List<QuizEntity> quizzesEntities = this.getQuizzesFixturesEntities();
+        final List<QuizModelInterface> quizzesModels = this.getQuizzesFixturesModels();
+        final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
+        when(this.quizzesMapper.findAll()).thenReturn(quizzesEntities);
+        when(quizzesOptions.withRelations(listCaptor.capture())).thenReturn(quizzesModels);
 
-        Assert.assertEquals(0, quizzesModels.size());
+        final List<QuizModelInterface> quizzesFoundedModels = this.quizzesService.findAll(quizzesOptions);
 
+        this.assertServicesSet(quizzesOptions);
+        this.quizzesSupport.assertModelsListEquals(quizzesModels, listCaptor.getValue());
+        Assert.assertSame(quizzesModels, quizzesFoundedModels);
     }
 
     @Test
     public void testFindPresentModel() throws Exception {
+        final QuizEntity quizEntity = this.quizzesSupport.getEntityFixtureMock(0);
+        when(this.quizzesMapper.find(quizEntity.getId())).thenReturn(quizEntity);
 
-        final Integer id = 1;
-        final QuizEntity quizEntity = this.createQuizEntityMock(id, "test", 1);
-        given(this.quizzesMapper.find(id)).willReturn(quizEntity);
+        final QuizModelInterface quizFoundedModel = this.quizzesService.find(quizEntity.getId());
 
-        final QuizModelInterface quizModel = this.quizzesService.find(id);
-
-        Assert.assertEquals(this.mapQuizModel(quizEntity), quizModel);
-
+        this.quizzesSupport.assertEquals(this.quizzesSupport.getModelFixtureMock(0), quizFoundedModel);
     }
 
     @Test
     public void testFindAbsentModel() throws Exception {
-
         final Integer id = 10;
-        given(this.quizzesMapper.find(id)).willReturn(null);
+        when(this.quizzesMapper.find(id)).thenReturn(null);
 
-        final QuizModelInterface quizModel = this.quizzesService.find(id);
+        final QuizModelInterface quizFoundedModel = this.quizzesService.find(id);
 
-        Assert.assertEquals(null, quizModel);
-
-    }
-
-    @Test
-    public void testFindByIssue() throws Exception {
-        final Integer issueId = 7;
-        final IssueModelInterface issueModel = Mockito.mock(IssueModelInterface.class);
-        final QuizEntity quizEntityFirst = this.createQuizEntityMock(3, "test3", issueId);
-        final QuizEntity quizEntitySecond = this.createQuizEntityMock(12, "test12",  issueId);
-        final List<QuizEntity> quizzesEntities = new ArrayList<>();
-        quizzesEntities.add(quizEntityFirst);
-        quizzesEntities.add(quizEntitySecond);
-        Mockito.when(issueModel.getId()).thenReturn(issueId);
-        given(this.quizzesMapper.findByIssueId(issueId)).willReturn(quizzesEntities);
-        final List<QuizModelInterface> quizzesModels = new ArrayList<>();
-        quizzesModels.add(this.mapQuizModel(quizEntityFirst));
-        quizzesModels.add(this.mapQuizModel(quizEntitySecond));
-
-        final List<QuizModelInterface> foundedQuizzesModels = this.quizzesService.findByIssue(issueModel);
-
-        verify(this.quizzesMapper).findByIssueId(issueId);
-        Assert.assertEquals(quizzesModels, foundedQuizzesModels);
-    }
-
-    @Test
-    public void testFindByIssueWithOptions() throws Exception {
-        final Integer issueId = 7;
-        final IssueModelInterface issueModel = Mockito.mock(IssueModelInterface.class);
-        final QuizEntity quizEntityFirst = this.createQuizEntityMock(3, "test3", issueId);
-        final QuizEntity quizEntitySecond = this.createQuizEntityMock(12, "test12", issueId);
-        final List<QuizEntity> quizzesEntities = new ArrayList<>();
-        quizzesEntities.add(quizEntityFirst);
-        quizzesEntities.add(quizEntitySecond);
-        given(issueModel.getId()).willReturn(issueId);
-        given(this.quizzesMapper.findByIssueId(issueId)).willReturn(quizzesEntities);
-        final List<QuizModelInterface> quizzesModels = new ArrayList<>();
-        quizzesModels.add(this.mapQuizModel(quizEntityFirst));
-        quizzesModels.add(this.mapQuizModel(quizEntitySecond));
-        final QuizzesOptionsInterface quizOptions = Mockito.mock(QuizzesOptionsInterface.class);
-        given(quizOptions.withRelations(quizzesModels)).willReturn(quizzesModels);
-
-        final List<QuizModelInterface> foundedQuizzesModels =
-                this.quizzesService.findByIssue(issueModel, quizOptions);
-
-        verify(this.quizzesMapper).findByIssueId(issueId);
-        verify(quizOptions).withRelations(quizzesModels);
-        Assert.assertEquals(quizzesModels, foundedQuizzesModels);
-    }
-
-    @Test
-    public void testSaveCreatesEntity() throws Exception {
-
-        final QuizModelInterface quizModel = this.createQuizModel(null, "test", 1);
-
-        this.quizzesService.save(quizModel);
-
-        verify(this.quizzesMapper, times(1)).insert(this.mapQuizEntity(quizModel));
-
-    }
-
-    @Test
-    public void testSaveUpdatesEntity() throws Exception {
-
-        final QuizModelInterface quizModel = this.createQuizModel(1, "test", 1);
-
-        this.quizzesService.save(quizModel);
-
-        verify(this.quizzesMapper, times(1)).update(this.mapQuizEntity(quizModel));
-
-    }
-
-    @Test
-    public void testSaveEntitiesList() throws Exception {
-
-        final QuizModelInterface quizModelFirst = this.createQuizModel(null, "test1", 1);
-        final QuizModelInterface quizModelSecond = this.createQuizModel(null, "test2", 2);
-
-        final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
-
-        final List<QuizModelInterface> quizzesModels = new ArrayList<>();
-        quizzesModels.add(quizModelFirst);
-        quizzesModels.add(quizModelSecond);
-
-        final QuizzesServiceInterface quizzesServiceSpy = Mockito.spy(quizzesService);
-
-        quizzesServiceSpy.save(quizzesModels);
-        verify(quizzesServiceSpy, times(1)).save(quizModelFirst);
-        verify(quizzesServiceSpy, times(1)).save(quizModelSecond);
-
-        quizzesServiceSpy.save(quizzesModels, quizzesOptions);
-        verify(quizzesServiceSpy, times(1)).save(quizModelFirst, quizzesOptions);
-        verify(quizzesServiceSpy, times(1)).save(quizModelSecond, quizzesOptions);
-
-    }
-
-    @Test
-    public void testDeleteIdentifiedModel() throws Exception {
-
-        final QuizModelInterface quizModel = this.createQuizModel(1, "test", 1);
-
-        this.quizzesService.delete(quizModel);
-
-        verify(this.quizzesMapper, times(1)).delete(this.mapQuizEntity(quizModel));
-
-    }
-
-    @Test
-    public void testDeleteModelsList() throws Exception {
-
-        final QuizModelInterface quizModelFirst = this.createQuizModel(2, "test2", 1);
-        final QuizModelInterface quizModelSecond = this.createQuizModel(3, "test3", 2);
-
-        final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
-
-        final List<QuizModelInterface> quizzesModels = new ArrayList<>();
-        quizzesModels.add(quizModelFirst);
-        quizzesModels.add(quizModelSecond);
-
-        final QuizzesServiceInterface quizzesServiceSpy = Mockito.spy(quizzesService);
-
-        quizzesServiceSpy.delete(quizzesModels);
-        verify(quizzesServiceSpy, times(1)).delete(quizModelFirst);
-        verify(quizzesServiceSpy, times(1)).delete(quizModelSecond);
-
-        quizzesServiceSpy.delete(quizzesModels, quizzesOptions);
-        verify(quizzesServiceSpy, times(1)).delete(quizModelFirst, quizzesOptions);
-        verify(quizzesServiceSpy, times(1)).delete(quizModelSecond, quizzesOptions);
-    }
-
-    @Test
-    public void testDeleteUnidentifiedModel() throws Exception {
-
-        final QuizModelInterface quizModel = this.createQuizModel(null, "test", 1);
-
-        exception.expect(DeleteUnidentifiedModelException.class);
-        this.quizzesService.delete(quizModel);
-
+        Assert.assertNull(quizFoundedModel);
     }
 
     @Test
     public void testFindWithOptions() throws Exception {
-        final Integer id = 1;
-        final Integer issueId = 1;
-        final QuizEntity quizEntity = this.createQuizEntityMock(4, "test3", issueId);
-        final QuizModelInterface quizModel = this.mapQuizModel(quizEntity);
+        final ArgumentCaptor<QuizModelInterface> quizModelCaptor = ArgumentCaptor.
+                forClass(QuizModelInterface.class);
+        final QuizEntity quizEntity = this.quizzesSupport.getEntityFixtureMock(0);
+        final QuizModelInterface quizModel = this.quizzesSupport.getModelFixtureMock(0);
         final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
-        given(this.quizzesMapper.find(id)).willReturn(quizEntity);
-        given(quizzesOptions.withRelations(quizModel)).willReturn(quizModel);
+        when(this.quizzesMapper.find(quizModel.getId())).thenReturn(quizEntity);
+        when(quizzesOptions.withRelations(quizModelCaptor.capture())).thenReturn(quizModel);
 
-        final QuizModelInterface foundedQuizModel = this.quizzesService.find(id, quizzesOptions);
+        final QuizModelInterface quizFoundedModel = this.quizzesService.find(quizModel.getId(), quizzesOptions);
 
-        Assert.assertEquals(quizModel, foundedQuizModel);
-        verify(quizzesOptions).withRelations(quizModel);
+        this.assertServicesSet(quizzesOptions);
+        this.quizzesSupport.assertEquals(quizModel, quizModelCaptor.getValue());
+        Assert.assertSame(quizModel, quizFoundedModel);
     }
 
     @Test
-    public void testFindAllWithOptions() throws Exception {
-        final List<QuizEntity> quizzesEntities = this.getQuizzesEntities();
-        final List<QuizModelInterface> quizzesModels = this.getIssuesModels();
+    public void testFindByIssuePresentList() throws Exception {
+        final IssueModelInterface issueModel = Mockito.mock(IssueModelInterface.class);
+        final List<QuizEntity> quizzesEntities = this.getQuizzesFixturesEntities();
+        when(this.quizzesMapper.findByIssueId(issueModel.getId())).thenReturn(quizzesEntities);
+        final List<QuizModelInterface> quizzesModels = this.getQuizzesFixturesModels();
+
+        final List<QuizModelInterface> quizzesFoundedModels = this.quizzesService.findByIssue(issueModel);
+
+        this.quizzesSupport.assertModelsListEquals(quizzesModels, quizzesFoundedModels);
+    }
+
+    @Test
+    public void testFindByIssueAbsentList() throws Exception {
+        final IssueModelInterface issueModel = Mockito.mock(IssueModelInterface.class);
+        when(this.quizzesMapper.findByIssueId(issueModel.getId())).thenReturn(new ArrayList<>(0));
+
+        final List<QuizModelInterface> quizzesFoundedModels = this.quizzesService.findByIssue(issueModel);
+
+        Assert.assertEquals(0, quizzesFoundedModels.size());
+    }
+
+    @Test
+    public void testFindByIssueWithOptions() throws Exception {
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final IssueModelInterface issueModel = Mockito.mock(IssueModelInterface.class);
+        final List<QuizEntity> quizzesEntities = this.getQuizzesFixturesEntities();
+        when(this.quizzesMapper.findByIssueId(issueModel.getId())).thenReturn(quizzesEntities);
+        final List<QuizModelInterface> quizzesModels = this.getQuizzesFixturesModels();
         final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
-        given(this.quizzesMapper.findAll()).willReturn(quizzesEntities);
-        given(quizzesOptions.withRelations(Mockito.anyList())).willReturn(quizzesModels);
+        when(quizzesOptions.withRelations(listCaptor.capture())).thenReturn(quizzesModels);
 
-        final List<QuizModelInterface> foundedQuizzesModels = this.quizzesService.findAll(quizzesOptions);
+        final List<QuizModelInterface> quizzesFoundedModels =
+                this.quizzesService.findByIssue(issueModel, quizzesOptions);
 
-        verify(quizzesOptions).withRelations(foundedQuizzesModels);
-        Assert.assertEquals(quizzesModels, foundedQuizzesModels);
+        this.assertServicesSet(quizzesOptions);
+        this.quizzesSupport.assertModelsListEquals(quizzesModels, listCaptor.getValue());
+        Assert.assertSame(quizzesModels, quizzesFoundedModels);
+    }
+
+    @Test
+    public void testSaveCreatesEntity() throws Exception {
+        final ArgumentCaptor<QuizEntity> quizEntityCaptor = ArgumentCaptor.forClass(QuizEntity.class);
+
+        this.quizzesService.save(this.quizzesSupport.getModelAdditionalMock(0));
+
+        verify(this.quizzesMapper, times(1)).insert(quizEntityCaptor.capture());
+        this.quizzesSupport.assertEquals(this.quizzesSupport.getModelAdditionalMock(0),
+                quizEntityCaptor.getValue());
+    }
+
+    @Test
+    public void testSaveUpdateEntityIdOnCreation() throws Exception {
+        final QuizModelInterface quizAdditionalModel = this.quizzesSupport.getModelAdditionalMock(0);
+        doAnswer(invocation -> {
+            final QuizEntity quizEntity = (QuizEntity) invocation.getArguments()[0];
+            quizEntity.setId(5);
+            return null;
+        }).when(this.quizzesMapper).insert(Mockito.any(QuizEntity.class));
+
+        this.quizzesService.save(quizAdditionalModel);
+
+        verify(quizAdditionalModel, times(1)).setId(5);
+    }
+
+    @Test
+    public void testSaveUpdatesEntity() throws Exception {
+        final ArgumentCaptor<QuizEntity> quizEntityCaptor = ArgumentCaptor.forClass(QuizEntity.class);
+
+        this.quizzesService.save(this.quizzesSupport.getModelFixtureMock(0));
+
+        verify(this.quizzesMapper, times(1)).update(quizEntityCaptor.capture());
+        this.quizzesSupport.assertEquals(this.quizzesSupport.getEntityFixtureMock(0),
+                quizEntityCaptor.getValue());
+
     }
 
     @Test
     public void testSaveWithOptions() throws Exception {
-        final QuizModelInterface quizModel = this.createQuizModel(null, "test", 1);
+        final QuizModelInterface quizModel = this.quizzesSupport.getModelFixtureMock(0);
         final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
 
         this.quizzesService.save(quizModel, quizzesOptions);
 
-        verify(quizzesOptions).saveWithRelations(quizModel);
+        this.assertServicesSet(quizzesOptions);
+        verify(quizzesOptions, times(1)).saveWithRelations(quizModel);
+        verifyNoMoreInteractions(this.quizzesMapper);
+    }
+
+    @Test
+    public void testSaveModelsList() throws Exception {
+        final ArgumentCaptor<QuizEntity> quizEntityCaptor = ArgumentCaptor.forClass(QuizEntity.class);
+        final List<QuizModelInterface> quizzesModels = this.getQuizzesFixturesModels();
+
+        this.quizzesService.save(quizzesModels);
+
+        verify(this.quizzesMapper, times(quizzesModels.size())).update(quizEntityCaptor.capture());
+        this.quizzesSupport.assertEntitiesListEquals(this.getQuizzesFixturesEntities(),
+                quizEntityCaptor.getAllValues());
+    }
+
+    @Test
+    public void testSaveModelsListWithOptions() throws Exception {
+        final ArgumentCaptor<QuizModelInterface> quizModelCaptor =
+                ArgumentCaptor.forClass(QuizModelInterface.class);
+        final List<QuizModelInterface> quizzesModels = this.getQuizzesFixturesModels();
+        final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
+
+        this.quizzesService.save(quizzesModels, quizzesOptions);
+
+        this.assertServicesSet(quizzesOptions, quizzesModels.size());
+        verify(quizzesOptions, times(quizzesModels.size())).saveWithRelations(quizModelCaptor.capture());
+        this.quizzesSupport.assertModelsListEquals(quizzesModels, quizModelCaptor.getAllValues());
+    }
+
+    @Test
+    public void testDeleteIdentifiedModel() throws Exception {
+        final ArgumentCaptor<QuizEntity> quizEntityCaptor = ArgumentCaptor.forClass(QuizEntity.class);
+
+        this.quizzesService.delete(this.quizzesSupport.getModelFixtureMock(0));
+
+        verify(this.quizzesMapper, times(1)).delete(quizEntityCaptor.capture());
+        this.quizzesSupport.assertEquals(this.quizzesSupport.getEntityFixtureMock(0), quizEntityCaptor.getValue());
+    }
+
+    @Test
+    public void testDeleteUnidentifiedModel() throws Exception {
+        final QuizModelInterface quizModel = this.quizzesSupport.getModelAdditionalMock(0);
+
+        exception.expect(DeleteUnidentifiedModelException.class);
+        this.quizzesService.delete(quizModel);
     }
 
     @Test
     public void testDeleteWithOptions() throws Exception {
-        final QuizModelInterface quizModel = this.createQuizModel(null, "test", 1);
+        final QuizModelInterface quizModel = this.quizzesSupport.getModelFixtureMock(0);
         final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
 
         this.quizzesService.delete(quizModel, quizzesOptions);
 
-        verify(quizzesOptions).deleteWithRelations(quizModel);
+        this.assertServicesSet(quizzesOptions);
+        verify(quizzesOptions, times(1)).deleteWithRelations(quizModel);
+        verifyNoMoreInteractions(this.quizzesMapper);
+    }
+
+    @Test
+    public void testDeleteModelsList() throws Exception {
+        final ArgumentCaptor<QuizEntity> quizEntityCaptor = ArgumentCaptor.forClass(QuizEntity.class);
+        final List<QuizModelInterface> quizzesModels = this.getQuizzesFixturesModels();
+
+        this.quizzesService.delete(quizzesModels);
+
+        verify(this.quizzesMapper, times(quizzesModels.size())).delete(quizEntityCaptor.capture());
+        this.quizzesSupport.assertEntitiesListEquals(this.getQuizzesFixturesEntities(), quizEntityCaptor.getAllValues());
+    }
+
+    @Test
+    public void testDeleteModelsListWithOptions() throws Exception {
+        final ArgumentCaptor<QuizModelInterface> quizModelCaptor = ArgumentCaptor.forClass(QuizModelInterface.class);
+        final List<QuizModelInterface> quizzesModels = this.getQuizzesFixturesModels();
+        final QuizzesOptionsInterface quizzesOptions = Mockito.mock(QuizzesOptionsInterface.class);
+
+        this.quizzesService.delete(quizzesModels, quizzesOptions);
+
+        this.assertServicesSet(quizzesOptions, quizzesModels.size());
+        verify(quizzesOptions, times(quizzesModels.size())).deleteWithRelations(quizModelCaptor.capture());
+        this.quizzesSupport.assertModelsListEquals(quizzesModels, quizModelCaptor.getAllValues());
+        verifyNoMoreInteractions(this.quizzesMapper);
     }
 }
