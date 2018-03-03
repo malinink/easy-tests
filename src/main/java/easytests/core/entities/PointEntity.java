@@ -3,6 +3,7 @@ package easytests.core.entities;
 import easytests.core.models.PointModelInterface;
 import lombok.Data;
 
+
 /**
  * @author nikitalpopov
  */
@@ -22,5 +23,4 @@ public class PointEntity {
         this.setQuizId(pointModel.getQuiz().getId());
 
     }
-
 }
