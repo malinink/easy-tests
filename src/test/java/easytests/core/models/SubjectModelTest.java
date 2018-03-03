@@ -22,16 +22,16 @@ public class SubjectModelTest extends AbstractModelTest {
 
     @Test
     public void testCommon() throws Exception {
-        this.testCommon(SubjectModel.class);
+        super.testCommon(SubjectModel.class);
     }
 
     @Test
     public void testMap() throws Exception {
         final SubjectEntity subjectEntity = this.subjectsSupport.getEntityFixtureMock(0);
         final SubjectModelInterface subjectModel = new SubjectModel();
+
         subjectModel.map(subjectEntity);
 
         this.subjectsSupport.assertEquals(subjectEntity, subjectModel);
     }
-
 }
