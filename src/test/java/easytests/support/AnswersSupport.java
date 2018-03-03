@@ -7,12 +7,13 @@ import easytests.core.models.empty.QuestionModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
+
 /**
  * @author sakhprace
  */
 public class AnswersSupport {
 
-    protected static Object[][] fixtures = new Object[][] {
+    protected static Object[][] fixtures = new Object[][]{
             {
                     1,
                     "Answer1",
@@ -37,7 +38,7 @@ public class AnswersSupport {
             },
     };
 
-    protected static Object[][] additional = new Object[][] {
+    protected static Object[][] additional = new Object[][]{
             {
                     // for insert entity
                     null,
@@ -160,7 +161,6 @@ public class AnswersSupport {
         Assert.assertNotEquals(unexpected.getQuestionId(), actual.getQuestionId());
         Assert.assertNotEquals(unexpected.getSerialNumber(), actual.getSerialNumber());
         Assert.assertNotEquals(unexpected.getRight(), actual.getRight());
-
     }
 
     public void assertEquals(AnswerModelInterface expected, AnswerModelInterface actual) {
@@ -169,7 +169,6 @@ public class AnswersSupport {
         Assert.assertEquals(expected.getQuestion(), actual.getQuestion());
         Assert.assertEquals(expected.getSerialNumber(), actual.getSerialNumber());
         Assert.assertEquals(expected.getRight(), actual.getRight());
-
     }
 
     public void assertEquals(AnswerModelInterface expected, AnswerEntity actual) {
@@ -178,12 +177,10 @@ public class AnswersSupport {
         Assert.assertEquals(expected.getQuestion().getId(), actual.getQuestionId());
         Assert.assertEquals(expected.getSerialNumber(), actual.getSerialNumber());
         Assert.assertEquals(expected.getRight(), actual.getRight());
-
     }
 
     public void assertEquals(AnswerEntity expected, AnswerModelInterface actual) {
         assertEquals(actual, expected);
         Assert.assertEquals(new ModelsListEmpty(), actual.getQuestion());
     }
-
 }
