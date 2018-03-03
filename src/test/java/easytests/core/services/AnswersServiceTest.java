@@ -4,12 +4,10 @@ import easytests.core.entities.AnswerEntity;
 import easytests.core.mappers.AnswersMapper;
 import easytests.core.models.AnswerModel;
 import easytests.core.models.AnswerModelInterface;
-import easytests.core.models.QuestionModelInterface;
 import easytests.core.options.AnswersOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import easytests.support.AnswersSupport;
@@ -25,7 +23,7 @@ import org.springframework.boot.test.mock.mockito.*;
 import org.springframework.test.context.junit4.*;
 
 /**
- * @author malinink
+ * @author sakhprace
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
