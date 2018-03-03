@@ -28,8 +28,7 @@ public interface AnswersMapper {
     @ResultMap("AnswerEntity")
     AnswerEntity find(Integer id);
 
-    @Select("SELECT * FROM answers WHERE"
-            + " question_id=#{questionId}")
+    @Select("SELECT * FROM answers WHERE question_id=#{questionId}")
     @ResultMap("AnswerEntity")
     List<AnswerEntity> findByQuestionId(Integer questionId);
 
