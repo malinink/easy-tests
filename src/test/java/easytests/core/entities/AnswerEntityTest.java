@@ -21,9 +21,9 @@ public class AnswerEntityTest extends AbstractEntityTest {
     public void testMap() throws Exception {
         final AnswerModelInterface answerModel = this.answersSupport.getModelFixtureMock(0);
         final AnswerEntity answerEntity = new AnswerEntity();
+
         answerEntity.map(answerModel);
 
         this.answersSupport.assertEquals(answerModel, answerEntity);
     }
-
 }
