@@ -191,7 +191,6 @@ public class AnswersSupport {
 
     public void assertEquals(AnswerEntity expected, AnswerModelInterface actual) {
         assertEquals(actual, expected);
-        Assert.assertEquals(new ModelsListEmpty(), actual.getQuestion());
     }
 
 }
