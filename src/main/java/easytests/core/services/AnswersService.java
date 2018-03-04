@@ -32,6 +32,11 @@ public class AnswersService implements AnswersServiceInterface {
     }
 
     @Override
+    public List<AnswerModelInterface> findAll(AnswersOptionsInterface answersOptions) {
+        return this.withServices(answersOptions).withRelations(this.map(this.answersMapper.findAll()));
+    }
+
+    @Override
     public List<AnswerModelInterface> findByQuestion(QuestionModelInterface questionModel) {
         return this.map(this.answersMapper.findByQuestionId(questionModel.getId()));
     }
