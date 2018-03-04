@@ -31,6 +31,10 @@ public class IssueStandardQuestionTypeOptionModelTest extends AbstractModelTest 
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel=new IssueStandardQuestionTypeOptionModel();
         questionTypeOptionModel.map(questionTypeOptionEntity);
 
+
         this.issueStandardQuestionTypeOptionsSupport.assertEquals(questionTypeOptionEntity,questionTypeOptionModel);
+
+       this.issueStandardQuestionTypeOptionsSupport.assertEquals(questionTypeOptionEntity,questionTypeOptionModel);
+
     }
 }
