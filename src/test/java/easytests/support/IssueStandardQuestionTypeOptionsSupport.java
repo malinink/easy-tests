@@ -4,6 +4,7 @@ import easytests.core.entities.IssueStandardQuestionTypeOptionEntity;
 import easytests.core.models.IssueStandardQuestionTypeOptionModelInterface;
 import easytests.core.models.empty.IssueStandardModelEmpty;
 import easytests.core.models.empty.QuestionTypeModelEmpty;
+import java.util.List;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -215,4 +216,23 @@ public class IssueStandardQuestionTypeOptionsSupport {
         Assert.assertEquals(new QuestionTypeModelEmpty(expected.getQuestionTypeId()), actual.getQuestionType());
         Assert.assertEquals(new IssueStandardModelEmpty(expected.getIssueStandardId()), actual.getIssueStandard());
     }
+
+    public void assertModelsListEquals(List<IssueStandardQuestionTypeOptionModelInterface> expected, List<IssueStandardQuestionTypeOptionModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel: expected) {
+            this.assertEquals(questionTypeOptionModel, actual.get(i));
+            i++;
+        }
+    }
+
+    public void assertEntitiesListEquals(List<IssueStandardQuestionTypeOptionEntity> expected, List<IssueStandardQuestionTypeOptionEntity> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity: expected) {
+            this.assertEquals(questionTypeOptionEntity, actual.get(i));
+            i++;
+        }
+    }
+
 }
