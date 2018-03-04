@@ -74,7 +74,7 @@ public class AnswersMapperTest extends AbstractMapperTest {
 
     @Test
     public void testUpdate() throws Exception {
-        final AnswerEntity answerChangedEntity = this.answersSupport.getEntityAdditionalMock(1);
+        final AnswerEntity answerChangedEntity = this.answersSupport.getEntityAdditionalMock(2);
         final AnswerEntity answerBeforeUpdateEntity = this.answersMapper.find(answerChangedEntity.getId());
         Assert.assertNotNull(answerBeforeUpdateEntity);
         this.answersSupport.assertNotEqualsWithoutId(answerChangedEntity, answerBeforeUpdateEntity);

@@ -106,14 +106,14 @@ public class AnswersService implements AnswersServiceInterface {
     @Override
     public void delete(List<AnswerModelInterface> answersModels) {
         for (AnswerModelInterface answerModel: answersModels) {
-            this.save(answerModel);
+            this.delete(answerModel);
         }
     }
 
     @Override
     public void delete(List<AnswerModelInterface> answersModels, AnswersOptionsInterface answersOptions) {
         for (AnswerModelInterface answerModel: answersModels) {
-            this.save(answerModel, answersOptions);
+            this.delete(answerModel, answersOptions);
         }
     }
     

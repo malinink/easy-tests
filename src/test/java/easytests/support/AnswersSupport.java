@@ -42,16 +42,24 @@ public class AnswersSupport {
             {
                     // for insert entity
                     null,
-                    "Answer",
+                    "Answer11",
                     1,
                     1,
+                    true
+            },
+            {
+                    // for insert entity
+                    null,
+                    "Answer22",
+                    2,
+                    2,
                     true
             },
             {
                     // for update entity with id = 1
                     1,
                     "NewAnswer",
-                    2,
+                    3,
                     2,
                     false
             },
@@ -181,6 +189,5 @@ public class AnswersSupport {
 
     public void assertEquals(AnswerEntity expected, AnswerModelInterface actual) {
         assertEquals(actual, expected);
-        Assert.assertEquals(new ModelsListEmpty(), actual.getQuestion());
     }
 }
