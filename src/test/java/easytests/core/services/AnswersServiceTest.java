@@ -60,6 +60,7 @@ public class AnswersServiceTest {
         return answersModels;
     }
 
+
     private void assertEquals(List<AnswerModelInterface> expected, List<AnswerModelInterface> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
@@ -97,6 +98,23 @@ public class AnswersServiceTest {
         final AnswerModelInterface answerFoundedModel = this.answersService.find(answerEntity.getId());
 
         this.answersSupport.assertEquals(this.answersSupport.getModelFixtureMock(0), answerFoundedModel);
+    }
+
+    @Test
+    public void testFindAllWithOptions() throws Exception {
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final List<AnswerEntity> answersEntities = getAnswersFixturesEntities();
+        final List<AnswerModelInterface> answersModels = getAnswersFixturesModels();
+        final AnswersOptionsInterface answersOptions = mock(AnswersOptionsInterface.class);
+        when(this.answersMapper.findAll()).thenReturn(answersEntities);
+        when(answersOptions.withRelations(listCaptor.capture())).thenReturn(answersModels);
+
+        final List<AnswerModelInterface> answersFoundedModels = this.answersService.findAll(answersOptions);
+
+        this.assertEquals(answersFoundedModels, listCaptor.getValue());
+        Assert.assertSame(answersModels, answersFoundedModels);
+        verify(this.answersMapper, times(1)).findAll();
+        verifyNoMoreInteractions(this.answersMapper);
     }
 
     @Test
