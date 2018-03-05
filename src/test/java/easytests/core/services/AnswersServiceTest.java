@@ -6,11 +6,9 @@ import easytests.core.models.AnswerModel;
 import easytests.core.models.AnswerModelInterface;
 import easytests.core.options.AnswersOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
-
+import easytests.support.AnswersSupport;
 import java.util.ArrayList;
 import java.util.List;
-
-import easytests.support.AnswersSupport;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
@@ -21,6 +19,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.mock.mockito.*;
 import org.springframework.test.context.junit4.*;
+
 
 /**
  * @author sakhprace
