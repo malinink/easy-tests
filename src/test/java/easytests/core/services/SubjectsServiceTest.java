@@ -85,6 +85,7 @@ public class SubjectsServiceTest {
 
         final List<SubjectModelInterface> subjectsModels = this.subjectsService.findAll();
 
+        Assert.assertNotNull(subjectsModels);
         Assert.assertEquals(0, subjectsModels.size());
     }
 
