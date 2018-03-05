@@ -64,7 +64,8 @@ public class QuizzesService implements QuizzesServiceInterface {
             IssueModelInterface issueModel,
             QuizzesOptionsInterface quizzesOptions
     ) {
-        return quizzesOptions.withRelations(this.map(this.quizzesMapper.findByIssueId(issueModel.getId())));
+        return this.withServices(quizzesOptions)
+                .withRelations(this.map(this.quizzesMapper.findByIssueId(issueModel.getId())));
     }
 
     @Override
@@ -138,7 +139,7 @@ public class QuizzesService implements QuizzesServiceInterface {
     }
 
     private List<QuizModelInterface> map(List<QuizEntity> quizzesList) {
-        final List<QuizModelInterface> resultQuizList = new ArrayList(quizzesList.size());
+        final List<QuizModelInterface> resultQuizList = new ArrayList<>(quizzesList.size());
         for (QuizEntity quiz: quizzesList) {
             resultQuizList.add(this.map(quiz));
         }
