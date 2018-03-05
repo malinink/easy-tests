@@ -21,6 +21,7 @@ public class UserModelTest extends AbstractModelTest {
     public void testMap() throws Exception {
         final UserEntity userEntity = this.usersSupport.getEntityFixtureMock(0);
         final UserModel userModel = new UserModel();
+
         userModel.map(userEntity);
 
         this.usersSupport.assertEquals(userEntity, userModel);
