@@ -9,7 +9,7 @@ import org.meanbean.test.ConfigurationBuilder;
 /**
  * @author SvetlanaTselikova
  */
-public class SolutionModelTest extends AbstractModelTest{
+public class SolutionModelTest extends AbstractModelTest {
 
     private SolutionsSupport solutionsSupport = new SolutionsSupport();
 
@@ -29,6 +29,7 @@ public class SolutionModelTest extends AbstractModelTest{
     public void testMap() throws Exception {
         final SolutionEntity solutionEntity = this.solutionsSupport.getEntityFixtureMock(0);
         final SolutionModel solutionModel = new SolutionModel();
+
         solutionModel.map(solutionEntity);
 
         this.solutionsSupport.assertEquals(solutionEntity, solutionModel);
