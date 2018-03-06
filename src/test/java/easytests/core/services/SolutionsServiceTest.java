@@ -2,12 +2,12 @@ package easytests.core.services;
 
 import easytests.core.entities.SolutionEntity;
 import easytests.core.mappers.SolutionsMapper;
-import easytests.core.models.SolutionModelInterface;
 import easytests.core.models.PointModelInterface;
+import easytests.core.models.SolutionModelInterface;
 import easytests.core.options.SolutionsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
-import easytests.support.SolutionsSupport;
 import easytests.support.PointsSupport;
+import easytests.support.SolutionsSupport;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.*;
@@ -82,6 +82,7 @@ public class SolutionsServiceTest {
 
         final List<SolutionModelInterface> solutionsModels = this.solutionsService.findAll();
 
+        Assert.assertNotNull(solutionsModels);
         Assert.assertEquals(0, solutionsModels.size());
     }
 
@@ -185,7 +186,6 @@ public class SolutionsServiceTest {
         verify(this.solutionsMapper, times(1)).insert(solutionEntityCaptor.capture());
         this.solutionsSupport.assertEquals(this.solutionsSupport.getEntityAdditionalMock(0), solutionEntityCaptor.getValue());
     }
-
 
     @Test
     public void testSaveUpdateEntityIdOnCreation() throws Exception {
@@ -304,5 +304,4 @@ public class SolutionsServiceTest {
         this.solutionsSupport.assertModelsListEquals(solutionsModels, solutionModelCaptor.getAllValues());
         verifyNoMoreInteractions(this.solutionsMapper);
     }
-
 }

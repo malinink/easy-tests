@@ -307,5 +307,4 @@ public class SubjectsServiceTest {
         this.subjectsSupport.assertModelsListEquals(subjectsModels, subjectModelCaptor.getAllValues());
         verifyNoMoreInteractions(this.subjectsMapper);
     }
-
 }
