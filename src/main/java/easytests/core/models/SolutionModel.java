@@ -5,6 +5,7 @@ import easytests.core.models.empty.AnswerModelEmpty;
 import easytests.core.models.empty.PointModelEmpty;
 import lombok.*;
 
+
 /**
  * @author SingularityA
  */
