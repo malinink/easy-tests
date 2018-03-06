@@ -4,9 +4,9 @@ import easytests.core.entities.SolutionEntity;
 import easytests.core.models.SolutionModelInterface;
 import easytests.core.models.empty.AnswerModelEmpty;
 import easytests.core.models.empty.PointModelEmpty;
+import java.util.List;
 import org.junit.Assert;
 import org.mockito.Mockito;
-import java.util.List;
 
 
 /**
@@ -58,7 +58,7 @@ public class SolutionsSupport {
     };
 
     public SolutionEntity getEntityFixtureMock(Integer index) {
-        return  this.getEntityMock(fixtures[index]);
+        return this.getEntityMock(fixtures[index]);
     }
 
     public SolutionEntity getEntityAdditionalMock(Integer index) {
@@ -180,5 +180,4 @@ public class SolutionsSupport {
             i++;
         }
     }
-
 }
