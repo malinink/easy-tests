@@ -7,28 +7,25 @@ import easytests.core.models.IssueStandardQuestionTypeOptionModel;
 import easytests.core.models.IssueStandardQuestionTypeOptionModelInterface;
 import easytests.core.options.IssueStandardQuestionTypeOptionsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
-import easytests.support.Entities;
-import easytests.support.Models;
+import easytests.support.IssueStandardQuestionTypeOptionsSupport;
+import easytests.support.IssueStandardSupport;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.junit.runner.*;
+import org.mockito.ArgumentCaptor;
+import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.boot.test.context.*;
+import org.springframework.boot.test.mock.mockito.*;
+import org.springframework.test.context.junit4.*;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 /**
- * @author SingularityA
+ * @author VeronikaRevjakina
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,341 +34,310 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
-    @Mock
+    @MockBean
     private IssueStandardQuestionTypeOptionsMapper questionTypeOptionsMapper;
 
-    @InjectMocks
+    @Autowired
     private IssueStandardQuestionTypeOptionsService questionTypeOptionsService;
 
-    private IssueStandardQuestionTypeOptionModelInterface
-        mapQuestionTypeOptionModel(IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity) {
+    private IssueStandardQuestionTypeOptionsSupport questionTypeOptionsSupport=new IssueStandardQuestionTypeOptionsSupport();
 
-        IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = new IssueStandardQuestionTypeOptionModel();
-        questionTypeOptionModel.map(questionTypeOptionEntity);
-        return questionTypeOptionModel;
-    }
+    private IssueStandardSupport issueStandardSupport=new IssueStandardSupport();
 
-    private IssueStandardQuestionTypeOptionEntity
-        mapQuestionTypeOptionEntity(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel) {
 
-        IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
-                = new IssueStandardQuestionTypeOptionEntity();
-        questionTypeOptionEntity.map(questionTypeOptionModel);
-        return questionTypeOptionEntity;
-    }
-
-    private List<IssueStandardQuestionTypeOptionEntity> getQuestionTypeOptionEntities() {
+    private List<IssueStandardQuestionTypeOptionEntity> getQuestionTypeOptionFixturesEntities() {
         final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities = new ArrayList<>(2);
-        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(1, 2, 10, 20, null, 3));
-        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(2, 3, 5, 25, 60, 2));
+        questionTypeOptionEntities.add(this.questionTypeOptionsSupport.getEntityFixtureMock(0));
+        questionTypeOptionEntities.add(this.questionTypeOptionsSupport.getEntityFixtureMock(1));
         return questionTypeOptionEntities;
     }
 
-    private List<IssueStandardQuestionTypeOptionModelInterface> getQuestionTypeOptionModels() {
+    private List<IssueStandardQuestionTypeOptionModelInterface> getQuestionTypeOptionFixturesModels() {
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels = new ArrayList<>(2);
-        for (IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity: this.getQuestionTypeOptionEntities()) {
-            questionTypeOptionModels.add(this.mapQuestionTypeOptionModel(questionTypeOptionEntity));
-        }
+        questionTypeOptionModels.add(this.questionTypeOptionsSupport.getModelFixtureMock(0));
+        questionTypeOptionModels.add(this.questionTypeOptionsSupport.getModelFixtureMock(1));
         return questionTypeOptionModels;
+    }
+
+    private void assertServicesSet(IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionOptions) {
+        this.assertServicesSet(questionTypeOptionOptions,1) ;
+    }
+
+    private void assertServicesSet(IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionOptions, Integer times) {
+        verify(questionTypeOptionOptions, times(times)).setQuestionTypesService(any(QuestionTypesServiceInterface.class));
+        verify(questionTypeOptionOptions, times(times)).setQuestionTypeOptionsService(any(IssueStandardQuestionTypeOptionsServiceInterface.class));
+        verify(questionTypeOptionOptions, times(times)).setIssueStandardsService(any(IssueStandardsServiceInterface.class));
     }
 
     @Test
     public void testFindAllPresentList() throws Exception {
         final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities
-                = this.getQuestionTypeOptionEntities();
+                = this.getQuestionTypeOptionFixturesEntities();
 
-        given(this.questionTypeOptionsMapper.findAll()).willReturn(questionTypeOptionEntities);
+        when(this.questionTypeOptionsMapper.findAll()).thenReturn(questionTypeOptionEntities);
 
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels
                 = this.questionTypeOptionsService.findAll();
 
-        Assert.assertNotNull(questionTypeOptionModels);
-        Assert.assertEquals(this.getQuestionTypeOptionModels(), questionTypeOptionModels);
+        this.questionTypeOptionsSupport.assertModelsListEquals(this.getQuestionTypeOptionFixturesModels(),questionTypeOptionModels);
     }
 
     @Test
     public void testFindAllAbsentList() throws Exception {
-        given(this.questionTypeOptionsMapper.findAll()).willReturn(new ArrayList<>(0));
+        when(this.questionTypeOptionsMapper.findAll()).thenReturn(new ArrayList<>(0));
 
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels
                 = this.questionTypeOptionsService.findAll();
 
-        Assert.assertNotNull(questionTypeOptionModels);
         Assert.assertEquals(0, questionTypeOptionModels.size());
     }
 
     @Test
     public void testFindAllWithOptions() throws Exception {
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
         final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities
-                = this.getQuestionTypeOptionEntities();
+                = this.getQuestionTypeOptionFixturesEntities();
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels
-                = this.getQuestionTypeOptionModels();
+                = this.getQuestionTypeOptionFixturesModels();
 
         final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions
                 = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
-        given(this.questionTypeOptionsMapper.findAll()).willReturn(questionTypeOptionEntities);
-        given(questionTypeOptionsOptions.withRelations(Mockito.anyList())).willReturn(questionTypeOptionModels);
+        when(this.questionTypeOptionsMapper.findAll()).thenReturn(questionTypeOptionEntities);
+        when(questionTypeOptionsOptions.withRelations(listCaptor.capture())).thenReturn(questionTypeOptionModels);
 
-        final List<IssueStandardQuestionTypeOptionModelInterface> foundedQuestionTypeOptionModels
+        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionFoundedModels
                 = this.questionTypeOptionsService.findAll(questionTypeOptionsOptions);
 
-        verify(questionTypeOptionsOptions).withRelations(questionTypeOptionModels);
-        Assert.assertNotNull(foundedQuestionTypeOptionModels);
-        Assert.assertEquals(questionTypeOptionModels, foundedQuestionTypeOptionModels);
+        this.assertServicesSet(questionTypeOptionsOptions);
+        this.questionTypeOptionsSupport.assertModelsListEquals(questionTypeOptionModels, listCaptor.getValue());
+        Assert.assertSame(questionTypeOptionModels, questionTypeOptionFoundedModels);
     }
 
     @Test
     public void testFindPresentModel() throws Exception {
-        final Integer id = 1;
         final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
-                = Entities.createQuestionTypeOptionEntityMock(id, 1, 10, 20, 60, 1);
-        given(this.questionTypeOptionsMapper.find(id)).willReturn(questionTypeOptionEntity);
+                = this.questionTypeOptionsSupport.getEntityFixtureMock(0);
+        when(this.questionTypeOptionsMapper.find(questionTypeOptionEntity.getId())).thenReturn(questionTypeOptionEntity);
 
-        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = this.questionTypeOptionsService.find(id);
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionFoundedModel
+                = this.questionTypeOptionsService.find(questionTypeOptionEntity.getId());
 
-        Assert.assertNotNull(questionTypeOptionModel);
-        Assert.assertEquals(this.mapQuestionTypeOptionModel(questionTypeOptionEntity), questionTypeOptionModel);
+        this.questionTypeOptionsSupport.assertEquals(this.questionTypeOptionsSupport.getModelFixtureMock(0),questionTypeOptionFoundedModel);
     }
 
     @Test
     public void testFindAbsentModel() throws Exception {
         final Integer id = 10;
-        given(this.questionTypeOptionsMapper.find(id)).willReturn(null);
+        when(this.questionTypeOptionsMapper.find(id)).thenReturn(null);
 
-        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionFoundedModel
                 = this.questionTypeOptionsService.find(id);
 
-        Assert.assertNull(questionTypeOptionModel);
+        Assert.assertNull(questionTypeOptionFoundedModel);
     }
 
     @Test
     public void testFindWithOptions() throws Exception {
-        final Integer id = 1;
+        final ArgumentCaptor<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModelCaptor = ArgumentCaptor.forClass(IssueStandardQuestionTypeOptionModelInterface.class);
         final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
-                = Entities.createQuestionTypeOptionEntityMock(id, 1, 10, 20, 60, 1);
+                = this.questionTypeOptionsSupport.getEntityFixtureMock(0);
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = this.mapQuestionTypeOptionModel(questionTypeOptionEntity);
-
+                = this.questionTypeOptionsSupport.getModelFixtureMock(0);
         final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions
                 = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
-        given(this.questionTypeOptionsMapper.find(id)).willReturn(questionTypeOptionEntity);
-        given(questionTypeOptionsOptions.withRelations(questionTypeOptionModel)).willReturn(questionTypeOptionModel);
+        when(this.questionTypeOptionsMapper.find(questionTypeOptionModel.getId())).thenReturn(questionTypeOptionEntity);
+        when(questionTypeOptionsOptions.withRelations(questionTypeOptionModelCaptor.capture())).thenReturn(questionTypeOptionModel);
 
-        final IssueStandardQuestionTypeOptionModelInterface foundedQuestionTypeOptionModel
-                = this.questionTypeOptionsService.find(id, questionTypeOptionsOptions);
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionFoundedModel
+                = this.questionTypeOptionsService.find(questionTypeOptionModel.getId(), questionTypeOptionsOptions);
 
-        verify(questionTypeOptionsOptions).withRelations(questionTypeOptionModel);
-        Assert.assertNotNull(foundedQuestionTypeOptionModel);
-        Assert.assertEquals(questionTypeOptionModel, foundedQuestionTypeOptionModel);
+        this.assertServicesSet(questionTypeOptionsOptions);
+        this.questionTypeOptionsSupport.assertEquals(questionTypeOptionModel,questionTypeOptionModelCaptor.getValue());
+        Assert.assertSame(questionTypeOptionModel,questionTypeOptionFoundedModel);
     }
 
     @Test
     public void testFindByIssueStandardPresentList() throws Exception {
-        final Integer issueStandardId = 5;
-        final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities = new ArrayList<>(2);
+        final IssueStandardModelInterface issueStandardModel=this.issueStandardSupport.getModelFixtureMock(0);
+        final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities = this.getQuestionTypeOptionFixturesEntities();
+        when(this.questionTypeOptionsMapper.findByIssueStandardId(issueStandardModel.getId()))
+                .thenReturn(questionTypeOptionEntities);
 
-        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(1, 1, 1, 10, null, issueStandardId));
-        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(2, 2, 10, 20, 60, issueStandardId));
-        given(this.questionTypeOptionsMapper.findByIssueStandardId(issueStandardId))
-                .willReturn(questionTypeOptionEntities);
-
-        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
-        Mockito.when(issueStandardModel.getId()).thenReturn(issueStandardId);
-
-        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels
+        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionFoundedModels
                 = this.questionTypeOptionsService.findByIssueStandard(issueStandardModel);
 
-        Assert.assertNotNull(questionTypeOptionModels);
-        Assert.assertEquals(questionTypeOptionEntities.size(), questionTypeOptionModels.size());
-        for (int i = 0; i < questionTypeOptionModels.size(); i++) {
-            Assert.assertEquals(this.mapQuestionTypeOptionModel(questionTypeOptionEntities.get(i)),
-                    questionTypeOptionModels.get(i));
-        }
+        this.questionTypeOptionsSupport.assertModelsListEquals(this.getQuestionTypeOptionFixturesModels(),questionTypeOptionFoundedModels);
     }
 
     @Test
     public void testFindByIssueStandardAbsentList() throws Exception {
-        final Integer issueStandardId = 10;
-        given(this.questionTypeOptionsMapper.findByIssueStandardId(issueStandardId)).willReturn(new ArrayList<>(0));
+        final IssueStandardModelInterface issueStandardModel=this.issueStandardSupport.getModelFixtureMock(0);
+        when(this.questionTypeOptionsMapper.findByIssueStandardId(issueStandardModel.getId())).thenReturn(new ArrayList<>(0));
 
-        final IssueStandardModelInterface issueStandardModel = Mockito.mock(IssueStandardModelInterface.class);
-        Mockito.when(issueStandardModel.getId()).thenReturn(issueStandardId);
-
-        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels
+        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionFoundedModels
                 = this.questionTypeOptionsService.findByIssueStandard(issueStandardModel);
-        Assert.assertNotNull(questionTypeOptionModels);
-        Assert.assertEquals(0, questionTypeOptionModels.size());
+
+        Assert.assertEquals(0, questionTypeOptionFoundedModels.size());
     }
 
     @Test
     public void testFindByIssueStandardWithOptions() throws Exception {
-        final Integer issueStandardId = 5;
-        final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities = new ArrayList<>(2);
-        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(1, 1, 1, 10, null, issueStandardId));
-        questionTypeOptionEntities.add(Entities.createQuestionTypeOptionEntityMock(2, 2, 10, 20, 60, issueStandardId));
-
-        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels = new ArrayList<>(2);
-        questionTypeOptionModels.add(this.mapQuestionTypeOptionModel(questionTypeOptionEntities.get(0)));
-        questionTypeOptionModels.add(this.mapQuestionTypeOptionModel(questionTypeOptionEntities.get(1)));
-
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final IssueStandardModelInterface issueStandardModel=this.issueStandardSupport.getModelFixtureMock(0);
+        final List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities = this.getQuestionTypeOptionFixturesEntities();
+        when(this.questionTypeOptionsMapper.findByIssueStandardId(issueStandardModel.getId()))
+                .thenReturn(questionTypeOptionEntities);
+        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels
+                = this.getQuestionTypeOptionFixturesModels();
         final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions
                 = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
-        given(this.questionTypeOptionsMapper.findByIssueStandardId(issueStandardId))
-                .willReturn(questionTypeOptionEntities);
-        given(questionTypeOptionsOptions.withRelations(questionTypeOptionModels)).willReturn(questionTypeOptionModels);
+        when(questionTypeOptionsOptions.withRelations(listCaptor.capture())).thenReturn(questionTypeOptionModels);
 
-        List<IssueStandardQuestionTypeOptionModelInterface> foundedQuestionTypeOptionModels
-                = this.questionTypeOptionsService.findByIssueStandard(
-                        questionTypeOptionModels.get(0).getIssueStandard(), questionTypeOptionsOptions);
+        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionFoundedModels
+                = this.questionTypeOptionsService.findByIssueStandard(issueStandardModel, questionTypeOptionsOptions);
 
-        verify(questionTypeOptionsOptions).withRelations(questionTypeOptionModels);
-        Assert.assertNotNull(foundedQuestionTypeOptionModels);
-        Assert.assertEquals(questionTypeOptionModels, foundedQuestionTypeOptionModels);
+        this.assertServicesSet(questionTypeOptionsOptions);
+        this.questionTypeOptionsSupport.assertModelsListEquals(questionTypeOptionModels,listCaptor.getValue());
+        Assert.assertSame(questionTypeOptionModels,questionTypeOptionFoundedModels);
+    }
+
+    @Test
+    public void testSaveCreatesEntity() throws Exception {
+        final ArgumentCaptor<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntityCaptor = ArgumentCaptor.forClass(IssueStandardQuestionTypeOptionEntity.class);
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel = this.questionTypeOptionsSupport.getModelAdditionalMock(0);
+
+        this.questionTypeOptionsService.save(questionTypeOptionModel);
+
+        verify(this.questionTypeOptionsMapper, times(1)).insert(questionTypeOptionEntityCaptor.capture());
+        this.questionTypeOptionsSupport.assertEquals(this.questionTypeOptionsSupport.getEntityAdditionalMock(0), questionTypeOptionEntityCaptor.getValue());
+    }
+
+    @Test
+    public void testSaveUpdateEntityIdOnCreation() throws Exception {
+        final Integer id = 10;
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel = this.questionTypeOptionsSupport.getModelAdditionalMock(0);
+        doAnswer(invocations -> {
+            final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
+                    = (IssueStandardQuestionTypeOptionEntity) invocations.getArguments()[0];
+            questionTypeOptionEntity.setId(id);
+            return null;
+        }).when(this.questionTypeOptionsMapper).insert(any());
+
+        this.questionTypeOptionsService.save(questionTypeOptionModel);
+
+        verify(questionTypeOptionModel, times(1)).setId(id);
     }
 
     @Test
     public void testSaveUpdatesEntity() throws Exception {
-        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = Models.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1);
-        this.questionTypeOptionsService.save(questionTypeOptionModel);
-
-        verify(this.questionTypeOptionsMapper, times(1))
-                .update(this.mapQuestionTypeOptionEntity(questionTypeOptionModel));
-    }
-
-    @Test
-    public void testSaveInsertsEntity() throws Exception {
-        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = Models.createQuestionTypeOptionModel(null, 1, 10, 20, 60, 1);
-
-        final Integer id = 10;
-        doAnswer(invocations -> {
-            final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
-                    = (IssueStandardQuestionTypeOptionEntity) invocations.getArguments()[0];
-            questionTypeOptionEntity.setId(id);
-            return null;
-        }).when(this.questionTypeOptionsMapper).insert(Mockito.any(IssueStandardQuestionTypeOptionEntity.class));
+        final ArgumentCaptor<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntityCaptor = ArgumentCaptor.forClass(IssueStandardQuestionTypeOptionEntity.class);
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel = this.questionTypeOptionsSupport.getModelFixtureMock(0);
 
         this.questionTypeOptionsService.save(questionTypeOptionModel);
 
-        // TODO verify(this.questionTypeOptionsMapper, times(1)).insert(this.mapQuestionTypeOptionEntity(questionTypeOptionModel));
-        Assert.assertEquals(id, questionTypeOptionModel.getId());
-    }
-
-    @Test
-    public void testSaveList() throws Exception {
-        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels = new ArrayList<>(2);
-        questionTypeOptionModels.add(Models.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1));
-        questionTypeOptionModels.add(Models.createQuestionTypeOptionModel(null, 1, 10, 20, 60, 1));
-
-        final Integer id = 10;
-        doAnswer(invocations -> {
-            final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
-                    = (IssueStandardQuestionTypeOptionEntity) invocations.getArguments()[0];
-            questionTypeOptionEntity.setId(id);
-            return null;
-        }).when(this.questionTypeOptionsMapper).insert(Mockito.any(IssueStandardQuestionTypeOptionEntity.class));
-
-        this.questionTypeOptionsService.save(questionTypeOptionModels);
-
-        verify(this.questionTypeOptionsMapper, times(1))
-                .update(this.mapQuestionTypeOptionEntity(questionTypeOptionModels.get(0)));
-        verify(this.questionTypeOptionsMapper, times(1))
-                .insert(this.mapQuestionTypeOptionEntity(questionTypeOptionModels.get(1)));
-        Assert.assertEquals(id, questionTypeOptionModels.get(1).getId());
+        verify(this.questionTypeOptionsMapper, times(1)).update(questionTypeOptionEntityCaptor.capture());
+        this.questionTypeOptionsSupport.assertEquals(this.questionTypeOptionsSupport.getEntityFixtureMock(0),questionTypeOptionEntityCaptor.getValue());
     }
 
     @Test
     public void testSaveWithOptions() throws Exception {
-        final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions
-                = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel = this.questionTypeOptionsSupport.getModelFixtureMock(0);
+        final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
 
-        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = Models.createQuestionTypeOptionModel(1, 2, 10, 20, 60, 2);
+        this.questionTypeOptionsService.save(questionTypeOptionModel,questionTypeOptionsOptions );
 
-        this.questionTypeOptionsService.save(questionTypeOptionModel, questionTypeOptionsOptions);
-
-        verify(questionTypeOptionsOptions).saveWithRelations(questionTypeOptionModel);
+        this.assertServicesSet(questionTypeOptionsOptions);
+        verify(questionTypeOptionsOptions,times(1)).saveWithRelations(questionTypeOptionModel);
+        verifyNoMoreInteractions(this.questionTypeOptionsMapper);
     }
 
-    @Test
-    public void testSaveListWithOptions() throws Exception {
-        final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions
-                = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
 
-        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels
-                = this.getQuestionTypeOptionModels();
+    @Test
+    public void testSaveModelsList() throws Exception {
+        final ArgumentCaptor<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntityCaptor = ArgumentCaptor.forClass(IssueStandardQuestionTypeOptionEntity.class);
+        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels = this.getQuestionTypeOptionFixturesModels();
+
+
+        this.questionTypeOptionsService.save(questionTypeOptionModels);
+
+        verify(this.questionTypeOptionsMapper, times(questionTypeOptionModels.size()))
+                .update(questionTypeOptionEntityCaptor.capture());
+        this.questionTypeOptionsSupport.assertEntitiesListEquals(this.getQuestionTypeOptionFixturesEntities(),questionTypeOptionEntityCaptor.getAllValues());
+    }
+
+
+    @Test
+    public void testSaveModelsListWithOptions() throws Exception {
+        final ArgumentCaptor<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModelCaptor = ArgumentCaptor.forClass(IssueStandardQuestionTypeOptionModelInterface.class);
+        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels = this.getQuestionTypeOptionFixturesModels();
+        final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
 
         this.questionTypeOptionsService.save(questionTypeOptionModels, questionTypeOptionsOptions);
 
-        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel: questionTypeOptionModels) {
-            verify(questionTypeOptionsOptions).saveWithRelations(questionTypeOptionModel);
-        }
+        this.assertServicesSet(questionTypeOptionsOptions, questionTypeOptionModels.size());
+        verify(questionTypeOptionsOptions, times(questionTypeOptionModels.size())).saveWithRelations(questionTypeOptionModelCaptor.capture());
+        this.questionTypeOptionsSupport.assertModelsListEquals(questionTypeOptionModels, questionTypeOptionModelCaptor.getAllValues());
+        verifyNoMoreInteractions(this.questionTypeOptionsMapper);
     }
 
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
-        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = Models.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1);
+        final ArgumentCaptor<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntityCaptor = ArgumentCaptor.forClass(IssueStandardQuestionTypeOptionEntity.class);
 
-        this.questionTypeOptionsService.delete(questionTypeOptionModel);
+        this.questionTypeOptionsService.delete(this.questionTypeOptionsSupport.getModelFixtureMock(0));
 
-        verify(this.questionTypeOptionsMapper, times(1))
-                .delete(this.mapQuestionTypeOptionEntity(questionTypeOptionModel));
+        verify(this.questionTypeOptionsMapper, times(1)).delete(questionTypeOptionEntityCaptor.capture());
+        this.questionTypeOptionsSupport.assertEquals(this.questionTypeOptionsSupport.getEntityFixtureMock(0),questionTypeOptionEntityCaptor.getValue());
     }
 
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
-        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = Models.createQuestionTypeOptionModel(null, 1, 10, 20, 60, 1);
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel = this.questionTypeOptionsSupport.getModelAdditionalMock(0);
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.questionTypeOptionsService.delete(questionTypeOptionModel);
 
-        verify(this.questionTypeOptionsMapper, times(0))
-                .delete(this.mapQuestionTypeOptionEntity(questionTypeOptionModel));
-    }
-
-    @Test
-    public void testDeleteList() throws Exception {
-        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels
-                = this.getQuestionTypeOptionModels();
-
-        this.questionTypeOptionsService.delete(questionTypeOptionModels);
-
-        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel: questionTypeOptionModels) {
-            verify(this.questionTypeOptionsMapper, times(1))
-                    .delete(this.mapQuestionTypeOptionEntity(questionTypeOptionModel));
-        }
     }
 
     @Test
     public void testDeleteWithOptions() throws Exception {
-        final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions
-                = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
-
-        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
-                = Models.createQuestionTypeOptionModel(1, 1, 10, 20, 60, 1);
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel = this.questionTypeOptionsSupport.getModelFixtureMock(0);
+        final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
 
         this.questionTypeOptionsService.delete(questionTypeOptionModel, questionTypeOptionsOptions);
 
-        verify(questionTypeOptionsOptions).deleteWithRelations(questionTypeOptionModel);
+        this.assertServicesSet(questionTypeOptionsOptions);
+        verify(questionTypeOptionsOptions,times(1)).deleteWithRelations(questionTypeOptionModel);
+        verifyNoMoreInteractions(this.questionTypeOptionsMapper);
     }
 
     @Test
-    public void testDeleteListWithOptions() throws Exception {
-        final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions
-                = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
+    public void testDeleteModelsList() throws Exception {
+        final ArgumentCaptor<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntityCaptor = ArgumentCaptor.forClass(IssueStandardQuestionTypeOptionEntity.class);
+        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels = this.getQuestionTypeOptionFixturesModels();
 
-        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels
-                = this.getQuestionTypeOptionModels();
+        this.questionTypeOptionsService.delete(questionTypeOptionModels);
+
+
+        verify(this.questionTypeOptionsMapper, times(questionTypeOptionModels.size())).delete(questionTypeOptionEntityCaptor.capture());
+        this.questionTypeOptionsSupport.assertEntitiesListEquals(this.getQuestionTypeOptionFixturesEntities(),questionTypeOptionEntityCaptor.getAllValues());
+
+    }
+
+
+
+    @Test
+    public void testDeleteModelsListWithOptions() throws Exception {
+        final ArgumentCaptor<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModelCaptor = ArgumentCaptor.forClass(IssueStandardQuestionTypeOptionModelInterface.class);
+        final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels = this.getQuestionTypeOptionFixturesModels();
+        final IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions = Mockito.mock(IssueStandardQuestionTypeOptionsOptionsInterface.class);
 
         this.questionTypeOptionsService.delete(questionTypeOptionModels, questionTypeOptionsOptions);
 
-        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel: questionTypeOptionModels) {
-            verify(questionTypeOptionsOptions).deleteWithRelations(questionTypeOptionModel);
+        this.assertServicesSet(questionTypeOptionsOptions,questionTypeOptionModels.size());
+        verify(questionTypeOptionsOptions,times(questionTypeOptionModels.size())).deleteWithRelations(questionTypeOptionModelCaptor.capture());
+        this.questionTypeOptionsSupport.assertModelsListEquals(questionTypeOptionModels,questionTypeOptionModelCaptor.getAllValues());
+        verifyNoMoreInteractions(this.questionTypeOptionsMapper);
         }
     }
-}
+
