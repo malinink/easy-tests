@@ -9,11 +9,9 @@ import org.junit.Assert;
 import org.mockito.Mockito;
 
 
-
 /**
  * @author VeronikaRevjakina
  */
-
 public class IssueStandardQuestionTypeOptionsSupport {
 
     protected static Object[][] fixtures = new Object[][]{
@@ -90,7 +88,6 @@ public class IssueStandardQuestionTypeOptionsSupport {
         return this.getEntityMock(additional[index]);
     }
 
-
     private IssueStandardQuestionTypeOptionEntity getEntityMock(Object[] data) {
         return this.getEntityMock(
                 (Integer) data[0],
@@ -161,7 +158,7 @@ public class IssueStandardQuestionTypeOptionsSupport {
 
         assertEquals(expected, actual, false);
 
-        assertEquals(expected, actual,false);
+        assertEquals(expected, actual, false);
 
     }
 
@@ -240,6 +237,5 @@ public class IssueStandardQuestionTypeOptionsSupport {
             i++;
         }
     }
-
 }
 
