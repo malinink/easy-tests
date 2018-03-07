@@ -5,10 +5,10 @@ import easytests.support.IssueStandardQuestionTypeOptionsSupport;
 import org.junit.Test;
 import org.meanbean.test.ConfigurationBuilder;
 
+
 /**
  * @author VeronikaRevjakina
  */
-
 public class IssueStandardQuestionTypeOptionModelTest extends AbstractModelTest {
 
     private IssueStandardQuestionTypeOptionsSupport issueStandardQuestionTypeOptionsSupport = new IssueStandardQuestionTypeOptionsSupport();
@@ -16,7 +16,6 @@ public class IssueStandardQuestionTypeOptionModelTest extends AbstractModelTest 
     @Override
     protected ConfigurationBuilder getConfigurationBuilder() {
         return super.getConfigurationBuilder()
-                .ignoreProperty("questionType")
                 .ignoreProperty("issueStandard");
     }
 
@@ -27,14 +26,11 @@ public class IssueStandardQuestionTypeOptionModelTest extends AbstractModelTest 
 
     @Test
     public void testMap() throws Exception {
-        final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity=this.issueStandardQuestionTypeOptionsSupport.getEntityFixtureMock(0);
-        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel=new IssueStandardQuestionTypeOptionModel();
+        final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity = this.issueStandardQuestionTypeOptionsSupport.getEntityFixtureMock(0);
+        final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel = new IssueStandardQuestionTypeOptionModel();
+
         questionTypeOptionModel.map(questionTypeOptionEntity);
 
-
-        this.issueStandardQuestionTypeOptionsSupport.assertEquals(questionTypeOptionEntity,questionTypeOptionModel);
-
-       this.issueStandardQuestionTypeOptionsSupport.assertEquals(questionTypeOptionEntity,questionTypeOptionModel);
-
+        this.issueStandardQuestionTypeOptionsSupport.assertEquals(questionTypeOptionEntity, questionTypeOptionModel);
     }
 }
