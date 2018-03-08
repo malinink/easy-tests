@@ -1,50 +1,37 @@
 package easytests.core.models;
 
 import easytests.core.entities.SolutionEntity;
-import org.junit.Assert;
-import org.junit.Ignore;
+import easytests.support.SolutionsSupport;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.meanbean.test.BeanTester;
-import org.meanbean.test.EqualsMethodTester;
-import org.meanbean.test.HashCodeMethodTester;
-import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.meanbean.test.ConfigurationBuilder;
+
 
 /**
- * @author SingularityA
+ * @author SvetlanaTselikova
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class SolutionModelTest {
-    @Ignore
+public class SolutionModelTest extends AbstractModelTest {
+
+    private SolutionsSupport solutionsSupport = new SolutionsSupport();
+
+    @Override
+    protected ConfigurationBuilder getConfigurationBuilder() {
+        return super.getConfigurationBuilder()
+                .ignoreProperty("answer")
+                .ignoreProperty("point");
+    }
+
     @Test
     public void testCommon() throws Exception {
-        new BeanTester().testBean(SolutionModel.class);
-        new EqualsMethodTester().testEqualsMethod(SolutionModel.class);
-        new HashCodeMethodTester().testHashCodeMethod(SolutionModel.class);
+        this.testCommon(SolutionModel.class);
     }
 
     @Test
     public void testMap() throws Exception {
-        final Integer id = 1;
-        final Integer sort = 1;
-        final Integer answerId = 2;
-        final Integer pointId = 3;
+        final SolutionEntity solutionEntity = this.solutionsSupport.getEntityFixtureMock(0);
+        final SolutionModel solutionModel = new SolutionModel();
 
-        SolutionEntity solutionEntity = Mockito.mock(SolutionEntity.class);
-        Mockito.when(solutionEntity.getId()).thenReturn(id);
-        //Mockito.when(solutionEntity.getSort()).thenReturn(sort);
-        Mockito.when(solutionEntity.getAnswerId()).thenReturn(answerId);
-        Mockito.when(solutionEntity.getPointId()).thenReturn(pointId);
-
-        final SolutionModelInterface solutionModel = new SolutionModel();
         solutionModel.map(solutionEntity);
 
-        Assert.assertEquals(id, solutionModel.getId());
-        //Assert.assertEquals(sort, solutionModel.getSort());
-        Assert.assertNull(solutionModel.getPoint());
-        Assert.assertNull(solutionModel.getAnswer());
+        this.solutionsSupport.assertEquals(solutionEntity, solutionModel);
     }
 }
