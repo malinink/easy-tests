@@ -6,11 +6,9 @@ import easytests.core.models.AnswerModel;
 import easytests.core.models.AnswerModelInterface;
 import easytests.core.options.AnswersOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
-
+import easytests.support.AnswersSupport;
 import java.util.ArrayList;
 import java.util.List;
-
-import easytests.support.AnswersSupport;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
@@ -21,6 +19,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.mock.mockito.*;
 import org.springframework.test.context.junit4.*;
+
 
 /**
  * @author sakhprace
@@ -92,16 +91,6 @@ public class AnswersServiceTest {
     }
 
     @Test
-    public void testFindPresentModel() throws Exception {
-        final AnswerEntity answerEntity = this.answersSupport.getEntityFixtureMock(0);
-        when(this.answersMapper.find(answerEntity.getId())).thenReturn(answerEntity);
-
-        final AnswerModelInterface answerFoundedModel = this.answersService.find(answerEntity.getId());
-
-        this.answersSupport.assertEquals(this.answersSupport.getModelFixtureMock(0), answerFoundedModel);
-    }
-
-    @Test
     public void testFindAllWithOptions() throws Exception {
         final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
         final List<AnswerEntity> answersEntities = getAnswersFixturesEntities();
@@ -119,6 +108,26 @@ public class AnswersServiceTest {
     }
 
     @Test
+    public void testFindPresentModel() throws Exception {
+        final AnswerEntity answerEntity = this.answersSupport.getEntityFixtureMock(0);
+        when(this.answersMapper.find(answerEntity.getId())).thenReturn(answerEntity);
+
+        final AnswerModelInterface answerFoundedModel = this.answersService.find(answerEntity.getId());
+
+        this.answersSupport.assertEquals(this.answersSupport.getModelFixtureMock(0), answerFoundedModel);
+    }
+
+    @Test
+    public void testFindAbsentModel() throws Exception {
+        final Integer absentId = 12;
+        when(this.answersMapper.find(absentId)).thenReturn(null);
+
+        final AnswerModelInterface answerFoundedModel = this.answersService.find(absentId);
+
+        Assert.assertNull(answerFoundedModel);
+    }
+
+    @Test
     public void testFindWithOptions() throws Exception {
         final ArgumentCaptor<AnswerModelInterface> answerModelCaptor = ArgumentCaptor.forClass(AnswerModelInterface.class);
         final AnswerModelInterface answerModel = this.answersSupport.getModelFixtureMock(0);
@@ -133,16 +142,6 @@ public class AnswersServiceTest {
         Assert.assertSame(answerModel, answerFoundedModel);
         verify(this.answersMapper, times(1)).find(answerModel.getId());
         verifyNoMoreInteractions(this.answersMapper);
-    }
-
-    @Test
-    public void testFindAbsentModel() throws Exception {
-        final Integer absentId = 12;
-        when(this.answersMapper.find(absentId)).thenReturn(null);
-
-        final AnswerModelInterface answerFoundedModel = this.answersService.find(absentId);
-
-        Assert.assertNull(answerFoundedModel);
     }
 
     @Test
@@ -185,7 +184,6 @@ public class AnswersServiceTest {
         Assert.assertSame(answersModels, answersFoundedModels);
         verify(this.answersMapper, times(1)).findByQuestionId(answersModels.get(0).getQuestion().getId());
         verifyNoMoreInteractions(this.answersMapper);
-
     }
 
     @Test
@@ -308,7 +306,6 @@ public class AnswersServiceTest {
             this.answersSupport.assertEquals(answerModel, capturedEntities.get(index));
             index++;
         }
-
     }
 
     @Test
@@ -328,5 +325,4 @@ public class AnswersServiceTest {
         }
         verifyNoMoreInteractions(this.answersMapper);
     }
-
 }
