@@ -41,6 +41,12 @@ public class PointsSupport {
                     2
             },
             {
+                    // for insert entity
+                    null,
+                    3,
+                    3
+            },
+            {
                     // for update entity with id = 1
                     1,
                     2,
