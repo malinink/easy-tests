@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 /**
  * @author SingularityA
  * @author Loriens
@@ -131,7 +132,7 @@ public class SolutionsService implements SolutionsServiceInterface {
     }
 
     private List<SolutionModelInterface> map(List<SolutionEntity> solutionEntities) {
-        final List<SolutionModelInterface> solutionModels = new ArrayList(solutionEntities.size());
+        final List<SolutionModelInterface> solutionModels = new ArrayList<>(solutionEntities.size());
         for (SolutionEntity solutionEntity: solutionEntities) {
             solutionModels.add(this.map(solutionEntity));
         }
@@ -140,7 +141,7 @@ public class SolutionsService implements SolutionsServiceInterface {
 
     private SolutionsOptionsInterface withServices(SolutionsOptionsInterface solutionOptions) {
         solutionOptions.setSolutionsService(this);
-        //solutionOptions.setPointsService(this.pointsService);
+        solutionOptions.setPointsService(this.pointsService);
         return solutionOptions;
     }
 }

@@ -111,7 +111,7 @@ public class TesteesService implements TesteesServiceInterface {
     }
 
     private List<TesteeModelInterface> map(List<TesteeEntity> testeesList) {
-        final List<TesteeModelInterface> resultTesteeList = new ArrayList(testeesList.size());
+        final List<TesteeModelInterface> resultTesteeList = new ArrayList<>(testeesList.size());
         for (TesteeEntity testee: testeesList) {
             resultTesteeList.add(this.map(testee));
         }
