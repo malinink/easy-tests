@@ -75,7 +75,7 @@ public class PointsMapperTest extends AbstractMapperTest {
 
     @Test
     public void testUpdate() throws Exception {
-        final PointEntity pointChangedEntity = this.pointsSupport.getEntityAdditionalMock(2);
+        final PointEntity pointChangedEntity = this.pointsSupport.getEntityAdditionalMock(1);
         final PointEntity pointBeforeUpdateEntity = this.pointsMapper.find(pointChangedEntity.getId());
         Assert.assertNotNull(pointBeforeUpdateEntity);
         this.pointsSupport.assertNotEqualsWithoutId(pointChangedEntity, pointBeforeUpdateEntity);
