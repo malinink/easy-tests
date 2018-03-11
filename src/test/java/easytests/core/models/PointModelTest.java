@@ -1,10 +1,10 @@
 package easytests.core.models;
 
-
 import easytests.core.entities.PointEntity;
 import easytests.support.PointsSupport;
 import org.junit.Test;
 import org.meanbean.test.ConfigurationBuilder;
+
 
 /**
  * @author nikitalpopov
@@ -17,8 +17,7 @@ public class PointModelTest extends AbstractModelTest {
     protected ConfigurationBuilder getConfigurationBuilder() {
         return super.getConfigurationBuilder()
                 .ignoreProperty("question")
-                .ignoreProperty("quiz")
-                .ignoreProperty("solutions");
+                .ignoreProperty("quiz");
     }
 
     @Test
