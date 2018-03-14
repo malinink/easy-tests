@@ -7,6 +7,7 @@ import easytests.common.exceptions.NotFoundException;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilder;
+import easytests.core.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController("UsersControllerV1")
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/users/")
-public class UsersController extends AbstractCrudController {
+public class UsersController {
+
+    @Autowired
+    protected UsersService usersService;
 
     @Autowired
     private UsersOptionsBuilder usersOptionsBuilder;
@@ -42,6 +46,6 @@ public class UsersController extends AbstractCrudController {
     }
 
     private UserModelInterface getUserModel(Integer id) {
-        return getUserModel(id, this.usersOptionsBuilder.forAuth());
+        return this.getUserModel(id, this.usersOptionsBuilder.forAuth());
     }
 }
