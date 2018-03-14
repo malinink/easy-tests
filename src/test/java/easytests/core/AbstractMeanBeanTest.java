@@ -37,6 +37,14 @@ public class AbstractMeanBeanTest {
             {
                     QuizModelInterface.class,
                     new QuizModelFactory()
+            },
+            {
+                    PointModelInterface.class,
+                    new PointModelFactory()
+            },
+            {
+                    AnswerModelInterface.class,
+                    new AnswerModelFactory()
             }
     };
 
