@@ -2,7 +2,6 @@ package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.UsersMapper;
 import easytests.api.v1.models.User;
-import easytests.common.controllers.AbstractCrudController;
 import easytests.common.exceptions.NotFoundException;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.UsersOptionsInterface;
