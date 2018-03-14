@@ -33,6 +33,10 @@ public class AbstractMeanBeanTest {
             {
                     TesteeModelInterface.class,
                     new TesteeModelFactory()
+            },
+            {
+                    QuizModelInterface.class,
+                    new QuizModelFactory()
             }
     };
 
