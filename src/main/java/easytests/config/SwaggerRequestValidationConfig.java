@@ -53,6 +53,6 @@ public class SwaggerRequestValidationConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
-        registry.addInterceptor(swaggerValidationInterceptor);
+        registry.addInterceptor(this.swaggerValidationInterceptor);
     }
 }
