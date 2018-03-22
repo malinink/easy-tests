@@ -5,6 +5,7 @@ import easytests.support.TesteesSupport;
 import org.junit.Test;
 import org.meanbean.test.ConfigurationBuilder;
 
+
 /**
  * @author Yarik2308
  */
@@ -14,8 +15,7 @@ public class TesteeModelTest extends AbstractModelTest{
 
     @Override
     protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder()
-                .ignoreProperty("quiz");
+        return super.getConfigurationBuilder();
     }
 
     @Test
@@ -27,6 +27,7 @@ public class TesteeModelTest extends AbstractModelTest{
     public void testMap() throws Exception {
         final TesteeEntity testeeEntity = this.testeesSupport.getEntityFixtureMock(0);
         final TesteeModelInterface testeeModel = new TesteeModel();
+
         testeeModel.map(testeeEntity);
 
         this.testeesSupport.assertEquals(testeeEntity, testeeModel);
