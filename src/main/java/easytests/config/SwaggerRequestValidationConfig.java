@@ -1,9 +1,9 @@
 package easytests.config;
 
-import com.atlassian.oai.validator.springmvc.SwaggerValidationFilter;
-import com.atlassian.oai.validator.springmvc.SwaggerValidationInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import easytests.swagger.SwaggerValidationFilter;
+import easytests.swagger.SwaggerValidationInterceptor;
 import java.io.IOException;
 import javax.servlet.Filter;
 import org.apache.commons.io.FileUtils;
