@@ -1,7 +1,7 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.mappers.UsersMapper;
-import easytests.api.v1.models.User;
+import easytests.api.v1.mappers.ObjectsMapper;
+import easytests.api.v1.models.Object;
 import easytests.common.exceptions.NotFoundException;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.UsersOptionsInterface;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author malinink
  */
-@RestController("UsersControllerV1")
+@RestController("ObjectsControllerV1")
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
-@RequestMapping("/v1/users/")
-public class UsersController {
+@RequestMapping("/v1/objects/")
+public class ObjectsController {
 
     @Autowired
     protected UsersService usersService;
@@ -27,13 +27,13 @@ public class UsersController {
     private UsersOptionsBuilder usersOptionsBuilder;
 
     @Autowired
-    @Qualifier("UsersMapperV1")
-    private UsersMapper usersMapper;
+    @Qualifier("ObjectsMapperV1")
+    private ObjectsMapper objectsMapper;
 
     @GetMapping("{userId}/")
-    public User view(@PathVariable Integer userId) {
+    public Object view(@PathVariable Integer userId) {
         final UserModelInterface userModel = this.getUserModel(userId);
-        return this.usersMapper.map(userModel, User.class);
+        return this.objectsMapper.map(userModel, Object.class);
     }
 
     private UserModelInterface getUserModel(Integer id, UsersOptionsInterface userOptions) {

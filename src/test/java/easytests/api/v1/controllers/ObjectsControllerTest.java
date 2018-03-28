@@ -1,6 +1,7 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.mappers.UsersMapper;
+import easytests.api.v1.mappers.ObjectsMapper;
+import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.UsersOptions;
 import easytests.core.options.UsersOptionsInterface;
@@ -24,10 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author malinink
  */
-@Import(UsersMapper.class)
+@Import({ObjectsMapper.class, SwaggerRequestValidationConfig.class})
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = UsersController.class, secure = false)
-public class UsersControllerTest {
+@WebMvcTest(controllers = ObjectsController.class, secure = false)
+public class ObjectsControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -46,7 +47,7 @@ public class UsersControllerTest {
         when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
         when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(userModel);
 
-        mvc.perform(get("/v1/users/1/")
+        mvc.perform(get("/v1/objects/1/")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

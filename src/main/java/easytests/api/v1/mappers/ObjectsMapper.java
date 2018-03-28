@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 /**
  * @author malinink
  */
-@Service("UsersMapperV1")
-public class UsersMapper extends ModelMapper {
+@Service("ObjectsMapperV1")
+public class ObjectsMapper extends ModelMapper {
 
 }
