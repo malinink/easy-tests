@@ -22,17 +22,15 @@ public class InvalidRequestException extends RuntimeException {
 
     public InvalidRequestException(final ValidationReport validationReport) {
         this.validationReport = validationReport;
+        final StringBuilder sb = new StringBuilder();
+        for (final ValidationReport.Message message : this.validationReport.getMessages()) {
+            sb.append(MESSAGE_DELIMITER).append(message.getMessage());
+        }
+        this.message = sb.substring(Math.min(sb.length(), MESSAGE_DELIMITER.length()));
     }
 
     @Override
     public String getMessage() {
-        if (this.message == null) {
-            final StringBuilder sb = new StringBuilder();
-            for (final ValidationReport.Message message : this.validationReport.getMessages()) {
-                sb.append(MESSAGE_DELIMITER).append(message.getMessage());
-            }
-            this.message = sb.substring(Math.min(sb.length(), MESSAGE_DELIMITER.length()));
-        }
         return this.message;
     }
 
