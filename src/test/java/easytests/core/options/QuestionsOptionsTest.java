@@ -11,6 +11,7 @@ import easytests.core.services.QuestionTypesServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.support.QuestionsSupport;
+import easytests.support.TopicsSupport;
 import easytests.support.QuestionTypesSupport;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,9 @@ public class QuestionsOptionsTest {
 
     private TopicsOptionsInterface topicsOptions;
 
-    private TopicModelInterface topicsModels;
+    private List<TopicModelInterface> topicsModels;
+
+    private TopicModelInterface topicModel;
 
     private List<List<TopicModelInterface>> topicsModelsLists;
 
@@ -152,10 +155,7 @@ public class QuestionsOptionsTest {
     }
 
     private QuestionsOptionsTest withTopicsModelsInjected() {
-        this.topicsModelsLists = new ArrayList<>(2);
-        this.topicsModelsLists.add(new ArrayList<>());
-        this.topicsModelsLists.add(new ArrayList<>());
-        when(this.questionModel.getTopic()).thenReturn(this.topicsModels);
+        when(this.questionModel.getTopic()).thenReturn(this.topicModel);
         return this;
     }
 /**/
@@ -233,7 +233,7 @@ public class QuestionsOptionsTest {
     @Test
     public void testSaveWithAnswersRelations() throws Exception {
         this.withQuestionModel().withAnswersModelsInjected().withAnswers();
-        final ArgumentCaptor<AnswersOptionsInterface> answersOptionsCaptor = ArgumentCaptor.forClass(AnswersOptionsInterface.class);;
+        final ArgumentCaptor<AnswersOptionsInterface> answersOptionsCaptor = ArgumentCaptor.forClass(AnswersOptionsInterface.class);
 
 
         this.questionsOptions.saveWithRelations(this.questionModel);
@@ -247,7 +247,7 @@ public class QuestionsOptionsTest {
     @Test
     public void testSaveWithTopicRelations() throws Exception {
         this.withQuestionModel().withTopicsModelsInjected().withTopic();
-        final ArgumentCaptor<TopicsOptionsInterface> topicsOptionsCaptor = ArgumentCaptor.forClass(TopicsOptionsInterface.class);;
+        final ArgumentCaptor<TopicsOptionsInterface> topicsOptionsCaptor = ArgumentCaptor.forClass(TopicsOptionsInterface.class);
 
 
         this.questionsOptions.saveWithRelations(this.questionModel);
@@ -260,17 +260,15 @@ public class QuestionsOptionsTest {
 
     @Test
     public void testSaveWithAllRelationsOrder() throws Exception {
-        //this.withQuestionModel().withTopicsModelInjected().withTopic();
+        this.withQuestionModel().withTopicsModelsInjected().withTopic();
         this.withQuestionModel().withAnswersModelsInjected().withAnswers();
-        //this.withQuestionModel().withQuestionTypesModelInjected().withQuestionType();
 
-        final InOrder inOrder = inOrder(this.answersService);
-//, this.questionTypesService, this.topicsService
+
+        final InOrder inOrder = inOrder(this.topicsService, this.answersService);
+
 
         this.questionsOptions.saveWithRelations(this.questionModel);
-
-        inOrder.verify(this.questionsService, times(1)).save(any(QuestionModelInterface.class));
-        inOrder.verify(this.topicsService,times(1)).save(any(TopicModelInterface.class));
+        inOrder.verify(this.topicsService,times(1)).save(any(TopicModelInterface.class),any(TopicsOptionsInterface.class));
         inOrder.verify(this.answersService, times(1)).save(anyList(),any());
 
     }
