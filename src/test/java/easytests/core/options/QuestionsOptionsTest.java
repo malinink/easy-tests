@@ -11,6 +11,7 @@ import easytests.core.services.QuestionTypesServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.support.QuestionsSupport;
+import easytests.support.QuestionTypesSupport;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -57,15 +58,15 @@ public class QuestionsOptionsTest {
 
     private QuestionTypesOptionsInterface questionTypesOptions;
 
-    private List<QuestionTypeModelInterface> questionTypesModels;
+    private QuestionTypeModelInterface questionTypesModel;
 
-    private List<List<QuestionTypeModelInterface>> questionTypesModelsLists;
+
 
     private TopicsServiceInterface topicsService;
 
     private TopicsOptionsInterface topicsOptions;
 
-    private List<TopicModelInterface> topicsModels;
+    private TopicModelInterface topicsModels;
 
     private List<List<TopicModelInterface>> topicsModelsLists;
 
@@ -143,7 +144,21 @@ public class QuestionsOptionsTest {
 
         return this;
     }
+    /**/
 
+    private QuestionsOptionsTest withQuestionTypesModelInjected() {
+        when(this.questionModel.getQuestionType()).thenReturn(this.questionTypesModel);
+        return this;
+    }
+
+    private QuestionsOptionsTest withTopicsModelsInjected() {
+        this.topicsModelsLists = new ArrayList<>(2);
+        this.topicsModelsLists.add(new ArrayList<>());
+        this.topicsModelsLists.add(new ArrayList<>());
+        when(this.questionModel.getTopic()).thenReturn(this.topicsModels);
+        return this;
+    }
+/**/
     @Test
     public void testWithNoRelations() throws Exception {
         this.withQuestionModel().withAnswersModelsFounded();
@@ -153,6 +168,8 @@ public class QuestionsOptionsTest {
         Assert.assertSame(questionModel, questionModelWithRelations);
         verify(this.answersService, times(0)).findByQuestion(any(), any());
         verify(this.questionModel, times(0)).setAnswers(anyList());
+        verify(this.questionModel, times(0)).setQuestionType(any());
+        verify(this.questionModel, times(0)).setTopic(any());
     }
 
     @Test
@@ -190,7 +207,7 @@ public class QuestionsOptionsTest {
     }
 
     @Test
-    public void testWithSubjectsRelationsOnModelsList() throws Exception {
+    public void testWithAnswersRelationsOnModelsList() throws Exception {
         this.withQuestionsList().withAnswersModelsListsFounded().withAnswers();
 
         final List<QuestionModelInterface> questionsModelsWithRelations = this.questionsOptions.withRelations(this.questionsModels);
@@ -228,14 +245,34 @@ public class QuestionsOptionsTest {
     }
 
     @Test
-    public void testSaveWithAllRelationsOrder() throws Exception {
-        this.withQuestionModel().withAnswersModelsInjected().withAnswers();
-        final InOrder inOrder = inOrder(this.answersService, this.answersService);
+    public void testSaveWithTopicRelations() throws Exception {
+        this.withQuestionModel().withTopicsModelsInjected().withTopic();
+        final ArgumentCaptor<TopicsOptionsInterface> topicsOptionsCaptor = ArgumentCaptor.forClass(TopicsOptionsInterface.class);;
+
 
         this.questionsOptions.saveWithRelations(this.questionModel);
 
-        inOrder.verify(this.questionsService, times(1)).save(any());
+        verify(this.questionsService, times(1)).save(this.questionModel);
+        verify(this.topicsService, times(1)).save(this.listCaptor.capture(), topicsOptionsCaptor.capture());
+        Assert.assertSame(this.topicsModels, this.listCaptor.getValue());
+        Assert.assertSame(this.topicsOptions, topicsOptionsCaptor.getValue());
+    }
+
+    @Test
+    public void testSaveWithAllRelationsOrder() throws Exception {
+        //this.withQuestionModel().withTopicsModelInjected().withTopic();
+        this.withQuestionModel().withAnswersModelsInjected().withAnswers();
+        //this.withQuestionModel().withQuestionTypesModelInjected().withQuestionType();
+
+        final InOrder inOrder = inOrder(this.answersService);
+//, this.questionTypesService, this.topicsService
+
+        this.questionsOptions.saveWithRelations(this.questionModel);
+
+        inOrder.verify(this.questionsService, times(1)).save(any(QuestionModelInterface.class));
+        inOrder.verify(this.topicsService,times(1)).save(any(TopicModelInterface.class));
         inOrder.verify(this.answersService, times(1)).save(anyList(),any());
+
     }
 
     @Test
@@ -275,44 +312,6 @@ public class QuestionsOptionsTest {
 
 /*
     ////////////////////////
-    @Test
-    public void testWithRelationsOnSingleModel() throws Exception {
-        final QuestionModelInterface questionModel = Mockito.mock(QuestionModelInterface.class);
-        questionModel.setId(1);
-        given(questionModel.getTopic()).willReturn(new TopicModelEmpty(1));
-        given(questionModel.getQuestionType()).willReturn(new QuestionTypeModelEmpty(1));
-        final QuestionsOptionsInterface questionsOptions = new QuestionsOptions();
-        final AnswersServiceInterface answersService = Mockito.mock(AnswersServiceInterface.class);
-        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        final TopicsOptionsInterface topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
-        final QuestionTypesServiceInterface questionTypesService = Mockito.mock(QuestionTypesServiceInterface.class);
-        final QuestionTypesOptionsInterface questionTypesOptions = Mockito.mock(QuestionTypesOptionsInterface.class);
-        questionsOptions.setAnswersService(answersService);
-        questionsOptions.withAnswers(answersOptions);
-        questionsOptions.setTopicsService(topicsService);
-        questionsOptions.withTopic(topicsOptions);
-        questionsOptions.setQuestionTypesService(questionTypesService);
-        questionsOptions.withQuestionType(questionTypesOptions);
-        final List<AnswerModelInterface> answersModels = new ArrayList<>();
-        answersModels.add(Mockito.mock(AnswerModelInterface.class));
-        TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        QuestionTypeModelInterface questionTypeModel = Mockito.mock(QuestionTypeModelInterface.class);
-        given(answersService.findByQuestion(questionModel, answersOptions)).willReturn(answersModels);
-        given(topicsService.find(questionModel.getTopic().getId(), topicsOptions)).willReturn(topicModel);
-        given(questionTypesService.find(questionModel.getQuestionType().getId(), questionTypesOptions)).willReturn(questionTypeModel);
-
-        final QuestionModelInterface questionModelWithRelations = questionsOptions.withRelations(questionModel);
-
-        Assert.assertEquals(questionModel, questionModelWithRelations);
-        verify(answersService).findByQuestion(questionModel, answersOptions);
-        verify(topicsService).find(questionModel.getTopic().getId(), topicsOptions);
-        verify(questionTypesService).find(questionModel.getQuestionType().getId(), questionTypesOptions);
-        verify(questionModel).setAnswers(answersModels);
-        verify(questionModel).setTopic(topicModel);
-        verify(questionModel).setQuestionType(questionTypeModel);
-        verify(questionModel).setAnswers(Mockito.anyList());
-    }
 
     @Test
     public void testWithRelationsOnNull() throws Exception {
