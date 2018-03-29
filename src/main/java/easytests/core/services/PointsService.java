@@ -171,7 +171,5 @@ public class PointsService implements PointsServiceInterface {
         pointsOptions.setSolutionsService(this.solutionsService);
 
         return pointsOptions;
-
     }
-
 }
