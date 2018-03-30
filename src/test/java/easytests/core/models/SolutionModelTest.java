@@ -15,9 +15,7 @@ public class SolutionModelTest extends AbstractModelTest {
 
     @Override
     protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder()
-                .ignoreProperty("answer")
-                .ignoreProperty("point");
+        return super.getConfigurationBuilder();
     }
 
     @Test

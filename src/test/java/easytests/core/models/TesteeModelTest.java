@@ -5,6 +5,7 @@ import easytests.support.TesteesSupport;
 import org.junit.Test;
 import org.meanbean.test.ConfigurationBuilder;
 
+
 /**
  * @author Yarik2308
  */
@@ -14,8 +15,7 @@ public class TesteeModelTest extends AbstractModelTest{
 
     @Override
     protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder()
-                .ignoreProperty("quiz");
+        return super.getConfigurationBuilder();
     }
 
     @Test
