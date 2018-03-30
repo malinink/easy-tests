@@ -164,6 +164,7 @@
                     <excludes>
                         <exclude>**/EasyTestsApplication.java</exclude>
                         <exclude>easytests/swagger/*</exclude>
+                        <exclude>easytests/personal/**/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
