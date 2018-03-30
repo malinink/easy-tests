@@ -10,20 +10,20 @@ import java.time.LocalDateTime;
  * @author malinink
  */
 public abstract class Entities {
-    public static IssueStandardEntity createIssueStandardEntityMock(
-            Integer id,
-            Integer timeLimit,
-            Integer questionsNumber,
-            Integer subjectId
-    ) {
-
-        final IssueStandardEntity issueStandardEntity = Mockito.mock(IssueStandardEntity.class);
-        Mockito.when(issueStandardEntity.getId()).thenReturn(id);
-        Mockito.when(issueStandardEntity.getTimeLimit()).thenReturn(timeLimit);
-        Mockito.when(issueStandardEntity.getQuestionsNumber()).thenReturn(questionsNumber);
-        Mockito.when(issueStandardEntity.getSubjectId()).thenReturn(subjectId);
-        return issueStandardEntity;
-    }
+//    public static IssueStandardEntity createIssueStandardEntityMock(
+//            Integer id,
+//            Integer timeLimit,
+//            Integer questionsNumber,
+//            Integer subjectId
+//    ) {
+//
+//        final IssueStandardEntity issueStandardEntity = Mockito.mock(IssueStandardEntity.class);
+//        Mockito.when(issueStandardEntity.getId()).thenReturn(id);
+//        Mockito.when(issueStandardEntity.getTimeLimit()).thenReturn(timeLimit);
+//        Mockito.when(issueStandardEntity.getQuestionsNumber()).thenReturn(questionsNumber);
+//        Mockito.when(issueStandardEntity.getSubjectId()).thenReturn(subjectId);
+//        return issueStandardEntity;
+//    }
 
     public static IssueStandardTopicPriorityEntity createTopicPriorityEntityMock(
             Integer id,

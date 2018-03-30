@@ -55,7 +55,7 @@ public class IssueStandardOptionsTest {
         issueStandardsOptions
                 .withTopicPriorities(topicPrioritiesOptions)
                 .withQuestionTypeOptions(questionTypeOptionsOptions)
-                .withSubject(subjectsOptions);
+                .withSubjects(subjectsOptions);
 
         final IssueStandardModelInterface issueStandardModel = null;
 
@@ -125,7 +125,7 @@ public class IssueStandardOptionsTest {
         issueStandardsOptions
                 .withTopicPriorities(topicPrioritiesOptions)
                 .withQuestionTypeOptions(questionTypeOptionsOptions)
-                .withSubject(subjectsOptions);
+                .withSubjects(subjectsOptions);
 
         // теперь options заданы
         final IssueStandardModelInterface issueStandardModelWithRelations
@@ -233,7 +233,7 @@ public class IssueStandardOptionsTest {
         issueStandardsOptions
                 .withTopicPriorities(topicPrioritiesOptions)
                 .withQuestionTypeOptions(questionTypeOptionsOptions)
-                .withSubject(subjectsOptions);
+                .withSubjects(subjectsOptions);
 
         // теперь options заданы
         List<IssueStandardModelInterface> issueStandardModelsWithRelations
@@ -291,7 +291,7 @@ public class IssueStandardOptionsTest {
         issueStandardsOptions
                 .withTopicPriorities(topicPrioritiesOptions)
                 .withQuestionTypeOptions(questionTypeOptionsOptions)
-                .withSubject(subjectsOptions);
+                .withSubjects(subjectsOptions);
 
         final InOrder inOrder = Mockito.inOrder(
                 subjectsService, issueStandardsService,
@@ -342,7 +342,7 @@ public class IssueStandardOptionsTest {
         issueStandardsOptions
                 .withTopicPriorities(topicPrioritiesOptions)
                 .withQuestionTypeOptions(questionTypeOptionsOptions)
-                .withSubject(subjectsOptions);
+                .withSubjects(subjectsOptions);
 
         final InOrder inOrder = Mockito.inOrder(
                 subjectsService, issueStandardsService,

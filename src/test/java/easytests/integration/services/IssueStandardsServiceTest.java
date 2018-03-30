@@ -46,7 +46,7 @@ public class IssueStandardsServiceTest extends AbstractServiceTest {
         issueStandardModel.setSubject(subjectModel);
 
         final IssueStandardModelInterface foundedIssueStandardModel
-                = this.issueStandardsService.find(id, new IssueStandardsOptions().withSubject(new SubjectsOptions()));
+                = this.issueStandardsService.find(id, new IssueStandardsOptions().withSubjects(new SubjectsOptions()));
 
         Assert.assertEquals(issueStandardModel, foundedIssueStandardModel);
         Assert.assertEquals(subjectModel, foundedIssueStandardModel.getSubject());

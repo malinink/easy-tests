@@ -36,7 +36,7 @@ public class IssueStandardsOptionsBuilderTest {
 
         final IssueStandardsOptionsInterface issueStandardsOptions = this.issueStandardsOptionsBuilder.forAuth();
 
-        Assert.assertEquals(new IssueStandardsOptions().withSubject(subjectsOptions), issueStandardsOptions);
+        Assert.assertEquals(new IssueStandardsOptions().withSubjects(subjectsOptions), issueStandardsOptions);
     }
 
     @Test

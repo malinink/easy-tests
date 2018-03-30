@@ -28,6 +28,6 @@ public class IssueStandardsOptionsBuilder implements IssueStandardsOptionsBuilde
 
     @Override
     public IssueStandardsOptionsInterface forAuth() {
-        return new IssueStandardsOptions().withSubject(this.subjectsOptionsBuilder.forAuth());
+        return new IssueStandardsOptions().withSubjects(this.subjectsOptionsBuilder.forAuth());
     }
 }

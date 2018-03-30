@@ -26,7 +26,7 @@ public interface IssueStandardsOptionsInterface extends OptionsInterface {
     IssueStandardsOptionsInterface withQuestionTypeOptions(
             IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions);
 
-    IssueStandardsOptionsInterface withSubject(SubjectsOptionsInterface subjectsOptions);
+    IssueStandardsOptionsInterface withSubjects(SubjectsOptionsInterface subjectsOptions);
 
     IssueStandardModelInterface withRelations(IssueStandardModelInterface issueStandardModel);
 
