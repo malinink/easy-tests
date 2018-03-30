@@ -4,6 +4,7 @@ import easytests.core.entities.SolutionEntity;
 import easytests.core.models.SolutionModelInterface;
 import easytests.core.models.empty.AnswerModelEmpty;
 import easytests.core.models.empty.PointModelEmpty;
+import java.util.List;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -57,7 +58,7 @@ public class SolutionsSupport {
     };
 
     public SolutionEntity getEntityFixtureMock(Integer index) {
-        return  this.getEntityMock(fixtures[index]);
+        return this.getEntityMock(fixtures[index]);
     }
 
     public SolutionEntity getEntityAdditionalMock(Integer index) {
@@ -158,6 +159,25 @@ public class SolutionsSupport {
 
     public void assertEquals(SolutionEntity expected, SolutionModelInterface actual) {
         assertEquals(actual, expected);
+        Assert.assertEquals(new PointModelEmpty(expected.getPointId()), actual.getPoint());
+        Assert.assertEquals(new AnswerModelEmpty(expected.getAnswerId()), actual.getAnswer());
     }
 
+    public void assertModelsListEquals(List<SolutionModelInterface> expected, List<SolutionModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (SolutionModelInterface solutionModel : expected) {
+            this.assertEquals(solutionModel, actual.get(i));
+            i++;
+        }
+    }
+
+    public void assertEntitiesListEquals(List<SolutionEntity> expected, List<SolutionEntity> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (SolutionEntity solutionEntity : expected) {
+            this.assertEquals(solutionEntity, actual.get(i));
+            i++;
+        }
+    }
 }

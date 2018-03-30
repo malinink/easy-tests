@@ -4,17 +4,15 @@ import easytests.core.entities.AnswerEntity;
 import easytests.core.mappers.AnswersMapper;
 import easytests.core.models.AnswerModel;
 import easytests.core.models.AnswerModelInterface;
-import easytests.core.models.QuestionModelInterface;
 import easytests.core.options.AnswersOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
-
+import easytests.support.AnswersSupport;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
-
+import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
@@ -22,8 +20,9 @@ import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.mock.mockito.*;
 import org.springframework.test.context.junit4.*;
 
+
 /**
- * @author malinink
+ * @author sakhprace
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -38,161 +37,292 @@ public class AnswersServiceTest {
     @Autowired
     private AnswersService answersService;
 
-    private AnswerModelInterface createAnswerModel(Integer id, String txt,
-                                                   QuestionModelInterface question, Integer serialNumber,
-                                                   boolean right) {
-        final AnswerModelInterface answerModel = new AnswerModel();
-        answerModel.setId(id);
-        answerModel.setTxt(txt);
-        answerModel.setQuestion(question);
-        answerModel.setSerialNumber(serialNumber);
-        answerModel.setRight(right);
-        return answerModel;
+    private AnswersSupport answersSupport = new AnswersSupport();
+
+    private List<AnswerEntity> getAnswersFixturesEntities() {
+        final List<AnswerEntity> answersEntities = new ArrayList<>(2);
+        answersEntities.add(this.answersSupport.getEntityFixtureMock(0));
+        answersEntities.add(this.answersSupport.getEntityFixtureMock(2));
+        return answersEntities;
     }
 
-    private AnswerModelInterface createAnswerModel(Integer id, String txt,
-                                                   Integer questionId, Integer serialNumber, Boolean right) {
-
-        final AnswerModelInterface answerModel = new AnswerModel();
-        answerModel.setId(id);
-        answerModel.setTxt(txt);
-        answerModel.setSerialNumber(serialNumber);
-        answerModel.setRight(true);
-
-        final QuestionModelInterface questionModel = Mockito.mock(QuestionModelInterface.class);
-        Mockito.when(questionModel.getId()).thenReturn(questionId);
-
-        answerModel.setQuestion(questionModel);
-
-        return answerModel;
-
+    private List<AnswerModelInterface> getAnswersFixturesModels() {
+        final List<AnswerModelInterface> answersModels = new ArrayList<>(2);
+        answersModels.add(this.answersSupport.getModelFixtureMock(0));
+        answersModels.add(this.answersSupport.getModelFixtureMock(2));
+        return answersModels;
     }
 
-    private AnswerEntity createAnswerEntityMock(Integer id, String txt,
-                                                Integer questionId, Integer serialNumber, boolean right) {
-        final AnswerEntity answerEntity = Mockito.mock(AnswerEntity.class);
-        Mockito.when(answerEntity.getId()).thenReturn(id);
-        Mockito.when(answerEntity.getTxt()).thenReturn(txt);
-        Mockito.when(answerEntity.getQuestionId()).thenReturn(questionId);
-        Mockito.when(answerEntity.getSerialNumber()).thenReturn(serialNumber);
-        Mockito.when(answerEntity.getRight()).thenReturn(right);
-        return answerEntity;
+    private List<AnswerModelInterface> getAnswersAdditionalModels() {
+        final List<AnswerModelInterface> answersModels = new ArrayList<>(2);
+        answersModels.add(this.answersSupport.getModelAdditionalMock(0));
+        answersModels.add(this.answersSupport.getModelAdditionalMock(1));
+        return answersModels;
     }
 
-    private AnswerModelInterface mapAnswerModel(AnswerEntity answerEntity) {
-        final AnswerModelInterface answerModel = new AnswerModel();
-        answerModel.map(answerEntity);
-        return answerModel;
-    }
 
-    private AnswerEntity mapAnswerEntity(AnswerModelInterface answerModel) {
-        final AnswerEntity answerEntity = new AnswerEntity();
-        answerEntity.map(answerModel);
-        return answerEntity;
+    private void assertEquals(List<AnswerModelInterface> expected, List<AnswerModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (AnswerModelInterface answerModel: expected) {
+            this.answersSupport.assertEquals(answerModel, actual.get(i));
+            i++;
+        }
     }
 
     @Test
     public void testFindAllPresentList() throws Exception {
-        final List<AnswerEntity> answersEntities = new ArrayList<>(2);
-        final AnswerEntity answerEntityFirst = this.createAnswerEntityMock(1, "Answer1", 1, 1, true);
-        final AnswerEntity answerEntitySecond = this.createAnswerEntityMock(2, "Answer2", 2, 2, false);
-        answersEntities.add(answerEntityFirst);
-        answersEntities.add(answerEntitySecond);
-        given(this.answersMapper.findAll()).willReturn(answersEntities);
+        final List<AnswerEntity> answersEntities = this.getAnswersFixturesEntities();
+        when(this.answersMapper.findAll()).thenReturn(answersEntities);
 
-        final List<AnswerModelInterface> answersModels = this.answersService.findAll();
+        final List<AnswerModelInterface> answersFoundedModels = this.answersService.findAll();
 
-        Assert.assertEquals(2, answersModels.size());
-        Assert.assertEquals(answersModels.get(0), this.mapAnswerModel(answerEntityFirst));
-        Assert.assertEquals(answersModels.get(1), this.mapAnswerModel(answerEntitySecond));
+        this.assertEquals(this.getAnswersFixturesModels(), answersFoundedModels);
     }
 
     @Test
     public void testFindAllAbsentList() throws Exception {
-        given(this.answersMapper.findAll()).willReturn(new ArrayList<>(0));
+        when(this.answersMapper.findAll()).thenReturn(new ArrayList<>(0));
 
-        final List<AnswerModelInterface> answersModels = this.answersService.findAll();
+        final List<AnswerModelInterface> answersFoundedModels = this.answersService.findAll();
 
-        Assert.assertEquals(0, answersModels.size());
+        Assert.assertNotNull(answersFoundedModels);
+        Assert.assertEquals(0, answersFoundedModels.size());
+    }
+
+    @Test
+    public void testFindAllWithOptions() throws Exception {
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final List<AnswerEntity> answersEntities = getAnswersFixturesEntities();
+        final List<AnswerModelInterface> answersModels = getAnswersFixturesModels();
+        final AnswersOptionsInterface answersOptions = mock(AnswersOptionsInterface.class);
+        when(this.answersMapper.findAll()).thenReturn(answersEntities);
+        when(answersOptions.withRelations(listCaptor.capture())).thenReturn(answersModels);
+
+        final List<AnswerModelInterface> answersFoundedModels = this.answersService.findAll(answersOptions);
+
+        this.assertEquals(answersFoundedModels, listCaptor.getValue());
+        Assert.assertSame(answersModels, answersFoundedModels);
+        verify(this.answersMapper, times(1)).findAll();
+        verifyNoMoreInteractions(this.answersMapper);
     }
 
     @Test
     public void testFindPresentModel() throws Exception {
-        final Integer id = 1;
-        final AnswerEntity answerEntity = this.createAnswerEntityMock(id, "NewAnswer", 1, 1, true);
-        given(this.answersMapper.find(id)).willReturn(answerEntity);
+        final AnswerEntity answerEntity = this.answersSupport.getEntityFixtureMock(0);
+        when(this.answersMapper.find(answerEntity.getId())).thenReturn(answerEntity);
 
-        final AnswerModelInterface answerModel = this.answersService.find(id);
+        final AnswerModelInterface answerFoundedModel = this.answersService.find(answerEntity.getId());
 
-        Assert.assertEquals(this.mapAnswerModel(answerEntity), answerModel);
-    }
-
-    @Test
-    public void testFindWithOptions() throws Exception {
-        final Integer id = 1;
-        final AnswerEntity answerEntity = this.createAnswerEntityMock(id, "NewAnswer", 1, 1, true);
-        final AnswerModelInterface answerModel = this.mapAnswerModel(answerEntity);
-
-        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
-        given(this.answersMapper.find(id)).willReturn(answerEntity);
-        given(answersOptions.withRelations(answerModel)).willReturn(answerModel);
-
-        final AnswerModelInterface foundedAnswerModel
-                = this.answersService.find(id, answersOptions);
-
-        verify(answersOptions).withRelations(answerModel);
-        Assert.assertNotNull(foundedAnswerModel);
-        Assert.assertEquals(answerModel, foundedAnswerModel);
+        this.answersSupport.assertEquals(this.answersSupport.getModelFixtureMock(0), answerFoundedModel);
     }
 
     @Test
     public void testFindAbsentModel() throws Exception {
-        final Integer id = 10;
-        given(this.answersMapper.find(id)).willReturn(null);
+        final Integer absentId = 12;
+        when(this.answersMapper.find(absentId)).thenReturn(null);
 
-        final AnswerModelInterface answerModel = this.answersService.find(id);
+        final AnswerModelInterface answerFoundedModel = this.answersService.find(absentId);
 
-        Assert.assertEquals(null, answerModel);
+        Assert.assertNull(answerFoundedModel);
+    }
+
+    @Test
+    public void testFindWithOptions() throws Exception {
+        final ArgumentCaptor<AnswerModelInterface> answerModelCaptor = ArgumentCaptor.forClass(AnswerModelInterface.class);
+        final AnswerModelInterface answerModel = this.answersSupport.getModelFixtureMock(0);
+        final AnswerEntity answerEntity = this.answersSupport.getEntityFixtureMock(0);
+        final AnswersOptionsInterface answersOptions = mock(AnswersOptionsInterface.class);
+        when(this.answersMapper.find(answerModel.getId())).thenReturn(answerEntity);
+        when(answersOptions.withRelations(answerModelCaptor.capture())).thenReturn(answerModel);
+
+        final AnswerModelInterface answerFoundedModel = this.answersService.find(answerModel.getId(), answersOptions);
+
+        this.answersSupport.assertEquals(answerModel, answerModelCaptor.getValue());
+        Assert.assertSame(answerModel, answerFoundedModel);
+        verify(this.answersMapper, times(1)).find(answerModel.getId());
+        verifyNoMoreInteractions(this.answersMapper);
+    }
+
+    @Test
+    public void testFindByPresentQuestion() throws Exception {
+        final List<AnswerModelInterface> answersModels = getAnswersFixturesModels();
+        final List<AnswerEntity> answersEntities = getAnswersFixturesEntities();
+        when(this.answersMapper.findByQuestionId(answersModels.get(0).getQuestion().getId())).thenReturn(answersEntities);
+
+        final List<AnswerModelInterface> answersFoundedModels = this.answersService.findByQuestion(answersModels.get(0).getQuestion());
+
+        Integer index = 0;
+        for (AnswerModelInterface answerModel1: answersFoundedModels) {
+            this.answersSupport.assertEquals(answerModel1, answersEntities.get(index));
+
+            index++;
+        }
+    }
+
+    @Test
+    public void testFindByAbsentQuestion() throws Exception {
+        final AnswerModelInterface answerModel = this.answersSupport.getModelAdditionalMock(2);
+
+        final List<AnswerModelInterface> answerFoundedModels = this.answersService.findByQuestion(answerModel.getQuestion());
+
+        Assert.assertEquals(0, answerFoundedModels.size());
+    }
+
+    @Test
+    public void testFindByQuestionWithOptions() throws Exception {
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final List<AnswerModelInterface> answersModels = getAnswersFixturesModels();
+        final List<AnswerEntity> answersEntities = getAnswersFixturesEntities();
+        final AnswersOptionsInterface answerOptions = mock(AnswersOptionsInterface.class);
+        when(this.answersMapper.findByQuestionId(answersModels.get(0).getQuestion().getId())).thenReturn(answersEntities);
+        when(answerOptions.withRelations(listCaptor.capture())).thenReturn(answersModels);
+
+        final List<AnswerModelInterface> answersFoundedModels = this.answersService.findByQuestion(answersModels.get(0).getQuestion(), answerOptions);
+
+        this.assertEquals(answersFoundedModels, listCaptor.getValue());
+        Assert.assertSame(answersModels, answersFoundedModels);
+        verify(this.answersMapper, times(1)).findByQuestionId(answersModels.get(0).getQuestion().getId());
+        verifyNoMoreInteractions(this.answersMapper);
     }
 
     @Test
     public void testSaveCreatesEntity() throws Exception {
-        final AnswerModelInterface answerModel = this.createAnswerModel(null, "Answer11", 1, 1, true);
-        doAnswer(invocation -> {
-            final AnswerEntity answerEntity = (AnswerEntity) invocation.getArguments()[0];
-            answerEntity.setId(100);
-            return null;
-        }).when(this.answersMapper).insert(Mockito.any(AnswerEntity.class));
-        this.answersService.save(answerModel);
+        final ArgumentCaptor<AnswerEntity> answerEntityCaptor = ArgumentCaptor.forClass(AnswerEntity.class);
 
-        // TODO verify(this.answersMapper, times(1)).insert(this.mapAnswerEntity(answerModel));
-        Assert.assertEquals((Integer) 100, answerModel.getId());
+        this.answersService.save(this.answersSupport.getModelAdditionalMock(0));
+
+        verify(this.answersMapper, times(1)).insert(answerEntityCaptor.capture());
+        this.answersSupport.assertEquals(this.answersSupport.getEntityAdditionalMock(0), answerEntityCaptor.getValue());
     }
 
     @Test
     public void testSaveUpdatesEntity() throws Exception {
-        final AnswerModelInterface answerModel = this.createAnswerModel(1, "Answer22", 1, 1, true);
+        final ArgumentCaptor<AnswerEntity> answerEntityCaptor = ArgumentCaptor.forClass(AnswerEntity.class);
 
-        this.answersService.save(answerModel);
+        this.answersService.save(this.answersSupport.getModelFixtureMock(0));
 
-        verify(this.answersMapper, times(1)).update(this.mapAnswerEntity(answerModel));
+        verify(this.answersMapper, times(1)).update(answerEntityCaptor.capture());
+        this.answersSupport.assertEquals(this.answersSupport.getEntityFixtureMock(0), answerEntityCaptor.getValue());
+    }
+
+    @Test
+    public void testSaveUpdateEntityIdOnCreation() throws Exception {
+        final AnswerModelInterface answerAdditionalModel = this.answersSupport.getModelAdditionalMock(0);
+        doAnswer(invocation -> {
+            final AnswerEntity answerEntity = (AnswerEntity) invocation.getArguments()[0];
+            answerEntity.setId(5);
+            return null;
+        }).when(this.answersMapper).insert(Mockito.any(AnswerEntity.class));
+
+        this.answersService.save(answerAdditionalModel);
+
+        verify(answerAdditionalModel, times(1)).setId(5);
+    }
+
+    @Test
+    public void testSaveWithOptions() throws Exception {
+        final AnswerModelInterface answerModel = this.answersSupport.getModelFixtureMock(0);
+        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
+
+        this.answersService.save(answerModel, answersOptions);
+
+        verify(answersOptions, times(1)).saveWithRelations(answerModel);
+        verifyNoMoreInteractions(this.answersMapper);
+    }
+
+    @Test
+    public void testSaveCreatesListEntities() throws Exception {
+        final ArgumentCaptor<AnswerEntity> answerEntityCaptor = ArgumentCaptor.forClass(AnswerEntity.class);
+        final List<AnswerModelInterface> answersModels = getAnswersAdditionalModels();
+
+        this.answersService.save(answersModels);
+
+        verify(this.answersMapper, times(2)).insert(answerEntityCaptor.capture());
+        final List<AnswerEntity> capturedEntities = answerEntityCaptor.getAllValues();
+
+        Integer index = 0;
+        for (AnswerModelInterface answerModel: answersModels) {
+            this.answersSupport.assertEquals(answersModels.get(index), capturedEntities.get(index));
+            index++;
+        }
+    }
+
+    @Test
+    public void testSaveCreatesListEntitiesWithOptions() throws Exception {
+        final List<AnswerModelInterface> answersModels = getAnswersAdditionalModels();
+        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
+
+        this.answersService.save(answersModels, answersOptions);
+        Integer index = 0;
+        for (AnswerModelInterface answersModel: answersModels) {
+            verify(answersOptions, times(1)).saveWithRelations(answersModels.get(index));
+            index++;
+        }
+        verifyNoMoreInteractions(this.answersMapper);
     }
 
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
-        final AnswerModelInterface answerModel = this.createAnswerModel(1, "Answer3", 1, 1, true);
+        final ArgumentCaptor<AnswerEntity> answerEntityCaptor = ArgumentCaptor.forClass(AnswerEntity.class);
 
-        this.answersService.delete(answerModel);
+        this.answersService.delete(this.answersSupport.getModelFixtureMock(0));
 
-        verify(this.answersMapper, times(1)).delete(this.mapAnswerEntity(answerModel));
+        verify(this.answersMapper, times(1)).delete(answerEntityCaptor.capture());
+        this.answersSupport.assertEquals(this.answersSupport.getEntityFixtureMock(0), answerEntityCaptor.getValue());
     }
 
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
-        final AnswerModelInterface answerModel = this.createAnswerModel(null, "Answer4", 1, 1, true);
+        final AnswerModelInterface answerModel = this.answersSupport.getModelAdditionalMock(0);
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.answersService.delete(answerModel);
     }
 
+    @Test
+    public void testDeleteModelWithOptions() throws Exception {
+        final ArgumentCaptor<AnswerModel> answerModelCaptor = ArgumentCaptor.forClass(AnswerModel.class);
+        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
+
+        this.answersService.delete(this.answersSupport.getModelFixtureMock(0), answersOptions);
+
+        verify(answersOptions, times(1)).deleteWithRelations(answerModelCaptor.capture());
+        this.answersSupport.assertEquals(this.answersSupport.getModelFixtureMock(0), answerModelCaptor.getValue());
+        verifyNoMoreInteractions(this.answersMapper);
+    }
+
+    @Test
+    public void testDeleteModelList() throws Exception {
+        final ArgumentCaptor<AnswerEntity> answerEntityCaptor = ArgumentCaptor.forClass(AnswerEntity.class);
+        final List<AnswerModelInterface> answersModels = getAnswersFixturesModels();
+
+        this.answersService.delete(answersModels);
+        verify(this.answersMapper, times(2)).delete(answerEntityCaptor.capture());
+        final List<AnswerEntity> capturedEntities = answerEntityCaptor.getAllValues();
+
+        Integer index = 0;
+        for (AnswerModelInterface answerModel: answersModels) {
+            this.answersSupport.assertEquals(answerModel, capturedEntities.get(index));
+            index++;
+        }
+    }
+
+    @Test
+    public void testDeleteModelListWithOptions() throws Exception {
+        final ArgumentCaptor<AnswerModel> answerModelCaptor = ArgumentCaptor.forClass(AnswerModel.class);
+        final AnswersOptionsInterface answersOptions = Mockito.mock(AnswersOptionsInterface.class);
+        final List<AnswerModelInterface> answersModels = getAnswersFixturesModels();
+
+        this.answersService.delete(answersModels, answersOptions);
+
+        verify(answersOptions, times(2)).deleteWithRelations(answerModelCaptor.capture());
+        final List<AnswerModel> capturedModels = answerModelCaptor.getAllValues();
+        Integer index = 0;
+        for (AnswerModelInterface answerModel: answersModels) {
+            this.answersSupport.assertEquals(answerModel, capturedModels.get(index));
+            index++;
+        }
+        verifyNoMoreInteractions(this.answersMapper);
+    }
 }
