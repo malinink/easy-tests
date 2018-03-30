@@ -151,7 +151,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.6.201602180812</version>
+                <version>[0.8.1, 0.9.0)</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -163,6 +163,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/EasyTestsApplication.java</exclude>
+                        <exclude>easytests/swagger/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
