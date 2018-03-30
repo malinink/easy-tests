@@ -45,7 +45,11 @@ public class AbstractMeanBeanTest {
             {
                     AnswerModelInterface.class,
                     new AnswerModelFactory()
-            }
+            },
+            {
+                    QuestionModelInterface.class,
+                    new QuestionModelFactory()
+            },
     };
 
     private BeanTester beanTester;
