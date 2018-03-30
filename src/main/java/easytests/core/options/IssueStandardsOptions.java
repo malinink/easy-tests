@@ -49,7 +49,7 @@ public class IssueStandardsOptions implements IssueStandardsOptionsInterface {
 
     @Override
     public IssueStandardsOptionsInterface
-    withSubject(SubjectsOptionsInterface subjectsOptions) {
+        withSubject(SubjectsOptionsInterface subjectsOptions) {
         this.subjectsOptions = subjectsOptions;
         return this;
     }
