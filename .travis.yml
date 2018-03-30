@@ -3,6 +3,9 @@ jdk:
 - openjdk8
 services:
 - postgresql
+cache:
+  directories:
+  - $HOME/.m2
 install:
 - cp src/main/resources/application.travis.properties src/main/resources/application.properties
 - cp src/main/resources/database.travis.properties src/main/resources/database.properties
