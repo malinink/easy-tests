@@ -93,9 +93,9 @@ public abstract class Entities {
     }
 
     public static QuestionEntity createQuestionEntityMock(
-            Integer id, 
-            String text, 
-            Integer questionTypeId, 
+            Integer id,
+            String text,
+            Integer questionTypeId,
             Integer topicId
     ) {
         final QuestionEntity questionEntity = Mockito.mock(QuestionEntity.class);

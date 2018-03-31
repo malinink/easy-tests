@@ -11,13 +11,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 /**
-/**
-@author fortyways
+ * /**
+ *
+ * @author fortyways
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -27,13 +29,15 @@ public class AuthControllerTest {
     MockMvc mockMvc;
     @InjectMocks
     AuthController controller;
+
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
+
     @Test
-    public void testSignInWithoutSession() throws Exception{
+    public void testSignInWithoutSession() throws Exception {
 
         mockMvc.perform(get("/auth/sign-in"))
                 .andExpect(status().isOk())
@@ -44,11 +48,11 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void testSignInWithSession() throws Exception{
+    public void testSignInWithSession() throws Exception {
 
         MockHttpSession session = new MockHttpSession();
 
-        session.setAttribute("LAST_LOGIN","sup");
+        session.setAttribute("LAST_LOGIN", "sup");
 
         mockMvc.perform(get("/auth/sign-in").session(session))
 

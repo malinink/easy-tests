@@ -4,7 +4,9 @@ import easytests.core.models.IssueStandardQuestionTypeOptionModelInterface;
 import easytests.core.services.IssueStandardQuestionTypeOptionsServiceInterface;
 import easytests.core.services.IssueStandardsServiceInterface;
 import easytests.core.services.QuestionTypesServiceInterface;
+
 import java.util.List;
+
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
@@ -29,21 +31,21 @@ public class IssueStandardQuestionTypeOptionsOptions implements IssueStandardQue
 
     @Override
     public IssueStandardQuestionTypeOptionsOptionsInterface
-        withQuestionType(QuestionTypesOptionsInterface questionTypesOptions) {
+    withQuestionType(QuestionTypesOptionsInterface questionTypesOptions) {
         this.questionTypesOptions = questionTypesOptions;
         return this;
     }
 
     @Override
     public IssueStandardQuestionTypeOptionsOptionsInterface
-        withIssueStandard(IssueStandardsOptionsInterface issueStandardsOptions) {
+    withIssueStandard(IssueStandardsOptionsInterface issueStandardsOptions) {
         this.issueStandardsOptions = issueStandardsOptions;
         return this;
     }
 
     @Override
     public IssueStandardQuestionTypeOptionModelInterface
-        withRelations(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel) {
+    withRelations(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel) {
 
         if (questionTypeOptionModel == null) {
             return questionTypeOptionModel;
@@ -63,9 +65,9 @@ public class IssueStandardQuestionTypeOptionsOptions implements IssueStandardQue
 
     @Override
     public List<IssueStandardQuestionTypeOptionModelInterface>
-        withRelations(List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels) {
+    withRelations(List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels) {
 
-        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel: questionTypeOptionModels) {
+        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel : questionTypeOptionModels) {
             this.withRelations(questionTypeOptionModel);
         }
         return questionTypeOptionModels;

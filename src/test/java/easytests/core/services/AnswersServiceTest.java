@@ -7,13 +7,17 @@ import easytests.core.models.AnswerModelInterface;
 import easytests.core.options.AnswersOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.AnswersSupport;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.BDDMockito.*;
+
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
@@ -64,7 +68,7 @@ public class AnswersServiceTest {
     private void assertEquals(List<AnswerModelInterface> expected, List<AnswerModelInterface> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (AnswerModelInterface answerModel: expected) {
+        for (AnswerModelInterface answerModel : expected) {
             this.answersSupport.assertEquals(answerModel, actual.get(i));
             i++;
         }
@@ -153,7 +157,7 @@ public class AnswersServiceTest {
         final List<AnswerModelInterface> answersFoundedModels = this.answersService.findByQuestion(answersModels.get(0).getQuestion());
 
         Integer index = 0;
-        for (AnswerModelInterface answerModel1: answersFoundedModels) {
+        for (AnswerModelInterface answerModel1 : answersFoundedModels) {
             this.answersSupport.assertEquals(answerModel1, answersEntities.get(index));
 
             index++;
@@ -242,7 +246,7 @@ public class AnswersServiceTest {
         final List<AnswerEntity> capturedEntities = answerEntityCaptor.getAllValues();
 
         Integer index = 0;
-        for (AnswerModelInterface answerModel: answersModels) {
+        for (AnswerModelInterface answerModel : answersModels) {
             this.answersSupport.assertEquals(answersModels.get(index), capturedEntities.get(index));
             index++;
         }
@@ -255,7 +259,7 @@ public class AnswersServiceTest {
 
         this.answersService.save(answersModels, answersOptions);
         Integer index = 0;
-        for (AnswerModelInterface answersModel: answersModels) {
+        for (AnswerModelInterface answersModel : answersModels) {
             verify(answersOptions, times(1)).saveWithRelations(answersModels.get(index));
             index++;
         }
@@ -302,7 +306,7 @@ public class AnswersServiceTest {
         final List<AnswerEntity> capturedEntities = answerEntityCaptor.getAllValues();
 
         Integer index = 0;
-        for (AnswerModelInterface answerModel: answersModels) {
+        for (AnswerModelInterface answerModel : answersModels) {
             this.answersSupport.assertEquals(answerModel, capturedEntities.get(index));
             index++;
         }
@@ -319,7 +323,7 @@ public class AnswersServiceTest {
         verify(answersOptions, times(2)).deleteWithRelations(answerModelCaptor.capture());
         final List<AnswerModel> capturedModels = answerModelCaptor.getAllValues();
         Integer index = 0;
-        for (AnswerModelInterface answerModel: answersModels) {
+        for (AnswerModelInterface answerModel : answersModels) {
             this.answersSupport.assertEquals(answerModel, capturedModels.get(index));
             index++;
         }

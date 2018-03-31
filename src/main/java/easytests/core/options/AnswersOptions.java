@@ -2,7 +2,9 @@ package easytests.core.options;
 
 import easytests.core.models.AnswerModelInterface;
 import easytests.core.services.*;
+
 import java.util.List;
+
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
@@ -45,7 +47,7 @@ public class AnswersOptions implements AnswersOptionsInterface {
     @Override
     public List<AnswerModelInterface> withRelations(List<AnswerModelInterface> answerModels) {
 
-        for (AnswerModelInterface answerModel: answerModels) {
+        for (AnswerModelInterface answerModel : answerModels) {
             this.withRelations(answerModel);
         }
         return answerModels;

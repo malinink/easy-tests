@@ -3,8 +3,10 @@ package easytests.core.mappers;
 import easytests.core.mappers.helpers.MapperTestHelper;
 import easytests.core.mappers.providers.MapperComponentProvider;
 import easytests.core.mappers.providers.MapperTestComponentProvider;
+
 import java.lang.reflect.Field;
 import java.util.*;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,17 +45,17 @@ public class EachMapperHaveOwnTestTest {
         final Set<Class> mappersClasses = new HashSet<>();
         final Set<Class> mappersWithTestsClasses = new HashSet<>();
 
-        for (BeanDefinition mapper: mappers) {
+        for (BeanDefinition mapper : mappers) {
             mappersClasses.add(Class.forName(mapper.getBeanClassName()));
         }
 
-        for (BeanDefinition mapperTest: mappersTests) {
+        for (BeanDefinition mapperTest : mappersTests) {
             final Class mapperTestClass = Class.forName(mapperTest.getBeanClassName());
             final Field mapperField = MapperTestHelper.findMapperFieldInTest(mapperTestClass);
 
             Assert.assertNotNull(
                     String.format(
-                        "Mapper '%1$s' use unknown mapper, or mapper have no @Mapper annotation",
+                            "Mapper '%1$s' use unknown mapper, or mapper have no @Mapper annotation",
                             mapperTestClass.getName()
                     ),
                     mapperField

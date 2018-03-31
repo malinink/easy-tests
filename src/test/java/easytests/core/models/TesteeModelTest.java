@@ -9,7 +9,7 @@ import org.meanbean.test.ConfigurationBuilder;
 /**
  * @author Yarik2308
  */
-public class TesteeModelTest extends AbstractModelTest{
+public class TesteeModelTest extends AbstractModelTest {
 
     protected TesteesSupport testeesSupport = new TesteesSupport();
 

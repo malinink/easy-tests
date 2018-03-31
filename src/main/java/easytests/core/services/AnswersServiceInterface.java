@@ -3,6 +3,7 @@ package easytests.core.services;
 import easytests.core.models.AnswerModelInterface;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.options.AnswersOptionsInterface;
+
 import java.util.List;
 
 /**
@@ -15,9 +16,9 @@ public interface AnswersServiceInterface extends ServiceInterface {
     List<AnswerModelInterface> findAll(AnswersOptionsInterface answersOptions);
 
     List<AnswerModelInterface> findByQuestion(QuestionModelInterface questionModel);
-    
+
     List<AnswerModelInterface> findByQuestion(
-            QuestionModelInterface questionModel, 
+            QuestionModelInterface questionModel,
             AnswersOptionsInterface answersOptions);
 
     AnswerModelInterface find(Integer id);
@@ -39,5 +40,5 @@ public interface AnswersServiceInterface extends ServiceInterface {
     void delete(List<AnswerModelInterface> answerModel);
 
     void delete(List<AnswerModelInterface> answerModel, AnswersOptionsInterface answersOptions);
-    
+
 }

@@ -6,21 +6,23 @@ import easytests.core.services.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.mockito.BDDMockito.given;
+
 import org.mockito.InOrder;
 
 import static org.mockito.Mockito.times;
+
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.verify;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-
 
 
 /**
@@ -249,7 +251,7 @@ public class SubjectsOptionsTest {
 
         subjectModel.setIssueStandard(issueStandardModel);
 
-        final InOrder inOrder = Mockito.inOrder(subjectsService, issueStandardsService, topicsService, issuesService) ;
+        final InOrder inOrder = Mockito.inOrder(subjectsService, issueStandardsService, topicsService, issuesService);
 
         subjectsOptions.saveWithRelations(subjectModel);
 
@@ -295,8 +297,7 @@ public class SubjectsOptionsTest {
         subjectModel.setIssueStandard(issueStandardModel);
 
 
-
-        final InOrder inOrder = Mockito.inOrder( topicsService,  issueStandardsService, issuesService, subjectsService);
+        final InOrder inOrder = Mockito.inOrder(topicsService, issueStandardsService, issuesService, subjectsService);
 
         subjectsOptions.deleteWithRelations(subjectModel);
 

@@ -7,8 +7,10 @@ import easytests.core.models.IssueStandardQuestionTypeOptionModel;
 import easytests.core.models.IssueStandardQuestionTypeOptionModelInterface;
 import easytests.core.options.IssueStandardQuestionTypeOptionsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,14 +59,14 @@ public class IssueStandardQuestionTypeOptionsService implements IssueStandardQue
 
     @Override
     public List<IssueStandardQuestionTypeOptionModelInterface>
-        findByIssueStandard(IssueStandardModelInterface issueStandard) {
+    findByIssueStandard(IssueStandardModelInterface issueStandard) {
 
         return this.map(this.questionTypeOptionsMapper.findByIssueStandardId(issueStandard.getId()));
     }
 
     @Override
     public List<IssueStandardQuestionTypeOptionModelInterface>
-        findByIssueStandard(IssueStandardModelInterface issueStandard,
+    findByIssueStandard(IssueStandardModelInterface issueStandard,
                         IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions) {
 
         return this.withServices(questionTypeOptionsOptions).withRelations(this.findByIssueStandard(issueStandard));
@@ -83,7 +85,7 @@ public class IssueStandardQuestionTypeOptionsService implements IssueStandardQue
 
     @Override
     public void save(List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels) {
-        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel: questionTypeOptionModels) {
+        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel : questionTypeOptionModels) {
             this.save(questionTypeOptionModel);
         }
     }
@@ -99,7 +101,7 @@ public class IssueStandardQuestionTypeOptionsService implements IssueStandardQue
     public void save(List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels,
                      IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions) {
 
-        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel: questionTypeOptionModels) {
+        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel : questionTypeOptionModels) {
             this.save(questionTypeOptionModel, questionTypeOptionsOptions);
         }
     }
@@ -115,7 +117,7 @@ public class IssueStandardQuestionTypeOptionsService implements IssueStandardQue
 
     @Override
     public void delete(List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels) {
-        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel: questionTypeOptionModels) {
+        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel : questionTypeOptionModels) {
             this.delete(questionTypeOptionModel);
         }
     }
@@ -131,13 +133,13 @@ public class IssueStandardQuestionTypeOptionsService implements IssueStandardQue
     public void delete(List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels,
                        IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions) {
 
-        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel: questionTypeOptionModels) {
+        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel : questionTypeOptionModels) {
             this.delete(questionTypeOptionModel, questionTypeOptionsOptions);
         }
     }
 
     private IssueStandardQuestionTypeOptionsOptionsInterface
-        withServices(IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions) {
+    withServices(IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions) {
 
         questionTypeOptionsOptions.setQuestionTypeOptionsService(this);
         questionTypeOptionsOptions.setQuestionTypesService(this.questionTypesService);
@@ -146,7 +148,7 @@ public class IssueStandardQuestionTypeOptionsService implements IssueStandardQue
     }
 
     private IssueStandardQuestionTypeOptionModelInterface
-        map(IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity) {
+    map(IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity) {
 
         final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
                 = new IssueStandardQuestionTypeOptionModel();
@@ -155,7 +157,7 @@ public class IssueStandardQuestionTypeOptionsService implements IssueStandardQue
     }
 
     private IssueStandardQuestionTypeOptionEntity
-        map(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel) {
+    map(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel) {
 
         final IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity
                 = new IssueStandardQuestionTypeOptionEntity();
@@ -164,12 +166,12 @@ public class IssueStandardQuestionTypeOptionsService implements IssueStandardQue
     }
 
     private List<IssueStandardQuestionTypeOptionModelInterface>
-        map(List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities) {
+    map(List<IssueStandardQuestionTypeOptionEntity> questionTypeOptionEntities) {
 
         final List<IssueStandardQuestionTypeOptionModelInterface>
                 questionTypeOptionModels = new ArrayList<>(questionTypeOptionEntities.size());
 
-        for (IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity: questionTypeOptionEntities) {
+        for (IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity : questionTypeOptionEntities) {
             questionTypeOptionModels.add(this.map(questionTypeOptionEntity));
         }
         return questionTypeOptionModels;

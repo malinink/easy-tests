@@ -96,9 +96,9 @@ public abstract class Models {
     }
 
     public static QuestionModelInterface createQuestionModel(
-            Integer id, 
-            String text, 
-            Integer questionTypeId,  
+            Integer id,
+            String text,
+            Integer questionTypeId,
             Integer topicId
     ) {
         final QuestionModelInterface questionModel = new QuestionModel();
@@ -117,7 +117,7 @@ public abstract class Models {
             LocalDateTime startedAt,
             LocalDateTime finishedAt,
             boolean codeExpired
-    ){
+    ) {
         final QuizModelInterface quizModel = new QuizModel();
         quizModel.setId(id);
         quizModel.setInviteCode(inviteCode);
@@ -131,9 +131,9 @@ public abstract class Models {
     }
 
     public static IssueModelInterface createIssueModel(
-           Integer id,
-           String name,
-           Integer subjectId
+            Integer id,
+            String name,
+            Integer subjectId
     ) {
         final IssueModelInterface issueModel = new IssueModel();
         issueModel.setId(id);

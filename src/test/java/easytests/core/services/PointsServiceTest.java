@@ -8,14 +8,18 @@ import easytests.core.options.PointsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.PointsSupport;
 import easytests.support.QuizzesSupport;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.times;
+
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

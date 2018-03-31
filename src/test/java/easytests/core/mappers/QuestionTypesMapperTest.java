@@ -2,7 +2,9 @@ package easytests.core.mappers;
 
 import easytests.core.entities.QuestionTypeEntity;
 import easytests.support.QuestionTypesSupport;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ public class QuestionTypesMapperTest extends AbstractMapperTest {
 
         Assert.assertEquals(4, questionTypesFoundedEntities.size());
         Integer index = 0;
-        for (QuestionTypeEntity questionTypeEntity: questionTypesFoundedEntities) {
+        for (QuestionTypeEntity questionTypeEntity : questionTypesFoundedEntities) {
             final QuestionTypeEntity questionTypeFixtureEntity = this.questionTypesSupport.getEntityFixtureMock(index);
             this.questionTypesSupport.assertEquals(questionTypeFixtureEntity, questionTypeEntity);
             index++;

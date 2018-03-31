@@ -2,12 +2,16 @@ package easytests.core.mappers;
 
 import easytests.core.entities.PointEntity;
 import easytests.support.PointsSupport;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.Mockito.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -27,7 +31,7 @@ public class PointsMapperTest extends AbstractMapperTest {
 
         Assert.assertEquals(3, pointsFoundedEntities.size());
         Integer index = 0;
-        for (PointEntity pointEntity: pointsFoundedEntities) {
+        for (PointEntity pointEntity : pointsFoundedEntities) {
             final PointEntity pointFixtureEntity = this.pointsSupport.getEntityFixtureMock(index);
             this.pointsSupport.assertEquals(pointFixtureEntity, pointEntity);
             index++;
@@ -53,7 +57,7 @@ public class PointsMapperTest extends AbstractMapperTest {
 
         Assert.assertEquals(2, pointsFoundedEntities.size());
         Integer index = 0;
-        for (PointEntity pointEntity: pointsFoundedEntities) {
+        for (PointEntity pointEntity : pointsFoundedEntities) {
             this.pointsSupport.assertEquals(pointsFixtureEntities.get(index), pointEntity);
             index++;
         }

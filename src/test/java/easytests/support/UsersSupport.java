@@ -232,7 +232,7 @@ public class UsersSupport {
     public void assertModelsListEquals(List<UserModelInterface> expected, List<UserModelInterface> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (UserModelInterface userModel: expected) {
+        for (UserModelInterface userModel : expected) {
             this.assertEquals(userModel, actual.get(i));
             i++;
         }
@@ -241,7 +241,7 @@ public class UsersSupport {
     public void assertEntitiesListEquals(List<UserEntity> expected, List<UserEntity> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (UserEntity userEntity: expected) {
+        for (UserEntity userEntity : expected) {
             this.assertEquals(userEntity, actual.get(i));
             i++;
         }

@@ -3,7 +3,9 @@ package easytests.core;
 import easytests.core.models.*;
 import easytests.support.meanbean.*;
 import easytests.support.meanbean.models.*;
+
 import java.time.LocalDateTime;
+
 import org.meanbean.lang.Factory;
 import org.meanbean.test.*;
 
@@ -69,7 +71,7 @@ public class AbstractMeanBeanTest {
     }
 
     protected void addBeanTesterFactories() {
-        for (Object[] mappedFactory: mappedFactories) {
+        for (Object[] mappedFactory : mappedFactories) {
             this.addBeanTesterFactory((Class) mappedFactory[0], (Factory) mappedFactory[1]);
         }
     }
@@ -88,7 +90,7 @@ public class AbstractMeanBeanTest {
     }
 
     protected void addEqualsMethodTesterFactories() {
-        for (Object[] mappedFactory: mappedFactories) {
+        for (Object[] mappedFactory : mappedFactories) {
             this.addEqualsMethodTesterFactory((Class) mappedFactory[0], (Factory) mappedFactory[1]);
         }
     }
@@ -107,7 +109,7 @@ public class AbstractMeanBeanTest {
     }
 
     protected void addHashCodeMethodTesterFactories() {
-        for (Object[] mappedFactory: mappedFactories) {
+        for (Object[] mappedFactory : mappedFactories) {
             this.addHashCodeMethodTesterFactory((Class) mappedFactory[0], (Factory) mappedFactory[1]);
         }
     }

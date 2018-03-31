@@ -5,6 +5,7 @@ import easytests.core.models.TesteeModelInterface;
 import easytests.core.models.empty.QuizModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
+
 import java.util.List;
 
 /**
@@ -40,7 +41,7 @@ public class TesteesSupport {
 
     };
 
-    private static  Object[][] additional = new Object[][]{
+    private static Object[][] additional = new Object[][]{
             // for insert
             {
                     null,
@@ -163,7 +164,7 @@ public class TesteesSupport {
         assertNotEquals(expected, actual, true);
     }
 
-    public void assertNotEquals(TesteeEntity expected, TesteeEntity actual, Boolean exceptId){
+    public void assertNotEquals(TesteeEntity expected, TesteeEntity actual, Boolean exceptId) {
         if (!exceptId) {
             Assert.assertNotEquals(expected.getId(), actual.getId());
         }
@@ -174,7 +175,7 @@ public class TesteesSupport {
         Assert.assertNotEquals(expected.getGroupNumber(), actual.getGroupNumber());
     }
 
-    public void assertEquals(TesteeModelInterface expected, TesteeEntity actual){
+    public void assertEquals(TesteeModelInterface expected, TesteeEntity actual) {
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
         Assert.assertEquals(expected.getLastName(), actual.getLastName());
@@ -183,11 +184,11 @@ public class TesteesSupport {
     }
 
     public void assertEquals(TesteeEntity expected, TesteeModelInterface actual) {
-        assertEquals(actual,expected);
+        assertEquals(actual, expected);
         Assert.assertEquals(new QuizModelEmpty(expected.getQuizId()), actual.getQuiz());
     }
 
-    public void assertEquals(TesteeModelInterface expected, TesteeModelInterface actual){
+    public void assertEquals(TesteeModelInterface expected, TesteeModelInterface actual) {
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
         Assert.assertEquals(expected.getLastName(), actual.getLastName());
@@ -196,19 +197,19 @@ public class TesteesSupport {
         Assert.assertEquals(expected.getGroupNumber(), actual.getGroupNumber());
     }
 
-    public void assertModelsListEquals(List<TesteeModelInterface> expected, List <TesteeModelInterface> actual) {
+    public void assertModelsListEquals(List<TesteeModelInterface> expected, List<TesteeModelInterface> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for(TesteeModelInterface testeeModel: expected){
+        for (TesteeModelInterface testeeModel : expected) {
             this.assertEquals(testeeModel, actual.get(i));
             i++;
         }
     }
 
-    public void assetEntityListEquals(List<TesteeEntity> expected, List<TesteeEntity> actual){
+    public void assetEntityListEquals(List<TesteeEntity> expected, List<TesteeEntity> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for(TesteeEntity testeeEntity: expected){
+        for (TesteeEntity testeeEntity : expected) {
             this.assertEquals(testeeEntity, actual.get(i));
             i++;
         }

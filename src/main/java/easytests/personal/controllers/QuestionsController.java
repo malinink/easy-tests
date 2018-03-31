@@ -14,9 +14,11 @@ import easytests.core.services.QuestionsService;
 import easytests.core.services.TopicsService;
 import easytests.personal.dto.QuestionModelDto;
 import easytests.personal.validators.QuestionModelDtoValidator;
+
 import java.util.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,8 +31,8 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 @SuppressWarnings({
-                "checkstyle:MultipleStringLiterals",
-                "checkstyle:ClassFanOutComplexity"})
+        "checkstyle:MultipleStringLiterals",
+        "checkstyle:ClassFanOutComplexity"})
 @RequestMapping("/personal/topics/{topicId}/questions")
 public class QuestionsController extends AbstractCrudController {
 
@@ -45,10 +47,10 @@ public class QuestionsController extends AbstractCrudController {
 
     @Autowired
     private QuestionsOptionsBuilder questionsOptionsBuilder;
-    
+
     @Autowired
     private TopicsOptionsBuilder topicsOptionsBuilder;
-    
+
     @Autowired
     private QuestionModelDtoValidator questionModelDtoValidator;
 
@@ -61,7 +63,7 @@ public class QuestionsController extends AbstractCrudController {
     @GetMapping("")
     public String list(Model model, @PathVariable("topicId") Integer topicId) {
         final List<QuestionModelInterface> questions = this.questionsService
-            .findByTopic(this.getCurrentTopicModel(topicId));
+                .findByTopic(this.getCurrentTopicModel(topicId));
         model.addAttribute("questions", questions);
         model.addAttribute("topicId", topicId);
         return "questions/list";
@@ -190,7 +192,7 @@ public class QuestionsController extends AbstractCrudController {
             throw new ForbiddenException();
         }
     }
-    
+
     private void checkModel(TopicModelInterface topicModel) {
         if (topicModel == null) {
             throw new NotFoundException();

@@ -3,7 +3,9 @@ package easytests.core.models;
 import easytests.core.entities.IssueStandardEntity;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.SubjectModelEmpty;
+
 import java.util.List;
+
 import lombok.Data;
 
 /**

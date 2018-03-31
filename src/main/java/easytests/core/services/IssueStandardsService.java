@@ -7,8 +7,10 @@ import easytests.core.models.IssueStandardModelInterface;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.options.IssueStandardsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,7 +84,7 @@ public class IssueStandardsService implements IssueStandardsServiceInterface {
 
     @Override
     public void save(List<IssueStandardModelInterface> issueStandardModels) {
-        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+        for (IssueStandardModelInterface issueStandardModel : issueStandardModels) {
             this.save(issueStandardModel);
         }
     }
@@ -98,7 +100,7 @@ public class IssueStandardsService implements IssueStandardsServiceInterface {
     public void save(List<IssueStandardModelInterface> issueStandardModels,
                      IssueStandardsOptionsInterface issueStandardsOptions) {
 
-        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+        for (IssueStandardModelInterface issueStandardModel : issueStandardModels) {
             this.save(issueStandardModel, issueStandardsOptions);
         }
 
@@ -115,7 +117,7 @@ public class IssueStandardsService implements IssueStandardsServiceInterface {
 
     @Override
     public void delete(List<IssueStandardModelInterface> issueStandardModels) {
-        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+        for (IssueStandardModelInterface issueStandardModel : issueStandardModels) {
             this.delete(issueStandardModel);
         }
     }
@@ -131,7 +133,7 @@ public class IssueStandardsService implements IssueStandardsServiceInterface {
     public void delete(List<IssueStandardModelInterface> issueStandardModels,
                        IssueStandardsOptionsInterface issueStandardsOptions) {
 
-        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+        for (IssueStandardModelInterface issueStandardModel : issueStandardModels) {
             this.delete(issueStandardModel, issueStandardsOptions);
         }
     }
@@ -158,7 +160,7 @@ public class IssueStandardsService implements IssueStandardsServiceInterface {
 
     private List<IssueStandardModelInterface> map(List<IssueStandardEntity> issueStandardEntities) {
         final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(issueStandardEntities.size());
-        for (IssueStandardEntity issueStandardEntity: issueStandardEntities) {
+        for (IssueStandardEntity issueStandardEntity : issueStandardEntities) {
             issueStandardModels.add(this.map(issueStandardEntity));
         }
         return issueStandardModels;

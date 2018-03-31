@@ -1,7 +1,9 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.QuestionTypeEntity;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.*;
 
 
@@ -12,11 +14,11 @@ import org.apache.ibatis.annotations.*;
 @SuppressWarnings("checkstyle:linelength")
 public interface QuestionTypesMapper {
     @Results(
-        id = "QuestionType",
-        value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name")
-        })
+            id = "QuestionType",
+            value = {
+                    @Result(property = "id", column = "id"),
+                    @Result(property = "name", column = "name")
+            })
     @Select("SELECT id, name FROM question_types order by sort")
     List<QuestionTypeEntity> findAll();
 

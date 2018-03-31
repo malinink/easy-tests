@@ -1,13 +1,17 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.IssueEntity;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -24,15 +28,15 @@ public class IssuesMapperTest extends AbstractMapperTest {
         final IssueEntity issue = this.issuesMapper.find(1);
         Assert.assertEquals((long) 1, (long) issue.getId());
         Assert.assertEquals("Name1", issue.getName());
-        Assert.assertEquals((long)1, (long)issue.getSubjectId());
+        Assert.assertEquals((long) 1, (long) issue.getSubjectId());
     }
 
     @Test
     public void testFindAll() throws Exception {
-        final List<IssueEntity> issues=this.issuesMapper.findAll();
-        Assert.assertEquals("Name1",issues.get(0).getName());
-        Assert.assertEquals("Name2",issues.get(1).getName());
-        Assert.assertEquals("Name3",issues.get(2).getName());
+        final List<IssueEntity> issues = this.issuesMapper.findAll();
+        Assert.assertEquals("Name1", issues.get(0).getName());
+        Assert.assertEquals("Name2", issues.get(1).getName());
+        Assert.assertEquals("Name3", issues.get(2).getName());
     }
 
     @Test
@@ -66,7 +70,7 @@ public class IssuesMapperTest extends AbstractMapperTest {
     public void testInsert() throws Exception {
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final String name = "NewName";
-        final Integer subjectId=2;
+        final Integer subjectId = 2;
 
         IssueEntity issueEntity = Mockito.mock(IssueEntity.class);
         Mockito.when(issueEntity.getName()).thenReturn(name);
@@ -74,7 +78,7 @@ public class IssuesMapperTest extends AbstractMapperTest {
 
         this.issuesMapper.insert(issueEntity);
 
-        verify(issueEntity, times(1)) .setId(id.capture());
+        verify(issueEntity, times(1)).setId(id.capture());
 
         Assert.assertNotNull(id.getValue());
 
@@ -89,7 +93,7 @@ public class IssuesMapperTest extends AbstractMapperTest {
     public void testUpdate() throws Exception {
         final Integer id = 1;
         final String name = "NewName";
-        final Integer subjectId=2;
+        final Integer subjectId = 2;
 
         IssueEntity issueEntity = this.issuesMapper.find(id);
         Assert.assertNotNull(issueEntity);

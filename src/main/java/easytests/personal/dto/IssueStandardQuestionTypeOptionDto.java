@@ -3,9 +3,11 @@ package easytests.personal.dto;
 import easytests.core.models.IssueStandardQuestionTypeOptionModelInterface;
 import easytests.core.models.empty.IssueStandardModelEmpty;
 import easytests.core.models.empty.QuestionTypeModelEmpty;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 import lombok.Data;
 
 /**

@@ -1,6 +1,7 @@
 package easytests.core.models;
 
 import easytests.core.entities.UserEntity;
+
 import java.util.List;
 
 /**

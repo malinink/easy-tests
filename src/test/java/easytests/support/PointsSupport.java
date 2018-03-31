@@ -5,7 +5,9 @@ import easytests.core.models.PointModelInterface;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.QuestionModelEmpty;
 import easytests.core.models.empty.QuizModelEmpty;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -160,7 +162,7 @@ public class PointsSupport {
     public void assertModelsListEquals(List<PointModelInterface> expected, List<PointModelInterface> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (PointModelInterface pointModel: expected) {
+        for (PointModelInterface pointModel : expected) {
             this.assertEquals(pointModel, actual.get(i));
             i++;
         }
@@ -169,7 +171,7 @@ public class PointsSupport {
     public void assertEntitiesListEquals(List<PointEntity> expected, List<PointEntity> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (PointEntity pointEntity: expected) {
+        for (PointEntity pointEntity : expected) {
             this.assertEquals(pointEntity, actual.get(i));
             i++;
         }

@@ -7,8 +7,10 @@ import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,8 +67,8 @@ public class SubjectsService implements SubjectsServiceInterface {
 
     @Override
     public List<SubjectModelInterface> findByUser(
-        UserModelInterface userModel,
-        SubjectsOptionsInterface subjectsOptions
+            UserModelInterface userModel,
+            SubjectsOptionsInterface subjectsOptions
     ) {
         return this.withServices(subjectsOptions).withRelations(this.findByUser(userModel));
     }
@@ -89,14 +91,14 @@ public class SubjectsService implements SubjectsServiceInterface {
 
     @Override
     public void save(List<SubjectModelInterface> subjectsModels) {
-        for (SubjectModelInterface subjectModel: subjectsModels) {
+        for (SubjectModelInterface subjectModel : subjectsModels) {
             this.save(subjectModel);
         }
     }
 
     @Override
     public void save(List<SubjectModelInterface> subjectsModels, SubjectsOptionsInterface subjectsOptions) {
-        for (SubjectModelInterface subjectModel: subjectsModels) {
+        for (SubjectModelInterface subjectModel : subjectsModels) {
             this.save(subjectModel, subjectsOptions);
         }
     }
@@ -117,14 +119,14 @@ public class SubjectsService implements SubjectsServiceInterface {
 
     @Override
     public void delete(List<SubjectModelInterface> subjectsModels) {
-        for (SubjectModelInterface subjectModel: subjectsModels) {
+        for (SubjectModelInterface subjectModel : subjectsModels) {
             this.delete(subjectModel);
         }
     }
 
     @Override
     public void delete(List<SubjectModelInterface> subjectsModels, SubjectsOptionsInterface subjectsOptions) {
-        for (SubjectModelInterface subjectModel: subjectsModels) {
+        for (SubjectModelInterface subjectModel : subjectsModels) {
             this.delete(subjectModel, subjectsOptions);
         }
     }
@@ -144,7 +146,7 @@ public class SubjectsService implements SubjectsServiceInterface {
 
     private List<SubjectModelInterface> map(List<SubjectEntity> subjectsList) {
         final List<SubjectModelInterface> resultSubjectList = new ArrayList<>(subjectsList.size());
-        for (SubjectEntity subject: subjectsList) {
+        for (SubjectEntity subject : subjectsList) {
             resultSubjectList.add(this.map(subject));
         }
         return resultSubjectList;

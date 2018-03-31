@@ -6,36 +6,38 @@
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection"/>
     <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
 <div class="container">
     <div class="row">
-		<h4 class="header">Issue Standard for subject: Subject Name</h4>
-    	<form id="issueStandardForm" class="col s12">
-			<div class="row">
-				<input disabled value="1" id="id" name="id" type="hidden">
-				<div class="row">
-					<div class="input-field col s4">
-					  <input placeholder="No Restriction" value="20" id="timeLimit" name="timeLimit" type="number" min="1" class="validate">
-					  <label class="active" for="timeLimit">Time Limit</label>
-					</div>
-				</div>
-				<div class="row">
-					<div class="input-field col s4">
-					  <input placeholder="No Restriction" value="10" id="questionsNumber" name="questionsNumber" type="number" min="1" class="validate">
-					  <label class="active" for="questionsNumber">Number of Questions</label>
-					</div>
-				</div>
-				<input disabled value="1" id="subjectId" name="subjectId" type="hidden">
-			</div>
+        <h4 class="header">Issue Standard for subject: Subject Name</h4>
+        <form id="issueStandardForm" class="col s12">
+            <div class="row">
+                <input disabled value="1" id="id" name="id" type="hidden">
+                <div class="row">
+                    <div class="input-field col s4">
+                        <input placeholder="No Restriction" value="20" id="timeLimit" name="timeLimit" type="number"
+                               min="1" class="validate">
+                        <label class="active" for="timeLimit">Time Limit</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s4">
+                        <input placeholder="No Restriction" value="10" id="questionsNumber" name="questionsNumber"
+                               type="number" min="1" class="validate">
+                        <label class="active" for="questionsNumber">Number of Questions</label>
+                    </div>
+                </div>
+                <input disabled value="1" id="subjectId" name="subjectId" type="hidden">
+            </div>
 
-			<div class="row">
-				<h5 class="header">Topics Priorities</h5>
-				<p></p>
-				<div id="topicPrioritiesBlock">
+            <div class="row">
+                <h5 class="header">Topics Priorities</h5>
+                <p></p>
+                <div id="topicPrioritiesBlock">
                     <div class="topicPriorityForm row">
                         <input id="tpId0" name="tpId0" disabled value="1" type="hidden">
                         <div class="input-field col s6">
@@ -49,21 +51,23 @@
                         </div>
                         <div class="col s4">
                             <p>
-                                <input id="tpIsPreferable0" name="tpIsPreferable0" type="checkbox" checked="checked" />
+                                <input id="tpIsPreferable0" name="tpIsPreferable0" type="checkbox" checked="checked"/>
                                 <label for="tpIsPreferable0">Is Preferable</label>
                             </p>
                         </div>
-                        <a class="deleteTopicPriorityForm btn-floating btn-large waves-effect waves-light right blue-grey"><i class="material-icons">delete</i></a>
+                        <a class="deleteTopicPriorityForm btn-floating btn-large waves-effect waves-light right blue-grey"><i
+                                class="material-icons">delete</i></a>
                     </div>
-				</div>
-				<div class="row">
-					<a id="addTopicPriorityForm" class="btn-floating btn-large waves-effect waves-light right blue"><i class="material-icons">add</i></a>
-				</div>
-			</div>
+                </div>
+                <div class="row">
+                    <a id="addTopicPriorityForm" class="btn-floating btn-large waves-effect waves-light right blue"><i
+                            class="material-icons">add</i></a>
+                </div>
+            </div>
 
-			<div class="row">
-				<h5 class="header">Question Types Options</h5>
-				<p></p>
+            <div class="row">
+                <h5 class="header">Question Types Options</h5>
+                <p></p>
                 <div id="questionTypeOptionsBlock">
                     <div class="questionTypeOptionForm row">
                         <input id="qtoId0" name="qtoId0" disabled value="1" type="hidden">
@@ -77,41 +81,48 @@
                             <label>Question Type</label>
                         </div>
                         <div class="input-field col s2">
-                            <input id="qtoMinQuestions0" name="qtoMinQuestions0" placeholder="No Restriction" value="1" type="number" min="1" class="validate">
+                            <input id="qtoMinQuestions0" name="qtoMinQuestions0" placeholder="No Restriction" value="1"
+                                   type="number" min="1" class="validate">
                             <label class="active" for="qtoMinQuestions0">Minimal number of questions</label>
                         </div>
                         <div class="input-field col s2">
-                            <input id="qtoMaxQuestions0" name="qtoMaxQuestions0" placeholder="No Restriction" value="20" type="number" min="1" class="validate">
+                            <input id="qtoMaxQuestions0" name="qtoMaxQuestions0" placeholder="No Restriction" value="20"
+                                   type="number" min="1" class="validate">
                             <label class="active" for="qtoMaxQuestions0">Maximal number of questions</label>
                         </div>
                         <div class="input-field col s2">
-                            <input id="qtoTimeLimit0" name="qtoTimeLimit0" placeholder="No Restriction" value="60" type="number" min="1" class="validate">
+                            <input id="qtoTimeLimit0" name="qtoTimeLimit0" placeholder="No Restriction" value="60"
+                                   type="number" min="1" class="validate">
                             <label class="active" for="qtoTimeLimit0">Time limit for type</label>
                         </div>
-                        <a class="deleteQuestionTypeOptionForm btn-floating btn-large waves-effect waves-light right blue-grey"><i class="material-icons">delete</i></a>
+                        <a class="deleteQuestionTypeOptionForm btn-floating btn-large waves-effect waves-light right blue-grey"><i
+                                class="material-icons">delete</i></a>
                     </div>
                 </div>
-				<div class="row">
-					<a id="addQuestionTypeOptionForm" class="btn-floating btn-large waves-effect waves-light right blue"><i class="material-icons">add</i></a>
-				</div>
-			</div>
-			<div class="row">
-				<a class="btn-large waves-effect waves-light blue" type="submit" name="submit">Save
-					<i class="material-icons right">send</i>
-				</a>
-				<a class="btn-large waves-effect waves-light red" href="issue_standard_view.html" name="cancel">Cancel</a>
-			</div>
-    	</form>
+                <div class="row">
+                    <a id="addQuestionTypeOptionForm"
+                       class="btn-floating btn-large waves-effect waves-light right blue"><i
+                            class="material-icons">add</i></a>
+                </div>
+            </div>
+            <div class="row">
+                <a class="btn-large waves-effect waves-light blue" type="submit" name="submit">Save
+                    <i class="material-icons right">send</i>
+                </a>
+                <a class="btn-large waves-effect waves-light red" href="issue_standard_view.html"
+                   name="cancel">Cancel</a>
+            </div>
+        </form>
     </div>
 </div>
 <div hidden id="topicsHidden">
-	<p id="topicsListTakenSize">1</p>
-	<div id="topicSelects">
-		<div class="topicSelectRow">
-			<p class="selectId">topicId0</p>
-			<p class="topicId">1</p>
-		</div>
-	</div>
+    <p id="topicsListTakenSize">1</p>
+    <div id="topicSelects">
+        <div class="topicSelectRow">
+            <p class="selectId">topicId0</p>
+            <p class="topicId">1</p>
+        </div>
+    </div>
     <p id="topicsListTotalSize">3</p>
     <div id="topicsList">
         <div class="topicsListRow">

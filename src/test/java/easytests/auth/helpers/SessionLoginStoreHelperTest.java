@@ -1,6 +1,7 @@
 package easytests.auth.helpers;
 
 import javax.servlet.http.HttpSession;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

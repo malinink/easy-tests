@@ -3,6 +3,7 @@ package easytests.core.models.empty;
 import easytests.core.entities.IssueStandardEntity;
 import easytests.core.models.*;
 import easytests.core.models.exceptions.CallMethodOnEmptyModelException;
+
 import java.util.List;
 
 /**

@@ -7,8 +7,10 @@ import easytests.core.models.TesteeModel;
 import easytests.core.models.TesteeModelInterface;
 import easytests.core.options.TesteesOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,7 @@ public class TesteesService implements TesteesServiceInterface {
 
     @Override
     public TesteeModelInterface findByQuiz(QuizModelInterface quizModel,
-                                                     TesteesOptionsInterface testeesOptions) {
+                                           TesteesOptionsInterface testeesOptions) {
         return this.withServices(testeesOptions).withRelations(this.findByQuiz(quizModel));
     }
 
@@ -112,7 +114,7 @@ public class TesteesService implements TesteesServiceInterface {
 
     private List<TesteeModelInterface> map(List<TesteeEntity> testeesList) {
         final List<TesteeModelInterface> resultTesteeList = new ArrayList<>(testeesList.size());
-        for (TesteeEntity testee: testeesList) {
+        for (TesteeEntity testee : testeesList) {
             resultTesteeList.add(this.map(testee));
         }
         return resultTesteeList;

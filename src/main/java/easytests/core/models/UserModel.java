@@ -2,7 +2,9 @@ package easytests.core.models;
 
 import easytests.core.entities.UserEntity;
 import easytests.core.models.empty.ModelsListEmpty;
+
 import java.util.List;
+
 import lombok.*;
 
 /**

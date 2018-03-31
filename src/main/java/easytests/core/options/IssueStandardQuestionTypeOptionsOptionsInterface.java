@@ -19,16 +19,16 @@ public interface IssueStandardQuestionTypeOptionsOptionsInterface extends Option
     void setIssueStandardsService(IssueStandardsServiceInterface issueStandardsService);
 
     IssueStandardQuestionTypeOptionsOptionsInterface
-        withQuestionType(QuestionTypesOptionsInterface questionTypesOptions);
+    withQuestionType(QuestionTypesOptionsInterface questionTypesOptions);
 
     IssueStandardQuestionTypeOptionsOptionsInterface
-        withIssueStandard(IssueStandardsOptionsInterface issueStandardsOptions);
+    withIssueStandard(IssueStandardsOptionsInterface issueStandardsOptions);
 
     IssueStandardQuestionTypeOptionModelInterface
-        withRelations(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel);
+    withRelations(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel);
 
     List<IssueStandardQuestionTypeOptionModelInterface>
-        withRelations(List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels);
+    withRelations(List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModels);
 
     void saveWithRelations(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel);
 

@@ -2,13 +2,17 @@ package easytests.core.mappers;
 
 import easytests.core.entities.QuestionEntity;
 import easytests.support.QuestionsSupport;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -25,10 +29,10 @@ public class QuestionsMapperTest extends AbstractMapperTest {
     @Test
     public void testFindAll() throws Exception {
         final List<QuestionEntity> questionsFoundedEntities = this.questionsMapper.findAll();
-        Assert.assertEquals( 3,  questionsFoundedEntities.size());
+        Assert.assertEquals(3, questionsFoundedEntities.size());
 
         Integer index = 0;
-        for (QuestionEntity questionEntity: questionsFoundedEntities) {
+        for (QuestionEntity questionEntity : questionsFoundedEntities) {
             final QuestionEntity questionFixtureEntity = this.questionsSupport.getEntityFixtureMock(index);
 
             this.questionsSupport.assertEquals(questionFixtureEntity, questionEntity);
@@ -56,7 +60,7 @@ public class QuestionsMapperTest extends AbstractMapperTest {
         Assert.assertEquals(1, questionsFoundedEntities.size());
 
         Integer index = 0;
-        for (QuestionEntity questionEntity: questionsFoundedEntities) {
+        for (QuestionEntity questionEntity : questionsFoundedEntities) {
             this.questionsSupport.assertEquals(questionsFixtureEntities.get(index), questionEntity);
             index++;
         }

@@ -8,10 +8,12 @@ import easytests.core.options.*;
 import easytests.core.services.*;
 import easytests.personal.dto.IssueStandardDto;
 import easytests.personal.validators.IssueStandardDtoValidator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
@@ -92,9 +94,9 @@ public class IssueStandardsController extends AbstractPersonalController {
 
     @PostMapping("update/{issueStandardId}/")
     public String save(Model model,
-                               @PathVariable Integer issueStandardId,
-                               @Valid IssueStandardDto issueStandardDto,
-                               BindingResult bindingResult) {
+                       @PathVariable Integer issueStandardId,
+                       @Valid IssueStandardDto issueStandardDto,
+                       BindingResult bindingResult) {
 
         final IssueStandardModelInterface issueStandardModel = getIssueStandardModel(
                 issueStandardId,

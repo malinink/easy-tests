@@ -7,8 +7,10 @@ import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,14 +79,14 @@ public class TopicsService implements TopicsServiceInterface {
 
     @Override
     public void save(List<TopicModelInterface> topicsModels) {
-        for (TopicModelInterface topicModel: topicsModels) {
+        for (TopicModelInterface topicModel : topicsModels) {
             this.save(topicModel);
         }
     }
 
     @Override
     public void save(List<TopicModelInterface> topicsModels, TopicsOptionsInterface topicsOptions) {
-        for (TopicModelInterface topicModel: topicsModels) {
+        for (TopicModelInterface topicModel : topicsModels) {
             this.save(topicModel, topicsOptions);
         }
     }
@@ -105,14 +107,14 @@ public class TopicsService implements TopicsServiceInterface {
 
     @Override
     public void delete(List<TopicModelInterface> topicsModels) {
-        for (TopicModelInterface topicModel: topicsModels) {
+        for (TopicModelInterface topicModel : topicsModels) {
             this.delete(topicModel);
         }
     }
 
     @Override
     public void delete(List<TopicModelInterface> topicsModels, TopicsOptionsInterface topicsOptions) {
-        for (TopicModelInterface topicModel: topicsModels) {
+        for (TopicModelInterface topicModel : topicsModels) {
             this.delete(topicModel, topicsOptions);
         }
     }
@@ -141,7 +143,7 @@ public class TopicsService implements TopicsServiceInterface {
 
     private List<TopicModelInterface> map(List<TopicEntity> topicsList) {
         final List<TopicModelInterface> resultTopicsList = new ArrayList<>(topicsList.size());
-        for (TopicEntity topic: topicsList) {
+        for (TopicEntity topic : topicsList) {
             resultTopicsList.add(this.map(topic));
         }
         return resultTopicsList;

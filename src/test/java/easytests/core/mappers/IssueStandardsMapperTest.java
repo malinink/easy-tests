@@ -2,12 +2,16 @@ package easytests.core.mappers;
 
 import easytests.core.entities.IssueStandardEntity;
 import easytests.support.IssueStandardSupport;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -27,7 +31,7 @@ public class IssueStandardsMapperTest extends AbstractMapperTest {
 
         Assert.assertEquals(2, issueStandardsFoundedEntities.size());
         Integer index = 0;
-        for (IssueStandardEntity issueStandardEntity: issueStandardsFoundedEntities) {
+        for (IssueStandardEntity issueStandardEntity : issueStandardsFoundedEntities) {
             final IssueStandardEntity issueStandartFixtureEntity = this.issueStandardSupport.getEntityFixtureMock(index);
             this.issueStandardSupport.assertEquals(issueStandartFixtureEntity, issueStandardEntity);
             index++;

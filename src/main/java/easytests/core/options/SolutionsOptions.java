@@ -5,7 +5,9 @@ import easytests.core.services.AnswersServiceInterface;
 import easytests.core.services.PointsServiceInterface;
 import easytests.core.services.SolutionsServiceInterface;
 import groovy.transform.EqualsAndHashCode;
+
 import java.util.List;
+
 import lombok.Setter;
 
 /**
@@ -56,7 +58,7 @@ public class SolutionsOptions implements SolutionsOptionsInterface {
     @Override
     public List<SolutionModelInterface> withRelations(List<SolutionModelInterface> solutionModels) {
 
-        for (SolutionModelInterface solutionModel: solutionModels) {
+        for (SolutionModelInterface solutionModel : solutionModels) {
             this.withRelations(solutionModel);
         }
         return solutionModels;

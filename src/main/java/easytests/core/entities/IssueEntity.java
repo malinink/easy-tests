@@ -4,7 +4,7 @@ import easytests.core.models.IssueModelInterface;
 import lombok.*;
 
 /**
- *@author fortyways
+ * @author fortyways
  */
 
 @Data

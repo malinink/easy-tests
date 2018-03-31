@@ -8,14 +8,18 @@ import easytests.core.options.IssueStandardQuestionTypeOptionsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.IssueStandardQuestionTypeOptionsSupport;
 import easytests.support.IssueStandardSupport;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
@@ -58,7 +62,7 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
     }
 
     private void assertServicesSet(IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionOptions) {
-        this.assertServicesSet(questionTypeOptionOptions,1) ;
+        this.assertServicesSet(questionTypeOptionOptions, 1);
     }
 
     private void assertServicesSet(IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionOptions, Integer times) {
@@ -259,7 +263,6 @@ public class IssueStandardQuestionTypeOptionsServiceTest {
                 .update(questionTypeOptionEntityCaptor.capture());
         this.questionTypeOptionsSupport.assertEntitiesListEquals(this.getQuestionTypeOptionFixturesEntities(), questionTypeOptionEntityCaptor.getAllValues());
     }
-
 
     @Test
     public void testSaveModelsListWithOptions() throws Exception {

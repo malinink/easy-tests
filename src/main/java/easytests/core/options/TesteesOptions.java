@@ -3,7 +3,9 @@ package easytests.core.options;
 import easytests.core.models.TesteeModelInterface;
 import easytests.core.services.QuizzesServiceInterface;
 import easytests.core.services.TesteesServiceInterface;
+
 import java.util.List;
+
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
@@ -41,7 +43,7 @@ public class TesteesOptions implements TesteesOptionsInterface {
 
     @Override
     public List<TesteeModelInterface> withRelations(List<TesteeModelInterface> testeesModels) {
-        for (TesteeModelInterface testeeModel: testeesModels) {
+        for (TesteeModelInterface testeeModel : testeesModels) {
             this.withRelations(testeeModel);
         }
         return testeesModels;

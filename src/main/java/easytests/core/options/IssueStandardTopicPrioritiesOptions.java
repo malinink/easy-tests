@@ -4,7 +4,9 @@ import easytests.core.models.IssueStandardTopicPriorityModelInterface;
 import easytests.core.services.IssueStandardTopicPrioritiesServiceInterface;
 import easytests.core.services.IssueStandardsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
+
 import java.util.List;
+
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
@@ -29,21 +31,21 @@ public class IssueStandardTopicPrioritiesOptions implements IssueStandardTopicPr
 
     @Override
     public IssueStandardTopicPrioritiesOptionsInterface
-        withTopic(TopicsOptionsInterface topicsOptions) {
+    withTopic(TopicsOptionsInterface topicsOptions) {
         this.topicsOptions = topicsOptions;
         return this;
     }
 
     @Override
     public IssueStandardTopicPrioritiesOptionsInterface
-        withIssueStandard(IssueStandardsOptionsInterface issueStandardsOptions) {
+    withIssueStandard(IssueStandardsOptionsInterface issueStandardsOptions) {
         this.issueStandardsOptions = issueStandardsOptions;
         return this;
     }
 
     @Override
     public IssueStandardTopicPriorityModelInterface
-        withRelations(IssueStandardTopicPriorityModelInterface topicPriorityModel) {
+    withRelations(IssueStandardTopicPriorityModelInterface topicPriorityModel) {
 
         if (topicPriorityModel == null) {
             return topicPriorityModel;
@@ -61,9 +63,9 @@ public class IssueStandardTopicPrioritiesOptions implements IssueStandardTopicPr
 
     @Override
     public List<IssueStandardTopicPriorityModelInterface>
-        withRelations(List<IssueStandardTopicPriorityModelInterface> topicPriorityModels) {
+    withRelations(List<IssueStandardTopicPriorityModelInterface> topicPriorityModels) {
 
-        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel : topicPriorityModels) {
             this.withRelations(topicPriorityModel);
         }
         return topicPriorityModels;

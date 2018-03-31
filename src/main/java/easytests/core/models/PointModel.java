@@ -4,6 +4,7 @@ import easytests.core.entities.PointEntity;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.QuestionModelEmpty;
 import easytests.core.models.empty.QuizModelEmpty;
+
 import java.util.List;
 
 import lombok.Data;

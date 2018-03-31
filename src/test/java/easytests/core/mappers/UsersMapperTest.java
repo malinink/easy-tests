@@ -2,11 +2,15 @@ package easytests.core.mappers;
 
 import easytests.core.entities.UserEntity;
 import easytests.support.UsersSupport;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.Mockito.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -26,7 +30,7 @@ public class UsersMapperTest extends AbstractMapperTest {
 
         Assert.assertEquals(3, usersFoundedEntities.size());
         Integer index = 0;
-        for (UserEntity userEntity: usersFoundedEntities) {
+        for (UserEntity userEntity : usersFoundedEntities) {
             final UserEntity userFixtureEntity = this.usersSupport.getEntityFixtureMock(index);
             this.usersSupport.assertEquals(userFixtureEntity, userEntity);
             index++;

@@ -7,8 +7,10 @@ import easytests.core.models.QuizModel;
 import easytests.core.models.QuizModelInterface;
 import easytests.core.options.QuizzesOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,14 +88,14 @@ public class QuizzesService implements QuizzesServiceInterface {
 
     @Override
     public void save(List<QuizModelInterface> quizzesModels) {
-        for (QuizModelInterface quizModel: quizzesModels) {
+        for (QuizModelInterface quizModel : quizzesModels) {
             this.save(quizModel);
         }
     }
 
     @Override
     public void save(List<QuizModelInterface> quizzesModels, QuizzesOptionsInterface quizzesOptions) {
-        for (QuizModelInterface quizModel: quizzesModels) {
+        for (QuizModelInterface quizModel : quizzesModels) {
             this.save(quizModel, quizzesOptions);
         }
     }
@@ -121,7 +123,7 @@ public class QuizzesService implements QuizzesServiceInterface {
 
     @Override
     public void delete(List<QuizModelInterface> quizzesModels, QuizzesOptionsInterface quizzesOptions) {
-        for (QuizModelInterface quizModel: quizzesModels) {
+        for (QuizModelInterface quizModel : quizzesModels) {
             this.delete(quizModel, quizzesOptions);
         }
     }
@@ -140,7 +142,7 @@ public class QuizzesService implements QuizzesServiceInterface {
 
     private List<QuizModelInterface> map(List<QuizEntity> quizzesList) {
         final List<QuizModelInterface> resultQuizList = new ArrayList<>(quizzesList.size());
-        for (QuizEntity quiz: quizzesList) {
+        for (QuizEntity quiz : quizzesList) {
             resultQuizList.add(this.map(quiz));
         }
         return resultQuizList;

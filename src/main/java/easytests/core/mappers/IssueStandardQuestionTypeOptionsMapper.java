@@ -1,26 +1,28 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.IssueStandardQuestionTypeOptionEntity;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.*;
 
 /**
- * @author  SingularityA
+ * @author SingularityA
  */
 @Mapper
 @SuppressWarnings("checkstyle:linelength")
 public interface IssueStandardQuestionTypeOptionsMapper {
 
     @Results(
-        id = "IssueStandardQuestionTypeOption",
-        value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "questionTypeId", column = "question_type_id"),
-            @Result(property = "minQuestions", column = "min_number"),
-            @Result(property = "maxQuestions", column = "max_number"),
-            @Result(property = "timeLimit", column = "time_limit"),
-            @Result(property = "issueStandardId", column = "issue_standard_id")
-        })
+            id = "IssueStandardQuestionTypeOption",
+            value = {
+                    @Result(property = "id", column = "id"),
+                    @Result(property = "questionTypeId", column = "question_type_id"),
+                    @Result(property = "minQuestions", column = "min_number"),
+                    @Result(property = "maxQuestions", column = "max_number"),
+                    @Result(property = "timeLimit", column = "time_limit"),
+                    @Result(property = "issueStandardId", column = "issue_standard_id")
+            })
     @Select("SELECT * FROM question_type_options")
     List<IssueStandardQuestionTypeOptionEntity> findAll();
 

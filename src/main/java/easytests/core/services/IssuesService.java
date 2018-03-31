@@ -7,8 +7,10 @@ import easytests.core.models.IssueModelInterface;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.options.IssuesOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,14 +68,14 @@ public class IssuesService implements IssuesServiceInterface {
 
     @Override
     public void save(List<IssueModelInterface> issuesModels) {
-        for (IssueModelInterface issueModel: issuesModels) {
+        for (IssueModelInterface issueModel : issuesModels) {
             this.save(issueModel);
         }
     }
 
     @Override
     public void save(List<IssueModelInterface> issuesModels, IssuesOptionsInterface issueOptions) {
-        for (IssueModelInterface issueModel: issuesModels) {
+        for (IssueModelInterface issueModel : issuesModels) {
             this.save(issueModel, issueOptions);
         }
     }
@@ -89,14 +91,14 @@ public class IssuesService implements IssuesServiceInterface {
 
     @Override
     public void delete(List<IssueModelInterface> issuesModels) {
-        for (IssueModelInterface issueModel: issuesModels) {
+        for (IssueModelInterface issueModel : issuesModels) {
             this.delete(issueModel);
         }
     }
 
     @Override
     public void delete(List<IssueModelInterface> issuesModels, IssuesOptionsInterface issueOptions) {
-        for (IssueModelInterface issueModel: issuesModels) {
+        for (IssueModelInterface issueModel : issuesModels) {
             this.delete(issueModel, issueOptions);
         }
     }
@@ -134,7 +136,7 @@ public class IssuesService implements IssuesServiceInterface {
 
     private List<IssueModelInterface> map(List<IssueEntity> issuesList) {
         final List<IssueModelInterface> resultIssueList = new ArrayList(issuesList.size());
-        for (IssueEntity issue: issuesList) {
+        for (IssueEntity issue : issuesList) {
             resultIssueList.add(this.map(issue));
         }
         return resultIssueList;

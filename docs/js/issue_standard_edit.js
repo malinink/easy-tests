@@ -5,7 +5,7 @@
 /**
  * updates selects after loading page
  */
-$(document).ready(function() {
+$(document).ready(function () {
     var selects = $("#topicPrioritiesBlock").find("select");
     var selectsInfo = $("#topicSelects").find(".topicSelectRow");
 
@@ -60,8 +60,8 @@ function cutIndex(fieldName) {
 /**
  * adds another row with TopicPriority form for on button 'plus' click
  */
-$(document).ready(function() {
-    $("#addTopicPriorityForm").click(function() {
+$(document).ready(function () {
+    $("#addTopicPriorityForm").click(function () {
         var currentListSizeElem = $("#topicsListTakenSize");
         var totalListSize = Number($("#topicsListTotalSize").text());
         var currentListSize = Number(currentListSizeElem.text());
@@ -77,7 +77,7 @@ $(document).ready(function() {
         var createdTopicRows = $("#topicSelects").find(".topicSelectRow");
 
         // формирование пунктов селекта
-        $(".topicsListRow").each(function() {
+        $(".topicsListRow").each(function () {
             var id = $(this).find(".id").text();
             var name = $(this).find(".name").text();
             var topic = createdTopicRows.find("p.topicId").filter(function () {
@@ -103,32 +103,32 @@ $(document).ready(function() {
 
         var newRow =
             '<div class="topicPriorityForm row">'
-            +  '<input id="' + tpIdId + '" name="' + tpIdName + '" disabled value="" type="hidden">'
-            +  '<div class="input-field col s6">'
-            +    '<select id="' + tpTopicIdId + '" name="' + tpTopicIdName + '">'
-            +       optionsString
-            +    '</select>'
-            +    '<label>Topic</label>'
-            +  '</div>'
-            +  '<div class="col s4">'
-            +    '<p>'
-            +        '<input id="' + tpIsPreferableId + '" name="' + tpIsPreferableName + '" type="checkbox"/>'
-            +        '<label for="' + tpIsPreferableId + '">Is Preferable</label>'
-            +    '</p>'
-            +  '</div>'
-            +  '<a class="deleteTopicPriorityForm btn-floating btn-large waves-effect waves-light right blue-grey">'
-            +    '<i class="material-icons">delete</i>'
-            +  '</a>'
-            +'</div>';
+            + '<input id="' + tpIdId + '" name="' + tpIdName + '" disabled value="" type="hidden">'
+            + '<div class="input-field col s6">'
+            + '<select id="' + tpTopicIdId + '" name="' + tpTopicIdName + '">'
+            + optionsString
+            + '</select>'
+            + '<label>Topic</label>'
+            + '</div>'
+            + '<div class="col s4">'
+            + '<p>'
+            + '<input id="' + tpIsPreferableId + '" name="' + tpIsPreferableName + '" type="checkbox"/>'
+            + '<label for="' + tpIsPreferableId + '">Is Preferable</label>'
+            + '</p>'
+            + '</div>'
+            + '<a class="deleteTopicPriorityForm btn-floating btn-large waves-effect waves-light right blue-grey">'
+            + '<i class="material-icons">delete</i>'
+            + '</a>'
+            + '</div>';
         // добавление новой строки-формы
         $("#topicPrioritiesBlock").append(newRow);
         $('select').material_select();
 
         var hiddenRow =
             '<div class="topicSelectRow">'
-            +	'<p class="selectId">' + tpTopicIdId + '</p>'
-            +	'<p class="topicId"></p>'
-            +'</div>';
+            + '<p class="selectId">' + tpTopicIdId + '</p>'
+            + '<p class="topicId"></p>'
+            + '</div>';
         // добавление строки в hidden слой
         $("#topicSelects").append(hiddenRow);
     });
@@ -137,8 +137,8 @@ $(document).ready(function() {
 /**
  * updates free and busy topics in selects lists on change in select
  */
-$(document).ready(function() {
-    $("#topicPrioritiesBlock").on("change", "select", function() {
+$(document).ready(function () {
+    $("#topicPrioritiesBlock").on("change", "select", function () {
         var selectId = $(this).attr("id");
         var selectInfo = $("#topicSelects").find(".topicSelectRow").find("p.selectId").filter(function () {
             return $(this).text() === selectId;
@@ -165,8 +165,8 @@ $(document).ready(function() {
 /**
  * deletes TopicPriority form on button 'delete' click
  */
-$(document).ready(function() {
-    $("#topicPrioritiesBlock").on("click", "a.deleteTopicPriorityForm", function() {
+$(document).ready(function () {
+    $("#topicPrioritiesBlock").on("click", "a.deleteTopicPriorityForm", function () {
         // поправка количества занятых тем
         var currentListSizeElem = $("#topicsListTakenSize");
         var newListSize = Number(currentListSizeElem.text()) - 1;
@@ -236,8 +236,8 @@ $(document).ready(function() {
 /**
  * adds another row with QuestionTypeOption form for on button 'plus' click
  */
-$(document).ready(function() {
-    $("#addQuestionTypeOptionForm").click(function() {
+$(document).ready(function () {
+    $("#addQuestionTypeOptionForm").click(function () {
         var currentListSizeElem = $("#questionTypesListTakenSize");
         var totalListSize = Number($("#questionTypesListTotalSize").text());
         var currentListSize = Number(currentListSizeElem.text());
@@ -253,7 +253,7 @@ $(document).ready(function() {
         var createdQuestionTypeRows = $("#questionTypeSelects").find(".questionTypeSelectRow");
 
         // формирование пунктов селекта
-        $(".questionTypesListRow").each(function() {
+        $(".questionTypesListRow").each(function () {
             var id = $(this).find(".id").text();
             var name = $(this).find(".name").text();
             var questionType = createdQuestionTypeRows.find("p.questionTypeId").filter(function () {
@@ -285,25 +285,25 @@ $(document).ready(function() {
             '<div class="questionTypeOptionForm row">'
             + '<input id="' + qtoIdId + '" name="' + qtoIdName + '" disabled value="" type="hidden">'
             + '<div class="input-field col s5">'
-            +   '<select id="' + qtoQuestionTypeIdId + '" name="' + qtoQuestionTypeIdName + '">'
-            +      optionsString
-            +   '</select>'
-            +   '<label>Question Type</label>'
+            + '<select id="' + qtoQuestionTypeIdId + '" name="' + qtoQuestionTypeIdName + '">'
+            + optionsString
+            + '</select>'
+            + '<label>Question Type</label>'
             + '</div>'
             + '<div class="input-field col s2">'
-            +    '<input id="' + qtoMinQuestionsId + '" name="' + qtoMinQuestionsName + '" placeholder="No Restriction" type="number" min="1" class="validate">'
-            +    '<label class="active" for="' + qtoMinQuestionsId + '">Minimal number of questions</label>'
+            + '<input id="' + qtoMinQuestionsId + '" name="' + qtoMinQuestionsName + '" placeholder="No Restriction" type="number" min="1" class="validate">'
+            + '<label class="active" for="' + qtoMinQuestionsId + '">Minimal number of questions</label>'
             + '</div>'
             + '<div class="input-field col s2">'
-            +    '<input id="' + qtoMaxQuestionsId + '" name="' + qtoMaxQuestionsName + '" placeholder="No Restriction" type="number" min="1" class="validate">'
-            +    '<label class="active" for="' + qtoMaxQuestionsId + '">Maximal number of questions</label>'
+            + '<input id="' + qtoMaxQuestionsId + '" name="' + qtoMaxQuestionsName + '" placeholder="No Restriction" type="number" min="1" class="validate">'
+            + '<label class="active" for="' + qtoMaxQuestionsId + '">Maximal number of questions</label>'
             + '</div>'
             + '<div class="input-field col s2">'
-            +    '<input id="' + qtoTimeLimitId + '" name="' + qtoTimeLimitName + '" placeholder="No Restriction" type="number" min="1" class="validate">'
-            +    '<label class="active" for="' + qtoTimeLimitId + '">Time limit for type</label>'
+            + '<input id="' + qtoTimeLimitId + '" name="' + qtoTimeLimitName + '" placeholder="No Restriction" type="number" min="1" class="validate">'
+            + '<label class="active" for="' + qtoTimeLimitId + '">Time limit for type</label>'
             + '</div>'
             + '<a class="deleteQuestionTypeOptionForm btn-floating btn-large waves-effect waves-light right blue-grey"><i class="material-icons">delete</i></a>'
-            +'</div>';
+            + '</div>';
 
         // добавление новой строки-формы
         $("#questionTypeOptionsBlock").append(newRow);
@@ -311,9 +311,9 @@ $(document).ready(function() {
 
         var hiddenRow =
             '<div class="questionTypeSelectRow">'
-            +	'<p class="selectId">' + qtoQuestionTypeIdId + '</p>'
-            +	'<p class="questionTypeId"></p>'
-            +'</div>';
+            + '<p class="selectId">' + qtoQuestionTypeIdId + '</p>'
+            + '<p class="questionTypeId"></p>'
+            + '</div>';
         // добавление строки в hidden слой
         $("#questionTypeSelects").append(hiddenRow);
     });
@@ -322,8 +322,8 @@ $(document).ready(function() {
 /**
  * updates free and busy questions types in selects lists on change in select
  */
-$(document).ready(function() {
-    $("#questionTypeOptionsBlock").on("change", "select", function() {
+$(document).ready(function () {
+    $("#questionTypeOptionsBlock").on("change", "select", function () {
         var selectId = $(this).attr("id");
         var selectInfo = $("#questionTypeSelects").find(".questionTypeSelectRow").find("p.selectId").filter(function () {
             return $(this).text() === selectId;
@@ -350,8 +350,8 @@ $(document).ready(function() {
 /**
  * deletes QuestionTypeOption form on button 'delete' click
  */
-$(document).ready(function() {
-    $("#questionTypeOptionsBlock").on("click", "a.deleteQuestionTypeOptionForm", function() {
+$(document).ready(function () {
+    $("#questionTypeOptionsBlock").on("click", "a.deleteQuestionTypeOptionForm", function () {
         // поправка количества занятых тем
         var currentListSizeElem = $("#questionTypesListTakenSize");
         var newListSize = Number(currentListSizeElem.text()) - 1;

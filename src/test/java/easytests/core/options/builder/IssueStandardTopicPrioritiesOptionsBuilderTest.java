@@ -35,7 +35,7 @@ public class IssueStandardTopicPrioritiesOptionsBuilderTest {
                 = this.topicPrioritiesOptionsBuilder.forAuth();
 
         Assert.assertEquals(new IssueStandardTopicPrioritiesOptions()
-                .withIssueStandard(issueStandardsOptions),
+                        .withIssueStandard(issueStandardsOptions),
                 topicPrioritiesOptions);
     }
 

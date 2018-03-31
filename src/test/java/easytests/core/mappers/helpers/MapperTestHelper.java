@@ -1,6 +1,7 @@
 package easytests.core.mappers.helpers;
 
 import org.apache.ibatis.annotations.Mapper;
+
 import java.lang.reflect.Field;
 
 
@@ -13,7 +14,7 @@ public abstract class MapperTestHelper {
         final Field[] mapperTestClassFields = mapperTestClass.getDeclaredFields();
         Field mapperTestClassField = null;
 
-        for (Field field: mapperTestClassFields) {
+        for (Field field : mapperTestClassFields) {
             if (field.getType().isAnnotationPresent(Mapper.class)) {
                 mapperTestClassField = field;
                 break;

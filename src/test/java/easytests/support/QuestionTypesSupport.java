@@ -2,7 +2,9 @@ package easytests.support;
 
 import easytests.core.entities.QuestionTypeEntity;
 import easytests.core.models.QuestionTypeModelInterface;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -82,7 +84,7 @@ public class QuestionTypesSupport {
     }
 
     private void assertEquals(QuestionTypeEntity expected, QuestionTypeEntity actual, Boolean expectId) {
-        if (!expectId){
+        if (!expectId) {
             Assert.assertEquals(expected.getId(), actual.getId());
         }
         Assert.assertEquals(expected.getName(), actual.getName());
@@ -97,7 +99,7 @@ public class QuestionTypesSupport {
     }
 
     private void assertNotEquals(QuestionTypeEntity unexpected, QuestionTypeEntity actual, boolean expectedId) {
-        if (!expectedId){
+        if (!expectedId) {
             Assert.assertNotEquals(unexpected.getId(), actual.getId());
         }
         Assert.assertNotEquals(unexpected.getName(), actual.getName());
@@ -120,7 +122,7 @@ public class QuestionTypesSupport {
     public void assertModelsListEquals(List<QuestionTypeModelInterface> expected, List<QuestionTypeModelInterface> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (QuestionTypeModelInterface questionTypeModel: expected) {
+        for (QuestionTypeModelInterface questionTypeModel : expected) {
             this.assertEquals(questionTypeModel, actual.get(i));
             i++;
         }
@@ -129,7 +131,7 @@ public class QuestionTypesSupport {
     public void assertEntitiesListEquals(List<QuestionTypeEntity> expected, List<QuestionTypeEntity> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (QuestionTypeEntity questionTypeEntity: expected) {
+        for (QuestionTypeEntity questionTypeEntity : expected) {
             this.assertEquals(questionTypeEntity, actual.get(i));
             i++;
         }

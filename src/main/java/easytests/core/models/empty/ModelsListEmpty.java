@@ -1,6 +1,7 @@
 package easytests.core.models.empty;
 
 import easytests.core.models.exceptions.CallMethodOnEmptyModelsListException;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;

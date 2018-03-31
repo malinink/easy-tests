@@ -50,8 +50,8 @@ public class IssueStandardsOptionsBuilderTest {
         final IssueStandardsOptionsInterface issueStandardsOptions = this.issueStandardsOptionsBuilder.forDelete();
 
         Assert.assertEquals(new IssueStandardsOptions()
-                .withTopicPriorities(topicPrioritiesOptions)
-                .withQuestionTypeOptions(questionTypeOptionsOptions),
+                        .withTopicPriorities(topicPrioritiesOptions)
+                        .withQuestionTypeOptions(questionTypeOptionsOptions),
                 issueStandardsOptions);
     }
 }

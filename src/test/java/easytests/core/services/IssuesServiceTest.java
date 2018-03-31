@@ -18,11 +18,13 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
 
 import static org.mockito.BDDMockito.*;
+
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.mock.mockito.*;
 import org.springframework.test.context.junit4.*;
+
 /**
  * @author fortyways
  */
@@ -38,6 +40,7 @@ public class IssuesServiceTest {
 
     @Autowired
     private IssuesService issuesService;
+
     private IssueModelInterface mapIssueModel(IssueEntity issueEntity) {
         final IssueModelInterface issueModel = new IssueModel();
         issueModel.map(issueEntity);
@@ -69,7 +72,7 @@ public class IssuesServiceTest {
 
     private List<IssueModelInterface> getIssuesModels() {
         final List<IssueModelInterface> issuesModels = new ArrayList<>(2);
-        for (IssueEntity issueEntity: this.getIssuesEntities()) {
+        for (IssueEntity issueEntity : this.getIssuesEntities()) {
             issuesModels.add(this.mapIssueModel(issueEntity));
         }
         return issuesModels;
@@ -116,7 +119,7 @@ public class IssuesServiceTest {
         given(issuesOptions.withRelations(issuesModels)).willReturn(issuesModels);
 
         final List<IssueModelInterface> foundIssuesModels =
-                this.issuesService.findBySubject(subjectModel,issuesOptions);
+                this.issuesService.findBySubject(subjectModel, issuesOptions);
 
         verify(this.issuesMapper).findBySubjectId(subjectId);
         verify(issuesOptions).withRelations(issuesModels);
@@ -286,7 +289,7 @@ public class IssuesServiceTest {
     }
 
     @Test
-    public void testMultipleSaveAndDelete(){
+    public void testMultipleSaveAndDelete() {
         final IssueModelInterface issueModelFirst = Models.createIssueModel(
                 1,
                 "Name",
@@ -297,7 +300,7 @@ public class IssuesServiceTest {
                 "Name2",
                 2
         );
-        final ArrayList<IssueModelInterface> issueModels=new ArrayList<>();
+        final ArrayList<IssueModelInterface> issueModels = new ArrayList<>();
         issueModels.add(issueModelFirst);
         issueModels.add(issueModelSecond);
         this.issuesService.save(issueModels);

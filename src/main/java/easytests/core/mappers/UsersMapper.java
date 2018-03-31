@@ -1,7 +1,9 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.UserEntity;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.*;
 
 
@@ -13,17 +15,17 @@ import org.apache.ibatis.annotations.*;
 public interface UsersMapper {
 
     @Results(
-        id = "User",
-        value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "firstName", column = "first_name"),
-            @Result(property = "lastName", column = "last_name"),
-            @Result(property = "surname", column = "surname"),
-            @Result(property = "email", column = "email"),
-            @Result(property = "password", column = "password"),
-            @Result(property = "isAdmin", column = "is_admin"),
-            @Result(property = "state", column = "state")
-        })
+            id = "User",
+            value = {
+                    @Result(property = "id", column = "id"),
+                    @Result(property = "firstName", column = "first_name"),
+                    @Result(property = "lastName", column = "last_name"),
+                    @Result(property = "surname", column = "surname"),
+                    @Result(property = "email", column = "email"),
+                    @Result(property = "password", column = "password"),
+                    @Result(property = "isAdmin", column = "is_admin"),
+                    @Result(property = "state", column = "state")
+            })
     @Select("SELECT * FROM users")
     List<UserEntity> findAll();
 

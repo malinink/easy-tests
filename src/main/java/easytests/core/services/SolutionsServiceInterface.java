@@ -3,6 +3,7 @@ package easytests.core.services;
 import easytests.core.models.PointModelInterface;
 import easytests.core.models.SolutionModelInterface;
 import easytests.core.options.SolutionsOptionsInterface;
+
 import java.util.List;
 
 
@@ -26,7 +27,7 @@ public interface SolutionsServiceInterface extends ServiceInterface {
     void save(SolutionModelInterface solutionModel);
 
     void save(SolutionModelInterface solutionModel,
-                                     SolutionsOptionsInterface solutionsOptions);
+              SolutionsOptionsInterface solutionsOptions);
 
     void save(List<SolutionModelInterface> solutionModels, SolutionsOptionsInterface solutionsOptions);
 

@@ -14,13 +14,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+
 import static org.mockito.BDDMockito.*;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,11 +66,11 @@ public class TesteesServiceTest {
         return testeesModels;
     }
 
-    private void assertServicesSet(TesteesOptionsInterface testeesOptions){
+    private void assertServicesSet(TesteesOptionsInterface testeesOptions) {
         this.assertServicesSet(testeesOptions, 1);
     }
 
-    private void assertServicesSet(TesteesOptionsInterface testeesOptions, Integer times){
+    private void assertServicesSet(TesteesOptionsInterface testeesOptions, Integer times) {
         verify(testeesOptions, times(times)).setQuizzesService(any(QuizzesService.class));
         verify(testeesOptions, times(times)).setTesteesService(any(TesteesService.class));
     }

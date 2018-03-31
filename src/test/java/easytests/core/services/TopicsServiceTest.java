@@ -8,15 +8,19 @@ import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.SubjectsSupport;
 import easytests.support.TopicsSupport;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.Mockito.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -57,7 +61,7 @@ public class TopicsServiceTest {
         return topicsModels;
     }
 
-    private void assertServicesSet(TopicsOptionsInterface topicsOptions) throws Exception{
+    private void assertServicesSet(TopicsOptionsInterface topicsOptions) throws Exception {
         this.assertServicesSet(topicsOptions, 1);
     }
 

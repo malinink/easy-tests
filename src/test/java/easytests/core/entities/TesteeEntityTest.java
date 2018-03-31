@@ -8,13 +8,13 @@ import org.junit.Test;
 /**
  * @author DoZor-80
  */
-public class TesteeEntityTest extends AbstractEntityTest{
+public class TesteeEntityTest extends AbstractEntityTest {
 
     protected TesteesSupport testeesSupport = new TesteesSupport();
 
     @Test
     public void testCommon() throws Exception {
-       this.testCommon(TesteeEntity.class);
+        this.testCommon(TesteeEntity.class);
     }
 
     @Test
@@ -24,7 +24,7 @@ public class TesteeEntityTest extends AbstractEntityTest{
 
         testeeEntity.map(testeeModel);
 
-        this.testeesSupport.assertEquals(testeeModel,testeeEntity);
+        this.testeesSupport.assertEquals(testeeModel, testeeEntity);
 
     }
 }

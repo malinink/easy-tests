@@ -10,15 +10,21 @@ import easytests.core.services.AnswersServiceInterface;
 import easytests.core.services.QuestionTypesServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.core.services.QuestionsServiceInterface;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import static org.mockito.BDDMockito.given;
+
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+
 import static org.mockito.Mockito.verify;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 

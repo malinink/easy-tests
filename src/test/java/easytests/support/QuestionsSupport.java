@@ -5,7 +5,9 @@ import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.QuestionTypeModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -172,7 +174,7 @@ public class QuestionsSupport {
     public void assertModelsListEquals(List<QuestionModelInterface> expected, List<QuestionModelInterface> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (QuestionModelInterface questionModel: expected) {
+        for (QuestionModelInterface questionModel : expected) {
             this.assertEquals(questionModel, actual.get(i));
             i++;
         }
@@ -181,7 +183,7 @@ public class QuestionsSupport {
     public void assertEntitiesListEquals(List<QuestionEntity> expected, List<QuestionEntity> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (QuestionEntity questionEntity: expected) {
+        for (QuestionEntity questionEntity : expected) {
             this.assertEquals(questionEntity, actual.get(i));
             i++;
         }
