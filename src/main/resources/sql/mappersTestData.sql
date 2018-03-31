@@ -48,9 +48,9 @@ INSERT INTO question_type_options (question_type_id, min_number, max_number, tim
   (3, 5, NULL, 300, 2);
 
 INSERT INTO subjects (name, description, user_id) VALUES
-  ('test1', 'testdescription1', 2),
-  ('test2', 'testdescription2', 2),
-  ('test3', 'testdescription3', 3);
+  ('Subject1', 'Subject Description 1', 2),
+  ('Subject2', 'Subject Description 2', 2),
+  ('Subject3', 'Subject Description 3', 3);
 
 INSERT INTO topics (name, subject_id) VALUES
   ('Name1', 2),
@@ -71,7 +71,7 @@ INSERT INTO question_types VALUES
 INSERT INTO answers(txt, question_id, serial_number, is_right) VALUES
   ('Answer1', 1, 1, TRUE),
   ('Answer2', 2, 2, FALSE),
-  ('Answer3', 3, 3, TRUE);
+  ('Answer3', 1, 3, TRUE);
 
 INSERT INTO quizzes (issue_id, invite_code,started_at,finished_at,code_expired) VALUES
  (1, 'test_invite_code1','2003-2-1'::timestamp,'2003-3-1'::timestamp,FALSE ),

@@ -1,0 +1,91 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "0.0.1"
+  title: "Easy Tests"
+host: "api.easy-tests"
+tags:
+  - name: "users"
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /v1/objects:
+    get:
+      summary: List all object
+      operationId: listObject
+      tags:
+        - objects
+      responses:
+        "200":
+          description: An array of objects
+          schema:
+            $ref: '#/definitions/V1Objects'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+  /v1/objects/{objectId}:
+    get:
+      summary: Info for a specific user
+      operationId: showObjectById
+      tags:
+        - objects
+      parameters:
+        - name: objectId
+          in: path
+          required: true
+          description: The id of the object to retrieve
+          type: integer
+      responses:
+        "200":
+          description: Expected response to a valid request
+          schema:
+            $ref: '#/definitions/V1Object'
+        "404":
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/V1Object'
+definitions:
+  V1Object:
+    required:
+      - id
+      - firstName
+      - lastNname
+      - surname
+      - email
+      - isAdmin
+      - state
+    properties:
+      id:
+        type: integer
+        format: int64
+      firstName:
+        type: string
+      lastName:
+        type: string
+      surname:
+        type: string
+      email:
+        type: string
+      isAdmin:
+        type: boolean
+      state:
+        type: integer
+  V1Objects:
+    type: array
+    items:
+      $ref: '#/definitions/V1Object'
+  V1Error:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

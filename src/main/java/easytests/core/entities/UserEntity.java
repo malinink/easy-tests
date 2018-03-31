@@ -2,12 +2,14 @@ package easytests.core.entities;
 
 import easytests.core.models.UserModelInterface;
 import lombok.*;
+import org.modelmapper.ModelMapper;
 
 /**
  * @author malinink
  */
 @Data
-public class UserEntity {
+public class UserEntity implements EntityInterface {
+
     private Integer id;
 
     private String firstName;
@@ -25,13 +27,7 @@ public class UserEntity {
     private Integer state;
 
     public void map(UserModelInterface userModel) {
-        this.setId(userModel.getId());
-        this.setFirstName(userModel.getFirstName());
-        this.setLastName(userModel.getLastName());
-        this.setSurname(userModel.getSurname());
-        this.setEmail(userModel.getEmail());
-        this.setPassword(userModel.getPassword());
-        this.setIsAdmin(userModel.getIsAdmin());
-        this.setState(userModel.getState());
+        final ModelMapper modelMapper = new ModelMapper();
+        modelMapper.map(userModel, this);
     }
 }

@@ -2,30 +2,29 @@ package easytests.core.services;
 
 import easytests.core.entities.SolutionEntity;
 import easytests.core.mappers.SolutionsMapper;
-import easytests.core.models.AnswerModelInterface;
 import easytests.core.models.PointModelInterface;
-import easytests.core.models.SolutionModel;
 import easytests.core.models.SolutionModelInterface;
-import java.util.ArrayList;
-import java.util.List;
-
 import easytests.core.options.SolutionsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import easytests.support.PointsSupport;
+import easytests.support.SolutionsSupport;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.runner.*;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.boot.test.context.*;
+import org.springframework.boot.test.mock.mockito.*;
+import org.springframework.test.context.junit4.*;
+
 
 /**
- * @author SingularityA
- * @author Loriens
+ * @author SvetlanaTselikova
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -34,257 +33,275 @@ public class SolutionsServiceTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
-    @Mock
+    @MockBean
     private SolutionsMapper solutionsMapper;
 
-    @InjectMocks
+    @Autowired
     private SolutionsService solutionsService;
 
-    private SolutionEntity createSolutionEntityMock(Integer id, Integer answerId, Integer pointId) {
-        final SolutionEntity solutionEntity = mock(SolutionEntity.class);
-        when(solutionEntity.getId()).thenReturn(id);
-        when(solutionEntity.getAnswerId()).thenReturn(answerId);
-        when(solutionEntity.getPointId()).thenReturn(pointId);
-        return solutionEntity;
-    }
+    private SolutionsSupport solutionsSupport = new SolutionsSupport();
 
-    private SolutionModelInterface createSolutionModel(Integer id, Integer answerId, Integer pointId) {
-        final SolutionModelInterface solutionModel = new SolutionModel();
+    private PointsSupport pointsSupport = new PointsSupport();
 
-        final AnswerModelInterface answerModel = mock(AnswerModelInterface.class);
-        when(answerModel.getId()).thenReturn(answerId);
-
-        final PointModelInterface pointModel = mock(PointModelInterface.class);
-        when(pointModel.getId()).thenReturn(pointId);
-
-        solutionModel.setId(id);
-        solutionModel.setAnswer(answerModel);
-        solutionModel.setPoint(pointModel);
-        return solutionModel;
-    }
-
-    private SolutionEntity mapSolutionEntity(SolutionModelInterface solutionModel) {
-        final SolutionEntity solutionEntity = new SolutionEntity();
-        solutionEntity.map(solutionModel);
-        return solutionEntity;
-    }
-
-    private SolutionModelInterface mapSolutionModel(SolutionEntity solutionEntity) {
-        final SolutionModelInterface solutionModel = new SolutionModel();
-        solutionModel.map(solutionEntity);
-        return solutionModel;
-    }
-
-    private List<SolutionEntity> getSolutionsEntities() {
+    private List<SolutionEntity> getSolutionsFixturesEntities() {
         final List<SolutionEntity> solutionsEntities = new ArrayList<>(2);
-        solutionsEntities.add(this.createSolutionEntityMock(1, 10, 1));
-        solutionsEntities.add(this.createSolutionEntityMock(2, 20, 1));
+        solutionsEntities.add(this.solutionsSupport.getEntityFixtureMock(0));
+        solutionsEntities.add(this.solutionsSupport.getEntityFixtureMock(1));
         return solutionsEntities;
     }
 
-    private List<SolutionModelInterface> getSolutionsModels(List<SolutionEntity> solutionsEntities) {
-        final List<SolutionModelInterface> usersModels = new ArrayList<>(2);
-        for (SolutionEntity solutionEntity: solutionsEntities) {
-            usersModels.add(this.mapSolutionModel(solutionEntity));
-        }
-        return usersModels;
+    private List<SolutionModelInterface> getSolutionsFixturesModels() {
+        final List<SolutionModelInterface> solutionsModels = new ArrayList<>(2);
+        solutionsModels.add(this.solutionsSupport.getModelFixtureMock(0));
+        solutionsModels.add(this.solutionsSupport.getModelFixtureMock(1));
+        return solutionsModels;
+    }
+
+    private void assertServicesSet(SolutionsOptionsInterface solutionsOptions) throws Exception {
+        this.assertServicesSet(solutionsOptions,1);
+    }
+
+    private void assertServicesSet(SolutionsOptionsInterface solutionsOptions, Integer times) {
+        verify(solutionsOptions, times(times)).setPointsService(any(PointsServiceInterface.class));
+        verify(solutionsOptions, times(times)).setSolutionsService(this.solutionsService);
     }
 
     @Test
     public void testFindAllPresentList() throws Exception {
-        final List<SolutionEntity> solutionEntities = new ArrayList<>(5);
-        solutionEntities.add(this.createSolutionEntityMock(1, 10, 1));
-        solutionEntities.add(this.createSolutionEntityMock(2, 20, 1));
-        solutionEntities.add(this.createSolutionEntityMock(3, 11, 2));
-        solutionEntities.add(this.createSolutionEntityMock(4, 21, 2));
-        solutionEntities.add(this.createSolutionEntityMock(5, 12, 3));
-        given(this.solutionsMapper.findAll()).willReturn(solutionEntities);
+        final List<SolutionEntity> solutionsEntities = this.getSolutionsFixturesEntities();
+        when(this.solutionsMapper.findAll()).thenReturn(solutionsEntities);
 
-        final List<SolutionModelInterface> solutionModels = this.solutionsService.findAll();
+        final List<SolutionModelInterface> solutionsModels = this.solutionsService.findAll();
 
-        Assert.assertNotNull(solutionModels);
-        Assert.assertEquals(solutionEntities.size(), solutionModels.size());
-        for (int i = 0; i < solutionEntities.size(); i++) {
-            Assert.assertEquals(solutionModels.get(i), this.mapSolutionModel(solutionEntities.get(i)));
-        }
+        this.solutionsSupport.assertModelsListEquals(this.getSolutionsFixturesModels(), solutionsModels);
     }
 
     @Test
     public void testFindAllAbsentList() throws Exception {
-        given(this.solutionsMapper.findAll()).willReturn(new ArrayList<>(0));
+        when(this.solutionsMapper.findAll()).thenReturn(new ArrayList<>(0));
 
-        final List<SolutionModelInterface> solutionModels = this.solutionsService.findAll();
+        final List<SolutionModelInterface> solutionsModels = this.solutionsService.findAll();
 
-        Assert.assertNotNull(solutionModels);
-        Assert.assertEquals(0, solutionModels.size());
+        Assert.assertNotNull(solutionsModels);
+        Assert.assertEquals(0, solutionsModels.size());
     }
 
     @Test
     public void testFindAllWithOptions() throws Exception {
-        final List<SolutionEntity> solutionsEntities = this.getSolutionsEntities();
-
-        final List<SolutionModelInterface> solutionsModels = this.getSolutionsModels(solutionsEntities);
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final List<SolutionEntity> solutionsEntities = this.getSolutionsFixturesEntities();
+        final List<SolutionModelInterface> solutionsModels = this.getSolutionsFixturesModels();
         final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
-        given(this.solutionsMapper.findAll()).willReturn(solutionsEntities);
-        given(solutionsOptions.withRelations(Mockito.anyList())).willReturn(solutionsModels);
+        when(this.solutionsMapper.findAll()).thenReturn(solutionsEntities);
+        when(solutionsOptions.withRelations(listCaptor.capture())).thenReturn(solutionsModels);
 
-        final List<SolutionModelInterface> foundedSolutionsModels = this.solutionsService.findAll(solutionsOptions);
+        final List<SolutionModelInterface> solutionsFoundedModels = this.solutionsService.findAll(solutionsOptions);
 
-        verify(solutionsOptions).withRelations(solutionsModels);
-        Assert.assertEquals(solutionsModels, foundedSolutionsModels);
+        this.assertServicesSet(solutionsOptions);
+        this.solutionsSupport.assertModelsListEquals(solutionsModels, listCaptor.getValue());
+        Assert.assertSame(solutionsModels, solutionsFoundedModels);
     }
 
     @Test
     public void testFindPresentModel() throws Exception {
-        Integer id = 1;
-        final SolutionEntity solutionEntity = this.createSolutionEntityMock(id, 2, 3);
-        given(this.solutionsMapper.find(id)).willReturn(solutionEntity);
+        final SolutionEntity solutionEntity = this.solutionsSupport.getEntityFixtureMock(0);
+        when(this.solutionsMapper.find(solutionEntity.getId())).thenReturn(solutionEntity);
 
-        final SolutionModelInterface solutionModel = this.solutionsService.find(id);
-        Assert.assertNotNull(solutionModel);
-        Assert.assertEquals(solutionModel, this.mapSolutionModel(solutionEntity));
+        final SolutionModelInterface solutionFoundedModel = this.solutionsService.find(solutionEntity.getId());
+
+        this.solutionsSupport.assertEquals(this.solutionsSupport.getModelFixtureMock(0), solutionFoundedModel);
     }
 
     @Test
     public void testFindAbsentModel() throws Exception {
-        Integer id = 20;
-        given(this.solutionsMapper.find(id)).willReturn(null);
+        final Integer id = 10;
+        when(this.solutionsMapper.find(id)).thenReturn(null);
 
-        final SolutionModelInterface solutionModel = this.solutionsService.find(id);
-        Assert.assertNull(solutionModel);
-    }
+        final SolutionModelInterface solutionFoundedModel = this.solutionsService.find(id);
 
-    @Test
-    public void testFindByPointPresentModel() throws Exception {
-        Integer pointId = 1;
-        final List<SolutionEntity> solutionEntities = new ArrayList<>(2);
-        solutionEntities.add(this.createSolutionEntityMock(1, 10, pointId));
-        solutionEntities.add(this.createSolutionEntityMock(2, 20, pointId));
-
-        given(this.solutionsMapper.findByPointId(pointId)).willReturn(solutionEntities);
-
-        final PointModelInterface pointModel = mock(PointModelInterface.class);
-        when(pointModel.getId()).thenReturn(pointId);
-
-        final List<SolutionModelInterface> solutionModels = this.solutionsService.findByPoint(pointModel);
-
-        Assert.assertNotNull(solutionModels);
-        Assert.assertEquals(solutionEntities.size(), solutionModels.size());
-        for (int i = 0; i < solutionEntities.size(); i++) {
-            Assert.assertEquals(solutionModels.get(i), this.mapSolutionModel(solutionEntities.get(i)));
-        }
-    }
-
-    @Test
-    public void testFindByPointAbsentModel() throws Exception {
-        Integer pointId = 10;
-        given(this.solutionsMapper.findByPointId(pointId)).willReturn(new ArrayList<>(0));
-
-        final PointModelInterface pointModel = mock(PointModelInterface.class);
-        when(pointModel.getId()).thenReturn(pointId);
-
-        final List<SolutionModelInterface> solutionModels = this.solutionsService.findByPoint(pointModel);
-
-        Assert.assertNotNull(solutionModels);
-        Assert.assertEquals(0, solutionModels.size());
+        Assert.assertNull(solutionFoundedModel);
     }
 
     @Test
     public void testFindWithOptions() throws Exception {
-        final Integer id = 1;
-        final SolutionEntity solutionEntity = this.createSolutionEntityMock(
-                id,
-                1,
-                1
-        );
-        final SolutionModelInterface solutionModel = this.mapSolutionModel(solutionEntity);
+        final ArgumentCaptor<SolutionModelInterface> solutionModelCaptor = ArgumentCaptor.forClass(SolutionModelInterface.class);
+        final SolutionEntity solutionEntity = this.solutionsSupport.getEntityFixtureMock(0);
+        final SolutionModelInterface solutionModel = this.solutionsSupport.getModelFixtureMock(0);
         final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
-        given(this.solutionsMapper.find(id)).willReturn(solutionEntity);
-        given(solutionsOptions.withRelations(solutionModel)).willReturn(solutionModel);
+        when(this.solutionsMapper.find(solutionModel.getId())).thenReturn(solutionEntity);
+        when(solutionsOptions.withRelations(solutionModelCaptor.capture())).thenReturn(solutionModel);
 
-        final SolutionModelInterface foundedSolutionModel = this.solutionsService.find(id, solutionsOptions);
+        final SolutionModelInterface solutionFoundedModel = this.solutionsService.find(solutionModel.getId(), solutionsOptions);
 
-        Assert.assertEquals(solutionModel, foundedSolutionModel);
-        verify(solutionsOptions).withRelations(solutionModel);
+        this.assertServicesSet(solutionsOptions);
+        this.solutionsSupport.assertEquals(solutionModel, solutionModelCaptor.getValue());
+        Assert.assertSame(solutionModel, solutionFoundedModel);
     }
 
     @Test
-    public void testSaveInsertsEntity() throws Exception {
-        final SolutionModelInterface solutionModel = this.createSolutionModel(null, 13, 4);
-        final Integer id = 5;
+    public void testFindByPointPresentList() throws Exception {
+        final PointModelInterface pointModel = this.pointsSupport.getModelFixtureMock(0);
+        final List<SolutionEntity> solutionsEntities = this.getSolutionsFixturesEntities();
+        when(this.solutionsMapper.findByPointId(pointModel.getId())).thenReturn(solutionsEntities);
 
-        doAnswer(invocations -> {
-            final SolutionEntity solutionEntity = (SolutionEntity) invocations.getArguments()[0];
-            solutionEntity.setId(id);
-            return null;
-        }).when(this.solutionsMapper).insert(Mockito.any(SolutionEntity.class));
+        final List<SolutionModelInterface> solutionsFoundedModels = this.solutionsService.findByPoint(pointModel);
+
+        this.solutionsSupport.assertModelsListEquals(this.getSolutionsFixturesModels(), solutionsFoundedModels);
+    }
+
+    @Test
+    public void testFindByPointAbsentList() throws Exception {
+        final PointModelInterface pointModel = this.pointsSupport.getModelFixtureMock(0);
+        when(this.solutionsMapper.findByPointId(pointModel.getId())).thenReturn(new ArrayList<>(0));
+
+        final List<SolutionModelInterface> solutionsFoundedModels = this.solutionsService.findByPoint(pointModel);
+
+        Assert.assertEquals(0, solutionsFoundedModels.size());
+    }
+
+    @Test
+    public void testFindByPointWithOptions() throws Exception {
+        final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
+        final PointModelInterface pointModel = this.pointsSupport.getModelFixtureMock(0);
+        final List<SolutionEntity> solutionsEntities = this.getSolutionsFixturesEntities();
+        when(this.solutionsMapper.findByPointId(pointModel.getId())).thenReturn(solutionsEntities);
+        final List<SolutionModelInterface> solutionsModels = this.getSolutionsFixturesModels();
+        final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
+        when(solutionsOptions.withRelations(listCaptor.capture())).thenReturn(solutionsModels);
+
+        final List<SolutionModelInterface> solutionsFoundedModels = this.solutionsService.findByPoint(pointModel, solutionsOptions);
+
+        this.assertServicesSet(solutionsOptions);
+        this.solutionsSupport.assertModelsListEquals(solutionsModels, listCaptor.getValue());
+        Assert.assertSame(solutionsModels, solutionsFoundedModels);
+    }
+
+    @Test
+    public void testSaveCreatesEntity() throws Exception {
+        final ArgumentCaptor<SolutionEntity> solutionEntityCaptor = ArgumentCaptor.forClass(SolutionEntity.class);
+        final SolutionModelInterface solutionModel = this.solutionsSupport.getModelAdditionalMock(0);
 
         this.solutionsService.save(solutionModel);
 
-        verify(this.solutionsMapper, times(1)).insert(this.mapSolutionEntity(solutionModel));
-        Assert.assertEquals(id, solutionModel.getId());
+        verify(this.solutionsMapper, times(1)).insert(solutionEntityCaptor.capture());
+        this.solutionsSupport.assertEquals(this.solutionsSupport.getEntityAdditionalMock(0), solutionEntityCaptor.getValue());
     }
 
     @Test
-    public void testSaveEntitiesList() throws Exception {
-        final SolutionModelInterface solutionModelFirst = this.createSolutionModel(1, 13, 4);
-        final SolutionModelInterface solutionModelSecond = this.createSolutionModel(2, 10, 3);
+    public void testSaveUpdateEntityIdOnCreation() throws Exception {
+        final Integer id = 5;
+        final SolutionModelInterface solutionModel = this.solutionsSupport.getModelAdditionalMock(0);
+        doAnswer(invocation -> {
+            final SolutionEntity solutionEntity = (SolutionEntity) invocation.getArguments()[0];
+            solutionEntity.setId(id);
+            return null;
+        }).when(this.solutionsMapper).insert(any());
 
-        final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
+        this.solutionsService.save(solutionModel);
 
-        final List<SolutionModelInterface> solutionModels = new ArrayList<>();
-        solutionModels.add(solutionModelFirst);
-        solutionModels.add(solutionModelSecond);
-
-        final SolutionsServiceInterface solutionsServiceSpy = Mockito.spy(solutionsService);
-
-        solutionsServiceSpy.save(solutionModels);
-        verify(solutionsServiceSpy, times(1)).save(solutionModelFirst);
-        verify(solutionsServiceSpy, times(1)).save(solutionModelSecond);
-
-        solutionsServiceSpy.save(solutionModels, solutionsOptions);
-        verify(solutionsServiceSpy, times(1)).save(solutionModelFirst, solutionsOptions);
-        verify(solutionsServiceSpy, times(1)).save(solutionModelSecond, solutionsOptions);
+        verify(solutionModel, times(1)).setId(id);
     }
 
     @Test
     public void testSaveUpdatesEntity() throws Exception {
-        final SolutionModelInterface solutionModel = this.createSolutionModel(1, 10, 1);
+        final ArgumentCaptor<SolutionEntity> solutionEntityCaptor = ArgumentCaptor.forClass(SolutionEntity.class);
+        final SolutionModelInterface solutionModel = this.solutionsSupport.getModelFixtureMock(0);
 
         this.solutionsService.save(solutionModel);
 
-        verify(this.solutionsMapper, times(1)).update(this.mapSolutionEntity(solutionModel));
+        verify(this.solutionsMapper, times(1)).update(solutionEntityCaptor.capture());
+        this.solutionsSupport.assertEquals(this.solutionsSupport.getEntityFixtureMock(0), solutionEntityCaptor.getValue());
+    }
+
+    @Test
+    public void testSaveWithOptions() throws Exception {
+        final SolutionModelInterface solutionModel = this.solutionsSupport.getModelFixtureMock(0);
+        final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
+
+        this.solutionsService.save(solutionModel, solutionsOptions);
+
+        this.assertServicesSet(solutionsOptions);
+        verify(solutionsOptions, times(1)).saveWithRelations(solutionModel);
+        verifyNoMoreInteractions(this.solutionsMapper);
+    }
+
+    @Test
+    public void testSaveModelsList() throws Exception {
+        final ArgumentCaptor<SolutionEntity> solutionEntityCaptor = ArgumentCaptor.forClass(SolutionEntity.class);
+        final List<SolutionModelInterface> solutionsModels = this.getSolutionsFixturesModels();
+
+        this.solutionsService.save(solutionsModels);
+
+        verify(this.solutionsMapper, times(solutionsModels.size())).update(solutionEntityCaptor.capture());
+        this.solutionsSupport.assertEntitiesListEquals(this.getSolutionsFixturesEntities(), solutionEntityCaptor.getAllValues());
+    }
+
+    @Test
+    public void testSaveModelsListWithOptions() throws Exception {
+        final ArgumentCaptor<SolutionModelInterface> solutionModelCaptor = ArgumentCaptor.forClass(SolutionModelInterface.class);
+        final List<SolutionModelInterface> solutionsModels = this.getSolutionsFixturesModels();
+        final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
+
+        this.solutionsService.save(solutionsModels, solutionsOptions);
+
+        this.assertServicesSet(solutionsOptions, solutionsModels.size());
+        verify(solutionsOptions, times(solutionsModels.size())).saveWithRelations(solutionModelCaptor.capture());
+        this.solutionsSupport.assertModelsListEquals(solutionsModels, solutionModelCaptor.getAllValues());
+        verifyNoMoreInteractions(this.solutionsMapper);
     }
 
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
-        final SolutionModelInterface solutionModel = this.createSolutionModel(1, 10, 1);
+        final ArgumentCaptor<SolutionEntity> solutionEntityCaptor = ArgumentCaptor.forClass(SolutionEntity.class);
 
-        this.solutionsService.delete(solutionModel);
+        this.solutionsService.delete(this.solutionsSupport.getModelFixtureMock(0));
 
-        verify(this.solutionsMapper, times(1)).delete(this.mapSolutionEntity(solutionModel));
+        verify(this.solutionsMapper, times(1)).delete(solutionEntityCaptor.capture());
+        this.solutionsSupport.assertEquals(this.solutionsSupport.getEntityFixtureMock(0), solutionEntityCaptor.getValue());
     }
 
     @Test
     public void testDeleteUnidentifiedModel() throws Exception {
-        final SolutionModelInterface solutionModel = this.createSolutionModel(null, 13, 4);
+        final SolutionModelInterface solutionModel = this.solutionsSupport.getModelAdditionalMock(0);
 
         exception.expect(DeleteUnidentifiedModelException.class);
-
         this.solutionsService.delete(solutionModel);
     }
 
     @Test
     public void testDeleteWithOptions() throws Exception {
-        final SolutionModelInterface solutionModel = this.createSolutionModel(
-                1,
-                1,
-                1
-        );
+        final SolutionModelInterface solutionModel = this.solutionsSupport.getModelFixtureMock(0);
         final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
 
         this.solutionsService.delete(solutionModel, solutionsOptions);
 
-        verify(solutionsOptions).deleteWithRelations(solutionModel);
+        this.assertServicesSet(solutionsOptions);
+        verify(solutionsOptions, times(1)).deleteWithRelations(solutionModel);
+        verifyNoMoreInteractions(this.solutionsMapper);
+    }
+
+    @Test
+    public void testDeleteModelsList() throws Exception {
+        final ArgumentCaptor<SolutionEntity> solutionEntityCaptor = ArgumentCaptor.forClass(SolutionEntity.class);
+        final List<SolutionModelInterface> solutionsModels = this.getSolutionsFixturesModels();
+
+        this.solutionsService.delete(solutionsModels);
+
+        verify(this.solutionsMapper, times(solutionsModels.size())).delete(solutionEntityCaptor.capture());
+        this.solutionsSupport.assertEntitiesListEquals(this.getSolutionsFixturesEntities(), solutionEntityCaptor.getAllValues());
+    }
+
+    @Test
+    public void testDeleteModelsListWithOptions() throws Exception {
+        final ArgumentCaptor<SolutionModelInterface> solutionModelCaptor = ArgumentCaptor.forClass(SolutionModelInterface.class);
+        final List<SolutionModelInterface> solutionsModels = this.getSolutionsFixturesModels();
+        final SolutionsOptionsInterface solutionsOptions = Mockito.mock(SolutionsOptionsInterface.class);
+
+        this.solutionsService.delete(solutionsModels, solutionsOptions);
+
+        this.assertServicesSet(solutionsOptions, solutionsModels.size());
+        verify(solutionsOptions, times(solutionsModels.size())).deleteWithRelations(solutionModelCaptor.capture());
+        this.solutionsSupport.assertModelsListEquals(solutionsModels, solutionModelCaptor.getAllValues());
+        verifyNoMoreInteractions(this.solutionsMapper);
     }
 }

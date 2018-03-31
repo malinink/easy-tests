@@ -1,121 +1,106 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
 import easytests.core.entities.QuestionEntity;
+import easytests.support.QuestionsSupport;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.*;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.*;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
 
 /**
- * @author firkhraag
+ * @author RisaMagpie
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class QuestionsMapperTest {
+public class QuestionsMapperTest extends AbstractMapperTest {
+
+    protected QuestionsSupport questionsSupport = new QuestionsSupport();
 
     @Autowired
     private QuestionsMapper questionsMapper;
 
     @Test
     public void testFindAll() throws Exception {
-        final List<QuestionEntity> questionsEntities = this.questionsMapper.findAll();
-        Assert.assertEquals((long) 3, (long) questionsEntities.size());
+        final List<QuestionEntity> questionsFoundedEntities = this.questionsMapper.findAll();
+        Assert.assertEquals( 3,  questionsFoundedEntities.size());
+
+        Integer index = 0;
+        for (QuestionEntity questionEntity: questionsFoundedEntities) {
+            final QuestionEntity questionFixtureEntity = this.questionsSupport.getEntityFixtureMock(index);
+
+            this.questionsSupport.assertEquals(questionFixtureEntity, questionEntity);
+            index++;
+        }
     }
 
     @Test
     public void testFind() throws Exception {
-        final QuestionEntity question = this.questionsMapper.find(1);
-        Assert.assertEquals((long) 1, (long) question.getId());
-        Assert.assertEquals("test1", question.getText());
-        Assert.assertEquals((long) 1, (long) question.getQuestionTypeId());
-        Assert.assertEquals((long) 1, (long) question.getTopicId());
+        final QuestionEntity questionFixtureEntity = this.questionsSupport.getEntityFixtureMock(0);
+
+        final QuestionEntity questionFoundedEntity = this.questionsMapper.find(1);
+
+        this.questionsSupport.assertEquals(questionFixtureEntity, questionFoundedEntity);
     }
 
     @Test
     public void testFindByTopicId() throws Exception {
-        final List<QuestionEntity> questions = this.questionsMapper.findByTopicId(2);
-        Assert.assertEquals((Integer) 1, (Integer) questions.size());
-        final QuestionEntity question = questions.get(0);
+        final List<QuestionEntity> questionsFixtureEntities = new ArrayList<>();
 
-        Assert.assertEquals((Integer) 3, question.getId());
-        Assert.assertEquals("test3", question.getText());
-        Assert.assertEquals((Integer) 3, question.getQuestionTypeId());
-        Assert.assertEquals((Integer) 2, question.getTopicId());
+        questionsFixtureEntities.add(this.questionsSupport.getEntityFixtureMock(2));
+
+        final List<QuestionEntity> questionsFoundedEntities = this.questionsMapper.findByTopicId(2);
+
+        Assert.assertEquals(1, questionsFoundedEntities.size());
+
+        Integer index = 0;
+        for (QuestionEntity questionEntity: questionsFoundedEntities) {
+            this.questionsSupport.assertEquals(questionsFixtureEntities.get(index), questionEntity);
+            index++;
+        }
     }
 
     @Test
     public void testInsert() throws Exception {
-        final Integer id = this.questionsMapper.findAll().size() + 1;
-        final String text = "text1";
-        final Integer questionTypeId = 1;
-        final Integer topicId = 1;
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
+        final QuestionEntity questionUnidentifiedEntity = this.questionsSupport.getEntityAdditionalMock(0);
 
-        QuestionEntity questionEntity = Mockito.mock(QuestionEntity.class);
-        Mockito.when(questionEntity.getText()).thenReturn(text);
-        Mockito.when(questionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
-        Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
+        this.questionsMapper.insert(questionUnidentifiedEntity);
 
-        this.questionsMapper.insert(questionEntity);
+        verify(questionUnidentifiedEntity, times(1)).setId(id.capture());
+        Assert.assertNotNull(id.getValue());
 
-        verify(questionEntity, times(1)).setId(id);
+        final QuestionEntity questionInsertedEntity = this.questionsMapper.find(id.getValue());
 
-        questionEntity = this.questionsMapper.find(id);
-        Assert.assertEquals(id, questionEntity.getId());
-        Assert.assertEquals(text, questionEntity.getText());
-        Assert.assertEquals(questionTypeId, questionEntity.getQuestionTypeId());
-        Assert.assertEquals(topicId, questionEntity.getTopicId());
+        Assert.assertNotNull(questionInsertedEntity);
+        this.questionsSupport.assertEqualsWithoutId(questionUnidentifiedEntity, questionInsertedEntity);
     }
 
     @Test
     public void testUpdate() throws Exception {
-        final Integer id = 1;
-        final String text = "text2";
-        final Integer questionTypeId = 2;
-        final Integer topicId = 2;
+        final QuestionEntity questionChangedEntity = this.questionsSupport.getEntityAdditionalMock(1);
+        final QuestionEntity questionBeforeUpdateEntity = this.questionsMapper.find(questionChangedEntity.getId());
 
-        QuestionEntity questionEntity = this.questionsMapper.find(id);
-        Assert.assertNotNull(questionEntity);
-        Assert.assertEquals(id, questionEntity.getId());
-        Assert.assertNotEquals(text, questionEntity.getText());
-        Assert.assertNotEquals(questionTypeId, questionEntity.getQuestionTypeId());
-        Assert.assertNotEquals(topicId, questionEntity.getTopicId());
+        Assert.assertNotNull(questionBeforeUpdateEntity);
+        this.questionsSupport.assertNotEqualsWithoutId(questionChangedEntity, questionBeforeUpdateEntity);
 
-        questionEntity = Mockito.mock(QuestionEntity.class);
-        Mockito.when(questionEntity.getId()).thenReturn(id);
-        Mockito.when(questionEntity.getText()).thenReturn(text);
-        Mockito.when(questionEntity.getQuestionTypeId()).thenReturn(questionTypeId);
-        Mockito.when(questionEntity.getTopicId()).thenReturn(topicId);
+        this.questionsMapper.update(questionChangedEntity);
+        final QuestionEntity questionUpdatedEntity = this.questionsMapper.find(questionChangedEntity.getId());
 
-        this.questionsMapper.update(questionEntity);
-
-        questionEntity = this.questionsMapper.find(id);
-        Assert.assertEquals(id, questionEntity.getId());
-        Assert.assertEquals(text, questionEntity.getText());
-        Assert.assertEquals(questionTypeId, questionEntity.getQuestionTypeId());
-        Assert.assertEquals(topicId, questionEntity.getTopicId());
+        this.questionsSupport.assertEquals(questionChangedEntity, questionUpdatedEntity);
     }
 
     @Test
     public void testDelete() throws Exception {
-        QuestionEntity questionEntity = this.questionsMapper.find(1);
-        Assert.assertNotNull(questionEntity);
+        final Integer id = this.questionsSupport.getEntityFixtureMock(0).getId();
+        final QuestionEntity questionFoundedEntity = this.questionsMapper.find(id);
 
-        this.questionsMapper.delete(questionEntity);
-        questionEntity = this.questionsMapper.find(1);
-        Assert.assertNull(questionEntity);
+        Assert.assertNotNull(questionFoundedEntity);
+
+        this.questionsMapper.delete(questionFoundedEntity);
+
+        Assert.assertNull(this.questionsMapper.find(id));
     }
 }

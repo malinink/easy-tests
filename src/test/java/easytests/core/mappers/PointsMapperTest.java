@@ -1,138 +1,99 @@
 package easytests.core.mappers;
 
-import easytests.config.DatabaseConfig;
-import easytests.core.entities.*;
-import org.junit.Test;
-import org.junit.Assert;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
+import easytests.core.entities.PointEntity;
+import easytests.support.PointsSupport;
+import java.util.ArrayList;
 import java.util.List;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import static org.mockito.Mockito.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
- * @author nikitalpopov
+ * @author SvetlanaTselikova
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = {"classpath:database.test.properties"})
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {DatabaseConfig.class})
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql/mappersTestData.sql")
-public class PointsMapperTest {
+public class PointsMapperTest extends AbstractMapperTest {
+
+    private PointsSupport pointsSupport = new PointsSupport();
 
     @Autowired
     private PointsMapper pointsMapper;
 
     @Test
     public void testFindAll() throws Exception {
+        final List<PointEntity> pointsFoundedEntities = this.pointsMapper.findAll();
 
-        final List<PointEntity> testPointEntities = this.pointsMapper.findAll();
-
-        Assert.assertNotNull(testPointEntities);
-        Assert.assertEquals((long) 3, (long) testPointEntities.size());
-
+        Assert.assertEquals(3, pointsFoundedEntities.size());
+        Integer index = 0;
+        for (PointEntity pointEntity: pointsFoundedEntities) {
+            final PointEntity pointFixtureEntity = this.pointsSupport.getEntityFixtureMock(index);
+            this.pointsSupport.assertEquals(pointFixtureEntity, pointEntity);
+            index++;
+        }
     }
 
     @Test
     public void testFind() throws Exception {
+        final PointEntity pointFixtureEntity = this.pointsSupport.getEntityFixtureMock(0);
 
-        final PointEntity testPoint = this.pointsMapper.find(1);
+        final PointEntity pointFoundedEntity = this.pointsMapper.find(1);
 
-        Assert.assertNotNull(testPoint);
-        Assert.assertEquals((Integer) 1, testPoint.getId());
-        Assert.assertEquals((Integer) 1, testPoint.getQuestionId());
-        Assert.assertEquals((Integer) 1, testPoint.getQuizId());
-
-    }
-
-    @Test
-    public void testQuizNotNull() throws Exception {
-
-        final List<PointEntity> pointEntities = this.pointsMapper.findByQuizId(1);
-
-        Assert.assertNotNull(pointEntities);
-        Assert.assertEquals(1, pointEntities.size());
-
+        this.pointsSupport.assertEquals(pointFixtureEntity, pointFoundedEntity);
     }
 
     @Test
     public void testFindByQuizId() throws Exception {
+        final List<PointEntity> pointsFixtureEntities = new ArrayList<>();
+        pointsFixtureEntities.add(this.pointsSupport.getEntityFixtureMock(1));
+        pointsFixtureEntities.add(this.pointsSupport.getEntityFixtureMock(2));
 
-        final List<PointEntity> pointEntities = this.pointsMapper.findByQuizId(1);
+        final List<PointEntity> pointsFoundedEntities = this.pointsMapper.findByQuizId(2);
 
-        Assert.assertEquals(1, pointEntities.size());
-        Assert.assertEquals((Integer)1, pointEntities.get(0).getQuestionId());
-        Assert.assertEquals((Integer)1, pointEntities.get(0).getQuizId());
+        Assert.assertEquals(2, pointsFoundedEntities.size());
+        Integer index = 0;
+        for (PointEntity pointEntity: pointsFoundedEntities) {
+            this.pointsSupport.assertEquals(pointsFixtureEntities.get(index), pointEntity);
+            index++;
+        }
     }
 
     @Test
     public void testInsert() throws Exception {
+        final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
+        final PointEntity pointUnidentifiedEntity = this.pointsSupport.getEntityAdditionalMock(0);
 
-        final Integer testId = this.pointsMapper.findAll().size() + 1;
-        final Integer testQuestionId = 1;
-        final Integer testQuizId = 1;
+        this.pointsMapper.insert(pointUnidentifiedEntity);
 
-        final PointEntity testPoint = Mockito.mock(PointEntity.class);
-
-        Mockito.when(testPoint.getId()).thenReturn(testId);
-        Mockito.when(testPoint.getQuestionId()).thenReturn(testQuestionId);
-        Mockito.when(testPoint.getQuizId()).thenReturn(testQuizId);
-
-        pointsMapper.insert(testPoint);
-
-        final PointEntity readPoint = pointsMapper.find(testPoint.getId());
-
-        Assert.assertNotNull(readPoint);
-        Assert.assertEquals(testId, readPoint.getId());
-        Assert.assertEquals(testQuestionId, readPoint.getQuestionId());
-        Assert.assertEquals(testQuizId, readPoint.getQuizId());
-
+        verify(pointUnidentifiedEntity, times(1)).setId(id.capture());
+        Assert.assertNotNull(id.getValue());
+        final PointEntity pointInsertedEntity = this.pointsMapper.find(id.getValue());
+        Assert.assertNotNull(pointInsertedEntity);
+        this.pointsSupport.assertEqualsWithoutId(pointUnidentifiedEntity, pointInsertedEntity);
     }
 
     @Test
     public void testUpdate() throws Exception {
+        final PointEntity pointChangedEntity = this.pointsSupport.getEntityAdditionalMock(1);
+        final PointEntity pointBeforeUpdateEntity = this.pointsMapper.find(pointChangedEntity.getId());
+        Assert.assertNotNull(pointBeforeUpdateEntity);
+        this.pointsSupport.assertNotEqualsWithoutId(pointChangedEntity, pointBeforeUpdateEntity);
 
-        final Integer testId = 2;
-        final Integer testQuestionId = 1;
-        final Integer testQuizId = 1;
+        this.pointsMapper.update(pointChangedEntity);
 
-        PointEntity testPoint = this.pointsMapper.find(testId);
-
-        Assert.assertNotEquals(testQuestionId, testPoint.getQuestionId());
-        Assert.assertNotEquals(testQuizId, testPoint.getQuizId());
-
-        testPoint = Mockito.mock(PointEntity.class);
-
-        Mockito.when(testPoint.getId()).thenReturn(testId);
-        Mockito.when(testPoint.getQuestionId()).thenReturn(testQuestionId);
-        Mockito.when(testPoint.getQuizId()).thenReturn(testQuizId);
-
-        this.pointsMapper.update(testPoint);
-
-        final PointEntity checkUpdatePoint = pointsMapper.find(testId);
-
-        Assert.assertEquals(testQuestionId, checkUpdatePoint.getQuestionId());
-        Assert.assertEquals(testQuizId, checkUpdatePoint.getQuizId());
-
+        final PointEntity pointUpdatedEntity = this.pointsMapper.find(pointChangedEntity.getId());
+        this.pointsSupport.assertEquals(pointChangedEntity, pointUpdatedEntity);
     }
 
     @Test
     public void testDelete() throws Exception {
+        final Integer id = this.pointsSupport.getEntityFixtureMock(0).getId();
+        final PointEntity pointFoundedEntity = this.pointsMapper.find(id);
+        Assert.assertNotNull(pointFoundedEntity);
 
-        PointEntity testPoint = this.pointsMapper.find(1);
-        Assert.assertNotNull(testPoint);
+        this.pointsMapper.delete(pointFoundedEntity);
 
-        this.pointsMapper.delete(testPoint);
-
-        testPoint = this.pointsMapper.find(1);
-        Assert.assertNull(testPoint);
-
+        Assert.assertNull(this.pointsMapper.find(id));
     }
-
 }
