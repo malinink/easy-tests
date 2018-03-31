@@ -13,13 +13,13 @@ var config = {
     'source': 'bower_components'
 };
 
-gulp.task('fonts', function() {
+gulp.task('fonts', function () {
     gulp.src(['bower_components/materialize/dist/fonts/**'])
         .pipe(gulp.dest(config.docs + 'fonts'))
         .pipe(gulp.dest(config.dest + 'fonts'));
 });
 
-gulp.task('js', function() {
+gulp.task('js', function () {
     gulp.src(plugins.mainBowerFiles())
         .pipe(plugins.filter('*.js'))
         .pipe(gulp.dest(config.docs + 'js'));
@@ -33,7 +33,7 @@ gulp.task('js', function() {
         .pipe(gulp.dest(config.dest + 'js'));
 });
 
-gulp.task('css', function() {
+gulp.task('css', function () {
     gulp.src(plugins.mainBowerFiles())
         .pipe(plugins.filter('*.css'))
         .pipe(gulp.dest(config.docs + 'css'));
@@ -48,7 +48,7 @@ gulp.task('css', function() {
         .pipe(gulp.dest(config.dest + 'css'))
 });
 
-gulp.task('img', function() {
+gulp.task('img', function () {
 });
 
 gulp.task('default', ['fonts', 'js', 'css', 'img']);

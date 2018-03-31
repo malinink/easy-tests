@@ -4,6 +4,7 @@ import easytests.core.entities.UserEntity;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.UserModelInterface;
 import easytests.core.models.exceptions.CallMethodOnEmptyModelException;
+
 import java.util.List;
 
 

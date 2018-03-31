@@ -8,8 +8,10 @@ import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.services.IssueStandardTopicPrioritiesServiceInterface;
 import easytests.core.services.IssueStandardsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,7 +1,9 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.TopicEntity;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.*;
 
 
@@ -13,12 +15,12 @@ import org.apache.ibatis.annotations.*;
 public interface TopicsMapper {
 
     @Results(
-        id = "Topic",
-        value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "subjectId", column = "subject_id")
-        })
+            id = "Topic",
+            value = {
+                    @Result(property = "id", column = "id"),
+                    @Result(property = "name", column = "name"),
+                    @Result(property = "subjectId", column = "subject_id")
+            })
     @Select("SELECT * FROM topics")
     List<TopicEntity> findAll();
 

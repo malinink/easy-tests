@@ -3,6 +3,7 @@ package easytests.core.services;
 import easytests.core.models.IssueStandardModelInterface;
 import easytests.core.models.IssueStandardTopicPriorityModelInterface;
 import easytests.core.options.IssueStandardTopicPrioritiesOptionsInterface;
+
 import java.util.List;
 
 /**

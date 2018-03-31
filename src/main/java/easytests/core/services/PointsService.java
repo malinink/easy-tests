@@ -7,6 +7,7 @@ import easytests.core.models.PointModelInterface;
 import easytests.core.models.QuizModelInterface;
 import easytests.core.options.PointsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +89,7 @@ public class PointsService implements PointsServiceInterface {
     @Override
     public void save(List<PointModelInterface> pointsModels) {
 
-        for (PointModelInterface pointModel: pointsModels) {
+        for (PointModelInterface pointModel : pointsModels) {
             this.save(pointModel);
         }
 
@@ -97,7 +98,7 @@ public class PointsService implements PointsServiceInterface {
     @Override
     public void save(List<PointModelInterface> pointsModels, PointsOptionsInterface pointsOptions) {
 
-        for (PointModelInterface pointModel: pointsModels) {
+        for (PointModelInterface pointModel : pointsModels) {
             this.save(pointModel, pointsOptions);
         }
 
@@ -122,7 +123,7 @@ public class PointsService implements PointsServiceInterface {
     @Override
     public void delete(List<PointModelInterface> pointsModels) {
 
-        for (PointModelInterface pointModel: pointsModels) {
+        for (PointModelInterface pointModel : pointsModels) {
             this.delete(pointModel);
         }
 
@@ -131,7 +132,7 @@ public class PointsService implements PointsServiceInterface {
     @Override
     public void delete(List<PointModelInterface> pointsModels, PointsOptionsInterface pointsOptions) {
 
-        for (PointModelInterface pointModel: pointsModels) {
+        for (PointModelInterface pointModel : pointsModels) {
             this.delete(pointModel, pointsOptions);
         }
 
@@ -156,7 +157,7 @@ public class PointsService implements PointsServiceInterface {
     private List<PointModelInterface> map(List<PointEntity> pointsList) {
 
         final List<PointModelInterface> resultPointList = new ArrayList<>(pointsList.size());
-        for (PointEntity point: pointsList) {
+        for (PointEntity point : pointsList) {
             resultPointList.add(this.map(point));
         }
         return resultPointList;

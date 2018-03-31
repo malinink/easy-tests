@@ -3,6 +3,7 @@ package easytests.core.services;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.QuestionsOptionsInterface;
+
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface QuestionsServiceInterface extends ServiceInterface {
     List<QuestionModelInterface> findByTopic(TopicModelInterface topicModel);
 
     List<QuestionModelInterface> findByTopic(
-            TopicModelInterface topicModel, 
+            TopicModelInterface topicModel,
             QuestionsOptionsInterface questionsOptions);
 
     QuestionModelInterface find(Integer id);

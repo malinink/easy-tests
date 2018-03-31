@@ -10,8 +10,10 @@ import easytests.core.services.IssueStandardQuestionTypeOptionsServiceInterface;
 import easytests.core.services.IssueStandardsServiceInterface;
 import easytests.core.services.IssueStandardTopicPrioritiesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

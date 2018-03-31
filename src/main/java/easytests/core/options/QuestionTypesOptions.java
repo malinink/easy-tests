@@ -1,7 +1,9 @@
 package easytests.core.options;
 
 import easytests.core.models.QuestionTypeModelInterface;
+
 import java.util.List;
+
 import lombok.EqualsAndHashCode;
 
 
@@ -20,7 +22,7 @@ public class QuestionTypesOptions implements QuestionTypesOptionsInterface {
 
     @Override
     public List<QuestionTypeModelInterface> withRelations(List<QuestionTypeModelInterface> questionTypesModels) {
-        for (QuestionTypeModelInterface questionTypeModel: questionTypesModels) {
+        for (QuestionTypeModelInterface questionTypeModel : questionTypesModels) {
             this.withRelations(questionTypeModel);
         }
         return questionTypesModels;

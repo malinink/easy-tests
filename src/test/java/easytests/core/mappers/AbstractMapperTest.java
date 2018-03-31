@@ -2,9 +2,11 @@ package easytests.core.mappers;
 
 import easytests.core.mappers.helpers.MapperTestHelper;
 import easytests.core.mappers.proxy.InterceptInvocationsProxy;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;

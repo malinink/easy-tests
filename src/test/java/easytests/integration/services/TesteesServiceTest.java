@@ -6,7 +6,9 @@ import easytests.core.options.QuizzesOptions;
 import easytests.core.options.TesteesOptions;
 import easytests.core.services.TesteesService;
 import easytests.support.Models;
+
 import java.time.LocalDateTime;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,7 @@ public class TesteesServiceTest extends AbstractServiceTest {
 
         Assert.assertEquals(null, testeeModel);
     }
+
     @Test
     public void testFindWithOptions() throws Exception {
         final Integer id = 1;
@@ -51,7 +54,7 @@ public class TesteesServiceTest extends AbstractServiceTest {
 
         final TesteeModelInterface testeeModel = Models.createTesteeModel(id, "FirstName1", "LastName1", "Surname1", 301, quizId);
         final QuizModelInterface quizModel = Models.createQuizModel(quizId, "test_invite_code1", 1,
-                LocalDateTime.of(2003,2,1,0,0,0),LocalDateTime.of(2003,3,1,0,0,0),false);
+                LocalDateTime.of(2003, 2, 1, 0, 0, 0), LocalDateTime.of(2003, 3, 1, 0, 0, 0), false);
         testeeModel.setQuiz(quizModel);
 
         final TesteeModelInterface foundedTesteeModel

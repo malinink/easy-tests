@@ -35,7 +35,7 @@ public class IssueStandardQuestionTypeOptionsOptionsBuilderTest {
                 = this.questionTypeOptionsOptionsBuilder.forAuth();
 
         Assert.assertEquals(new IssueStandardQuestionTypeOptionsOptions()
-                .withIssueStandard(issueStandardsOptions),
+                        .withIssueStandard(issueStandardsOptions),
                 questionTypeOptionsOptions);
     }
 

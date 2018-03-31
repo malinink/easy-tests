@@ -9,8 +9,10 @@ import easytests.core.options.IssueStandardTopicPrioritiesOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.Entities;
 import easytests.support.Models;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,7 +46,7 @@ public class IssueStandardTopicPrioritiesServiceTest {
     private IssueStandardTopicPrioritiesService topicPrioritiesService;
 
     private IssueStandardTopicPriorityModelInterface
-        mapTopicPriorityModel(IssueStandardTopicPriorityEntity topicPriorityEntity) {
+    mapTopicPriorityModel(IssueStandardTopicPriorityEntity topicPriorityEntity) {
 
         final IssueStandardTopicPriorityModelInterface topicPriorityModel = new IssueStandardTopicPriorityModel();
         topicPriorityModel.map(topicPriorityEntity);
@@ -52,7 +54,7 @@ public class IssueStandardTopicPrioritiesServiceTest {
     }
 
     private IssueStandardTopicPriorityEntity
-        mapTopicPriorityEntity(IssueStandardTopicPriorityModelInterface topicPriorityModel) {
+    mapTopicPriorityEntity(IssueStandardTopicPriorityModelInterface topicPriorityModel) {
 
         final IssueStandardTopicPriorityEntity topicPriorityEntity = new IssueStandardTopicPriorityEntity();
         topicPriorityEntity.map(topicPriorityModel);
@@ -68,7 +70,7 @@ public class IssueStandardTopicPrioritiesServiceTest {
 
     private List<IssueStandardTopicPriorityModelInterface> getTopicPriorityModels() {
         List<IssueStandardTopicPriorityModelInterface> topicPriorityModels = new ArrayList<>(2);
-        for (IssueStandardTopicPriorityEntity topicPriorityEntity: this.getTopicPriorityEntities()) {
+        for (IssueStandardTopicPriorityEntity topicPriorityEntity : this.getTopicPriorityEntities()) {
             topicPriorityModels.add(this.mapTopicPriorityModel(topicPriorityEntity));
         }
         return topicPriorityModels;
@@ -213,7 +215,7 @@ public class IssueStandardTopicPrioritiesServiceTest {
 
         final List<IssueStandardTopicPriorityModelInterface> foundedTopicPriorityModels
                 = this.topicPrioritiesService.findByIssueStandard(
-                        topicPriorityModels.get(0).getIssueStandard(), topicPrioritiesOptions);
+                topicPriorityModels.get(0).getIssueStandard(), topicPrioritiesOptions);
 
         verify(topicPrioritiesOptions).withRelations(topicPriorityModels);
         Assert.assertNotNull(foundedTopicPriorityModels);
@@ -291,7 +293,7 @@ public class IssueStandardTopicPrioritiesServiceTest {
 
         this.topicPrioritiesService.save(topicPriorityModels, topicPrioritiesOptions);
 
-        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel : topicPriorityModels) {
             verify(topicPrioritiesOptions).saveWithRelations(topicPriorityModel);
         }
     }
@@ -323,7 +325,7 @@ public class IssueStandardTopicPrioritiesServiceTest {
 
         this.topicPrioritiesService.delete(topicPriorityModels);
 
-        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel : topicPriorityModels) {
             verify(this.topicPrioritiesMapper, times(1)).delete(this.mapTopicPriorityEntity(topicPriorityModel));
         }
     }
@@ -349,7 +351,7 @@ public class IssueStandardTopicPrioritiesServiceTest {
 
         this.topicPrioritiesService.delete(topicPriorityModels, topicPrioritiesOptions);
 
-        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel : topicPriorityModels) {
             verify(topicPrioritiesOptions).deleteWithRelations(topicPriorityModel);
         }
     }

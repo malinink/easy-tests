@@ -15,7 +15,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import static org.mockito.BDDMockito.given;
+
 import org.mockito.InOrder;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.List;
 import static org.mockito.Mockito.times;
 
 import static org.mockito.Mockito.verify;
+
 /**
  * @author fortyways
  */
@@ -212,7 +215,7 @@ public class QuizzesOptionsTest {
         quizzesOptions.saveWithRelations(quizModel);
 
         inOrder.verify(quizzesService).save(quizModel);
-        inOrder.verify(testeesService).save(quizModel.getTestee(),testeesOptions);
+        inOrder.verify(testeesService).save(quizModel.getTestee(), testeesOptions);
         inOrder.verify(pointsService).save(quizModel.getPoints(), pointsOptions);
     }
 
@@ -247,7 +250,7 @@ public class QuizzesOptionsTest {
 
         inOrder.verify(pointsService).delete(quizModel.getPoints(), pointsOptions);
         inOrder.verify(quizzesService).delete(quizModel);
-        inOrder.verify(testeesService).delete(quizModel.getTestee(),testeesOptions);
+        inOrder.verify(testeesService).delete(quizModel.getTestee(), testeesOptions);
 
     }
 

@@ -24,14 +24,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         final String usernameParameter = "login";
         final String userRole = "hasRole('USER')";
         http
-            .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/admin/**").access("hasRole('ADMIN')")
                 .antMatchers("/users/**").access(userRole)
                 .antMatchers("/personal/**").access(userRole)
                 .and()
-            .userDetailsService(this.authUsersService)
-            .formLogin()
+                .userDetailsService(this.authUsersService)
+                .formLogin()
                 .loginPage(signInUrl)
                 .loginProcessingUrl(signInUrl)
                 .usernameParameter(usernameParameter)
@@ -39,13 +39,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/users")
                 .failureHandler(new AuthenticationFailureHandler("/auth/sign-in?error", usernameParameter))
                 .and()
-            .logout()
+                .logout()
                 .logoutUrl("/auth/sign-out")
                 .logoutSuccessUrl(signInUrl)
                 .clearAuthentication(true)
                 .and()
-            .csrf()
+                .csrf()
                 .and()
-            .rememberMe();
+                .rememberMe();
     }
 }

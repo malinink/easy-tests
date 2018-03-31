@@ -2,13 +2,17 @@ package easytests.core.mappers;
 
 import easytests.core.entities.TopicEntity;
 import easytests.support.TopicsSupport;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -29,7 +33,7 @@ public class TopicsMapperTest extends AbstractMapperTest {
         Assert.assertEquals(3, topicsFoundedEntities.size());
 
         Integer index = 0;
-        for (TopicEntity topicEntity: topicsFoundedEntities) {
+        for (TopicEntity topicEntity : topicsFoundedEntities) {
             this.topicsSupport.assertEquals(this.topicsSupport.getEntityFixtureMock(index), topicEntity);
             index++;
         }
@@ -54,7 +58,7 @@ public class TopicsMapperTest extends AbstractMapperTest {
         Assert.assertEquals(topicsFixtureEntities.size(), topicsFoundedEntities.size());
 
         Integer index = 0;
-        for (TopicEntity topicEntity: topicsFoundedEntities) {
+        for (TopicEntity topicEntity : topicsFoundedEntities) {
             this.topicsSupport.assertEquals(topicsFixtureEntities.get(index), topicEntity);
             index++;
         }

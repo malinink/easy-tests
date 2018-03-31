@@ -11,8 +11,7 @@ import org.meanbean.lang.Factory;
 public class PointModelFactory implements Factory<PointModelInterface> {
 
     @Override
-    public PointModelInterface create()
-    {
+    public PointModelInterface create() {
         return new PointModel();
     }
 }

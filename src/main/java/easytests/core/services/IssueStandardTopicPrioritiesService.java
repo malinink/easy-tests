@@ -7,8 +7,10 @@ import easytests.core.models.IssueStandardTopicPriorityModel;
 import easytests.core.models.IssueStandardTopicPriorityModelInterface;
 import easytests.core.options.IssueStandardTopicPrioritiesOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,7 +85,7 @@ public class IssueStandardTopicPrioritiesService implements IssueStandardTopicPr
 
     @Override
     public void save(List<IssueStandardTopicPriorityModelInterface> topicPriorityModels) {
-        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel : topicPriorityModels) {
             this.save(topicPriorityModel);
         }
     }
@@ -99,7 +101,7 @@ public class IssueStandardTopicPrioritiesService implements IssueStandardTopicPr
     public void save(List<IssueStandardTopicPriorityModelInterface> topicPriorityModels,
                      IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions) {
 
-        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel : topicPriorityModels) {
             this.save(topicPriorityModel, topicPrioritiesOptions);
         }
     }
@@ -115,7 +117,7 @@ public class IssueStandardTopicPrioritiesService implements IssueStandardTopicPr
 
     @Override
     public void delete(List<IssueStandardTopicPriorityModelInterface> topicPriorityModels) {
-        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel : topicPriorityModels) {
             this.delete(topicPriorityModel);
         }
     }
@@ -131,13 +133,13 @@ public class IssueStandardTopicPrioritiesService implements IssueStandardTopicPr
     public void delete(List<IssueStandardTopicPriorityModelInterface> topicPriorityModels,
                        IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions) {
 
-        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: topicPriorityModels) {
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel : topicPriorityModels) {
             this.delete(topicPriorityModel, topicPrioritiesOptions);
         }
     }
 
     private IssueStandardTopicPrioritiesOptionsInterface
-        withServices(IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions) {
+    withServices(IssueStandardTopicPrioritiesOptionsInterface topicPrioritiesOptions) {
 
         topicPrioritiesOptions.setTopicPrioritiesService(this);
         topicPrioritiesOptions.setTopicsService(this.topicsService);
@@ -158,7 +160,7 @@ public class IssueStandardTopicPrioritiesService implements IssueStandardTopicPr
     }
 
     private List<IssueStandardTopicPriorityModelInterface>
-        map(List<IssueStandardTopicPriorityEntity> topicPriorityEntities) {
+    map(List<IssueStandardTopicPriorityEntity> topicPriorityEntities) {
 
         final List<IssueStandardTopicPriorityModelInterface> topicPriorityModels
                 = new ArrayList<>(topicPriorityEntities.size());

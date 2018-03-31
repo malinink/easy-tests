@@ -7,8 +7,10 @@ import easytests.core.options.IssueStandardsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.Entities;
 import easytests.support.Models;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
@@ -57,7 +59,7 @@ public class IssueStandardsServiceTest {
 
     private List<IssueStandardModelInterface> getIssueStandardModels() {
         final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(2);
-        for (IssueStandardEntity issueStandardEntity: this.getIssueStandardEntities()) {
+        for (IssueStandardEntity issueStandardEntity : this.getIssueStandardEntities()) {
             issueStandardModels.add(this.mapIssueStandardModel(issueStandardEntity));
         }
         return issueStandardModels;
@@ -210,7 +212,7 @@ public class IssueStandardsServiceTest {
     }
 
     @Test
-    public void testSaveList() throws  Exception {
+    public void testSaveList() throws Exception {
         final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(2);
         issueStandardModels.add(Models.createIssueStandardModel(1, 600, 10, 1));
         issueStandardModels.add(Models.createIssueStandardModel(null, 1200, 20, 5));
@@ -246,7 +248,7 @@ public class IssueStandardsServiceTest {
 
         this.issueStandardsService.save(issueStandardModels, issueStandardsOptions);
 
-        for(IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+        for (IssueStandardModelInterface issueStandardModel : issueStandardModels) {
             verify(issueStandardsOptions).saveWithRelations(issueStandardModel);
         }
     }
@@ -276,7 +278,7 @@ public class IssueStandardsServiceTest {
 
         this.issueStandardsService.delete(issueStandardModels);
 
-        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+        for (IssueStandardModelInterface issueStandardModel : issueStandardModels) {
             verify(this.issueStandardsMapper, times(1)).delete(this.mapIssueStandardEntity(issueStandardModel));
         }
     }
@@ -298,7 +300,7 @@ public class IssueStandardsServiceTest {
 
         this.issueStandardsService.delete(issueStandardModels, issueStandardsOptions);
 
-        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
+        for (IssueStandardModelInterface issueStandardModel : issueStandardModels) {
             verify(issueStandardsOptions).deleteWithRelations(issueStandardModel);
         }
     }

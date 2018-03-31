@@ -6,8 +6,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -29,7 +31,7 @@ public class QuizzesMapperTest extends AbstractMapperTest {
         Assert.assertEquals(3, quizFoundedEntities.size());
 
         Integer index = 0;
-        for(QuizEntity quizEntity: quizFoundedEntities){
+        for (QuizEntity quizEntity : quizFoundedEntities) {
             final QuizEntity quizFixtureEntity = this.quizzesSupport.getEntityFixtureMock(index);
 
             this.quizzesSupport.assertEquals(quizFixtureEntity, quizEntity);
@@ -56,7 +58,7 @@ public class QuizzesMapperTest extends AbstractMapperTest {
         Assert.assertEquals(1, quizzesFoundedEntities.size());
 
         Integer index = 0;
-        for(QuizEntity quizEntity: quizzesFoundedEntities) {
+        for (QuizEntity quizEntity : quizzesFoundedEntities) {
             this.quizzesSupport.assertEquals(quizzesFixtureEntities.get(index), quizEntity);
             index++;
         }

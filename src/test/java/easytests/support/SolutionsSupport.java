@@ -4,7 +4,9 @@ import easytests.core.entities.SolutionEntity;
 import easytests.core.models.SolutionModelInterface;
 import easytests.core.models.empty.AnswerModelEmpty;
 import easytests.core.models.empty.PointModelEmpty;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.mockito.Mockito;
 

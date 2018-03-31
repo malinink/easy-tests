@@ -49,9 +49,9 @@ public class TopicsOptionsTest {
         given(topicModel.getSubject()).willReturn(subjectModelWithId);
         given(subjectsService.find(topicModel.getSubject().getId(), subjectsOptions)).willReturn(subjectModel);
 
-        final TopicModelInterface topicModelWithRelations =  topicsOptions.withRelations(topicModel);
+        final TopicModelInterface topicModelWithRelations = topicsOptions.withRelations(topicModel);
 
-        Assert.assertEquals(topicModel,topicModelWithRelations);
+        Assert.assertEquals(topicModel, topicModelWithRelations);
         subjectsService.find(1, subjectsOptions);
         verify(topicModel).setSubject(subjectModel);
     }
@@ -75,26 +75,26 @@ public class TopicsOptionsTest {
 
         given(questionsService.findByTopic(topicModel, questionsOptions)).willReturn(questionsModels);
 
-        final TopicModelInterface topicModelWithRelations =  topicsOptions.withRelations(topicModel);
+        final TopicModelInterface topicModelWithRelations = topicsOptions.withRelations(topicModel);
 
-        Assert.assertEquals(topicModel,topicModelWithRelations);
+        Assert.assertEquals(topicModel, topicModelWithRelations);
         verify(questionsService).findByTopic(topicModel, questionsOptions);
         verify(topicModel).setQuestions(questionsModels);
     }
 
     @Test
-    public void testWithRelationsOnNull() throws Exception{
+    public void testWithRelationsOnNull() throws Exception {
 
         final TopicsOptionsInterface topicsOptions = new TopicsOptions();
         final TopicModelInterface nullTopicModel = null;
 
-        final TopicModelInterface topicModelWithRelations =  topicsOptions.withRelations(nullTopicModel);
+        final TopicModelInterface topicModelWithRelations = topicsOptions.withRelations(nullTopicModel);
 
         Assert.assertNull(topicModelWithRelations);
     }
 
     @Test
-    public void testWithRelationsSubjectOnList() throws Exception{
+    public void testWithRelationsSubjectOnList() throws Exception {
 
         final TopicModelInterface topicModelFirst = Mockito.mock(TopicModelInterface.class);
         final TopicModelInterface topicModelSecond = Mockito.mock(TopicModelInterface.class);
@@ -122,9 +122,9 @@ public class TopicsOptionsTest {
         given(subjectsService.find(topicModelFirst.getSubject().getId(), subjectsOptions)).willReturn(subjectModelFirst);
         given(subjectsService.find(topicModelSecond.getSubject().getId(), subjectsOptions)).willReturn(subjectModelSecond);
 
-        final List<TopicModelInterface> topicsModelsWithRelations =  topicsOptions.withRelations(topicsModels);
+        final List<TopicModelInterface> topicsModelsWithRelations = topicsOptions.withRelations(topicsModels);
 
-        Assert.assertEquals(topicsModelsWithRelations,topicsModels);
+        Assert.assertEquals(topicsModelsWithRelations, topicsModels);
         subjectsService.find(1, subjectsOptions);
         subjectsService.find(2, subjectsOptions);
         verify(topicsModels.get(0)).setSubject(subjectModelFirst);
@@ -133,7 +133,7 @@ public class TopicsOptionsTest {
 
 
     @Test
-    public void testWithRelationsQuestionsOnList() throws Exception{
+    public void testWithRelationsQuestionsOnList() throws Exception {
 
         final TopicModelInterface topicModelFirst = Mockito.mock(TopicModelInterface.class);
 
@@ -163,9 +163,9 @@ public class TopicsOptionsTest {
         given(questionsService.findByTopic(topicModelFirst, questionsOptions)).willReturn(questionsModelsFirst);
         given(questionsService.findByTopic(topicModelSecond, questionsOptions)).willReturn(questionsModelsSecond);
 
-        final List<TopicModelInterface> topicsModelsWithRelations =  topicsOptions.withRelations(topicsModels);
+        final List<TopicModelInterface> topicsModelsWithRelations = topicsOptions.withRelations(topicsModels);
 
-        Assert.assertEquals(topicsModelsWithRelations,topicsModels);
+        Assert.assertEquals(topicsModelsWithRelations, topicsModels);
         verify(questionsService).findByTopic(topicModelFirst, questionsOptions);
         verify(topicsModels.get(0)).setQuestions(questionsModelsFirst);
         verify(questionsService).findByTopic(topicModelSecond, questionsOptions);
@@ -173,7 +173,7 @@ public class TopicsOptionsTest {
     }
 
     @Test
-    public void testSaveWithRelationsSubject() throws Exception{
+    public void testSaveWithRelationsSubject() throws Exception {
 
         final TopicsOptionsInterface topicsOptions = new TopicsOptions();
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
@@ -200,7 +200,7 @@ public class TopicsOptionsTest {
     }
 
     @Test
-    public void testSaveWithRelationsQuestions() throws Exception{
+    public void testSaveWithRelationsQuestions() throws Exception {
 
         final TopicsOptionsInterface topicsOptions = new TopicsOptions();
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
@@ -224,7 +224,7 @@ public class TopicsOptionsTest {
     }
 
     @Test
-    public void testDeleteWithRelationsSubject() throws Exception{
+    public void testDeleteWithRelationsSubject() throws Exception {
 
         final TopicsOptionsInterface topicsOptions = new TopicsOptions();
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
@@ -251,7 +251,7 @@ public class TopicsOptionsTest {
     }
 
     @Test
-    public void testDeleteWithRelationsQuestion() throws Exception{
+    public void testDeleteWithRelationsQuestion() throws Exception {
 
         final TopicsOptionsInterface topicsOptions = new TopicsOptions();
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
@@ -323,7 +323,7 @@ public class TopicsOptionsTest {
     }
 
     @Test
-    public void testSaveDeleteWithRelationsQuestion() throws Exception{
+    public void testSaveDeleteWithRelationsQuestion() throws Exception {
 
         final TopicsOptionsInterface topicsOptions = new TopicsOptions();
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
@@ -343,7 +343,7 @@ public class TopicsOptionsTest {
 
         topicsOptions.deleteWithRelations(topicModel);
         verify(topicsService).delete(topicModel);
-        
+
         verify(questionsService, times(2)).save(topicModel.getQuestions(), questionsOptions);
     }
 

@@ -19,16 +19,16 @@ public interface IssueStandardTopicPrioritiesOptionsInterface extends OptionsInt
     void setIssueStandardsService(IssueStandardsServiceInterface issueStandardService);
 
     IssueStandardTopicPrioritiesOptionsInterface
-        withTopic(TopicsOptionsInterface topicsOptions);
+    withTopic(TopicsOptionsInterface topicsOptions);
 
     IssueStandardTopicPrioritiesOptionsInterface
-        withIssueStandard(IssueStandardsOptionsInterface issueStandardsOptions);
+    withIssueStandard(IssueStandardsOptionsInterface issueStandardsOptions);
 
     IssueStandardTopicPriorityModelInterface
-        withRelations(IssueStandardTopicPriorityModelInterface topicPriorityModel);
+    withRelations(IssueStandardTopicPriorityModelInterface topicPriorityModel);
 
     List<IssueStandardTopicPriorityModelInterface>
-        withRelations(List<IssueStandardTopicPriorityModelInterface> topicPriorityModels);
+    withRelations(List<IssueStandardTopicPriorityModelInterface> topicPriorityModels);
 
     void saveWithRelations(IssueStandardTopicPriorityModelInterface topicPriorityModel);
 

@@ -7,8 +7,10 @@ import easytests.core.models.AnswerModelInterface;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.options.AnswersOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +41,7 @@ public class AnswersService implements AnswersServiceInterface {
     public List<AnswerModelInterface> findByQuestion(QuestionModelInterface questionModel) {
         return this.map(this.answersMapper.findByQuestionId(questionModel.getId()));
     }
-    
+
     @Override
     public List<AnswerModelInterface> findByQuestion(
             QuestionModelInterface questionModel,
@@ -73,22 +75,22 @@ public class AnswersService implements AnswersServiceInterface {
         }
         this.answersMapper.update(answerEntity);
     }
-    
+
     @Override
     public void save(AnswerModelInterface answerModel, AnswersOptionsInterface answersOptions) {
         this.withServices(answersOptions).saveWithRelations(answerModel);
     }
-    
+
     @Override
     public void save(List<AnswerModelInterface> answersModels) {
-        for (AnswerModelInterface answerModel: answersModels) {
+        for (AnswerModelInterface answerModel : answersModels) {
             this.save(answerModel);
         }
     }
 
     @Override
     public void save(List<AnswerModelInterface> answersModels, AnswersOptionsInterface answersOptions) {
-        for (AnswerModelInterface answerModel: answersModels) {
+        for (AnswerModelInterface answerModel : answersModels) {
             this.save(answerModel, answersOptions);
         }
     }
@@ -101,26 +103,26 @@ public class AnswersService implements AnswersServiceInterface {
         }
         this.answersMapper.delete(answerEntity);
     }
-    
+
     @Override
     public void delete(AnswerModelInterface answerModel, AnswersOptionsInterface answersOptions) {
         this.withServices(answersOptions).deleteWithRelations(answerModel);
     }
-    
+
     @Override
     public void delete(List<AnswerModelInterface> answersModels) {
-        for (AnswerModelInterface answerModel: answersModels) {
+        for (AnswerModelInterface answerModel : answersModels) {
             this.delete(answerModel);
         }
     }
 
     @Override
     public void delete(List<AnswerModelInterface> answersModels, AnswersOptionsInterface answersOptions) {
-        for (AnswerModelInterface answerModel: answersModels) {
+        for (AnswerModelInterface answerModel : answersModels) {
             this.delete(answerModel, answersOptions);
         }
     }
-    
+
     private AnswersOptionsInterface withServices(AnswersOptionsInterface answersOptions) {
         answersOptions.setAnswersService(this);
         answersOptions.setQuestionsService(this.questionsService);
@@ -141,7 +143,7 @@ public class AnswersService implements AnswersServiceInterface {
 
     private List<AnswerModelInterface> map(List<AnswerEntity> answersList) {
         final List<AnswerModelInterface> resultAnswerList = new ArrayList<>(answersList.size());
-        for (AnswerEntity answer: answersList) {
+        for (AnswerEntity answer : answersList) {
             resultAnswerList.add(this.map(answer));
         }
         return resultAnswerList;

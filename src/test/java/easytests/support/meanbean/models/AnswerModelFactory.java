@@ -11,8 +11,7 @@ import org.meanbean.lang.Factory;
 public class AnswerModelFactory implements Factory<AnswerModelInterface> {
 
     @Override
-    public AnswerModelInterface create()
-    {
+    public AnswerModelInterface create() {
         return new AnswerModel();
     }
 }

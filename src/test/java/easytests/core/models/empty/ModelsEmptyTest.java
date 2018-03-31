@@ -3,11 +3,13 @@ package easytests.core.models.empty;
 import easytests.core.models.ModelInterface;
 import easytests.core.models.exceptions.CallMethodOnEmptyModelException;
 import easytests.core.models.exceptions.CreateEmptyModelWithNullIdException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,7 +47,7 @@ public class ModelsEmptyTest extends AbstractEmptyTest {
             if (!AbstractModelEmpty.class.isAssignableFrom(emptyModelClass)) {
                 continue;
             }
-            parametersList.add(new Object[] {emptyModelClass});
+            parametersList.add(new Object[]{emptyModelClass});
         }
         return parametersList;
     }
@@ -124,7 +126,8 @@ public class ModelsEmptyTest extends AbstractEmptyTest {
     @Test
     public void testEqualsOnDifferentClassObjects() throws Exception {
         final Object first = this.modelEmpty.getDeclaredConstructor(Integer.class).newInstance(1);
-        final Object second = new AbstractModelEmpty(1) { };
+        final Object second = new AbstractModelEmpty(1) {
+        };
 
         Assert.assertNotEquals(first, second);
     }
@@ -132,7 +135,8 @@ public class ModelsEmptyTest extends AbstractEmptyTest {
     @Test
     public void testEqualsOnDifferentClassEmptyObjects() throws Exception {
         final Object first = this.modelEmpty.getDeclaredConstructor().newInstance();
-        final Object second = new AbstractModelEmpty() { };
+        final Object second = new AbstractModelEmpty() {
+        };
 
         Assert.assertNotEquals(first, second);
     }

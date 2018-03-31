@@ -1,7 +1,9 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.IssueStandardEntity;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.*;
 
 
@@ -13,13 +15,13 @@ import org.apache.ibatis.annotations.*;
 public interface IssueStandardsMapper {
 
     @Results(
-        id = "IssueStandard",
-        value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "timeLimit", column = "time_limit"),
-            @Result(property = "questionsNumber", column = "questions_number"),
-            @Result(property = "subjectId", column = "subject_id")
-        })
+            id = "IssueStandard",
+            value = {
+                    @Result(property = "id", column = "id"),
+                    @Result(property = "timeLimit", column = "time_limit"),
+                    @Result(property = "questionsNumber", column = "questions_number"),
+                    @Result(property = "subjectId", column = "subject_id")
+            })
     @Select("SELECT * FROM issue_standards")
     List<IssueStandardEntity> findAll();
 

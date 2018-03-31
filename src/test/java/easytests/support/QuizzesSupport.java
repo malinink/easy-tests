@@ -5,8 +5,10 @@ import easytests.core.models.QuizModelInterface;
 import easytests.core.models.empty.IssueModelEmpty;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.TesteeModelEmpty;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -22,24 +24,24 @@ public class QuizzesSupport {
                     1,
                     "test_invite_code1",
                     false,
-                    LocalDateTime.of(2003,2,1,0,0,0),
-                    LocalDateTime.of(2003,3,1,0,0,0)
+                    LocalDateTime.of(2003, 2, 1, 0, 0, 0),
+                    LocalDateTime.of(2003, 3, 1, 0, 0, 0)
             },
             {
                     2,
                     2,
                     "test_invite_code2",
                     false,
-                    LocalDateTime.of(2003,2,1,0,0,0),
-                    LocalDateTime.of(2003,3,1,0,0,0)
+                    LocalDateTime.of(2003, 2, 1, 0, 0, 0),
+                    LocalDateTime.of(2003, 3, 1, 0, 0, 0)
             },
             {
                     3,
                     3,
                     "test_invite_code3",
                     true,
-                    LocalDateTime.of(2003,2,1,0,0,0),
-                    LocalDateTime.of(2003,3,1,0,0,0)
+                    LocalDateTime.of(2003, 2, 1, 0, 0, 0),
+                    LocalDateTime.of(2003, 3, 1, 0, 0, 0)
             }
     };
 
@@ -49,16 +51,16 @@ public class QuizzesSupport {
                     1,
                     "code",
                     false,
-                    LocalDateTime.of(1,1,1,1,1),
-                    LocalDateTime.of(2,2,2,2,2)
+                    LocalDateTime.of(1, 1, 1, 1, 1),
+                    LocalDateTime.of(2, 2, 2, 2, 2)
             },
             {
                     2,
                     2,
                     "updated",
                     true,
-                    LocalDateTime.of(2017,5,18,12,1,0),
-                    LocalDateTime.of(2017,5,18,13,0,0)
+                    LocalDateTime.of(2017, 5, 18, 12, 1, 0),
+                    LocalDateTime.of(2017, 5, 18, 13, 0, 0)
             }
     };
 
@@ -104,7 +106,7 @@ public class QuizzesSupport {
     }
 
     public QuizModelInterface getModelAdditionalMock(Integer index) {
-                return this.getModelMock(additional[index]);
+        return this.getModelMock(additional[index]);
     }
 
     private QuizModelInterface getModelMock(Object[] data) {
@@ -143,7 +145,7 @@ public class QuizzesSupport {
     }
 
     private void assertNotEqualsWithoutIds(QuizEntity unexpected, QuizEntity actual, Boolean exceptId) {
-        if(!exceptId){
+        if (!exceptId) {
             Assert.assertNotEquals(unexpected.getId(), actual.getId());
         }
         Assert.assertNotEquals(unexpected.getInviteCode(), actual.getInviteCode());
@@ -202,7 +204,7 @@ public class QuizzesSupport {
     ) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (QuizModelInterface quizModel: expected) {
+        for (QuizModelInterface quizModel : expected) {
             this.assertEquals(quizModel, actual.get(i));
             i++;
         }
@@ -214,7 +216,7 @@ public class QuizzesSupport {
     ) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (QuizEntity quizEntity: expected) {
+        for (QuizEntity quizEntity : expected) {
             this.assertEquals(quizEntity, actual.get(i));
             i++;
         }

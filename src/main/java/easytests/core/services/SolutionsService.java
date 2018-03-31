@@ -7,8 +7,10 @@ import easytests.core.models.SolutionModel;
 import easytests.core.models.SolutionModelInterface;
 import easytests.core.options.SolutionsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +58,7 @@ public class SolutionsService implements SolutionsServiceInterface {
 
     @Override
     public List<SolutionModelInterface> findByPoint(PointModelInterface pointModel,
-                                             SolutionsOptionsInterface solutionsOptions) {
+                                                    SolutionsOptionsInterface solutionsOptions) {
         return this.withServices(solutionsOptions).withRelations(this.findByPoint(pointModel));
     }
 
@@ -73,20 +75,20 @@ public class SolutionsService implements SolutionsServiceInterface {
 
     @Override
     public void save(SolutionModelInterface solutionModel,
-                                       SolutionsOptionsInterface solutionsOptions) {
+                     SolutionsOptionsInterface solutionsOptions) {
         this.withServices(solutionsOptions).saveWithRelations(solutionModel);
     }
 
     @Override
     public void save(List<SolutionModelInterface> solutionModels) {
-        for (SolutionModelInterface solutionModel: solutionModels) {
+        for (SolutionModelInterface solutionModel : solutionModels) {
             this.save(solutionModel);
         }
     }
 
     @Override
     public void save(List<SolutionModelInterface> solutionModels, SolutionsOptionsInterface solutionsOptions) {
-        for (SolutionModelInterface solutionModel: solutionModels) {
+        for (SolutionModelInterface solutionModel : solutionModels) {
             this.save(solutionModel, solutionsOptions);
         }
     }
@@ -102,7 +104,7 @@ public class SolutionsService implements SolutionsServiceInterface {
 
     @Override
     public void delete(List<SolutionModelInterface> solutionsModel) {
-        for (SolutionModelInterface solutionModel: solutionsModel) {
+        for (SolutionModelInterface solutionModel : solutionsModel) {
             this.delete(solutionModel);
         }
     }
@@ -114,7 +116,7 @@ public class SolutionsService implements SolutionsServiceInterface {
 
     @Override
     public void delete(List<SolutionModelInterface> solutionsModel, SolutionsOptionsInterface solutionsOptions) {
-        for (SolutionModelInterface solutionModel: solutionsModel) {
+        for (SolutionModelInterface solutionModel : solutionsModel) {
             this.delete(solutionModel, solutionsOptions);
         }
     }
@@ -133,7 +135,7 @@ public class SolutionsService implements SolutionsServiceInterface {
 
     private List<SolutionModelInterface> map(List<SolutionEntity> solutionEntities) {
         final List<SolutionModelInterface> solutionModels = new ArrayList<>(solutionEntities.size());
-        for (SolutionEntity solutionEntity: solutionEntities) {
+        for (SolutionEntity solutionEntity : solutionEntities) {
             solutionModels.add(this.map(solutionEntity));
         }
         return solutionModels;

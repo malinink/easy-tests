@@ -3,12 +3,12 @@ package easytests.personal.dto;
 import easytests.core.models.AnswerModel;
 import easytests.core.models.AnswerModelInterface;
 import easytests.core.models.QuestionModelInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
+
 import lombok.Data;
-
-
 
 
 /**
@@ -37,7 +37,7 @@ public class AnswerListDto {
     public void mapInto(QuestionModelInterface questionModel) {
         final List<AnswerDto> answerDtoList = this.getAnswersList();
         final List<AnswerModelInterface> answers = new ArrayList<>(this.getAnswersList().size());
-        for (AnswerDto answerDto: answerDtoList) {
+        for (AnswerDto answerDto : answerDtoList) {
             final AnswerModelInterface answer = new AnswerModel();
             answerDto.mapInto(answer);
             answers.add(answer);

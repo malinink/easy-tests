@@ -5,17 +5,23 @@ import easytests.core.models.UserModelInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.UsersServiceInterface;
 import easytests.support.UsersSupport;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.BDDMockito.when;
+
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+
 import static org.mockito.Mockito.*;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -174,7 +180,8 @@ public class UsersOptionsTest {
     @Test
     public void testSaveWithSubjectsRelations() throws Exception {
         this.withUserModel().withSubjectsModelsInjected().withSubjects();
-        final ArgumentCaptor<SubjectsOptionsInterface> subjectsOptionsCaptor = ArgumentCaptor.forClass(SubjectsOptionsInterface.class);;
+        final ArgumentCaptor<SubjectsOptionsInterface> subjectsOptionsCaptor = ArgumentCaptor.forClass(SubjectsOptionsInterface.class);
+        ;
 
 
         this.usersOptions.saveWithRelations(this.userModel);
@@ -209,7 +216,8 @@ public class UsersOptionsTest {
     @Test
     public void testDeleteWithSubjectsRelations() throws Exception {
         this.withUserModel().withSubjectsModelsInjected().withSubjects();
-        final ArgumentCaptor<SubjectsOptionsInterface> subjectsOptionsCaptor = ArgumentCaptor.forClass(SubjectsOptionsInterface.class);;
+        final ArgumentCaptor<SubjectsOptionsInterface> subjectsOptionsCaptor = ArgumentCaptor.forClass(SubjectsOptionsInterface.class);
+        ;
 
         this.usersOptions.deleteWithRelations(this.userModel);
 

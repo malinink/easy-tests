@@ -1,7 +1,9 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.SolutionEntity;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.*;
 
 
@@ -13,12 +15,12 @@ import org.apache.ibatis.annotations.*;
 public interface SolutionsMapper {
 
     @Results(
-        id = "Solution",
-        value = {
-             @Result(property = "id", column = "id"),
-             @Result(property = "answerId", column = "answer_id"),
-             @Result(property = "pointId", column = "point_id")
-        })
+            id = "Solution",
+            value = {
+                    @Result(property = "id", column = "id"),
+                    @Result(property = "answerId", column = "answer_id"),
+                    @Result(property = "pointId", column = "point_id")
+            })
     @Select("SELECT * FROM solutions")
     List<SolutionEntity> findAll();
 

@@ -6,6 +6,7 @@ import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.PointsServiceInterface;
 import easytests.core.services.QuizzesServiceInterface;
 import easytests.core.services.TesteesServiceInterface;
+
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
@@ -76,7 +77,7 @@ public class QuizzesOptions implements QuizzesOptionsInterface {
 
     public List<QuizModelInterface> withRelations(List<QuizModelInterface> quizzesModels) {
 
-        for (QuizModelInterface quizModel: quizzesModels) {
+        for (QuizModelInterface quizModel : quizzesModels) {
             this.withRelations(quizModel);
         }
         return quizzesModels;

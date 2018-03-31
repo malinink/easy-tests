@@ -1,7 +1,9 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.IssueStandardTopicPriorityEntity;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.*;
 
 
@@ -13,13 +15,13 @@ import org.apache.ibatis.annotations.*;
 public interface IssueStandardTopicPrioritiesMapper {
 
     @Results(
-        id = "IssueStandardTopicPriority",
-        value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "topicId", column = "topic_id"),
-            @Result(property = "isPreferable", column = "is_preferable"),
-            @Result(property = "issueStandardId", column = "issue_standard_id")
-        })
+            id = "IssueStandardTopicPriority",
+            value = {
+                    @Result(property = "id", column = "id"),
+                    @Result(property = "topicId", column = "topic_id"),
+                    @Result(property = "isPreferable", column = "is_preferable"),
+                    @Result(property = "issueStandardId", column = "issue_standard_id")
+            })
     @Select("SELECT * FROM topic_priorities")
     List<IssueStandardTopicPriorityEntity> findAll();
 

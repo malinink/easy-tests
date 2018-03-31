@@ -14,11 +14,15 @@ import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import static org.mockito.BDDMockito.given;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
 /**
  * @author fortyways
  */
@@ -128,13 +132,13 @@ public class IssuesOptionsTest {
 
         Assert.assertEquals(issuesModelsWithRelations, issuesModels);
         verify(quizzesService).findByIssue(issueModelFirst, quizzesOptions);
-        verify(subjectsService).find(1,subjectsOptions);
+        verify(subjectsService).find(1, subjectsOptions);
         verify(issuesModels.get(0)).setQuizzes(quizzesModelsFirst);
         verify(issuesModels.get(0)).setQuizzes(Mockito.anyList());
         verify(issuesModels.get(0)).setSubject(subjectModelFirst);
 
         verify(quizzesService).findByIssue(issueModelSecond, quizzesOptions);
-        verify(subjectsService).find(2,subjectsOptions);
+        verify(subjectsService).find(2, subjectsOptions);
         verify(issuesModels.get(1)).setQuizzes(quizzesModelsSecond);
         verify(issuesModels.get(1)).setQuizzes(Mockito.anyList());
         verify(issuesModels.get(1)).setSubject(subjectModelSecond);
@@ -186,7 +190,7 @@ public class IssuesOptionsTest {
     }
 
     @Test
-    public void testSaveDeleteWithSubject(){
+    public void testSaveDeleteWithSubject() {
         final IssuesOptionsInterface issuesOptions = new IssuesOptions();
 
 

@@ -11,8 +11,7 @@ import org.meanbean.lang.Factory;
 public class TopicModelFactory implements Factory<TopicModelInterface> {
 
     @Override
-    public TopicModelInterface create()
-    {
+    public TopicModelInterface create() {
         return new TopicModel();
     }
 }

@@ -5,7 +5,9 @@ import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.SubjectModelEmpty;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -59,12 +61,12 @@ public class TopicsSupport {
     private TopicEntity getEntityMock(Object[] data) {
         return this.getEntityMock(
                 (Integer) data[0],
-                (String)  data[1],
+                (String) data[1],
                 (Integer) data[2]
         );
     }
 
-    private TopicEntity getEntityMock (
+    private TopicEntity getEntityMock(
             Integer id,
             String name,
             Integer subjectId
@@ -89,15 +91,15 @@ public class TopicsSupport {
     private TopicModelInterface getModelMock(Object[] data) {
         return this.getModelMock(
                 (Integer) data[0],
-                (String)  data[1],
+                (String) data[1],
                 (Integer) data[2]
         );
     }
 
     private TopicModelInterface getModelMock(
-        Integer id,
-        String name,
-        Integer subjectId
+            Integer id,
+            String name,
+            Integer subjectId
     ) {
         final TopicModelInterface topicModelMock = Mockito.mock(TopicModelInterface.class);
 
@@ -165,7 +167,7 @@ public class TopicsSupport {
         Assert.assertEquals(expected.size(), actual.size());
 
         Integer i = 0;
-        for(TopicModelInterface topicModel: expected) {
+        for (TopicModelInterface topicModel : expected) {
             this.assertEquals(topicModel, actual.get(i));
             i++;
         }
@@ -175,7 +177,7 @@ public class TopicsSupport {
         Assert.assertEquals(expected.size(), actual.size());
 
         Integer i = 0;
-        for(TopicEntity topicEntity: expected) {
+        for (TopicEntity topicEntity : expected) {
             this.assertEquals(topicEntity, actual.get(i));
             i++;
         }

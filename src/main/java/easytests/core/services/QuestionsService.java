@@ -7,8 +7,10 @@ import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,14 +86,14 @@ public class QuestionsService implements QuestionsServiceInterface {
 
     @Override
     public void save(List<QuestionModelInterface> questionsModels) {
-        for (QuestionModelInterface questionModel: questionsModels) {
+        for (QuestionModelInterface questionModel : questionsModels) {
             this.save(questionModel);
         }
     }
 
     @Override
     public void save(List<QuestionModelInterface> questionsModels, QuestionsOptionsInterface questionsOptions) {
-        for (QuestionModelInterface questionModel: questionsModels) {
+        for (QuestionModelInterface questionModel : questionsModels) {
             this.save(questionModel, questionsOptions);
         }
     }
@@ -112,14 +114,14 @@ public class QuestionsService implements QuestionsServiceInterface {
 
     @Override
     public void delete(List<QuestionModelInterface> questionsModels) {
-        for (QuestionModelInterface questionModel: questionsModels) {
+        for (QuestionModelInterface questionModel : questionsModels) {
             this.delete(questionModel);
         }
     }
 
     @Override
     public void delete(List<QuestionModelInterface> questionsModels, QuestionsOptionsInterface questionsOptions) {
-        for (QuestionModelInterface questionModel: questionsModels) {
+        for (QuestionModelInterface questionModel : questionsModels) {
             this.delete(questionModel, questionsOptions);
         }
     }
@@ -149,7 +151,7 @@ public class QuestionsService implements QuestionsServiceInterface {
 
     private List<QuestionModelInterface> map(List<QuestionEntity> questionsList) {
         final List<QuestionModelInterface> resultQuestionList = new ArrayList(questionsList.size());
-        for (QuestionEntity question: questionsList) {
+        for (QuestionEntity question : questionsList) {
             resultQuestionList.add(this.map(question));
         }
         return resultQuestionList;

@@ -1,7 +1,9 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.PointEntity;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.*;
 
 
@@ -13,12 +15,12 @@ import org.apache.ibatis.annotations.*;
 public interface PointsMapper {
 
     @Results(
-        id = "Point",
-        value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "questionId", column = "question_id"),
-            @Result(property = "quizId", column = "quiz_id")
-        })
+            id = "Point",
+            value = {
+                    @Result(property = "id", column = "id"),
+                    @Result(property = "questionId", column = "question_id"),
+                    @Result(property = "quizId", column = "quiz_id")
+            })
     @Select("SELECT * FROM points")
     List<PointEntity> findAll();
 

@@ -5,7 +5,9 @@ import easytests.core.services.AnswersServiceInterface;
 import easytests.core.services.QuestionTypesServiceInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
+
 import java.util.List;
+
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
@@ -72,7 +74,7 @@ public class QuestionsOptions implements QuestionsOptionsInterface {
 
     @Override
     public List<QuestionModelInterface> withRelations(List<QuestionModelInterface> questionsModels) {
-        for (QuestionModelInterface questionModel: questionsModels) {
+        for (QuestionModelInterface questionModel : questionsModels) {
             this.withRelations(questionModel);
         }
         return questionsModels;

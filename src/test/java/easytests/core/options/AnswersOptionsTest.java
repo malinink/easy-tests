@@ -3,8 +3,10 @@ package easytests.core.options;
 import easytests.core.models.*;
 import easytests.core.models.empty.QuestionModelEmpty;
 import easytests.core.services.QuestionsServiceInterface;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,13 +14,13 @@ import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.given;
 
 import static org.mockito.Mockito.times;
+
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.verify;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-
 
 
 /**

@@ -4,6 +4,7 @@ import easytests.common.exceptions.NotFoundException;
 import easytests.common.validators.AbstractDtoValidator;
 import easytests.core.services.QuestionsService;
 import easytests.personal.dto.AnswerDto;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ import org.springframework.validation.Errors;
  */
 @SuppressWarnings({
         "checkstyle:LineLength",
-        "checkstyle:CyclomaticComplexity" })
+        "checkstyle:CyclomaticComplexity"})
 @Component
 public class AnswerDtoValidator extends AbstractDtoValidator {
 

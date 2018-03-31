@@ -7,15 +7,19 @@ import easytests.core.models.QuizModelInterface;
 import easytests.core.options.QuizzesOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.QuizzesSupport;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.BDDMockito.*;
+
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -85,7 +89,7 @@ public class QuizzesServiceTest {
         Assert.assertNotNull(quizzesFoundedModels);
         Assert.assertEquals(0, quizzesFoundedModels.size());
     }
-    
+
     @Test
     public void testFindAllWithOptions() throws Exception {
         final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);

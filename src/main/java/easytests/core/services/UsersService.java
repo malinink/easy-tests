@@ -6,8 +6,10 @@ import easytests.core.models.UserModel;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.UsersOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -106,7 +108,7 @@ public class UsersService implements UsersServiceInterface {
 
     private List<UserModelInterface> map(List<UserEntity> usersList) {
         final List<UserModelInterface> resultUsersList = new ArrayList<>(usersList.size());
-        for (UserEntity user: usersList) {
+        for (UserEntity user : usersList) {
             resultUsersList.add(this.map(user));
         }
         return resultUsersList;

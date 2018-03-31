@@ -135,7 +135,7 @@ public class IssueStandardSupport {
     }
 
     private void assertEquals(IssueStandardEntity expected, IssueStandardEntity actual, Boolean expectId) {
-        if (!expectId){
+        if (!expectId) {
             Assert.assertEquals(expected.getId(), actual.getId());
         }
         Assert.assertEquals(expected.getTimeLimit(), actual.getTimeLimit());
@@ -144,7 +144,7 @@ public class IssueStandardSupport {
     }
 
     private void assertNotEquals(IssueStandardEntity expected, IssueStandardEntity actual, Boolean expectId) {
-        if (!expectId){
+        if (!expectId) {
             Assert.assertNotEquals(expected.getId(), actual.getId());
         }
         Assert.assertNotEquals(expected.getTimeLimit(), actual.getTimeLimit());

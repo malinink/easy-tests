@@ -4,6 +4,7 @@ import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,7 +37,7 @@ public abstract class AbstractEmptyTest {
      * Test that each method which are not in skipList throw expected Exception
      */
     protected void testModelTrowsExpectedExceptions(Object model, Class expectedException) throws Exception {
-        for (Method method: this.modelEmpty.getMethods()) {
+        for (Method method : this.modelEmpty.getMethods()) {
             if (skipMethodsWithNames.contains(method.getName())) {
                 continue;
             }
@@ -58,7 +59,7 @@ public abstract class AbstractEmptyTest {
     private Object[] getMethodParametersValues(Executable method) throws Exception {
         final Object[] parameters = new Object[method.getParameterCount()];
         Integer i = 0;
-        for (Class<?> type: method.getParameterTypes()) {
+        for (Class<?> type : method.getParameterTypes()) {
             parameters[i] = this.getObjectByType(type);
             i++;
         }

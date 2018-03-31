@@ -4,7 +4,9 @@ import easytests.core.entities.IssueStandardQuestionTypeOptionEntity;
 import easytests.core.models.IssueStandardQuestionTypeOptionModelInterface;
 import easytests.core.models.empty.IssueStandardModelEmpty;
 import easytests.core.models.empty.QuestionTypeModelEmpty;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -82,7 +84,6 @@ public class IssueStandardQuestionTypeOptionsSupport {
     public IssueStandardQuestionTypeOptionEntity getEntityFixtureMock(Integer index) {
         return this.getEntityMock(fixtures[index]);
     }
-
 
     public IssueStandardQuestionTypeOptionEntity getEntityAdditionalMock(Integer index) {
         return this.getEntityMock(additional[index]);
@@ -223,7 +224,7 @@ public class IssueStandardQuestionTypeOptionsSupport {
     public void assertModelsListEquals(List<IssueStandardQuestionTypeOptionModelInterface> expected, List<IssueStandardQuestionTypeOptionModelInterface> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel: expected) {
+        for (IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel : expected) {
             this.assertEquals(questionTypeOptionModel, actual.get(i));
             i++;
         }
@@ -232,7 +233,7 @@ public class IssueStandardQuestionTypeOptionsSupport {
     public void assertEntitiesListEquals(List<IssueStandardQuestionTypeOptionEntity> expected, List<IssueStandardQuestionTypeOptionEntity> actual) {
         Assert.assertEquals(expected.size(), actual.size());
         Integer i = 0;
-        for (IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity: expected) {
+        for (IssueStandardQuestionTypeOptionEntity questionTypeOptionEntity : expected) {
             this.assertEquals(questionTypeOptionEntity, actual.get(i));
             i++;
         }

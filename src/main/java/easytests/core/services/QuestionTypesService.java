@@ -5,8 +5,10 @@ import easytests.core.mappers.QuestionTypesMapper;
 import easytests.core.models.QuestionTypeModel;
 import easytests.core.models.QuestionTypeModelInterface;
 import easytests.core.options.QuestionTypesOptionsInterface;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +63,7 @@ public class QuestionTypesService implements QuestionTypesServiceInterface {
     private List<QuestionTypeModelInterface> map(List<QuestionTypeEntity> questionTypesEntities) {
         final List<QuestionTypeModelInterface> resultQuestionTypesEntities =
                 new ArrayList(questionTypesEntities.size());
-        for (QuestionTypeEntity questionTypeEntity: questionTypesEntities) {
+        for (QuestionTypeEntity questionTypeEntity : questionTypesEntities) {
             resultQuestionTypesEntities.add(this.map(questionTypeEntity));
         }
         return resultQuestionTypesEntities;

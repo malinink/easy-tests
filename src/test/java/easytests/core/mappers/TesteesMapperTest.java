@@ -2,13 +2,17 @@ package easytests.core.mappers;
 
 import easytests.core.entities.TesteeEntity;
 import easytests.support.TesteesSupport;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -29,7 +33,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
         Assert.assertEquals(3, testeesFoundedEntities.size());
 
         Integer index = 0;
-        for (TesteeEntity testeeEntity: testeesFoundedEntities){
+        for (TesteeEntity testeeEntity : testeesFoundedEntities) {
             final TesteeEntity testeeFixtureEntity = this.testeesSupport.getEntityFixtureMock(index);
 
             this.testeesSupport.assertEquals(testeeFixtureEntity, testeeEntity);
@@ -49,14 +53,14 @@ public class TesteesMapperTest extends AbstractMapperTest {
     @Test
     public void testFindByQuizId() throws Exception {
         final TesteeEntity testeeFixtureEntity = this.testeesSupport.getEntityFixtureMock(2);
-        
+
         final TesteeEntity testeeFoundedEntity = this.testeesMapper.findByQuizId(3);
 
         this.testeesSupport.assertEquals(testeeFixtureEntity, testeeFoundedEntity);
     }
 
     @Test
-    public void testInsert() throws Exception{
+    public void testInsert() throws Exception {
         final ArgumentCaptor<Integer> id = ArgumentCaptor.forClass(Integer.class);
         final TesteeEntity testeeUnidentifiedEntity = this.testeesSupport.getEntityAdditionalMock(0);
 
@@ -72,7 +76,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
     }
 
     @Test
-    public void testUpdate() throws Exception{
+    public void testUpdate() throws Exception {
         final TesteeEntity testeeChangedEntity = this.testeesSupport.getEntityAdditionalMock(1);
         final Integer id = testeeChangedEntity.getId();
         final TesteeEntity testeeBeforeUpdateEntity = this.testeesMapper.find(id);
@@ -87,7 +91,7 @@ public class TesteesMapperTest extends AbstractMapperTest {
     }
 
     @Test
-    public void testDelete() throws Exception{
+    public void testDelete() throws Exception {
         final Integer id = this.testeesSupport.getEntityFixtureMock(0).getId();
         TesteeEntity testeeFoundedEntity = this.testeesMapper.find(id);
 

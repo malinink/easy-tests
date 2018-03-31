@@ -2,6 +2,7 @@ package easytests.personal.dto;
 
 import easytests.core.models.*;
 import easytests.core.models.empty.SubjectModelEmpty;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+
 import lombok.Data;
 
 /**
@@ -41,7 +43,7 @@ public class IssueStandardDto {
         final List<IssueStandardTopicPriorityDto> topicPriorityDtoList
                 = new ArrayList<>(issueStandardModel.getTopicPriorities().size());
 
-        for (IssueStandardTopicPriorityModelInterface topicPriorityModel: issueStandardModel.getTopicPriorities()) {
+        for (IssueStandardTopicPriorityModelInterface topicPriorityModel : issueStandardModel.getTopicPriorities()) {
             final IssueStandardTopicPriorityDto topicPriorityDto = new IssueStandardTopicPriorityDto();
             topicPriorityDto.map(topicPriorityModel);
             topicPriorityDtoList.add(topicPriorityDto);
@@ -70,7 +72,7 @@ public class IssueStandardDto {
         final List<IssueStandardTopicPriorityModelInterface> topicPriorityModelList
                 = new ArrayList<>(this.getTopicPriorities().size());
 
-        for (IssueStandardTopicPriorityDto topicPriorityDto: this.getTopicPriorities()) {
+        for (IssueStandardTopicPriorityDto topicPriorityDto : this.getTopicPriorities()) {
             final IssueStandardTopicPriorityModelInterface topicPriorityModel
                     = new IssueStandardTopicPriorityModel();
             topicPriorityDto.mapInto(topicPriorityModel, this.getId());
@@ -80,7 +82,7 @@ public class IssueStandardDto {
         final List<IssueStandardQuestionTypeOptionModelInterface> questionTypeOptionModelList
                 = new ArrayList<>(this.getQuestionTypeOptions().size());
 
-        for (IssueStandardQuestionTypeOptionDto questionTypeOptionDto: this.getQuestionTypeOptions()) {
+        for (IssueStandardQuestionTypeOptionDto questionTypeOptionDto : this.getQuestionTypeOptions()) {
             final IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel
                     = new IssueStandardQuestionTypeOptionModel();
             questionTypeOptionDto.mapInto(questionTypeOptionModel, this.getId());

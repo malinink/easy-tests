@@ -1,7 +1,9 @@
 package easytests.core.entities;
 
 import easytests.core.models.QuizModelInterface;
+
 import java.time.LocalDateTime;
+
 import lombok.Data;
 
 /**

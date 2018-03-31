@@ -1,13 +1,17 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.*;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 

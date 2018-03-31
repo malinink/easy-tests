@@ -3,7 +3,9 @@ package easytests.core.options;
 import easytests.core.models.IssueStandardModelInterface;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.services.*;
+
 import java.util.List;
+
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
@@ -85,7 +87,7 @@ public class SubjectsOptions implements SubjectsOptionsInterface {
 
     public List<SubjectModelInterface> withRelations(List<SubjectModelInterface> subjectsModels) {
 
-        for (SubjectModelInterface subjectModel: subjectsModels) {
+        for (SubjectModelInterface subjectModel : subjectsModels) {
             this.withRelations(subjectModel);
         }
         return subjectsModels;

@@ -46,7 +46,7 @@ public class QuestionsServiceTest extends AbstractServiceTest {
     @Test
     public void testFindPresentModel() throws Exception {
         final Integer id = 1;
-        final QuestionModelInterface questionModel = this.createQuestionModel(id, "test1" , 1, 1);
+        final QuestionModelInterface questionModel = this.createQuestionModel(id, "test1", 1, 1);
 
         final QuestionModelInterface foundedQuestionModel = this.questionsService.find(id);
 

@@ -3,7 +3,9 @@ package easytests.core.options;
 import easytests.core.models.UserModelInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.UsersServiceInterface;
+
 import java.util.List;
+
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
@@ -40,7 +42,7 @@ public class UsersOptions implements UsersOptionsInterface {
 
     @Override
     public List<UserModelInterface> withRelations(List<UserModelInterface> usersModels) {
-        for (UserModelInterface userModel: usersModels) {
+        for (UserModelInterface userModel : usersModels) {
             this.withRelations(userModel);
         }
         return usersModels;

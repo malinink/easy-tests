@@ -3,6 +3,7 @@ package easytests.core.services;
 import easytests.core.models.QuizModelInterface;
 import easytests.core.models.TesteeModelInterface;
 import easytests.core.options.TesteesOptionsInterface;
+
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public interface TesteesServiceInterface extends ServiceInterface {
     TesteeModelInterface findByQuiz(QuizModelInterface quizModel);
 
     TesteeModelInterface findByQuiz(QuizModelInterface quizModel,
-                                              TesteesOptionsInterface testeesOptions);
+                                    TesteesOptionsInterface testeesOptions);
 
     void save(TesteeModelInterface testeeModel);
 
