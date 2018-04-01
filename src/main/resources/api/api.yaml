@@ -13,6 +13,9 @@ consumes:
 produces:
   - application/json
 paths:
+  #
+  # Users
+  #
   /v1/users:
     get:
       summary: List all users
@@ -138,6 +141,27 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/V1Error'
+  #
+  # Subjects
+  #
+  #
+  # Topics
+  #
+  #
+  # Questions
+  #
+  #
+  # Issues
+  #
+  #
+  # Quizzes
+  #
+  #
+  # Points
+  #
+  #
+  # Temporary Objects
+  #
   /v1/objects:
     get:
       summary: List all object
@@ -175,6 +199,9 @@ paths:
           schema:
             $ref: '#/definitions/V1Object'
 definitions:
+  #
+  # Users
+  #
   V1User:
     type: object
     required:
@@ -214,6 +241,27 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/V1User'
+  #
+  # Subjects
+  #
+  #
+  # Topics
+  #
+  #
+  # Questions
+  #
+  #
+  # Issues
+  #
+  #
+  # Quizzes
+  #
+  #
+  # Points
+  #
+  #
+  # Temporary Objects
+  #
   V1Object:
     required:
       - id
@@ -243,6 +291,9 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/V1Object'
+  #
+  # Errors
+  #
   V1Error:
     required:
       - code
