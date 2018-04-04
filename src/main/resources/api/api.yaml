@@ -151,17 +151,17 @@ paths:
   # Questions
   #
   /v1/Questions:
+    parameters:
+      - name: topicId
+        in: path
+        required: true
+        description: Id of the specific topic
+        type: string
     get:
       summary: Get the list of all questions in the specific topic
       operationId: listQuestions
       tags:
         - questions
-      parameters:
-        - name: topicId
-          in: path
-          required: true
-          description: Id of the specific topic
-          type: string
       responses:
         '200':
           description: Return an array of the specific topic's questions
@@ -215,18 +215,18 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
   /v1/questions/{questionId}:
+    parameters:
+      - name: questionId
+        in: path
+        required: true
+        description: Id of the question to retrieve
+        type: integer
+        format: int64
     get:
       summary: Get the question with a specific id
       operationId: showQuestionById
       tags:
         - questions
-      parameters:
-        - name: questionId
-          in: path
-          required: true
-          description: Id of the question to retrieve
-          type: integer
-          format: int64
       responses:
         '200':
           description: Return the question
