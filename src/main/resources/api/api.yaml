@@ -153,6 +153,131 @@ paths:
   #
   # Issues
   #
+  /v1/issues:
+    get:
+      summary: List of issues
+      operationId: listIssues
+      tags:
+      - issues
+      parameters:
+        - name: subjectId
+          in: query
+          required: false
+          description: Id of specific subject
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Return an array of specific subject's issues or list of all issues
+          schema:
+            $ref: '#/definitions/V1Issues'
+        '400':
+          description: The specified subject ID is invalid
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: Subject is not permitted for this user
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+    post:
+      summary: Create a new issue
+      operationId: createIssue
+      parameters:
+        - name: issue
+          in: body
+          required: true
+          description: Issue that needs to be created
+          schema:
+            $ref: '#/definitions/V1Issues'
+      tags:
+        - issues
+      responses:
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+    put:
+      summary: Update an existing Issue
+      operationId: updateIssue
+      tags:
+        - issues
+      parameters:
+        - name: issue
+          in: body
+          required: true
+          description: Update issue with a specific id
+          schema:
+            $ref: '#/definitions/V1Issue'
+      responses:
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+  /v1/issues/{issueId}:
+    get:
+      summary: Info for a specific issue
+      operationId: showIssueById
+      parameters:
+        - name: issueId
+          in: path
+          required: true
+          description: Id of specific issue
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Expected response to a valid request
+          schema:
+            $ref: '#/definitions/V1Issue'
+        '400':
+          description: The specified issue ID is invalid
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: An issue with the specified ID was not found.
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+    delete:
+      summary: Delete an issue with the specific id
+      operationId: deleteIssueById
+      tags:
+        - Issues
+      parameters:
+        - name: issueId
+          in: path
+          required: true
+          description: The id of the issue to delete
+          type: integer
+          format: int64
+      responses:
+        '400':
+          description: The specified issue ID is invalid
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: An issue with the specified ID was not found
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
   #
   # Quizzes
   #
@@ -253,6 +378,34 @@ definitions:
   #
   # Issues
   #
+  V1Issue:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      subject:
+        type: object
+        items:
+          $ref: '#/definitions/V1Subject'
+      quizzes:
+        type: array
+        items:
+          $ref: '#/definitions/V1Quizz'
+    required:
+      - id
+      - name
+      - subject
+    example:
+      id: 1
+      name: Test№1
+      subject: Networks
+  V1Issues:
+    type: array
+    items:
+      $ref: '#/definitions/V1Issue'
   #
   # Quizzes
   #
