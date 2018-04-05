@@ -386,14 +386,9 @@ definitions:
         format: int64
       name:
         type: string
-      subject:
-        type: object
-        items:
-          $ref: '#/definitions/V1Subject'
-      quizzes:
-        type: array
-        items:
-          $ref: '#/definitions/V1Quizz'
+      subjectId:
+        type: integer
+        format: int64
     required:
       - id
       - name
@@ -401,7 +396,7 @@ definitions:
     example:
       id: 1
       name: Test№1
-      subject: Networks
+      subjectId: 1
   V1Issues:
     type: array
     items:
