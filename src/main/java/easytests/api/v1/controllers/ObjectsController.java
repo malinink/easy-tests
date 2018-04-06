@@ -4,6 +4,8 @@ import easytests.api.v1.mappers.ObjectsMapper;
 import easytests.api.v1.models.Object;
 import easytests.common.exceptions.NotFoundException;
 import easytests.core.models.UserModelInterface;
+import easytests.core.options.SubjectsOptions;
+import easytests.core.options.UsersOptions;
 import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
@@ -32,7 +34,10 @@ public class ObjectsController {
 
     @GetMapping("{userId}/")
     public Object view(@PathVariable Integer userId) {
-        final UserModelInterface userModel = this.getUserModel(userId);
+        final UserModelInterface userModel = this.getUserModel(
+            userId,
+            (new UsersOptions()).withSubjects(new SubjectsOptions())
+        );
         return this.objectsMapper.map(userModel, Object.class);
     }
 
