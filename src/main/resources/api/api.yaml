@@ -412,7 +412,6 @@ definitions:
   #
   V1Object:
     required:
-      - id
       - firstName
       - lastNname
       - surname
@@ -435,10 +434,24 @@ definitions:
         type: boolean
       state:
         type: integer
+      subjects:
+        $ref: '#/definitions/V1Identities'
   V1Objects:
     type: array
     items:
       $ref: '#/definitions/V1Object'
+  V1Identity:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  V1Identities:
+    type: array
+    items:
+      $ref: '#/definitions/V1Identity'
   #
   # Errors
   #
