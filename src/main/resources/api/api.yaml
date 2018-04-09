@@ -316,34 +316,6 @@ paths:
         required: true
         description: Id of specific question
         type: string
-    delete:
-      summary: Delete answer with specific id
-      operationId: deleteAnswerById
-      tags:
-        - answer
-      parameters:
-        - name: body
-          in: path
-          required: true
-          description: The id of Answer to delete
-          type: integer
-      responses:
-        "400":
-          description: Invalid answer Id supplied
-          schema:
-            $ref: '#/definitions/V1Error'
-        "404":
-          description: An answer was not found
-          schema:
-            $ref: '#/definitions/V1Error'
-        "403":
-          description: Access forbidden
-          schema:
-            $ref: '#/definitions/V1Error' 
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/V1Error'
   #
   # Issues
   #
