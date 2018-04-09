@@ -309,13 +309,6 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/V1Error'
-  /v1/AnswerForAdmin:
-    parameters:
-      - name: answerId
-        in: path
-        required: true
-        description: Id of specific question
-        type: string
   #
   # Issues
   #
