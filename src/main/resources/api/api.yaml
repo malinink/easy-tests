@@ -281,6 +281,34 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
+    delete:
+      summary: Delete question with specific id
+      operationId: deleteQuestionById
+      tags:
+        - question
+      parameters:
+        - name: body
+          in: path
+          required: true
+          description: The id of the question to delete
+          type: integer
+      responses:
+        "400":
+          description: The specified question ID is invalid (not a number)
+          schema:
+            $ref: '#/definitions/V1Error'
+        "404":
+          description: A question with the specified ID was not found
+          schema:
+            $ref: '#/definitions/V1Error'
+        "403":
+          description: Access forbidden
+          schema:
+            $ref: '#/definitions/V1Error' 
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
   #
   # Issues
   #
@@ -407,7 +435,7 @@ definitions:
       answers:
         type: array
         items:
-          $ref: '#/definitions/V1AnswersForAdmin'
+          $ref: '#/definitions/V1AnswerForAdmin'
     example:
       id: 100500
       questionText: 'Select private networks:'
@@ -417,6 +445,38 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/V1Question'
+  # 
+  # Answers
+  # 
+  V1AnswerForAdmin:
+    type: object
+    required:
+      - answerText
+      - answerType
+      - question
+    properties:
+      id:
+        type: integer
+        format: int64
+      answerText:
+        type: string
+      answerType:
+        type: string
+        description: Type of answer text or numeric
+        default: text answer
+        enum:
+          - text answer
+          - numeric answer
+      question:
+        $ref: '#/definitions/V1Question'
+    example:
+      id: 100500
+      answerText: 2,3
+      answerType: numeric answer
+  V1AnswersForAdmin:
+    type: array
+    items:
+      $ref: '#/definitions/V1AnswerForAdmin'
   #
   # Issues
   #
