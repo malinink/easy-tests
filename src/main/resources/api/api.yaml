@@ -287,7 +287,7 @@ paths:
       tags:
         - question
       parameters:
-        - name: questoinId
+        - name: body
           in: path
           required: true
           description: The id of the question to delete
@@ -301,79 +301,28 @@ paths:
           description: A question with the specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
+        "403":
+          description: Access forbidden
+          schema:
+            $ref: '#/definitions/V1Error' 
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/V1Error'
-  /v1/AnswersForAdmin:
+  /v1/AnswerForAdmin:
     parameters:
-      - name: questoinId
+      - name: answerId
         in: path
         required: true
         description: Id of specific question
         type: string
-    post:
-      summary: Add a new answer
-      operationId: createAnswer
-      tags:
-        - answers
-      parameters:
-        - name: body
-          in: body
-          required: true
-          description: Answer that need to be added
-          schema:
-            $ref:'#/definitions/V1AnswersForAdmin'
-      responses:
-        '200':
-          description: Return a new answer
-          schema:
-            $ref: '#/definitions/V1AnswersForAdmin'
-        '400':
-          description: Invalid input
-          schema:
-            $ref: '#/definitions/V1Error'
-        '403':
-          description: Access forbidden
-          schema:
-            $ref: '#/definitions/V1Error'
-        default:
-          description: Unexpected error
-          schema:
-            $ref: '#/definitions/V1Error'
-    get:
-      summary: Get answer for specific question
-      operationId: answer
-      tags:
-        - answer
-      responses:
-        '200':
-          description: Return answer for specific question
-          schema:
-            $ref: '#/definitions/V1AnswersForAdmin'
-        '400':
-          description: Invalid question ID supplied
-          schema:
-            $ref: '#/definitions/V1Error'
-        '404':
-          description: Answer not found.
-          schema:
-            $ref: '#/definitions/V1Error'
-        '403':
-          description: Access forbidden
-          schema:
-            $ref: '#/definitions/V1Error'
-        default:
-          description: Unexpected error
-          schema:
-            $ref: '#/definitions/V1Error'
     delete:
       summary: Delete answer with specific id
       operationId: deleteAnswerById
       tags:
         - answer
       parameters:
-        - name: answerId
+        - name: body
           in: path
           required: true
           description: The id of Answer to delete
@@ -387,6 +336,10 @@ paths:
           description: An answer was not found
           schema:
             $ref: '#/definitions/V1Error'
+        "403":
+          description: Access forbidden
+          schema:
+            $ref: '#/definitions/V1Error' 
         default:
           description: unexpected error
           schema:
@@ -517,7 +470,7 @@ definitions:
       answers:
         type: array
         items:
-          $ref: '#/definitions/V1AnswersForAdmin'
+          $ref: '#/definitions/V1AnswerForAdmin'
     example:
       id: 100500
       questionText: 'Select private networks:'
@@ -530,7 +483,7 @@ definitions:
   # 
   # Answers
   # 
-  V1AnswersForAdmin:
+  V1AnswerForAdmin:
     type: object
     required:
       - answerText
@@ -551,6 +504,14 @@ definitions:
           - numeric answer
       question:
         $ref: '#/definitions/V1Question'
+    example:
+      id: 100500
+      answerText: 2,3
+      answerType: numeric answer
+  V1AnswersForAdmin:
+    type: array
+    items:
+      $ref: '#/definitions/V1AnswerForAdmin'
   #
   # Issues
   #
