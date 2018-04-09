@@ -430,8 +430,8 @@ definitions:
         - one answer
         - text answer
         - numeric answer
-      topicNum:
-        $ref: '#/definitions/V1TopicID'
+      topic:
+        $ref: '#/definitions/V1Identity'
       answers:
         type: array
         items:
