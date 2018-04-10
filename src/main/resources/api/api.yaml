@@ -156,6 +156,7 @@ paths:
   #
   # Quizzes
   #
+
   #
   # Points
   #
@@ -256,6 +257,33 @@ definitions:
   #
   # Quizzes
   #
+  V1Quiz:
+      required:
+        - id
+        - startedAt
+        - finishedAt
+        - testee
+      properties:
+        id:
+          type: integer
+          format: int64
+        startedAt:
+          type: string
+          format: date-time
+        finishedAt:
+          type: string
+          format: date-time
+        testee:
+          type: string
+      example:
+        id: 1
+        startedAt: '2018-03-11T23:20:50'
+        finishedAt: '2018-03-11T23:30:50'
+        testee: 'Ivan Ivanov'
+    V1Quizzes:
+      type: array
+      items:
+        $ref: '#/definitions/V1Quiz'
   #
   # Points
   #
