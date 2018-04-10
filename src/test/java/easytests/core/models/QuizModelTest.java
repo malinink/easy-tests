@@ -15,9 +15,7 @@ public class QuizModelTest extends AbstractModelTest {
 
     @Override
     protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder()
-                .ignoreProperty("issue")
-                .ignoreProperty("testee");
+        return super.getConfigurationBuilder();
     }
 
     @Test

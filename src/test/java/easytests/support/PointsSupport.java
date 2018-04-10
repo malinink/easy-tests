@@ -154,7 +154,7 @@ public class PointsSupport {
         assertEquals(actual, expected);
         Assert.assertEquals(new QuestionModelEmpty(expected.getQuestionId()), actual.getQuestion());
         Assert.assertEquals(new ModelsListEmpty(), actual.getSolutions());
-        Assert.assertEquals(new QuizModelEmpty(), actual.getQuiz());
+        Assert.assertEquals(new QuizModelEmpty(expected.getQuizId()), actual.getQuiz());
     }
 
     public void assertModelsListEquals(List<PointModelInterface> expected, List<PointModelInterface> actual) {
