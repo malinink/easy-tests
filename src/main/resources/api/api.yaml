@@ -224,6 +224,8 @@ paths:
             $ref: '#/definitions/V1Error'
         '404':
           description: The specified issue Id was not found
+          schema:
+            $ref: '#/definitions/V1Error'
         default:
           description: Unexpected error
           schema:
@@ -434,7 +436,9 @@ definitions:
       name:
         type: string
       subject:
-        $ref: '#/definitions/V1Identities'
+        type: object
+        items:
+          $ref: '#/definitions/V1Subject'
     required:
       - id
       - name
