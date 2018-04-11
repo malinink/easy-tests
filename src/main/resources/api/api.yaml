@@ -155,32 +155,21 @@ paths:
   #
   /v1/issues:
     get:
-      summary: List of issues
+      summary: List of all issues
       operationId: listIssues
       tags:
       - issues
-      parameters:
-        - name: subjectId
-          in: query
-          required: true
-          description: Id of specific subject
-          type: integer
-          format: int64
       responses:
         '200':
-          description: Return an array of specific subject's issues or list of all issues
+          description: Return an array of all issues
           schema:
             $ref: '#/definitions/V1Issues'
-        '400':
-          description: The specified subject ID is invalid
-          schema:
-            $ref: '#/definitions/V1Error'
         '403':
           description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: The specified subject Id was not found
+          description: Issues was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -237,6 +226,40 @@ paths:
           description: The specified issue Id was not found
         default:
           description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+  /v1/issued/FindBySunjectId:
+    get:
+      summary: List of issues by Subject Id
+      operationId: listIssuesBySubjectId
+      tags:
+        - issues
+      parameters:
+        - name: subjectId
+          in: query
+          required: true
+          description: Id of specific subject
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Return an array of issues by subject id
+          schema:
+            $ref: '#/definitions/V1Issues'
+        '400':
+          description: The specified subject ID is invalid
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: The specified subject Id was not found
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: unexpected error
           schema:
             $ref: '#/definitions/V1Error'
   /v1/issues/{issueId}:
