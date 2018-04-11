@@ -265,18 +265,18 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
   /v1/issues/{issueId}:
+    parameters:
+      - name: issueId
+        in: path
+        required: true
+        description: Id of specific issue
+        type: integer
+        format: int64
     get:
       summary: Info for a specific issue
       operationId: showIssueById
       tags:
         - issues
-      parameters:
-        - name: issueId
-          in: path
-          required: true
-          description: Id of specific issue
-          type: integer
-          format: int64
       responses:
         '200':
           description: Expected response to a valid request
@@ -303,13 +303,6 @@ paths:
       operationId: deleteIssueById
       tags:
         - Issues
-      parameters:
-        - name: issueId
-          in: path
-          required: true
-          description: The id of the issue to delete
-          type: integer
-          format: int64
       responses:
         '400':
           description: The specified issue ID is invalid
