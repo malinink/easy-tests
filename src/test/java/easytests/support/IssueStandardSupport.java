@@ -7,6 +7,8 @@ import easytests.core.models.empty.SubjectModelEmpty;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
+import java.util.List;
+
 
 /**
  * @author Yarik2308
@@ -85,6 +87,9 @@ public class IssueStandardSupport {
     public IssueStandardModelInterface getModelFixtureMock(Integer index) {
         return this.getModelMock(fixtures[index]);
     }
+    public IssueStandardModelInterface getModelAdditionalMock(Integer index){
+        return this.getModelMock(additional[index]);
+    }
 
     private IssueStandardModelInterface getModelMock(Object[] data) {
         return this.getModelMock(
@@ -134,6 +139,17 @@ public class IssueStandardSupport {
         assertNotEquals(expected, actual, true);
     }
 
+    public void assertModelsListEquals(List<IssueStandardModelInterface> expected,
+                                       List<IssueStandardModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i =0;
+        for (IssueStandardModelInterface issueStandardModel: expected){
+            this.assertEquals(issueStandardModel, actual.get(i));
+            i++;
+        }
+
+    }
+
     private void assertEquals(IssueStandardEntity expected, IssueStandardEntity actual, Boolean expectId) {
         if (!expectId){
             Assert.assertEquals(expected.getId(), actual.getId());
@@ -141,6 +157,14 @@ public class IssueStandardSupport {
         Assert.assertEquals(expected.getTimeLimit(), actual.getTimeLimit());
         Assert.assertEquals(expected.getQuestionsNumber(), actual.getQuestionsNumber());
         Assert.assertEquals(expected.getSubjectId(), actual.getSubjectId());
+    }
+
+    public void assertEquals(IssueStandardModelInterface expected,
+                             IssueStandardModelInterface actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getQuestionsNumber(), actual.getQuestionsNumber());
+        Assert.assertEquals(expected.getTimeLimit(), actual.getTimeLimit());
+        Assert.assertEquals(expected.getSubject().getId(), actual.getSubject().getId());
     }
 
     private void assertNotEquals(IssueStandardEntity expected, IssueStandardEntity actual, Boolean expectId) {
