@@ -1,11 +1,11 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  description: ""
-  version: "0.0.1"
-  title: "Easy Tests"
-host: "api.easy-tests"
+  description: ''
+  version: '0.0.1'
+  title: 'Easy Tests'
+host: 'api.easy-tests'
 tags:
-  - name: "users"
+  - name: 'users'
 schemes:
   - http
 consumes:
@@ -23,7 +23,7 @@ paths:
       tags:
         - users
       responses:
-        "200":
+        '200':
           description: An array of users
           schema:
             $ref: '#/definitions/V1Users'
@@ -44,7 +44,7 @@ paths:
       tags:
         - users
       responses:
-        "400":
+        '400':
           description: Invalid input
           schema:
             $ref: '#/definitions/V1Error'
@@ -86,7 +86,7 @@ paths:
           description: The id of the user to retrieve
           type: integer
       responses:
-        "200":
+        '200':
           description: Expected response to a valid request
           schema:
             $ref: '#/definitions/V1User'
@@ -109,7 +109,7 @@ paths:
       tags:
         - users
       responses:
-        "200":
+        '200':
           description: Current user
           schema:
             $ref: '#/definitions/V1User'
@@ -343,7 +343,7 @@ paths:
       tags:
         - objects
       responses:
-        "200":
+        '200':
           description: An array of objects
           schema:
             $ref: '#/definitions/V1Objects'
@@ -364,11 +364,11 @@ paths:
           description: The id of the object to retrieve
           type: integer
       responses:
-        "200":
+        '200':
           description: Expected response to a valid request
           schema:
             $ref: '#/definitions/V1Object'
-        "404":
+        '404':
           description: unexpected error
           schema:
             $ref: '#/definitions/V1Object'
