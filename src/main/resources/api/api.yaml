@@ -438,7 +438,7 @@ definitions:
       subject:
         type: object
         items:
-          $ref: '#/definitions/V1Subject'
+          $ref: '#/definitions/V1Identities'
     required:
       - id
       - name
