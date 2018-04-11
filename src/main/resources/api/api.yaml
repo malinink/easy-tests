@@ -156,7 +156,8 @@ paths:
         in: path
         required: true
         description: Id of the specific topic
-        type: string
+        type: integer
+        format: int64
     get:
       summary: Get the list of all questions in the specific topic
       operationId: listQuestions
@@ -288,20 +289,20 @@ paths:
         - question
       parameters:
         - name: body
-          in: path
+          in: body
           required: true
           description: The id of the question to delete
           type: integer
       responses:
-        "400":
+        '400':
           description: The specified question ID is invalid (not a number)
           schema:
             $ref: '#/definitions/V1Error'
-        "404":
+        '404':
           description: A question with the specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
-        "403":
+        '403':
           description: Access forbidden
           schema:
             $ref: '#/definitions/V1Error' 
