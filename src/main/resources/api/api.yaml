@@ -258,7 +258,7 @@ paths:
         - name: body
           in: body
           required: true
-          description: Question that needs to be added instead of the existing              one with the same id
+          description: The id of the question to update
           schema:
             $ref: '#/definitions/V1Question'
       responses:
@@ -292,7 +292,8 @@ paths:
           in: body
           required: true
           description: The id of the question to delete
-          type: integer
+          schema:
+            $ref: '#/definitions/V1Question'
       responses:
         '400':
           description: The specified question ID is invalid (not a number)
