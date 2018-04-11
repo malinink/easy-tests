@@ -162,7 +162,7 @@ paths:
       parameters:
         - name: subjectId
           in: query
-          required: false
+          required: true
           description: Id of specific subject
           type: integer
           format: int64
@@ -175,8 +175,12 @@ paths:
           description: The specified subject ID is invalid
           schema:
             $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
         '404':
-          description: Subject is not permitted for this user
+          description: The specified subject Id was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -200,6 +204,10 @@ paths:
           description: Invalid input
           schema:
             $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
         default:
           description: unexpected error
           schema:
@@ -221,6 +229,12 @@ paths:
           description: Invalid input
           schema:
             $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: The specified issue Id was not found
         default:
           description: Unexpected error
           schema:
@@ -229,6 +243,8 @@ paths:
     get:
       summary: Info for a specific issue
       operationId: showIssueById
+      tags:
+        - issues
       parameters:
         - name: issueId
           in: path
@@ -245,8 +261,12 @@ paths:
           description: The specified issue ID is invalid
           schema:
             $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
         '404':
-          description: An issue with the specified ID was not found.
+          description: The specified issue Id was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -270,8 +290,12 @@ paths:
           description: The specified issue ID is invalid
           schema:
             $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
         '404':
-          description: An issue with the specified ID was not found
+          description: The specified issue Id was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -386,9 +410,8 @@ definitions:
         format: int64
       name:
         type: string
-      subjectId:
-        type: integer
-        format: int64
+      subject:
+        $ref: '#/definitions/V1Identities'
     required:
       - id
       - name
