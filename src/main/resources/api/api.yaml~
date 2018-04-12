@@ -131,6 +131,8 @@ paths:
           description: A user with the specified ID was not found.
           schema:
             $ref: '#/definitions/V1Error'
+<<<<<<< HEAD
+=======
   /v1/users/me:
     get:
       summary: Info for current user
@@ -142,6 +144,7 @@ paths:
           description: Current user
           schema:
             $ref: '#/definitions/V1User'
+>>>>>>> dev
         default:
           description: unexpected error
           schema:
