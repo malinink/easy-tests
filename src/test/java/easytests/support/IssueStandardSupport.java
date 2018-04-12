@@ -4,10 +4,9 @@ import easytests.core.entities.IssueStandardEntity;
 import easytests.core.models.IssueStandardModelInterface;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.SubjectModelEmpty;
+import java.util.List;
 import org.junit.Assert;
 import org.mockito.Mockito;
-
-import java.util.List;
 
 
 /**
@@ -139,17 +138,6 @@ public class IssueStandardSupport {
         assertNotEquals(expected, actual, true);
     }
 
-    public void assertModelsListEquals(List<IssueStandardModelInterface> expected,
-                                       List<IssueStandardModelInterface> actual) {
-        Assert.assertEquals(expected.size(), actual.size());
-        Integer i =0;
-        for (IssueStandardModelInterface issueStandardModel: expected){
-            this.assertEquals(issueStandardModel, actual.get(i));
-            i++;
-        }
-
-    }
-
     private void assertEquals(IssueStandardEntity expected, IssueStandardEntity actual, Boolean expectId) {
         if (!expectId){
             Assert.assertEquals(expected.getId(), actual.getId());
@@ -174,5 +162,24 @@ public class IssueStandardSupport {
         Assert.assertNotEquals(expected.getTimeLimit(), actual.getTimeLimit());
         Assert.assertNotEquals(expected.getQuestionsNumber(), actual.getQuestionsNumber());
         Assert.assertNotEquals(expected.getSubjectId(), actual.getSubjectId());
+    }
+
+    public void assertModelsListEquals(List<IssueStandardModelInterface> expected,
+                                       List<IssueStandardModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i =0;
+        for (IssueStandardModelInterface issueStandardModel: expected){
+            this.assertEquals(issueStandardModel, actual.get(i));
+            i++;
+        }
+    }
+
+    public void assertEntitiesListEquals(List<IssueStandardEntity> expected, List<IssueStandardEntity> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i =0;
+        for (IssueStandardEntity issueStandardEntity: expected){
+            this.assertEquals(issueStandardEntity, actual.get(i));
+            i++;
+        }
     }
 }
