@@ -26,5 +26,4 @@ public class SubjectEntityTest extends AbstractEntityTest {
 
         this.subjectsSupport.assertEquals(subjectModel, subjectEntity);
     }
-
 }

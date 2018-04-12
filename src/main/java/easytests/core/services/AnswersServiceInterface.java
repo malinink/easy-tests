@@ -12,6 +12,8 @@ public interface AnswersServiceInterface extends ServiceInterface {
 
     List<AnswerModelInterface> findAll();
 
+    List<AnswerModelInterface> findAll(AnswersOptionsInterface answersOptions);
+
     List<AnswerModelInterface> findByQuestion(QuestionModelInterface questionModel);
     
     List<AnswerModelInterface> findByQuestion(
