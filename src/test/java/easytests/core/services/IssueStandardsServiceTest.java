@@ -7,20 +7,19 @@ import easytests.core.options.IssueStandardsOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.IssueStandardSupport;
 import easytests.support.SubjectsSupport;
-import easytests.core.models.SubjectModelInterface;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.*;
 import org.mockito.ArgumentCaptor;
+import static org.mockito.BDDMockito.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.*;
 
-import static org.mockito.BDDMockito.*;
 
 /**
  * @author janchk
@@ -42,24 +41,12 @@ public class IssueStandardsServiceTest {
 
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
-    private IssueStandardEntity mapIssueStandardEntity(IssueStandardModelInterface issueStandardModel) {
-        final IssueStandardEntity issueStandardEntity = new IssueStandardEntity();
-        issueStandardEntity.map(issueStandardModel);
-        return issueStandardEntity;
-    }
-
-    private IssueStandardModelInterface mapIssueStandardModel(IssueStandardEntity issueStandardEntity) {
-        final IssueStandardModelInterface issueStandardModel = new IssueStandardModel();
-        issueStandardModel.map(issueStandardEntity);
-        return issueStandardModel;
-    }
     private List<IssueStandardEntity> getIssueStandardFixturesEntities(){
         final List<IssueStandardEntity> issueStandardEntities = new ArrayList<>(2);
         issueStandardEntities.add(this.issueStandardSupport.getEntityFixtureMock(0));
         issueStandardEntities.add(this.issueStandardSupport.getEntityFixtureMock(1));
         return issueStandardEntities;
     }
-
 
     private List<IssueStandardModelInterface> getIssueStandardFixturesModels() {
         final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(2);
@@ -68,20 +55,27 @@ public class IssueStandardsServiceTest {
         return issueStandardModels;
     }
 
+    private void assertServicesSet(IssueStandardsOptionsInterface issueStandardsOptions) throws Exception {
+        this.assertServicesSet(issueStandardsOptions, 1);
+    }
+
+    private void assertServicesSet(IssueStandardsOptionsInterface issueStandardsOptions, Integer times) throws Exception{
+        verify(issueStandardsOptions, times(times)).setIssueStandardsService(this.issueStandardsService);
+    }
+
     @Test
     public void testFindAllPresentList() throws Exception {
         final List<IssueStandardEntity> issueStandardEntities = this.getIssueStandardFixturesEntities();
-        given(this.issueStandardsMapper.findAll()).willReturn(issueStandardEntities);
+        when(this.issueStandardsMapper.findAll()).thenReturn(issueStandardEntities);
 
         final List<IssueStandardModelInterface> issueStandardModels = this.issueStandardsService.findAll();
 
-        Assert.assertNotNull(issueStandardModels);
         this.issueStandardSupport.assertModelsListEquals(this.getIssueStandardFixturesModels(), issueStandardModels);
     }
 
     @Test
     public void testFindAllAbsentList() throws Exception {
-        given(this.issueStandardsMapper.findAll()).willReturn(new ArrayList<>(0));
+        when(this.issueStandardsMapper.findAll()).thenReturn(new ArrayList<>(0));
 
         final List<IssueStandardModelInterface> issueStandardModels = this.issueStandardsService.findAll();
 
@@ -89,14 +83,11 @@ public class IssueStandardsServiceTest {
         Assert.assertEquals(0, issueStandardModels.size());
     }
 
-
     @Test
     public void testFindAllWithOptions() throws Exception {
         final ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
-
         final List<IssueStandardModelInterface> issueStandardModels = this.getIssueStandardFixturesModels();
         final List<IssueStandardEntity> issueStandardEntities = this.getIssueStandardFixturesEntities();
-
         final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
         when(this.issueStandardsMapper.findAll()).thenReturn(issueStandardEntities);
         when(issueStandardsOptions.withRelations(listCaptor.capture())).thenReturn(issueStandardModels);
@@ -107,15 +98,6 @@ public class IssueStandardsServiceTest {
         this.assertServicesSet(issueStandardsOptions);
         this.issueStandardSupport.assertModelsListEquals(issueStandardModels, listCaptor.getValue());
         Assert.assertSame(issueStandardModels, foundedIssueStandardModels);
-    }
-
-    private void assertServicesSet(IssueStandardsOptionsInterface issueStandardsOptions) throws Exception {
-        this.assertServicesSet(issueStandardsOptions, 1);
-    }
-
-    private void assertServicesSet(IssueStandardsOptionsInterface issueStandardsOptions, Integer times)  throws Exception{
-        verify(issueStandardsOptions, times(times)).setIssueStandardsService(this.issueStandardsService);
-
     }
 
     @Test
@@ -131,9 +113,10 @@ public class IssueStandardsServiceTest {
     @Test
     public void testFindAbsentModel() throws Exception {
         final Integer id = 10;
-        given(this.issueStandardsMapper.find(id)).willReturn(null);
+        when(this.issueStandardsMapper.find(id)).thenReturn(null);
 
         final IssueStandardModelInterface issueStandardModel = this.issueStandardsService.find(id);
+
         Assert.assertNull(issueStandardModel);
     }
 
@@ -167,19 +150,26 @@ public class IssueStandardsServiceTest {
     }
 
     @Test
+    public void testFindBySubjectAbsentModel() throws Exception {
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
+        when(this.issueStandardsMapper.find(subjectModel.getId())).thenReturn(null);
+
+        final IssueStandardModelInterface issueStandardModel = this.issueStandardsService.findBySubject(subjectModel);
+
+        Assert.assertNull(issueStandardModel);
+    }
+
+    @Test
     public void testFindBySubjectWithOptions() throws Exception {
         final ArgumentCaptor<IssueStandardModelInterface> issueStandardModelCaptor = ArgumentCaptor.forClass(IssueStandardModelInterface.class);
         final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
         final IssueStandardEntity issueStandardEntity = this.issueStandardSupport.getEntityFixtureMock(0);
-        final IssueStandardModelInterface issueStandardModel = this.mapIssueStandardModel(issueStandardEntity);
-
+        final IssueStandardModelInterface issueStandardModel = this.issueStandardSupport.getModelFixtureMock(0);
         final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
         when(this.issueStandardsMapper.findBySubjectId(subjectModel.getId())).thenReturn(issueStandardEntity);
         when(issueStandardsOptions.withRelations(issueStandardModelCaptor.capture())).thenReturn(issueStandardModel);
 
         final IssueStandardModelInterface issueStandardFoundedModel = this.issueStandardsService.findBySubject(subjectModel, issueStandardsOptions);
-
-
 
         this.assertServicesSet(issueStandardsOptions);
         this.issueStandardSupport.assertEquals(issueStandardModel, issueStandardModelCaptor.getValue());
@@ -187,62 +177,40 @@ public class IssueStandardsServiceTest {
     }
 
     @Test
-    public void testFindBySubjectAbsentModel() throws Exception {
-        final Integer subjectId = 5;
+    public void testSaveCreatesEntity() throws Exception {
+        final ArgumentCaptor<IssueStandardEntity> issueStandardsEntityCaptor = ArgumentCaptor.forClass(IssueStandardEntity.class);
+        final IssueStandardModelInterface issueStandardModel = this.issueStandardSupport.getModelAdditionalMock(0);
 
-        final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
-        Mockito.when(subjectModel.getId()).thenReturn(subjectId);
+        this.issueStandardsService.save(issueStandardModel);
 
-        final IssueStandardModelInterface issueStandardModel = this.issueStandardsService.findBySubject(subjectModel);
-        Assert.assertNull(issueStandardModel);
+        verify(this.issueStandardsMapper, times(1)).insert(issueStandardsEntityCaptor.capture());
+        this.issueStandardSupport.assertEquals(this.issueStandardSupport.getEntityAdditionalMock(0), issueStandardsEntityCaptor.getValue());
+    }
+
+    @Test
+    public void testSaveUpdateEntityIdOnCreation() throws Exception {
+        final Integer id = 5;
+        final IssueStandardModelInterface issueStandardModel = this.issueStandardSupport.getModelAdditionalMock(0);
+        doAnswer(invocation -> {
+            final IssueStandardEntity issueStandardEntity = (IssueStandardEntity) invocation.getArguments()[0];
+            issueStandardEntity.setId(id);
+            return null;
+        }).when(this.issueStandardsMapper).insert(any());
+
+        this.issueStandardsService.save(issueStandardModel);
+
+        verify(issueStandardModel, times(1)).setId(id);
     }
 
     @Test
     public void testSaveUpdatesEntity() throws Exception {
         final ArgumentCaptor<IssueStandardEntity> issueStandardsEntityCaptor = ArgumentCaptor.forClass(IssueStandardEntity.class);
-
-        this.issueStandardsService.save(this.issueStandardSupport.getModelFixtureMock(0));
-
-        verify(this.issueStandardsMapper, times(1)).update(issueStandardsEntityCaptor.capture());
-
-        this.issueStandardSupport.assertEquals(this.issueStandardSupport.getEntityFixtureMock(0), issueStandardsEntityCaptor.getValue());
-
-    }
-
-    @Test
-    public void testSaveInsertsEntity() throws Exception {
         final IssueStandardModelInterface issueStandardModel = this.issueStandardSupport.getModelFixtureMock(0);
-        final Integer id = issueStandardModel.getId();
-
-        doAnswer(invocations -> {
-            final IssueStandardEntity issueStandardEntity = (IssueStandardEntity) invocations.getArguments()[0];
-            issueStandardEntity.setId(id);
-            return null;
-        }).when(this.issueStandardsMapper).insert(Mockito.any(IssueStandardEntity.class));
 
         this.issueStandardsService.save(issueStandardModel);
 
-        Assert.assertEquals(id, issueStandardModel.getId());
-    }
-
-    @Test
-    public void testSaveList() throws  Exception {
-        final List<IssueStandardModelInterface> issueStandardModels = new ArrayList<>(2);
-        issueStandardModels.add(this.issueStandardSupport.getModelFixtureMock(0));
-        issueStandardModels.add(this.issueStandardSupport.getModelAdditionalMock(0));
-
-        final Integer id = issueStandardModels.get(1).getId();
-        doAnswer(invocations -> {
-            final IssueStandardEntity issueStandardEntity = (IssueStandardEntity) invocations.getArguments()[0];
-            issueStandardEntity.setId(id);
-            return null;
-        }).when(this.issueStandardsMapper).insert(Mockito.any(IssueStandardEntity.class));
-
-        this.issueStandardsService.save(issueStandardModels);
-
-        verify(this.issueStandardsMapper, times(1)).update(this.mapIssueStandardEntity(issueStandardModels.get(0)));
-        verify(this.issueStandardsMapper, times(1)).insert(this.mapIssueStandardEntity(issueStandardModels.get(1)));
-        Assert.assertEquals(id, issueStandardModels.get(1).getId());
+        verify(this.issueStandardsMapper, times(1)).update(issueStandardsEntityCaptor.capture());
+        this.issueStandardSupport.assertEquals(this.issueStandardSupport.getEntityFixtureMock(0), issueStandardsEntityCaptor.getValue());
     }
 
     @Test
@@ -253,28 +221,43 @@ public class IssueStandardsServiceTest {
         this.issueStandardsService.save(issueStandardModel, issueStandardsOptions);
 
         this.assertServicesSet(issueStandardsOptions);
-        verify(issueStandardsOptions).saveWithRelations(issueStandardModel);
+        verify(issueStandardsOptions, times(1)).saveWithRelations(issueStandardModel);
+        verifyNoMoreInteractions(this.issueStandardsMapper);
     }
 
     @Test
-    public void testSaveListWithOptions() throws Exception {
-        final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
+    public void testSaveModelsList() throws Exception {
+        final ArgumentCaptor<IssueStandardEntity> issueStandardsEntityCaptor = ArgumentCaptor.forClass(IssueStandardEntity.class);
         final List<IssueStandardModelInterface> issueStandardModels = this.getIssueStandardFixturesModels();
+
+        this.issueStandardsService.save(issueStandardModels);
+
+        verify(this.issueStandardsMapper, times(issueStandardModels.size())).update(issueStandardsEntityCaptor.capture());
+        this.issueStandardSupport.assertEntitiesListEquals(this.getIssueStandardFixturesEntities(), issueStandardsEntityCaptor.getAllValues());
+    }
+
+    @Test
+    public void testSaveModelsListWithOptions() throws Exception {
+        final ArgumentCaptor<IssueStandardModelInterface> issueStandardsModelCaptor = ArgumentCaptor.forClass(IssueStandardModelInterface.class);
+        final List<IssueStandardModelInterface> issueStandardModels = this.getIssueStandardFixturesModels();
+        final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
 
         this.issueStandardsService.save(issueStandardModels, issueStandardsOptions);
 
-        for(IssueStandardModelInterface issueStandardModel: issueStandardModels) {
-            verify(issueStandardsOptions).saveWithRelations(issueStandardModel);
-        }
+        this.assertServicesSet(issueStandardsOptions, issueStandardModels.size());
+        verify(issueStandardsOptions, times(issueStandardModels.size())).saveWithRelations(issueStandardsModelCaptor.capture());
+        this.issueStandardSupport.assertModelsListEquals(issueStandardModels, issueStandardsModelCaptor.getAllValues());
+        verifyNoMoreInteractions(this.issueStandardsMapper);
     }
 
     @Test
     public void testDeleteIdentifiedModel() throws Exception {
-        final IssueStandardModelInterface issueStandardModel = this.issueStandardSupport.getModelFixtureMock(0);
+        final ArgumentCaptor<IssueStandardEntity> issueStandardsEntityCaptor = ArgumentCaptor.forClass(IssueStandardEntity.class);
 
-        this.issueStandardsService.delete(issueStandardModel);
+        this.issueStandardsService.delete(this.issueStandardSupport.getModelFixtureMock(0));
 
-        verify(issueStandardsMapper, times(1)).delete(this.mapIssueStandardEntity(issueStandardModel));
+        verify(this.issueStandardsMapper, times(1)).delete(issueStandardsEntityCaptor.capture());
+        this.issueStandardSupport.assertEquals(this.issueStandardSupport.getEntityFixtureMock(0), issueStandardsEntityCaptor.getValue());
     }
 
     @Test
@@ -283,19 +266,6 @@ public class IssueStandardsServiceTest {
 
         exception.expect(DeleteUnidentifiedModelException.class);
         this.issueStandardsService.delete(issueStandardModel);
-
-        verify(this.issueStandardsMapper, times(0)).delete(this.mapIssueStandardEntity(issueStandardModel));
-    }
-
-    @Test
-    public void testDeleteList() throws Exception {
-        final List<IssueStandardModelInterface> issueStandardModels = this.getIssueStandardFixturesModels();
-
-        this.issueStandardsService.delete(issueStandardModels);
-
-        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
-            verify(this.issueStandardsMapper, times(1)).delete(this.mapIssueStandardEntity(issueStandardModel));
-        }
     }
 
     @Test
@@ -305,18 +275,33 @@ public class IssueStandardsServiceTest {
 
         this.issueStandardsService.delete(issueStandardModel, issueStandardsOptions);
 
-        verify(issueStandardsOptions).deleteWithRelations(issueStandardModel);
+        this.assertServicesSet(issueStandardsOptions);
+        verify(issueStandardsOptions, times(1)).deleteWithRelations(issueStandardModel);
+        verifyNoMoreInteractions(this.issueStandardsMapper);
     }
 
     @Test
-    public void testDeleteListWithOptions() throws Exception {
-        final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
+    public void testDeleteModelsList() throws Exception {
+        final ArgumentCaptor<IssueStandardEntity> issueStandardsEntityCaptor = ArgumentCaptor.forClass(IssueStandardEntity.class);
         final List<IssueStandardModelInterface> issueStandardModels = this.getIssueStandardFixturesModels();
+
+        this.issueStandardsService.delete(issueStandardModels);
+
+        verify(this.issueStandardsMapper, times(issueStandardModels.size())).delete(issueStandardsEntityCaptor.capture());
+        this.issueStandardSupport.assertEntitiesListEquals(this.getIssueStandardFixturesEntities(), issueStandardsEntityCaptor.getAllValues());
+    }
+
+    @Test
+    public void testDeleteModelsListWithOptions() throws Exception {
+        final ArgumentCaptor<IssueStandardModelInterface> issueStandardsModelCaptor = ArgumentCaptor.forClass(IssueStandardModelInterface.class);
+        final List<IssueStandardModelInterface> issueStandardModels = this.getIssueStandardFixturesModels();
+        final IssueStandardsOptionsInterface issueStandardsOptions = Mockito.mock(IssueStandardsOptionsInterface.class);
 
         this.issueStandardsService.delete(issueStandardModels, issueStandardsOptions);
 
-        for (IssueStandardModelInterface issueStandardModel: issueStandardModels) {
-            verify(issueStandardsOptions).deleteWithRelations(issueStandardModel);
-        }
+        this.assertServicesSet(issueStandardsOptions, issueStandardModels.size());
+        verify(issueStandardsOptions, times(issueStandardModels.size())).deleteWithRelations(issueStandardsModelCaptor.capture());
+        this.issueStandardSupport.assertModelsListEquals(issueStandardModels, issueStandardsModelCaptor.getAllValues());
+        verifyNoMoreInteractions(this.issueStandardsMapper);
     }
 }
