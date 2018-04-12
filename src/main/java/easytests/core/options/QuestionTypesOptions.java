@@ -2,6 +2,8 @@ package easytests.core.options;
 
 import easytests.core.models.QuestionTypeModelInterface;
 import java.util.List;
+
+import easytests.core.services.QuestionTypesServiceInterface;
 import lombok.EqualsAndHashCode;
 
 
