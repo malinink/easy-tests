@@ -160,7 +160,6 @@ public class TesteesServiceTest {
         final QuizModelInterface quizModel = this.quizzesSupport.getModelFixtureMock(0);
         final TesteeEntity testeeEntity = this.testeesSupport.getEntityFixtureMock(0);
         final TesteeModelInterface testeeModel = this.mapTesteeModel(testeeEntity);
-
         final TesteesOptionsInterface testeesOptions = Mockito.mock(TesteesOptionsInterface.class);
         when(this.testeesMapper.findByQuizId(quizModel.getId())).thenReturn(testeeEntity);
         when(testeesOptions.withRelations(testeeModelCaptor.capture())).thenReturn(testeeModel);
@@ -176,9 +175,10 @@ public class TesteesServiceTest {
     @Test
     public void testFindByQuizAbsentModel() throws Exception {
         final QuizModelInterface quizModel = this.quizzesSupport.getModelFixtureMock(0);
-        given(this.testeesMapper.findByQuizId(quizModel.getId())).willReturn(null);
+        when(this.testeesMapper.findByQuizId(quizModel.getId())).thenReturn(null);
 
         final TesteeModelInterface testeeFoundedModel = this.testeesService.findByQuiz(quizModel);
+
         Assert.assertNull(testeeFoundedModel);
     }
 
