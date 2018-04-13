@@ -4,6 +4,7 @@ import easytests.core.models.*;
 import easytests.core.services.AnswersServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.core.services.QuestionsServiceInterface;
+import easytests.core.services.QuestionTypesServiceInterface;
 import easytests.support.QuestionsSupport;
 import easytests.support.TopicsSupport;
 import java.util.ArrayList;
@@ -49,6 +50,10 @@ public class QuestionsOptionsTest {
 
     private List<List<AnswerModelInterface>> answersModelsLists;
 
+    private QuestionTypesServiceInterface questionTypesService;
+
+    private QuestionTypesOptionsInterface questionTypesOptions;
+
     private TopicsServiceInterface topicsService;
 
     private TopicsOptionsInterface topicsOptions;
@@ -63,6 +68,8 @@ public class QuestionsOptionsTest {
         this.answersOptions = Mockito.mock(AnswersOptionsInterface.class);
         this.topicsService = Mockito.mock(TopicsServiceInterface.class);
         this.topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
+        this.questionTypesService = Mockito.mock(QuestionTypesServiceInterface.class);
+        this.questionTypesOptions = Mockito.mock(QuestionTypesOptionsInterface.class);
         this.questionsService = Mockito.mock(QuestionsServiceInterface.class);
 
         this.questionsOptions = new QuestionsOptions();
@@ -102,6 +109,11 @@ public class QuestionsOptionsTest {
 
     private QuestionsOptionsTest withTopic() {
         this.questionsOptions.withTopic(this.topicsOptions);
+        return this;
+    }
+
+    private QuestionsOptionsTest withQuestionType() {
+        this.questionsOptions.withQuestionType(this.questionTypesOptions);
         return this;
     }
 
