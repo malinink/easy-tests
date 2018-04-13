@@ -15,9 +15,7 @@ public class SubjectModelTest extends AbstractModelTest {
 
     @Override
     protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder()
-                .ignoreProperty("user")
-                .ignoreProperty("issueStandard");
+        return super.getConfigurationBuilder();
     }
 
     @Test
