@@ -1,10 +1,7 @@
 package easytests.core.options;
 
 import easytests.core.models.*;
-import easytests.core.models.empty.QuestionTypeModelEmpty;
-import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.services.AnswersServiceInterface;
-import easytests.core.services.QuestionTypesServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.support.QuestionsSupport;
@@ -17,7 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.when;
-import static org.mockito.BDDMockito.given;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.verify;
@@ -45,7 +41,6 @@ public class QuestionsOptionsTest {
 
     private List<QuestionModelInterface> questionsModels;
 
-
     private AnswersServiceInterface answersService;
 
     private AnswersOptionsInterface answersOptions;
@@ -54,24 +49,11 @@ public class QuestionsOptionsTest {
 
     private List<List<AnswerModelInterface>> answersModelsLists;
 
-
-    private QuestionTypesServiceInterface questionTypesService;
-
-    private QuestionTypesOptionsInterface questionTypesOptions;
-
-    private QuestionTypeModelInterface questionTypesModel;
-
-
-
     private TopicsServiceInterface topicsService;
 
     private TopicsOptionsInterface topicsOptions;
 
-    private List<TopicModelInterface> topicsModels;
-
     private TopicModelInterface topicModel;
-
-    private List<List<TopicModelInterface>> topicsModelsLists;
 
     private ArgumentCaptor<List> listCaptor;
 
@@ -79,8 +61,6 @@ public class QuestionsOptionsTest {
     public void before() {
         this.answersService = Mockito.mock(AnswersServiceInterface.class);
         this.answersOptions = Mockito.mock(AnswersOptionsInterface.class);
-        this.questionTypesService = Mockito.mock(QuestionTypesServiceInterface.class);
-        this.questionTypesOptions = Mockito.mock(QuestionTypesOptionsInterface.class);
         this.topicsService = Mockito.mock(TopicsServiceInterface.class);
         this.topicsOptions = Mockito.mock(TopicsOptionsInterface.class);
         this.questionsService = Mockito.mock(QuestionsServiceInterface.class);
@@ -88,7 +68,6 @@ public class QuestionsOptionsTest {
         this.questionsOptions = new QuestionsOptions();
         this.questionsOptions.setQuestionsService(this.questionsService);
         this.questionsOptions.setAnswersService(this.answersService);
-        this.questionsOptions.setQuestionTypesService(this.questionTypesService);
         this.questionsOptions.setTopicsService(this.topicsService);
 
         this.listCaptor = ArgumentCaptor.forClass(List.class);
@@ -116,24 +95,15 @@ public class QuestionsOptionsTest {
         return this;
     }
 
-
     private QuestionsOptionsTest withAnswers() {
         this.questionsOptions.withAnswers(this.answersOptions);
         return this;
     }
 
-
-    private QuestionsOptionsTest withQuestionType() {
-        this.questionsOptions.withQuestionType(this.questionTypesOptions);
-        return this;
-    }
-
-
     private QuestionsOptionsTest withTopic() {
         this.questionsOptions.withTopic(this.topicsOptions);
         return this;
     }
-
 
     private QuestionsOptionsTest withQuestionsList() {
         this.questionsModels = new ArrayList<>(2);
@@ -248,7 +218,7 @@ public class QuestionsOptionsTest {
 
     @Test
     public void testSaveWithTopicRelations() throws Exception {
-        this.withQuestionModel().withTopicModel().withTopicModelInjected().withTopic();
+        this.withQuestionModel().withTopicModelInjected().withTopic();
         final ArgumentCaptor<TopicsOptionsInterface> topicsOptionsCaptor = ArgumentCaptor.forClass(TopicsOptionsInterface.class);
         final ArgumentCaptor<TopicModelInterface> topicModelCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
 
@@ -257,8 +227,8 @@ public class QuestionsOptionsTest {
 
         verify(this.questionsService, times(1)).save(this.questionModel);
         verify(this.topicsService, times(1)).save(topicModelCaptor.capture(),  topicsOptionsCaptor.capture());
-        Assert.assertEquals(this.topicModel, topicModelCaptor.getValue());
-        Assert.assertEquals(this.topicsOptions, topicsOptionsCaptor.getValue());
+        Assert.assertSame(this.topicModel, topicModelCaptor.getValue());
+        Assert.assertSame(this.topicsOptions, topicsOptionsCaptor.getValue());
     }
 
     @Test
@@ -303,27 +273,26 @@ public class QuestionsOptionsTest {
     public void testDeleteWithTopicsRelations() throws Exception {
         this.withQuestionModel().withTopicModelInjected().withTopic();
         final ArgumentCaptor<TopicsOptionsInterface> topicsOptionsCaptor = ArgumentCaptor.forClass(TopicsOptionsInterface.class);;
+        final ArgumentCaptor<TopicModelInterface> topicModelCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
 
         this.questionsOptions.deleteWithRelations(this.questionModel);
 
-        verify(this.topicsService, times(1)).delete(this.listCaptor.capture(), topicsOptionsCaptor.capture());
+        verify(this.topicsService, times(1)).delete(topicModelCaptor.capture(), topicsOptionsCaptor.capture());
         verify(this.questionsService, times(1)).delete(this.questionModel);
-        Assert.assertSame(this.topicsModels, this.listCaptor.getValue());
+        Assert.assertSame(this.topicModel, topicModelCaptor.getValue());
         Assert.assertSame(this.topicsOptions, topicsOptionsCaptor.getValue());
     }
 
     @Test
     public void testDeleteWithAllRelationsOrder() throws Exception {
         this.withQuestionModel().withAnswersModelsInjected().withAnswers();
-        this.withQuestionModel().withTopicModelInjected().withTopic();
-        final InOrder inOrder = inOrder(this.answersService, this.questionsService, this.topicsService);
-
+        this.withQuestionModel().withTopicModel().withTopicModelInjected().withTopic();
+        final InOrder inOrder = inOrder(this.answersService, this.questionsService,  this.topicsService);
 
         this.questionsOptions.deleteWithRelations(this.questionModel);
 
         inOrder.verify(this.answersService, times(1)).delete(anyList(), any());
         inOrder.verify(this.questionsService, times(1)).delete(any(QuestionModelInterface.class));
         inOrder.verify(this.topicsService,times(1)).delete(any(TopicModelInterface.class),any(TopicsOptionsInterface.class));
-
     }
 }
