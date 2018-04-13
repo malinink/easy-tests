@@ -287,13 +287,6 @@ paths:
       operationId: deleteQuestionById
       tags:
         - question
-      parameters:
-        - name: body
-          in: body
-          required: true
-          description: The id of the question to delete
-          schema:
-            $ref: '#/definitions/V1Question'
       responses:
         '400':
           description: The specified question ID is invalid (not a number)
@@ -453,8 +446,7 @@ definitions:
   V1AnswerForAdmin:
     type: object
     required:
-      - answerText
-      - answerType
+      - text
       - question
     properties:
       id:
@@ -462,13 +454,11 @@ definitions:
         format: int64
       answerText:
         type: string
-      answerType:
-        type: string
-        description: Type of answer text or numeric
-        default: text answer
-        enum:
-          - text answer
-          - numeric answer
+      isRight: 
+        type: boolean
+      number: 
+        type: integer
+        format: int64
       question:
         $ref: '#/definitions/V1Question'
     example:
