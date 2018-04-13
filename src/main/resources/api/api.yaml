@@ -215,9 +215,60 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/V1Error'
+    post:
+      summary: Create a new Object
+      operationId: createObject
+      parameters:
+        - name: object
+          in: body
+          required: true
+          description: Object that needs to be created
+          schema:
+            $ref: '#/definitions/V1Object'
+      tags:
+        - objects
+      responses:
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+    put:
+      summary: Update an existing object
+      operationId: updateObject
+      tags:
+        - objects
+      parameters:
+        - name: object
+          in: body
+          required: true
+          description: Object that needs to be updated
+          schema:
+            $ref: '#/definitions/V1Object'
+      responses:
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+
   /v1/objects/{objectId}:
     get:
-      summary: Info for a specific user
+      summary: Info for a specific object
       operationId: showObjectById
       tags:
         - objects
