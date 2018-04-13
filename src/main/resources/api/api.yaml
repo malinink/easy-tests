@@ -448,6 +448,8 @@ definitions:
     required:
       - text
       - question
+      - isRight
+      - number
     properties:
       id:
         type: integer
@@ -463,8 +465,9 @@ definitions:
         $ref: '#/definitions/V1Question'
     example:
       id: 100500
-      answerText: 2,3
-      answerType: numeric answer
+      text: 2,3
+      number: 1
+      isRight: true
   V1AnswersForAdmin:
     type: array
     items:
