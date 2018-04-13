@@ -1,9 +1,6 @@
 package easytests.core.options;
 
-import easytests.core.models.AnswerModelInterface;
-import easytests.core.models.QuestionTypeModelInterface;
-import easytests.core.models.TopicModelInterface;
-import easytests.core.models.QuestionModelInterface;
+import easytests.core.models.*;
 import easytests.core.models.empty.QuestionTypeModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.services.AnswersServiceInterface;
@@ -156,11 +153,6 @@ public class QuestionsOptionsTest {
         return this;
     }
 
-    private QuestionsOptionsTest withQuestionTypesModelInjected() {
-        when(this.questionModel.getQuestionType()).thenReturn(this.questionTypesModel);
-        return this;
-    }
-
     private QuestionsOptionsTest withTopicModelInjected() {
         when(this.questionModel.getTopic()).thenReturn(this.topicModel);
         return this;
@@ -258,14 +250,15 @@ public class QuestionsOptionsTest {
     public void testSaveWithTopicRelations() throws Exception {
         this.withQuestionModel().withTopicModel().withTopicModelInjected().withTopic();
         final ArgumentCaptor<TopicsOptionsInterface> topicsOptionsCaptor = ArgumentCaptor.forClass(TopicsOptionsInterface.class);
+        final ArgumentCaptor<TopicModelInterface> topicModelCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
 
 
         this.questionsOptions.saveWithRelations(this.questionModel);
 
         verify(this.questionsService, times(1)).save(this.questionModel);
-        verify(this.topicsService, times(1)).save(this.listCaptor.capture(),  topicsOptionsCaptor.capture());
-        Assert.assertSame(this.topicModel, this.listCaptor.getValue());
-        Assert.assertSame(this.topicsOptions, topicsOptionsCaptor.getValue());
+        verify(this.topicsService, times(1)).save(topicModelCaptor.capture(),  topicsOptionsCaptor.capture());
+        Assert.assertEquals(this.topicModel, topicModelCaptor.getValue());
+        Assert.assertEquals(this.topicsOptions, topicsOptionsCaptor.getValue());
     }
 
     @Test
