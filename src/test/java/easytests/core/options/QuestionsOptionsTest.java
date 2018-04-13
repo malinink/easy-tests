@@ -48,6 +48,7 @@ public class QuestionsOptionsTest {
 
     private List<QuestionModelInterface> questionsModels;
 
+
     private AnswersServiceInterface answersService;
 
     private AnswersOptionsInterface answersOptions;
@@ -55,6 +56,7 @@ public class QuestionsOptionsTest {
     private List<AnswerModelInterface> answersModels;
 
     private List<List<AnswerModelInterface>> answersModelsLists;
+
 
     private QuestionTypesServiceInterface questionTypesService;
 
@@ -159,7 +161,7 @@ public class QuestionsOptionsTest {
         return this;
     }
 
-    private QuestionsOptionsTest withTopicsModelsInjected() {
+    private QuestionsOptionsTest withTopicModelInjected() {
         when(this.questionModel.getTopic()).thenReturn(this.topicModel);
         return this;
     }
@@ -228,7 +230,7 @@ public class QuestionsOptionsTest {
     @Test
     public void testSaveWithNoRelations() throws Exception {
         this.withQuestionModel().withAnswersModelsInjected();
-        this.withQuestionModel().withTopicsModelsInjected();
+        this.withQuestionModel().withTopicModelInjected();
 
 
         this.questionsOptions.saveWithRelations(this.questionModel);
@@ -254,7 +256,7 @@ public class QuestionsOptionsTest {
 
     @Test
     public void testSaveWithTopicRelations() throws Exception {
-        this.withQuestionModel().withTopicsModelsInjected().withTopic();
+        this.withQuestionModel().withTopicModel().withTopicModelInjected().withTopic();
         final ArgumentCaptor<TopicsOptionsInterface> topicsOptionsCaptor = ArgumentCaptor.forClass(TopicsOptionsInterface.class);
 
 
@@ -262,13 +264,13 @@ public class QuestionsOptionsTest {
 
         verify(this.questionsService, times(1)).save(this.questionModel);
         verify(this.topicsService, times(1)).save(this.listCaptor.capture(),  topicsOptionsCaptor.capture());
-        Assert.assertSame(this.topicsModels, this.listCaptor.getValue());
+        Assert.assertSame(this.topicModel, this.listCaptor.getValue());
         Assert.assertSame(this.topicsOptions, topicsOptionsCaptor.getValue());
     }
 
     @Test
     public void testSaveWithAllRelationsOrder() throws Exception {
-        this.withQuestionModel().withTopicsModelsInjected().withTopic();
+        this.withQuestionModel().withTopicModelInjected().withTopic();
         this.withQuestionModel().withAnswersModelsInjected().withAnswers();
 
 
@@ -306,7 +308,7 @@ public class QuestionsOptionsTest {
 
     @Test
     public void testDeleteWithTopicsRelations() throws Exception {
-        this.withQuestionModel().withTopicsModelsInjected().withTopic();
+        this.withQuestionModel().withTopicModelInjected().withTopic();
         final ArgumentCaptor<TopicsOptionsInterface> topicsOptionsCaptor = ArgumentCaptor.forClass(TopicsOptionsInterface.class);;
 
         this.questionsOptions.deleteWithRelations(this.questionModel);
@@ -320,7 +322,7 @@ public class QuestionsOptionsTest {
     @Test
     public void testDeleteWithAllRelationsOrder() throws Exception {
         this.withQuestionModel().withAnswersModelsInjected().withAnswers();
-        this.withQuestionModel().withTopicsModelsInjected().withTopic();
+        this.withQuestionModel().withTopicModelInjected().withTopic();
         final InOrder inOrder = inOrder(this.answersService, this.questionsService, this.topicsService);
 
 
