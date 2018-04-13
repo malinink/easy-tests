@@ -33,7 +33,6 @@ paths:
           description: isAdmin value that need to be considered for filter
           required: false
           type: string
-
       responses:
         '200':
           description: An array of users
@@ -131,21 +130,6 @@ paths:
           description: A user with the specified ID was not found.
           schema:
             $ref: '#/definitions/V1Error'
-  /v1/users/me:
-    get:
-      summary: Info for current user
-      operationId: showCurrentUser
-      tags:
-        - users
-      responses:
-        '200':
-          description: Current user
-          schema:
-            $ref: '#/definitions/V1User'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/V1Error'
     delete:
       summary: Delete a user with the specific id
       operationId: deleteUserById
@@ -174,6 +158,7 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/V1Error'
+
   /v1/users/me:
     get:
       summary: Info for current user
