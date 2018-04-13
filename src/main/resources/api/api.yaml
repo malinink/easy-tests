@@ -156,7 +156,82 @@ paths:
   #
   # Quizzes
   #
-
+  /v1/quizzes:
+      get:
+        summary: Get the list of all quizzes by issueId
+        operationId: listQuizzes
+        parameters:
+        - name: issueId
+          in: query
+          required: true
+          description: Id of the specific issue
+          type: string
+        tags:
+          - quizzes
+        responses:
+          '200':
+            description: Return an array of quizzes
+            schema:
+              type: array
+              items:
+                $ref: '#/definitions/V1Quiz'
+          '400':
+            description: Bad Request
+              schema:
+                $ref: '#/definitions/V1Error'
+          '401':
+            description: Unauthorized
+              schema:
+              $ref: '#/definitions/V1Error'
+          '403':
+            description: Forbidden
+              schema:
+              $ref: '#/definitions/V1Error'
+          '404':
+            description: Issue not found
+            schema:
+              $ref: '#/definitions/V1Error'
+          default:
+              description: unexpected error
+              schema:
+                $ref: '#/definitions/V1Error'
+  /v1/quizzes/{quizId}:
+    get:
+      summary: Get quiz by quizId
+      operationId: quizById
+      parameters:
+       - name: quizId
+         in: path
+         required: true
+         description: Id of the specific quiz
+         type: integer
+      tags:
+         - quizzes
+      responses:
+         '200':
+           description: Return a specific quiz
+           schema:
+             $ref: '#/definitions/V1Quiz'
+         '400':
+           description: Bad Request
+           schema:
+             $ref: '#/definitions/V1Error'
+         '401':
+           description: Unauthorized
+           schema:
+             $ref: '#/definitions/V1Error'
+         '403':
+           description: Forbidden
+           schema:
+             $ref: '#/definitions/V1Error'
+         '404':
+           description: Issue not found
+           schema:
+             $ref: '#/definitions/V1Error'
+         default:
+           description: unexpected error
+           schema:
+             $ref: '#/definitions/V1Error'
   #
   # Points
   #
@@ -260,9 +335,6 @@ definitions:
   V1Quiz:
       required:
         - id
-        - startedAt
-        - finishedAt
-        - testee
       properties:
         id:
           type: integer
@@ -274,16 +346,16 @@ definitions:
           type: string
           format: date-time
         testee:
-          type: string
+          $ref: '#/definitions/V1Testee'
       example:
         id: 1
         startedAt: '2018-03-11T23:20:50'
         finishedAt: '2018-03-11T23:30:50'
         testee: 'Ivan Ivanov'
-    V1Quizzes:
-      type: array
-      items:
-        $ref: '#/definitions/V1Quiz'
+  V1Quizzes:
+    type: array
+    items:
+      $ref: '#/definitions/V1Quiz'
   #
   # Points
   #
