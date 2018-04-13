@@ -158,18 +158,29 @@ paths:
       summary: List of all issues
       operationId: listIssues
       tags:
-      - issues
+        - issues
+      parameters:
+        - name: subjectId
+          in: query
+          required: true
+          description: Id of specific subject
+          type: integer
+          format: int64
       responses:
         '200':
           description: Return an array of all issues
           schema:
             $ref: '#/definitions/V1Issues'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
         '403':
           description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Issues was not found
+          description: The specified subject Id or Issues was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -185,7 +196,7 @@ paths:
           required: true
           description: Issue that needs to be created
           schema:
-            $ref: '#/definitions/V1Issues'
+            $ref: '#/definitions/V1Issue'
       tags:
         - issues
       responses:
@@ -228,40 +239,6 @@ paths:
             $ref: '#/definitions/V1Error'
         default:
           description: Unexpected error
-          schema:
-            $ref: '#/definitions/V1Error'
-  /v1/issued/FindBySunjectId:
-    get:
-      summary: List of issues by Subject Id
-      operationId: listIssuesBySubjectId
-      tags:
-        - issues
-      parameters:
-        - name: subjectId
-          in: query
-          required: true
-          description: Id of specific subject
-          type: integer
-          format: int64
-      responses:
-        '200':
-          description: Return an array of issues by subject id
-          schema:
-            $ref: '#/definitions/V1Issues'
-        '400':
-          description: The specified subject ID is invalid
-          schema:
-            $ref: '#/definitions/V1Error'
-        '403':
-          description: Permission denied
-          schema:
-            $ref: '#/definitions/V1Error'
-        '404':
-          description: The specified subject Id was not found
-          schema:
-            $ref: '#/definitions/V1Error'
-        default:
-          description: unexpected error
           schema:
             $ref: '#/definitions/V1Error'
   /v1/issues/{issueId}:
@@ -431,15 +408,13 @@ definitions:
       subject:
         type: object
         items:
-          $ref: '#/definitions/V1Identities'
+          $ref: '#/definitions/V1Identity'
     required:
-      - id
       - name
       - subject
     example:
       id: 1
       name: Test№1
-      subjectId: 1
   V1Issues:
     type: array
     items:
