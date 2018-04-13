@@ -60,6 +60,8 @@ public class QuestionsOptionsTest {
 
     private TopicModelInterface topicModel;
 
+    private QuestionTypeModelInterface questionTypeModel;
+
     private ArgumentCaptor<List> listCaptor;
 
     @Before
@@ -117,6 +119,16 @@ public class QuestionsOptionsTest {
         return this;
     }
 
+    private QuestionsOptionsTest withRelations() {
+        this.questionsOptions.withRelations(this.questionModel);
+        return this;
+    }
+
+    private QuestionsOptionsTest withRelationsInList() {
+        this.questionsOptions.withRelations(this.questionsModels);
+        return this;
+    }
+
     private QuestionsOptionsTest withQuestionsList() {
         this.questionsModels = new ArrayList<>(2);
         this.questionsModels.add(this.questionsSupport.getModelFixtureMock(0));
@@ -137,6 +149,11 @@ public class QuestionsOptionsTest {
 
     private QuestionsOptionsTest withTopicModelInjected() {
         when(this.questionModel.getTopic()).thenReturn(this.topicModel);
+        return this;
+    }
+
+    private QuestionsOptionsTest withQuestionTypeModelInjected() {
+        when(this.questionModel.getQuestionType()).thenReturn(this.questionTypeModel);
         return this;
     }
 
@@ -205,7 +222,6 @@ public class QuestionsOptionsTest {
     public void testSaveWithNoRelations() throws Exception {
         this.withQuestionModel().withAnswersModelsInjected();
         this.withQuestionModel().withTopicModelInjected();
-
 
         this.questionsOptions.saveWithRelations(this.questionModel);
 
