@@ -12,7 +12,6 @@ import easytests.core.services.TopicsServiceInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.support.QuestionsSupport;
 import easytests.support.TopicsSupport;
-import easytests.support.QuestionTypesSupport;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -38,6 +37,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class QuestionsOptionsTest {
 
     private QuestionsSupport questionsSupport = new QuestionsSupport();
+
+    private TopicsSupport topicsSupport = new TopicsSupport();
 
     private QuestionsOptionsInterface questionsOptions;
 
@@ -96,6 +97,11 @@ public class QuestionsOptionsTest {
 
     private QuestionsOptionsTest withQuestionModel() {
         this.questionModel = this.questionsSupport.getModelFixtureMock(0);
+        return this;
+    }
+
+    private QuestionsOptionsTest withTopicModel() {
+        this.topicModel = this.topicsSupport.getModelFixtureMock(0);
         return this;
     }
 
