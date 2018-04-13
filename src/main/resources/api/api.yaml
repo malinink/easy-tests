@@ -150,19 +150,19 @@ paths:
   #
   # Questions
   #
-  /v1/Questions:
-    parameters:
-      - name: topicId
-        in: path
-        required: true
-        description: Id of the specific topic
-        type: integer
-        format: int64
+  /v1/questions:
     get:
       summary: Get the list of all questions in the specific topic
       operationId: listQuestions
       tags:
         - questions
+      parameters:
+        - name: topicId
+          in: query
+          required: true
+          description: Id of the specific topic
+          type: integer
+          format: int64
       responses:
         '200':
           description: Return an array of the specific topic's questions
@@ -299,7 +299,7 @@ paths:
         '403':
           description: Access forbidden
           schema:
-            $ref: '#/definitions/V1Error' 
+            $ref: '#/definitions/V1Error'
         default:
           description: unexpected error
           schema:
@@ -407,24 +407,24 @@ definitions:
   V1Question:
     type: object
     required:
-      - questionText
-      - questionType
+      - text
+      - type
       - topic
     properties:
       id:
         type: integer
         format: int64
-      questionText:
+      text:
         type: string
-      questionType:
+      type:
         type: string
-        description: question type means the type of answer - multi, free, etc
-        default: many answers
+        description: question type means the type and quantity of answers
+        default: 1
         enum:
-        - many answers
-        - one answer
-        - text answer
-        - numeric answer
+        - 1
+        - 2
+        - 3
+        - 4
       topic:
         $ref: '#/definitions/V1Identity'
       answers:
@@ -434,15 +434,15 @@ definitions:
     example:
       id: 100500
       questionText: 'Select private networks:'
-      questionType: 'many answers'
+      questionType: '1'
       topicNum: 1
   V1Questions:
     type: array
     items:
       $ref: '#/definitions/V1Question'
-  # 
+  #
   # Answers
-  # 
+  #
   V1AnswerForAdmin:
     type: object
     required:
@@ -454,9 +454,9 @@ definitions:
         format: int64
       answerText:
         type: string
-      isRight: 
+      isRight:
         type: boolean
-      number: 
+      number:
         type: integer
         format: int64
       question:
