@@ -11,5 +11,7 @@ import org.meanbean.lang.Factory;
 public class QuestionModelFactory implements Factory<QuestionModelInterface> {
 
     @Override
-    public QuestionModelInterface create() {return new QuestionModel();}
+    public QuestionModelInterface create() {
+        return new QuestionModel();
+    }
 }
