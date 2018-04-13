@@ -18,15 +18,35 @@ paths:
   #
   /v1/users:
     get:
-      summary: List all users
+      summary: List of all users
       operationId: listUsers
       tags:
         - users
+      parameters:
+        - name: state
+          in: query
+          description: State value that need to be considered for filter
+          required: false
+          type: string
+        - name: isAdmin
+          in: query
+          description: isAdmin value that need to be considered for filter
+          required: false
+          type: string
+
       responses:
         '200':
           description: An array of users
           schema:
             $ref: '#/definitions/V1Users'
+        '400':
+          description: Invalid query parameter value
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
         default:
           description: unexpected error
           schema:
@@ -48,6 +68,10 @@ paths:
           description: Invalid input
           schema:
             $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
         default:
           description: Unexpected error
           schema:
@@ -61,7 +85,7 @@ paths:
         - name: user
           in: body
           required: true
-          description: User that needs to be added instead of the existing              one with the same id
+          description: User that needs to be updated
           schema:
             $ref: '#/definitions/V1User'
       responses:
@@ -69,10 +93,15 @@ paths:
           description: Invalid input
           schema:
             $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
         default:
           description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
+
   /v1/users/{userId}:
     get:
       summary: Info for a specific user
@@ -94,12 +123,12 @@ paths:
           description: The specified user ID is invalid (not a number).
           schema:
             $ref: '#/definitions/V1Error'
-        '404':
-          description: A user with the specified ID was not found.
+        '403':
+          description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
-        default:
-          description: unexpected error
+        '404':
+          description: A user with the specified ID was not found.
           schema:
             $ref: '#/definitions/V1Error'
   /v1/users/me:
@@ -133,6 +162,10 @@ paths:
           description: The specified user ID is invalid (not a number)
           schema:
             $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
         '404':
           description: A user with the specified ID was not found
           schema:
@@ -141,6 +174,26 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/V1Error'
+  /v1/users/me:
+    get:
+      summary: Info for current user
+      operationId: showCurrentUser
+      tags:
+        - users
+      responses:
+        '200':
+          description: Current user
+          schema:
+            $ref: '#/definitions/V1User'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+
   #
   # Subjects
   #
