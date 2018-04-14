@@ -215,40 +215,6 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
-  /v1/questions/{questionId}:
-    parameters:
-      - name: questionId
-        in: path
-        required: true
-        description: Id of the question to retrieve
-        type: integer
-        format: int64
-    get:
-      summary: Get the question with a specific id
-      operationId: showQuestionById
-      tags:
-        - questions
-      responses:
-        '200':
-          description: Return the question
-          schema:
-            $ref: '#/definitions/V1Question'
-        '400':
-          description: Invalid question ID supplied
-          schema:
-            $ref: '#/definitions/V1Error'
-        '404':
-          description: Question not found.
-          schema:
-            $ref: '#/definitions/V1Error'
-        '403':
-          description: Access forbidden
-          schema:
-            $ref: '#/definitions/V1Error'
-        default:
-          description: Unexpected error
-          schema:
-            $ref: '#/definitions/V1Error'
     put:
       summary: Update an existing question
       operationId: updateQuestion
@@ -282,6 +248,40 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
+  /v1/questions/{questionId}:
+    parameters:
+      - name: questionId
+        in: path
+        required: true
+        description: Id of the question to retrieve
+        type: integer
+        format: int64
+    get:
+      summary: Get the question with a specific id
+      operationId: showQuestionById
+      tags:
+        - questions
+      responses:
+        '200':
+          description: Return the question
+          schema:
+            $ref: '#/definitions/V1Question'
+        '400':
+          description: Invalid question ID supplied
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: Question not found.
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Access forbidden
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'    
     delete:
       summary: Delete question with specific id
       operationId: deleteQuestionById
@@ -430,12 +430,17 @@ definitions:
       answers:
         type: array
         items:
-          $ref: '#/definitions/V1AnswerForAdmin'
+          $ref: '#/definitions/V1AdminAnswer'
     example:
       id: 100500
-      questionText: 'Select private networks:'
-      questionType: '1'
-      topicNum: 1
+      text: 'Select private networks:'
+      type: '1'
+      topic: 1
+      answers:
+        - 1
+        - 2
+        - 3
+        - 4
   V1Questions:
     type: array
     items:
@@ -443,7 +448,7 @@ definitions:
   #
   # Answers
   #
-  V1AnswerForAdmin:
+  V1AdminAnswer:
     type: object
     required:
       - text
@@ -454,7 +459,7 @@ definitions:
       id:
         type: integer
         format: int64
-      answerText:
+      text:
         type: string
       isRight:
         type: boolean
@@ -466,12 +471,12 @@ definitions:
     example:
       id: 100500
       text: 2,3
-      number: 1
       isRight: true
+      number: 1
   V1AnswersForAdmin:
     type: array
     items:
-      $ref: '#/definitions/V1AnswerForAdmin'
+      $ref: '#/definitions/V1AdminAnswer'
   #
   # Issues
   #
