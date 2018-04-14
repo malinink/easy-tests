@@ -436,7 +436,11 @@ definitions:
       text: 'Select private networks:'
       type: '1'
       topic: 1
-      answers: [1,2,3,4]
+      answers:
+        - 1
+        - 2
+        - 3
+        - 4
   V1Questions:
     type: array
     items:
