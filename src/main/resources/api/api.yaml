@@ -228,6 +228,10 @@ paths:
       tags:
         - objects
       responses:
+        '201':
+          description: Object created successfully
+          schema:
+            $ref: '#/definitions/V1Identity'
         '400':
           description: Invalid input
           schema:
@@ -253,6 +257,8 @@ paths:
           schema:
             $ref: '#/definitions/V1Object'
       responses:
+        '200':
+          description: Object updated successfully
         '400':
           description: Invalid input
           schema:
@@ -323,7 +329,6 @@ definitions:
       lastName: 'Ivanovich'
       surname: 'Ivanov'
       email: 'Ivanov@gmail.com'
-      password: '1244s'
       isAdmin: false
       state: 1
   V1Users:
@@ -354,7 +359,7 @@ definitions:
   V1Object:
     required:
       - firstName
-      - lastNname
+      - lastName
       - surname
       - email
       - isAdmin
