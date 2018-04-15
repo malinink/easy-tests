@@ -381,7 +381,9 @@ definitions:
       state:
         type: integer
       subjects:
-        $ref: '#/definitions/V1Identities'
+        readOnly: true
+        allOf:
+          - $ref: '#/definitions/V1Identities'
   V1Objects:
     type: array
     items:
