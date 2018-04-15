@@ -61,7 +61,6 @@ public class ObjectsController {
         if (object.getId() != null) {
             throw new IdentifiedModelException();
         }
-        this.verifySubjectsIsNull(object);
 
         /**
          * We need to check for email existence in usersService
@@ -85,7 +84,6 @@ public class ObjectsController {
         if (object.getId() == null) {
             throw new UnidentifiedModelException();
         }
-        this.verifySubjectsIsNull(object);
 
         /**
          * We need to check for email existence in usersService
@@ -118,11 +116,5 @@ public class ObjectsController {
 
     private UserModelInterface getUserModel(Integer id) {
         return this.getUserModel(id, this.usersOptionsBuilder.forAuth());
-    }
-
-    private void verifySubjectsIsNull(Object object) throws BadRequestException {
-        if (object.getSubjects() != null) {
-            throw new BadRequestException("subjects must be null");
-        }
     }
 }
