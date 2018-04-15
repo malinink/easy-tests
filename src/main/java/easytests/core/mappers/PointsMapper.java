@@ -1,7 +1,6 @@
 package easytests.core.mappers;
 
 import easytests.core.entities.PointEntity;
-
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 
@@ -40,5 +39,4 @@ public interface PointsMapper {
 
     @Delete("DELETE FROM points WHERE id=#{id}")
     void delete(PointEntity point);
-
 }

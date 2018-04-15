@@ -15,9 +15,7 @@ public class SubjectModelTest extends AbstractModelTest {
 
     @Override
     protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder()
-                .ignoreProperty("user")
-                .ignoreProperty("issueStandard");
+        return super.getConfigurationBuilder();
     }
 
     @Test
@@ -29,6 +27,7 @@ public class SubjectModelTest extends AbstractModelTest {
     public void testMap() throws Exception {
         final SubjectEntity subjectEntity = this.subjectsSupport.getEntityFixtureMock(0);
         final SubjectModelInterface subjectModel = new SubjectModel();
+
         subjectModel.map(subjectEntity);
 
         this.subjectsSupport.assertEquals(subjectEntity, subjectModel);

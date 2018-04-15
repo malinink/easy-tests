@@ -85,6 +85,7 @@ public class SubjectsServiceTest {
 
         final List<SubjectModelInterface> subjectsModels = this.subjectsService.findAll();
 
+        Assert.assertNotNull(subjectsModels);
         Assert.assertEquals(0, subjectsModels.size());
     }
 
@@ -306,5 +307,4 @@ public class SubjectsServiceTest {
         this.subjectsSupport.assertModelsListEquals(subjectsModels, subjectModelCaptor.getAllValues());
         verifyNoMoreInteractions(this.subjectsMapper);
     }
-
 }

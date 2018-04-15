@@ -21,6 +21,7 @@ public class QuestionModelTest extends AbstractModelTest {
     public void testMap() throws Exception {
         final QuestionEntity questionEntity = this.questionsSupport.getEntityFixtureMock(0);
         final QuestionModelInterface questionModel = new QuestionModel();
+
         questionModel.map(questionEntity);
 
         this.questionsSupport.assertEquals(questionEntity, questionModel);

@@ -71,7 +71,7 @@ INSERT INTO question_types VALUES
 INSERT INTO answers(txt, question_id, serial_number, is_right) VALUES
   ('Answer1', 1, 1, TRUE),
   ('Answer2', 2, 2, FALSE),
-  ('Answer3', 3, 3, TRUE);
+  ('Answer3', 1, 3, TRUE);
 
 INSERT INTO quizzes (issue_id, invite_code,started_at,finished_at,code_expired) VALUES
  (1, 'test_invite_code1','2003-2-1'::timestamp,'2003-3-1'::timestamp,FALSE ),

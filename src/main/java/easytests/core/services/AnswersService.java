@@ -9,7 +9,6 @@ import easytests.core.options.AnswersOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +28,11 @@ public class AnswersService implements AnswersServiceInterface {
     @Override
     public List<AnswerModelInterface> findAll() {
         return this.map(this.answersMapper.findAll());
+    }
+
+    @Override
+    public List<AnswerModelInterface> findAll(AnswersOptionsInterface answersOptions) {
+        return this.withServices(answersOptions).withRelations(this.map(this.answersMapper.findAll()));
     }
 
     @Override
@@ -106,14 +110,14 @@ public class AnswersService implements AnswersServiceInterface {
     @Override
     public void delete(List<AnswerModelInterface> answersModels) {
         for (AnswerModelInterface answerModel: answersModels) {
-            this.save(answerModel);
+            this.delete(answerModel);
         }
     }
 
     @Override
     public void delete(List<AnswerModelInterface> answersModels, AnswersOptionsInterface answersOptions) {
         for (AnswerModelInterface answerModel: answersModels) {
-            this.save(answerModel, answersOptions);
+            this.delete(answerModel, answersOptions);
         }
     }
     
@@ -136,11 +140,10 @@ public class AnswersService implements AnswersServiceInterface {
     }
 
     private List<AnswerModelInterface> map(List<AnswerEntity> answersList) {
-        final List<AnswerModelInterface> resultAnswerList = new ArrayList(answersList.size());
+        final List<AnswerModelInterface> resultAnswerList = new ArrayList<>(answersList.size());
         for (AnswerEntity answer: answersList) {
             resultAnswerList.add(this.map(answer));
         }
         return resultAnswerList;
     }
-
 }
