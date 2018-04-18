@@ -33,10 +33,9 @@ paths:
           description: isAdmin value that need to be considered for filter
           required: false
           type: string
-
       responses:
         '200':
-          description: An array of users
+          description: An array of founded users
           schema:
             $ref: '#/definitions/V1Users'
         '400':
@@ -48,7 +47,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         default:
-          description: unexpected error
+          description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
     post:
@@ -64,6 +63,10 @@ paths:
       tags:
         - users
       responses:
+        '201':
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/V1Identity'
         '400':
           description: Invalid input
           schema:
@@ -89,6 +92,8 @@ paths:
           schema:
             $ref: '#/definitions/V1User'
       responses:
+        '200':
+          description: User updated successfully
         '400':
           description: Invalid input
           schema:
@@ -112,11 +117,11 @@ paths:
         - name: userId
           in: path
           required: true
-          description: The id of the user to retrieve
+          description: The ID of the user to retrieve
           type: integer
       responses:
         '200':
-          description: Expected response to a valid request
+          description: User with specified ID
           schema:
             $ref: '#/definitions/V1User'
         '400':
@@ -131,21 +136,6 @@ paths:
           description: A user with the specified ID was not found.
           schema:
             $ref: '#/definitions/V1Error'
-  /v1/users/me:
-    get:
-      summary: Info for current user
-      operationId: showCurrentUser
-      tags:
-        - users
-      responses:
-        '200':
-          description: Current user
-          schema:
-            $ref: '#/definitions/V1User'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/V1Error'
     delete:
       summary: Delete a user with the specific id
       operationId: deleteUserById
@@ -158,6 +148,8 @@ paths:
           description: The id of the user to delete
           type: integer
       responses:
+        '200':
+          description: User deleted successfully
         '400':
           description: The specified user ID is invalid (not a number)
           schema:
@@ -171,7 +163,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         default:
-          description: unexpected error
+          description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
   /v1/users/me:
@@ -190,7 +182,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         default:
-          description: unexpected error
+          description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
 
@@ -227,7 +219,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Objects'
         default:
-          description: unexpected error
+          description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
   /v1/objects/{objectId}:
@@ -248,7 +240,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Object'
         '404':
-          description: unexpected error
+          description: Unexpected error
           schema:
             $ref: '#/definitions/V1Object'
 definitions:
