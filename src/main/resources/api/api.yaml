@@ -168,7 +168,7 @@ paths:
           format: int64
       responses:
         '200':
-          description: Return an array of all issues
+          description: Return an array of founded issues
           schema:
             $ref: '#/definitions/V1Issues'
         '400':
@@ -184,7 +184,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         default:
-          description: unexpected error
+          description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
     post:
@@ -200,8 +200,8 @@ paths:
       tags:
         - issues
       responses:
-        '200':
-          description: Expected response to a valid request
+        '201':
+          description: Issue created successfully
           schema:
             $ref: '#/definitions/V1Identity'
         '400':
@@ -213,7 +213,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         default:
-          description: unexpected error
+          description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
     put:
@@ -225,12 +225,12 @@ paths:
         - name: issue
           in: body
           required: true
-          description: Update issue with a specific id
+          description: Issue that needs to be updated
           schema:
             $ref: '#/definitions/V1Issue'
       responses:
         '200':
-          description: OK
+          description: Iser updated successfully
         '400':
           description: Invalid input
           schema:
@@ -252,7 +252,7 @@ paths:
       - name: issueId
         in: path
         required: true
-        description: Id of specific issue
+        description: The ID of the issue to retrieve
         type: integer
         format: int64
     get:
@@ -262,7 +262,7 @@ paths:
         - issues
       responses:
         '200':
-          description: Expected response to a valid request
+          description: Issue with specified ID
           schema:
             $ref: '#/definitions/V1Issue'
         '400':
@@ -278,7 +278,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         default:
-          description: unexpected error
+          description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
     delete:
@@ -288,7 +288,7 @@ paths:
         - Issues
       responses:
         '200':
-          description: OK
+          description: Issue deleted successfully
         '400':
           description: The specified issue ID is invalid
           schema:
@@ -302,7 +302,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         default:
-          description: unexpected error
+          description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
   #
