@@ -174,6 +174,25 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/V1Error'
+  /v1/users/me:
+    get:
+      summary: Info for current user
+      operationId: showCurrentUser
+      tags:
+        - users
+      responses:
+        '200':
+          description: Current user
+          schema:
+            $ref: '#/definitions/V1User'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
 
   #
   # Subjects
@@ -212,13 +231,13 @@ paths:
           '400':
             description: Bad Request
             schema:
-              $ref: '#/definitions/V1Error'
+                $ref: '#/definitions/V1Error'
           '401':
-            description: Unauthorized
+            description: Unauthorized User
             schema:
               $ref: '#/definitions/V1Error'
           '403':
-            description: Forbidden
+            description: Access Forbidden
             schema:
               $ref: '#/definitions/V1Error'
           '404':
@@ -251,11 +270,11 @@ paths:
            schema:
              $ref: '#/definitions/V1Error'
          '401':
-           description: Unauthorized
+           description: Unauthorized User
            schema:
              $ref: '#/definitions/V1Error'
          '403':
-           description: Forbidden
+           description: Access Forbidden
            schema:
              $ref: '#/definitions/V1Error'
          '404':
