@@ -232,10 +232,6 @@ paths:
             description: Bad Request
             schema:
                 $ref: '#/definitions/V1Error'
-          '401':
-            description: Unauthorized User
-            schema:
-              $ref: '#/definitions/V1Error'
           '403':
             description: Access Forbidden
             schema:
@@ -267,10 +263,6 @@ paths:
              $ref: '#/definitions/V1Quiz'
          '400':
            description: Bad Request
-           schema:
-             $ref: '#/definitions/V1Error'
-         '401':
-           description: Unauthorized User
            schema:
              $ref: '#/definitions/V1Error'
          '403':
@@ -399,13 +391,13 @@ definitions:
           type: string
           format: date-time
         testee:
-          $ref: '#/definitions/V1Testee'
+          $ref: '#/definitions/V1Identity'
       example:
         id: 1
         startedAt: '2018-03-11T23:20:50'
         finishedAt: '2018-03-11T23:30:50'
         testee:
-          $ref: '#/definitions/V1Testee'
+          $ref: '#/definitions/V1Identity'
   V1Quizzes:
     type: array
     items:
