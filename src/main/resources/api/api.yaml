@@ -230,7 +230,7 @@ paths:
             $ref: '#/definitions/V1Issue'
       responses:
         '200':
-          description: Iser updated successfully
+          description: Issue updated successfully
         '400':
           description: Invalid input
           schema:
