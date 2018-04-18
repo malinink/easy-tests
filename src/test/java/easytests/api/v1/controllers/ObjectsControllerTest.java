@@ -48,7 +48,34 @@ public class ObjectsControllerTest {
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
     @Test
-    public void testViewReturnsData() throws Exception {
+    public void testListReturnsData() throws Exception {
+        final List<UserModelInterface> usersModels = new ArrayList<>();
+        usersModels.add(this.usersSupport.getModelFixtureMock(0));
+        usersModels.add(this.usersSupport.getModelFixtureMock(1));
+        when(this.usersService.findAll()).thenReturn(usersModels);
+
+        mvc.perform(get("/v1/objects")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andReturn();
+    }
+
+    @Test
+    public void testShowReturnsData() throws Exception {
+        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
+        when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
+        when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(userModel);
+
+        mvc.perform(get("/v1/objects/1")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andReturn();
+    }
+
+    @Test
+    public void testShowReturnsDataWithSubjects() throws Exception {
         final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
         final List<SubjectModelInterface> subjects = new ArrayList<>();
         subjects.add(this.subjectsSupport.getModelFixtureMock(0));
@@ -57,7 +84,7 @@ public class ObjectsControllerTest {
         when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
         when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(userModel);
 
-        mvc.perform(get("/v1/objects/1/")
+        mvc.perform(get("/v1/objects/1")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
