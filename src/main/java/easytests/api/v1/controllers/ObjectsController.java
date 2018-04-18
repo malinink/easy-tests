@@ -1,5 +1,6 @@
 package easytests.api.v1.controllers;
 
+import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.IdentifiedModelException;
 import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.exceptions.UnidentifiedModelException;
@@ -60,6 +61,9 @@ public class ObjectsController {
         if (object.getId() != null) {
             throw new IdentifiedModelException();
         }
+        if (object.getSubjects() != null) {
+            throw new BadRequestException("subjects must be absent");
+        }
 
         /**
          * We need to check for email existence in usersService
@@ -82,6 +86,9 @@ public class ObjectsController {
     public void update(@RequestBody Object object) throws Exception {
         if (object.getId() == null) {
             throw new UnidentifiedModelException();
+        }
+        if (object.getSubjects() != null) {
+            throw new BadRequestException("subjects must be absent");
         }
 
         /**
