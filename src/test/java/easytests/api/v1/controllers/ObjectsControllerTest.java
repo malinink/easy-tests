@@ -48,7 +48,7 @@ public class ObjectsControllerTest {
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
     @Test
-    public void testListReturnsData() throws Exception {
+    public void testListSuccess() throws Exception {
         final List<UserModelInterface> usersModels = new ArrayList<>();
         IntStream.range(0, 2).forEach(idx -> {
             final UserModel userModel = new UserModel();
@@ -65,7 +65,43 @@ public class ObjectsControllerTest {
     }
 
     @Test
-    public void testShowReturnsData() throws Exception {
+    public void testCreateSuccess() throws Exception {
+        doAnswer(invocation -> {
+            final UserModel userModel = (UserModel) invocation.getArguments()[0];
+            userModel.setId(5);
+            return null;
+        }).when(this.usersService).save(any(UserModelInterface.class));
+
+        mvc.perform(post("/v1/objects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0}"))
+                .andExpect(status().is(201))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
+    }
+
+    @Test
+    public void testCreateWithIdFailed() throws Exception {
+        mvc.perform(post("/v1/objects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"id\": 2, \"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0}"))
+                .andExpect(status().isBadRequest())
+                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
+    }
+
+    @Test
+    public void testCreateWithSubjectsFailed() throws Exception {
+        mvc.perform(post("/v1/objects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0, \"subjects\": []}"))
+                .andExpect(status().isBadRequest())
+                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowSuccess() throws Exception {
         final UserModelInterface userModel = new UserModel();
         userModel.map(this.usersSupport.getEntityFixtureMock(0));
         when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
@@ -79,7 +115,7 @@ public class ObjectsControllerTest {
     }
 
     @Test
-    public void testShowReturnsDataWithSubjects() throws Exception {
+    public void testShowWithSubjectsSuccess() throws Exception {
         final UserModelInterface userModel = new UserModel();
         userModel.map(this.usersSupport.getEntityFixtureMock(0));
         final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
