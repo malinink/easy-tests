@@ -200,6 +200,10 @@ paths:
       tags:
         - issues
       responses:
+        '200':
+          description: Expected response to a valid request
+          schema:
+            $ref: '#/definitions/V1Identity'
         '400':
           description: Invalid input
           schema:
@@ -225,6 +229,8 @@ paths:
           schema:
             $ref: '#/definitions/V1Issue'
       responses:
+        '200':
+          description: OK
         '400':
           description: Invalid input
           schema:
@@ -281,6 +287,8 @@ paths:
       tags:
         - Issues
       responses:
+        '200':
+          description: OK
         '400':
           description: The specified issue ID is invalid
           schema:
