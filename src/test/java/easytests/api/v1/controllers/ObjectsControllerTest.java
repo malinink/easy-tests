@@ -2,8 +2,7 @@ package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.ObjectsMapper;
 import easytests.config.SwaggerRequestValidationConfig;
-import easytests.core.models.SubjectModelInterface;
-import easytests.core.models.UserModelInterface;
+import easytests.core.models.*;
 import easytests.core.options.UsersOptions;
 import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilder;
@@ -12,6 +11,7 @@ import easytests.support.SubjectsSupport;
 import easytests.support.UsersSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
@@ -50,8 +50,11 @@ public class ObjectsControllerTest {
     @Test
     public void testListReturnsData() throws Exception {
         final List<UserModelInterface> usersModels = new ArrayList<>();
-        usersModels.add(this.usersSupport.getModelFixtureMock(0));
-        usersModels.add(this.usersSupport.getModelFixtureMock(1));
+        IntStream.range(0, 2).forEach(idx -> {
+            final UserModel userModel = new UserModel();
+            userModel.map(this.usersSupport.getEntityFixtureMock(1));
+            usersModels.add(userModel);
+        });
         when(this.usersService.findAll()).thenReturn(usersModels);
 
         mvc.perform(get("/v1/objects")
@@ -63,7 +66,8 @@ public class ObjectsControllerTest {
 
     @Test
     public void testShowReturnsData() throws Exception {
-        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(this.usersSupport.getEntityFixtureMock(0));
         when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
         when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(userModel);
 
@@ -76,11 +80,15 @@ public class ObjectsControllerTest {
 
     @Test
     public void testShowReturnsDataWithSubjects() throws Exception {
-        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
-        final List<SubjectModelInterface> subjects = new ArrayList<>();
-        subjects.add(this.subjectsSupport.getModelFixtureMock(0));
-        subjects.add(this.subjectsSupport.getModelFixtureMock(1));
-        when(userModel.getSubjects()).thenReturn(subjects);
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(this.usersSupport.getEntityFixtureMock(0));
+        final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
+        IntStream.range(0, 2).forEach(idx -> {
+            final SubjectModel subjectModel = new SubjectModel();
+            subjectModel.map(this.subjectsSupport.getEntityFixtureMock(0));
+            subjectsModels.add(subjectModel);
+        });
+        userModel.setSubjects(subjectsModels);
         when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
         when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(userModel);
 
