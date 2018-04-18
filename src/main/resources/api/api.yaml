@@ -174,25 +174,6 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/V1Error'
-  /v1/users/me:
-    get:
-      summary: Info for current user
-      operationId: showCurrentUser
-      tags:
-        - users
-      responses:
-        '200':
-          description: Current user
-          schema:
-            $ref: '#/definitions/V1User'
-        '403':
-          description: Permission denied
-          schema:
-            $ref: '#/definitions/V1Error'
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/V1Error'
 
   #
   # Subjects
@@ -209,7 +190,6 @@ paths:
   #
   # Quizzes
   #
-<<<<<<< HEAD
   /v1/quizzes:
       get:
         summary: Get the list of all quizzes by issueId
@@ -231,15 +211,15 @@ paths:
                 $ref: '#/definitions/V1Quiz'
           '400':
             description: Bad Request
-              schema:
-                $ref: '#/definitions/V1Error'
+            schema:
+              $ref: '#/definitions/V1Error'
           '401':
             description: Unauthorized
-              schema:
+            schema:
               $ref: '#/definitions/V1Error'
           '403':
             description: Forbidden
-              schema:
+            schema:
               $ref: '#/definitions/V1Error'
           '404':
             description: Issue not found
@@ -405,7 +385,8 @@ definitions:
         id: 1
         startedAt: '2018-03-11T23:20:50'
         finishedAt: '2018-03-11T23:30:50'
-        testee: 'Ivan Ivanov'
+        testee:
+          $ref: '#/definitions/V1Testee'
   V1Quizzes:
     type: array
     items:
