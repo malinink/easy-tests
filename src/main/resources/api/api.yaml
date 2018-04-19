@@ -288,6 +288,8 @@ paths:
       tags:
         - question
       responses:
+        '200':
+          description: Question was deleted
         '400':
           description: The specified question ID is invalid (not a number)
           schema:
@@ -410,6 +412,7 @@ definitions:
       - text
       - type
       - topic
+      - answers
     properties:
       id:
         type: integer
@@ -417,7 +420,7 @@ definitions:
       text:
         type: string
       type:
-        type: string
+        type: integer
         description: question type means the type and quantity of answers
         default: 1
         enum:
@@ -473,6 +476,7 @@ definitions:
       text: 2,3
       isRight: true
       number: 1
+      question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
   V1AnswersForAdmin:
     type: array
     items:
