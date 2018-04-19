@@ -22,17 +22,6 @@ paths:
       operationId: listUsers
       tags:
         - users
-      parameters:
-        - name: state
-          in: query
-          description: State value that need to be considered for filter
-          required: false
-          type: string
-        - name: isAdmin
-          in: query
-          description: isAdmin value that need to be considered for filter
-          required: false
-          type: string
       responses:
         '200':
           description: An array of founded users
@@ -134,6 +123,10 @@ paths:
             $ref: '#/definitions/V1Error'
         '404':
           description: A user with the specified ID was not found.
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
     delete:
