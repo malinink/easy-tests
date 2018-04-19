@@ -228,10 +228,8 @@ paths:
           schema:
             $ref: '#/definitions/V1Question'
       responses:
-        '200':
-          description: Return the updated question
-          schema:
-            $ref: '#/definitions/V1Question'
+        '200': 
+          description: OK
         '403':
           description: Access forbidden
           schema:
@@ -289,7 +287,7 @@ paths:
         - question
       responses:
         '200':
-          description: Question was deleted
+          description: OK
         '400':
           description: The specified question ID is invalid (not a number)
           schema:
@@ -437,13 +435,13 @@ definitions:
     example:
       id: 100500
       text: 'Select private networks:'
-      type: '1'
+      type: integer
       topic: 1
       answers:
-        - 1
-        - 2
-        - 3
-        - 4
+        id: 100500
+        text: 1,2,3,4
+        number: 1
+        question: "Select private networks:"
   V1Questions:
     type: array
     items:
@@ -476,8 +474,8 @@ definitions:
       text: 2,3
       isRight: true
       number: 1
-      question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-  V1AnswersForAdmin:
+      question: "Select private networks:"
+  V1AdminAnswers:
     type: array
     items:
       $ref: '#/definitions/V1AdminAnswer'
