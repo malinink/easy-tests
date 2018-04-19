@@ -57,7 +57,7 @@ public class ObjectsController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Identity create(@RequestBody Object object) throws Exception {
+    public Identity create(@RequestBody Object object) throws BadRequestException {
         if (object.getId() != null) {
             throw new IdentifiedModelException();
         }
@@ -83,7 +83,7 @@ public class ObjectsController {
     }
 
     @PutMapping("")
-    public void update(@RequestBody Object object) throws Exception {
+    public void update(@RequestBody Object object) throws BadRequestException, NotFoundException {
         if (object.getId() == null) {
             throw new UnidentifiedModelException();
         }
@@ -104,7 +104,7 @@ public class ObjectsController {
     }
 
     @GetMapping("/{userId}")
-    public Object show(@PathVariable Integer userId) {
+    public Object show(@PathVariable Integer userId) throws NotFoundException {
         final UserModelInterface userModel = this.getUserModel(
             userId,
             (new UsersOptions()).withSubjects(new SubjectsOptions())
@@ -112,7 +112,7 @@ public class ObjectsController {
         return this.objectsMapper.map(userModel, Object.class);
     }
 
-    private UserModelInterface getUserModel(Integer id, UsersOptionsInterface userOptions) {
+    private UserModelInterface getUserModel(Integer id, UsersOptionsInterface userOptions) throws NotFoundException {
         final UserModelInterface userModel = this.usersService.find(id, userOptions);
         if (userModel == null) {
             throw new NotFoundException();
@@ -120,7 +120,7 @@ public class ObjectsController {
         return userModel;
     }
 
-    private UserModelInterface getUserModel(Integer id) {
+    private UserModelInterface getUserModel(Integer id) throws NotFoundException {
         return this.getUserModel(id, this.usersOptionsBuilder.forAuth());
     }
 }

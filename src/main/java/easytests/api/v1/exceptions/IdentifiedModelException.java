@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author malinink
  */
 @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "id must be absent")
-public class IdentifiedModelException extends Exception {
+public class IdentifiedModelException extends BadRequestException {
 }

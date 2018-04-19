@@ -8,6 +8,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author malinink
  */
 @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "id must be present")
-public class UnidentifiedModelException extends Exception {
-
+public class UnidentifiedModelException extends BadRequestException {
 }
