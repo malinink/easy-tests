@@ -101,6 +101,41 @@ public class ObjectsControllerTest {
     }
 
     @Test
+    public void testUpdateSuccess() throws Exception {
+        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
+        when(this.usersService.find(any(), any())).thenReturn(userModel);
+
+        mvc.perform(put("/v1/objects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"id\": 1, \"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0}"))
+                .andExpect(status().is(200))
+                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        verify(this.usersService, times(1)).save(userModel);
+    }
+
+    @Test
+    public void testUpdateWithoutIdFailed() throws Exception {
+        mvc.perform(put("/v1/objects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0}"))
+                .andExpect(status().isBadRequest())
+                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateWithSubjectsFailed() throws Exception {
+        mvc.perform(put("/v1/objects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"id\": 1, \"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0, \"subjects\": []}"))
+                .andExpect(status().isBadRequest())
+                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
+    }
+
+    @Test
     public void testShowSuccess() throws Exception {
         final UserModelInterface userModel = new UserModel();
         userModel.map(this.usersSupport.getEntityFixtureMock(0));
