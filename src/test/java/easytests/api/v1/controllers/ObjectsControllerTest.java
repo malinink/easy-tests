@@ -150,6 +150,18 @@ public class ObjectsControllerTest {
     }
 
     @Test
+    public void testShowFailed() throws Exception {
+        when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
+        when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(null);
+
+        mvc.perform(get("/v1/objects/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
+    }
+
+    @Test
     public void testShowWithSubjectsSuccess() throws Exception {
         final UserModelInterface userModel = new UserModel();
         userModel.map(this.usersSupport.getEntityFixtureMock(0));
