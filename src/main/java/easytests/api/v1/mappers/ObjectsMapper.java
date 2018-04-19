@@ -20,5 +20,9 @@ public class ObjectsMapper extends ModelMapper {
                     context -> !(context.getSource() instanceof ModelsListEmpty)
                 ).map(UserModel::getSubjects, Object::setSubjects)
             );
+        /**
+         * Refuse of back mapping subjects from object into user, properties are read only
+         * TODO
+         */
     }
 }
