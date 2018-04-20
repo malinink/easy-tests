@@ -617,16 +617,6 @@ definitions:
   #
   # Subjects
   #
-  
-  V1SubjectID:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-    required:
-      - id
-
   #
   # Topics
   #
@@ -643,20 +633,11 @@ definitions:
       name:
         type: string
       subjectID:
-        $ref: '#/definitions/V1SubjectID'
+        $ref: '#/definitions/V1Identity'
     example:
       id: 322
       name: Database normalization
       subjectID: 1
-
-  V1TopicID:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-    required:
-      - id
 
   #
   # Questions
