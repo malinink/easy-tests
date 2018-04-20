@@ -22,17 +22,6 @@ paths:
       operationId: listUsers
       tags:
         - users
-      parameters:
-        - name: state
-          in: query
-          description: State value that need to be considered for filter
-          required: false
-          type: string
-        - name: isAdmin
-          in: query
-          description: isAdmin value that need to be considered for filter
-          required: false
-          type: string
       responses:
         '200':
           description: An array of founded users
@@ -136,6 +125,10 @@ paths:
           description: A user with the specified ID was not found.
           schema:
             $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
     delete:
       summary: Delete a user with the specific id
       operationId: deleteUserById
@@ -166,6 +159,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
+
   /v1/users/me:
     get:
       summary: Info for current user
@@ -198,6 +192,158 @@ paths:
   #
   # Issues
   #
+  /v1/issues:
+    get:
+      summary: List of all issues
+      operationId: listIssues
+      tags:
+        - issues
+      parameters:
+        - name: subjectId
+          in: query
+          required: true
+          description: Id of specific subject
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Return an array of founded issues
+          schema:
+            $ref: '#/definitions/V1Issues'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: The specified subject Id or Issues was not found
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+    post:
+      summary: Create a new issue
+      operationId: createIssue
+      parameters:
+        - name: issue
+          in: body
+          required: true
+          description: Issue that needs to be created
+          schema:
+            $ref: '#/definitions/V1Issue'
+      tags:
+        - issues
+      responses:
+        '201':
+          description: Issue created successfully
+          schema:
+            $ref: '#/definitions/V1Identity'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+    put:
+      summary: Update an existing Issue
+      operationId: updateIssue
+      tags:
+        - issues
+      parameters:
+        - name: issue
+          in: body
+          required: true
+          description: Issue that needs to be updated
+          schema:
+            $ref: '#/definitions/V1Issue'
+      responses:
+        '200':
+          description: Issue updated successfully
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: The specified issue Id was not found
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+  /v1/issues/{issueId}:
+    parameters:
+      - name: issueId
+        in: path
+        required: true
+        description: The ID of the issue to retrieve
+        type: integer
+        format: int64
+    get:
+      summary: Info for a specific issue
+      operationId: showIssueById
+      tags:
+        - issues
+      responses:
+        '200':
+          description: Issue with specified ID
+          schema:
+            $ref: '#/definitions/V1Issue'
+        '400':
+          description: The specified issue ID is invalid
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: The specified issue Id was not found
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+    delete:
+      summary: Delete an issue with the specific id
+      operationId: deleteIssueById
+      tags:
+        - Issues
+      responses:
+        '200':
+          description: Issue deleted successfully
+        '400':
+          description: The specified issue ID is invalid
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: The specified issue Id was not found
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
   #
   # Quizzes
   #
@@ -222,9 +368,66 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
+    post:
+      summary: Create a new Object
+      operationId: createObject
+      parameters:
+        - name: object
+          in: body
+          required: true
+          description: Object that needs to be created
+          schema:
+            $ref: '#/definitions/V1Object'
+      tags:
+        - objects
+      responses:
+        '201':
+          description: Object created successfully
+          schema:
+            $ref: '#/definitions/V1Identity'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+    put:
+      summary: Update an existing object
+      operationId: updateObject
+      tags:
+        - objects
+      parameters:
+        - name: object
+          in: body
+          required: true
+          description: Object that needs to be updated
+          schema:
+            $ref: '#/definitions/V1Object'
+      responses:
+        '200':
+          description: Object updated successfully
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+
   /v1/objects/{objectId}:
     get:
-      summary: Info for a specific user
+      summary: Info for a specific object
       operationId: showObjectById
       tags:
         - objects
@@ -279,7 +482,6 @@ definitions:
       lastName: 'Ivanovich'
       surname: 'Ivanov'
       email: 'Ivanov@gmail.com'
-      password: '1244s'
       isAdmin: false
       state: 1
   V1Users:
@@ -298,6 +500,30 @@ definitions:
   #
   # Issues
   #
+  V1Issue:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      subject:
+        type: object
+        items:
+          $ref: '#/definitions/V1Identity'
+    required:
+      - name
+      - subject
+    example:
+      id: 1
+      name: Test№1
+  V1Issues:
+    type: array
+    items:
+      $ref: '#/definitions/V1Issue'
+  #
+  # TODO: IssueStandard that we should pass for creation(generation) issue.
   #
   # Quizzes
   #
@@ -310,7 +536,7 @@ definitions:
   V1Object:
     required:
       - firstName
-      - lastNname
+      - lastName
       - surname
       - email
       - isAdmin
