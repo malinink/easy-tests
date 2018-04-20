@@ -435,7 +435,7 @@ definitions:
     example:
       id: 100500
       text: 'Select private networks:'
-      type: integer
+      type: 1
       topic: 1
       answers:
         id: 100500
