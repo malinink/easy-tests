@@ -106,7 +106,7 @@ paths:
         - name: userId
           in: path
           required: true
-          description: The Id of the user to retrieve
+          description: The ID of the user to retrieve
           type: integer
       responses:
         '200':
@@ -124,7 +124,7 @@ paths:
         '404':
           description: A user with the specified ID was not found.
           schema:
-            $ref: '#/definitions/V1Error' 
+            $ref: '#/definitions/V1Error'
         default:
           description: Unexpected error
           schema:
