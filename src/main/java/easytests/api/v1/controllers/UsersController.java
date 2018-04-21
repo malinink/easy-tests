@@ -52,6 +52,6 @@ public class UsersController {
      * delete(userId)
      */
     /**
-     * ShowMe
+     * showMe
      */
 }
