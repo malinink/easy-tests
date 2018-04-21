@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .and()
             .csrf()
-                .and()
+                .disable()
             .rememberMe();
     }
 }
