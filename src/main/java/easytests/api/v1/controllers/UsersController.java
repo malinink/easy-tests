@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author SvetlanaTselikova
  */
+@RestController("ObjectsControllerV1")
+@SuppressWarnings("checkstyle:MultipleStringLiterals")
+@RequestMapping("/v1/objects")
 public class UsersController {
 
     @Autowired
@@ -20,7 +23,7 @@ public class UsersController {
     private UsersOptionsBuilder usersOptionsBuilder;
 
     @Autowired
-    @Qualifier("UsersMapperV1")
+    @Qualifier("ObjectsMapperV1")
     private UsersMapper usersMapper;
 
     /**
