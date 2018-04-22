@@ -5,9 +5,12 @@ import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.*;
 
 
-
+@RestController("UsersControllerV1")
+@SuppressWarnings("checkstyle:MultipleStringLiterals")
+@RequestMapping("/v1/users")
 public class UsersController {
 
     @Autowired
