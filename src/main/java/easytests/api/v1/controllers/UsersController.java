@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author SvetlanaTselikova
  */
-@RestController("UsersControllerV1")
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/users")
 public class UsersController {
