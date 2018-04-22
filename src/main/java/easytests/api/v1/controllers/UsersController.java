@@ -16,16 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/users")
 public class UsersController {
 
-    @Autowired
-    protected UsersService usersService;
-
-    @Autowired
-    private UsersOptionsBuilder usersOptionsBuilder;
-
-    @Autowired
-    @Qualifier("UsersMapperV1")
-    private UsersMapper usersMapper;
-
     /**
      * list
      */
