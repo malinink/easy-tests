@@ -435,10 +435,26 @@ definitions:
       type: 1
       topic: 1
       answers:
-        id: 100500
-        text: '255.255.255.255.'
-        number: 1
-        question: 'Select private networks:'
+        - id: 100500
+          text: '255.255.255.255.'
+          question: 'Select private networks:'
+          isRight: false
+          number: 1
+        - id: 100501
+          text: '10.0.0.1'
+          question: 'Select private networks:'
+          isRight: true          
+          number: 2
+        - id: 100502
+          text: '10.71.0.1'
+          question: 'Select private networks:'
+          isRight: true          
+          number: 3
+        - id: 100503
+          text: '100.65.70.1'
+          question: 'Select private networks:'
+          isRight: true          
+          number: 4
   V1Questions:
     type: array
     items:
