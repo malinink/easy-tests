@@ -225,7 +225,8 @@ paths:
           in: query
           required: true
           description: Id of the specific issue
-          type: string
+          type: integer
+          format: int64
         tags:
           - quizzes
         responses:
@@ -261,6 +262,7 @@ paths:
          required: true
          description: Id of the specific quiz
          type: integer
+         format: int64
       tags:
          - quizzes
       responses:
