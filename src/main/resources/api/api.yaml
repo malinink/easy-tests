@@ -192,6 +192,13 @@ paths:
       operationId: listTopics
       tags:
         - topics
+      parameters:
+        - name: subjectId
+          in: query
+          required: true
+          description: Id of specific subject
+          type: integer
+          format: int64
       responses:
         '200':
           description: An array of topics
