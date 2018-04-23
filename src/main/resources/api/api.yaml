@@ -428,9 +428,7 @@ definitions:
       topic:
         $ref: '#/definitions/V1Identity'
       answers:
-        type: array
-        items:
-          $ref: '#/definitions/V1AdminAnswer'
+        $ref: '#/definitions/V1AdminAnswers'
     example:
       id: 100500
       text: 'Select private networks:'
