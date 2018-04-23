@@ -436,25 +436,25 @@ definitions:
       topic: 1
       answers:
         - id: 100500
-          text: '255.255.255.255.'
-          question: 'Select private networks:'
+          text: '255.255.255.255'
           isRight: false
           number: 1
+          question: 'Select private networks:'
         - id: 100501
           text: '10.0.0.1'
-          question: 'Select private networks:'
           isRight: true          
           number: 2
+          question: 'Select private networks:'
         - id: 100502
           text: '10.71.0.1'
-          question: 'Select private networks:'
           isRight: true          
           number: 3
+          question: 'Select private networks:'
         - id: 100503
           text: '100.65.70.1'
-          question: 'Select private networks:'
           isRight: true          
           number: 4
+          question: 'Select private networks:'
   V1Questions:
     type: array
     items:
@@ -485,8 +485,9 @@ definitions:
     example:
       id: 100500
       text: '255.255.255.255'
-      isRight: true
+      isRight: false
       number: 1
+      question: 'Select private networks:'
   V1AdminAnswers:
     type: array
     items:
