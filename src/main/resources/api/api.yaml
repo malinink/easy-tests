@@ -400,17 +400,52 @@ definitions:
           type: string
           format: date-time
         testee:
-          $ref: '#/definitions/V1Identity'
+          $ref: '#/definitions/V1Testee'
       example:
         id: 1
         startedAt: '2018-03-11T23:20:50'
         finishedAt: '2018-03-11T23:30:50'
         testee:
-          $ref: '#/definitions/V1Identity'
+          $ref: '#/definitions/V1Testee'
   V1Quizzes:
     type: array
     items:
       $ref: '#/definitions/V1Quiz'
+  V1Testee:
+    required:
+      - id
+      - firstName
+      - lastName
+      - surname
+      - groupNumber
+      - quiz
+    properties:
+      id:
+        type: integer
+        format: int64
+      firstName:
+        type: string
+      lastName:
+        type: string
+      surname:
+        type: string
+      groupNumber:
+        type: integer
+        format: int64
+      quiz:
+        $ref: '#/definitions/V1Identity'
+    example:
+      id: 1
+      firstName: 'Ivan'
+      lastName: 'Ivanovich'
+      surname: 'Ivanov'
+      groupNumber: 1
+      quiz:
+        $ref: '#/definitions/V1Identity'
+  V1Testees:
+    type: array
+    items:
+      $ref: '#/definitions/V1Testee'
   #
   # Points
   #
