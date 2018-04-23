@@ -196,11 +196,17 @@ paths:
         '200':
           description: An array of topics
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/V1Topic'
+            $ref: '#/definitions/V1Topics'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/V1Error'
         '403':
           description: Access forbidden
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: Topic with specified id wasn't found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -222,12 +228,16 @@ paths:
       responses:
         '201':
           description: The topic was successfully created
+          schema:
+            $ref: '#/definitions/V1Identity'
         '400':
           description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '401':
           description: User isn't authenticated
+          schema:
+            $ref: '#/definitions/V1Error'
         '403':
           description: Access forbidden
           schema:
@@ -251,10 +261,16 @@ paths:
       responses:
         '200':
           description: The topic was successfully updated
-        '404':
-          description: Topic with specified id wasn't found
         '400':
           description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Access forbidden
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: Topic with specified id wasn't found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -268,7 +284,7 @@ paths:
         in: path
         required: true
         description: An id of the topic
-        type: string
+        type: integer
     'get':
       summary: Get a topic with the specific id
       operationId: getTopicById
@@ -279,6 +295,10 @@ paths:
           description: Expected response to a valid request. Return the topic
           schema:
             $ref: '#/definitions/V1Topic'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
         '403':
           description: Access forbidden
           schema:
@@ -299,6 +319,10 @@ paths:
       responses:
         '200':
           description: Successfully deleted
+        '400':
+          description: Invalid input
+          schema:
+            $ref: '#/definitions/V1Error'
         '403':
           description: Access forbidden
           schema:
@@ -623,7 +647,6 @@ definitions:
   V1Topic:
     type: object
     required:
-      - id
       - name
       - V1Identity
     properties:
