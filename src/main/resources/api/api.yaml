@@ -171,15 +171,15 @@ paths:
             items:
               $ref: '#/definitions/V1Question'
         '400':
-          description: Invalid topic ID supplied
+          description: The specified question ID is invalid (not a number)
           schema:
             $ref: '#/definitions/V1Error'
         '403':
-          description: Access forbidden
+          description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Questions not found
+          description: A question with the specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -199,16 +199,16 @@ paths:
           schema:
             $ref: '#/definitions/V1Question'
       responses:
-        '200':
-          description: Return a new question
+        '201':
+          description: Qustion created successfully
           schema:
             $ref: '#/definitions/V1Question'
         '400':
-          description: Invalid input
+          description: The specified question ID is invalid (not a number)
           schema:
             $ref: '#/definitions/V1Error'
         '403':
-          description: Access forbidden
+          description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -229,17 +229,17 @@ paths:
             $ref: '#/definitions/V1Question'
       responses:
         '200': 
-          description: OK
+          description: Question updated successfully
         '403':
-          description: Access forbidden
+          description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Question not found
+          description: A question with the specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         '400':
-          description: Invalid input
+          description: The specified question ID is invalid (not a number)
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -261,19 +261,19 @@ paths:
         - questions
       responses:
         '200':
-          description: Return the question
+          description: Question with specified ID
           schema:
             $ref: '#/definitions/V1Question'
         '400':
-          description: Invalid question ID supplied
+          description: The specified question ID is invalid (not a number)
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Question not found.
+          description: A question with the specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         '403':
-          description: Access forbidden
+          description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -287,7 +287,7 @@ paths:
         - question
       responses:
         '200':
-          description: OK
+          description: Question deleted successfully
         '400':
           description: The specified question ID is invalid (not a number)
           schema:
@@ -297,11 +297,11 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '403':
-          description: Access forbidden
+          description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         default:
-          description: unexpected error
+          description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
   #
@@ -420,7 +420,6 @@ definitions:
       type:
         type: integer
         description: question type means the type and quantity of answers
-        default: 1
         enum:
         - 1
         - 2
@@ -439,9 +438,9 @@ definitions:
       topic: 1
       answers:
         id: 100500
-        text: 1,2,3,4
+        text: '255.255.255.255.'
         number: 1
-        question: "Select private networks:"
+        question: 'Select private networks:'
   V1Questions:
     type: array
     items:
@@ -471,10 +470,9 @@ definitions:
         $ref: '#/definitions/V1Question'
     example:
       id: 100500
-      text: 2,3
+      text: '255.255.255.255'
       isRight: true
       number: 1
-      question: "Select private networks:"
   V1AdminAnswers:
     type: array
     items:
