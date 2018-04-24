@@ -7,6 +7,7 @@ import easytests.core.options.UsersOptions;
 import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
+import easytests.support.JsonSupport;
 import easytests.support.SubjectsSupport;
 import easytests.support.UsersSupport;
 import java.util.ArrayList;
@@ -82,12 +83,22 @@ public class ObjectsControllerTest {
 
     @Test
     public void testCreateWithIdFailed() throws Exception {
-        mvc.perform(post("/v1/objects")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\": 2, \"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0}"))
-                .andExpect(status().isBadRequest())
-                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andReturn();
+        mvc.perform(
+                post("/v1/objects")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(new JsonSupport()
+                        .with("id", 2)
+                        .with("firstName", "firstName")
+                        .with("lastName", "lastName")
+                        .with("surname", "surname")
+                        .with("email", "mail@fmail.com")
+                        .with("isAdmin", true)
+                        .with("state", 0)
+                        .build()
+                ))
+            .andExpect(status().isBadRequest())
+            //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andReturn();
     }
 
     @Test
