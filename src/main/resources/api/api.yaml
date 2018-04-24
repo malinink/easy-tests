@@ -167,9 +167,7 @@ paths:
         '200':
           description: Return an array of the specific topic's questions
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/V1Question'
+            $ref: '#/definitions/V1Question'
         '400':
           description: The specified question ID is invalid (not a number)
           schema:
@@ -433,7 +431,8 @@ definitions:
       id: 100500
       text: 'Select private networks:'
       type: 1
-      topic: 1
+      topic: 
+        $ref: '#/definitions/V1Identity'
       answers:
         $ref: '#/definitions/V1AdminAnswers'
   V1Questions:
@@ -447,7 +446,6 @@ definitions:
     type: object
     required:
       - text
-      - question
       - isRight
       - number
     properties:
@@ -461,14 +459,11 @@ definitions:
       number:
         type: integer
         format: int64
-      question:
-        $ref: '#/definitions/V1Identity'
     example:
       id: 100500
       text: '255.255.255.255'
       isRight: false
       number: 1
-      question: 100500
   V1AdminAnswers:
     type: array
     items:
