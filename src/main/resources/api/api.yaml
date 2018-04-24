@@ -655,19 +655,19 @@ definitions:
     type: object
     required:
       - name
-      - V1Identity
+      - subjectId
     properties:
       id:
         type: integer
         format: int64
       name:
         type: string
-      V1Identity:
+      subjectId:
         $ref: '#/definitions/V1Identity'
     example:
       id: 322
       name: Database normalization
-      V1Identity:
+      subjectId:
         id: 1
   V1Topics:
     type: array
