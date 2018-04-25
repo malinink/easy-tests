@@ -476,7 +476,7 @@ paths:
           description: A question with the specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
-        '403':t
+        '403':
           description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
