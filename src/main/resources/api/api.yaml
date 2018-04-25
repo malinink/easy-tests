@@ -180,10 +180,10 @@ paths:
   #
   /v1/topics:
     'get':
-      summary: List all topics
+      summary: Retrieve Topics list
       operationId: listTopics
       tags:
-        - topics
+        - Topics
       parameters:
         - name: subjectId
           in: query
@@ -205,7 +205,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Topic with specified id wasn't found
+          description: User with specified ID wasn't found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -213,7 +213,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
     'post':
-      summary: Create a new topic
+      summary: Create a new Topic
       operationId: createTopic
       parameters:
         - name: topic
@@ -223,10 +223,10 @@ paths:
           schema:
             $ref: '#/definitions/V1Topic'
       tags:
-        - topics
+        - Topics
       responses:
         '201':
-          description: The topic was successfully created
+          description: The Topic was successfully created
           schema:
             $ref: '#/definitions/V1Identity'
         '400':
@@ -246,20 +246,20 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
     'put':
-      summary: Update an existing topic
+      summary: Update an existing Topic
       operationId: updateTopic
       tags:
-        - topics
+        - Topics
       parameters:
         - in: body
           name: topic
-          description: The topic that needs to be added instead of the existing one with the same id
+          description: The Topic that needs to be added instead of the existing one with the same id
           required: true
           schema:
             $ref: '#/definitions/V1Topic'
       responses:
         '200':
-          description: The topic was successfully updated
+          description: Topic was successfully updated
         '400':
           description: Invalid input
           schema:
@@ -269,7 +269,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Topic with specified id wasn't found
+          description: Topic with specified ID wasn't found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -282,13 +282,13 @@ paths:
       - name: topicId
         in: path
         required: true
-        description: An id of the topic
+        description: Topic ID
         type: integer
     'get':
-      summary: Get a topic with the specific id
+      summary: Retrieve Topic with a specified ID
       operationId: getTopicById
       tags:
-        - topics
+        - Topics
       responses:
         '200':
           description: Expected response to a valid request. Return the topic
@@ -303,7 +303,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: A topic with the specified ID was not found.
+          description: Topic with the specified ID was not found.
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -311,10 +311,10 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
     'delete':
-      summary: Delete a topic with the specific id
+      summary: Delete Topic with the specified ID
       operationId: deleteTopicById
       tags:
-        - topics
+        - Topics
       responses:
         '200':
           description: Successfully deleted
@@ -327,7 +327,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: A topic with the specified ID was not found.
+          description: Topic with the specified ID was not found.
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -811,7 +811,7 @@ definitions:
         format: int64
       name:
         type: string
-      subject:
+      subject:`
         $ref: '#/definitions/V1Identity'
     example:
       id: 322
