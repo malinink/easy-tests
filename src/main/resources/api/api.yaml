@@ -364,9 +364,7 @@ paths:
           '200':
             description: Return an array of quizzes
             schema:
-              type: array
-              items:
-                $ref: '#/definitions/V1Quiz'
+              $ref: '#/definitions/V1Quizzes'
           '400':
             description: Bad Request
             schema:
