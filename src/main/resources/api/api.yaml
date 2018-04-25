@@ -811,7 +811,7 @@ definitions:
         format: int64
       name:
         type: string
-      subject:`
+      subject:
         $ref: '#/definitions/V1Identity'
     example:
       id: 322
