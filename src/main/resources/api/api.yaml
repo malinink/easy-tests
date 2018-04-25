@@ -349,20 +349,20 @@ paths:
   #
   /v1/quizzes:
       get:
-        summary: Get the list of all quizzes by issueId
+        summary: Retrieve list of all Quizzes by Issue with specified ID
         operationId: listQuizzes
         parameters:
         - name: issueId
           in: query
           required: true
-          description: Id of the specific issue
+          description: Id of the specific Issue
           type: integer
           format: int64
         tags:
-          - quizzes
+          - Quizzes
         responses:
           '200':
-            description: Return an array of quizzes
+            description: An array of founded Quizzes
             schema:
               $ref: '#/definitions/V1Quizzes'
           '400':
@@ -383,20 +383,20 @@ paths:
                 $ref: '#/definitions/V1Error'
   /v1/quizzes/{quizId}:
     get:
-      summary: Get quiz by quizId
+      summary: Retrieve Quiz with specified ID
       operationId: quizById
       parameters:
        - name: quizId
          in: path
          required: true
-         description: Id of the specific quiz
+         description: Id of the specified Quiz
          type: integer
          format: int64
       tags:
-         - quizzes
+         - Quizzes
       responses:
          '200':
-           description: Return a specific quiz
+           description: Quiz with specified ID
            schema:
              $ref: '#/definitions/V1Quiz'
          '400':
