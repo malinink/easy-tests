@@ -193,7 +193,7 @@ paths:
           format: int64
       responses:
         '200':
-          description: An array of topics
+          description: An array of founded topics
           schema:
             $ref: '#/definitions/V1Topics'
         '400':
@@ -226,7 +226,7 @@ paths:
         - Topics
       responses:
         '201':
-          description: The Topic was successfully created
+          description: Topic was successfully created
           schema:
             $ref: '#/definitions/V1Identity'
         '400':
@@ -253,7 +253,7 @@ paths:
       parameters:
         - in: body
           name: topic
-          description: The Topic that needs to be added instead of the existing one with the same id
+          description: Topic that needs to be updated
           required: true
           schema:
             $ref: '#/definitions/V1Topic'
@@ -317,7 +317,7 @@ paths:
         - Topics
       responses:
         '200':
-          description: Successfully deleted
+          description: Topic successfully deleted
         '400':
           description: Invalid input
           schema:
