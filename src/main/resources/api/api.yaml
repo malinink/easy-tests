@@ -579,7 +579,7 @@ paths:
         '200':
           description: Object with specified ID
           schema:
-            $ref: '#/definitions/V1Issue'
+            $ref: '#/definitions/V1Object'
         '400':
           description: The specified Object ID is invalid (not a number)
           schema:
