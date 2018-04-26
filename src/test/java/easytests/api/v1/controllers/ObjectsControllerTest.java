@@ -34,6 +34,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = ObjectsController.class, secure = false)
 public class ObjectsControllerTest {
+    private static String id = "id";
+    private static String firstName = "firstName";
+    private static String lastName = "lastName";
+    private static String surname = "surname";
+    private static String email = "email";
+    private static String isAdmin = "isAdmin";
+    private static String state = "state";
+    private static String subjects = "subjects";
 
     @Autowired
     private MockMvc mvc;
@@ -60,9 +68,9 @@ public class ObjectsControllerTest {
 
         mvc.perform(get("/v1/objects")
                 .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andReturn();
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
     }
 
     @Test
@@ -75,39 +83,58 @@ public class ObjectsControllerTest {
 
         mvc.perform(post("/v1/objects")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0}"))
+                .content(new JsonSupport()
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@fmail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
                 .andExpect(status().is(201))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(
+                        new JsonSupport()
+                                .with(id, 5)
+                                .build()
+                ))
                 .andReturn();
     }
 
     @Test
     public void testCreateWithIdFailed() throws Exception {
-        mvc.perform(
-                post("/v1/objects")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(new JsonSupport()
-                        .with("id", 2)
-                        .with("firstName", "firstName")
-                        .with("lastName", "lastName")
-                        .with("surname", "surname")
-                        .with("email", "mail@fmail.com")
-                        .with("isAdmin", true)
-                        .with("state", 0)
+        mvc.perform(post("/v1/objects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 2)
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@fmail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
                         .build()
                 ))
-            .andExpect(status().isBadRequest())
-            //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andReturn();
+                .andExpect(status().isBadRequest())
+                .andReturn();
     }
 
     @Test
     public void testCreateWithSubjectsFailed() throws Exception {
         mvc.perform(post("/v1/objects")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0, \"subjects\": []}"))
+                .content(new JsonSupport()
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@fmail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .with(subjects, "[]")
+                        .build()
+                ))
                 .andExpect(status().isBadRequest())
-                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andReturn();
     }
 
@@ -118,9 +145,18 @@ public class ObjectsControllerTest {
 
         mvc.perform(put("/v1/objects")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\": 1, \"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0}"))
+                .content(new JsonSupport()
+                        .with(id, 1)
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@fmail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
                 .andExpect(status().is(200))
-                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().string(""))
                 .andReturn();
 
         verify(this.usersService, times(1)).save(userModel);
@@ -130,9 +166,16 @@ public class ObjectsControllerTest {
     public void testUpdateWithoutIdFailed() throws Exception {
         mvc.perform(put("/v1/objects")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0}"))
+                .content(new JsonSupport()
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@fmail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
                 .andExpect(status().isBadRequest())
-                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andReturn();
     }
 
@@ -140,9 +183,18 @@ public class ObjectsControllerTest {
     public void testUpdateWithSubjectsFailed() throws Exception {
         mvc.perform(put("/v1/objects")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\": 1, \"firstName\": \"string\", \"lastName\": \"string\", \"surname\": \"string\", \"email\": \"mail@fmail.com\", \"isAdmin\": true, \"state\": 0, \"subjects\": []}"))
+                .content(new JsonSupport()
+                        .with(id, 1)
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@fmail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .with(subjects, "[]")
+                        .build()
+                ))
                 .andExpect(status().isBadRequest())
-                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andReturn();
     }
 
@@ -155,9 +207,9 @@ public class ObjectsControllerTest {
 
         mvc.perform(get("/v1/objects/1")
                 .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andReturn();
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
     }
 
     @Test
@@ -168,7 +220,6 @@ public class ObjectsControllerTest {
         mvc.perform(get("/v1/objects/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andReturn();
     }
 
@@ -188,8 +239,8 @@ public class ObjectsControllerTest {
 
         mvc.perform(get("/v1/objects/1")
                 .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andReturn();
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
     }
 }
