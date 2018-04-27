@@ -1,5 +1,8 @@
 package easytests.support;
 
+import easytests.support.exceptions.CallArrayMethodOnObjectException;
+import easytests.support.exceptions.CallObjectMethodOnArrayException;
+
 
 /**
  * @author malinink
@@ -9,52 +12,134 @@ public class JsonSupport {
 
     private String json;
 
+    private Boolean isObject;
+
+    private Boolean notNull = false;
+
+    public JsonSupport withArray() {
+        this.verifyIsArray();
+        return this;
+    }
+
+    public JsonSupport withNotNull() {
+        this.notNull = true;
+        return this;
+    }
+
     public JsonSupport with(String key, String value) {
-        this.prepareJsonObject();
-        this.json += this.gatherLeft(key) + quote + value + quote;
+        this.verifyIsObject();
+        this.prepareJson();
+        this.json += this.gatherLeft(key) + this.convert(value);
+        return this;
+    }
+
+    public JsonSupport with(String key, JsonSupport value) {
+        this.verifyIsObject();
+        this.prepareJson();
+        this.json += this.gatherLeft(key) + this.convert(value.build(), false);
         return this;
     }
 
     public JsonSupport with(String key, Integer value) {
-        this.prepareJsonObject();
-        this.json += this.gatherLeft(key) + value;
+        this.verifyIsObject();
+        this.prepareJson();
+        this.json += this.gatherLeft(key) + this.convert(value);
         return this;
     }
 
     public JsonSupport with(String key, Boolean value) {
-        this.prepareJsonObject();
-        this.json += this.gatherLeft(key) + (value ? "true" : "false");
+        this.verifyIsObject();
+        this.prepareJson();
+        this.json += this.gatherLeft(key) + this.convert(value);
         return this;
     }
 
-    public String build(Boolean notNull) {
-        if (notNull) {
-            this.prepareJsonObject();
+    public JsonSupport with(String value) {
+        this.verifyIsArray();
+        this.prepareJson();
+        this.json += this.convert(value);
+        return this;
+    }
+
+    public JsonSupport with(JsonSupport value) {
+        this.verifyIsArray();
+        this.prepareJson();
+        this.json += this.convert(value.build(), false);
+        return this;
+    }
+
+    public JsonSupport with(Integer value) {
+        this.verifyIsArray();
+        this.prepareJson();
+        this.json += this.convert(value);
+        return this;
+    }
+
+    public JsonSupport with(Boolean value) {
+        this.verifyIsArray();
+        this.prepareJson();
+        this.json += this.convert(value);
+        return this;
+    }
+
+    private String convert(String value) {
+        return this.convert(value, true);
+    }
+
+    private String convert(String value, Boolean escape) {
+        if (escape) {
+            return quote + value + quote;
         }
-        return this.build();
+        return value;
+    }
+
+    private String convert(Integer value) {
+        return value.toString();
+    }
+
+    private String convert(Boolean value) {
+        return value ? "true" : "false";
     }
 
     public String build() {
-        this.finishJsonObject();
+        if (this.notNull) {
+            this.prepareJson();
+        }
+        this.finishJson();
         return this.json;
     }
 
     public JsonSupport empty() {
         this.json = null;
+        this.isObject = null;
         return this;
     }
 
-    private void prepareJsonObject() {
+    private void prepareJson() {
         if (this.json == null) {
-            this.json = "{";
+            this.json = "";
         } else {
             this.json += ", ";
         }
     }
 
-    private void finishJsonObject() {
+    private void finishJson() {
         if (this.json != null) {
-            this.json += '}';
+            this.json = (this.isObject ? '{' : '[') + this.json + (this.isObject ? '}' : ']');
+        }
+    }
+
+    private void verifyIsArray() {
+        this.isObject = this.isObject == null ? false : this.isObject;
+        if (this.isObject) {
+            throw new CallObjectMethodOnArrayException();
+        }
+    }
+
+    private void verifyIsObject() {
+        this.isObject = this.isObject == null ? true : this.isObject;
+        if (!this.isObject) {
+            throw new CallArrayMethodOnObjectException();
         }
     }
 
