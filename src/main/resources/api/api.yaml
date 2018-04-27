@@ -22,13 +22,9 @@ paths:
         - Users
       responses:
         '200':
-          description: An array of founded users
+          description: An array of founded Users
           schema:
             $ref: '#/definitions/V1Users'
-        '400':
-          description: Invalid query parameter value
-          schema:
-            $ref: '#/definitions/V1Error'
         '403':
           description: Permission denied
           schema:
@@ -40,22 +36,22 @@ paths:
     post:
       summary: Create a new User
       operationId: createUser
+      tags:
+        - Users
       parameters:
-        - name: user
+        - name: body
           in: body
           required: true
           description: User that needs to be created
           schema:
             $ref: '#/definitions/V1User'
-      tags:
-        - Users
       responses:
         '201':
-          description: User created successfully
+          description: User was successfully created
           schema:
             $ref: '#/definitions/V1Identity'
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -72,7 +68,7 @@ paths:
       tags:
         - Users
       parameters:
-        - name: user
+        - name: body
           in: body
           required: true
           description: User that needs to be updated
@@ -80,9 +76,9 @@ paths:
             $ref: '#/definitions/V1User'
       responses:
         '200':
-          description: User updated successfully
+          description: User was successfully updated
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -112,7 +108,7 @@ paths:
           schema:
             $ref: '#/definitions/V1User'
         '400':
-          description: The specified user ID is invalid (not a number).
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -120,7 +116,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: A user with the specified ID was not found.
+          description: User with specified ID was not found.
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -128,15 +124,15 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
     delete:
-      summary: Delete User with the specified ID
+      summary: Delete User with specified ID
       operationId: deleteUserById
       tags:
         - Users
       responses:
         '200':
-          description: User deleted successfully
+          description: User was successfully deleted
         '400':
-          description: The specified user ID is invalid (not a number)
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -144,7 +140,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: A user with the specified ID was not found
+          description: User with the specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -160,7 +156,7 @@ paths:
         - Users
       responses:
         '200':
-          description: Current user
+          description: Current User
           schema:
             $ref: '#/definitions/V1User'
         '403':
@@ -205,7 +201,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: User with specified ID wasn't found
+          description: User with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -215,15 +211,15 @@ paths:
     'post':
       summary: Create a new Topic
       operationId: createTopic
-      parameters:
-        - name: topic
-          in: body
-          required: true
-          description: The topic that is created
-          schema:
-            $ref: '#/definitions/V1Topic'
       tags:
         - Topics
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: Topic that needs to be created
+          schema:
+            $ref: '#/definitions/V1Topic'
       responses:
         '201':
           description: Topic was successfully created
@@ -233,12 +229,8 @@ paths:
           description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
-        '401':
-          description: User isn't authenticated
-          schema:
-            $ref: '#/definitions/V1Error'
         '403':
-          description: Access forbidden
+          description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -252,7 +244,7 @@ paths:
         - Topics
       parameters:
         - in: body
-          name: topic
+          name: body
           description: Topic that needs to be updated
           required: true
           schema:
@@ -265,11 +257,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '403':
-          description: Access forbidden
-          schema:
-            $ref: '#/definitions/V1Error'
-        '404':
-          description: Topic with specified ID wasn't found
+          description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -291,19 +279,19 @@ paths:
         - Topics
       responses:
         '200':
-          description: Expected response to a valid request. Return the topic
+          description: Topic with specified ID
           schema:
             $ref: '#/definitions/V1Topic'
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
-          description: Access forbidden
+          description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Topic with the specified ID was not found.
+          description: Topic with the specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -317,17 +305,17 @@ paths:
         - Topics
       responses:
         '200':
-          description: Topic successfully deleted
+          description: Topic was successfully deleted
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
-          description: Access forbidden
+          description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Topic with the specified ID was not found.
+          description: Topic with the specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -347,7 +335,7 @@ paths:
         - name: topicId
           in: query
           required: true
-          description: Id of the specific topic
+          description: Topic ID
           type: integer
           format: int64
       responses:
@@ -356,7 +344,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Questions'
         '400':
-          description: The specified question ID is invalid (not a number)
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -364,7 +352,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Topic with the specified ID was not found
+          description: Topic with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -385,11 +373,11 @@ paths:
             $ref: '#/definitions/V1Question'
       responses:
         '201':
-          description: Qustion created successfully
+          description: Qustion was successfully created
           schema:
             $ref: '#/definitions/V1Identity'
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -414,9 +402,9 @@ paths:
             $ref: '#/definitions/V1Question'
       responses:
         '200': 
-          description: Question updated successfully
+          description: Question was successfully updated
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -437,7 +425,7 @@ paths:
         type: integer
         format: int64
     get:
-      summary: Retrieve Question with a specified ID
+      summary: Retrieve Question with specified ID
       operationId: showQuestionById
       tags:
         - Questions
@@ -447,15 +435,15 @@ paths:
           schema:
             $ref: '#/definitions/V1Question'
         '400':
-          description: The specified Question ID is invalid (not a number)
-          schema:
-            $ref: '#/definitions/V1Error'
-        '404':
-          description: A Question with the specified ID was not found
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
           description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: Question with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -469,17 +457,17 @@ paths:
         - Questions
       responses:
         '200':
-          description: Question deleted successfully
+          description: Question was successfully deleted
         '400':
-          description: The specified Question ID is invalid (not a number)
-          schema:
-            $ref: '#/definitions/V1Error'
-        '404':
-          description: A question with the specified ID was not found
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
           description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: Question with the specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -508,7 +496,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Issues'
         '400':
-          description: The specified Subject ID is invalid (not a number)
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -516,7 +504,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: A Subject with the specified ID was not found
+          description: Subject with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -526,22 +514,22 @@ paths:
     post:
       summary: Create a new Issue
       operationId: createIssue
+      tags:
+        - Issues
       parameters:
-        - name: issue
+        - name: body
           in: body
           required: true
           description: Issue that needs to be created
           schema:
             $ref: '#/definitions/V1Issue'
-      tags:
-        - Issues
       responses:
         '201':
-          description: Issue created successfully
+          description: Issue was successfully created
           schema:
             $ref: '#/definitions/V1Identity'
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -558,7 +546,7 @@ paths:
       tags:
         - Issues
       parameters:
-        - name: issue
+        - name: body
           in: body
           required: true
           description: Issue that needs to be updated
@@ -566,9 +554,9 @@ paths:
             $ref: '#/definitions/V1Issue'
       responses:
         '200':
-          description: Issue updated successfully
+          description: Issue was successfully updated
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -589,7 +577,7 @@ paths:
         type: integer
         format: int64
     get:
-      summary: Retrieve Issue with a specified ID
+      summary: Retrieve Issue with specified ID
       operationId: showIssueById
       tags:
         - Issues
@@ -599,7 +587,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Issue'
         '400':
-          description: The specified Issue ID is invalid (not a number)
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -607,7 +595,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: The specified Issue ID was not found
+          description: Issue with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -621,9 +609,9 @@ paths:
         - Issues
       responses:
         '200':
-          description: Issue deleted successfully
+          description: Issue was successfully deleted
         '400':
-          description: The specified Issue ID is invalid (not a number)
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -631,7 +619,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: The specified Issue ID was not found
+          description: Issue with the specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -655,7 +643,7 @@ paths:
         - Objects
       responses:
         '200':
-          description: An array of objects
+          description: An array of founded Objects
           schema:
             $ref: '#/definitions/V1Objects'
         default:
@@ -665,22 +653,22 @@ paths:
     post:
       summary: Create a new Object
       operationId: createObject
+      tags:
+        - Objects
       parameters:
-        - name: object
+        - name: body
           in: body
           required: true
           description: Object that needs to be created
           schema:
             $ref: '#/definitions/V1Object'
-      tags:
-        - Objects
       responses:
         '201':
-          description: Object created successfully
+          description: Object was successfully created
           schema:
             $ref: '#/definitions/V1Identity'
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -692,12 +680,12 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
     put:
-      summary: Update an existing object
+      summary: Update an existing Object
       operationId: updateObject
       tags:
         - Objects
       parameters:
-        - name: object
+        - name: body
           in: body
           required: true
           description: Object that needs to be updated
@@ -705,9 +693,9 @@ paths:
             $ref: '#/definitions/V1Object'
       responses:
         '200':
-          description: Object updated successfully
+          description: Object was successfully updated
         '400':
-          description: The specified Object ID is invalid (not a number)
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -720,24 +708,24 @@ paths:
             $ref: '#/definitions/V1Error'
 
   /v1/objects/{objectId}:
+    parameters:
+      - name: objectId
+        in: path
+        required: true
+        description: Object ID
+        type: integer
     get:
-      summary: Retrieve Object with a specified ID
+      summary: Retrieve Object with specified ID
       operationId: showObjectById
       tags:
         - Objects
-      parameters:
-        - name: objectId
-          in: path
-          required: true
-          description: Object ID
-          type: integer
       responses:
         '200':
           description: Object with specified ID
           schema:
             $ref: '#/definitions/V1Object'
         '400':
-          description: The specified Object ID is invalid (not a number)
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -745,7 +733,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: The specified Object ID was not found
+          description: Object with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -784,10 +772,10 @@ definitions:
         format: int64
     example:
       id: 1
-      firstName: 'Ivan'
-      lastName: 'Ivanovich'
-      surname: 'Ivanov'
-      email: 'Ivanov@gmail.com'
+      firstName: Ivan
+      lastName: Ivanovich
+      surname: Ivanov
+      email: Ivanov@gmail.com
       isAdmin: false
       state: 1
   V1Users:
@@ -852,13 +840,13 @@ definitions:
         $ref: '#/definitions/V1AdminAnswers'
     example:
       id: 1
-      text: 'Select private networks:'
+      text: Select private networks
       type: 1
       topic:
         id: 2
       answers:
         - id: 2
-          text: '255.255.255.255'
+          text: 255.255.255.255
           isRight: false
           number: 1
   V1Questions:
@@ -887,7 +875,7 @@ definitions:
         format: int64
     example:
       id: 2
-      text: '255.255.255.255'
+      text: 255.255.255.255
       isRight: false
       number: 1
   V1AdminAnswers:
@@ -914,7 +902,7 @@ definitions:
           $ref: '#/definitions/V1Identity'
     example:
       id: 1
-      name: 'Test №1'
+      name: Test №1
       subject:
         id: 2
   V1Issues:
@@ -961,10 +949,10 @@ definitions:
         $ref: '#/definitions/V1Identities'
     example:
       id: 1
-      firstName: 'FirstName'
-      lastName: 'lastName'
-      surname: 'surname'
-      email: 'mail@mail.ru'
+      firstName: FirstName
+      lastName: LastName
+      surname: Surname
+      email: mail@mail.ru
       subjects:
         - 1
         - 4
