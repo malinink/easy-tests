@@ -37,9 +37,9 @@ public class TopicsController {
      * update
      */
     /**
-     * show(userId)
+     * show(topicId)
      */
     /**
-     * delete(userId)
+     * delete(topicId)
      */
 }
