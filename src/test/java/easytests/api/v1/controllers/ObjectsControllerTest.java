@@ -70,6 +70,25 @@ public class ObjectsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(new JsonSupport()
+                                .with(id, usersModels.get(0).getId())
+                                .with(firstName, usersModels.get(0).getFirstName())
+                                .with(lastName, usersModels.get(0).getLastName())
+                                .with(surname, usersModels.get(0).getSurname())
+                                .with(email, usersModels.get(0).getEmail())
+                                .with(isAdmin, usersModels.get(0).getIsAdmin())
+                                .with(state, usersModels.get(0).getState()))
+                        .with(new JsonSupport()
+                                .with(id, usersModels.get(1).getId())
+                                .with(firstName, usersModels.get(1).getFirstName())
+                                .with(lastName, usersModels.get(1).getLastName())
+                                .with(surname, usersModels.get(1).getSurname())
+                                .with(email, usersModels.get(1).getEmail())
+                                .with(isAdmin, usersModels.get(1).getIsAdmin())
+                                .with(state, usersModels.get(1).getState()))
+                        .build()
+                ))
                 .andReturn();
     }
 
@@ -87,7 +106,7 @@ public class ObjectsControllerTest {
                         .with(firstName, "firstName")
                         .with(lastName, "lastName")
                         .with(surname, "surname")
-                        .with(email, "mail@fmail.com")
+                        .with(email, "mail@mail.com")
                         .with(isAdmin, true)
                         .with(state, 0)
                         .build()
@@ -111,12 +130,13 @@ public class ObjectsControllerTest {
                         .with(firstName, "firstName")
                         .with(lastName, "lastName")
                         .with(surname, "surname")
-                        .with(email, "mail@fmail.com")
+                        .with(email, "mail@mail.com")
                         .with(isAdmin, true)
                         .with(state, 0)
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
                 .andReturn();
     }
 
@@ -128,13 +148,16 @@ public class ObjectsControllerTest {
                         .with(firstName, "firstName")
                         .with(lastName, "lastName")
                         .with(surname, "surname")
-                        .with(email, "mail@fmail.com")
+                        .with(email, "mail@mail.com")
                         .with(isAdmin, true)
                         .with(state, 0)
-                        .with(subjects, "[]")
+                        .with(subjects, new JsonSupport()
+                                .withArray()
+                                .withNotNull())
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
                 .andReturn();
     }
 
@@ -176,6 +199,7 @@ public class ObjectsControllerTest {
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
                 .andReturn();
     }
 
@@ -195,6 +219,7 @@ public class ObjectsControllerTest {
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
                 .andReturn();
     }
 
@@ -209,6 +234,16 @@ public class ObjectsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, userModel.getId())
+                        .with(firstName, userModel.getFirstName())
+                        .with(lastName, userModel.getLastName())
+                        .with(surname, userModel.getSurname())
+                        .with(email, userModel.getEmail())
+                        .with(isAdmin, userModel.getIsAdmin())
+                        .with(state, userModel.getState())
+                        .build()
+                ))
                 .andReturn();
     }
 
@@ -220,6 +255,7 @@ public class ObjectsControllerTest {
         mvc.perform(get("/v1/objects/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
                 .andReturn();
     }
 
@@ -230,7 +266,7 @@ public class ObjectsControllerTest {
         final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
         IntStream.range(0, 2).forEach(idx -> {
             final SubjectModel subjectModel = new SubjectModel();
-            subjectModel.map(this.subjectsSupport.getEntityFixtureMock(0));
+            subjectModel.map(this.subjectsSupport.getEntityFixtureMock(idx));
             subjectsModels.add(subjectModel);
         });
         userModel.setSubjects(subjectsModels);
@@ -241,6 +277,22 @@ public class ObjectsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, userModel.getId())
+                        .with(firstName, userModel.getFirstName())
+                        .with(lastName, userModel.getLastName())
+                        .with(surname, userModel.getSurname())
+                        .with(email, userModel.getEmail())
+                        .with(isAdmin, userModel.getIsAdmin())
+                        .with(state, userModel.getState())
+                        .with(subjects, new JsonSupport()
+                                .with(new JsonSupport()
+                                        .with(id, subjectsModels.get(0).getId()))
+                                .with(new JsonSupport()
+                                        .with(id, subjectsModels.get(1).getId()))
+                        )
+                        .build()
+                ))
                 .andReturn();
     }
 }
