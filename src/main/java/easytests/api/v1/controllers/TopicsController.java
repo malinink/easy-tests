@@ -18,7 +18,7 @@ public class TopicsController {
 
     @Autowired
     protected TopicsServiceInterface topicsService;
-    //todo: I think it's better to autowire an service interface instead of it's realisation (because we don't care how exactly our service works)
+    //todo: we don't care about particular realisation, so shouldn't we wire an interface?
 
     @Autowired
     private TopicsOptionsBuilderInterface topicsOptions;
