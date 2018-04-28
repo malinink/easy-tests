@@ -177,24 +177,24 @@ paths:
   #
   /v1/subjects:
     get:
-      summary: List of all subjects
+      summary: Retrive subjects list
       operationId: listSubjects
       tags:
-          - subjects
+          - Subjects
       parameters:
         - name: userId
           in: query
-          description: Id of specific user
           required: true
+          description: Id of specific user
           type: integer
           format: int64
       responses:
         '200':
-          description: An array of  subjects
+          description: An array of founded subjects
           schema:
               $ref: '#/definitions/V1Subjects'
         '400':
-          description: Invalid query parameter value
+          description: Bad request
           schema:
               $ref: '#/definitions/V1Error'
         '403':
@@ -202,7 +202,7 @@ paths:
           schema:
               $ref: '#/definitions/V1Error'
         default:
-          description: unexpected error
+          description: Unexpected error
           schema:
               $ref: '#/definitions/V1Error'
     post:
@@ -216,14 +216,14 @@ paths:
           schema:
             $ref: '#/definitions/V1Subject'
       tags:
-          - subjects
+          - Subjects
       responses:
         '201':
           description: Subject created successfully
           schema:
             $ref: '#/definitions/V1Identity'
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -238,7 +238,7 @@ paths:
       summary: Update an existing subject
       operationId: updateSubject
       tags:
-        - subjects
+        - Subjects
       parameters:
         - name: subject
           in: body
@@ -250,7 +250,7 @@ paths:
         '200':
           description: Subject updated successfully
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
               $ref: '#/definitions/V1Error'
         '403':
@@ -258,7 +258,7 @@ paths:
           schema:
               $ref: '#/definitions/V1Error'
         '404':
-          description: Subject not found
+          description: Subject with specified ID wasn't found
           schema:
               $ref: '#/definitions/V1Error'
         default:
@@ -266,24 +266,24 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
   /v1/subjects/{subjectId}:
+      parameters:
+        - name: subjectId
+          in: path
+          required: true
+          description: The id of the subject to retrieve
+          type: integer
       get:
         summary: Retrieve Subject with a specified ID
         operationId: showSubjectById
         tags:
-          - subjects
-        parameters:
-          - name: subjectId
-            in: path
-            required: true
-            description: The id of the subject to retrieve
-            type: integer
+          - Subjects
         responses:
           '200':
             description: Subject with specified ID
             schema:
               $ref: '#/definitions/V1Subject'
           '400':
-            description: The specified subject ID is invalid (not a number).
+            description:  Bad request
             schema:
               $ref: '#/definitions/V1Error'
           '403':
@@ -303,18 +303,12 @@ paths:
         summary: Delete a subject with the specified ID
         operationId: deleteSubjectById
         tags:
-          - subjects
-        parameters:
-          - name: subjectId
-            in: path
-            required: true
-            description: The id of the subject to delete
-            type: integer
+          - Subjects
         responses:
           '200':
             description: Subject deleted successfully
           '400':
-            description: The specified subject ID is invalid (not a number)
+            description: Bad request
             schema:
               $ref: '#/definitions/V1Error'
           '403':
