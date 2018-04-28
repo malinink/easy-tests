@@ -12,8 +12,8 @@ import easytests.core.models.UserModelInterface;
 import easytests.core.options.SubjectsOptions;
 import easytests.core.options.UsersOptions;
 import easytests.core.options.UsersOptionsInterface;
-import easytests.core.options.builder.UsersOptionsBuilder;
-import easytests.core.services.UsersService;
+import easytests.core.options.builder.UsersOptionsBuilderInterface;
+import easytests.core.services.UsersServiceInterface;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +31,10 @@ import org.springframework.web.bind.annotation.*;
 public class ObjectsController {
 
     @Autowired
-    protected UsersService usersService;
+    protected UsersServiceInterface usersService;
 
     @Autowired
-    private UsersOptionsBuilder usersOptionsBuilder;
+    private UsersOptionsBuilderInterface usersOptionsBuilder;
 
     @Autowired
     @Qualifier("ObjectsMapperV1")
