@@ -171,6 +171,154 @@ paths:
   #
   # Subjects
   #
+  /v1/subjects:
+    get:
+      summary: Retrive subjects list
+      operationId: listSubjects
+      tags:
+          - Subjects
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: Id of specific user
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: An array of founded subjects
+          schema:
+              $ref: '#/definitions/V1Subjects'
+        '400':
+          description: Bad request
+          schema:
+              $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+              $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+              $ref: '#/definitions/V1Error'
+    post:
+      summary: Create a new Subject
+      operationId: createSubject
+      parameters:
+        - name: subject
+          in: body
+          required: true
+          description: Subject that needs to be created
+          schema:
+            $ref: '#/definitions/V1Subject'
+      tags:
+          - Subjects
+      responses:
+        '201':
+          description: Subject created successfully
+          schema:
+            $ref: '#/definitions/V1Identity'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+    put:
+      summary: Update an existing subject
+      operationId: updateSubject
+      tags:
+        - Subjects
+      parameters:
+        - name: subject
+          in: body
+          required: true
+          description: Subject that needs to be updated
+          schema:
+            $ref: '#/definitions/V1Subject'
+      responses:
+        '200':
+          description: Subject updated successfully
+        '400':
+          description: Bad request
+          schema:
+              $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+              $ref: '#/definitions/V1Error'
+        '404':
+          description: Subject with specified ID wasn't found
+          schema:
+              $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
+  /v1/subjects/{subjectId}:
+      parameters:
+        - name: subjectId
+          in: path
+          required: true
+          description: The id of the subject to retrieve
+          type: integer
+      get:
+        summary: Retrieve Subject with a specified ID
+        operationId: showSubjectById
+        tags:
+          - Subjects
+        responses:
+          '200':
+            description: Subject with specified ID
+            schema:
+              $ref: '#/definitions/V1Subject'
+          '400':
+            description:  Bad request
+            schema:
+              $ref: '#/definitions/V1Error'
+          '403':
+            description: Permission denied
+            schema:
+              $ref: '#/definitions/V1Error'
+          '404':
+            description: A subject with the specified ID was not found.
+            schema:
+              $ref: '#/definitions/V1Error'
+          default:
+            description: Unexpected error
+            schema:
+              $ref: '#/definitions/V1Error'
+
+      delete:
+        summary: Delete a subject with the specified ID
+        operationId: deleteSubjectById
+        tags:
+          - Subjects
+        responses:
+          '200':
+            description: Subject deleted successfully
+          '400':
+            description: Bad request
+            schema:
+              $ref: '#/definitions/V1Error'
+          '403':
+            description: Permission denied
+            schema:
+              $ref: '#/definitions/V1Error'
+          '404':
+            description: A subject with the specified ID was not found
+            schema:
+              $ref: '#/definitions/V1Error'
+          default:
+            description: unexpected error
+            schema:
+                $ref: '#/definitions/V1Error'
   #
   # Topics
   #
@@ -785,6 +933,32 @@ definitions:
   #
   # Subjects
   #
+  V1Subject:
+    type: object
+    required:
+       - name
+       - user
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      description:
+        type: string
+      user:
+        $ref: '#/definitions/V1Identity'
+
+    example:
+      id: 1
+      name: 'Databases and Network Technologies'
+      description: 'Development and analysis of databases'
+      user:
+        id: 1
+  V1Subjects:
+    type: array
+    items:
+      $ref: '#/definitions/V1Subject'
   #
   # Topics
   #
