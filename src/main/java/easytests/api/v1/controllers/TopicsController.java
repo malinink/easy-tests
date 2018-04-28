@@ -18,7 +18,6 @@ public class TopicsController {
 
     @Autowired
     protected TopicsServiceInterface topicsService;
-    //todo: we don't care about particular realisation, so shouldn't we wire an interface?
 
     @Autowired
     private TopicsOptionsBuilderInterface topicsOptions;
