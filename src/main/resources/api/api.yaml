@@ -116,7 +116,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: User with specified ID was not found.
+          description: User with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -140,7 +140,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: User with the specified ID was not found
+          description: User with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -197,7 +197,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '403':
-          description: Access forbidden
+          description: Permission denied
           schema:
             $ref: '#/definitions/V1Error'
         '404':
@@ -253,7 +253,7 @@ paths:
         '200':
           description: Topic was successfully updated
         '400':
-          description: Invalid input
+          description: Bad request
           schema:
             $ref: '#/definitions/V1Error'
         '403':
@@ -291,7 +291,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Topic with the specified ID was not found
+          description: Topic with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -315,7 +315,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Topic with the specified ID was not found
+          description: Topic with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -467,7 +467,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Question with the specified ID was not found
+          description: Question with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
@@ -619,7 +619,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Error'
         '404':
-          description: Issue with the specified ID was not found
+          description: Issue with specified ID was not found
           schema:
             $ref: '#/definitions/V1Error'
         default:
