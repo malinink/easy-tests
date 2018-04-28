@@ -11,5 +11,5 @@ public class Topic {
 
     private String name;
 
-    private Identity subjectId;
+    private Identity subject;
 }
