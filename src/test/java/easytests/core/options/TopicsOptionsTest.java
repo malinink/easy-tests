@@ -134,6 +134,12 @@ public class TopicsOptionsTest {
         return this;
     }
 
+    private TopicsOptionsTest withQustionsModelsInjected() {
+        this.topicModel.setQuestions(this.questionsModels);
+        given(this.topicModel.getQuestions()).willReturn(this.questionsModels);
+        return this;
+    }
+
     private TopicsOptionsTest withSubject() {
         this.topicsOptions.withSubject(this.subjectsOptions);
         return this;
@@ -229,7 +235,6 @@ public class TopicsOptionsTest {
     @Test
     public void testSaveWithRelationsSubject() throws Exception {
         this.withTopicModel().withSubjectModelInjected().withSubject();
-        final ArgumentCaptor<SubjectsOptionsInterface> subjectsOptionsCaptor = ArgumentCaptor.forClass(SubjectsOptionsInterface.class);
         final InOrder inOrder = Mockito.inOrder(subjectsService, topicsService);
 
         this.topicsOptions.saveWithRelations(this.topicModel);
@@ -241,25 +246,14 @@ public class TopicsOptionsTest {
     @Test
     public void testSaveWithRelationsQuestions() throws Exception{
 
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setQuestionsService(questionsService);
-        topicsOptions.setTopicsService(topicsService);
-
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-        topicsOptions.withQuestions(questionsOptions);
-
-        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
-        topicModel.setQuestions(questionsModels);
-
+        this.withTopicModel().withQustionsModelsInjected().withQuestions();
+        
         final InOrder inOrder = Mockito.inOrder(topicsService, questionsService);
 
-        topicsOptions.saveWithRelations(topicModel);
+        this.topicsOptions.saveWithRelations(this.topicModel);
 
-        inOrder.verify(topicsService).save(topicModel);
-        inOrder.verify(questionsService).save(topicModel.getQuestions(), questionsOptions);
+        inOrder.verify(this.topicsService).save(this.topicModel);
+        inOrder.verify(this.questionsService).save(this.topicModel.getQuestions(), this.questionsOptions);
     }
 
     @Test
