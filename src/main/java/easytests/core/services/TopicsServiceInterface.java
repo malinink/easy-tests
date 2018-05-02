@@ -22,6 +22,8 @@ public interface TopicsServiceInterface extends ServiceInterface {
 
     List<TopicModelInterface> findBySubject(SubjectModelInterface subjectModel);
 
+    List<TopicModelInterface> findBySubject(Integer subjectId);
+
     void save(TopicModelInterface topicModel);
 
     void save(TopicModelInterface topicModel, TopicsOptionsInterface topicsOptions);
