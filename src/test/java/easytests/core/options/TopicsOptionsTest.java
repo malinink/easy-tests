@@ -151,6 +151,7 @@ public class TopicsOptionsTest {
         this.questionsModelsList = new ArrayList<>(2);
         this.questionsModelsList.add(new ArrayList<>());
         this.questionsModelsList.add(new ArrayList<>());
+
         given(this.questionsService.findByTopic(this.topicsModels.get(0), this.questionsOptions))
                 .willReturn(questionsModelsList.get(0));
         given(this.questionsService.findByTopic(this.topicsModels.get(1), this.questionsOptions))
@@ -209,42 +210,15 @@ public class TopicsOptionsTest {
 
     @Test
     public void testWithRelationsQuestionsOnList() throws Exception{
-
-        final TopicModelInterface topicModelFirst = Mockito.mock(TopicModelInterface.class);
-
-        final TopicModelInterface topicModelSecond = Mockito.mock(TopicModelInterface.class);
-
-        final List<TopicModelInterface> topicsModels = new ArrayList<>(2);
-        topicsModels.add(topicModelFirst);
-        topicsModels.add(topicModelSecond);
-
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-
-        final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-
-        topicsOptions.setTopicsService(topicsService);
-        topicsOptions.setQuestionsService(questionsService);
-        topicsOptions.withQuestions(questionsOptions);
-
-
-        final List<QuestionModelInterface> questionsModelsFirst = new ArrayList<>();
-        questionsModelsFirst.add(Mockito.mock(QuestionModelInterface.class));
-
-        final List<QuestionModelInterface> questionsModelsSecond = new ArrayList<>();
-        questionsModelsSecond.add(Mockito.mock(QuestionModelInterface.class));
-
-        given(questionsService.findByTopic(topicModelFirst, questionsOptions)).willReturn(questionsModelsFirst);
-        given(questionsService.findByTopic(topicModelSecond, questionsOptions)).willReturn(questionsModelsSecond);
-
+        this.withTopicsList().withQuestionsModelsListFounded().withQuestions();
+        
         final List<TopicModelInterface> topicsModelsWithRelations =  topicsOptions.withRelations(topicsModels);
 
-        Assert.assertEquals(topicsModelsWithRelations,topicsModels);
-        verify(questionsService).findByTopic(topicModelFirst, questionsOptions);
-        verify(topicsModels.get(0)).setQuestions(questionsModelsFirst);
-        verify(questionsService).findByTopic(topicModelSecond, questionsOptions);
-        verify(topicsModels.get(1)).setQuestions(questionsModelsSecond);
+        Assert.assertSame(topicsModelsWithRelations,topicsModels);
+        verify(this.questionsService).findByTopic(this.topicsModels.get(0), this.questionsOptions);
+        verify(this.topicsModels.get(0)).setQuestions(this.questionsModelsList.get(0));
+        verify(this.questionsService).findByTopic(this.topicsModels.get(1), this.questionsOptions);
+        verify(this.topicsModels.get(1)).setQuestions(this.questionsModelsList.get(1));
     }
 
     @Test
