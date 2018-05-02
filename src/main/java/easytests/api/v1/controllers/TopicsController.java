@@ -3,6 +3,7 @@ package easytests.api.v1.controllers;
 import easytests.api.v1.mappers.TopicsMapper;
 import easytests.api.v1.models.Topic;
 import easytests.core.models.TopicModelInterface;
+import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.TopicsServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,8 @@ public class TopicsController {
 
     @GetMapping("")
     public List<Topic> list(@RequestParam(required = true) Integer subjectId) {
-        final List<TopicModelInterface> topicsModels = this.topicsService.findBySubject(subjectId);
+        final List<TopicModelInterface> topicsModels =
+                this.topicsService.findBySubject(new SubjectModelEmpty(subjectId));
 
         //todo: ACL should be there
 

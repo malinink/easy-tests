@@ -60,11 +60,6 @@ public class TopicsService implements TopicsServiceInterface {
     }
 
     @Override
-    public List<TopicModelInterface> findBySubject(Integer subjectId) {
-        return this.map(this.topicsMapper.findBySubjectId(subjectId));
-    }
-
-    @Override
     public void save(TopicModelInterface topicModel) {
         final TopicEntity topicEntity = this.map(topicModel);
         if (topicEntity.getId() == null) {
