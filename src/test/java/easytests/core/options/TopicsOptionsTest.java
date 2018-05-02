@@ -245,9 +245,7 @@ public class TopicsOptionsTest {
 
     @Test
     public void testSaveWithRelationsQuestions() throws Exception{
-
         this.withTopicModel().withQustionsModelsInjected().withQuestions();
-
         final InOrder inOrder = Mockito.inOrder(this.topicsService, this.questionsService);
 
         this.topicsOptions.saveWithRelations(this.topicModel);
@@ -258,9 +256,7 @@ public class TopicsOptionsTest {
 
     @Test
     public void testDeleteWithRelationsSubject() throws Exception{
-
         this.withTopicModel().withSubjectModelInjected().withSubject();
-
         final InOrder inOrder = Mockito.inOrder(this.topicsService, this.subjectsService);
 
         this.topicsOptions.deleteWithRelations(this.topicModel);
@@ -271,9 +267,7 @@ public class TopicsOptionsTest {
 
     @Test
     public void testDeleteWithRelationsQuestion() throws Exception{
-
         this.withTopicModel().withQustionsModelsInjected().withQuestions();
-        
         final InOrder inOrder = Mockito.inOrder(this.questionsService, this.topicsService);
 
         this.topicsOptions.deleteWithRelations(this.topicModel);
@@ -296,55 +290,28 @@ public class TopicsOptionsTest {
 
     @Test
     public void testSaveDeleteWithRelationsSubject() {
+        this.withTopicModel().withSubjectModelInjected().withSubject();
 
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final SubjectModelInterface subjectModelId = Mockito.mock(SubjectModelInterface.class);
-        given(topicModel.getSubject()).willReturn(subjectModelId);
+        this.topicsOptions.saveWithRelations(this.topicModel);
+        verify(this.topicsService).save(this.topicModel);
 
-        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setSubjectsService(subjectsService);
-        topicsOptions.setTopicsService(topicsService);
+        this.topicsOptions.deleteWithRelations(this.topicModel);
+        verify(this.topicsService).delete(this.topicModel);
 
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-        topicsOptions.withSubject(subjectsOptions);
-
-        final SubjectModelInterface subjectModel = new SubjectModel();
-        topicModel.setSubject(subjectModel);
-
-        topicsOptions.saveWithRelations(topicModel);
-        verify(topicsService).save(topicModel);
-
-        topicsOptions.deleteWithRelations(topicModel);
-        verify(topicsService).delete(topicModel);
-
-        verify(subjectsService, times(2)).save(topicModel.getSubject(), subjectsOptions);
+        verify(this.subjectsService, times(2)).save(this.topicModel.getSubject(), this.subjectsOptions);
     }
 
     @Test
     public void testSaveDeleteWithRelationsQuestion() throws Exception{
-
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setQuestionsService(questionsService);
-        topicsOptions.setTopicsService(topicsService);
-
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-        topicsOptions.withQuestions(questionsOptions);
-
-        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
-        topicModel.setQuestions(questionsModels);
-
-        topicsOptions.saveWithRelations((topicModel));
-        verify(topicsService).save(topicModel);
-
-        topicsOptions.deleteWithRelations(topicModel);
-        verify(topicsService).delete(topicModel);
+        this.withTopicModel().withQustionsModelsInjected().withQuestions();
         
-        verify(questionsService, times(2)).save(topicModel.getQuestions(), questionsOptions);
+        this.topicsOptions.saveWithRelations((this.topicModel));
+        verify(this.topicsService).save(this.topicModel);
+
+        this.topicsOptions.deleteWithRelations(this.topicModel);
+        verify(this.topicsService).delete(this.topicModel);
+        
+        verify(this.questionsService, times(2)).save(this.topicModel.getQuestions(), this.questionsOptions);
     }
 
 }
