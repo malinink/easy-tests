@@ -102,7 +102,7 @@ public class TopicsOptionsTest {
         return this;
     }
 
-    private TopicsOptionsTest withOptions(){
+    private TopicsOptionsTest withQuestions(){
         this.topicsOptions.withQuestions(this.questionsOptions);
         return this;
     }
@@ -139,7 +139,7 @@ public class TopicsOptionsTest {
     @Test
     public void testWithRelationsQuestionsOnSingleModel() throws Exception {
 
-        this.withTopicModel().withQustionsModelsFounded().withOptions();
+        this.withTopicModel().withQustionsModelsFounded().withQuestions();
 
 /*        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
         final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
@@ -165,14 +165,12 @@ public class TopicsOptionsTest {
     }
 
     @Test
-    public void testWithRelationsOnNull() throws Exception{
-
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
+    public void testWithRelationsOnNull() throws Exception {
         final TopicModelInterface nullTopicModel = null;
 
-        final TopicModelInterface topicModelWithRelations =  topicsOptions.withRelations(nullTopicModel);
+        final TopicModelInterface topicModelWithRelations =  this.topicsOptions.withRelations(nullTopicModel);
 
-        Assert.assertNull(topicModelWithRelations);
+        Assert.assertSame(null, topicModelWithRelations);
     }
 
     @Test
@@ -358,22 +356,14 @@ public class TopicsOptionsTest {
 
     @Test
     public void testWithSubject() throws Exception {
-
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-
-        final TopicsOptionsInterface topicsOptionsWithSubject = topicsOptions.withSubject(subjectsOptions);
-        Assert.assertEquals(topicsOptionsWithSubject, topicsOptions);
+        final TopicsOptionsInterface topicsOptionsWithSubject = this.topicsOptions.withSubject(this.subjectsOptions);
+        Assert.assertSame(topicsOptionsWithSubject, this.topicsOptions);
     }
 
     @Test
     public void testWithQuestions() throws Exception {
-
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-
-        final TopicsOptionsInterface topicsOptionsWithQuestions = topicsOptions.withQuestions(questionsOptions);
-        Assert.assertEquals(topicsOptionsWithQuestions, topicsOptions);
+        final TopicsOptionsInterface topicsOptionsWithQuestions = this.topicsOptions.withQuestions(this.questionsOptions);
+        Assert.assertEquals(topicsOptionsWithQuestions, this.topicsOptions);
     }
 
     @Test
