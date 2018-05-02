@@ -97,6 +97,11 @@ public class TopicsOptionsTest {
         return this;
     }
 
+    private TopicsOptionsTest withSubjectModelInjected() {
+        given(this.topicModel.getSubject()).willReturn(this.subjectModel);
+        return this;
+    }
+
     private TopicsOptionsTest withSubjectsModelsFounded() {
 
         this.subjectsModels = new ArrayList<>(2);
@@ -211,7 +216,7 @@ public class TopicsOptionsTest {
     @Test
     public void testWithRelationsQuestionsOnList() throws Exception{
         this.withTopicsList().withQuestionsModelsListFounded().withQuestions();
-        
+
         final List<TopicModelInterface> topicsModelsWithRelations =  topicsOptions.withRelations(topicsModels);
 
         Assert.assertSame(topicsModelsWithRelations,topicsModels);
@@ -222,30 +227,15 @@ public class TopicsOptionsTest {
     }
 
     @Test
-    public void testSaveWithRelationsSubject() throws Exception{
-
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final SubjectModelInterface subjectModelId = Mockito.mock(SubjectModelInterface.class);
-        given(topicModel.getSubject()).willReturn(subjectModelId);
-
-        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setSubjectsService(subjectsService);
-        topicsOptions.setTopicsService(topicsService);
-
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-        topicsOptions.withSubject(subjectsOptions);
-
-        final SubjectModelInterface subjectModel = new SubjectModel();
-        topicModel.setSubject(subjectModel);
-
+    public void testSaveWithRelationsSubject() throws Exception {
+        this.withTopicModel().withSubjectModelInjected().withSubject();
+        final ArgumentCaptor<SubjectsOptionsInterface> subjectsOptionsCaptor = ArgumentCaptor.forClass(SubjectsOptionsInterface.class);
         final InOrder inOrder = Mockito.inOrder(subjectsService, topicsService);
 
-        topicsOptions.saveWithRelations(topicModel);
+        this.topicsOptions.saveWithRelations(this.topicModel);
 
-        inOrder.verify(subjectsService).save(topicModel.getSubject(), subjectsOptions);
-        inOrder.verify(topicsService).save(topicModel);
+        inOrder.verify(this.subjectsService).save(this.topicModel.getSubject(), this.subjectsOptions);
+        inOrder.verify(this.topicsService).save(this.topicModel);
     }
 
     @Test
