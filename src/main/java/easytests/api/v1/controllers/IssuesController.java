@@ -1,11 +1,16 @@
 package easytests.api.v1.controllers;
 
-import easytests.core.mappers.IssuesMapper;
-import easytests.core.options.builder.IssuesOptionsBuilderInterface;
-import easytests.core.services.IssuesServiceInterface;
+import easytests.api.v1.mappers.IssuesMapper;
+import easytests.api.v1.models.Issue;
+import easytests.core.models.IssueModelInterface;
+import easytests.core.models.SubjectModel;
+import easytests.core.options.builder.IssuesOptionsBuilder;
+import easytests.core.services.IssuesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Yarik2308
@@ -16,10 +21,10 @@ import org.springframework.web.bind.annotation.*;
 public class IssuesController {
 
     @Autowired
-    protected IssuesServiceInterface issuesService;
+    protected IssuesService issuesService;
 
     @Autowired
-    protected IssuesOptionsBuilderInterface issuesOptions;
+    protected IssuesOptionsBuilder issuesOptions;
 
     @Autowired
     @Qualifier("IssuesMapperV1")
@@ -28,6 +33,18 @@ public class IssuesController {
     /**
      * listIssues
      */
+    @GetMapping("")
+    public List<Issue> list(@RequestParam("subjectId") int subjectId){
+        final SubjectModel subjectModel = new SubjectModel();
+        subjectModel.setId(subjectId);
+
+        final List<IssueModelInterface> issuesModels = this.issuesService.findBySubject(subjectModel);
+
+        return issuesModels
+                .stream()
+                .map(model -> this.issuesMapper.map(model, Issue.class))
+                .collect(Collectors.toList());
+    }
     /**
      * createIssue
      */
