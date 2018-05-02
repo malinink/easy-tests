@@ -247,8 +247,8 @@ public class TopicsOptionsTest {
     public void testSaveWithRelationsQuestions() throws Exception{
 
         this.withTopicModel().withQustionsModelsInjected().withQuestions();
-        
-        final InOrder inOrder = Mockito.inOrder(topicsService, questionsService);
+
+        final InOrder inOrder = Mockito.inOrder(this.topicsService, this.questionsService);
 
         this.topicsOptions.saveWithRelations(this.topicModel);
 
@@ -259,52 +259,27 @@ public class TopicsOptionsTest {
     @Test
     public void testDeleteWithRelationsSubject() throws Exception{
 
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final SubjectModelInterface subjectModelId = Mockito.mock(SubjectModelInterface.class);
-        given(topicModel.getSubject()).willReturn(subjectModelId);
+        this.withTopicModel().withSubjectModelInjected().withSubject();
 
-        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setSubjectsService(subjectsService);
-        topicsOptions.setTopicsService(topicsService);
+        final InOrder inOrder = Mockito.inOrder(this.topicsService, this.subjectsService);
 
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-        topicsOptions.withSubject(subjectsOptions);
+        this.topicsOptions.deleteWithRelations(this.topicModel);
 
-        final SubjectModelInterface subjectModel = new SubjectModel();
-        topicModel.setSubject(subjectModel);
-
-        final InOrder inOrder = Mockito.inOrder(topicsService, subjectsService);
-
-        topicsOptions.deleteWithRelations(topicModel);
-
-        inOrder.verify(topicsService).delete(topicModel);
-        inOrder.verify(subjectsService).save(topicModel.getSubject(), subjectsOptions);
+        inOrder.verify(this.topicsService).delete(this.topicModel);
+        inOrder.verify(this.subjectsService).save(this.topicModel.getSubject(), this.subjectsOptions);
     }
 
     @Test
     public void testDeleteWithRelationsQuestion() throws Exception{
 
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setQuestionsService(questionsService);
-        topicsOptions.setTopicsService(topicsService);
+        this.withTopicModel().withQustionsModelsInjected().withQuestions();
+        
+        final InOrder inOrder = Mockito.inOrder(this.questionsService, this.topicsService);
 
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-        topicsOptions.withQuestions(questionsOptions);
+        this.topicsOptions.deleteWithRelations(this.topicModel);
 
-        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
-        topicModel.setQuestions(questionsModels);
-
-        final InOrder inOrder = Mockito.inOrder(questionsService, topicsService);
-
-        topicsOptions.deleteWithRelations(topicModel);
-
-        inOrder.verify(questionsService).save(topicModel.getQuestions(), questionsOptions);
-        inOrder.verify(topicsService).delete(topicModel);
+        inOrder.verify(this.questionsService).save(this.topicModel.getQuestions(), this.questionsOptions);
+        inOrder.verify(this.topicsService).delete(this.topicModel);
     }
 
     @Test
