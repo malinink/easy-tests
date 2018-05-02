@@ -50,8 +50,6 @@ public class TopicsOptionsTest {
 
     private List<SubjectModelInterface> subjectsModels;
 
-    private SubjectModelInterface subjectModelWithId;
-
     private List<QuestionModelInterface> questionsModels;
 
     private List<List<QuestionModelInterface>> questionsModelsList;
@@ -63,7 +61,6 @@ public class TopicsOptionsTest {
     private TopicsServiceInterface topicsService;
 
 
-    private ArgumentCaptor<List> listCaptor;
 
     @Before
     public void before(){
@@ -78,8 +75,6 @@ public class TopicsOptionsTest {
         this.topicsOptions.setSubjectsService(subjectsService);
         this.topicsOptions.setQuestionsService(questionsService);
         this.topicsOptions.setTopicsService(topicsService);
-
-        this.listCaptor = ArgumentCaptor.forClass(List.class);
     }
 
     private TopicsOptionsTest withTopicModel() {
@@ -89,10 +84,10 @@ public class TopicsOptionsTest {
 
     private TopicsOptionsTest withSubjectModelFounded() {
         this.subjectModel = Mockito.mock(SubjectModelInterface.class);
-        this.subjectModelWithId = Mockito.mock(SubjectModelInterface.class);
+        SubjectModelInterface subjectModelWithId = Mockito.mock(SubjectModelInterface.class);
 
         given(this.topicModel.getSubject()).willReturn(subjectModelWithId);
-        given(this.subjectsService.find(topicModel.getSubject().getId(), this.subjectsOptions)).willReturn(subjectModel);
+        given(this.subjectsService.find(this.topicModel.getSubject().getId(), this.subjectsOptions)).willReturn(this.subjectModel);
 
         return this;
     }
@@ -103,7 +98,6 @@ public class TopicsOptionsTest {
     }
 
     private TopicsOptionsTest withSubjectsModelsFounded() {
-
         this.subjectsModels = new ArrayList<>(2);
         final SubjectModelInterface subjectModelFirst = Mockito.mock(SubjectModelInterface.class);
         final SubjectModelInterface subjectModelSecond = Mockito.mock(SubjectModelInterface.class);
@@ -173,7 +167,6 @@ public class TopicsOptionsTest {
 
     @Test
     public void testWithRelationsSubjectOnSingleModel() throws Exception {
-
         this.withTopicModel().withSubjectModelFounded().withSubject();
 
         final TopicModelInterface topicModelWithRelations =  this.topicsOptions.withRelations(this.topicModel);
@@ -185,7 +178,6 @@ public class TopicsOptionsTest {
 
     @Test
     public void testWithRelationsQuestionsOnSingleModel() throws Exception {
-
         this.withTopicModel().withQustionsModelsFounded().withQuestions();
 
         final TopicModelInterface topicModelWithRelations =  this.topicsOptions.withRelations(this.topicModel);
@@ -304,7 +296,7 @@ public class TopicsOptionsTest {
     @Test
     public void testSaveDeleteWithRelationsQuestion() throws Exception{
         this.withTopicModel().withQustionsModelsInjected().withQuestions();
-        
+
         this.topicsOptions.saveWithRelations((this.topicModel));
         verify(this.topicsService).save(this.topicModel);
 
