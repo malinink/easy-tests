@@ -33,6 +33,18 @@ public class IssuesController {
     /**
      * listIssues
      */
+    @GetMapping("")
+    public List<Issue> list(@RequestParam("subjectId") int subjectId){
+        final SubjectModel subjectModel = new SubjectModel();
+        subjectModel.setId(subjectId);
+
+        final List<IssueModelInterface> issuesModels = this.issuesService.findBySubject(subjectModel);
+
+        return issuesModels
+                .stream()
+                .map(model -> this.issuesMapper.map(model, Issue.class))
+                .collect(Collectors.toList());
+    }
     /**
      * createIssue
      */
