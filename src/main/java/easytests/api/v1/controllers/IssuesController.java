@@ -33,7 +33,7 @@ public class IssuesController {
     /**
      * listIssues
      */
-    @GetMapping("")
+    @GetMapping("/get")
     public List<Issue> list(@RequestParam("subjectId") int subjectId){
         final SubjectModel subjectModel = new SubjectModel();
         subjectModel.setId(subjectId);
