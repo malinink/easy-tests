@@ -1,7 +1,9 @@
 package easytests.api.v1.controllers;
 
+import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.mappers.IssuesMapper;
 import easytests.api.v1.models.Issue;
+import easytests.core.models.IssueModel;
 import easytests.core.models.IssueModelInterface;
 import easytests.core.models.SubjectModel;
 import easytests.core.options.builder.IssuesOptionsBuilder;
