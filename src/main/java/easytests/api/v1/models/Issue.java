@@ -12,5 +12,5 @@ public class Issue {
 
     private String name;
 
-    private Integer subject;
+    private Identity subject;
 }
