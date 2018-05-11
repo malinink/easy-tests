@@ -2,7 +2,7 @@ package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.IssuesMapper;
 import easytests.config.SwaggerRequestValidationConfig;
-import easytests.core.models.*
+import easytests.core.models.*;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesService;
 import easytests.support.JsonSupport;
