@@ -4,58 +4,21 @@ package easytests.api.v1.controllers;
  * @author Yarik2308
  */
 public class IssuesControllerTest {
+
     /**
-     * testListSuccess
+     * list
      */
     /**
-     * testListBadRequest
+     * create
      */
     /**
-     * testListPermissionDenied
+     * update
      */
     /**
-     * testListSubjectIdNotFound
+     * show(issueId)
      */
     /**
-     * testCreateSuccess
+     * delete(issueId)
      */
-    /**
-     * testCreateWithId
-     */
-    /**
-     * testCreateBadRequest
-     */
-    /**
-     * testCreatePermissionDenied
-     */
-    /**
-     * testUpdateSuccess
-     */
-    /**
-     * testUpdateBadRequest
-     */
-    /**
-     * testUpdatePermissionDenied
-     */
-    /**
-     * testShowByIdSuccess
-     */
-    /**
-     * testShowByIdBadRequest
-     */
-    /**
-     * testShowByIdIssueNotFound
-     */
-    /**
-     * testDeleteByIdSuccess
-     */
-    /**
-     * testDeleteByIdBadRequest
-     */
-    /**
-     * testDeleteByIdPermissionDenied
-     */
-    /**
-     * testDeleteByIdIssueNotFound
-     */
+
 }
