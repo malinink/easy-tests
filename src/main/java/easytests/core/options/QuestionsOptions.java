@@ -65,7 +65,7 @@ public class QuestionsOptions implements QuestionsOptionsInterface {
         }
         if (this.questionTypesOptions != null) {
             questionModel.setQuestionType(
-                    this.questionTypesService.find(questionModel.getQuestionType().getId(), questionTypesOptions));
+                    this.questionTypesService.find(questionModel.getQuestionType().getId(), this.questionTypesOptions));
         }
         return questionModel;
     }

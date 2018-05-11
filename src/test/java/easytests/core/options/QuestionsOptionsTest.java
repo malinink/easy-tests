@@ -7,6 +7,7 @@ import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.QuestionTypesServiceInterface;
 import easytests.support.QuestionsSupport;
 import easytests.support.TopicsSupport;
+import easytests.support.QuestionTypesSupport;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -24,7 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 
 /**
- * @author Risa_Magpie
+ * @author RisaMagpie
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,6 +34,8 @@ public class QuestionsOptionsTest {
     private QuestionsSupport questionsSupport = new QuestionsSupport();
 
     private TopicsSupport topicsSupport = new TopicsSupport();
+
+    private QuestionTypesSupport questionTypesSupport = new QuestionTypesSupport();
 
     private QuestionsOptionsInterface questionsOptions;
 
@@ -92,6 +95,11 @@ public class QuestionsOptionsTest {
         return this;
     }
 
+    private QuestionsOptionsTest withQuestionTypeModel() {
+        this.questionTypeModel = this.questionTypesSupport.getModelFixtureMock(0);
+        return this;
+    }
+
     private QuestionsOptionsTest withAnswersModelsFounded() {
         this.answersModels = new ArrayList<>();
         when(this.answersService.findByQuestion(this.questionModel, this.answersOptions)).thenReturn(this.answersModels);
@@ -124,10 +132,10 @@ public class QuestionsOptionsTest {
         return this;
     }
 
-   /* private QuestionsOptionsTest withRelationsInList() {
+    private QuestionsOptionsTest withRelationsInList() {
         this.questionsOptions.withRelations(this.questionsModels);
         return this;
-    }*/
+    }
 
     private QuestionsOptionsTest withQuestionsList() {
         this.questionsModels = new ArrayList<>(2);
@@ -157,6 +165,7 @@ public class QuestionsOptionsTest {
         return this;
     }
 
+
     @Test
     public void testWithNoRelations() throws Exception {
         this.withQuestionModel().withAnswersModelsFounded();
@@ -181,6 +190,36 @@ public class QuestionsOptionsTest {
         verify(this.questionModel, times(1)).setAnswers(this.listCaptor.capture());
         Assert.assertSame(this.answersModels, this.listCaptor.getValue());
     }
+
+    //this method:&&&
+
+    @Test
+    public void testWithTopicRelations() throws Exception {
+        this.withQuestionModel().withTopicModelInjected().withTopic();
+        final ArgumentCaptor<TopicModelInterface> topicModelCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
+
+        this.questionModel = this.questionsSupport.getModelFixtureMock(0);//почему без этой строки следующая строка хватает null? Ведь это то же самое что и в withQuestionModel() метод.
+
+        final QuestionModelInterface questionModelWithRelations = this.questionsOptions.withRelations(this.questionModel);
+
+        Assert.assertSame(questionModel, questionModelWithRelations);
+        verify(this.topicsService, times(1)).find(this.questionModel.getTopic().getId(),this.topicsOptions);
+        verify(this.questionModel, times(1)).setTopic(topicModelCaptor.capture());
+        Assert.assertSame(this.topicModel, topicModelCaptor.getValue());
+    }
+/*
+    @Test
+    public void testWithQuestionTypeRelations() throws Exception {
+        this.withQuestionModel().withQuestionTypeModelInjected().withQuestionType();
+        final ArgumentCaptor<QuestionTypeModelInterface> questionTypeModelCaptor = ArgumentCaptor.forClass(QuestionTypeModelInterface.class);
+        this.questionModel = this.questionsSupport.getModelFixtureMock(0);
+        final QuestionModelInterface questionModelWithRelations = this.questionsOptions.withRelations(this.questionModel);
+
+        Assert.assertSame(questionModel, questionModelWithRelations);
+        verify(this.questionTypesService, times(1)).find(this.questionModel.getQuestionType().getId(),this.questionTypesOptions);
+        verify(this.questionModel, times(1)).setQuestionType(questionTypeModelCaptor.capture());
+        Assert.assertSame(this.topicModel, questionTypeModelCaptor.getValue());
+    }*/
 
     @Test
     public void testWithRelationsOnNull() throws Exception {
