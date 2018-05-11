@@ -54,16 +54,16 @@ public class IssuesController {
                 .collect(Collectors.toList());
     }
     /**
-     * createIssue
+     * create
      */
     /**
-     * updateIssue
+     * update
      */
     /**
-     * showIssueById
+     * show(issueId)
      */
     /**
-     * deleteIssueById
+     * delete(issueId)
      */
 
 }

@@ -82,54 +82,15 @@ public class IssuesControllerTest {
                 .andReturn();
     }
     /**
-     * testListBadRequest
+     * create
      */
     /**
-     * testListPermissionDenied
+     * update
      */
     /**
-     * testListSubjectIdNotFound
+     * show(issueId)
      */
     /**
-     * testCreateSuccess
-     */
-    /**
-     * testCreateWithId
-     */
-    /**
-     * testCreateBadRequest
-     */
-    /**
-     * testCreatePermissionDenied
-     */
-    /**
-     * testUpdateSuccess
-     */
-    /**
-     * testUpdateBadRequest
-     */
-    /**
-     * testUpdatePermissionDenied
-     */
-    /**
-     * testShowByIdSuccess
-     */
-    /**
-     * testShowByIdBadRequest
-     */
-    /**
-     * testShowByIdIssueNotFound
-     */
-    /**
-     * testDeleteByIdSuccess
-     */
-    /**
-     * testDeleteByIdBadRequest
-     */
-    /**
-     * testDeleteByIdPermissionDenied
-     */
-    /**
-     * testDeleteByIdIssueNotFound
+     * delete(issueId)
      */
 }
