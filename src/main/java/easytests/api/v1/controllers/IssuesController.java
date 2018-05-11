@@ -12,7 +12,6 @@ import easytests.core.services.SubjectsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,16 +54,16 @@ public class IssuesController {
                 .collect(Collectors.toList());
     }
     /**
-     * create
+     * createIssue
      */
     /**
-     * update
+     * updateIssue
      */
     /**
-     * show(issueId)
+     * showIssueById
      */
     /**
-     * delete(issueId)
+     * deleteIssueById
      */
 
 }
