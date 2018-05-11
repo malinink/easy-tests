@@ -109,7 +109,7 @@ public class ObjectsController extends AbstractController {
         /*
          * Show how to check access
          */
-        if (this.acl.hasAccess(userModel)) {
+        if (!this.acl.hasAccess(userModel)) {
             throw new ForbiddenException();
         }
         return this.objectsMapper.map(userModel, Object.class);
