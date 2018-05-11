@@ -6,9 +6,6 @@ import easytests.core.models.TopicModelInterface;
 import easytests.core.models.UserModelInterface;
 import easytests.core.services.UsersServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 
@@ -16,58 +13,47 @@ import org.springframework.stereotype.Service;
  * @author malinink
  */
 @Service
-public class AccessControlLayerService {
+public class AccessControlLayerService implements AccessControlLayerServiceInterface {
+
     @Autowired
     protected UsersServiceInterface usersService;
 
-    private Boolean userModelFetched = false;
+    @Autowired
+    private SessionServiceInterface sessionService;
 
-    private UserModelInterface userModel;
-
-    private Boolean hasAccess(SubjectModelInterface subjectModel, UserModelInterface userModel) {
-        return this.isUser(userModel) && subjectModel.getUser().getId().equals(this.getUserModel().getId());
+    @Override
+    public Boolean hasAccess(UserModelInterface source) {
+        return this.hasAccess(source, this.sessionService.getUserModel());
     }
 
-    public Boolean hasAccess(SubjectModelInterface subjectModel) {
-        return this.hasAccess(subjectModel, this.getUserModel());
+    private Boolean hasAccess(UserModelInterface source, UserModelInterface userModel) {
+        return userModel != null && source.getId().equals(userModel.getId());
     }
 
-    private Boolean hasAccess(TopicModelInterface topicModel, UserModelInterface userModel) {
-        return this.hasAccess(topicModel.getSubject(), userModel);
+    @Override
+    public Boolean hasAccess(SubjectModelInterface source) {
+        return this.hasAccess(source, this.sessionService.getUserModel());
     }
 
-    public Boolean hasAccess(TopicModelInterface topicModel) {
-        return this.hasAccess(topicModel, this.getUserModel());
+    private Boolean hasAccess(SubjectModelInterface source, UserModelInterface userModel) {
+        return userModel != null && source.getUser().getId().equals(userModel.getId());
     }
 
-    private Boolean hasAccess(QuestionModelInterface questionModel, UserModelInterface userModel) {
-        return this.hasAccess(questionModel.getTopic(), userModel);
+    @Override
+    public Boolean hasAccess(TopicModelInterface source) {
+        return this.hasAccess(source, this.sessionService.getUserModel());
     }
 
-    public Boolean hasAccess(QuestionModelInterface questionModel) {
-        return this.hasAccess(questionModel, this.getUserModel());
+    private Boolean hasAccess(TopicModelInterface source, UserModelInterface userModel) {
+        return this.hasAccess(source.getSubject(), userModel);
     }
 
-    private Boolean isUser(UserModelInterface userModel) {
-        return userModel != null;
+    @Override
+    public Boolean hasAccess(QuestionModelInterface source) {
+        return this.hasAccess(source, this.sessionService.getUserModel());
     }
 
-    private Boolean isUser() {
-        return this.isUser(this.getUserModel());
-    }
-
-    /**
-     * TODO decide where that method should be?
-     * @return UserModelInterface
-     */
-    public UserModelInterface getUserModel() {
-        if (!this.userModelFetched) {
-            final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (!(authentication instanceof AnonymousAuthenticationToken)) {
-                this.userModel = usersService.findByEmail(authentication.getName());
-            }
-            this.userModelFetched = true;
-        }
-        return this.userModel;
+    private Boolean hasAccess(QuestionModelInterface source, UserModelInterface userModel) {
+        return this.hasAccess(source.getTopic(), userModel);
     }
 }
