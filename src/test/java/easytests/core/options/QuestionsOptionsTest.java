@@ -124,10 +124,10 @@ public class QuestionsOptionsTest {
         return this;
     }
 
-    private QuestionsOptionsTest withRelationsInList() {
+   /* private QuestionsOptionsTest withRelationsInList() {
         this.questionsOptions.withRelations(this.questionsModels);
         return this;
-    }
+    }*/
 
     private QuestionsOptionsTest withQuestionsList() {
         this.questionsModels = new ArrayList<>(2);
