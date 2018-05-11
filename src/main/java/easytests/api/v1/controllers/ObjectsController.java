@@ -1,9 +1,6 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.exceptions.BadRequestException;
-import easytests.api.v1.exceptions.IdentifiedModelException;
-import easytests.api.v1.exceptions.NotFoundException;
-import easytests.api.v1.exceptions.UnidentifiedModelException;
+import easytests.api.v1.exceptions.*;
 import easytests.api.v1.mappers.ObjectsMapper;
 import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.Object;
@@ -28,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController("ObjectsControllerV1")
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/objects")
-public class ObjectsController {
+public class ObjectsController extends AbstractController {
 
     @Autowired
     protected UsersServiceInterface usersService;
@@ -65,14 +62,14 @@ public class ObjectsController {
             throw new BadRequestException("subjects must be absent");
         }
 
-        /**
+        /*
          * We need to check for email existence in usersService
          * TODO
          */
 
         final UserModelInterface userModel = this.objectsMapper.map(object, UserModel.class);
 
-        /**
+        /*
          * Temporary set password cause it must be not null
          */
         userModel.setPassword("");
@@ -91,7 +88,7 @@ public class ObjectsController {
             throw new BadRequestException("subjects must be absent");
         }
 
-        /**
+        /*
          * We need to check for email existence in usersService
          * TODO
          */
@@ -104,11 +101,17 @@ public class ObjectsController {
     }
 
     @GetMapping("/{userId}")
-    public Object show(@PathVariable Integer userId) throws NotFoundException {
+    public Object show(@PathVariable Integer userId) throws NotFoundException, ForbiddenException {
         final UserModelInterface userModel = this.getUserModel(
             userId,
             (new UsersOptions()).withSubjects(new SubjectsOptions())
         );
+        /*
+         * Show how to check access
+         */
+        if (this.acl.hasAccess(userModel)) {
+            throw new ForbiddenException();
+        }
         return this.objectsMapper.map(userModel, Object.class);
     }
 
