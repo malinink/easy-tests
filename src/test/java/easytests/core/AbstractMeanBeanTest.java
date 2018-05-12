@@ -53,6 +53,10 @@ public class AbstractMeanBeanTest {
             {
                     UserModelInterface.class,
                     new UserModelFactory()
+            },
+            {
+                    QuestionModelInterface.class,
+                    new QuestionModelFactory()
             }
     };
 
