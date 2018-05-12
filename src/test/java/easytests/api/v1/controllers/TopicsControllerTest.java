@@ -23,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,8 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TopicsControllerTest {
     private static final String id = "id";
     private static final String name = "name";
-    private static final String subjectId = "subjectId";
-    private static final String subjects = "subjects";
+    private static final String subject = "subject";
 
     @Autowired
     private MockMvc mvc;
@@ -62,6 +60,14 @@ public class TopicsControllerTest {
         });
         when(this.topicsService.findBySubject(any(SubjectModelInterface.class))).thenReturn(topicsModels);
 
+        String myJson = new JsonSupport()
+                .with(id, topicsModels.get(0).getId())
+                .with(name, topicsModels.get(0).getName())
+                .with(subject, new JsonSupport()
+                        .with(id, topicsModels.get(0).getSubject().getId())
+                )
+                .build();
+
         mvc.perform(get("/v1/topics")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()) //todo: test has failed this line
@@ -70,12 +76,16 @@ public class TopicsControllerTest {
                         .with(new JsonSupport()
                                 .with(id, topicsModels.get(0).getId())
                                 .with(name, topicsModels.get(0).getName())
-                                .with(subjectId, topicsModels.get(0).getSubject().getId())
+                                .with(subject, new JsonSupport()
+                                        .with(id, topicsModels.get(0).getSubject().getId())
+                                )
                         )
                         .with(new JsonSupport()
                                 .with(id, topicsModels.get(1).getId())
                                 .with(name, topicsModels.get(1).getName())
-                                .with(subjectId, topicsModels.get(1).getSubject().getId())
+                                .with(subject, new JsonSupport()
+                                        .with(id, topicsModels.get(0).getSubject().getId())
+                                )
                         )
                         .build()
                 ))
