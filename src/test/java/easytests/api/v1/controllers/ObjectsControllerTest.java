@@ -1,6 +1,7 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.ObjectsMapper;
+import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.options.UsersOptions;
@@ -50,6 +51,9 @@ public class ObjectsControllerTest {
     private UsersService usersService;
 
     @MockBean
+    private AccessControlLayerServiceInterface acl;
+
+    @MockBean
     private UsersOptionsBuilder usersOptionsBuilder;
 
     private UsersSupport usersSupport = new UsersSupport();
@@ -61,7 +65,7 @@ public class ObjectsControllerTest {
         final List<UserModelInterface> usersModels = new ArrayList<>();
         IntStream.range(0, 2).forEach(idx -> {
             final UserModel userModel = new UserModel();
-            userModel.map(this.usersSupport.getEntityFixtureMock(1));
+            userModel.map(this.usersSupport.getEntityFixtureMock(idx));
             usersModels.add(userModel);
         });
         when(this.usersService.findAll()).thenReturn(usersModels);
@@ -231,6 +235,7 @@ public class ObjectsControllerTest {
         userModel.map(this.usersSupport.getEntityFixtureMock(0));
         when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
         when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(userModel);
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
 
         mvc.perform(get("/v1/objects/1")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -250,13 +255,28 @@ public class ObjectsControllerTest {
     }
 
     @Test
-    public void testShowFailed() throws Exception {
+    public void testShowNotFound() throws Exception {
         when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
         when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(null);
 
         mvc.perform(get("/v1/objects/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowForbidden() throws Exception {
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(this.usersSupport.getEntityFixtureMock(0));
+        when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
+        when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(userModel);
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
+
+        mvc.perform(get("/v1/objects/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
                 .andReturn();
     }
@@ -274,6 +294,7 @@ public class ObjectsControllerTest {
         userModel.setSubjects(subjectsModels);
         when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
         when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(userModel);
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
 
         mvc.perform(get("/v1/objects/1")
                 .contentType(MediaType.APPLICATION_JSON))
