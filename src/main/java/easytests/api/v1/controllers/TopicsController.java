@@ -6,16 +6,14 @@ import easytests.core.models.TopicModelInterface;
 import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.TopicsServiceInterface;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author lelay
