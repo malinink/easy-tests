@@ -7,7 +7,7 @@ import org.meanbean.test.ConfigurationBuilder;
 
 
 /**
- * @author nikitalpopov
+ * @author AnyaMaz
  */
 public class PointModelTest extends AbstractModelTest {
 
@@ -15,9 +15,7 @@ public class PointModelTest extends AbstractModelTest {
 
     @Override
     protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder()
-                .ignoreProperty("question")
-                .ignoreProperty("quiz");
+            return super.getConfigurationBuilder();
     }
 
     @Test
