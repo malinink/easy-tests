@@ -63,7 +63,7 @@ public class IssuesControllerTest {
 
         when(this.issuesService.findBySubject(subjectModel)).thenReturn(issuesModels);
 
-        mvc.perform(get("/v1/issues")
+        mvc.perform(get("/v1/issues/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
