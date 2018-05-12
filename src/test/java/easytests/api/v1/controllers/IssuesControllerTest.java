@@ -54,7 +54,6 @@ public class IssuesControllerTest {
         IntStream.range(0, 2).forEach(idx -> {
             final IssueModel issueModel = new IssueModel();
             issueModel.map(this.issueSupport.getEntityFixtureMock(idx));
-            //Is it fine to use issues with different subject ID??
             issuesModels.add(issueModel);
         });
 
@@ -63,20 +62,21 @@ public class IssuesControllerTest {
 
         when(this.issuesService.findBySubject(subjectModel)).thenReturn(issuesModels);
 
-        mvc.perform(get("/v1/issues/1")
-                .contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/v1/issues")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content().json(new JsonSupport()
+                        .with(subject, 1)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(new JsonSupport()
                         .with(new JsonSupport()
                                 .with(id, issuesModels.get(0).getId())
                                 .with(name, issuesModels.get(0).getName())
-                                .with(subject, issuesModels.get(0).getSubject().getId()))
-                        // Is it fine to return subject id? When we have "Identity" in Issue.
+                                .with(subject, new JsonSupport().with(issuesModels.get(0).getSubject().getId())))
                         .with(new JsonSupport()
                                 .with(id, issuesModels.get(1).getId())
                                 .with(name, issuesModels.get(1).getName())
-                                .with(subject, issuesModels.get(1).getSubject().getId()))
+                                .with(subject, new JsonSupport().with(issuesModels.get(1).getSubject().getId())))
                         .build()
                 ))
                 .andReturn();
