@@ -4,7 +4,6 @@ import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.models.UserModelInterface;
-import easytests.core.services.UsersServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AccessControlLayerService implements AccessControlLayerServiceInterface {
-
-    @Autowired
-    protected UsersServiceInterface usersService;
 
     @Autowired
     private SessionServiceInterface sessionService;

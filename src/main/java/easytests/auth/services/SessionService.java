@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SessionService implements SessionServiceInterface {
+
     @Autowired
     protected UsersServiceInterface usersService;
 
