@@ -39,7 +39,7 @@ public class TopicsControllerTest {
     private static final String name = "name";
     private static final String subject = "subject";
     private static final String subjectId = "subjectId";
-    private static final String subjectIdParam = "2";
+    private static final String subjectIdParamValue = "2";
 
     @Autowired
     private MockMvc mvc;
@@ -71,8 +71,9 @@ public class TopicsControllerTest {
                 .build();
 
         mvc.perform(get("/v1/topics")
-                .param(subjectId, subjectIdParam)
-                .contentType(MediaType.APPLICATION_JSON))
+                .param(subjectId, subjectIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isOk()) //todo: test has failed this line
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(new JsonSupport()

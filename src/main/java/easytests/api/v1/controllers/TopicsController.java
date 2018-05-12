@@ -34,7 +34,7 @@ public class TopicsController {
     private TopicsMapper topicsMapper;
 
     @GetMapping("")
-    public List<Topic> list(@RequestParam(required = true) Integer subjectId) {
+    public List<Topic> list(@RequestParam(name = "subjectId", required = true) Integer subjectId) {
         final List<TopicModelInterface> topicsModels =
                 this.topicsService.findBySubject(new SubjectModelEmpty(subjectId));
 
