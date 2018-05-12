@@ -47,7 +47,7 @@ public class IssueStandardTopicPrioritySupport {
             {
                 // for update entity with id = 1
                 1,
-                1,
+                5,
                 false,
                 2
             }
