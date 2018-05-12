@@ -1,21 +1,18 @@
 package easytests.api.v1.models;
 
 import lombok.Data;
-import java.util.List;
 
 
 /**
  * @author RisaMagpie
  */
 @Data
-public class Question {
+public class AdminAnswer {
     private Integer id;
 
     private String text;
 
-    private Integer type;
+    private Boolean isRight;
 
-    private Identity topic;
-
-    private List<Identity> answers;
+    private Integer number;
 }
