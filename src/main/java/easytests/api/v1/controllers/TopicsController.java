@@ -27,7 +27,7 @@ public class TopicsController {
     protected TopicsServiceInterface topicsService;
 
     @Autowired
-    private TopicsOptionsBuilderInterface topicsOptions;
+    private TopicsOptionsBuilderInterface topicsOptionsBuilder;
 
     @Autowired
     @Qualifier("TopicsMapperV1")
