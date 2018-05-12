@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @author malinink
  */
-@SuppressWarnings("checkstyle:MultipleStringLiterals")
 public class AbstractController {
 
     @Autowired
