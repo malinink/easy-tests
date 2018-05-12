@@ -17,17 +17,17 @@ public class IssueSupport {
     protected static Object[][] fixtures = new Object[][]{
             {
                     1,
-                    "Issue1",
+                    "Name1",
                     1
             },
             {
                     2,
-                    "Issue2",
+                    "Name2",
                     2
             },
             {
                     3,
-                    "Issue3",
+                    "Name3",
                     3
             },
     };
@@ -43,7 +43,7 @@ public class IssueSupport {
                     // for update entity with id = 1
                     1,
                     "newIssue",
-                    1
+                    2
             },
     };
 
@@ -117,7 +117,6 @@ public class IssueSupport {
             Assert.assertEquals(expected.getId(), actual.getId());
         }
         Assert.assertEquals(expected.getName(), actual.getName());
-        Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getSubjectId(), actual.getSubjectId());
     }
 
@@ -134,7 +133,6 @@ public class IssueSupport {
             Assert.assertNotEquals(unexpected.getId(), actual.getId());
         }
         Assert.assertNotEquals(unexpected.getName(), actual.getName());
-        Assert.assertNotEquals(unexpected.getId(), actual.getId());
         Assert.assertNotEquals(unexpected.getSubjectId(), actual.getSubjectId());
     }
 
@@ -155,7 +153,6 @@ public class IssueSupport {
 
     public void assertEquals(IssueEntity expected, IssueModelInterface actual) {
         assertEquals(actual, expected);
-        //Assert.assertEquals(new ModelsListEmptyTest(), actual.getQuizzes());
     }
 
     public void assertModelsListEquals(List<IssueModelInterface> expected, List<IssueModelInterface> actual) {

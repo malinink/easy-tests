@@ -5,10 +5,10 @@ import easytests.support.IssueSupport;
 import org.junit.Test;
 import org.meanbean.test.ConfigurationBuilder;
 
+
 /**
  * @author greenbarrow
  */
-
 public class IssueModelTest extends AbstractModelTest {
 
     private IssueSupport issueSupport = new IssueSupport();
@@ -16,7 +16,6 @@ public class IssueModelTest extends AbstractModelTest {
     @Override
     protected ConfigurationBuilder getConfigurationBuilder() {
         return super.getConfigurationBuilder()
-                .ignoreProperty("quizzes")
                 .ignoreProperty("subject");
     }
 
