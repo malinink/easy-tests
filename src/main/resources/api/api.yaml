@@ -777,6 +777,74 @@ paths:
   #
   # Quizzes
   #
+  /v1/quizzes:
+      parameters:
+        - name: issueId
+          in: query
+          required: true
+          description: Id of the specific Issue
+          type: integer
+          format: int64
+      get:
+        summary: Retrieve list of all Quizzes by Issue with specified ID
+        operationId: listQuizzes
+        tags:
+          - Quizzes
+        responses:
+          '200':
+            description: An array of founded Quizzes
+            schema:
+              $ref: '#/definitions/V1Quizzes'
+          '400':
+            description: The specified Issue ID is invalid (not a number)
+            schema:
+                $ref: '#/definitions/V1Error'
+          '403':
+            description: Permission denied
+            schema:
+              $ref: '#/definitions/V1Error'
+          '404':
+            description: The specified Quiz was not found in this Issue
+            schema:
+              $ref: '#/definitions/V1Error'
+          default:
+              description: Unexpected error
+              schema:
+                $ref: '#/definitions/V1Error'
+  /v1/quizzes/{quizId}:
+    parameters:
+      - name: quizId
+        in: path
+        required: true
+        description: Id of the specified Quiz
+        type: integer
+        format: int64
+    get:
+      summary: Retrieve Quiz with specified ID
+      operationId: quizById
+      tags:
+         - Quizzes
+      responses:
+         '200':
+           description: Quiz with specified ID
+           schema:
+             $ref: '#/definitions/V1Quiz'
+         '400':
+           description: The specified Quiz ID is invalid (not a number)
+           schema:
+             $ref: '#/definitions/V1Error'
+         '403':
+           description: Permission denied
+           schema:
+             $ref: '#/definitions/V1Error'
+         '404':
+           description: The specified Quiz ID was not found
+           schema:
+             $ref: '#/definitions/V1Error'
+         default:
+           description: Unexpected error
+           schema:
+             $ref: '#/definitions/V1Error'
   #
   # Points
   #
@@ -1087,6 +1155,73 @@ definitions:
   #
   # Quizzes
   #
+  V1Quiz:
+      required:
+        - id
+        - codeExpired
+      properties:
+        id:
+          type: integer
+          format: int64
+        inviteCode:
+          type: string
+        codeExpired:
+          type: boolean
+        startedAt:
+          type: string
+          format: date-time
+        finishedAt:
+          type: string
+          format: date-time
+        testee:
+          $ref: '#/definitions/V1Testee'
+      example:
+        id: 1
+        inviteCode: 1
+        codeExpired: false
+        startedAt: '2018-03-11T23:20:50'
+        finishedAt: '2018-03-11T23:30:50'
+        testee:
+          $ref: '#/definitions/V1Testee'
+  V1Quizzes:
+    type: array
+    items:
+      $ref: '#/definitions/V1Quiz'
+  V1Testee:
+    required:
+      - id
+      - firstName
+      - lastName
+      - surname
+      - groupNumber
+      - quiz
+    properties:
+      id:
+        type: integer
+        format: int64
+      firstName:
+        type: string
+      lastName:
+        type: string
+      surname:
+        type: string
+      groupNumber:
+        type: integer
+        format: int64
+      quiz:
+        $ref: '#/definitions/V1Identity'
+    example:
+      id: 1
+      firstName: 'Ivan'
+      lastName: 'Ivanovich'
+      surname: 'Ivanov'
+      groupNumber: 1
+      quiz:
+        $ref: '#/definitions/V1Identity'
+  V1Testees:
+    type: array
+    items:
+      $ref: '#/definitions/V1Testee'
   #
   # Points
   #
