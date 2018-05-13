@@ -70,8 +70,7 @@ public class TopicsControllerTest {
                 )
                 .build();
 
-        mvc.perform(get("/v1/topics")
-                .param(subjectId, subjectIdParamValue)
+        mvc.perform(get("/v1/topics?subjectId={subjectIdParamValue}", subjectIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk()) //todo: test has failed this line
