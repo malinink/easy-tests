@@ -5,6 +5,7 @@ import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesService;
+import easytests.support.IssueSupport;
 import easytests.support.JsonSupport;
 import easytests.support.SubjectsSupport;
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -35,6 +38,10 @@ public class IssuesControllerTest {
     private static String name = "name";
 
     private static String subject = "subject";
+
+    private static String subjectId = "subjectId";
+
+    private static Integer subjectIdParamValue = 1;
 
     @Autowired
     private MockMvc mvc;
@@ -58,25 +65,24 @@ public class IssuesControllerTest {
         });
 
         final SubjectModel subjectModel = new SubjectModel();
-        subjectModel.setId(1);
+        subjectModel.setId(subjectIdParamValue);
 
         when(this.issuesService.findBySubject(subjectModel)).thenReturn(issuesModels);
 
-        mvc.perform(get("/v1/issues")
+        this.mvc.perform(get("/v1/issues?subjectId={subjectIdParamValue}", subjectIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content().json(new JsonSupport()
-                        .with(subject, 1)))
+        )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(new JsonSupport()
                         .with(new JsonSupport()
                                 .with(id, issuesModels.get(0).getId())
                                 .with(name, issuesModels.get(0).getName())
-                                .with(subject, new JsonSupport().with(issuesModels.get(0).getSubject().getId())))
+                                .with(subject, new JsonSupport().with(id, issuesModels.get(0).getSubject().getId())))
                         .with(new JsonSupport()
                                 .with(id, issuesModels.get(1).getId())
                                 .with(name, issuesModels.get(1).getName())
-                                .with(subject, new JsonSupport().with(issuesModels.get(1).getSubject().getId())))
+                                .with(subject, new JsonSupport().with(id, issuesModels.get(1).getSubject().getId())))
                         .build()
                 ))
                 .andReturn();
