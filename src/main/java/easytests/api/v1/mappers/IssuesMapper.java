@@ -18,7 +18,8 @@ public class IssuesMapper extends ModelMapper {
                 .addMappings(
                         mapper -> mapper.when(
                                 context -> !(context.getSource() instanceof ModelsListEmpty)
-                        ).map(IssueModel::getSubject, Issue::setSubject)
+                        ).<Integer>map(IssueModel -> IssueModel.getSubject().getId(),
+                                (Issue, id) -> Issue.getSubject().setId(id))
                 );
     }
 }
