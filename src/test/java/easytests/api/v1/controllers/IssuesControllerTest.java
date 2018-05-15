@@ -4,12 +4,9 @@ import easytests.api.v1.mappers.IssuesMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
-import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
-import easytests.core.services.SubjectsServiceInterface;
 import easytests.support.IssueSupport;
 import easytests.support.JsonSupport;
-import easytests.support.SubjectsSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
@@ -41,21 +38,11 @@ public class IssuesControllerTest {
     @MockBean
     private IssuesServiceInterface issuesService;
 
-    @MockBean
-    private SubjectsServiceInterface subjectsService;
-
-    @MockBean
-    private IssuesMapper issuesMapper;
 
     @MockBean
     private AccessControlLayerServiceInterface acl;
 
-    @MockBean
-    private IssuesOptionsBuilder issuesOptionsBuilder;
-
     private IssueSupport issueSupport = new IssueSupport();
-
-    private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
     /**
      * list
@@ -119,6 +106,27 @@ public class IssuesControllerTest {
                 .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
                 .andReturn();
+    }
+
+    @Test
+    public void testUpdateBadRequest() throws Exception {
+        final IssueModelInterface issueModel = issueSupport.getModelFixtureMock(0);
+
+        when(this.issuesService.find(any(), any())).thenReturn(issueModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+
+        mvc.perform(put("/v1/issues")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 1)
+                        .with(name, "newIssue")
+                        .with(subject, 2)
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+
     }
     /**
      * show(issueId)
