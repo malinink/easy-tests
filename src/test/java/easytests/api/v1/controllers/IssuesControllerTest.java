@@ -38,7 +38,6 @@ public class IssuesControllerTest {
     private static String id = "id";
     private static String name = "name";
     private static String subject = "subject";
-    private static String subjectId = "subjectId";
 
     @Autowired
     private MockMvc mvc;
@@ -134,7 +133,6 @@ public class IssuesControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(""))
                 .andReturn();
-
     }
     /**
      * create
