@@ -54,10 +54,7 @@ public class IssuesController extends AbstractController{
 
         final List<IssueModelInterface> issuesModels = this.issuesService
                 .findBySubject(new SubjectModelEmpty(subjectId));
-
-        if(issuesModels == null) {
-            throw new NotFoundException();
-        }
+        
 
         return issuesModels
                 .stream()
