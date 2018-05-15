@@ -86,6 +86,20 @@ public class IssuesControllerTest {
         verify(this.issuesService, times(1)).save(issueModel);
     }
 
+    @Test
+    public void testUpdateNotFound() throws Exception {
+        mvc.perform(put("/v1/issues")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 5)
+                        .with(name, "newIssue")
+                        .with(subject, new JsonSupport().with(id, 2))
+                        .build()
+                ))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
     /**
      * show(issueId)
      */
