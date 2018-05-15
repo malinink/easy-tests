@@ -17,5 +17,5 @@ public class Question {
 
     private Identity topic;
 
-    private List<Identity> answers;
+    private List<AdminAnswer> answers;
 }
