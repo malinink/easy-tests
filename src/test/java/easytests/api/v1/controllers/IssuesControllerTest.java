@@ -100,6 +100,26 @@ public class IssuesControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
+
+    @Test
+    public void testUpdateForbidden() throws Exception {
+        final IssueModelInterface issueModel = issueSupport.getModelFixtureMock(0);
+
+        when(this.issuesService.find(any(), any())).thenReturn(issueModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+
+        mvc.perform(put("/v1/issues")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 5)
+                        .with(name, "newIssue")
+                        .with(subject, new JsonSupport().with(id, 2))
+                        .build()
+                ))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
     /**
      * show(issueId)
      */
