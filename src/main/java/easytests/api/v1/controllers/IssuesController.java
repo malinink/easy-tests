@@ -1,6 +1,5 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.mappers.IssuesMapper;
 import easytests.api.v1.models.Issue;
@@ -54,7 +53,6 @@ public class IssuesController extends AbstractController{
 
         final List<IssueModelInterface> issuesModels = this.issuesService
                 .findBySubject(new SubjectModelEmpty(subjectId));
-
 
         return issuesModels
                 .stream()

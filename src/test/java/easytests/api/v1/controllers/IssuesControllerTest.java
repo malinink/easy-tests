@@ -6,7 +6,6 @@ import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.IssuesOptionsBuilder;
-import easytests.core.services.IssuesService;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.support.IssueSupport;
@@ -98,7 +97,6 @@ public class IssuesControllerTest {
 
     @Test
     public void testListNotFound() throws Exception {
-
         int subjectIdParamValue = 5;
 
         this.mvc.perform(get("/v1/issues?subjectId={subjectIdParamValue}", subjectIdParamValue)
@@ -129,6 +127,7 @@ public class IssuesControllerTest {
     @Test
     public void testListSubjectIdNotInt() throws Exception {
         String subjectIdParamValue ="abc";
+
         this.mvc.perform(get("/v1/issues?subjectId={subjectIdParamValue}", subjectIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON)
         )
