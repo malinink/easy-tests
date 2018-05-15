@@ -54,7 +54,7 @@ public class IssuesController extends AbstractController{
 
         final List<IssueModelInterface> issuesModels = this.issuesService
                 .findBySubject(new SubjectModelEmpty(subjectId));
-        
+
 
         return issuesModels
                 .stream()

@@ -1,11 +1,14 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.IssuesMapper;
+import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesService;
+import easytests.core.services.IssuesServiceInterface;
+import easytests.core.services.SubjectsServiceInterface;
 import easytests.support.IssueSupport;
 import easytests.support.JsonSupport;
 import easytests.support.SubjectsSupport;
@@ -37,13 +40,18 @@ public class IssuesControllerTest {
     private static String name = "name";
     private static String subject = "subject";
     private static String subjectId = "subjectId";
-    private static int subjectIdParamValue = 1;
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private IssuesService issuesService;
+    private IssuesServiceInterface issuesService;
+
+    @MockBean
+    private SubjectsServiceInterface subjectsService;
+
+    @MockBean
+    private AccessControlLayerServiceInterface acl;
 
     @MockBean
     private IssuesOptionsBuilder issuesOptionsBuilder;
@@ -61,7 +69,13 @@ public class IssuesControllerTest {
             issuesModels.add(issueModel);
         });
 
-        when(this.issuesService.findBySubject(new SubjectModelEmpty(subjectIdParamValue))).thenReturn(issuesModels);
+        int subjectIdParamValue = 1;
+
+        when(this.subjectsService.find(subjectIdParamValue))
+                .thenReturn(new SubjectModelEmpty(subjectIdParamValue));
+        when(this.issuesService.findBySubject(new SubjectModelEmpty(subjectIdParamValue)))
+                .thenReturn(issuesModels);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
 
         this.mvc.perform(get("/v1/issues?subjectId={subjectIdParamValue}", subjectIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -79,6 +93,20 @@ public class IssuesControllerTest {
                                 .with(subject, new JsonSupport().with(id, issuesModels.get(1).getSubject().getId())))
                         .build()
                 ))
+                .andReturn();
+    }
+
+    @Test
+    public void testListUnknownSubject() throws Exception {
+
+        int subjectIdParamValue = 5;
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+
+        this.mvc.perform(get("/v1/issues?subjectId={subjectIdParamValue}", subjectIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
                 .andReturn();
     }
     /**
