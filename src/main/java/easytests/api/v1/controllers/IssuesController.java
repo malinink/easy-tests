@@ -8,7 +8,6 @@ import easytests.api.v1.models.Issue;
 import easytests.common.exceptions.NotFoundException;
 import easytests.core.models.IssueModelInterface;
 import easytests.core.options.IssuesOptionsInterface;
-import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.options.builder.IssuesOptionsBuilderInterface;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
@@ -44,7 +43,7 @@ public class IssuesController extends AbstractController{
      * create
      */
 
-    @PutMapping
+    @PutMapping("")
     public void update(@RequestBody Issue issue) throws BadRequestException, NotFoundException, ForbiddenException {
 
         if(issue.getId()==null) {
