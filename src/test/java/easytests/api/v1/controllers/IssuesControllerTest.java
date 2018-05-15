@@ -97,10 +97,9 @@ public class IssuesControllerTest {
     }
 
     @Test
-    public void testListUnknownSubject() throws Exception {
+    public void testListNotFound() throws Exception {
 
         int subjectIdParamValue = 5;
-        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
 
         this.mvc.perform(get("/v1/issues?subjectId={subjectIdParamValue}", subjectIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -108,6 +107,23 @@ public class IssuesControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(""))
                 .andReturn();
+    }
+
+    @Test
+    public void testListForbidden() throws Exception {
+        int subjectIdParamValue = 1;
+
+        when(this.subjectsService.find(subjectIdParamValue))
+                .thenReturn(new SubjectModelEmpty(subjectIdParamValue));
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+
+        this.mvc.perform(get("/v1/issues?subjectId={subjectIdParamValue}", subjectIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+
     }
     /**
      * create
