@@ -3,6 +3,7 @@ package easytests.api.v1.controllers;
 import easytests.api.v1.mappers.IssuesMapper;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
+import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesService;
 import easytests.support.IssueSupport;
@@ -34,14 +35,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = IssuesController.class, secure = false)
 public class IssuesControllerTest {
     private static String id = "id";
-
     private static String name = "name";
-
     private static String subject = "subject";
-
     private static String subjectId = "subjectId";
-
-    private static Integer subjectIdParamValue = 1;
+    private static int subjectIdParamValue = 1;
 
     @Autowired
     private MockMvc mvc;
@@ -55,6 +52,7 @@ public class IssuesControllerTest {
     private IssueSupport issueSupport = new IssueSupport();
 
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
+
     @Test
     public void testListSuccess() throws Exception {
         final List<IssueModelInterface> issuesModels = new ArrayList<>();
@@ -64,10 +62,7 @@ public class IssuesControllerTest {
             issuesModels.add(issueModel);
         });
 
-        final SubjectModel subjectModel = new SubjectModel();
-        subjectModel.setId(subjectIdParamValue);
-
-        when(this.issuesService.findBySubject(subjectModel)).thenReturn(issuesModels);
+        when(this.issuesService.findBySubject(new SubjectModelEmpty(subjectIdParamValue))).thenReturn(issuesModels);
 
         this.mvc.perform(get("/v1/issues?subjectId={subjectIdParamValue}", subjectIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON)

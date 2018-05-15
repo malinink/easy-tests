@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AuthUsersService implements UserDetailsService {
+
     @Autowired
     private UsersService usersService;
 
@@ -40,8 +41,8 @@ public class AuthUsersService implements UserDetailsService {
         }
         return new User(
                 userModel.getEmail(),
-                userModel.getPassword(),
-                userModel.getState() == 3 ? true : false,
+                "{noop}" + userModel.getPassword(),
+                userModel.getState() == 3,
                 true,
                 true,
                 true,
