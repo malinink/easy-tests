@@ -45,14 +45,17 @@ public class IssuesController extends AbstractController{
      */
 
     @PutMapping
-    public void update(@RequestBody Issue issue) throws BadRequestException, NotFoundException {
+    public void update(@RequestBody Issue issue) throws BadRequestException, NotFoundException, ForbiddenException {
 
         if(issue.getId()==null) {
             throw new UnidentifiedModelException();
         }
-        
 
         final IssueModelInterface issueModel = this.getIssueModel(issue.getId());
+
+        if(!this.acl.hasAccess(issueModel.getSubject())) {
+            throw new ForbiddenException();
+        }
 
         this.issuesMapper.map(issue, issueModel);
 
