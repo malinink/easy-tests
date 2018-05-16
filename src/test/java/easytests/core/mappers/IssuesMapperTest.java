@@ -24,7 +24,6 @@ public class IssuesMapperTest extends AbstractMapperTest {
     @Autowired
     private IssuesMapper issuesMapper;
 
-
     @Test
     public void testFindAll() throws Exception {
         final List<IssueEntity> issuesFoundedEntities = this.issuesMapper.findAll();
@@ -51,9 +50,11 @@ public class IssuesMapperTest extends AbstractMapperTest {
     public void testFindBySubjectId() throws Exception {
         final List<IssueEntity> issueFixtureEntities = new ArrayList<>();
         issueFixtureEntities.add(this.issueSupport.getEntityFixtureMock(0));
+        issueFixtureEntities.add(this.issueSupport.getEntityFixtureMock(1));
 
         final List<IssueEntity> issueFoundedEntities = this.issuesMapper.findBySubjectId(issueFixtureEntities.get(0).getSubjectId());
 
+        Assert.assertEquals(2, issueFoundedEntities.size());
         Integer index = 0;
         for (IssueEntity issueEntity : issueFoundedEntities) {
             this.issueSupport.assertEquals(issueFixtureEntities.get(index), issueEntity);
@@ -98,5 +99,4 @@ public class IssuesMapperTest extends AbstractMapperTest {
 
         Assert.assertNull(this.issuesMapper.find(id));
     }
-
 }

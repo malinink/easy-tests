@@ -4,10 +4,9 @@ import easytests.core.entities.IssueEntity;
 import easytests.core.models.IssueModelInterface;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.SubjectModelEmpty;
+import java.util.List;
 import org.junit.Assert;
 import org.mockito.Mockito;
-
-import java.util.List;
 
 /**
  * @author greenbarrow
@@ -23,7 +22,7 @@ public class IssueSupport {
             {
                     2,
                     "Name2",
-                    2
+                    1
             },
             {
                     3,

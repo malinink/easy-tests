@@ -7,31 +7,27 @@ import easytests.core.models.SubjectModelInterface;
 import easytests.core.options.IssuesOptionsInterface;
 import easytests.core.services.exceptions.DeleteUnidentifiedModelException;
 import easytests.support.IssueSupport;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import static org.mockito.BDDMockito.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.BDDMockito.*;
-
 
 /**
  * @author greenbarrow
  */
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
-
 public class IssuesServiceTest {
 
     @Rule
@@ -117,10 +113,10 @@ public class IssuesServiceTest {
 
     @Test
     public void testFindAbsentModel() throws Exception {
-        final Integer absentId = 10;
-        when(this.issuesMapper.find(absentId)).thenReturn(null);
+        final Integer id = 10;
+        when(this.issuesMapper.find(id)).thenReturn(null);
 
-        final IssueModelInterface issueFoundedModel = this.issuesService.find(absentId);
+        final IssueModelInterface issueFoundedModel = this.issuesService.find(id);
 
         Assert.assertNull(issueFoundedModel);
     }
@@ -197,16 +193,17 @@ public class IssuesServiceTest {
 
     @Test
     public void testSaveUpdateEntityIdOnCreation() throws Exception {
+        final Integer id = 5;
         final IssueModelInterface issueAdditionalModel = this.issueSupport.getModelAdditionalMock(0);
         doAnswer(invocation -> {
             final IssueEntity issueEntity = (IssueEntity) invocation.getArguments()[0];
-            issueEntity.setId(5);
+            issueEntity.setId(id);
             return null;
         }).when(this.issuesMapper).insert(Mockito.any(IssueEntity.class));
 
         this.issuesService.save(issueAdditionalModel);
 
-        verify(issueAdditionalModel, times(1)).setId(5);
+        verify(issueAdditionalModel, times(1)).setId(id);
     }
 
     @Test
@@ -220,7 +217,6 @@ public class IssuesServiceTest {
                 this.issueSupport.getEntityFixtureMock(0),
                 issueEntityCaptor.getValue()
         );
-
     }
 
     @Test
@@ -261,6 +257,7 @@ public class IssuesServiceTest {
         this.assertServicesSet(issuesOptions, issuesModels.size());
         verify(issuesOptions, times(issuesModels.size())).saveWithRelations(issueModelCaptor.capture());
         this.issueSupport.assertModelsListEquals(issuesModels, issueModelCaptor.getAllValues());
+        verifyNoMoreInteractions(this.issuesMapper);
     }
 
     @Test
