@@ -4,7 +4,9 @@ import easytests.api.v1.mappers.IssuesMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
+import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
+import easytests.core.services.SubjectsServiceInterface;
 import easytests.support.IssueSupport;
 import easytests.support.JsonSupport;
 import org.junit.Test;
@@ -38,9 +40,17 @@ public class IssuesControllerTest {
     @MockBean
     private IssuesServiceInterface issuesService;
 
+    @MockBean
+    private SubjectsServiceInterface subjectsService;
+
+    @MockBean
+    private IssuesMapper issuesMapper;
 
     @MockBean
     private AccessControlLayerServiceInterface acl;
+
+    @MockBean
+    private IssuesOptionsBuilder issuesOptionsBuilder;
 
     private IssueSupport issueSupport = new IssueSupport();
 
