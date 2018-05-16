@@ -15,11 +15,11 @@ public class IssuesMapper extends ModelMapper {
     public IssuesMapper() {
         super();
         this.createTypeMap(Issue.class, IssueModel.class)
-                .addMappings(
-                        mapper -> mapper.when(
-                                context -> !(context.getSource() instanceof ModelsListEmpty)
-                        ).<Integer>map(Issue -> Issue.getSubject().getId(),
-                                (IssueModel, id) -> IssueModel.getSubject().setId(id))
-                );
+            .addMappings(
+                mapper -> mapper.when(
+                    context -> !(context.getSource() instanceof ModelsListEmpty)
+                ).<Integer>map(issue -> issue.getSubject().getId(),
+                    (issueModel, id) -> issueModel.getSubject().setId(id))
+            );
     }
 }

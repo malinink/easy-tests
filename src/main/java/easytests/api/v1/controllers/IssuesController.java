@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController("IssuesControllerV1")
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/issues")
-public class IssuesController extends AbstractController{
+public class IssuesController extends AbstractController {
 
     @Autowired
     protected IssuesServiceInterface issuesService;
@@ -46,13 +46,13 @@ public class IssuesController extends AbstractController{
     @PutMapping("")
     public void update(@RequestBody Issue issue) throws BadRequestException, NotFoundException, ForbiddenException {
 
-        if(issue.getId()==null) {
+        if (issue.getId() == null) {
             throw new UnidentifiedModelException();
         }
 
         final IssueModelInterface issueModel = this.getIssueModel(issue.getId());
 
-        if(!this.acl.hasAccess(issueModel.getSubject())) {
+        if (!this.acl.hasAccess(issueModel.getSubject())) {
             throw new ForbiddenException();
         }
 
@@ -68,7 +68,8 @@ public class IssuesController extends AbstractController{
      * delete(issueId)
      */
 
-    private IssueModelInterface getIssueModel(Integer id, IssuesOptionsInterface issueOptions) throws NotFoundException {
+    private IssueModelInterface getIssueModel(Integer id, IssuesOptionsInterface issueOptions)
+            throws NotFoundException {
         final IssueModelInterface issueModel = this.issuesService.find(id, issueOptions);
         if (issueModel == null) {
             throw new NotFoundException();
