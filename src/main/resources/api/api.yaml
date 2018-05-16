@@ -779,7 +779,7 @@ paths:
   #
   /v1/quizzes:
     get:
-      summary: Retrieve list of all Quizzes by Issue with specified ID
+      summary: Retrieve Quizzes list
       operationId: listQuizzes
       tags:
         - Quizzes
@@ -787,7 +787,7 @@ paths:
         - name: issueId
           in: query
           required: true
-          description: Id of the specific Issue
+          description: Issue ID
           type: integer
           format: int64
       responses:
@@ -816,7 +816,7 @@ paths:
       - name: quizId
         in: path
         required: true
-        description: Id of the specified Quiz
+        description: Quiz ID
         type: integer
         format: int64
     get:
