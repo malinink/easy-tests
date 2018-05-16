@@ -852,6 +852,7 @@ definitions:
     items:
       $ref: '#/definitions/V1Quiz'
   V1Testee:
+    type: object
     required:
       - id
       - firstName
