@@ -11,10 +11,10 @@ import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Yarik2308
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RestController("IssuesControllerV1")
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/issues")
-public class IssuesController extends AbstractController{
+public class IssuesController extends AbstractController {
 
     @Autowired
     protected IssuesServiceInterface issuesService;
