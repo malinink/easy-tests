@@ -1,12 +1,10 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.TopicsMapper;
-import easytests.api.v1.models.Topic;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
-import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.support.JsonSupport;
@@ -21,13 +19,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,7 +38,6 @@ public class TopicsControllerTest {
     private static final String id = "id";
     private static final String name = "name";
     private static final String subject = "subject";
-    private static final String subjectId = "subjectId";
     private static final String subjectIdParamValue = "2";
 
     @Autowired
