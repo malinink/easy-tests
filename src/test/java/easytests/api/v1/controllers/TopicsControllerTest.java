@@ -1,11 +1,14 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.TopicsMapper;
+import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
+import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
+import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.support.JsonSupport;
 import easytests.support.TopicsSupport;
@@ -46,6 +49,12 @@ public class TopicsControllerTest {
     @MockBean
     private TopicsServiceInterface topicsService;
 
+    @MockBean
+    private SubjectsServiceInterface subjectsService;
+
+    @MockBean
+    private AccessControlLayerServiceInterface acl;
+
     @Autowired
     @Qualifier("TopicsMapperV1")
     private TopicsMapper topicsMapper;
@@ -64,6 +73,13 @@ public class TopicsControllerTest {
             topicsModels.add(topicModel);
         });
         when(this.topicsService.findBySubject(any(SubjectModelInterface.class))).thenReturn(topicsModels);
+
+        when(this.subjectsService.find(Integer.valueOf(subjectIdParamValue)))
+                .thenReturn(new SubjectModelEmpty(Integer.valueOf(subjectIdParamValue)));
+        when(this.topicsService.findBySubject(new SubjectModelEmpty(Integer.valueOf(subjectIdParamValue))))
+                .thenReturn(topicsModels);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class)))
+                .thenReturn(true);
 
         final String receivedModelsJson = new JsonSupport()
                 .with(new JsonSupport()
