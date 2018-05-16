@@ -10,7 +10,6 @@ import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.support.IssueSupport;
 import easytests.support.JsonSupport;
-import easytests.support.SubjectsSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -55,8 +54,6 @@ public class IssuesControllerTest {
     private IssuesOptionsBuilder issuesOptionsBuilder;
 
     private IssueSupport issueSupport = new IssueSupport();
-
-    private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
     @Test
     public void testListSuccess() throws Exception {
