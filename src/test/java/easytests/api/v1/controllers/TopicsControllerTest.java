@@ -1,10 +1,12 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.TopicsMapper;
+import easytests.api.v1.models.Topic;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
+import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.support.JsonSupport;
@@ -12,6 +14,7 @@ import easytests.support.TopicsSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -21,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.mockito.BDDMockito.*;
@@ -47,6 +51,10 @@ public class TopicsControllerTest {
     @MockBean
     private TopicsServiceInterface topicsService;
 
+    @Autowired
+    @Qualifier("TopicsMapperV1")
+    private TopicsMapper topicsMapper;
+
     @MockBean
     TopicsOptionsBuilderInterface topicsOptionsBuilder;
 
@@ -62,36 +70,29 @@ public class TopicsControllerTest {
         });
         when(this.topicsService.findBySubject(any(SubjectModelInterface.class))).thenReturn(topicsModels);
 
-        String myJson = new JsonSupport()
-                .with(id, topicsModels.get(0).getId())
-                .with(name, topicsModels.get(0).getName())
-                .with(subject, new JsonSupport()
-                        .with(id, topicsModels.get(0).getSubject().getId())
+        final String receivedModelsJson = new JsonSupport()
+                .with(new JsonSupport()
+                        .with(id, topicsModels.get(0).getId())
+                        .with(name, topicsModels.get(0).getName())
+                        .with(subject, new JsonSupport()
+                                .with(id, topicsModels.get(0).getSubject().getId())
+                        )
+                )
+                .with(new JsonSupport()
+                        .with(id, topicsModels.get(1).getId())
+                        .with(name, topicsModels.get(1).getName())
+                        .with(subject, new JsonSupport()
+                                .with(id, topicsModels.get(0).getSubject().getId())
+                        )
                 )
                 .build();
 
         mvc.perform(get("/v1/topics?subjectId={subjectIdParamValue}", subjectIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isOk()) //todo: test has failed this line
+                .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(new JsonSupport()
-                        .with(new JsonSupport()
-                                .with(id, topicsModels.get(0).getId())
-                                .with(name, topicsModels.get(0).getName())
-                                .with(subject, new JsonSupport()
-                                        .with(id, topicsModels.get(0).getSubject().getId())
-                                )
-                        )
-                        .with(new JsonSupport()
-                                .with(id, topicsModels.get(1).getId())
-                                .with(name, topicsModels.get(1).getName())
-                                .with(subject, new JsonSupport()
-                                        .with(id, topicsModels.get(0).getSubject().getId())
-                                )
-                        )
-                        .build()
-                ))
+                .andExpect(content().json(receivedModelsJson))
                 .andReturn();
 
     }
