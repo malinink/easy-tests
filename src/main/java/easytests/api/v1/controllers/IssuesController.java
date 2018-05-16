@@ -10,11 +10,10 @@ import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -43,11 +42,11 @@ public class IssuesController extends AbstractController{
             throws NotFoundException, ForbiddenException {
         final SubjectModelInterface subjectModel = this.subjectsService.find(subjectId);
 
-        if(subjectModel == null) {
+        if (subjectModel == null) {
             throw new NotFoundException();
         }
 
-        if(!this.acl.hasAccess(subjectModel)) {
+        if (!this.acl.hasAccess(subjectModel)) {
             throw new ForbiddenException();
         }
 
