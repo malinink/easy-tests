@@ -4,7 +4,6 @@ import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.mappers.TopicsMapper;
 import easytests.api.v1.models.Topic;
-import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController("TopicsControllerV1")
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/topics")
-public class TopicsController extends AbstractController{
+public class TopicsController extends AbstractController {
 
     @Autowired
     protected SubjectsServiceInterface subjectsService;
@@ -45,11 +44,11 @@ public class TopicsController extends AbstractController{
             throws NotFoundException, ForbiddenException {
         final SubjectModelInterface subjectModel = this.subjectsService.find(subjectId);
 
-        if(subjectModel == null) {
+        if (subjectModel == null) {
             throw new NotFoundException();
         }
 
-        if(!this.acl.hasAccess(subjectModel)) {
+        if (!this.acl.hasAccess(subjectModel)) {
             throw new ForbiddenException();
         }
 

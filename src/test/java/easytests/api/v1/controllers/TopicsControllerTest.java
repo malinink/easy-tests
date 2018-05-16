@@ -107,4 +107,32 @@ public class TopicsControllerTest {
                 .andReturn();
 
     }
+
+    @Test
+    public void testListNotFound() throws Exception {
+        final String nonexistentSubjectId = "5";
+
+        this.mvc.perform(get("/v1/topics?subjectId={nonexistentSubjectId}", nonexistentSubjectId)
+                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testListForbidden() throws Exception {
+
+        when(this.subjectsService.find(Integer.valueOf(subjectIdParamValue)))
+                .thenReturn(new SubjectModelEmpty(Integer.valueOf(subjectIdParamValue)));
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+
+        this.mvc.perform(get("/v1/topics?subjectId={subjectIdParamValue}", subjectIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+
+    }
 }
