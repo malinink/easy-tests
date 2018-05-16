@@ -20,6 +20,6 @@ public class IssuesMapper extends ModelMapper {
                     context -> !(context.getSource() instanceof ModelsListEmpty)
                 ).<Integer>map(issue -> issue.getSubject().getId(),
                     (issueModel, id) -> issueModel.getSubject().setId(id))
-                );
+            );
     }
 }
