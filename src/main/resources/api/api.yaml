@@ -1157,6 +1157,37 @@ definitions:
   #
   # Points
   #
+  V1Point:
+    type: object
+    required:
+      -quiz
+      -question
+      -solutions
+    properties:
+      id:
+        type: integer
+        format: int64
+      quiz:
+        type: object
+        items:
+          $ref: '#/definitions/V1Quiz'
+      question:
+        type: object
+        items:
+          $ref: '#/definitions/V1Question'
+      solutions:
+        type: object
+        array:
+          $ref: '#/definitions/V1Solution'
+      example:
+        id: 1
+        question: 'Question №1'
+        quiz: 'Quiz1'
+        solutions: 'Solutionsarray'
+  V1Points:
+    type: array
+    items:
+      $ref: '#/definitions/V1Point'
   #
   # Temporary Objects
   #
