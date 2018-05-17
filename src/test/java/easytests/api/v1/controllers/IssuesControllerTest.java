@@ -119,16 +119,11 @@ public class IssuesControllerTest {
     }
 
     @Test
-    public void testUpdateBadRequest() throws Exception {
-        final IssueModelInterface issueModel = issueSupport.getModelFixtureMock(0);
-
-        when(this.issuesService.find(any(), any())).thenReturn(issueModel);
-        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+    public void testUpdateIdFailed() throws Exception {
 
         mvc.perform(put("/v1/issues")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(id, 1)
                         .with(name, "newIssue")
                         .with(subject, 2)
                         .build()
@@ -136,8 +131,8 @@ public class IssuesControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(""))
                 .andReturn();
-
     }
+    
     /**
      * show(issueId)
      */
