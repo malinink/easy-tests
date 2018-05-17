@@ -780,6 +780,73 @@ paths:
   #
   # Points
   #
+  /v1/points:
+       get:
+        summary: List all points
+        operationId: listPoints
+        tags:
+          - Points
+        parameters:
+          - name: subjectId
+            in: query
+            required: true
+            description: Subject ID
+            type: integer
+            format: int64
+        responses:
+          '200':
+            description: An array of founded Points
+            schema:
+              $ref: '#/definitions/V1Points'
+          '400':
+            description: Bad request
+            schema:
+              $ref: '#/definitions/V1Error'
+          '403':
+            description: Permission denied
+            schema:
+              $ref: '#/definitions/V1Error'
+          '404':
+            description: Subject with specified ID was not found
+            schema:
+              $ref: '#/definitions/V1Error'
+          default:
+            description: Unexpected error
+            schema:
+              $ref: '#/definitions/V1Error'
+  /v1/points/{pointId}:
+    parameters:
+      - name: pointId
+        in: path
+        required: true
+        description: Point ID
+        type: integer
+    get:
+      summary: Retrieve Points with a specified ID
+      operationId: getPointById
+      tags:
+        - Points
+      responses:
+        '200':
+          description: Point with specified ID
+          schema:
+            $ref: '#/definitions/V1Point'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/V1Error'
+        '403':
+          description: Permission denied
+          schema:
+            $ref: '#/definitions/V1Error'
+        '404':
+          description: Point with specified ID was not found
+          schema:
+            $ref: '#/definitions/V1Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/V1Error'
   #
   # Temporary Objects
   #
