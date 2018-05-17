@@ -13,11 +13,6 @@ public class TesteeModelTest extends AbstractModelTest{
 
     protected TesteesSupport testeesSupport = new TesteesSupport();
 
-    @Override
-    protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder();
-    }
-
     @Test
     public void testCommon() throws Exception {
         this.testCommon(TesteeModel.class);
