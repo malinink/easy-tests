@@ -93,5 +93,5 @@ INSERT INTO points (question_id, quiz_id) VALUES
 
 INSERT INTO issues (name, subject_id) VALUES
   ('Name1', 1),
-  ('Name2', 2),
+  ('Name2', 1),
   ('Name3', 3);
