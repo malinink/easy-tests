@@ -822,7 +822,6 @@ definitions:
       - id
       - inviteCode
       - codeExpired
-      - testee
     properties:
       id:
         type: integer
@@ -846,7 +845,7 @@ definitions:
       startedAt: 2018-03-11T23:20:50
       finishedAt: 2018-03-11T23:30:50
       testee:
-        $ref: '#/definitions/V1Testee'
+        $ref: '#/definitions/V1Identity'
   V1Quizzes:
     type: array
     items:
@@ -859,7 +858,6 @@ definitions:
       - lastName
       - surname
       - groupNumber
-      - quiz
     properties:
       id:
         type: integer
