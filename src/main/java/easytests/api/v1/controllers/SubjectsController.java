@@ -15,8 +15,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 /**
@@ -43,13 +44,12 @@ public class SubjectsController extends AbstractController{
 
     @GetMapping("")
     public List<Subject> list(@RequestParam(name = "userId", required = true) Integer userId)
-         throws NotFoundException, ForbiddenException {
+         throws NotFoundException, ForbiddenException{
             final UserModelInterface userModel = this.usersService.find(userId);
 
             if (userModel == null) {
                 throw new NotFoundException();
             }
-
             if (!this.acl.hasAccess(userModel)) {
                 throw new ForbiddenException();
             }
@@ -61,7 +61,6 @@ public class SubjectsController extends AbstractController{
                 .map(model -> this.subjectsMapper.map(model, Subject.class))
                 .collect(Collectors.toList());
     }
-
     /**
      * create
      */
