@@ -119,18 +119,7 @@ public class IssuesControllerTest {
                 .andReturn();
 
     }
-
-    @Test
-    public void testListSubjectIdNotInt() throws Exception {
-        String subjectIdParamValue ="abc";
-
-        this.mvc.perform(get("/v1/issues?subjectId={subjectIdParamValue}", subjectIdParamValue)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(""))
-                .andReturn();
-    }
+    
     /**
      * create
      */
