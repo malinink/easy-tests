@@ -4,6 +4,7 @@ import easytests.core.entities.QuestionTypeEntity;
 import easytests.core.mappers.QuestionTypesMapper;
 import easytests.core.models.QuestionTypeModelInterface;
 import easytests.core.options.QuestionTypesOptionsInterface;
+import easytests.core.options.SubjectsOptionsInterface;
 import easytests.support.QuestionTypesSupport;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,6 @@ import org.springframework.test.context.junit4.*;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-
 public class QuestionTypesServiceTest {
 
     @Rule
@@ -49,6 +49,13 @@ public class QuestionTypesServiceTest {
         questionTypesModels.add(this.questionTypesSupport.getModelFixtureMock(0));
         questionTypesModels.add(this.questionTypesSupport.getModelFixtureMock(1));
         return questionTypesModels;
+    }
+
+    private void assertServicesSet(QuestionTypesOptionsInterface questionTypesOptions) {
+        this.assertServicesSet(questionTypesOptions, 1);
+    }
+
+    private void assertServicesSet(QuestionTypesOptionsInterface questionTypesOptions, Integer times) {
     }
 
     @Test
@@ -82,6 +89,7 @@ public class QuestionTypesServiceTest {
 
         final List<QuestionTypeModelInterface> questionTypesFoundedModels = this.questionTypesService.findAll(questionTypesOptions);
 
+        this.assertServicesSet(questionTypesOptions);
         this.questionTypesSupport.assertModelsListEquals(questionTypesModels, listCaptor.getValue());
         Assert.assertSame(questionTypesModels, questionTypesFoundedModels);
     }
@@ -98,10 +106,10 @@ public class QuestionTypesServiceTest {
 
     @Test
     public void testFindAbsentModel() throws Exception {
-        final Integer absentId = 12;
-        when(this.questionTypesMapper.find(absentId)).thenReturn(null);
+        final Integer id = 12;
+        when(this.questionTypesMapper.find(id)).thenReturn(null);
 
-        final QuestionTypeModelInterface questionTypeFoundedModel = this.questionTypesService.find(absentId);
+        final QuestionTypeModelInterface questionTypeFoundedModel = this.questionTypesService.find(id);
 
         Assert.assertNull(questionTypeFoundedModel);
     }
@@ -117,6 +125,7 @@ public class QuestionTypesServiceTest {
 
         final QuestionTypeModelInterface questionTypeFoundedModel = this.questionTypesService.find(questionTypeModel.getId(), questionTypesOptions);
 
+        this.assertServicesSet(questionTypesOptions);
         this.questionTypesSupport.assertEquals(questionTypeModel, questionTypeModelCaptor.getValue());
         Assert.assertSame(questionTypeModel, questionTypeFoundedModel);
     }
