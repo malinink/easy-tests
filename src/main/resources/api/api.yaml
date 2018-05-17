@@ -780,6 +780,17 @@ paths:
   #
   # Points
   #
+   /v1/points:
+     get:
+      summary: List all poits
+      operationId: listPoints
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: Id of specific user
+          type: integer
+          format: int64
   #
   # Temporary Objects
   #
