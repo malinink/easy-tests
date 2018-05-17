@@ -59,6 +59,9 @@ public class SubjectsControllerTest {
     private SubjectsMapper subjectsMapper;
 
     @MockBean
+    private AccessControlLayerServiceInterface acl;
+
+    @MockBean
     SubjectsOptionsBuilder subjectsOptionsBuilder;
 
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
@@ -79,6 +82,7 @@ public class SubjectsControllerTest {
                 .thenReturn(new UserModelEmpty(userIdParamValue));
         when(this.subjectsService.findByUser(new UserModelEmpty(userIdParamValue)))
                 .thenReturn(subjectsModels);
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
 
         mvc.perform(get("/v1/subjects?userId={userIdParamValue}", userIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -102,6 +106,34 @@ public class SubjectsControllerTest {
 
     }
 
+    @Test
+    public void testListNotFound() throws Exception {
+        int userIdParamValue = 5;
+
+        this.mvc.perform(get("/v1/subjects?userId={userIdParamValue}", userIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testListForbidden() throws Exception {
+        int userIdParamValue = 1;
+
+        when(this.usersService.find(userIdParamValue))
+                .thenReturn(new UserModelEmpty(userIdParamValue));
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
+
+        this.mvc.perform(get("/v1/subjects?userId={userIdParamValue}", userIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+
+    }
     /**
      * create
      */
