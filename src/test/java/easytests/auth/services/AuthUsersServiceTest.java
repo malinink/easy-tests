@@ -39,7 +39,7 @@ public class AuthUsersServiceTest {
         userModel.setLastName("LastName3");
         userModel.setSurname("Surname3");
         userModel.setEmail(email);
-        userModel.setPassword("hash3");
+        userModel.setPassword("{noop}hash3");
         userModel.setIsAdmin(true);
         userModel.setState(3);
         when(usersService.findByEmail(email)).thenReturn(userModel);
