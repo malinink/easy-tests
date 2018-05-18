@@ -1,6 +1,6 @@
 package easytests.api.v1.controllers;
 
-import easytests.core.mappers.QuizzesMapper;
+import easytests.api.v1.mappers.QuizzesMapper;
 import easytests.core.options.builder.QuizzesOptionsBuilderInterface;
 import easytests.core.services.QuizzesServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
