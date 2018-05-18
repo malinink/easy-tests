@@ -4,6 +4,7 @@ import easytests.core.models.IssueStandardTopicPriorityModelInterface;
 import easytests.support.IssueStandardTopicPrioritySupport;
 import org.junit.Test;
 
+
 /**
  * @author SakhPrace
  */

@@ -4,7 +4,6 @@ import easytests.core.entities.IssueStandardTopicPriorityEntity;
 import easytests.core.models.IssueStandardTopicPriorityModelInterface;
 import easytests.core.models.empty.IssueStandardModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
-
 import java.util.List;
 import org.junit.Assert;
 import org.mockito.Mockito;
@@ -56,7 +55,6 @@ public class IssueStandardTopicPrioritySupport {
     public IssueStandardTopicPriorityEntity getEntityFixtureMock(Integer index) {
         return this.getEntityMock(fixtures[index]);
     }
-
 
     public IssueStandardTopicPriorityEntity getEntityAdditionalMock(Integer index) {
         return this.getEntityMock(additional[index]);
@@ -117,11 +115,7 @@ public class IssueStandardTopicPrioritySupport {
     }
 
     public void assertEquals(IssueStandardTopicPriorityEntity expected, IssueStandardTopicPriorityEntity actual) {
-
         assertEquals(expected, actual, false);
-
-        assertEquals(expected, actual, false);
-
     }
 
     public void assertEqualsWithoutId(IssueStandardTopicPriorityEntity expected, IssueStandardTopicPriorityEntity actual) {
