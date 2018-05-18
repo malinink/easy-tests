@@ -4,6 +4,7 @@ import easytests.auth.handlers.AuthenticationFailureHandler;
 import easytests.auth.services.AuthUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private AuthUsersService authUsersService;
 
@@ -23,12 +25,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         final String signInUrl = "/auth/sign-in";
         final String usernameParameter = "login";
         final String userRole = "hasRole('USER')";
+        final String adminRole = "hasRole('ADMIN')";
         http
             .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/admin/**").access("hasRole('ADMIN')")
-                .antMatchers("/users/**").access(userRole)
-                .antMatchers("/personal/**").access(userRole)
+                .antMatchers(HttpMethod.GET, "/v1/objects").access(adminRole)
+                .antMatchers("/v1/objects/**").access(userRole)
                 .and()
             .userDetailsService(this.authUsersService)
             .formLogin()
@@ -45,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .and()
             .csrf()
-                .and()
+                .disable()
             .rememberMe();
     }
 }
