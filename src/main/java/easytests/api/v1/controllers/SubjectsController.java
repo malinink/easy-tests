@@ -14,11 +14,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-
 
 /**
  * @author VeronikaRevjakina
@@ -26,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController("SubjectsControllerV1")
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/subjects")
-public class SubjectsController extends AbstractController{
+public class SubjectsController extends AbstractController {
 
     @Autowired
     protected SubjectsServiceInterface subjectsService;
@@ -43,18 +41,15 @@ public class SubjectsController extends AbstractController{
 
 
     @GetMapping("")
-    public List<Subject> list(@RequestParam(name = "userId", required = true) Integer userId)
-         throws NotFoundException, ForbiddenException{
+    public List<Subject> list(@RequestParam(name = "userId", required = true) Integer userId) throws NotFoundException, ForbiddenException{
             final UserModelInterface userModel = this.usersService.find(userId);
-
             if (userModel == null) {
                 throw new NotFoundException();
             }
             if (!this.acl.hasAccess(userModel)) {
                 throw new ForbiddenException();
             }
-
-        final List<SubjectModelInterface> subjectsModels = this.subjectsService.findByUser(new UserModelEmpty(userId));
+            final List<SubjectModelInterface> subjectsModels = this.subjectsService.findByUser(new UserModelEmpty(userId));
 
         return subjectsModels
                 .stream()
