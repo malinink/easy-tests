@@ -688,6 +688,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
+            
   /v1/issues/{issueId}:
     parameters:
       - name: issueId
