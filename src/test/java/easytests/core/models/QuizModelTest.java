@@ -13,11 +13,6 @@ public class QuizModelTest extends AbstractModelTest {
 
     private QuizzesSupport quizzesSupport = new QuizzesSupport();
 
-    @Override
-    protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder();
-    }
-
     @Test
     public void testCommon() throws Exception {
         this.testCommon(QuizModel.class);
