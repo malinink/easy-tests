@@ -30,7 +30,7 @@ public class SubjectsController extends AbstractController {
     protected SubjectsServiceInterface subjectsService;
 
     @Autowired
-    private SubjectsOptionsBuilderInterface subjectsOptionsBuilder;
+    protected SubjectsOptionsBuilderInterface subjectsOptionsBuilder;
 
     @Autowired
     protected UsersServiceInterface usersService;
@@ -39,17 +39,19 @@ public class SubjectsController extends AbstractController {
     @Qualifier("SubjectsMapperV1")
     private SubjectsMapper subjectsMapper;
 
-
     @GetMapping("")
-    public List<Subject> list(@RequestParam(name = "userId", required = true) Integer userId) throws NotFoundException, ForbiddenException{
-            final UserModelInterface userModel = this.usersService.find(userId);
-            if (userModel == null) {
-                throw new NotFoundException();
-            }
-            if (!this.acl.hasAccess(userModel)) {
-                throw new ForbiddenException();
-            }
-            final List<SubjectModelInterface> subjectsModels = this.subjectsService.findByUser(new UserModelEmpty(userId));
+    public List<Subject> list(@RequestParam(name = "userId", required = true) Integer userId)
+        throws NotFoundException, ForbiddenException {
+        final UserModelInterface userModel = this.usersService.find(userId);
+
+        if (userModel == null) {
+            throw new NotFoundException();
+        }
+        if (!this.acl.hasAccess(userModel)) {
+            throw new ForbiddenException();
+        }
+
+        final List<SubjectModelInterface> subjectsModels = this.subjectsService.findByUser(new UserModelEmpty(userId));
 
         return subjectsModels
                 .stream()

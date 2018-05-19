@@ -20,7 +20,7 @@ public class SubjectsMapper extends ModelMapper {
                     context -> !(context.getSource() instanceof ModelsListEmpty)
                 ).<Integer>map(issueModel -> issueModel.getUser().getId(),
                     (subject, id) -> subject.getUser().setId(id))
-                );
+            );
     }
 
 }
