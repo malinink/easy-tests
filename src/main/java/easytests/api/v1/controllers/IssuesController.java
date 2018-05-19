@@ -45,7 +45,6 @@ public class IssuesController extends AbstractController {
 
     @PutMapping("")
     public void update(@RequestBody Issue issue) throws BadRequestException, NotFoundException, ForbiddenException {
-
         if (issue.getId() == null) {
             throw new UnidentifiedModelException();
         }

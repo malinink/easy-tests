@@ -125,14 +125,14 @@ public class IssuesControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
                         .with(name, "newIssue")
-                        .with(subject, 2)
+                        .with(subject, new JsonSupport().with(subject, 1))
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(""))
                 .andReturn();
     }
-    
+
     /**
      * show(issueId)
      */
