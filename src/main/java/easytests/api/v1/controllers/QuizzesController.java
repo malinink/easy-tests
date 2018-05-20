@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController("QuizzesControllerV1")
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/quizzes")
-public class QuizzesController extends AbstractController{
+public class QuizzesController extends AbstractController {
 
     @Autowired
     protected QuizzesServiceInterface quizzesService;
