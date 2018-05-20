@@ -10,15 +10,14 @@ import easytests.core.models.empty.IssueModelEmpty;
 import easytests.core.options.builder.QuizzesOptionsBuilderInterface;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.QuizzesServiceInterface;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -41,7 +40,7 @@ public class QuizzesController extends AbstractController{
     @Autowired
     @Qualifier("QuizzesMapperV1")
     private QuizzesMapper quizzesMapper;
-    
+
     @GetMapping("")
     public List<Quiz> list(@RequestParam(name = "issueId", required = true) Integer issueId)
             throws NotFoundException, ForbiddenException {
