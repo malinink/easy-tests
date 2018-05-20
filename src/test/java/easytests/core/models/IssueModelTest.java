@@ -1,50 +1,36 @@
 package easytests.core.models;
 
 import easytests.core.entities.IssueEntity;
-import easytests.core.models.empty.ModelsListEmpty;
-import easytests.core.models.empty.SubjectModelEmpty;
-import org.junit.Assert;
+import easytests.support.IssueSupport;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.meanbean.test.*;
-import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.meanbean.test.ConfigurationBuilder;
+
 
 /**
- * @author fortyways
+ * @author greenbarrow
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class IssueModelTest {
+public class IssueModelTest extends AbstractModelTest {
+
+    private IssueSupport issueSupport = new IssueSupport();
+
+    @Override
+    protected ConfigurationBuilder getConfigurationBuilder() {
+        return super.getConfigurationBuilder()
+                .ignoreProperty("subject");
+    }
 
     @Test
     public void testCommon() throws Exception {
-        Configuration configuration = new ConfigurationBuilder()
-                .ignoreProperty("quizzes")
-                .ignoreProperty("subject")
-                .build();
-        new BeanTester().testBean(IssueModel.class, configuration);
+        super.testCommon(IssueModel.class);
     }
 
     @Test
     public void testMap() throws Exception {
-        final Integer issueId = 1;
-        final String name = "Name";
-        final Integer subjectId = 1;
-        final IssueEntity issueEntity = Mockito.mock(IssueEntity.class);
+        final IssueEntity issueEntity = this.issueSupport.getEntityFixtureMock(0);
+        final IssueModelInterface issueModel = new IssueModel();
 
-        Mockito.when(issueEntity.getId()).thenReturn(issueId);
-        Mockito.when(issueEntity.getName()).thenReturn(name);
-        Mockito.when(issueEntity.getSubjectId()).thenReturn(subjectId);
-
-        final IssueModel issueModel = new IssueModel();
         issueModel.map(issueEntity);
 
-        Assert.assertEquals(issueId, issueModel.getId());
-        Assert.assertEquals(name, issueModel.getName());
-        Assert.assertEquals(new ModelsListEmpty(), issueModel.getQuizzes());
-        Assert.assertEquals(new SubjectModelEmpty(subjectId), issueModel.getSubject());
+        this.issueSupport.assertEquals(issueEntity, issueModel);
     }
-
 }

@@ -51,7 +51,7 @@ public class SubjectsServiceTest {
     }
 
     private List<SubjectModelInterface> getSubjectsFixturesModels() {
-        final List<SubjectModelInterface> subjectsModels = new ArrayList<>(3);
+        final List<SubjectModelInterface> subjectsModels = new ArrayList<>(2);
         subjectsModels.add(this.subjectsSupport.getModelFixtureMock(0));
         subjectsModels.add(this.subjectsSupport.getModelFixtureMock(1));
         return subjectsModels;
