@@ -69,6 +69,7 @@ public class QuestionsOptionsTest {
 
     @Before
     public void before() {
+        this.questionModel = Mockito.mock(QuestionModelInterface.class);
         this.answersService = Mockito.mock(AnswersServiceInterface.class);
         this.answersOptions = Mockito.mock(AnswersOptionsInterface.class);
         this.topicsService = Mockito.mock(TopicsServiceInterface.class);
