@@ -15,11 +15,11 @@ public class QuestionsMapper extends ModelMapper {
     public QuestionsMapper() {
         super();
         this.createTypeMap(QuestionModel.class, Question.class)
-                .addMappings(
-                        mapper -> mapper.when(
-                                context -> !(context.getSource() instanceof ModelsListEmpty)
-                        ).<Integer>map(questionModel -> questionModel.getTopic().getId(),
-                                (question, id) -> question.getTopic().setId(id))
-                );
+            .addMappings(
+                mapper -> mapper.when(
+                    context -> !(context.getSource() instanceof ModelsListEmpty)
+                ).<Integer>map(questionModel -> questionModel.getTopic().getId(),
+                    (question, id) -> question.getTopic().setId(id))
+            );
     }
 }
