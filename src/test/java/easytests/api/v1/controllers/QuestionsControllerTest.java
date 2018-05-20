@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -49,6 +50,10 @@ public class QuestionsControllerTest {
     @MockBean
     private TopicsServiceInterface topicsService;
 
+    @Autowired
+    @Qualifier("QuestionsMapperV1")
+    private QuestionsMapper questionsMapper;
+
     @MockBean
     private AccessControlLayerServiceInterface acl;
 
@@ -65,6 +70,7 @@ public class QuestionsControllerTest {
             questionModel.map(this.questionSupport.getEntityFixtureMock(idx));
             questionsModels.add(questionModel);
         });
+
 
         int topicIdParamValue = 1;
 
@@ -84,12 +90,14 @@ public class QuestionsControllerTest {
                                 .with(id, questionsModels.get(0).getId())
                                 .with(text, questionsModels.get(0).getText())
                                 .with(type, new JsonSupport().with(id, questionsModels.get(0).getQuestionType().getId()))
-                                .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId())))
+                                .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId()))
+                                .with(answers, new JsonSupport().with(id, questionsModels.get(0).getAnswers().get(0).getId()))                        )
                         .with(new JsonSupport()
                                 .with(id, questionsModels.get(1).getId())
                                 .with(text, questionsModels.get(1).getText())
                                 .with(type, new JsonSupport().with(id, questionsModels.get(1).getQuestionType().getId()))
-                                .with(topic, new JsonSupport().with(id, questionsModels.get(1).getTopic().getId())))
+                                .with(topic, new JsonSupport().with(id, questionsModels.get(1).getTopic().getId()))
+                                .with(answers, new JsonSupport().with(id, questionsModels.get(1).getAnswers().get(0).getId())))
                         .build()
                 ))
                 .andReturn();
