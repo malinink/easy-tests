@@ -18,7 +18,7 @@ public class SubjectsMapper extends ModelMapper {
             .addMappings(
                 mapper -> mapper.when(
                     context -> !(context.getSource() instanceof ModelsListEmpty)
-                ).<Integer>map(issueModel -> issueModel.getUser().getId(),
+                ).<Integer>map(subjectModel -> subjectModel.getUser().getId(),
                     (subject, id) -> subject.getUser().setId(id))
             );
     }
