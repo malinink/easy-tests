@@ -51,7 +51,7 @@ public class SubjectsController extends AbstractController {
             throw new ForbiddenException();
         }
 
-        final List<SubjectModelInterface> subjectsModels = this.subjectsService.findByUser(new UserModelEmpty(userId));
+        final List<SubjectModelInterface> subjectsModels = this.subjectsService.findByUser(userModel);
 
         return subjectsModels
                 .stream()
