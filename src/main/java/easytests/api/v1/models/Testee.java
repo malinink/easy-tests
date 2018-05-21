@@ -14,4 +14,6 @@ public class Testee {
     private String surname;
 
     private Integer groupNumber;
+
+    private Identity quiz;
 }

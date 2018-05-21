@@ -52,6 +52,7 @@ public class QuizzesControllerTest {
     private static String lastName = "lastName";
     private static String surname = "surname";
     private static String groupNumber = "groupNumber";
+    private static String quiz = "quiz";
 
     @Autowired
     private MockMvc mvc;
@@ -80,7 +81,8 @@ public class QuizzesControllerTest {
             quizModel.map(this.quizzesSupport.getEntityFixtureMock(idx));
 
             TesteeModelInterface testeeModel = new TesteeModel();
-            testeeModel.map(testeesSupport.getEntityFixtureMock(idx));
+            testeeModel.map(testeesSupport.getEntityFixtureMock(0));
+            testeeModel.setQuiz(quizModel);
             quizModel.setTestee(testeeModel);
 
             if (quizModel.getId().equals(1)) {
@@ -111,7 +113,8 @@ public class QuizzesControllerTest {
                                         .with(firstName, quizzesModels.get(0).getTestee().getFirstName())
                                         .with(lastName, quizzesModels.get(0).getTestee().getLastName())
                                         .with(surname, quizzesModels.get(0).getTestee().getSurname())
-                                        .with(groupNumber, quizzesModels.get(0).getTestee().getGroupNumber()))
+                                        .with(groupNumber, quizzesModels.get(0).getTestee().getGroupNumber())
+                                        .with(quiz, new JsonSupport().with(id, quizzesModels.get(0).getId())))
                                 )
                         .build()
                 ))
