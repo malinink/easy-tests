@@ -54,8 +54,8 @@ public class QuestionsControllerTest {
     @MockBean
     private TopicsServiceInterface topicsService;
 
-    @MockBean
-    private AnswersServiceInterface answersService;
+   // @MockBean
+   // private AnswersServiceInterface answersService;
 
     @MockBean
     private QuestionTypesServiceInterface questionTypesService;
@@ -72,6 +72,8 @@ public class QuestionsControllerTest {
 
     private QuestionsSupport questionSupport = new QuestionsSupport();
 
+  //  private AnswersSupport answersSupport = new AnswersSupport();
+
     @Test
     public void testListSuccess() throws Exception {
         final List<QuestionModelInterface> questionsModels = new ArrayList<>();
@@ -83,11 +85,11 @@ public class QuestionsControllerTest {
 
         int topicIdParamValue = 1;
 
-        when(this.questionTypesService.find(topicIdParamValue))
-                .thenReturn(new QuestionTypeModelEmpty(topicIdParamValue));
+        //when(this.questionTypesService.find(topicIdParamValue))
+        //        .thenReturn(new QuestionTypeModelEmpty(topicIdParamValue));
         when(this.topicsService.find(topicIdParamValue))
                 .thenReturn(new TopicModelEmpty(topicIdParamValue));
-       // when(this.answersService.find(topicIdParamValue))
+        //when(this.answersService.find(topicIdParamValue))
         //        .thenReturn(new AnswerModelEmpty(topicIdParamValue));
         when(this.questionsService.findByTopic(new TopicModelEmpty(topicIdParamValue)))
                 .thenReturn(questionsModels);
@@ -103,14 +105,14 @@ public class QuestionsControllerTest {
                                 .with(id, questionsModels.get(0).getId())
                                 .with(text, questionsModels.get(0).getText())
                                 .with(type, new JsonSupport().with(id, questionsModels.get(0).getQuestionType().getId()))
-                                .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId()))
-                                .with(answers, new JsonSupport().with(id, questionsModels.get(0).getAnswers().get(0).getId()))                        )
+                                .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId())))
+                                //.with(answers, new JsonSupport().with(id, questionsModels.get(0).getAnswers().get(0).getId()))                        )
                         .with(new JsonSupport()
                                 .with(id, questionsModels.get(1).getId())
                                 .with(text, questionsModels.get(1).getText())
                                 .with(type, new JsonSupport().with(id, questionsModels.get(1).getQuestionType().getId()))
-                                .with(topic, new JsonSupport().with(id, questionsModels.get(1).getTopic().getId()))
-                                .with(answers, new JsonSupport().with(id, questionsModels.get(1).getAnswers().get(0).getId())))
+                                .with(topic, new JsonSupport().with(id, questionsModels.get(1).getTopic().getId())))
+                                //.with(answers, new JsonSupport().with(id, questionsModels.get(1).getAnswers().get(0).getId())))
                         .build()
                 ))
                 .andReturn();
