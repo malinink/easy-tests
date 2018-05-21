@@ -16,9 +16,9 @@ public class Quiz {
 
     private Boolean codeExpired;
 
-    private LocalDateTime startedAt;
+    private String startedAt;
 
-    private LocalDateTime finishedAt;
+    private String finishedAt;
 
-    private TesteeModelInterface testee;
+    private Testee testee;
 }

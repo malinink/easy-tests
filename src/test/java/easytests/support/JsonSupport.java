@@ -1,7 +1,13 @@
 package easytests.support;
 
+import easytests.core.models.TesteeModelInterface;
 import easytests.support.exceptions.CallArrayMethodOnObjectException;
 import easytests.support.exceptions.CallObjectMethodOnArrayException;
+import org.springframework.lang.Nullable;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
 
 /**
@@ -54,6 +60,14 @@ public class JsonSupport {
         return this;
     }
 
+    public JsonSupport with(String key, LocalDateTime value) {
+        this.verifyIsObject();
+        this.prepareJson();
+        this.json += this.gatherLeft(key) + this.convert(value);
+        return this;
+    }
+
+
     public JsonSupport with(String value) {
         this.verifyIsArray();
         this.prepareJson();
@@ -100,6 +114,11 @@ public class JsonSupport {
     private String convert(Boolean value) {
         return value ? "true" : "false";
     }
+
+    private String convert(LocalDateTime value) {
+        return quote + value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "Z" + quote;
+    }
+
 
     public String build() {
         if (this.notNull) {
