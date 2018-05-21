@@ -4,15 +4,18 @@ import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
+import easytests.core.models.empty.QuestionModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.models.empty.QuestionTypeModelEmpty;
 import easytests.core.models.empty.AnswerModelEmpty;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
+import easytests.core.options.builder.AnswersOptionsBuilder;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.QuestionTypesServiceInterface;
 import easytests.core.services.AnswersServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.support.QuestionsSupport;
+import easytests.support.AnswersSupport;
 import easytests.support.JsonSupport;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +48,12 @@ public class QuestionsControllerTest {
     private static String topic = "topic";
     private static String answers = "answers";
 
+    private static String idAdminAnswer = "id";
+    private static String textAdminAnswer = "text";
+    private static String isRight = "isRight";
+    private static String number = "number";
+
+
     @Autowired
     private MockMvc mvc;
 
@@ -54,8 +63,8 @@ public class QuestionsControllerTest {
     @MockBean
     private TopicsServiceInterface topicsService;
 
-   // @MockBean
-   // private AnswersServiceInterface answersService;
+    @MockBean
+    private AnswersServiceInterface answersService;
 
     @MockBean
     private QuestionTypesServiceInterface questionTypesService;
@@ -70,17 +79,25 @@ public class QuestionsControllerTest {
     @MockBean
     private QuestionsOptionsBuilder questionsOptionsBuilder;
 
+    //@MockBean
+    //private AnswersOptionsBuilder answersOptionsBuilder;
+
     private QuestionsSupport questionSupport = new QuestionsSupport();
 
-  //  private AnswersSupport answersSupport = new AnswersSupport();
+    private AnswersSupport answersSupport = new AnswersSupport();
 
     @Test
     public void testListSuccess() throws Exception {
         final List<QuestionModelInterface> questionsModels = new ArrayList<>();
+        ///final List<AnswerModelInterface> answersModels = new ArrayList<>();
         IntStream.range(0, 2).forEach(idx -> {
             final QuestionModel questionModel = new QuestionModel();
             questionModel.map(this.questionSupport.getEntityFixtureMock(idx));
             questionsModels.add(questionModel);
+
+            //final AnswerModel answerModel=new AnswerModel();
+            //answerModel.map(this.answersSupport.getEntityFixtureMock(idx));
+            //answersModels.add(answerModel);
         });
 
         int topicIdParamValue = 1;
@@ -93,11 +110,12 @@ public class QuestionsControllerTest {
         //        .thenReturn(new AnswerModelEmpty(topicIdParamValue));
         when(this.questionsService.findByTopic(new TopicModelEmpty(topicIdParamValue)))
                 .thenReturn(questionsModels);
+        //when(this.answersService.findByQuestion(new QuestionModelEmpty(topicIdParamValue)))
+        //        .thenReturn(answersModels);
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
 
         this.mvc.perform(get("/v1/questions?topicId={topicIdParamValue}", topicIdParamValue)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(new JsonSupport()
@@ -105,13 +123,23 @@ public class QuestionsControllerTest {
                                 .with(id, questionsModels.get(0).getId())
                                 .with(text, questionsModels.get(0).getText())
                                 .with(type, new JsonSupport().with(id, questionsModels.get(0).getQuestionType().getId()))
-                                .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId())))
+                                .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId()))
+                                .with(idAdminAnswer, questionsModels.get(0).getAnswers().get(0).getId())
+                                .with(textAdminAnswer, questionsModels.get(0).getAnswers().get(0).getTxt())
+                                .with(isRight, questionsModels.get(0).getAnswers().get(0).getRight())
+                                .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber())
+                        )
                                 //.with(answers, new JsonSupport().with(id, questionsModels.get(0).getAnswers().get(0).getId()))                        )
                         .with(new JsonSupport()
                                 .with(id, questionsModels.get(1).getId())
                                 .with(text, questionsModels.get(1).getText())
                                 .with(type, new JsonSupport().with(id, questionsModels.get(1).getQuestionType().getId()))
-                                .with(topic, new JsonSupport().with(id, questionsModels.get(1).getTopic().getId())))
+                                .with(topic, new JsonSupport().with(id, questionsModels.get(1).getTopic().getId()))
+                                .with(idAdminAnswer, questionsModels.get(1).getAnswers().get(0).getId())
+                                .with(textAdminAnswer, questionsModels.get(1).getAnswers().get(0).getTxt())
+                                .with(isRight, questionsModels.get(1).getAnswers().get(0).getRight())
+                                .with(number, questionsModels.get(1).getAnswers().get(0).getSerialNumber())
+                        )
                                 //.with(answers, new JsonSupport().with(id, questionsModels.get(1).getAnswers().get(0).getId())))
                         .build()
                 ))
