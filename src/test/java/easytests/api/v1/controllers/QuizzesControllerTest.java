@@ -113,6 +113,32 @@ public class QuizzesControllerTest {
                 ))
                 .andReturn();
     }
+
+    @Test
+    public void testListNotFound() throws Exception {
+        int issueIdParamValue = 10;
+
+        this.mvc.perform(get("/v1/quizzes?issueId={issueIdParamValue}", issueIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testListForbidden() throws Exception {
+        int issueIdParamValue = 10;
+
+        when(this.issuesService.find(issueIdParamValue))
+                .thenReturn(new IssueModelEmpty(issueIdParamValue));
+        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(false);
+
+        this.mvc.perform(get("/v1/quizzes?issueId={issueIdParamValue}", issueIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
     /**
      * show(quizId)
      */
