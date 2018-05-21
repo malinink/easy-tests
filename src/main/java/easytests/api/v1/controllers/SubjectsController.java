@@ -6,7 +6,6 @@ import easytests.api.v1.models.Subject;
 import easytests.common.exceptions.NotFoundException;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.UserModelInterface;
-import easytests.core.models.empty.UserModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.UsersServiceInterface;
