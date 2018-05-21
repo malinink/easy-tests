@@ -91,7 +91,7 @@ public class TopicsControllerTest {
                         .with(id, topicsModels.get(1).getId())
                         .with(name, topicsModels.get(1).getName())
                         .with(subject, new JsonSupport()
-                                .with(id, topicsModels.get(0).getSubject().getId())
+                                .with(id, topicsModels.get(1).getSubject().getId())
                         )
                 )
                 .build();
