@@ -5,8 +5,12 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.TopicModelEmpty;
+import easytests.core.models.empty.QuestionTypeModelEmpty;
+import easytests.core.models.empty.AnswerModelEmpty;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
 import easytests.core.services.QuestionsServiceInterface;
+import easytests.core.services.QuestionTypesServiceInterface;
+import easytests.core.services.AnswersServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.support.QuestionsSupport;
 import easytests.support.JsonSupport;
@@ -50,6 +54,12 @@ public class QuestionsControllerTest {
     @MockBean
     private TopicsServiceInterface topicsService;
 
+    @MockBean
+    private AnswersServiceInterface answersService;
+
+    @MockBean
+    private QuestionTypesServiceInterface questionTypesService;
+
     @Autowired
     @Qualifier("QuestionsMapperV1")
     private QuestionsMapper questionsMapper;
@@ -71,11 +81,14 @@ public class QuestionsControllerTest {
             questionsModels.add(questionModel);
         });
 
-
         int topicIdParamValue = 1;
 
+        when(this.questionTypesService.find(topicIdParamValue))
+                .thenReturn(new QuestionTypeModelEmpty(topicIdParamValue));
         when(this.topicsService.find(topicIdParamValue))
                 .thenReturn(new TopicModelEmpty(topicIdParamValue));
+       // when(this.answersService.find(topicIdParamValue))
+        //        .thenReturn(new AnswerModelEmpty(topicIdParamValue));
         when(this.questionsService.findByTopic(new TopicModelEmpty(topicIdParamValue)))
                 .thenReturn(questionsModels);
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
