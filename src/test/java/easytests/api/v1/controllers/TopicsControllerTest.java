@@ -76,8 +76,6 @@ public class TopicsControllerTest {
 
         when(this.subjectsService.find(Integer.valueOf(subjectIdParamValue)))
                 .thenReturn(new SubjectModelEmpty(Integer.valueOf(subjectIdParamValue)));
-        when(this.topicsService.findBySubject(new SubjectModelEmpty(Integer.valueOf(subjectIdParamValue))))
-                .thenReturn(topicsModels);
         when(this.acl.hasAccess(any(SubjectModelInterface.class)))
                 .thenReturn(true);
 
