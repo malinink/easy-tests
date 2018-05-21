@@ -6,7 +6,6 @@ import easytests.api.v1.mappers.QuizzesMapper;
 import easytests.api.v1.models.Quiz;
 import easytests.core.models.IssueModelInterface;
 import easytests.core.models.QuizModelInterface;
-import easytests.core.models.empty.IssueModelEmpty;
 import easytests.core.options.builder.QuizzesOptionsBuilderInterface;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.QuizzesServiceInterface;

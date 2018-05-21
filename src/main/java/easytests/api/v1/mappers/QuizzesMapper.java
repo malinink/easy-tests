@@ -1,19 +1,12 @@
 package easytests.api.v1.mappers;
 
 import easytests.api.v1.models.Quiz;
-import easytests.api.v1.models.Testee;
 import easytests.core.models.QuizModel;
-import easytests.core.models.TesteeModel;
-import easytests.core.models.TesteeModelInterface;
 import easytests.core.models.empty.ModelsListEmpty;
-import easytests.core.models.empty.TesteeModelEmpty;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
-
-import javax.print.attribute.standard.Destination;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 /**
  * @author miron97

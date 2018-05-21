@@ -1,6 +1,5 @@
 package easytests.api.v1.models;
 
-
 import lombok.Data;
 
 @Data

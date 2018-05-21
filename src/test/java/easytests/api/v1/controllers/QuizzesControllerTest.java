@@ -1,21 +1,19 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.mappers.ObjectsMapper;
 import easytests.api.v1.mappers.QuizzesMapper;
-import easytests.api.v1.models.Quiz;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.IssueModelEmpty;
 import easytests.core.options.builder.QuizzesOptionsBuilder;
-import easytests.core.options.builder.QuizzesOptionsBuilderInterface;
 import easytests.core.services.IssuesService;
-import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.QuizzesService;
-import easytests.core.services.QuizzesServiceInterface;
 import easytests.support.JsonSupport;
 import easytests.support.QuizzesSupport;
 import easytests.support.TesteesSupport;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +23,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
-
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

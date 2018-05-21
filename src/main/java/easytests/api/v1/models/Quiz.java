@@ -1,7 +1,5 @@
 package easytests.api.v1.models;
 
-import easytests.core.models.TesteeModelInterface;
-import java.time.LocalDateTime;
 import lombok.Data;
 
 
