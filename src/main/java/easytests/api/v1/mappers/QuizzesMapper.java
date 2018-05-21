@@ -17,12 +17,16 @@ public class QuizzesMapper extends ModelMapper {
         super();
         this.createTypeMap(QuizModel.class, Quiz.class)
                 .addMappings(mapper -> mapper.when(context -> !(context.getSource() instanceof ModelsListEmpty))
-                        .<Integer>map(quizModel -> quizModel.getTestee().getQuiz().getId(), (quiz, id) -> quiz.getTestee().getQuiz().setId(id)))
+                        .<Integer>map(quizModel -> quizModel.getTestee().getQuiz().getId()
+                                , (quiz, id) -> quiz.getTestee().getQuiz().setId(id)))
                 .addMappings(mapper -> mapper.when(context -> !(context.getSource() instanceof ModelsListEmpty))
-                        .<Integer>map(quizModel -> quizModel.getTestee().getId(), (quiz, id) -> quiz.getTestee().setId(id)))
-                .addMappings(mapper -> mapper.using(src -> ((LocalDateTime)src.getSource()).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "Z")
+                        .<Integer>map(quizModel -> quizModel.getTestee().getId()
+                                , (quiz, id) -> quiz.getTestee().setId(id)))
+                .addMappings(mapper -> mapper.using(src -> ((LocalDateTime)src.getSource())
+                        .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "Z")
                         .<String>map(QuizModel::getStartedAt, (quiz, startedAt) -> quiz.setStartedAt(startedAt)))
-                .addMappings(mapper -> mapper.using(src -> ((LocalDateTime)src.getSource()).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "Z")
+                .addMappings(mapper -> mapper.using(src -> ((LocalDateTime)src.getSource())
+                        .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "Z")
                         .<String>map(QuizModel::getFinishedAt, (quiz, finishedAt) -> quiz.setFinishedAt(finishedAt)));
     }
 }

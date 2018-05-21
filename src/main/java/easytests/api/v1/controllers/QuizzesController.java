@@ -55,12 +55,10 @@ public class QuizzesController extends AbstractController {
         final List<QuizModelInterface> quizModels = this.quizzesService
                 .findByIssue(issueModel);
 
-        List<Quiz> quizResult = quizModels
+        return quizModels
                 .stream()
                 .map(model -> this.quizzesMapper.map(model, Quiz.class))
                 .collect(Collectors.toList());
-
-        return quizResult;
     }
     /**
      * show(quizId)
