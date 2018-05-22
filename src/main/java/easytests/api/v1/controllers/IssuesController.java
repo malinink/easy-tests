@@ -6,7 +6,6 @@ import easytests.api.v1.models.Issue;
 import easytests.common.exceptions.NotFoundException;
 import easytests.core.models.IssueModelInterface;
 import easytests.core.models.SubjectModelInterface;
-import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
@@ -50,8 +49,7 @@ public class IssuesController extends AbstractController {
             throw new ForbiddenException();
         }
 
-        final List<IssueModelInterface> issuesModels = this.issuesService
-                .findBySubject(new SubjectModelEmpty(subjectId));
+        final List<IssueModelInterface> issuesModels = this.issuesService.findBySubject(subjectModel);
 
         return issuesModels
                 .stream()
