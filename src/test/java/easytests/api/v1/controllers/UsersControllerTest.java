@@ -8,6 +8,7 @@ import easytests.core.services.UsersService;
 import easytests.support.JsonSupport;
 import easytests.support.SubjectsSupport;
 import easytests.support.UsersSupport;
+import easytests.auth.services.SessionServiceInterface;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -39,7 +40,6 @@ public class UsersControllerTest {
     private static String email = "email";
     private static String isAdmin = "isAdmin";
     private static String state = "state";
-    private static String subjects = "subjects";
 
     @Autowired
     private MockMvc mvc;
@@ -54,8 +54,12 @@ public class UsersControllerTest {
 
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
+    @MockBean
+    private SessionServiceInterface sessionService;
+
     @Test
     public void testListSuccess() throws Exception {
+        //when(this.sessionService.getUserModel().getIsAdmin()).thenReturn(true);
         final List<UserModelInterface> usersModels = new ArrayList<>();
         IntStream.range(0, 2).forEach(idx -> {
             final UserModel userModel = new UserModel();
@@ -87,6 +91,17 @@ public class UsersControllerTest {
                                 .with(state, usersModels.get(1).getState()))
                         .build()
                 ))
+                .andReturn();
+    }
+
+    @Test
+    public void testListForbidden() throws Exception {
+        when(this.sessionService.getUserModel().getIsAdmin()).thenReturn(false);
+
+        mvc.perform(get("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
                 .andReturn();
     }
 
