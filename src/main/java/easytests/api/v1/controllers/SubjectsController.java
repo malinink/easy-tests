@@ -3,7 +3,7 @@ package easytests.api.v1.controllers;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.mappers.SubjectsMapper;
 import easytests.api.v1.models.Subject;
-import easytests.common.exceptions.NotFoundException;
+import easytests.api.v1.exceptions.NotFoundException;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilderInterface;
