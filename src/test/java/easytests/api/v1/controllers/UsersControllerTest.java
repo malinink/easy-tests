@@ -59,7 +59,7 @@ public class UsersControllerTest {
 
     @Test
     public void testListSuccess() throws Exception {
-        //when(this.sessionService.getUserModel().getIsAdmin()).thenReturn(true);
+        when(this.sessionService.getUserModel().getIsAdmin()).thenReturn(true);
         final List<UserModelInterface> usersModels = new ArrayList<>();
         IntStream.range(0, 2).forEach(idx -> {
             final UserModel userModel = new UserModel();
