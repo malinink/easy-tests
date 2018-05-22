@@ -1,9 +1,12 @@
 package easytests.api.v1.controllers;
 
+import easytests.api.v1.exceptions.*;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.mappers.SubjectsMapper;
+import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.Subject;
+import easytests.core.models.SubjectModel;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilderInterface;
@@ -13,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,9 +61,25 @@ public class SubjectsController extends AbstractController {
                 .map(model -> this.subjectsMapper.map(model, Subject.class))
                 .collect(Collectors.toList());
     }
-    /**
-     * create
-     */
+
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Identity create(@RequestBody Subject subject) throws BadRequestException, ForbiddenException {
+
+        final UserModelInterface userModel = this.usersService.find(subject.getUser().getId());
+        if (subject.getId() != null) {
+            throw new IdentifiedModelException();
+        }
+        if (!this.acl.hasAccess(userModel)) {
+            throw new ForbiddenException();
+        }
+
+        final SubjectModelInterface subjectModel = this.subjectsMapper.map(subject, SubjectModel.class);
+
+        this.subjectsService.save(subjectModel);
+
+        return this.subjectsMapper.map(subjectModel, Identity.class);
+    }
     /**
      * update
      */
