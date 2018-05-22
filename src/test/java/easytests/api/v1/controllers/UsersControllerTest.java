@@ -1,10 +1,10 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.UsersMapper;
+import easytests.auth.services.SessionServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.options.builder.UsersOptionsBuilder;
-import easytests.auth.services.SessionServiceInterface;
 import easytests.core.services.UsersService;
 import easytests.support.JsonSupport;
 import easytests.support.SubjectsSupport;
