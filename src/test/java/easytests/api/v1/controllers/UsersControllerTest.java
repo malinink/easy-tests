@@ -59,13 +59,14 @@ public class UsersControllerTest {
 
     @Test
     public void testListSuccess() throws Exception {
-        when(this.sessionService.getUserModel().getIsAdmin()).thenReturn(true);
+
         final List<UserModelInterface> usersModels = new ArrayList<>();
         IntStream.range(0, 2).forEach(idx -> {
             final UserModel userModel = new UserModel();
             userModel.map(this.usersSupport.getEntityFixtureMock(idx));
             usersModels.add(userModel);
         });
+        when(this.sessionService.getUserModel()).thenReturn(usersModels.get(0));
         when(this.usersService.findAll()).thenReturn(usersModels);
 
         mvc.perform(get("/v1/users")
@@ -96,7 +97,9 @@ public class UsersControllerTest {
 
     @Test
     public void testListForbidden() throws Exception {
-        when(this.sessionService.getUserModel().getIsAdmin()).thenReturn(false);
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(this.usersSupport.getEntityFixtureMock(1));
+        when(this.sessionService.getUserModel()).thenReturn(userModel);
 
         mvc.perform(get("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON))
