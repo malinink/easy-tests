@@ -1,10 +1,10 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.exceptions.*;
+import easytests.auth.services.SessionServiceInterface;
 import easytests.api.v1.mappers.UsersMapper;
 import easytests.api.v1.models.User;
 import easytests.core.models.UserModelInterface;
-import easytests.auth.services.SessionServiceInterface;
 import easytests.core.options.builder.UsersOptionsBuilderInterface;
 import easytests.core.services.UsersServiceInterface;
 import java.util.List;
