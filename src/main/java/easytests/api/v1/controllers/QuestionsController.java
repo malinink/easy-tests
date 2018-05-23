@@ -51,7 +51,8 @@ public class QuestionsController extends AbstractController {
             throw new ForbiddenException();
         }
 
-        final List<QuestionModelInterface> questionsModels = this.questionsService.findByTopic(new TopicModelEmpty(topicId));
+        final List<QuestionModelInterface> questionsModels =
+                this.questionsService.findByTopic(new TopicModelEmpty(topicId));
 
         return questionsModels
                 .stream()

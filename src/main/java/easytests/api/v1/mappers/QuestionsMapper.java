@@ -27,13 +27,13 @@ public class QuestionsMapper extends ModelMapper {
                             context -> !(context.getSource() instanceof ModelsListEmpty)
                     ).<Integer>map(questionModel -> questionModel.getTopic().getId(),
                             (question, id) -> question.getTopic().setId(id));
-                    //mapper.when(
-                    //        context -> !(context.getSource() instanceof ModelsListEmpty)
-                    //).<List<AdminAnswer>>map(questionModel -> questionModel.getAnswers(),
-                    //        (question, list) -> question.setAnswers(list));
                     mapper.when(
                             context -> !(context.getSource() instanceof ModelsListEmpty)
-                    ).map(QuestionModel::getAnswers, Question::setAnswers);
+                    ).<List<AdminAnswer>>map(questionModel -> questionModel.getAnswers(),
+                            (question, list) -> question.setAnswers(list));
+                    //mapper.when(
+                      //      context -> !(context.getSource() instanceof ModelsListEmpty)
+                    //).map(QuestionModel::getAnswers, Question::setAnswers);
                 }
             );
     }
