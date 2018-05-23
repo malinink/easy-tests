@@ -146,7 +146,7 @@ public class SubjectsControllerTest {
                 .content(new JsonSupport()
                         .with(name, "Name1")
                         .with(description, "Description1")
-                        .with(user, "7")
+                        .with(user, new JsonSupport().with(5))
                         .build()
                 ))
                 .andExpect(status().is(201))
