@@ -13,11 +13,6 @@ public class SubjectModelTest extends AbstractModelTest {
 
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
-    @Override
-    protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder();
-    }
-
     @Test
     public void testCommon() throws Exception {
         super.testCommon(SubjectModel.class);
