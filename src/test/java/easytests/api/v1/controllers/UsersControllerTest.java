@@ -1,20 +1,15 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.mappers.ObjectsMapper;
 import easytests.api.v1.mappers.UsersMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.entities.UserEntity;
 import easytests.core.models.*;
-import easytests.core.options.UsersOptions;
-import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
 import easytests.support.JsonSupport;
 import easytests.support.SubjectsSupport;
 import easytests.support.UsersSupport;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
@@ -69,18 +64,24 @@ public class UsersControllerTest {
          doAnswer(invocation -> {
              final UserModel userModel = (UserModel) invocation.getArguments()[0];
              userModel.setId(5);
+             final UserEntity userTrueEntity = this.usersSupport.getEntityAdditionalMock(0);
+             final UserModel userTrueModel = new UserModel();
+             userTrueModel.map(userTrueEntity);
+             userTrueModel.setId(5);
+             userTrueModel.setPassword(userModel.getPassword());
+             userTrueModel.setSubjects(null);
+             this.usersSupport.assertEquals(userModel, userTrueModel);
              return null;
          }).when(this.usersService).save(any(UserModelInterface.class));
-
          mvc.perform(post("/v1/users")
                  .contentType(MediaType.APPLICATION_JSON)
                  .content(new JsonSupport()
-                         .with(firstName, "firstName")
-                         .with(lastName, "lastName")
-                         .with(surname, "surname")
-                         .with(email, "mail@mail.com")
+                         .with(firstName, "FirstName")
+                         .with(lastName, "LastName")
+                         .with(surname, "Surname")
+                         .with(email, "mail@mail.ru")
                          .with(isAdmin, true)
-                         .with(state, 0)
+                         .with(state, 1)
                          .build()
                  ))
                  .andExpect(status().is(201))

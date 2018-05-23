@@ -32,7 +32,15 @@ public class UsersController {
     @Qualifier("UsersMapperV1")
     private UsersMapper usersMapper;
 
-    /**
+    private String passgenerator(int n) {
+        final String dict = "qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
+        String pass = "";
+        for (int i = 0; i < 6; i++)
+            pass = pass + (dict.charAt(0 + (int) (Math.random() * dict.length())));
+        return pass;
+    }
+
+        /**
      * list
      */
     @PostMapping("")
@@ -42,12 +50,12 @@ public class UsersController {
             throw new IdentifiedModelException();
         }
         if (this.usersService.findByEmail(user.getEmail()) != null) {
-            throw new BadRequestException();
+            throw new BadRequestException("This email already exist.");
         }
 
         final UserModelInterface userModel = this.usersMapper.map(user, UserModel.class);
 
-        userModel.setPassword("");
+        userModel.setPassword(passgenerator(6));
 
         this.usersService.save(userModel);
 
