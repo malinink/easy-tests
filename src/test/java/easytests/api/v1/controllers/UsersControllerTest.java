@@ -59,6 +59,9 @@ public class UsersControllerTest {
 
     @Test
     public void testListSuccess() throws Exception {
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
         final List<UserModelInterface> usersModels = new ArrayList<>();
         IntStream.range(0, 2).forEach(idx -> {
@@ -66,7 +69,6 @@ public class UsersControllerTest {
             userModel.map(this.usersSupport.getEntityFixtureMock(idx));
             usersModels.add(userModel);
         });
-        when(this.sessionService.getUserModel()).thenReturn(usersModels.get(0));
         when(this.usersService.findAll()).thenReturn(usersModels);
 
         mvc.perform(get("/v1/users")
@@ -97,9 +99,9 @@ public class UsersControllerTest {
 
     @Test
     public void testListForbidden() throws Exception {
-        final UserModelInterface userModel = new UserModel();
-        userModel.map(this.usersSupport.getEntityFixtureMock(1));
-        when(this.sessionService.getUserModel()).thenReturn(userModel);
+        final UserModelInterface userNotAdminModel = new UserModel();
+        userNotAdminModel.map(this.usersSupport.getNotAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
 
         mvc.perform(get("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON))
