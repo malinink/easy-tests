@@ -133,6 +133,32 @@ public class SubjectsControllerTest {
     /**
      * create
      */
+    @Test
+    public void testCreateSuccess() throws Exception {
+        doAnswer(invocation -> {
+            final SubjectModel subjectModel = (SubjectModel) invocation.getArguments()[0];
+            subjectModel.setId(4);
+            return null;
+        }).when(this.subjectsService).save(any(SubjectModelInterface.class));
+
+        mvc.perform(post("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(name, "Name1")
+                        .with(description, "Description1")
+                        .with(user, "7")
+                        .build()
+                ))
+                .andExpect(status().is(201))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(
+                        new JsonSupport()
+                                .with(id, 4)
+                                .build()
+                ))
+                .andReturn();
+    }
+
     /**
      * update
      */
