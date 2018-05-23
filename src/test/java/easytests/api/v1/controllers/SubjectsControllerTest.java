@@ -158,6 +158,23 @@ public class SubjectsControllerTest {
                 ))
                 .andReturn();
     }
+    
+    @Test
+    public void testCreateWithIdFailed() throws Exception {
+        mvc.perform(post("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 2)
+                        .with(name, "Name1")
+                        .with(description, "Description1")
+                        .with(user, new JsonSupport().with(5))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
 
     /**
      * update
