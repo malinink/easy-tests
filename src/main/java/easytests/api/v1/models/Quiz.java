@@ -1,5 +1,6 @@
 package easytests.api.v1.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 
@@ -14,9 +15,12 @@ public class Quiz {
 
     private Boolean codeExpired;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String startedAt;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String finishedAt;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Testee testee;
 }

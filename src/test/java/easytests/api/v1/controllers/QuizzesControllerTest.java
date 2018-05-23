@@ -69,18 +69,18 @@ public class QuizzesControllerTest {
     @Test
     public void testListSuccess() throws Exception {
         final List<QuizModelInterface> quizzesModels = new ArrayList<>();
-        IntStream.range(0, 3).forEach(idx -> {
+        final TesteeModelInterface testeeModel = new TesteeModel();
+        testeeModel.map(testeesSupport.getEntityFixtureMock(0));
+
+        IntStream.range(0, 2).forEach(idx -> {
             final QuizModel quizModel = new QuizModel();
             quizModel.map(this.quizzesSupport.getEntityFixtureMock(idx));
 
-            TesteeModelInterface testeeModel = new TesteeModel();
-            testeeModel.map(testeesSupport.getEntityFixtureMock(0));
-            testeeModel.setQuiz(quizModel);
-            quizModel.setTestee(testeeModel);
-
-            if (quizModel.getId().equals(1)) {
-                quizzesModels.add(quizModel);
+            if (quizModel.getId().equals(2)) {
+                quizModel.setTestee(testeeModel);
             }
+
+            quizzesModels.add(quizModel);
         });
 
         int issueIdParamValue = 1;
@@ -100,15 +100,20 @@ public class QuizzesControllerTest {
                                 .with(inviteCode, quizzesModels.get(0).getInviteCode())
                                 .with(codeExpired, quizzesModels.get(0).getCodeExpired())
                                 .with(startedAt, quizzesModels.get(0).getStartedAt())
-                                .with(finishedAt, quizzesModels.get(0).getFinishedAt())
+                                .with(finishedAt, quizzesModels.get(0).getFinishedAt()))
+                        .with(new JsonSupport()
+                                .with(id, quizzesModels.get(1).getId())
+                                .with(inviteCode, quizzesModels.get(1).getInviteCode())
+                                .with(codeExpired, quizzesModels.get(1).getCodeExpired())
+                                .with(startedAt, quizzesModels.get(1).getStartedAt())
+                                .with(finishedAt, quizzesModels.get(1).getFinishedAt())
                                 .with(testee, new JsonSupport()
-                                        .with(id, quizzesModels.get(0).getTestee().getId())
-                                        .with(firstName, quizzesModels.get(0).getTestee().getFirstName())
-                                        .with(lastName, quizzesModels.get(0).getTestee().getLastName())
-                                        .with(surname, quizzesModels.get(0).getTestee().getSurname())
-                                        .with(groupNumber, quizzesModels.get(0).getTestee().getGroupNumber())
-                                        .with(quiz, new JsonSupport().with(id, quizzesModels.get(0).getId())))
-                                )
+                                        .with(id, testeeModel.getId())
+                                        .with(firstName, testeeModel.getFirstName())
+                                        .with(lastName, testeeModel.getLastName())
+                                        .with(surname, testeeModel.getSurname())
+                                        .with(groupNumber, testeeModel.getGroupNumber())
+                                        .with(quiz, new JsonSupport().with(id, testeeModel.getQuiz().getId()))))
                         .build()
                 ))
                 .andReturn();

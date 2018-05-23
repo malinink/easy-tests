@@ -1,5 +1,6 @@
 package easytests.api.v1.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 
@@ -18,5 +19,6 @@ public class Testee {
 
     private Integer groupNumber;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Identity quiz;
 }
