@@ -32,14 +32,6 @@ public class UsersController {
     @Qualifier("UsersMapperV1")
     private UsersMapper usersMapper;
 
-    private String passgenerator(int n) {
-        final String dict = "qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
-        String pass = "";
-        for (int i = 0; i < n; i++) {
-            pass = pass + (dict.charAt(0 + (int) (Math.random() * dict.length())));
-        }
-        return pass;
-    }
     /**
      * list
      */
@@ -74,4 +66,13 @@ public class UsersController {
     /**
      * showMe
      */
+
+    private String passgenerator(int n) {
+        final String dict = "qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
+        String pass = "";
+        for (int i = 0; i < n; i++) {
+            pass = pass + (dict.charAt(0 + (int) (Math.random() * dict.length())));
+        }
+        return pass;
+    }
 }
