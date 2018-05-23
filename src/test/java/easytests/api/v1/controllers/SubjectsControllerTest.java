@@ -7,6 +7,8 @@ import easytests.core.models.*;
 import easytests.core.models.empty.UserModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
+import easytests.core.options.SubjectsOptions;
+import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.services.UsersServiceInterface;
 import easytests.support.SubjectsSupport;
 import easytests.support.JsonSupport;
@@ -139,6 +141,29 @@ public class SubjectsControllerTest {
     /**
      * show(subjectId)
      */
+    @Test
+    public void testShowSuccess() throws Exception {
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subjectModel.map(this.subjectsSupport.getEntityFixtureMock(0));
+        when(this.subjectsOptionsBuilder.forAuth()).thenReturn(new SubjectsOptions());
+        when(this.subjectsService.find(any(Integer.class), any(SubjectsOptionsInterface.class))).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+
+        mvc.perform(get("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, subjectModel.getId())
+                        .with(name, subjectModel.getName())
+                        .with(description, subjectModel.getDescription())
+                        .with(user, new JsonSupport().with(id, subjectModel.getUser().getId()))
+                        .build()
+                ))
+                .andReturn();
+    }
+
+
     /**
      * delete(subjectId)
      */
