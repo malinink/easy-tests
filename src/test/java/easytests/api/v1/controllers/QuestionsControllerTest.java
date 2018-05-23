@@ -10,10 +10,10 @@ import easytests.core.models.empty.QuestionTypeModelEmpty;
 import easytests.core.models.empty.AnswerModelEmpty;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
 import easytests.core.options.builder.AnswersOptionsBuilder;
-import easytests.core.services.QuestionsServiceInterface;
-import easytests.core.services.QuestionTypesServiceInterface;
-import easytests.core.services.AnswersServiceInterface;
-import easytests.core.services.TopicsServiceInterface;
+import easytests.core.services.QuestionsService;
+import easytests.core.services.QuestionTypesService;
+import easytests.core.services.AnswersService;
+import easytests.core.services.TopicsService;
 import easytests.support.QuestionsSupport;
 import easytests.support.AnswersSupport;
 import easytests.support.JsonSupport;
@@ -52,22 +52,23 @@ public class QuestionsControllerTest {
     private static String textAdminAnswer = "text";
     private static String isRight = "isRight";
     private static String number = "number";
+    private static String question = "question";
 
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private QuestionsServiceInterface questionsService;
+    private QuestionsService questionsService;
 
     @MockBean
-    private TopicsServiceInterface topicsService;
+    private TopicsService topicsService;
 
     @MockBean
-    private AnswersServiceInterface answersService;
+    private AnswersService answersService;
 
     @MockBean
-    private QuestionTypesServiceInterface questionTypesService;
+    private QuestionTypesService questionTypesService;
 
     @Autowired
     @Qualifier("QuestionsMapperV1")
@@ -88,7 +89,7 @@ public class QuestionsControllerTest {
 
     @Test
     public void testListSuccess() throws Exception {
-        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
+        /*final List<QuestionModelInterface> questionsModels = new ArrayList<>();
         ///final List<AnswerModelInterface> answersModels = new ArrayList<>();
         IntStream.range(0, 2).forEach(idx -> {
             final QuestionModel questionModel = new QuestionModel();
@@ -98,10 +99,31 @@ public class QuestionsControllerTest {
             //final AnswerModel answerModel=new AnswerModel();
             //answerModel.map(this.answersSupport.getEntityFixtureMock(idx));
             //answersModels.add(answerModel);
+        });*/
+
+        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
+        IntStream.range(0, 3).forEach(idx -> {
+            final QuestionModel questionModel = new QuestionModel();
+            questionModel.map(this.questionSupport.getEntityFixtureMock(idx));
+
+            final List<AnswerModelInterface> answersModels = new ArrayList<>();
+            IntStream.range(0, 3).forEach(answerIdx ->{
+                final AnswerModel answerModel = new AnswerModel();
+                answerModel.map(answersSupport.getEntityFixtureMock(answerIdx));
+                answerModel.setQuestion(questionModel);
+                answersModels.add(answerModel);
+            });
+
+            questionModel.setAnswers(answersModels);
+
+            if (questionModel.getId().equals(1)) {
+                questionsModels.add(questionModel);
+            }
+
         });
 
         int topicIdParamValue = 1;
-
+/*
         //when(this.questionTypesService.find(topicIdParamValue))
         //        .thenReturn(new QuestionTypeModelEmpty(topicIdParamValue));
         when(this.topicsService.find(topicIdParamValue))
@@ -112,6 +134,12 @@ public class QuestionsControllerTest {
                 .thenReturn(questionsModels);
         //when(this.answersService.findByQuestion(new QuestionModelEmpty(topicIdParamValue)))
         //        .thenReturn(answersModels);
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);*/
+
+        when(this.questionTypesService.find(topicIdParamValue))
+                .thenReturn(new QuestionTypeModelEmpty(topicIdParamValue));
+        when(this.answersService.find(any(Integer.class))).thenReturn(new AnswerModelEmpty(topicIdParamValue));
+        when(this.questionsService.findByTopic(any(TopicModelInterface.class))).thenReturn(questionsModels);
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
 
         this.mvc.perform(get("/v1/questions?topicId={topicIdParamValue}", topicIdParamValue)
@@ -124,10 +152,17 @@ public class QuestionsControllerTest {
                                 .with(text, questionsModels.get(0).getText())
                                 .with(type, new JsonSupport().with(id, questionsModels.get(0).getQuestionType().getId()))
                                 .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId()))
+                                /*//.with(answers, questionsModels.get(0).getAnswers())
                                 .with(idAdminAnswer, questionsModels.get(0).getAnswers().get(0).getId())
                                 .with(textAdminAnswer, questionsModels.get(0).getAnswers().get(0).getTxt())
                                 .with(isRight, questionsModels.get(0).getAnswers().get(0).getRight())
-                                .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber())
+                                .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber())*/
+                                .with(answers, new JsonSupport()
+                                        .with(id, questionsModels.get(0).getAnswers().get(0).getId())
+                                        .with(text, questionsModels.get(0).getAnswers().get(0).getTxt())
+                                        .with(isRight, questionsModels.get(0).getAnswers().get(0).getRight())
+                                        .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber())
+                                        .with(question, new JsonSupport().with(id, questionsModels.get(0).getId())))
                         )
                                 //.with(answers, new JsonSupport().with(id, questionsModels.get(0).getAnswers().get(0).getId()))                        )
                         .with(new JsonSupport()
@@ -135,10 +170,16 @@ public class QuestionsControllerTest {
                                 .with(text, questionsModels.get(1).getText())
                                 .with(type, new JsonSupport().with(id, questionsModels.get(1).getQuestionType().getId()))
                                 .with(topic, new JsonSupport().with(id, questionsModels.get(1).getTopic().getId()))
-                                .with(idAdminAnswer, questionsModels.get(1).getAnswers().get(0).getId())
+                                /*.with(idAdminAnswer, questionsModels.get(1).getAnswers().get(0).getId())
                                 .with(textAdminAnswer, questionsModels.get(1).getAnswers().get(0).getTxt())
                                 .with(isRight, questionsModels.get(1).getAnswers().get(0).getRight())
-                                .with(number, questionsModels.get(1).getAnswers().get(0).getSerialNumber())
+                                .with(number, questionsModels.get(1).getAnswers().get(0).getSerialNumber())*/
+                                .with(answers, new JsonSupport()
+                                        .with(id, questionsModels.get(1).getAnswers().get(0).getId())
+                                        .with(text, questionsModels.get(1).getAnswers().get(0).getTxt())
+                                        .with(isRight, questionsModels.get(1).getAnswers().get(0).getRight())
+                                        .with(number, questionsModels.get(1).getAnswers().get(0).getSerialNumber())
+                                        .with(question, new JsonSupport().with(id, questionsModels.get(0).getId())))
                         )
                                 //.with(answers, new JsonSupport().with(id, questionsModels.get(1).getAnswers().get(0).getId())))
                         .build()
