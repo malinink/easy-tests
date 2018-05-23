@@ -138,9 +138,6 @@ public class SubjectsControllerTest {
     /**
      * update
      */
-    /**
-     * show(subjectId)
-     */
     @Test
     public void testShowSuccess() throws Exception {
         final SubjectModelInterface subjectModel = new SubjectModel();
@@ -163,7 +160,32 @@ public class SubjectsControllerTest {
                 .andReturn();
     }
 
+    @Test
+    public void testShowNotFound() throws Exception {
+        when(this.subjectsOptionsBuilder.forAuth()).thenReturn(new SubjectsOptions());
+        when(this.subjectsService.find(any(Integer.class), any(SubjectsOptionsInterface.class))).thenReturn(null);
 
+        mvc.perform(get("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowForbidden() throws Exception {
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subjectModel.map(this.subjectsSupport.getEntityFixtureMock(0));
+        when(this.subjectsOptionsBuilder.forAuth()).thenReturn(new SubjectsOptions());
+        when(this.subjectsService.find(any(Integer.class), any(SubjectsOptionsInterface.class))).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+
+        mvc.perform(get("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
     /**
      * delete(subjectId)
      */
