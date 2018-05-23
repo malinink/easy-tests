@@ -35,7 +35,7 @@ public class UsersController {
     private String passgenerator(int n) {
         final String dict = "qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
         String pass = "";
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < n; i++) {
             pass = pass + (dict.charAt(0 + (int) (Math.random() * dict.length())));
         }
         return pass;
@@ -43,6 +43,7 @@ public class UsersController {
     /**
      * list
      */
+
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Identity create(@RequestBody User user) throws BadRequestException {
