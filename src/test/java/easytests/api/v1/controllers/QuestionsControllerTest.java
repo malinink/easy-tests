@@ -136,6 +136,8 @@ public class QuestionsControllerTest {
         //        .thenReturn(answersModels);
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);*/
 
+        when(this.topicsService.find(topicIdParamValue))
+                .thenReturn(new TopicModelEmpty(topicIdParamValue));
         when(this.questionTypesService.find(topicIdParamValue))
                 .thenReturn(new QuestionTypeModelEmpty(topicIdParamValue));
         when(this.answersService.find(any(Integer.class))).thenReturn(new AnswerModelEmpty(topicIdParamValue));
