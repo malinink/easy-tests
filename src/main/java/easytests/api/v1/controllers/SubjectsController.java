@@ -70,6 +70,9 @@ public class SubjectsController extends AbstractController {
         if (subject.getId() != null) {
             throw new IdentifiedModelException();
         }
+        if (subject.getUser() == null) {
+            throw new BadRequestException("user must exist");
+        }
         if (!this.acl.hasAccess(userModel)) {
             throw new ForbiddenException();
         }
