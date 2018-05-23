@@ -65,23 +65,26 @@ public class SubjectsController extends AbstractController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Identity create(@RequestBody Subject subject) throws BadRequestException, ForbiddenException {
+        if (subject.getUser() != null) {
+            final UserModelInterface userModel = this.usersService.find(subject.getUser().getId());
 
-        final UserModelInterface userModel = this.usersService.find(subject.getUser().getId());
-        if (subject.getId() != null) {
-            throw new IdentifiedModelException();
-        }
-        if (subject.getUser() == null) {
-            throw new BadRequestException("user must exist");
-        }
-        if (!this.acl.hasAccess(userModel)) {
-            throw new ForbiddenException();
-        }
 
-        final SubjectModelInterface subjectModel = this.subjectsMapper.map(subject, SubjectModel.class);
+            if (subject.getId() != null) {
+                throw new IdentifiedModelException();
+            }
+            if (subject.getUser() == null) {
+                throw new BadRequestException("user must exist");
+            }
+            if (!this.acl.hasAccess(userModel)) {
+                throw new ForbiddenException();
+            }
 
-        this.subjectsService.save(subjectModel);
+            final SubjectModelInterface subjectModel = this.subjectsMapper.map(subject, SubjectModel.class);
 
-        return this.subjectsMapper.map(subjectModel, Identity.class);
+            this.subjectsService.save(subjectModel);
+
+            return this.subjectsMapper.map(subjectModel, Identity.class);
+        } else throw new BadRequestException();
     }
     /**
      * update

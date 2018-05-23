@@ -137,7 +137,7 @@ public class SubjectsControllerTest {
     public void testCreateSuccess() throws Exception {
         doAnswer(invocation -> {
             final SubjectModel subjectModel = (SubjectModel) invocation.getArguments()[0];
-            subjectModel.setId(4);
+            subjectModel.setId(5);
             return null;
         }).when(this.subjectsService).save(any(SubjectModelInterface.class));
 
@@ -146,19 +146,19 @@ public class SubjectsControllerTest {
                 .content(new JsonSupport()
                         .with(name, "Name1")
                         .with(description, "Description1")
-                        .with(user, new JsonSupport().with(5))
+                        .with(user, new JsonSupport().with(2))
                         .build()
                 ))
                 .andExpect(status().is(201))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(
                         new JsonSupport()
-                                .with(id, 4)
+                                .with(id, 5)
                                 .build()
                 ))
                 .andReturn();
     }
-    
+
     @Test
     public void testCreateWithIdFailed() throws Exception {
         mvc.perform(post("/v1/subjects")
