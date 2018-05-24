@@ -49,9 +49,8 @@ public class QuestionsControllerTest {
     private static String topic = "topic";
     private static String answers = "answers";
 
-    private static String idAdminAnswer = "id";
-    private static String textAdminAnswer = "text";
-    private static String isRight = "isRight";
+    private static String txt = "txt";
+    private static String right = "right";
     private static String number = "number";
     private static String question = "question";
 
@@ -138,10 +137,19 @@ public class QuestionsControllerTest {
                                 .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId()))
                                 .with(answers, new JsonSupport()
                                         .with(id, questionsModels.get(0).getAnswers().get(0).getId())
-                                        .with(text, questionsModels.get(0).getAnswers().get(0).getTxt())
-                                        .with(isRight, questionsModels.get(0).getAnswers().get(0).getRight())
-                                        .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber())
-                                        .with(question, new JsonSupport().with(id, questionsModels.get(0).getId())))
+                                        .with(txt, questionsModels.get(0).getAnswers().get(0).getTxt())
+                                        .with(right, questionsModels.get(0).getAnswers().get(0).getRight())
+                                        .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber()))
+                        .with(new JsonSupport()
+                                .with(id, questionsModels.get(0).getId())
+                                .with(text, questionsModels.get(0).getText())
+                                .with(type, new JsonSupport().with(id, questionsModels.get(0).getQuestionType().getId()))
+                                .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId()))
+                                .with(answers, new JsonSupport()
+                                        .with(id, questionsModels.get(0).getAnswers().get(0).getId())
+                                        .with(txt, questionsModels.get(0).getAnswers().get(0).getTxt())
+                                        .with(right, questionsModels.get(0).getAnswers().get(0).getRight())
+                                        .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber())))
                         ).build()
                 ))
                 .andReturn();

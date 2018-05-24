@@ -10,9 +10,9 @@ import lombok.Data;
 public class AdminAnswer {
     private Integer id;
 
-    private String text;
+    private String txt;
 
-    private Boolean isRight;
+    private Boolean right;
 
     private Integer number;
 }
