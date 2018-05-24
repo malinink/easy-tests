@@ -35,7 +35,9 @@ public class UsersController {
     /**
      * list
      */
-
+    /**
+     * create
+     */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Identity create(@RequestBody User user) throws BadRequestException {
