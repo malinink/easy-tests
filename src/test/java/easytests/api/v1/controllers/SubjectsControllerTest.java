@@ -179,10 +179,8 @@ public class SubjectsControllerTest {
 
     @Test
     public void testBadRequest() throws Exception {
-
         Subject subject = new Subject();
-        subject.setId(5); //до проверки на userId есть проверка на subjId, и он её не пройдёт, если айдишки не будет
-
+        subject.setId(5);
         mvc.perform(post("/v1/subjects").param("subject", "subject"))
                 .andExpect(status().isBadRequest());
 
