@@ -4,8 +4,8 @@ import easytests.api.v1.mappers.IssuesMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
-import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.models.QuizModelInterface;
+import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.IssuesOptions;
 import easytests.core.options.IssuesOptionsInterface;
 import easytests.core.options.builder.IssuesOptionsBuilder;
@@ -13,12 +13,13 @@ import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.support.IssueSupport;
 import easytests.support.JsonSupport;
+import easytests.support.QuizzesSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-import easytests.support.QuizzesSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import static org.mockito.BDDMockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,6 +30,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+
 
 /**
  * @author Yarik2308
