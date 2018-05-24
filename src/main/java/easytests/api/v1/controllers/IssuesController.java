@@ -63,7 +63,7 @@ public class IssuesController extends AbstractController {
      * update
      */
     /**
-     * read(issueId)
+     * show(issueId)
      */
     @GetMapping("/{issueId}")
     public Object show(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException{
