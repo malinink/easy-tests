@@ -17,21 +17,20 @@ public class QuestionsMapper extends ModelMapper {
     public QuestionsMapper() {
         super();
         this.createTypeMap(QuestionModel.class, Question.class)
-                .addMappings(
-                        mapper -> {
-                            mapper.when(
-                                    context -> !(context.getSource() instanceof ModelsListEmpty)
-                            ).<Integer>map(questionModel -> questionModel.getQuestionType().getId(),
-                                    (question, id) -> question.setType(id));
-                            mapper.when(
-                                    context -> !(context.getSource() instanceof ModelsListEmpty)
-                            ).<Integer>map(questionModel -> questionModel.getTopic().getId(),
-                                    (question, id) -> question.getTopic().setId(id));
-                            mapper.when(
-                                    context -> !(context.getSource() instanceof ModelsListEmpty)
-                            ).<List<AdminAnswer>>map(questionModel -> questionModel.getAnswers(),
-                                    (question, list) -> question.setAnswers(list));
-                        }
-                );
+            .addMappings(mapper -> {
+                mapper.when(
+                    context -> !(context.getSource() instanceof ModelsListEmpty)
+                ).<Integer>map(questionModel -> questionModel.getQuestionType().getId(),
+                    (question, id) -> question.setType(id));
+                mapper.when(
+                    context -> !(context.getSource() instanceof ModelsListEmpty)
+                ).<Integer>map(questionModel -> questionModel.getTopic().getId(),
+                    (question, id) -> question.getTopic().setId(id));
+                mapper.when(
+                    context -> !(context.getSource() instanceof ModelsListEmpty)
+                ).<List<AdminAnswer>>map(questionModel -> questionModel.getAnswers(),
+                    (question, list) -> question.setAnswers(list));
+            }
+            );
     }
 }

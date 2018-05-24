@@ -7,7 +7,6 @@ import easytests.common.exceptions.NotFoundException;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.models.empty.TopicModelEmpty;
-import easytests.core.options.builder.QuestionsOptionsBuilder;
 import easytests.core.options.builder.QuestionsOptionsBuilderInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;

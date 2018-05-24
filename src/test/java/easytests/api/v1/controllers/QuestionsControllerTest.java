@@ -7,10 +7,7 @@ import easytests.core.models.*;
 import easytests.core.models.empty.QuestionModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.models.empty.QuestionTypeModelEmpty;
-import easytests.core.models.empty.AnswerModelEmpty;
-import easytests.core.options.QuestionTypesOptionsInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
-import easytests.core.options.builder.AnswersOptionsBuilder;
 import easytests.core.services.QuestionsService;
 import easytests.core.services.QuestionTypesService;
 import easytests.core.services.AnswersService;
@@ -139,9 +136,7 @@ public class QuestionsControllerTest {
                                             .with(right, answersModels.get(1).getRight())
                                             .with(number, answersModels.get(1).getSerialNumber()))
                                 )
-
                         )
-
                         .with(new JsonSupport()
                                 .with(id, questionsModels.get(1).getId())
                                 .with(text, questionsModels.get(1).getText())
@@ -157,8 +152,8 @@ public class QuestionsControllerTest {
                                         .with(id, answersModels.get(1).getId())
                                         .with(txt, answersModels.get(1).getTxt())
                                         .with(right, answersModels.get(1).getRight())
-                                        .with(number, answersModels.get(1).getSerialNumber())))
-
+                                        .with(number, answersModels.get(1).getSerialNumber()))
+                                )
                         ).build()
                 ))
                 .andReturn();
