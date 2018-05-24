@@ -36,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = QuizzesController.class, secure = false)
 public class QuizzesControllerTest {
     private static String id = "id";
+    private static String issue = "issue";
     private static String inviteCode = "inviteCode";
     private static String codeExpired = "codeExpired";
     private static String startedAt = "startedAt";
@@ -97,12 +98,14 @@ public class QuizzesControllerTest {
                 .andExpect(content().json(new JsonSupport()
                         .with(new JsonSupport()
                                 .with(id, quizzesModels.get(0).getId())
+                                .with(issue, new JsonSupport().with(id, quizzesModels.get(0).getIssue().getId()))
                                 .with(inviteCode, quizzesModels.get(0).getInviteCode())
                                 .with(codeExpired, quizzesModels.get(0).getCodeExpired())
                                 .with(startedAt, quizzesModels.get(0).getStartedAt())
                                 .with(finishedAt, quizzesModels.get(0).getFinishedAt()))
                         .with(new JsonSupport()
                                 .with(id, quizzesModels.get(1).getId())
+                                .with(issue, new JsonSupport().with(id, quizzesModels.get(1).getIssue().getId()))
                                 .with(inviteCode, quizzesModels.get(1).getInviteCode())
                                 .with(codeExpired, quizzesModels.get(1).getCodeExpired())
                                 .with(startedAt, quizzesModels.get(1).getStartedAt())
