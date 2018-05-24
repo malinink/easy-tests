@@ -6,7 +6,6 @@ import easytests.api.v1.mappers.SubjectsMapper;
 import easytests.api.v1.models.Subject;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.UserModelInterface;
-import easytests.core.options.SubjectsOptions;
 import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
@@ -78,11 +77,11 @@ public class SubjectsController extends AbstractController {
         if (!this.acl.hasAccess(subjectModel)) {
             throw new ForbiddenException();
         }
-        this.subjectsService.delete(new SubjectsOptions().withRelations(subjectModel));
+        this.subjectsService.delete(subjectModel);
     }
 
-    private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectOpt) {
-        final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectOpt);
+    private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectOption) {
+        final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectOption);
         return subjectModel;
     }
 

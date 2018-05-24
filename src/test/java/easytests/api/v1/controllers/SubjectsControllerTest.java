@@ -18,6 +18,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
+
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -146,12 +148,14 @@ public class SubjectsControllerTest {
         final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
         when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+        final ArgumentCaptor<SubjectModelInterface> argumentCaptor = ArgumentCaptor.forClass(SubjectModelInterface.class);
         this.mvc.perform(delete("/v1/subjects/1")
                 .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
+        verify(this.subjectsService, times(1)).delete(argumentCaptor.capture());
     }
     @Test
     public void testDeleteForbidden() throws Exception {
