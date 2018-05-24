@@ -49,7 +49,6 @@ public class QuestionsControllerTest {
     private static String txt = "txt";
     private static String right = "right";
     private static String number = "number";
-    private static String question = "question";
 
 
     @Autowired
