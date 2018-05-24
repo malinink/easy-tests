@@ -52,7 +52,6 @@ public class QuestionsControllerTest {
     private static String txt = "txt";
     private static String right = "right";
     private static String number = "number";
-    private static String question = "question";
 
 
     @Autowired
@@ -80,9 +79,6 @@ public class QuestionsControllerTest {
     @MockBean
     private QuestionsOptionsBuilder questionsOptionsBuilder;
 
-    //@MockBean
-    //private AnswersOptionsBuilder answersOptionsBuilder;
-
     private QuestionsSupport questionSupport = new QuestionsSupport();
 
     private AnswersSupport answersSupport = new AnswersSupport();
@@ -90,27 +86,23 @@ public class QuestionsControllerTest {
     @Test
     public void testListSuccess() throws Exception {
         final List<QuestionModelInterface> questionsModels = new ArrayList<>();
+
         final List<AnswerModelInterface> answersModels = new ArrayList<>();
-        IntStream.range(0, 3).forEach(answerIdx ->{
+        IntStream.range(0, 2).forEach(answerIdx ->{
             final AnswerModel answerModel = new AnswerModel();
             answerModel.map(answersSupport.getEntityFixtureMock(answerIdx));
-            //answerModel.setQuestion(questionModel);
             answersModels.add(answerModel);
         });
 
-        IntStream.range(0, 3).forEach(idx -> {
+        IntStream.range(0, 2).forEach(idx -> {
             final QuestionModel questionModel = new QuestionModel();
             questionModel.map(this.questionSupport.getEntityFixtureMock(idx));
 
-            IntStream.range(0, 3).forEach(answerIdx ->
+            IntStream.range(0, 2).forEach(answerIdx ->
                 answersModels.get(answerIdx).setQuestion(questionModel)
             );
             questionModel.setAnswers(answersModels);
-
-            if (questionModel.getId().equals(1)) {
-                questionsModels.add(questionModel);
-            }
-
+            questionsModels.add(questionModel);
         });
 
         int topicIdParamValue = 1;
@@ -133,23 +125,40 @@ public class QuestionsControllerTest {
                         .with(new JsonSupport()
                                 .with(id, questionsModels.get(0).getId())
                                 .with(text, questionsModels.get(0).getText())
-                                .with(type, new JsonSupport().with(id, questionsModels.get(0).getQuestionType().getId()))
+                                .with(type, questionsModels.get(0).getQuestionType().getId())
                                 .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId()))
                                 .with(answers, new JsonSupport()
-                                        .with(id, questionsModels.get(0).getAnswers().get(0).getId())
-                                        .with(txt, questionsModels.get(0).getAnswers().get(0).getTxt())
-                                        .with(right, questionsModels.get(0).getAnswers().get(0).getRight())
-                                        .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber()))
+                                    .with(new JsonSupport()
+                                        .with(id, answersModels.get(0).getId())
+                                        .with(txt, answersModels.get(0).getTxt())
+                                        .with(right, answersModels.get(0).getRight())
+                                        .with(number, answersModels.get(0).getSerialNumber()))
+                                    .with(new JsonSupport()
+                                            .with(id, answersModels.get(1).getId())
+                                            .with(txt, answersModels.get(1).getTxt())
+                                            .with(right, answersModels.get(1).getRight())
+                                            .with(number, answersModels.get(1).getSerialNumber()))
+                                )
+
+                        )
+
                         .with(new JsonSupport()
-                                .with(id, questionsModels.get(0).getId())
-                                .with(text, questionsModels.get(0).getText())
-                                .with(type, new JsonSupport().with(id, questionsModels.get(0).getQuestionType().getId()))
-                                .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId()))
+                                .with(id, questionsModels.get(1).getId())
+                                .with(text, questionsModels.get(1).getText())
+                                .with(type, questionsModels.get(1).getQuestionType().getId())
+                                .with(topic, new JsonSupport().with(id, questionsModels.get(1).getTopic().getId()))
                                 .with(answers, new JsonSupport()
-                                        .with(id, questionsModels.get(0).getAnswers().get(0).getId())
-                                        .with(txt, questionsModels.get(0).getAnswers().get(0).getTxt())
-                                        .with(right, questionsModels.get(0).getAnswers().get(0).getRight())
-                                        .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber())))
+                                    .with(new JsonSupport()
+                                        .with(id, answersModels.get(0).getId())
+                                        .with(txt, answersModels.get(0).getTxt())
+                                        .with(right, answersModels.get(0).getRight())
+                                        .with(number, answersModels.get(0).getSerialNumber()))
+                                    .with(new JsonSupport()
+                                        .with(id, answersModels.get(1).getId())
+                                        .with(txt, answersModels.get(1).getTxt())
+                                        .with(right, answersModels.get(1).getRight())
+                                        .with(number, answersModels.get(1).getSerialNumber())))
+
                         ).build()
                 ))
                 .andReturn();
