@@ -169,32 +169,7 @@ public class IssuesControllerTest {
                 .andReturn();
     }
 
-    @Test
-    public void testShowWithQuizesSucces() throws Exception {
-        final IssueModelInterface issueModel = new IssueModel();
-        issueModel.map(this.issueSupport.getEntityFixtureMock(0));
-        final List<QuizModelInterface> quizesModels = new ArrayList<>();
-        IntStream.range(0, 2).forEach(idx -> {
-            final QuizModel quizModel = new QuizModel();
-            quizModel.map(this.quizzesSupport.getEntityFixtureMock(idx));
-            quizesModels.add(quizModel);
-        });
-        issueModel.setQuizzes(quizesModels);
-        when(this.issuesOptionsBuilder.forAuth()).thenReturn(new IssuesOptions());
-        when(this.issuesService.find(any(Integer.class))).thenReturn(issueModel);
-        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
 
-        mvc.perform(get("/v1/issues/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(new JsonSupport()
-                        .with(id, issueModel.getId())
-                        .with(name, issueModel.getName())
-                .build()
-                ))
-                .andReturn();
-    }
 
     /**
      * delete(issueId)
