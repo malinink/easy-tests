@@ -3,7 +3,6 @@ package easytests.core.models;
 import easytests.core.entities.IssueStandardTopicPriorityEntity;
 import easytests.support.IssueStandardTopicPrioritySupport;
 import org.junit.Test;
-import org.meanbean.test.ConfigurationBuilder;
 
 
 /**
@@ -11,7 +10,7 @@ import org.meanbean.test.ConfigurationBuilder;
  */
 public class IssueStandardTopicPriorityModelTest extends AbstractModelTest {
 
-    private IssueStandardTopicPrioritySupport IssueStandardTopicPrioritySupport = new IssueStandardTopicPrioritySupport();
+    private IssueStandardTopicPrioritySupport issueStandardTopicPrioritySupport = new IssueStandardTopicPrioritySupport();
 
     @Test
     public void testCommon() throws Exception {
@@ -20,11 +19,11 @@ public class IssueStandardTopicPriorityModelTest extends AbstractModelTest {
 
     @Test
     public void testMap() throws Exception {
-        final IssueStandardTopicPriorityEntity IssueStandardTopicPriorityEntity = this.IssueStandardTopicPrioritySupport.getEntityFixtureMock(0);
-        final IssueStandardTopicPriorityModelInterface IssueStandardTopicPriorityModel = new IssueStandardTopicPriorityModel();
+        final IssueStandardTopicPriorityEntity issueStandardTopicPriorityEntity = this.issueStandardTopicPrioritySupport.getEntityFixtureMock(0);
+        final IssueStandardTopicPriorityModelInterface issueStandardTopicPriorityModel = new IssueStandardTopicPriorityModel();
 
-        IssueStandardTopicPriorityModel.map(IssueStandardTopicPriorityEntity);
+        issueStandardTopicPriorityModel.map(issueStandardTopicPriorityEntity);
 
-        this.IssueStandardTopicPrioritySupport.assertEquals(IssueStandardTopicPriorityEntity, IssueStandardTopicPriorityModel);
+        this.issueStandardTopicPrioritySupport.assertEquals(issueStandardTopicPriorityEntity, issueStandardTopicPriorityModel);
     }
 }
