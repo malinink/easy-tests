@@ -156,6 +156,7 @@ public class SubjectsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
         verify(this.subjectsService, times(1)).delete(argumentCaptor.capture());
+        this.subjectsSupport.assertEquals(argumentCaptor.getValue(), subjectModel);
     }
     @Test
     public void testDeleteForbidden() throws Exception {
