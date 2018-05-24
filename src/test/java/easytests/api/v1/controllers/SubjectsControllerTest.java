@@ -143,12 +143,18 @@ public class SubjectsControllerTest {
             return null;
         }).when(this.subjectsService).save(any(SubjectModelInterface.class));
 
+        int userIdParamValue = 2;
+
+        when(this.usersService.find(userIdParamValue))
+                .thenReturn(new UserModelEmpty(userIdParamValue));
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+
         mvc.perform(post("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
                         .with(name, "Name1")
                         .with(description, "Description1")
-                        .with(user, new JsonSupport().with(2))
+                        .with(user, new JsonSupport().with(id,2))
                         .build()
                 ))
                 .andExpect(status().is(201))
@@ -180,7 +186,6 @@ public class SubjectsControllerTest {
     @Test
     public void testCheckUserBadRequest() throws Exception {
         Subject subject = new Subject();
-        subject.setId(5);
         mvc.perform(post("/v1/subjects").param("subject", "subject"))
                 .andExpect(status().isBadRequest());
 
