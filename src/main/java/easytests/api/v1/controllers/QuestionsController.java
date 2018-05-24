@@ -5,17 +5,12 @@ import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.api.v1.models.Question;
 import easytests.common.exceptions.NotFoundException;
 import easytests.core.models.QuestionModelInterface;
-//import easytests.core.models.TopicModelInterface;
-//import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.options.AnswersOptions;
-//import easytests.core.options.builder.QuestionsOptionsBuilder;
 import easytests.core.options.QuestionsOptions;
 import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilderInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
-//import java.util.List;
-//import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +58,8 @@ public class QuestionsController extends AbstractController {
         return this.questionsMapper.map(questionModel, Question.class);
     }
 
-    private QuestionModelInterface getQuestionModel(Integer id, QuestionsOptionsInterface questionOptions) throws NotFoundException {
+    private QuestionModelInterface getQuestionModel(Integer id, QuestionsOptionsInterface
+            questionOptions) throws NotFoundException {
         final QuestionModelInterface questionModel = this.questionsService.find(id, questionOptions);
         if (questionModel == null) {
             throw new NotFoundException();
@@ -77,5 +73,4 @@ public class QuestionsController extends AbstractController {
     /**
      * delete(questionId)
      */
-
 }
