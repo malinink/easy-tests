@@ -5,9 +5,8 @@ import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.mappers.IssuesMapper;
 import easytests.api.v1.models.Issue;
 import easytests.core.models.IssueModelInterface;
-import easytests.core.options.IssuesOptions;
 import easytests.core.models.SubjectModelInterface;
-import easytests.core.models.empty.IssueModelEmpty;
+import easytests.core.options.IssuesOptionsInterface;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
@@ -30,6 +29,9 @@ public class IssuesController extends AbstractController {
 
     @Autowired
     protected IssuesOptionsBuilder issuesOptions;
+
+    @Autowired
+    protected IssuesOptionsBuilder issuesOptionsBuilder;
 
     @Autowired
     protected SubjectsServiceInterface subjectsService;
@@ -70,24 +72,27 @@ public class IssuesController extends AbstractController {
     /**
      * delete(issueId)
      */
+
     @DeleteMapping("/{issueId}")
     public void delete(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException {
-        final IssueModelInterface issueModel = this.issuesService.find(issueId);
+        final IssueModelInterface issueModel = this.getIssueModel(issueId);
 
         if (issueModel == null) {
             throw new NotFoundException();
         }
-//        if (!this.acl.hasAccess(issueModel)){
-//            throw new ForbiddenException();
-//        }
-        this.issuesService.delete(new IssuesOptions().withRelations(issueModel));
+        //if (!this.acl.hasAccess(issueModel)){
+        //    throw new ForbiddenException();
+        //}
+        this.issuesService.delete(issueModel);
     }
 
-//    private IssueModelInterface getIssueModel(Integer id) {
-//        final IssueModelInterface issueModel
-//
-//    }
+    private IssueModelInterface getIssueModel(Integer id) throws NotFoundException {
+        final IssuesOptionsInterface issuesOptionsInterface = this.issuesOptionsBuilder.forDelete();
+        return this.getIssueModel(id, issuesOptionsInterface);
+    }
 
-
-
+    private IssueModelInterface getIssueModel(Integer id, IssuesOptionsInterface issueOption) {
+        final IssueModelInterface issueModel = this.issuesService.find(id, issueOption);
+        return issueModel;
+    }
 }

@@ -16,6 +16,8 @@ import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
+
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -132,4 +134,42 @@ public class IssuesControllerTest {
     /**
      * delete(issueId)
      */
+    @Test
+    public void testDeleteSucces() throws Exception {
+        final ArgumentCaptor<IssueModelInterface> issueModelArgumentCaptor = ArgumentCaptor.forClass(IssueModelInterface.class);
+        final IssueModelInterface issueModel = this.issueSupport.getModelFixtureMock(0);
+        when(this.issuesService.find(any(), any())).thenReturn(issueModel);
+
+//        when(this.acl.hasAccess(any(issuesModelInterface.class))).thenReturn(true);
+        this.mvc.perform(delete("v1/issues/1")
+                .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+//        verify(this.issuesService, times(1)).delete(issueModelArgumentCaptor.capture());
+    }
+
+//    @Test
+//    public void testDeleteForbidden() throws Exception {
+//        final IssueModelInterface issueModel = this.issueSupport.getModelFixtureMock(0);
+//        when(this.issuesService.find(any(), any())).thenReturn(issueModel);
+//        when(this.acl.hasAccess(any))
+//        this.mvc.perform(delete("v1/issues/1")
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isForbidden())
+//                .andExpect(content().string(""))
+//                .andReturn();
+//    }
+
+    @Test
+    public void testDeleteNotFound() throws Exception {
+//        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
+        this.mvc.perform(delete("/v1/issues/5")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
 }
