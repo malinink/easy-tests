@@ -98,6 +98,7 @@ public class QuestionsControllerTest {
         IntStream.range(0, 2).forEach(idx -> {
             final AnswerModel answerModel = new AnswerModel();
             answerModel.map(this.answersSupport.getEntityFixtureMock(idx));
+            answerModel.setQuestion(questionModel);
             answersModels.add(answerModel);
         });
         questionModel.setAnswers(answersModels);
@@ -116,16 +117,16 @@ public class QuestionsControllerTest {
                         .with(topic, new JsonSupport().with(id, questionModel.getTopic().getId()))
                         .with(answers, new JsonSupport()
                                 .with(new JsonSupport()
-                                        .with(id, answersModels.get(0).getId())
-                                        .with(txt, answersModels.get(0).getTxt())
-                                        .with(right, answersModels.get(0).getRight())
-                                        .with(number, answersModels.get(0).getSerialNumber())
+                                        .with(id, questionModel.getAnswers().get(0).getId())
+                                        .with(txt, questionModel.getAnswers().get(0).getTxt())
+                                        .with(right, questionModel.getAnswers().get(0).getRight())
+                                        .with(number, questionModel.getAnswers().get(0).getSerialNumber())
                                 )
                                 .with(new JsonSupport()
-                                        .with(id, answersModels.get(1).getId())
-                                        .with(txt, answersModels.get(1).getTxt())
-                                        .with(right, answersModels.get(1).getRight())
-                                        .with(number, answersModels.get(1).getSerialNumber())
+                                        .with(id, questionModel.getAnswers().get(1).getId())
+                                        .with(txt, questionModel.getAnswers().get(1).getTxt())
+                                        .with(right, questionModel.getAnswers().get(1).getRight())
+                                        .with(number, questionModel.getAnswers().get(1).getSerialNumber())
                                 )
                         )
                         .build()
