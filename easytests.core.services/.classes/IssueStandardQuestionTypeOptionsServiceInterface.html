@@ -1,0 +1,97 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: IssueStandardQuestionTypeOptionsServiceInterface</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">easytests.core.services</a> ]
+</div>
+
+<h1>Coverage Summary for Class: IssueStandardQuestionTypeOptionsServiceInterface (easytests.core.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">IssueStandardQuestionTypeOptionsServiceInterface</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package easytests.core.services;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import easytests.core.models.IssueStandardModelInterface;
+<i>4</i>&nbsp;import easytests.core.models.IssueStandardQuestionTypeOptionModelInterface;
+<i>5</i>&nbsp;import easytests.core.options.IssueStandardQuestionTypeOptionsOptionsInterface;
+<i>6</i>&nbsp;import java.util.List;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * @author SingularityA
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public interface IssueStandardQuestionTypeOptionsServiceInterface extends ServiceInterface {
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    List&lt;IssueStandardQuestionTypeOptionModelInterface&gt; findAll();
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    List&lt;IssueStandardQuestionTypeOptionModelInterface&gt; findAll(
+<i>16</i>&nbsp;            IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions);
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    IssueStandardQuestionTypeOptionModelInterface find(Integer id);
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    IssueStandardQuestionTypeOptionModelInterface find(
+<i>21</i>&nbsp;            Integer id,
+<i>22</i>&nbsp;            IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions);
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    List&lt;IssueStandardQuestionTypeOptionModelInterface&gt; findByIssueStandard(
+<i>25</i>&nbsp;            IssueStandardModelInterface issueStandard);
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    List&lt;IssueStandardQuestionTypeOptionModelInterface&gt; findByIssueStandard(
+<i>28</i>&nbsp;            IssueStandardModelInterface issueStandard,
+<i>29</i>&nbsp;            IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions);
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    void save(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel);
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    void save(List&lt;IssueStandardQuestionTypeOptionModelInterface&gt; questionTypeOptionModels);
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    void save(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel,
+<i>36</i>&nbsp;              IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions);
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    void save(List&lt;IssueStandardQuestionTypeOptionModelInterface&gt; questionTypeOptionModels,
+<i>39</i>&nbsp;              IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions);
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    void delete(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel);
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    void delete(List&lt;IssueStandardQuestionTypeOptionModelInterface&gt; questionTypeOptionModels);
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    void delete(IssueStandardQuestionTypeOptionModelInterface questionTypeOptionModel,
+<i>46</i>&nbsp;                IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions);
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    void delete(List&lt;IssueStandardQuestionTypeOptionModelInterface&gt; questionTypeOptionModels,
+<i>49</i>&nbsp;                IssueStandardQuestionTypeOptionsOptionsInterface questionTypeOptionsOptions);
+<i>50</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-11-10 01:17</div>
+</div>
+</body>
+</html>
