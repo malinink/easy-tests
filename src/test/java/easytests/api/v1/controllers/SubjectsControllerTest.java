@@ -1,6 +1,7 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.SubjectsMapper;
+import easytests.api.v1.models.Subject;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -167,7 +169,7 @@ public class SubjectsControllerTest {
                         .with(id, 2)
                         .with(name, "Name1")
                         .with(description, "Description1")
-                        .with(user, new JsonSupport().with(5))
+                        .with(user, new JsonSupport().with(2))
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
@@ -175,7 +177,16 @@ public class SubjectsControllerTest {
                 .andReturn();
     }
 
+    @Test
+    public void testBadRequest() throws Exception {
 
+        Subject subject = new Subject();
+        subject.setId(5); //до проверки на userId есть проверка на subjId, и он её не пройдёт, если айдишки не будет
+
+        mvc.perform(post("/v1/subjects").param("subject", "subject"))
+                .andExpect(status().isBadRequest());
+
+    }
     /**
      * update
      */
