@@ -124,7 +124,7 @@ public class QuestionsControllerTest {
                 .andReturn();
     }
 
-   @Test
+    @Test
     public void testShowWithAnswersSuccess() throws Exception {
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.map(this.questionSupport.getEntityFixtureMock(0));
@@ -136,34 +136,34 @@ public class QuestionsControllerTest {
         });
         questionModel.setAnswers(answersModels);
         when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions());
-       // when(this.questionTypesService.find(1))
-         //       .thenReturn(new QuestionTypeModelEmpty(1));
+        // when(this.questionTypesService.find(1))
+        //       .thenReturn(new QuestionTypeModelEmpty(1));
         //when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class))).thenReturn(questionModel);
         //when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(true);
 
-       //final QuestionModelInterface questionModel = new QuestionModel();
-       //questionModel.map(this.questionSupport.getEntityFixtureMock(0));
-       when(this.questionsService.find(any(Integer.class))).thenReturn(questionModel);
-       when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(true);
+        //final QuestionModelInterface questionModel = new QuestionModel();
+        //questionModel.map(this.questionSupport.getEntityFixtureMock(0));
+        when(this.questionsService.find(any(Integer.class))).thenReturn(questionModel);
+        when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(true);
 
-       mvc.perform(get("/v1/questions/1")
-               .contentType(MediaType.APPLICATION_JSON))
-               .andExpect(status().isOk())
-               .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-               .andExpect(content().json(new JsonSupport()
-                       .with(id, questionModel.getId())
-                       .with(text, questionModel.getText())
-                       .with(type, questionModel.getQuestionType().getId())
-                       .with(topic, new JsonSupport().with(id, questionModel.getTopic().getId()))
-                       .with(answers, new JsonSupport()
-                               .with(id, questionModel.getAnswers().get(0).getId())
-                               .with(txt, questionModel.getAnswers().get(0).getTxt())
-                               .with(right, questionModel.getAnswers().get(0).getRight())
-                               .with(number, questionModel.getAnswers().get(0).getSerialNumber())
-                       )
-                       .build()
-               ))
-               .andReturn();
+        mvc.perform(get("/v1/questions/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, questionModel.getId())
+                        .with(text, questionModel.getText())
+                        .with(type, questionModel.getQuestionType().getId())
+                        .with(topic, new JsonSupport().with(id, questionModel.getTopic().getId()))
+                        .with(answers, new JsonSupport()
+                                .with(id, questionModel.getAnswers().get(0).getId())
+                                .with(txt, questionModel.getAnswers().get(0).getTxt())
+                                .with(right, questionModel.getAnswers().get(0).getRight())
+                                .with(number, questionModel.getAnswers().get(0).getSerialNumber())
+                        )
+                        .build()
+                ))
+                .andReturn();
 
     }
     /**
