@@ -1,11 +1,14 @@
 package easytests.api.v1.controllers;
 
+import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.NotFoundException;
+import easytests.api.v1.exceptions.UnidentifiedModelException;
 import easytests.api.v1.mappers.SubjectsMapper;
 import easytests.api.v1.models.Subject;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.UserModelInterface;
+import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.UsersServiceInterface;
@@ -21,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author VeronikaRevjakina
  */
 @RestController("SubjectsControllerV1")
-@SuppressWarnings("checkstyle:MultipleStringLiterals")
+@SuppressWarnings("checkstyle:linelength")
 @RequestMapping("/v1/subjects")
 public class SubjectsController extends AbstractController {
 
@@ -40,7 +43,7 @@ public class SubjectsController extends AbstractController {
 
     @GetMapping("")
     public List<Subject> list(@RequestParam(name = "userId", required = true) Integer userId)
-        throws NotFoundException, ForbiddenException {
+            throws NotFoundException, ForbiddenException {
         final UserModelInterface userModel = this.usersService.find(userId);
 
         if (userModel == null) {
@@ -60,13 +63,40 @@ public class SubjectsController extends AbstractController {
     /**
      * create
      */
-    /**
-     * update
-     */
+
+    @PutMapping("")
+    public void update(@RequestBody Subject subject) throws BadRequestException, ForbiddenException {
+
+        if (subject.getId() == null) {
+            throw new UnidentifiedModelException();
+        }
+
+        final SubjectModelInterface subjectModel = this.getSubjectModel(subject.getId());
+
+        if (!this.acl.hasAccess(subjectModel.getUser())) {
+            throw new ForbiddenException();
+        }
+
+        this.subjectsMapper.map(subject, subjectModel);
+
+        this.subjectsService.save(subjectModel);
+    }
     /**
      * show(subjectId)
      */
     /**
      * delete(subjectId)
      */
+
+    private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectOptions) throws BadRequestException {
+        final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectOptions);
+        if (subjectModel == null) {
+            throw new BadRequestException();
+        }
+        return subjectModel;
+    }
+
+    private SubjectModelInterface getSubjectModel(Integer id) throws BadRequestException {
+        return this.getSubjectModel(id, this.subjectsOptionsBuilder.forAuth());
+    }
 }
