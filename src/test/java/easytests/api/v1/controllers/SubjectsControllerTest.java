@@ -178,7 +178,7 @@ public class SubjectsControllerTest {
     }
 
     @Test
-    public void testBadRequest() throws Exception {
+    public void testCheckUserBadRequest() throws Exception {
         Subject subject = new Subject();
         subject.setId(5);
         mvc.perform(post("/v1/subjects").param("subject", "subject"))
