@@ -68,21 +68,21 @@ public class SubjectsController extends AbstractController {
     /**
      * show(subjectId)
      */
+
     @DeleteMapping("/{subjectId}")
     public void delete(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
         final SubjectModelInterface subjectModel = this.getSubjectModel(subjectId);
-
+        if (subjectModel == null) {
+            throw new NotFoundException();
+        }
         if (!this.acl.hasAccess(subjectModel)) {
             throw new ForbiddenException();
         }
         this.subjectsService.delete(new SubjectsOptions().withRelations(subjectModel));
     }
 
-    private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectOptions) throws NotFoundException {
-        final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectOptions);
-        if (subjectModel == null) {
-            throw new NotFoundException();
-        }
+    private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectOpt) {
+        final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectOpt);
         return subjectModel;
     }
 
