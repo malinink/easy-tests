@@ -13,6 +13,8 @@ import easytests.support.JsonSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
@@ -89,12 +91,12 @@ public class SubjectsControllerTest {
                         .with(new JsonSupport()
                                 .with(id, subjectsModels.get(0).getId())
                                 .with(name, subjectsModels.get(0).getName())
-                                .with(description,subjectsModels.get(0).getDescription())
+                                .with(description, subjectsModels.get(0).getDescription())
                                 .with(user, new JsonSupport().with(id, subjectsModels.get(0).getUser().getId())))
                         .with(new JsonSupport()
                                 .with(id, subjectsModels.get(1).getId())
                                 .with(name, subjectsModels.get(1).getName())
-                                .with(description,subjectsModels.get(1).getDescription())
+                                .with(description, subjectsModels.get(1).getDescription())
                                 .with(user, new JsonSupport().with(id, subjectsModels.get(1).getUser().getId())))
                         .build()
                 ))
@@ -139,8 +141,38 @@ public class SubjectsControllerTest {
     /**
      * show(subjectId)
      */
-    /**
-     * delete(subjectId)
-     */
-    
+    @Test
+    public void testDeleteSuccess() throws Exception {
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+        this.mvc.perform(delete("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+    @Test
+    public void testDeleteForbidden() throws Exception {
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+        this.mvc.perform(delete("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+    @Test
+    public void testDeleteNotFound() throws Exception {
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+        this.mvc.perform(delete("/v1/subjects/5")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
 }
