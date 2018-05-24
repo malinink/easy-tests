@@ -5,7 +5,9 @@ import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.mappers.IssuesMapper;
 import easytests.api.v1.models.Issue;
 import easytests.core.models.IssueModelInterface;
+import easytests.core.options.IssuesOptions;
 import easytests.core.models.SubjectModelInterface;
+import easytests.core.models.empty.IssueModelEmpty;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
@@ -68,5 +70,24 @@ public class IssuesController extends AbstractController {
     /**
      * delete(issueId)
      */
+    @DeleteMapping("/{issueId}")
+    public void delete(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException {
+        final IssueModelInterface issueModel = this.issuesService.find(issueId);
+
+        if (issueModel == null) {
+            throw new NotFoundException();
+        }
+//        if (!this.acl.hasAccess(issueModel)){
+//            throw new ForbiddenException();
+//        }
+        this.issuesService.delete(new IssuesOptions().withRelations(issueModel));
+    }
+
+//    private IssueModelInterface getIssueModel(Integer id) {
+//        final IssueModelInterface issueModel
+//
+//    }
+
+
 
 }
