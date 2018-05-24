@@ -68,19 +68,24 @@ public class SubjectsController extends AbstractController {
         if (subject.getId() != null) {
             throw new IdentifiedModelException();
         }
+        this.checkUser(subject);
+
+        final SubjectModelInterface subjectModel = this.subjectsMapper.map(subject, SubjectModel.class);
+
+        this.subjectsService.save(subjectModel);
+
+        return this.subjectsMapper.map(subjectModel, Identity.class);
+
+    }
+
+    private void checkUser( Subject subject) throws BadRequestException, ForbiddenException {
         if (subject.getUser() != null) {
             final UserModelInterface userModel = this.usersService.find(subject.getUser().getId());
 
             if (!this.acl.hasAccess(userModel)) {
                 throw new ForbiddenException();
             }
-        } else throw new BadRequestException("user must exist");
-
-            final SubjectModelInterface subjectModel = this.subjectsMapper.map(subject, SubjectModel.class);
-
-            this.subjectsService.save(subjectModel);
-
-            return this.subjectsMapper.map(subjectModel, Identity.class);
+        } else { throw new BadRequestException("user must exist"); }
 
     }
     /**
