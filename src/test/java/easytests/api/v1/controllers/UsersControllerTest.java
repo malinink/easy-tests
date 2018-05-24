@@ -4,12 +4,16 @@ import easytests.api.v1.mappers.UsersMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.entities.UserEntity;
+import easytests.auth.services.SessionServiceInterface;
 import easytests.core.models.*;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
 import easytests.support.JsonSupport;
 import easytests.support.SubjectsSupport;
 import easytests.support.UsersSupport;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
@@ -22,6 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 /**
  * @author SvetlanaTselikova
@@ -39,6 +44,7 @@ public class UsersControllerTest {
     private static String state = "state";
     private static String subjects = "subjects";
 
+
     @Autowired
     private MockMvc mvc;
 
@@ -55,11 +61,63 @@ public class UsersControllerTest {
 
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
-    /**
-     * testListSuccess
-     */
+    @MockBean
+    private SessionServiceInterface sessionService;
 
-     @Test
+    @Test
+    public void testListSuccess() throws Exception {
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
+        final List<UserModelInterface> usersModels = new ArrayList<>();
+        IntStream.range(0, 2).forEach(idx -> {
+            final UserModel userModel = new UserModel();
+            userModel.map(this.usersSupport.getEntityFixtureMock(idx));
+            usersModels.add(userModel);
+        });
+        when(this.usersService.findAll()).thenReturn(usersModels);
+
+        mvc.perform(get("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(new JsonSupport()
+                                .with(id, usersModels.get(0).getId())
+                                .with(firstName, usersModels.get(0).getFirstName())
+                                .with(lastName, usersModels.get(0).getLastName())
+                                .with(surname, usersModels.get(0).getSurname())
+                                .with(email, usersModels.get(0).getEmail())
+                                .with(isAdmin, usersModels.get(0).getIsAdmin())
+                                .with(state, usersModels.get(0).getState()))
+                        .with(new JsonSupport()
+                                .with(id, usersModels.get(1).getId())
+                                .with(firstName, usersModels.get(1).getFirstName())
+                                .with(lastName, usersModels.get(1).getLastName())
+                                .with(surname, usersModels.get(1).getSurname())
+                                .with(email, usersModels.get(1).getEmail())
+                                .with(isAdmin, usersModels.get(1).getIsAdmin())
+                                .with(state, usersModels.get(1).getState()))
+                        .build()
+                ))
+                .andReturn();
+    }
+
+    @Test
+    public void testListForbidden() throws Exception {
+        final UserModelInterface userNotAdminModel = new UserModel();
+        userNotAdminModel.map(this.usersSupport.getNotAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
+
+        mvc.perform(get("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
      public void testCreateSuccess() throws Exception {
          doAnswer(invocation -> {
              final UserModel userModel = (UserModel) invocation.getArguments()[0];
@@ -133,7 +191,7 @@ public class UsersControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
-
+  
     /**
      * testUpdateSuccess
      */

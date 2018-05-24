@@ -688,34 +688,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
-    put:
-      summary: Update an existing Issue
-      operationId: updateIssue
-      tags:
-        - Issues
-      parameters:
-        - name: body
-          in: body
-          required: true
-          description: Issue that needs to be updated
-          schema:
-            $ref: '#/definitions/V1Issue'
-      responses:
-        '200':
-          description: Issue was successfully updated
-        '400':
-          description: Bad request
-          schema:
-            $ref: '#/definitions/V1Error'
-        '403':
-          description: Permission denied
-          schema:
-            $ref: '#/definitions/V1Error'
-        default:
-          description: Unexpected error
-          schema:
-            $ref: '#/definitions/V1Error'
-
+            
   /v1/issues/{issueId}:
     parameters:
       - name: issueId

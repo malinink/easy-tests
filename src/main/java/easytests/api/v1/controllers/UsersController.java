@@ -5,9 +5,13 @@ import easytests.api.v1.mappers.UsersMapper;
 import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.User;
 import easytests.core.models.UserModel;
+import easytests.auth.services.SessionServiceInterface;
+
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.builder.UsersOptionsBuilderInterface;
 import easytests.core.services.UsersServiceInterface;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -29,12 +33,32 @@ public class UsersController {
     private UsersOptionsBuilderInterface usersOptionsBuilder;
 
     @Autowired
+    private SessionServiceInterface sessionService;
+
+    @Autowired
     @Qualifier("UsersMapperV1")
     private UsersMapper usersMapper;
+  
+    private Boolean isAdmin() {
+        return this.sessionService.getUserModel().getIsAdmin();
+    }
 
     /**
      * list
      */
+
+    @GetMapping("")
+    public List<User> list() throws ForbiddenException {
+        if (!this.isAdmin()) {
+            throw new ForbiddenException();
+        }
+        final List<UserModelInterface> usersModels = this.usersService.findAll();
+
+        return usersModels
+                .stream()
+                .map(model -> this.usersMapper.map(model, User.class))
+                .collect(Collectors.toList());
+    }
     /**
      * create
      */
@@ -56,6 +80,7 @@ public class UsersController {
 
         return this.usersMapper.map(userModel, Identity.class);
     }
+ 
     /**
      * update
      */
