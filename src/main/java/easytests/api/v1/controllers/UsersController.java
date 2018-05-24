@@ -4,9 +4,8 @@ import easytests.api.v1.exceptions.*;
 import easytests.api.v1.mappers.UsersMapper;
 import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.User;
-import easytests.core.models.UserModel;
 import easytests.auth.services.SessionServiceInterface;
-
+import easytests.core.models.UserModel;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.builder.UsersOptionsBuilderInterface;
 import easytests.core.services.UsersServiceInterface;
@@ -62,6 +61,7 @@ public class UsersController {
     /**
      * create
      */
+
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Identity create(@RequestBody User user) throws BadRequestException {
