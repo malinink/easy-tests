@@ -95,13 +95,20 @@ public class QuestionsControllerTest {
     /**
      * update
      */
-    /*@Test
-    public void testShowSuccess() throws Exception {
+    @Test
+    public void testShowWithAnswersSuccess() throws Exception {
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.map(this.questionSupport.getEntityFixtureMock(0));
-        when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions());
-        when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class))).thenReturn(questionModel);
-        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+        final List<AnswerModelInterface> answersModels = new ArrayList<>();
+        IntStream.range(0, 2).forEach(idx -> {
+            final AnswerModel answerModel = new AnswerModel();
+            answerModel.map(this.answersSupport.getEntityFixtureMock(idx));
+            answersModels.add(answerModel);
+        });
+        questionModel.setAnswers(answersModels);
+
+        when(this.questionsService.find(any(Integer.class))).thenReturn(questionModel);
+        when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(true);
 
         mvc.perform(get("/v1/questions/1")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -117,11 +124,12 @@ public class QuestionsControllerTest {
                                 .with(text, questionModel.getAnswers().get(0).getTxt())
                                 .with(isRight, questionModel.getAnswers().get(0).getRight())
                                 .with(number, questionModel.getAnswers().get(0).getSerialNumber())
-                                )
+                        )
                         .build()
                 ))
                 .andReturn();
-    }*/
+    }
+
 
     @Test
     public void testShowNotFound() throws Exception {
@@ -150,42 +158,6 @@ public class QuestionsControllerTest {
                 .andReturn();
     }
 
-    @Test
-    public void testShowWithAnswersSuccess() throws Exception {
-        final QuestionModelInterface questionModel = new QuestionModel();
-        questionModel.map(this.questionSupport.getEntityFixtureMock(0));
-        final List<AnswerModelInterface> answersModels = new ArrayList<>();
-        IntStream.range(0, 2).forEach(idx -> {
-            final AnswerModel answerModel = new AnswerModel();
-            answerModel.map(this.answersSupport.getEntityFixtureMock(idx));
-            answersModels.add(answerModel);
-        });
-        questionModel.setAnswers(answersModels);
-        when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions());
-       // when(this.questionTypesService.find(1))
-         //       .thenReturn(new QuestionTypeModelEmpty(1));
-        when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class))).thenReturn(questionModel);
-        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
-
-        mvc.perform(get("/v1/questions/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(new JsonSupport()
-                        .with(id, questionModel.getId())
-                        .with(text, questionModel.getText())
-                        .with(type, new JsonSupport().with(id, questionModel.getQuestionType().getId()))
-                        .with(topic, new JsonSupport().with(id, questionModel.getTopic().getId()))
-                        .with(answers, new JsonSupport()
-                                .with(new JsonSupport()
-                                        .with(id, answersModels.get(0).getId()))
-                                .with(new JsonSupport()
-                                        .with(id, answersModels.get(1).getId()))
-                        )
-                        .build()
-                ))
-                .andReturn();
-    }
     /**
      * delete(questionId)
      */

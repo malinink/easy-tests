@@ -53,10 +53,21 @@ public class QuestionsController extends AbstractController {
      */
     @GetMapping("/{questionId}")
     public Question show(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
-        final QuestionModelInterface questionModel = this.getQuestionModel(
+        /*final QuestionModelInterface questionModel = this.getQuestionModel(
                 questionId,
                 (new QuestionsOptions()).withAnswers(new AnswersOptions())
         );
+        if (!this.acl.hasAccess(questionModel)) {
+            throw new ForbiddenException();
+        }
+        return this.questionsMapper.map(questionModel, Question.class);*/
+
+        final QuestionModelInterface questionModel = this.questionsService.find(questionId);
+
+        if (questionModel == null) {
+            throw new NotFoundException();
+        }
+
         if (!this.acl.hasAccess(questionModel)) {
             throw new ForbiddenException();
         }
