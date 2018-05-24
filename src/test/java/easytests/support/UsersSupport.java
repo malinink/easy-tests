@@ -247,4 +247,30 @@ public class UsersSupport {
         }
     }
 
+    public UserEntity getAdminUser() {
+        return this.getEntityMock(
+                5,
+                "FirstName",
+                "LastName",
+                "Surname",
+                "email@mail.ru",
+                "hash",
+                true,
+                1
+        );
+    }
+
+    public UserEntity getNotAdminUser() {
+        return this.getEntityMock(
+                6,
+                "FirstName",
+                "LastName",
+                "Surname1",
+                "gmail@gmail.com",
+                "hash",
+                false,
+                1
+        );
+    }
+
 }
