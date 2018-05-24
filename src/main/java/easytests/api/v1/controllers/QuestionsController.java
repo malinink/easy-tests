@@ -52,7 +52,7 @@ public class QuestionsController extends AbstractController {
      * update
      */
     @GetMapping("/{questionId}")
-    public Object show(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
+    public Question show(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
         final QuestionModelInterface questionModel = this.getQuestionModel(
                 questionId,
                 (new QuestionsOptions()).withAnswers(new AnswersOptions())
@@ -60,7 +60,7 @@ public class QuestionsController extends AbstractController {
         if (!this.acl.hasAccess(questionModel)) {
             throw new ForbiddenException();
         }
-        return this.questionsMapper.map(questionModel, Object.class);
+        return this.questionsMapper.map(questionModel, Question.class);
     }
 
     private QuestionModelInterface getQuestionModel(Integer id, QuestionsOptionsInterface questionOptions) throws NotFoundException {
