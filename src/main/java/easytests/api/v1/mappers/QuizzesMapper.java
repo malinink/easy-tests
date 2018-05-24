@@ -34,6 +34,8 @@ public class QuizzesMapper extends ModelMapper {
     public QuizzesMapper() {
         super();
         this.createTypeMap(QuizModel.class, Quiz.class)
+                .addMappings(mapper -> mapper.<Integer>map(quizModel -> quizModel.getIssue().getId(),
+                        (quiz, issueId) -> quiz.getIssue().setId(issueId)))
                 .addMappings(mapper -> mapper.when(notEmptyModel)
                         .<Testee>map(quizModel -> quizModel.getTestee(),
                             (quiz, testee) -> quiz.setTestee(testee)))

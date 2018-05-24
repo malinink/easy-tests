@@ -11,6 +11,8 @@ import lombok.Data;
 public class Quiz {
     private Integer id;
 
+    private Identity issue;
+
     private String inviteCode;
 
     private Boolean codeExpired;
