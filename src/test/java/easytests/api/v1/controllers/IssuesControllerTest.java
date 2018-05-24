@@ -175,7 +175,7 @@ public class IssuesControllerTest {
         final IssueModelInterface issueModel = new IssueModel();
         issueModel.map(this.issueSupport.getEntityFixtureMock(0));
         final List<QuizModelInterface> quizesModels = new ArrayList<>();
-        IntStream.range(0,2).forEach(idx -> {
+        IntStream.range(0, 2).forEach(idx -> {
             final QuizModel quizModel = new QuizModel();
             quizModel.map(this.quizzesSupport.getEntityFixtureMock(idx));
             quizesModels.add(quizModel);
