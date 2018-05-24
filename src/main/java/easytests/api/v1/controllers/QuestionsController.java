@@ -5,17 +5,17 @@ import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.api.v1.models.Question;
 import easytests.common.exceptions.NotFoundException;
 import easytests.core.models.QuestionModelInterface;
-import easytests.core.models.TopicModelInterface;
-import easytests.core.models.empty.TopicModelEmpty;
+//import easytests.core.models.TopicModelInterface;
+//import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.options.AnswersOptions;
-import easytests.core.options.builder.QuestionsOptionsBuilder;
+//import easytests.core.options.builder.QuestionsOptionsBuilder;
 import easytests.core.options.QuestionsOptions;
 import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilderInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
-import java.util.List;
-import java.util.stream.Collectors;
+//import java.util.List;
+//import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -53,21 +53,10 @@ public class QuestionsController extends AbstractController {
      */
     @GetMapping("/{questionId}")
     public Question show(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
-        /*final QuestionModelInterface questionModel = this.getQuestionModel(
+        final QuestionModelInterface questionModel = this.getQuestionModel(
                 questionId,
                 (new QuestionsOptions()).withAnswers(new AnswersOptions())
         );
-        if (!this.acl.hasAccess(questionModel)) {
-            throw new ForbiddenException();
-        }
-        return this.questionsMapper.map(questionModel, Question.class);*/
-
-        final QuestionModelInterface questionModel = this.questionsService.find(questionId);
-
-        if (questionModel == null) {
-            throw new NotFoundException();
-        }
-
         if (!this.acl.hasAccess(questionModel)) {
             throw new ForbiddenException();
         }
