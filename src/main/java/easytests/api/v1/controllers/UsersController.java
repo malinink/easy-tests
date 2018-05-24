@@ -51,6 +51,7 @@ public class UsersController {
                 .map(model -> this.usersMapper.map(model, User.class))
                 .collect(Collectors.toList());
     }
+    
     /**
      * create
      */
