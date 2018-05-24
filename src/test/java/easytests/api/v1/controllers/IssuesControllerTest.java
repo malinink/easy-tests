@@ -5,6 +5,9 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.SubjectModelEmpty;
+import easytests.core.models.QuizModelInterface;
+import easytests.core.options.IssuesOptions;
+import easytests.core.options.IssuesOptionsInterface;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
@@ -13,6 +16,7 @@ import easytests.support.JsonSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+import easytests.support.QuizzesSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
@@ -23,7 +27,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -54,6 +57,8 @@ public class IssuesControllerTest {
     private IssuesOptionsBuilder issuesOptionsBuilder;
 
     private IssueSupport issueSupport = new IssueSupport();
+
+    private QuizzesSupport quizzesSupport = new QuizzesSupport();
 
     @Test
     public void testListSuccess() throws Exception {
@@ -129,6 +134,65 @@ public class IssuesControllerTest {
     /**
      * show(issueId)
      */
+    @Test
+    public void testShowSuccess() throws Exception {
+        final IssueModelInterface issueModel = new IssueModel();
+        issueModel.map(this.issueSupport.getEntityFixtureMock(0));
+        when(this.issuesOptionsBuilder.forAuth()).thenReturn(new IssuesOptions());
+        when(this.issuesService.find(any(Integer.class))).thenReturn(issueModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+
+        this.mvc.perform(get("/v1/issues/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, issueModel.getId())
+                        .with(name, issueModel.getName())
+                        .build()
+                ))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowNotFound() throws Exception {
+        when(this.issuesOptionsBuilder.forAuth()).thenReturn(new IssuesOptions());
+        when(this.issuesService.find(any(Integer.class), any(IssuesOptionsInterface.class))).thenReturn(null);
+
+        mvc.perform(get("/v1/issues/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowWithQuizesSucces() throws Exception {
+        final IssueModelInterface issueModel = new IssueModel();
+        issueModel.map(this.issueSupport.getEntityFixtureMock(0));
+        final List<QuizModelInterface> quizesModels = new ArrayList<>();
+        IntStream.range(0,2).forEach(idx -> {
+            final QuizModel quizModel = new QuizModel();
+            quizModel.map(this.quizzesSupport.getEntityFixtureMock(idx));
+            quizesModels.add(quizModel);
+        });
+        issueModel.setQuizzes(quizesModels);
+        when(this.issuesOptionsBuilder.forAuth()).thenReturn(new IssuesOptions());
+        when(this.issuesService.find(any(Integer.class))).thenReturn(issueModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+
+        mvc.perform(get("/v1/issues/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, issueModel.getId())
+                        .with(name, issueModel.getName())
+                .build()
+                ))
+                .andReturn();
+    }
+
     /**
      * delete(issueId)
      */

@@ -63,8 +63,23 @@ public class IssuesController extends AbstractController {
      * update
      */
     /**
-     * show(issueId)
+     * read(issueId)
      */
+    @GetMapping("/{issueId}")
+    public Object show(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException{
+        final IssueModelInterface issueModel = this.getIssueModel(issueId);
+        return this.issuesMapper.map(issueModel, Issue.class);
+    }
+
+    private IssueModelInterface getIssueModel(Integer id) throws NotFoundException{
+        final IssueModelInterface issueModel = this.issuesService.find(id);
+        if (issueModel == null) {
+            throw new NotFoundException();
+        }
+        return issueModel;
+    }
+
+
     /**
      * delete(issueId)
      */
