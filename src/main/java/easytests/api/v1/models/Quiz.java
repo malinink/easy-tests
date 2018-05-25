@@ -1,7 +1,6 @@
 package easytests.api.v1.models;
 
-import easytests.core.models.TesteeModelInterface;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 
@@ -12,13 +11,18 @@ import lombok.Data;
 public class Quiz {
     private Integer id;
 
+    private Identity issue;
+
     private String inviteCode;
 
     private Boolean codeExpired;
 
-    private LocalDateTime startedAt;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String startedAt;
 
-    private LocalDateTime finishedAt;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String finishedAt;
 
-    private TesteeModelInterface testee;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Testee testee;
 }
