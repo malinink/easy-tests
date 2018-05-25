@@ -31,9 +31,6 @@ public class IssuesController extends AbstractController {
     protected IssuesOptionsBuilder issuesOptions;
 
     @Autowired
-    protected IssuesOptionsBuilder issuesOptionsBuilder;
-
-    @Autowired
     protected SubjectsServiceInterface subjectsService;
 
     @Autowired
@@ -80,14 +77,14 @@ public class IssuesController extends AbstractController {
         if (issueModel == null) {
             throw new NotFoundException();
         }
-        if (!this.acl.hasAccess(issueModel)){
+        if (!this.acl.hasAccess(issueModel)) {
             throw new ForbiddenException();
         }
         this.issuesService.delete(issueModel);
     }
 
     private IssueModelInterface getIssueModel(Integer id) throws NotFoundException {
-        final IssuesOptionsInterface issuesOptionsInterface = this.issuesOptionsBuilder.forDelete();
+        final IssuesOptionsInterface issuesOptionsInterface = this.issuesOptions.forDelete();
         return this.getIssueModel(id, issuesOptionsInterface);
     }
 

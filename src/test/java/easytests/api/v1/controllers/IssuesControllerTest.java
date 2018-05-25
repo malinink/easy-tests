@@ -52,6 +52,9 @@ public class IssuesControllerTest {
     @MockBean
     private AccessControlLayerServiceInterface acl;
 
+    @MockBean
+    private IssuesOptionsBuilder issuesOptionsBuilder;
+
     private IssueSupport issueSupport = new IssueSupport();
 
     @Test
@@ -133,30 +136,30 @@ public class IssuesControllerTest {
      */
     @Test
     public void testDeleteSucces() throws Exception {
-//        final ArgumentCaptor<IssueModelInterface> issueModelArgumentCaptor = ArgumentCaptor.forClass(IssueModelInterface.class);
+        final ArgumentCaptor<IssueModelInterface> issueModelArgumentCaptor = ArgumentCaptor.forClass(IssueModelInterface.class);
         final IssueModelInterface issueModel = this.issueSupport.getModelFixtureMock(0);
         when(this.issuesService.find(any(), any())).thenReturn(issueModel);
-
         when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
-        this.mvc.perform(delete("v1/issues/1")
+        this.mvc.perform(delete("/v1/issues/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+        verify(this.issuesService, times(1)).delete(issueModelArgumentCaptor.capture());
+    }
+
+    @Test
+    public void testDeleteForbidden() throws Exception {
+        final IssueModel issueModel = new IssueModel();
+        issueModel.map(this.issueSupport.getEntityFixtureMock(0));
+        when(this.issuesService.find(any(), any())).thenReturn(issueModel);
+        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(false);
+        this.mvc.perform(delete("/v1/issues/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
                 .andReturn();
-//        verify(this.issuesService, times(1)).delete(issueModelArgumentCaptor.capture());
     }
-
-//    @Test
-//    public void testDeleteForbidden() throws Exception {
-//        final IssueModelInterface issueModel = this.issueSupport.getModelFixtureMock(0);
-//        when(this.issuesService.find(any(), any())).thenReturn(issueModel);
-//        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(false);
-//        this.mvc.perform(delete("v1/issues/1")
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isForbidden())
-//                .andExpect(content().string(""))
-//                .andReturn();
-//    }
 
     @Test
     public void testDeleteNotFound() throws Exception {
