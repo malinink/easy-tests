@@ -73,7 +73,7 @@ public class QuestionsControllerTest {
         mvc.perform(post("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(text, "Questiontext")
+                        .with(text, "Question")
                         .with(type, 1)
                         .with(topic, new JsonSupport().with(id, 1))
                         .with(answers, new JsonSupport()
