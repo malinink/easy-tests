@@ -3,7 +3,6 @@ package easytests.core.models;
 import easytests.core.entities.SolutionEntity;
 import easytests.support.SolutionsSupport;
 import org.junit.Test;
-import org.meanbean.test.ConfigurationBuilder;
 
 
 /**

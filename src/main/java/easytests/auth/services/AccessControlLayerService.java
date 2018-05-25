@@ -1,9 +1,6 @@
 package easytests.auth.services;
 
-import easytests.core.models.QuestionModelInterface;
-import easytests.core.models.SubjectModelInterface;
-import easytests.core.models.TopicModelInterface;
-import easytests.core.models.UserModelInterface;
+import easytests.core.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +48,14 @@ public class AccessControlLayerService implements AccessControlLayerServiceInter
 
     private Boolean hasAccess(QuestionModelInterface source, UserModelInterface userModel) {
         return this.hasAccess(source.getTopic(), userModel);
+    }
+
+    @Override
+    public Boolean hasAccess(IssueModelInterface source) {
+        return this.hasAccess(source, this.sessionService.getUserModel());
+    }
+
+    private Boolean hasAccess(IssueModelInterface source, UserModelInterface userModel) {
+        return this.hasAccess(source.getSubject(), userModel);
     }
 }
