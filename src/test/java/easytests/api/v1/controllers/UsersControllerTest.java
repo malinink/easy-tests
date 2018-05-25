@@ -1,6 +1,5 @@
 package easytests.api.v1.controllers;
 import easytests.api.v1.mappers.UsersMapper;
-import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.services.UsersService;
