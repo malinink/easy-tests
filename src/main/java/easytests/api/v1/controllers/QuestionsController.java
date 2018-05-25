@@ -6,8 +6,8 @@ import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.api.v1.models.Question;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.TopicModelInterface;
-import easytests.core.options.AnswersOptionsInterface;
-import easytests.core.options.QuestionsOptionsInterface;
+import easytests.core.options.AnswersOptions;
+import easytests.core.options.QuestionsOptions;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import java.util.List;
@@ -26,12 +26,6 @@ public class QuestionsController extends AbstractController {
 
     @Autowired
     protected QuestionsServiceInterface questionsService;
-
-    @Autowired
-    protected QuestionsOptionsInterface questionsOptions;
-
-    @Autowired
-    protected AnswersOptionsInterface answersOptions;
 
     @Autowired
     protected TopicsServiceInterface topicsService;
@@ -54,7 +48,7 @@ public class QuestionsController extends AbstractController {
         }
 
         final List<QuestionModelInterface> questionsModels =
-                this.questionsService.findByTopic(topicModel, questionsOptions.withAnswers(answersOptions));
+                this.questionsService.findByTopic(topicModel, new QuestionsOptions().withAnswers(new AnswersOptions()));
 
         return questionsModels
                 .stream()
