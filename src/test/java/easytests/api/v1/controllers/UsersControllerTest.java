@@ -1,9 +1,12 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.UsersMapper;
+import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.auth.services.SessionServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
+import easytests.core.options.UsersOptions;
+import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
 import easytests.support.JsonSupport;
@@ -40,6 +43,7 @@ public class UsersControllerTest {
     private static String email = "email";
     private static String isAdmin = "isAdmin";
     private static String state = "state";
+    private static String subjects = "subjects";
 
     @Autowired
     private MockMvc mvc;
@@ -53,6 +57,9 @@ public class UsersControllerTest {
     private UsersSupport usersSupport = new UsersSupport();
 
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
+
+    @MockBean
+    private AccessControlLayerServiceInterface acl;
 
     @MockBean
     private SessionServiceInterface sessionService;
@@ -146,10 +153,88 @@ public class UsersControllerTest {
     /**
      * testShowMeSuccess
      */
+    @Test
+    public void testShowMeSuccess() throws Exception {
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userModel);
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.usersService.findByEmail(any(), any())).thenReturn(userModel);
+
+        mvc.perform(get("/v1/users/me")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, userModel.getId())
+                        .with(firstName, userModel.getFirstName())
+                        .with(lastName, userModel.getLastName())
+                        .with(surname, userModel.getSurname())
+                        .with(email, userModel.getEmail())
+                        .with(state, userModel.getState())
+                        .build()
+                ))
+                .andReturn();
+    }
     /**
      * testShowMeFailed
      */
+    @Test
+    public void testShowMeFailed() throws Exception {
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userModel);
+        when(this.sessionService.isUser()).thenReturn(false);
+
+
+        mvc.perform(get("/v1/users/me")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andReturn();
+    }
     /**
      * testShowMeWithSubjectsSuccess
      */
+    @Test
+    public void testShowMeWithSubjectsSuccess() throws Exception {
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userModel);
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.usersService.findByEmail(any(), any())).thenReturn(userModel);
+
+        final List<SubjectModelInterface> subjectsModels = new ArrayList<>();
+        IntStream.range(0, 2).forEach(idx -> {
+            final SubjectModel subjectModel = new SubjectModel();
+            subjectModel.map(this.subjectsSupport.getEntityFixtureMock(idx));
+            subjectsModels.add(subjectModel);
+        });
+        userModel.setSubjects(subjectsModels);
+
+        when(this.usersOptionsBuilder.forAuth()).thenReturn(new UsersOptions());
+        when(this.sessionService.getUserModel()).thenReturn(userModel);
+        when(this.sessionService.isUser()).thenReturn(true);
+
+        mvc.perform(get("/v1/users/me")
+                .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, userModel.getId())
+                        .with(firstName, userModel.getFirstName())
+                        .with(lastName, userModel.getLastName())
+                        .with(surname, userModel.getSurname())
+                        .with(email, userModel.getEmail())
+                        .with(isAdmin, userModel.getIsAdmin())
+                        .with(state, userModel.getState())
+                        .with(subjects, new JsonSupport()
+                                .with(new JsonSupport()
+                                        .with(id, userModel.getSubjects().get(0).getId()))
+                                .with(new JsonSupport()
+                                        .with(id, userModel.getSubjects().get(1).getId()))
+                        )
+                        .build()
+                ))
+                .andReturn();
+    }
 }

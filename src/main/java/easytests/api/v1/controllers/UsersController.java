@@ -1,10 +1,14 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.exceptions.*;
+import easytests.api.v1.mappers.ObjectsMapper;
 import easytests.api.v1.mappers.UsersMapper;
 import easytests.api.v1.models.User;
 import easytests.auth.services.SessionServiceInterface;
 import easytests.core.models.UserModelInterface;
+import easytests.core.options.SubjectsOptions;
+import easytests.core.options.UsersOptions;
+import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilderInterface;
 import easytests.core.services.UsersServiceInterface;
 import java.util.List;
@@ -34,6 +38,10 @@ public class UsersController {
     @Autowired
     @Qualifier("UsersMapperV1")
     private UsersMapper usersMapper;
+
+//    @Autowired
+//    @Qualifier("ObjectsMapperV1")
+//    private ObjectsMapper usersMapper;
 
     private Boolean isAdmin() {
         return this.sessionService.getUserModel().getIsAdmin();
@@ -66,4 +74,31 @@ public class UsersController {
     /**
      * showMe
      */
+    @GetMapping("/me")
+    public User showme() throws ForbiddenException, NotFoundException{
+        final String userEmail = this.sessionService.getUserModel().getEmail();
+        final UsersOptionsInterface userOptions = new UsersOptions().withSubjects(new SubjectsOptions());
+        final UserModelInterface userModel = this.usersService.findByEmail(userEmail, userOptions);
+//        final UserModelInterface userModel = this.getUserModel(userId);
+
+//        final UserModelInterface userModel = this.sessionService.getUserModel(
+//                (new UsersOptions()).withSubjects(new SubjectsOptions())
+//        );
+        if (!this.sessionService.isUser()){
+            throw new ForbiddenException();
+        }
+        return this.usersMapper.map(userModel, User.class);
+    }
+    private UserModelInterface getUserModel(Integer id, UsersOptionsInterface userOptions) throws NotFoundException {
+        final UserModelInterface userModel = this.usersService.find(id, userOptions);
+        if (userModel == null) {
+            throw new NotFoundException();
+        }
+        return userModel;
+    }
+
+    private UserModelInterface getUserModel(Integer id) throws NotFoundException {
+        return this.getUserModel(id, this.usersOptionsBuilder.forAuth());
+    }
+
 }

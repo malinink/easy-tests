@@ -1,6 +1,9 @@
 package easytests.api.v1.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+
+import java.util.List;
 
 
 /**
@@ -21,4 +24,8 @@ public class User {
     private Boolean isAdmin;
 
     private Integer state;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<Identity> subjects;
 }
+
