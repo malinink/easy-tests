@@ -68,6 +68,7 @@ public class SubjectsController extends AbstractController {
         if (subject.getId() != null) {
             throw new IdentifiedModelException();
         }
+
         this.checkUser(subject);
 
         final SubjectModelInterface subjectModel = this.subjectsMapper.map(subject, SubjectModel.class);

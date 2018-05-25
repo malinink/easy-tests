@@ -155,6 +155,7 @@ public class SubjectsControllerTest {
             return null;
         }).when(this.subjectsService).save(any(SubjectModelInterface.class));
 
+        when(this.usersService.find(any(Integer.class))).thenReturn(new UserModelEmpty());
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
 
         mvc.perform(post("/v1/subjects")
