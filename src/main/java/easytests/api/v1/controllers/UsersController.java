@@ -5,7 +5,6 @@ import easytests.api.v1.mappers.UsersMapper;
 import easytests.api.v1.models.User;
 import easytests.auth.services.SessionServiceInterface;
 import easytests.core.models.UserModelInterface;
-import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilderInterface;
 import easytests.core.services.UsersServiceInterface;
 import java.util.List;
