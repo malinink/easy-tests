@@ -87,8 +87,7 @@ public class SubjectsController extends AbstractController {
             if (!this.acl.hasAccess(userModel)) {
                 throw new ForbiddenException();
             }
-        }
-        else {
+        } else {
             throw new BadRequestException("user must exist");
         }
 

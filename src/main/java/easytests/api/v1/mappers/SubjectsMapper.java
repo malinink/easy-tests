@@ -17,13 +17,13 @@ import org.springframework.stereotype.Service;
 public class SubjectsMapper extends ModelMapper {
 
     @Getter
-    UsersServiceInterface usersService;
+    private UsersServiceInterface usersService;
 
     public SubjectsMapper() {
         super();
         this.createTypeMap(SubjectModel.class, Subject.class)
                 .addMappings(mapper -> mapper.<Integer>map(subjectModel -> subjectModel.getUser().getId(),
-                     (subject, id) -> subject.getUser().setId(id)));
+                    (subject, id) -> subject.getUser().setId(id)));
 
         this.createTypeMap(Identity.class, UserModelInterface.class)
                 .addMappings(mapper -> mapper

@@ -15,8 +15,10 @@ import easytests.support.JsonSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -147,6 +149,7 @@ public class SubjectsControllerTest {
         final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(1);
         when(this.usersService.find(any(Integer.class))).thenReturn(userModel);
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+        final ArgumentCaptor<SubjectModelInterface> subjectCaptor = ArgumentCaptor.forClass(SubjectModelInterface.class);
 
         mvc.perform(post("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -164,6 +167,10 @@ public class SubjectsControllerTest {
                                 .build()
                 ))
                 .andReturn();
+        verify(this.subjectsService, times(1)).save(subjectCaptor.capture());
+        Assert.assertEquals(subjectCaptor.getValue().getName(), "Subject");
+        Assert.assertEquals(subjectCaptor.getValue().getDescription(), "Subject description");
+        Assert.assertEquals(subjectCaptor.getValue().getUser().getId(), (Integer) 2);
     }
 
     @Test
