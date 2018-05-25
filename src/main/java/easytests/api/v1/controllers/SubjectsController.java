@@ -6,7 +6,6 @@ import easytests.api.v1.mappers.SubjectsMapper;
 import easytests.api.v1.models.Subject;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.UserModelInterface;
-import easytests.core.options.SubjectsOptions;
 import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
@@ -94,17 +93,5 @@ public class SubjectsController extends AbstractController {
     /**
      * delete(subjectId)
      */
-
-    @DeleteMapping("/{subjectId}")
-    public void delete(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
-        final SubjectModelInterface subjectModel = this.getSubjectModel(subjectId);
-        if (subjectModel == null) {
-            throw new NotFoundException();
-        }
-        if (!this.acl.hasAccess(subjectModel)) {
-            throw new ForbiddenException();
-        }
-        this.subjectsService.delete(new SubjectsOptions().withRelations(subjectModel));
-    }
 
 }

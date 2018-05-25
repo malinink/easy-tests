@@ -190,38 +190,4 @@ public class SubjectsControllerTest {
      * delete(subjectId)
      */
 
-    @Test
-    public void testDeleteSuccess() throws Exception {
-        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
-        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
-        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
-        this.mvc.perform(delete("/v1/subjects/1")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().string(""))
-                .andReturn();
-    }
-    @Test
-    public void testDeleteForbidden() throws Exception {
-        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
-        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
-        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
-        this.mvc.perform(delete("/v1/subjects/1")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().isForbidden())
-                .andExpect(content().string(""))
-                .andReturn();
-    }
-    @Test
-    public void testDeleteNotFound() throws Exception {
-        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
-        this.mvc.perform(delete("/v1/subjects/5")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(""))
-                .andReturn();
-    }
 }
