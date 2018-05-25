@@ -6,6 +6,7 @@ import easytests.api.v1.mappers.TopicsMapper;
 import easytests.api.v1.models.Topic;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
+import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
@@ -70,16 +71,25 @@ public class TopicsController extends AbstractController {
 
     @DeleteMapping("/{topicId}")
     public void delete(@PathVariable Integer topicId) throws NotFoundException, ForbiddenException {
-        final TopicModelInterface topicModel = this.topicsService.find(topicId);
-
-        if (topicModel == null) {
-            throw new NotFoundException();
-        }
+        final TopicModelInterface topicModel = this.getTopicModel(topicId);
 
         if (!this.acl.hasAccess(topicModel)) {
             throw new ForbiddenException();
         }
 
         this.topicsService.delete(topicModel);
+    }
+
+    private TopicModelInterface getTopicModel(Integer id, TopicsOptionsInterface topicOptions)
+            throws NotFoundException {
+        final TopicModelInterface topicModel = this.topicsService.find(id, topicOptions);
+        if (topicModel == null) {
+            throw new NotFoundException();
+        }
+        return topicModel;
+    }
+
+    private TopicModelInterface getTopicModel(Integer id) throws NotFoundException {
+        return this.getTopicModel(id, this.topicsOptionsBuilder.forDelete());
     }
 }

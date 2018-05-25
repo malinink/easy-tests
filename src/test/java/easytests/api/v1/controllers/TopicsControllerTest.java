@@ -14,6 +14,8 @@ import easytests.support.JsonSupport;
 import easytests.support.TopicsSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.mockito.BDDMockito.*;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,7 +32,7 @@ import static org.mockito.BDDMockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 /**
  * @author lelay
  */
@@ -132,5 +134,46 @@ public class TopicsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
 
+    }
+
+    @Test
+    public void testDeleteSuccess() throws Exception {
+        final TopicModelInterface questionModel = this.topicsSupport.getModelFixtureMock(0);
+        when(this.topicsService.find(any(), any())).thenReturn(questionModel);
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
+        final ArgumentCaptor<TopicModelInterface> argumentCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
+        this.mvc.perform(delete("/v1/topics/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+        verify(this.topicsService, times(1)).delete(argumentCaptor.capture());
+        this.topicsSupport.assertEquals(argumentCaptor.getValue(), questionModel);
+    }
+
+    @Test
+    public void testDeleteNotFound() throws Exception {
+        when(this.topicsService.find(any(Integer.class))).thenReturn(null);
+
+        mvc.perform(delete("/v1/topics/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testDeleteForbidden() throws Exception {
+        final TopicModelInterface questionModel = new TopicModel();
+        questionModel.map(this.topicsSupport.getEntityFixtureMock(0));
+        when(this.topicsService.find(any(), any())).thenReturn(questionModel);
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);
+
+        mvc.perform(delete("/v1/topics/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
     }
 }
