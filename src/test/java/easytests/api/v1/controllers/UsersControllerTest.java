@@ -148,7 +148,12 @@ public class UsersControllerTest {
                  ))
                  .andReturn();
          verify(this.usersService, times(1)).save(userCaptor.capture());
-         this.checkForTestCreateSuccess(userCaptor.getValue());
+        Assert.assertEquals(userCaptor.getValue().getFirstName(), "FirstName");
+        Assert.assertEquals(userCaptor.getValue().getLastName(), "LastName");
+        Assert.assertEquals(userCaptor.getValue().getSurname(), "SurName");
+        Assert.assertEquals(userCaptor.getValue().getState(), (Integer) 1);
+        Assert.assertEquals(userCaptor.getValue().getIsAdmin(), true);
+    }
      }
 
     @Test
@@ -224,12 +229,4 @@ public class UsersControllerTest {
     /**
      * testShowMeWithSubjectsSuccess
      */
-
-    private void checkForTestCreateSuccess(UserModelInterface userModel) {
-        Assert.assertEquals(userModel.getFirstName(), "FirstName");
-        Assert.assertEquals(userModel.getLastName(), "LastName");
-        Assert.assertEquals(userModel.getSurname(), "SurName");
-        Assert.assertEquals(userModel.getState(), (Integer) 1);
-        Assert.assertEquals(userModel.getIsAdmin(), true);
-    }
 }
