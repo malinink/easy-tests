@@ -13,7 +13,6 @@ import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.support.IssueSupport;
 import easytests.support.JsonSupport;
-import easytests.support.QuizzesSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -140,7 +139,7 @@ public class IssuesControllerTest {
         final IssueModelInterface issueModel = new IssueModel();
         issueModel.map(this.issueSupport.getEntityFixtureMock(0));
         when(this.issuesOptionsBuilder.forAuth()).thenReturn(new IssuesOptions());
-        when(this.issuesService.find(any(Integer.class))).thenReturn(issueModel);
+        when(this.issuesService.find(any(Integer.class), any())).thenReturn(issueModel);
         when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
 
 
@@ -174,7 +173,7 @@ public class IssuesControllerTest {
         final IssueModelInterface issueModel = new IssueModel();
         issueModel.map(this.issueSupport.getEntityFixtureMock(0));
         when(this.issuesOptionsBuilder.forAuth()).thenReturn(new IssuesOptions());
-        when(this.issuesService.find(any(Integer.class))).thenReturn(issueModel);
+        when(this.issuesService.find(any(Integer.class), any())).thenReturn(issueModel);
         when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(false);
 
         mvc.perform(get("/v1/issues/1")
