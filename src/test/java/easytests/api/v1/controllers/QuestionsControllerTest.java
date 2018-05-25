@@ -7,7 +7,10 @@ import easytests.core.models.*;
 import easytests.core.models.empty.QuestionModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.models.empty.QuestionTypeModelEmpty;
-import easytests.core.options.builder.QuestionsOptionsBuilder;
+import easytests.core.options.AnswersOptionsInterface;
+import easytests.core.options.QuestionsOptions;
+import easytests.core.options.AnswersOptions;
+import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.services.QuestionsService;
 import easytests.core.services.QuestionTypesService;
 import easytests.core.services.AnswersService;
@@ -73,7 +76,10 @@ public class QuestionsControllerTest {
     private AccessControlLayerServiceInterface acl;
 
     @MockBean
-    private QuestionsOptionsBuilder questionsOptionsBuilder;
+    private QuestionsOptions questionsOptions;
+
+    @MockBean
+    private AnswersOptions answersOptions;
 
     private QuestionsSupport questionSupport = new QuestionsSupport();
 
@@ -101,8 +107,7 @@ public class QuestionsControllerTest {
 
         when(this.topicsService.find(topicIdParamValue))
                 .thenReturn(new TopicModelEmpty(topicIdParamValue));
-        when(this.questionsService.findByTopic(any(TopicModelInterface.class)))
-                .thenReturn(questionsModels);
+        when(this.questionsService.findByTopic(any(),any())).thenReturn(questionsModels);
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
 
         this.mvc.perform(get("/v1/questions?topicId={topicIdParamValue}", topicIdParamValue)
@@ -154,6 +159,9 @@ public class QuestionsControllerTest {
     public void testListNotFound() throws Exception {
         int topicIdParamValue = 5;
 
+        when(this.topicsService.find(topicIdParamValue))
+                .thenReturn(null);
+
         this.mvc.perform(get("/v1/questions?topicId={topicIdParamValue}", topicIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -166,7 +174,8 @@ public class QuestionsControllerTest {
         int topicIdParamValue = 1;
 
         when(this.topicsService.find(topicIdParamValue))
-                .thenReturn(new TopicModelEmpty(topicIdParamValue));
+               .thenReturn(new TopicModelEmpty(topicIdParamValue));
+
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);
 
         this.mvc.perform(get("/v1/questions?topicId={topicIdParamValue}", topicIdParamValue)
