@@ -47,7 +47,7 @@ public class QuestionsController extends AbstractController {
         if (!this.acl.hasAccess(questionModel)) {
             throw new ForbiddenException();
         }
-        
+
         this.questionsService.delete(questionModel);
     }
 
