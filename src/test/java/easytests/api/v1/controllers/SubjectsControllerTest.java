@@ -6,10 +6,12 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.UserModelEmpty;
+import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.UsersServiceInterface;
 import easytests.support.SubjectsSupport;
+import easytests.support.UsersSupport;
 import easytests.core.entities.SubjectEntity;
 import easytests.support.JsonSupport;
 import java.util.ArrayList;
@@ -64,6 +66,8 @@ public class SubjectsControllerTest {
     SubjectsOptionsBuilder subjectsOptionsBuilder;
 
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
+
+    private UsersSupport usersSupport = new UsersSupport();
 
     @Test
     public void testListSuccess() throws Exception {
@@ -145,15 +149,13 @@ public class SubjectsControllerTest {
             final SubjectModel subjectCheckModel = new SubjectModel();
             subjectCheckModel.map(subjectCheckEntity);
             subjectCheckModel.setId(5);
+            int userIdParamValue =2;
+            subjectModel.setUser(new UserModelEmpty(userIdParamValue));
             this.subjectsSupport.assertEquals(subjectModel, subjectCheckModel);
             return null;
         }).when(this.subjectsService).save(any(SubjectModelInterface.class));
 
-        int userIdParamValue = 2;
-
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
-        when(this.usersService.find(userIdParamValue))
-                .thenReturn(new UserModelEmpty(userIdParamValue));
 
         mvc.perform(post("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
