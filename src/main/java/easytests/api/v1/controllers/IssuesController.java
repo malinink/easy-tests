@@ -80,9 +80,9 @@ public class IssuesController extends AbstractController {
         if (issueModel == null) {
             throw new NotFoundException();
         }
-        //if (!this.acl.hasAccess(issueModel)){
-        //    throw new ForbiddenException();
-        //}
+        if (!this.acl.hasAccess(issueModel)){
+            throw new ForbiddenException();
+        }
         this.issuesService.delete(issueModel);
     }
 
@@ -91,8 +91,12 @@ public class IssuesController extends AbstractController {
         return this.getIssueModel(id, issuesOptionsInterface);
     }
 
-    private IssueModelInterface getIssueModel(Integer id, IssuesOptionsInterface issueOption) {
+    private IssueModelInterface getIssueModel(Integer id, IssuesOptionsInterface issueOption)
+            throws NotFoundException {
         final IssueModelInterface issueModel = this.issuesService.find(id, issueOption);
+        if (issueModel == null) {
+            throw new NotFoundException();
+        }
         return issueModel;
     }
 }

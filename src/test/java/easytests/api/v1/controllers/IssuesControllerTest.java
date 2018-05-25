@@ -132,14 +132,14 @@ public class IssuesControllerTest {
      */
     @Test
     public void testDeleteSucces() throws Exception {
-        final ArgumentCaptor<IssueModelInterface> issueModelArgumentCaptor = ArgumentCaptor.forClass(IssueModelInterface.class);
+//        final ArgumentCaptor<IssueModelInterface> issueModelArgumentCaptor = ArgumentCaptor.forClass(IssueModelInterface.class);
         final IssueModelInterface issueModel = this.issueSupport.getModelFixtureMock(0);
         when(this.issuesService.find(any(), any())).thenReturn(issueModel);
 
-//        when(this.acl.hasAccess(any(issuesModelInterface.class))).thenReturn(true);
+        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
         this.mvc.perform(delete("v1/issues/1")
                 .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isForbidden())
+                .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
                 .andReturn();
 //        verify(this.issuesService, times(1)).delete(issueModelArgumentCaptor.capture());
@@ -149,7 +149,7 @@ public class IssuesControllerTest {
 //    public void testDeleteForbidden() throws Exception {
 //        final IssueModelInterface issueModel = this.issueSupport.getModelFixtureMock(0);
 //        when(this.issuesService.find(any(), any())).thenReturn(issueModel);
-//        when(this.acl.hasAccess(any))
+//        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(false);
 //        this.mvc.perform(delete("v1/issues/1")
 //                .contentType(MediaType.APPLICATION_JSON))
 //                .andExpect(status().isForbidden())
@@ -159,7 +159,7 @@ public class IssuesControllerTest {
 
     @Test
     public void testDeleteNotFound() throws Exception {
-//        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
+        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
         this.mvc.perform(delete("/v1/issues/5")
                 .contentType(MediaType.APPLICATION_JSON)
         )
