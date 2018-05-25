@@ -1,47 +1,29 @@
 package easytests.core.models;
 
 import easytests.core.entities.IssueStandardTopicPriorityEntity;
-import easytests.core.models.empty.IssueStandardModelEmpty;
-import easytests.core.models.empty.TopicModelEmpty;
-import org.junit.Assert;
+import easytests.support.IssueStandardTopicPrioritySupport;
 import org.junit.Test;
-import org.meanbean.test.*;
-import org.mockito.Mockito;
+
 
 /**
- * @author SingularityA
+ * @author VlasovIgor
  */
-public class IssueStandardTopicPriorityModelTest {
+public class IssueStandardTopicPriorityModelTest extends AbstractModelTest {
+
+    private IssueStandardTopicPrioritySupport issueStandardTopicPrioritySupport = new IssueStandardTopicPrioritySupport();
 
     @Test
-    public void testCommon() {
-        Configuration configuration = new ConfigurationBuilder()
-                .ignoreProperty("topic")
-                .ignoreProperty("issueStandard")
-                .build();
-        new BeanTester().testBean(IssueStandardTopicPriorityModel.class, configuration);
+    public void testCommon() throws Exception {
+        super.testCommon(IssueStandardTopicPriorityModel.class);
     }
 
     @Test
-    public void testMap() {
-        final Integer id = 5;
-        final Integer topicId = 3;
-        final Boolean isPreferable = false;
-        final Integer issueStandardId = 2;
+    public void testMap() throws Exception {
+        final IssueStandardTopicPriorityEntity issueStandardTopicPriorityEntity = this.issueStandardTopicPrioritySupport.getEntityFixtureMock(0);
+        final IssueStandardTopicPriorityModelInterface issueStandardTopicPriorityModel = new IssueStandardTopicPriorityModel();
 
-        final IssueStandardTopicPriorityEntity topicPriorityEntity
-                = Mockito.mock(IssueStandardTopicPriorityEntity.class);
-        Mockito.when(topicPriorityEntity.getId()).thenReturn(id);
-        Mockito.when(topicPriorityEntity.getTopicId()).thenReturn(topicId);
-        Mockito.when(topicPriorityEntity.getIsPreferable()).thenReturn(isPreferable);
-        Mockito.when(topicPriorityEntity.getIssueStandardId()).thenReturn(issueStandardId);
+        issueStandardTopicPriorityModel.map(issueStandardTopicPriorityEntity);
 
-        final IssueStandardTopicPriorityModelInterface topicPriorityModel = new IssueStandardTopicPriorityModel();
-        topicPriorityModel.map(topicPriorityEntity);
-
-        Assert.assertEquals(id, topicPriorityModel.getId());
-        Assert.assertEquals(new TopicModelEmpty(topicId), topicPriorityModel.getTopic());
-        Assert.assertEquals(isPreferable, topicPriorityModel.getIsPreferable());
-        Assert.assertEquals(new IssueStandardModelEmpty(issueStandardId), topicPriorityModel.getIssueStandard());
+        this.issueStandardTopicPrioritySupport.assertEquals(issueStandardTopicPriorityEntity, issueStandardTopicPriorityModel);
     }
 }

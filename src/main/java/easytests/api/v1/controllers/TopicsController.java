@@ -65,9 +65,19 @@ public class TopicsController extends AbstractController {
     /**
      * update
      */
-    /**
-     * show(topicId)
-     */
+    @GetMapping("/{topicId}")
+    public Topic show(@PathVariable Integer topicId) throws NotFoundException, ForbiddenException {
+        final TopicModelInterface topicModel = this.topicsService.find(topicId);
+
+        if (topicModel == null) {
+            throw new NotFoundException();
+        }
+
+        if (!this.acl.hasAccess(topicModel)) {
+            throw new ForbiddenException();
+        }
+        return this.topicsMapper.map(topicModel, Topic.class);
+    }
 
     @DeleteMapping("/{topicId}")
     public void delete(@PathVariable Integer topicId) throws NotFoundException, ForbiddenException {
