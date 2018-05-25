@@ -66,12 +66,12 @@ public class UsersController {
     public void delete(@PathVariable Integer userId) throws NotFoundException, ForbiddenException {
         final UserModelInterface userModel = this.getUserModel(userId);
 
-        if (userModel == null) {
-            throw new NotFoundException();
-        }
-
         if (!this.isAdmin()) {
             throw new ForbiddenException();
+        }
+
+        if (userModel == null) {
+            throw new NotFoundException();
         }
 
         this.usersService.delete(userModel);
