@@ -6,7 +6,6 @@ import easytests.auth.services.SessionServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.options.UsersOptions;
-import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
 import easytests.support.JsonSupport;
@@ -153,34 +152,12 @@ public class UsersControllerTest {
     /**
      * testShowMeSuccess
      */
-    @Test
-    public void testShowMeSuccess() throws Exception {
-        final UserModelInterface userModel = new UserModel();
-        userModel.map(this.usersSupport.getAdminUser());
-        when(this.sessionService.getUserModel()).thenReturn(userModel);
-        when(this.sessionService.isUser()).thenReturn(true);
-        when(this.usersService.findByEmail(any(), any())).thenReturn(userModel);
 
-        mvc.perform(get("/v1/users/me")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(new JsonSupport()
-                        .with(id, userModel.getId())
-                        .with(firstName, userModel.getFirstName())
-                        .with(lastName, userModel.getLastName())
-                        .with(surname, userModel.getSurname())
-                        .with(email, userModel.getEmail())
-                        .with(state, userModel.getState())
-                        .build()
-                ))
-                .andReturn();
-    }
     /**
      * testShowMeFailed
      */
     @Test
-    public void testShowMeFailed() throws Exception {
+    public void testShowMeForbidden() throws Exception {
         final UserModelInterface userModel = new UserModel();
         userModel.map(this.usersSupport.getAdminUser());
         when(this.sessionService.getUserModel()).thenReturn(userModel);
@@ -217,7 +194,6 @@ public class UsersControllerTest {
 
         mvc.perform(get("/v1/users/me")
                 .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(new JsonSupport()
                         .with(id, userModel.getId())

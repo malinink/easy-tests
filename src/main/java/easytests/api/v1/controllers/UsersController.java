@@ -71,10 +71,8 @@ public class UsersController {
      */
 
     @GetMapping("/me")
-    public User showme() throws ForbiddenException, NotFoundException {
-        final String userEmail = this.sessionService.getUserModel().getEmail();
-        final UsersOptionsInterface userOptions = new UsersOptions().withSubjects(new SubjectsOptions());
-        final UserModelInterface userModel = this.usersService.findByEmail(userEmail, userOptions);
+    public User showme() throws ForbiddenException {
+        final UserModelInterface userModel = this.sessionService.getUserModel();
         if (!this.sessionService.isUser()) {
             throw new ForbiddenException();
         }
