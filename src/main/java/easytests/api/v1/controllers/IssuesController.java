@@ -69,6 +69,10 @@ public class IssuesController extends AbstractController {
     @GetMapping("/{issueId}")
     public Object show(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException {
         final IssueModelInterface issueModel = this.getIssueModel(issueId);
+
+        if (!this.acl.hasAccess(issueModel)) {
+            throw new ForbiddenException();
+        }
         return this.issuesMapper.map(issueModel, Issue.class);
     }
 

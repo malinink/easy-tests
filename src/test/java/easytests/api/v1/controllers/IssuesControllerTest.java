@@ -143,7 +143,9 @@ public class IssuesControllerTest {
         issueModel.map(this.issueSupport.getEntityFixtureMock(0));
         when(this.issuesOptionsBuilder.forAuth()).thenReturn(new IssuesOptions());
         when(this.issuesService.find(any(Integer.class))).thenReturn(issueModel);
-        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
+
+
 
         this.mvc.perform(get("/v1/issues/1")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -165,6 +167,21 @@ public class IssuesControllerTest {
         mvc.perform(get("/v1/issues/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowForbidden() throws Exception {
+        final IssueModelInterface issueModel = new IssueModel();
+        issueModel.map(this.issueSupport.getEntityFixtureMock(0));
+        when(this.issuesOptionsBuilder.forAuth()).thenReturn(new IssuesOptions());
+        when(this.issuesService.find(any(Integer.class))).thenReturn(issueModel);
+        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(false);
+
+        mvc.perform(get("/v1/issues/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
                 .andReturn();
     }
