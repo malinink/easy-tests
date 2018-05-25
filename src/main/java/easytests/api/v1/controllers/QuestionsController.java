@@ -6,7 +6,6 @@ import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.api.v1.models.Question;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.options.AnswersOptions;
-import easytests.core.options.QuestionsOptions;
 import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilderInterface;
 import easytests.core.services.QuestionsServiceInterface;
@@ -50,7 +49,7 @@ public class QuestionsController extends AbstractController {
     public Question show(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
         final QuestionModelInterface questionModel = this.getQuestionModel(
                 questionId,
-                (new QuestionsOptions()).withAnswers(new AnswersOptions())
+                this.questionsOptionsBuilder.forAuth().withAnswers(new AnswersOptions())
         );
         if (!this.acl.hasAccess(questionModel)) {
             throw new ForbiddenException();
