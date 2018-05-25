@@ -46,8 +46,7 @@ public class QuestionsControllerTest {
     private static String topic = "topic";
     private static String answers = "answers";
 
-    private static String txt = "txt";
-    private static String right = "right";
+    private static String isRight = "isRight";
     private static String number = "number";
 
 
@@ -94,10 +93,6 @@ public class QuestionsControllerTest {
         IntStream.range(0, 2).forEach(idx -> {
             final QuestionModel questionModel = new QuestionModel();
             questionModel.map(this.questionSupport.getEntityFixtureMock(idx));
-
-            IntStream.range(0, 2).forEach(answerIdx ->
-                answersModels.get(answerIdx).setQuestion(questionModel)
-            );
             questionModel.setAnswers(answersModels);
             questionsModels.add(questionModel);
         });
@@ -106,12 +101,8 @@ public class QuestionsControllerTest {
 
         when(this.topicsService.find(topicIdParamValue))
                 .thenReturn(new TopicModelEmpty(topicIdParamValue));
-        when(this.questionsService.findByTopic(new TopicModelEmpty(topicIdParamValue)))
+        when(this.questionsService.findByTopic(any(TopicModelInterface.class)))
                 .thenReturn(questionsModels);
-        when(this.answersService.findByQuestion(new QuestionModelEmpty()))
-                .thenReturn(answersModels);
-        when(this.questionTypesService.find(topicIdParamValue))
-                .thenReturn(new QuestionTypeModelEmpty(topicIdParamValue));
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
 
         this.mvc.perform(get("/v1/questions?topicId={topicIdParamValue}", topicIdParamValue)
@@ -127,13 +118,13 @@ public class QuestionsControllerTest {
                                 .with(answers, new JsonSupport()
                                     .with(new JsonSupport()
                                         .with(id, questionsModels.get(0).getAnswers().get(0).getId())
-                                        .with(txt, questionsModels.get(0).getAnswers().get(0).getTxt())
-                                        .with(right, questionsModels.get(0).getAnswers().get(0).getRight())
+                                        .with(text, questionsModels.get(0).getAnswers().get(0).getTxt())
+                                        .with(isRight, questionsModels.get(0).getAnswers().get(0).getRight())
                                         .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber()))
                                     .with(new JsonSupport()
                                         .with(id, questionsModels.get(0).getAnswers().get(1).getId())
-                                        .with(txt, questionsModels.get(0).getAnswers().get(1).getTxt())
-                                        .with(right, questionsModels.get(0).getAnswers().get(1).getRight())
+                                        .with(text, questionsModels.get(0).getAnswers().get(1).getTxt())
+                                        .with(isRight, questionsModels.get(0).getAnswers().get(1).getRight())
                                         .with(number, questionsModels.get(0).getAnswers().get(1).getSerialNumber()))
                                 )
                         )
@@ -145,13 +136,13 @@ public class QuestionsControllerTest {
                                 .with(answers, new JsonSupport()
                                     .with(new JsonSupport()
                                         .with(id, questionsModels.get(1).getAnswers().get(0).getId())
-                                        .with(txt, questionsModels.get(1).getAnswers().get(0).getTxt())
-                                        .with(right, questionsModels.get(1).getAnswers().get(0).getRight())
+                                        .with(text, questionsModels.get(1).getAnswers().get(0).getTxt())
+                                        .with(isRight, questionsModels.get(1).getAnswers().get(0).getRight())
                                         .with(number, questionsModels.get(1).getAnswers().get(0).getSerialNumber()))
                                     .with(new JsonSupport()
                                         .with(id, questionsModels.get(1).getAnswers().get(1).getId())
-                                        .with(txt, questionsModels.get(1).getAnswers().get(1).getTxt())
-                                        .with(right, questionsModels.get(1).getAnswers().get(1).getRight())
+                                        .with(text, questionsModels.get(1).getAnswers().get(1).getTxt())
+                                        .with(isRight, questionsModels.get(1).getAnswers().get(1).getRight())
                                         .with(number, questionsModels.get(1).getAnswers().get(1).getSerialNumber()))
                                 )
                         ).build()
@@ -164,8 +155,7 @@ public class QuestionsControllerTest {
         int topicIdParamValue = 5;
 
         this.mvc.perform(get("/v1/questions?topicId={topicIdParamValue}", topicIdParamValue)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(""))
                 .andReturn();
