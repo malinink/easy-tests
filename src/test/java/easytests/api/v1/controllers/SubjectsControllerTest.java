@@ -133,9 +133,85 @@ public class SubjectsControllerTest {
     /**
      * create
      */
-    /**
-     * update
-     */
+    @Test
+    public void testUpdateSuccess() throws Exception {
+        final SubjectModelInterface subjectModel = subjectsSupport.getModelFixtureMock(0);
+
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+
+        mvc.perform(put("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 1)
+                        .with(name, "newSubject")
+                        .with(description, "newDescription")
+                        .with(user, 1)
+                        .build()
+                ))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+
+        verify(this.subjectsService, times(1)).save(subjectModel);
+    }
+
+    @Test
+    public void testUpdateNotFound() throws Exception {
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+
+        mvc.perform(put("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 5)
+                        .with(name, "newSubject")
+                        .with(description, "newDescription")
+                        .with(user, new JsonSupport().with(id, 2))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateForbidden() throws Exception {
+        final SubjectModelInterface subjectModel = subjectsSupport.getModelFixtureMock(0);
+
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
+
+        mvc.perform(put("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 5)
+                        .with(name, "newSubject")
+                        .with(description, "newDescription")
+                        .with(user, new JsonSupport().with(id, 2))
+                        .build()
+                ))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateIdFailed() throws Exception {
+
+        mvc.perform(put("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(name, "newSubject")
+                        .with(description, "newDescription")
+                        .with(user, new JsonSupport().with(id, 2))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+
     /**
      * show(subjectId)
      */
