@@ -1,9 +1,9 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.exceptions.ForbiddenException;
+import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.api.v1.models.Question;
-import easytests.common.exceptions.NotFoundException;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.options.AnswersOptions;
 import easytests.core.options.QuestionsOptions;

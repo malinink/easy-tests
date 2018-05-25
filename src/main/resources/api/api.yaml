@@ -1087,8 +1087,8 @@ definitions:
         id: 2
       answers:
         - id: 2
-          txt: 255.255.255.255
-          right: false
+          text: 255.255.255.255
+          isRight: false
           number: 1
   V1Questions:
     type: array
@@ -1100,24 +1100,24 @@ definitions:
   V1AdminAnswer:
     type: object
     required:
-      - txt
-      - right
+      - text
+      - isRight
       - number
     properties:
       id:
         type: integer
         format: int64
-      txt:
+      text:
         type: string
-      right:
+      isRight:
         type: boolean
       number:
         type: integer
         format: int64
     example:
       id: 2
-      txt: 255.255.255.255
-      right: false
+      text: 255.255.255.255
+      isRight: false
       number: 1
   V1AdminAnswers:
     type: array

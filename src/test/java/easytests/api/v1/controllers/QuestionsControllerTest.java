@@ -46,8 +46,7 @@ public class QuestionsControllerTest {
     private static String topic = "topic";
     private static String answers = "answers";
 
-    private static String txt = "txt";
-    private static String right = "right";
+    private static String isRight = "isRight";
     private static String number = "number";
 
 
@@ -98,7 +97,6 @@ public class QuestionsControllerTest {
         IntStream.range(0, 2).forEach(idx -> {
             final AnswerModel answerModel = new AnswerModel();
             answerModel.map(this.answersSupport.getEntityFixtureMock(idx));
-            answerModel.setQuestion(questionModel);
             answersModels.add(answerModel);
         });
         questionModel.setAnswers(answersModels);
@@ -118,14 +116,14 @@ public class QuestionsControllerTest {
                         .with(answers, new JsonSupport()
                                 .with(new JsonSupport()
                                         .with(id, questionModel.getAnswers().get(0).getId())
-                                        .with(txt, questionModel.getAnswers().get(0).getTxt())
-                                        .with(right, questionModel.getAnswers().get(0).getRight())
+                                        .with(text, questionModel.getAnswers().get(0).getTxt())
+                                        .with(isRight, questionModel.getAnswers().get(0).getRight())
                                         .with(number, questionModel.getAnswers().get(0).getSerialNumber())
                                 )
                                 .with(new JsonSupport()
                                         .with(id, questionModel.getAnswers().get(1).getId())
-                                        .with(txt, questionModel.getAnswers().get(1).getTxt())
-                                        .with(right, questionModel.getAnswers().get(1).getRight())
+                                        .with(text, questionModel.getAnswers().get(1).getTxt())
+                                        .with(isRight, questionModel.getAnswers().get(1).getRight())
                                         .with(number, questionModel.getAnswers().get(1).getSerialNumber())
                                 )
                         )
