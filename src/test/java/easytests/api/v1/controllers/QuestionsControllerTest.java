@@ -77,17 +77,6 @@ public class QuestionsControllerTest {
     }
 
     @Test
-    public void testDeleteNotFound() throws Exception {
-        when(this.questionsService.find(any(Integer.class))).thenReturn(null);
-
-        mvc.perform(delete("/v1/questions/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(""))
-                .andReturn();
-    }
-
-    @Test
     public void testDeleteForbidden() throws Exception {
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.map(this.questionsSupport.getEntityFixtureMock(0));
@@ -100,4 +89,17 @@ public class QuestionsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
+
+    @Test
+    public void testDeleteNotFound() throws Exception {
+        when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(true);
+        when(this.questionsService.find(any(Integer.class))).thenReturn(null);
+
+        mvc.perform(delete("/v1/questions/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
 }

@@ -44,15 +44,16 @@ public class QuestionsController extends AbstractController {
     public void delete(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
         final QuestionModelInterface questionModel = this.getQuestionModel(questionId);
 
-        if (questionModel == null) {
-            throw new NotFoundException();
-        }
-
         if (!this.acl.hasAccess(questionModel)) {
             throw new ForbiddenException();
         }
 
-        this.questionsService.delete(questionModel);
+        if (questionModel == null) {
+            throw new NotFoundException();
+        }
+
+        final QuestionModelInterface questionModelForDelete = this.getQuestionModel(questionId,this.questionsOptionsBuilder.forDelete());
+        this.questionsService.delete(questionModelForDelete);
     }
 
     private QuestionModelInterface getQuestionModel(Integer id, QuestionsOptionsInterface questionOptions)
@@ -65,7 +66,7 @@ public class QuestionsController extends AbstractController {
     }
 
     private QuestionModelInterface getQuestionModel(Integer id) throws NotFoundException {
-        return this.getQuestionModel(id, this.questionsOptionsBuilder.forDelete());
+        return this.getQuestionModel(id, this.questionsOptionsBuilder.forAuth());
     }
 
 }
