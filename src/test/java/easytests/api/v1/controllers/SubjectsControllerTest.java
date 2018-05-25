@@ -10,6 +10,7 @@ import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.UsersServiceInterface;
 import easytests.support.SubjectsSupport;
+import easytests.core.entities.SubjectEntity;
 import easytests.support.JsonSupport;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,14 +141,19 @@ public class SubjectsControllerTest {
         doAnswer(invocation -> {
             final SubjectModel subjectModel = (SubjectModel) invocation.getArguments()[0];
             subjectModel.setId(5);
+            final SubjectEntity subjectCheckEntity = this.subjectsSupport.getEntityAdditionalMock(0);
+            final SubjectModel subjectCheckModel = new SubjectModel();
+            subjectCheckModel.map(subjectCheckEntity);
+            subjectCheckModel.setId(5);
+            this.subjectsSupport.assertEquals(subjectModel, subjectCheckModel);
             return null;
         }).when(this.subjectsService).save(any(SubjectModelInterface.class));
 
         int userIdParamValue = 2;
 
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
         when(this.usersService.find(userIdParamValue))
                 .thenReturn(new UserModelEmpty(userIdParamValue));
-        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
 
         mvc.perform(post("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -188,6 +194,23 @@ public class SubjectsControllerTest {
         Subject subject = new Subject();
         mvc.perform(post("/v1/subjects").param("subject", "subject"))
                 .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    public void testCreateForbidden() throws Exception {
+        int userIdParamValue = 2;
+
+        when(this.usersService.find(userIdParamValue))
+                .thenReturn(new UserModelEmpty(userIdParamValue));
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
+
+        this.mvc.perform(get("/v1/subjects?userId={userIdParamValue}", userIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
 
     }
     /**
