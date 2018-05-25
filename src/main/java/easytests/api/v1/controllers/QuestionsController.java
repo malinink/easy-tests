@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author RisaMagpie
  */
-@RestController("QuestionControllerV1")
+@RestController("QuestionsControllerV1")
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/questions")
-public class QuestionsController {
+public class QuestionsController extends AbstractController{
 
     @Autowired
     protected QuestionsService questionsService;
@@ -34,6 +34,9 @@ public class QuestionsController {
 
     /**
      * list
+     */
+    /**
+     * create
      */
 
     @PostMapping("")

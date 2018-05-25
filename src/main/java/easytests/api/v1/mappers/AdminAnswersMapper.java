@@ -1,5 +1,7 @@
 package easytests.api.v1.mappers;
 
+import easytests.api.v1.models.AdminAnswer;
+import easytests.core.models.AnswerModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -9,4 +11,17 @@ import org.springframework.stereotype.Service;
  */
 @Service("AdminAnswersMapperV1")
 public class AdminAnswersMapper extends ModelMapper {
+    public AdminAnswersMapper() {
+        super();
+        this.createTypeMap(AnswerModel.class, AdminAnswer.class)
+                .addMappings(
+                        mapper -> mapper.map(AnswerModel::getId, AdminAnswer::setId)
+                ).addMappings(
+                        mapper -> mapper.map(AnswerModel::getTxt, AdminAnswer::setText)
+                ).addMappings(
+                        mapper -> mapper.map(AnswerModel::getSerialNumber, AdminAnswer::setNumber)
+                ).addMappings(
+                        mapper -> mapper.map(AnswerModel::getRight, AdminAnswer::setIsRight)
+        );
+    }
 }
