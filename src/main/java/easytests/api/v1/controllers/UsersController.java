@@ -62,13 +62,14 @@ public class UsersController {
     public User show(@PathVariable Integer userId) throws NotFoundException, ForbiddenException {
         final UserModelInterface userModel = this.usersService.find(userId);
 
+        if (!this.isAdmin()) {
+            throw new ForbiddenException();
+        }
+
         if (userModel == null) {
             throw new NotFoundException();
         }
 
-        if (!this.isAdmin()) {
-            throw new ForbiddenException();
-        }
         return this.usersMapper.map(userModel, User.class);
     }
     /**

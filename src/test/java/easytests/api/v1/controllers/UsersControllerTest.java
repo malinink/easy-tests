@@ -156,17 +156,6 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testShowNotFound() throws Exception {
-        when(this.usersService.find(any(Integer.class))).thenReturn(null);
-
-        mvc.perform(get("/v1/users/10")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(""))
-                .andReturn();
-    }
-
-    @Test
     public void testShowForbidden() throws Exception {
         final UserModelInterface userModel = new UserModel();
         userModel.map(this.usersSupport.getEntityFixtureMock(0));
@@ -182,6 +171,22 @@ public class UsersControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
+
+    @Test
+    public void testShowNotFound() throws Exception {
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
+        when(this.usersService.find(any(Integer.class))).thenReturn(null);
+
+        mvc.perform(get("/v1/users/10")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
     /**
      * testDeleteSuccess
      */
