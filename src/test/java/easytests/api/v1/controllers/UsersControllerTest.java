@@ -14,9 +14,13 @@ import easytests.support.UsersSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
+
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -43,7 +47,6 @@ public class UsersControllerTest {
     private static String isAdmin = "isAdmin";
     private static String state = "state";
     private static String subjects = "subjects";
-
 
     @Autowired
     private MockMvc mvc;
@@ -122,21 +125,15 @@ public class UsersControllerTest {
          doAnswer(invocation -> {
              final UserModel userModel = (UserModel) invocation.getArguments()[0];
              userModel.setId(5);
-             final UserEntity userTrueEntity = this.usersSupport.getEntityAdditionalMock(0);
-             final UserModel userTrueModel = new UserModel();
-             userTrueModel.map(userTrueEntity);
-             userTrueModel.setId(5);
-             userTrueModel.setPassword(userModel.getPassword());
-             userTrueModel.setSubjects(null);
-             this.usersSupport.assertEquals(userModel, userTrueModel);
              return null;
          }).when(this.usersService).save(any(UserModelInterface.class));
+         final ArgumentCaptor<UserModelInterface> userCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
          mvc.perform(post("/v1/users")
                  .contentType(MediaType.APPLICATION_JSON)
                  .content(new JsonSupport()
                          .with(firstName, "FirstName")
                          .with(lastName, "LastName")
-                         .with(surname, "Surname")
+                         .with(surname, "SurName")
                          .with(email, "mail@mail.ru")
                          .with(isAdmin, true)
                          .with(state, 1)
@@ -150,6 +147,8 @@ public class UsersControllerTest {
                                  .build()
                  ))
                  .andReturn();
+         verify(this.usersService, times(1)).save(userCaptor.capture());
+         this.checkForTestCreateSuccess(userCaptor.getValue());
      }
 
     @Test
@@ -225,4 +224,12 @@ public class UsersControllerTest {
     /**
      * testShowMeWithSubjectsSuccess
      */
+
+    private void checkForTestCreateSuccess(UserModelInterface userModel) {
+        Assert.assertEquals(userModel.getFirstName(), "FirstName");
+        Assert.assertEquals(userModel.getLastName(), "LastName");
+        Assert.assertEquals(userModel.getSurname(), "SurName");
+        Assert.assertEquals(userModel.getState(), (Integer) 1);
+        Assert.assertEquals(userModel.getIsAdmin(), true);
+    }
 }
