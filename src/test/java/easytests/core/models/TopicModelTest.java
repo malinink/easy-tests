@@ -4,7 +4,7 @@ import easytests.core.entities.TopicEntity;
 import easytests.support.TopicsSupport;
 import org.junit.Test;
 import org.meanbean.test.ConfigurationBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  * @author lelay
