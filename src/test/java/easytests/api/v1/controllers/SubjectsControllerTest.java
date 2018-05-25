@@ -6,13 +6,11 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.UserModelEmpty;
-import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.UsersServiceInterface;
 import easytests.support.SubjectsSupport;
 import easytests.support.UsersSupport;
-import easytests.core.entities.SubjectEntity;
 import easytests.support.JsonSupport;
 import java.util.ArrayList;
 import java.util.List;
@@ -137,32 +135,24 @@ public class SubjectsControllerTest {
                 .andReturn();
 
     }
-    /**
-     * create
-     */
+
     @Test
     public void testCreateSuccess() throws Exception {
         doAnswer(invocation -> {
             final SubjectModel subjectModel = (SubjectModel) invocation.getArguments()[0];
             subjectModel.setId(5);
-            final SubjectEntity subjectCheckEntity = this.subjectsSupport.getEntityAdditionalMock(0);
-            final SubjectModel subjectCheckModel = new SubjectModel();
-            subjectCheckModel.map(subjectCheckEntity);
-            subjectCheckModel.setId(5);
-            int userIdParamValue =2;
-            subjectModel.setUser(new UserModelEmpty(userIdParamValue));
-            this.subjectsSupport.assertEquals(subjectModel, subjectCheckModel);
             return null;
         }).when(this.subjectsService).save(any(SubjectModelInterface.class));
 
-        when(this.usersService.find(any(Integer.class))).thenReturn(new UserModelEmpty());
+        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(1);
+        when(this.usersService.find(any(Integer.class))).thenReturn(userModel);
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
 
         mvc.perform(post("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(name, "Name1")
-                        .with(description, "Description1")
+                        .with(name, "Subject")
+                        .with(description, "Subject description")
                         .with(user, new JsonSupport().with(id,2))
                         .build()
                 ))
@@ -202,19 +192,20 @@ public class SubjectsControllerTest {
 
     @Test
     public void testCreateForbidden() throws Exception {
-        int userIdParamValue = 2;
-
-        when(this.usersService.find(userIdParamValue))
-                .thenReturn(new UserModelEmpty(userIdParamValue));
+        when(this.usersService.find(2)).thenReturn(new UserModelEmpty(2));
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
 
-        this.mvc.perform(get("/v1/subjects?userId={userIdParamValue}", userIdParamValue)
+        mvc.perform(post("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
-        )
+                .content(new JsonSupport()
+                        .with(name, "Subject")
+                        .with(description, "Subject description")
+                        .with(user, new JsonSupport().with(id, 2))
+                        .build()
+                ))
                 .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
                 .andReturn();
-
     }
     /**
      * update
