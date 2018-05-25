@@ -64,31 +64,19 @@ public class UsersController {
      */
     @DeleteMapping("/{userId}")
     public void delete(@PathVariable Integer userId) throws NotFoundException, ForbiddenException {
-        final UserModelInterface userModel = this.getUserModel(userId);
+        final UserModelInterface userModel = this.usersService.find(userId,this.usersOptionsBuilder.forDelete());
 
         if (!this.isAdmin()) {
             throw new ForbiddenException();
         }
 
-        if (userModel == null) {
-            throw new NotFoundException();
+        if(userModel==null){
+            throw  new NotFoundException();
         }
 
-        final UserModelInterface userModelForDelete = this.getUserModel(userId, this.usersOptionsBuilder.forDelete());
-        this.usersService.delete(userModelForDelete);
+        this.usersService.delete(userModel);
     }
 
-    private UserModelInterface getUserModel(Integer id, UsersOptionsInterface userOptions) throws NotFoundException {
-        final UserModelInterface userModel = this.usersService.find(id, userOptions);
-        if (userModel == null) {
-            throw new NotFoundException();
-        }
-        return userModel;
-    }
-
-    private UserModelInterface getUserModel(Integer id) throws NotFoundException {
-        return this.getUserModel(id, this.usersOptionsBuilder.forAuth());
-    }
     /**
      * showMe
      */
