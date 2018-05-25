@@ -1,9 +1,10 @@
 package easytests.api.v1.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.util.List;
 import lombok.Data;
 
-import java.util.List;
+
 
 
 /**

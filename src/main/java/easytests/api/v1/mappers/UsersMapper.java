@@ -15,10 +15,10 @@ public class UsersMapper extends ModelMapper {
     public UsersMapper() {
         super();
         this.createTypeMap(UserModel.class, User.class)
-                .addMappings(
-                        mapper -> mapper.when(
-                                context -> !(context.getSource() instanceof ModelsListEmpty)
-                        ).map(UserModel::getSubjects, User::setSubjects)
-                );
+            .addMappings(
+                mapper -> mapper.when(
+                    context -> !(context.getSource() instanceof ModelsListEmpty)
+                ).map(UserModel::getSubjects, User::setSubjects)
+            );
     }
 }
