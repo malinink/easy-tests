@@ -52,9 +52,7 @@ public class QuestionsController extends AbstractController {
             throw new NotFoundException();
         }
 
-        final QuestionModelInterface questionModelForDelete = this.getQuestionModel(questionId,
-                this.questionsOptionsBuilder.forDelete());
-        this.questionsService.delete(questionModelForDelete);
+        this.questionsService.delete(questionModel;
     }
 
     private QuestionModelInterface getQuestionModel(Integer id, QuestionsOptionsInterface questionOptions)
@@ -67,7 +65,7 @@ public class QuestionsController extends AbstractController {
     }
 
     private QuestionModelInterface getQuestionModel(Integer id) throws NotFoundException {
-        return this.getQuestionModel(id, this.questionsOptionsBuilder.forAuth());
+        return this.getQuestionModel(id, this.questionsOptionsBuilder.forDelete());
     }
 
 }
