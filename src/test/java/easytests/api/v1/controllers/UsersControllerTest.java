@@ -18,9 +18,8 @@ import java.util.stream.IntStream;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.mockito.BDDMockito.*;
-
 import org.mockito.ArgumentCaptor;
+import static org.mockito.BDDMockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -154,7 +153,7 @@ public class UsersControllerTest {
         Assert.assertEquals(userCaptor.getValue().getState(), (Integer) 1);
         Assert.assertEquals(userCaptor.getValue().getIsAdmin(), true);
     }
-     }
+
 
     @Test
     public void testCreateWithIdFailed() throws Exception {
