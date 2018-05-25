@@ -80,14 +80,17 @@ public class SubjectsController extends AbstractController {
 
     }
 
-    private void checkUser( Subject subject) throws BadRequestException, ForbiddenException {
+    private void checkUser(Subject subject) throws BadRequestException, ForbiddenException {
         if (subject.getUser() != null) {
             final UserModelInterface userModel = this.usersService.find(subject.getUser().getId());
 
             if (!this.acl.hasAccess(userModel)) {
                 throw new ForbiddenException();
             }
-        } else { throw new BadRequestException("user must exist"); }
+        }
+        else {
+            throw new BadRequestException("user must exist");
+        }
 
     }
     /**

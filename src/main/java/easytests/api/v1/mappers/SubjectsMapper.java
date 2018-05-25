@@ -23,7 +23,7 @@ public class SubjectsMapper extends ModelMapper {
         super();
         this.createTypeMap(SubjectModel.class, Subject.class)
                 .addMappings(mapper -> mapper.<Integer>map(subjectModel -> subjectModel.getUser().getId(),
-                        (subject, id) -> subject.getUser().setId(id)));
+                     (subject, id) -> subject.getUser().setId(id)));
 
         this.createTypeMap(Identity.class, UserModelInterface.class)
                 .addMappings(mapper -> mapper
