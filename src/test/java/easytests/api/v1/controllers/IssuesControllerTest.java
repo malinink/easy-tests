@@ -61,8 +61,6 @@ public class IssuesControllerTest {
 
     private IssueSupport issueSupport = new IssueSupport();
 
-    private QuizzesSupport quizzesSupport = new QuizzesSupport();
-
     @Test
     public void testListSuccess() throws Exception {
         final List<IssueModelInterface> issuesModels = new ArrayList<>();
