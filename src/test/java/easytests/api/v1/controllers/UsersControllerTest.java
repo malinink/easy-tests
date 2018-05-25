@@ -137,12 +137,53 @@ public class UsersControllerTest {
     /**
      * testShowWithSubjectsSuccess
      */
-    /**
-     * testDeleteSuccess
-     */
-    /**
-     * testDeleteFailed
-     */
+    @Test
+    public void testDeleteSuccess() throws Exception {
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(this.usersSupport.getEntityFixtureMock(0));
+        when(this.usersService.find(any(Integer.class))).thenReturn(userModel);
+
+        mvc.perform(delete("/v1/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+        verify(this.usersService, times(1)).delete(userModel);
+    }
+
+    @Test
+    public void testDeleteNotFound() throws Exception {
+        when(this.usersService.find(any(Integer.class))).thenReturn(null);
+
+        mvc.perform(delete("/v1/users/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testDeleteForbidden() throws Exception {
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(this.usersSupport.getEntityFixtureMock(0));
+        when(this.usersService.find(any(Integer.class))).thenReturn(userModel);
+
+        final UserModelInterface userNotAdminModel = new UserModel();
+        userNotAdminModel.map(this.usersSupport.getNotAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
+
+        mvc.perform(delete("/v1/users/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
     /**
      * testShowMeSuccess
      */

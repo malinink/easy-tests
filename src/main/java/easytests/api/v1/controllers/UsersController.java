@@ -51,6 +51,7 @@ public class UsersController {
                 .map(model -> this.usersMapper.map(model, User.class))
                 .collect(Collectors.toList());
     }
+
     /**
      * create
      */
@@ -60,9 +61,20 @@ public class UsersController {
     /**
      * show(userId)
      */
-    /**
-     * delete(userId)
-     */
+    @DeleteMapping("/{userId}")
+    public void delete(@PathVariable Integer userId) throws NotFoundException, ForbiddenException {
+        final UserModelInterface userModel = this.usersService.find(userId);
+
+        if (userModel == null) {
+            throw new NotFoundException();
+        }
+
+        if (!this.isAdmin()) {
+            throw new ForbiddenException();
+        }
+
+        this.usersService.delete(userModel);
+    }
     /**
      * showMe
      */
