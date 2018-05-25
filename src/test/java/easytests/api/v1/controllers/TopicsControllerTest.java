@@ -27,7 +27,9 @@ import java.util.List;
 import java.util.stream.IntStream;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.when;
+import static org.mockito.Mockito.doAnswer;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -132,6 +134,61 @@ public class TopicsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
 
+    }
+
+    @Test
+    public void testCreateSuccess() throws Exception {
+        doAnswer(invocation -> {
+            final TopicModel topicModel = (TopicModel) invocation.getArguments()[0];
+            topicModel.setId(5);
+            return null;
+        }).when(this.topicsService).save(any(TopicModelInterface.class));
+
+        mvc.perform(post("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(name, "TopicName")
+                        .with(subject, new JsonSupport().with(id, 1))
+                        .build()
+                ))
+                .andExpect(status().is(201))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(
+                        new JsonSupport()
+                                .with(id, 5)
+                                .build()
+                ))
+                .andReturn();
+    }
+
+    @Test
+    public void testCreateWithIdFailed() throws Exception {
+        mvc.perform(post("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 2)
+                        .with(name, "TopicName")
+                        .with(subject, new JsonSupport().with(id, 1))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testCreateWithSubjectsFailed() throws Exception {
+        mvc.perform(post("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, "id")
+                        .with(name, "name")
+                        .with(subject, new JsonSupport())
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
     }
 
 
