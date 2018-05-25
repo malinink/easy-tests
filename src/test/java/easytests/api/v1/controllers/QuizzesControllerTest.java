@@ -208,12 +208,6 @@ public class QuizzesControllerTest {
         final QuizModelInterface quizModel = new QuizModel();
         quizModel.map(this.quizzesSupport.getEntityFixtureMock(0));
         final TesteeModelInterface testeeModel = new TesteeModel();
-//        final List<TesteeModelInterface> testeesModels = new ArrayList<>();
-//        IntStream.range(0, 2).forEach(idx -> {
-//            final TesteeModel testeeModel = new TesteeModel();
-//            testeeModel.map(this.testeesSupport.getEntityFixtureMock(idx));
-//            testeesModels.add(testeeModel);
-//        });
         testeeModel.map(this.testeesSupport.getEntityFixtureMock(0));
         quizModel.setTestee(testeeModel);
         when(this.quizzesOptionsBuilder.forAuth()).thenReturn(new QuizzesOptions());
