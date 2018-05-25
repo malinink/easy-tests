@@ -55,7 +55,8 @@ public class QuestionsController extends AbstractController {
         this.questionsService.delete(questionModel);
     }
 
-    private QuestionModelInterface getQuestionModel(Integer id, QuestionsOptionsInterface questionOptions) throws NotFoundException {
+    private QuestionModelInterface getQuestionModel(Integer id, QuestionsOptionsInterface questionOptions)
+            throws NotFoundException {
         final QuestionModelInterface questionModel = this.questionsService.find(id, questionOptions);
         if (questionModel == null) {
             throw new NotFoundException();
