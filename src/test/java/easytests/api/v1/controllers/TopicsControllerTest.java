@@ -133,4 +133,52 @@ public class TopicsControllerTest {
                 .andReturn();
 
     }
+
+
+    @Test
+    public void testShowSuccess() throws Exception {
+        final TopicModelInterface topicModel = new TopicModel();
+        topicModel.map(this.topicsSupport.getEntityFixtureMock(0));
+        when(this.topicsService.find(any(Integer.class))).thenReturn(topicModel);
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
+
+        mvc.perform(get("/v1/topics/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, topicModel.getId())
+                        .with(name, topicModel.getName())
+                        .with(subject, new JsonSupport()
+                                .with(id, topicModel.getSubject().getId())
+                        )
+                        .build()
+                ))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowNotFound() throws Exception {
+        when(this.topicsService.find(any(Integer.class))).thenReturn(null);
+
+        mvc.perform(get("/v1/topics/10")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowForbidden() throws Exception {
+        final TopicModelInterface topicModel = new TopicModel();
+        topicModel.map(this.topicsSupport.getEntityFixtureMock(0));
+        when(this.topicsService.find(any(Integer.class))).thenReturn(topicModel);
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);
+
+        mvc.perform(get("/v1/topics/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
 }

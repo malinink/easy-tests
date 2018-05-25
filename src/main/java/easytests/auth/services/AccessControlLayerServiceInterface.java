@@ -1,9 +1,6 @@
 package easytests.auth.services;
 
-import easytests.core.models.QuestionModelInterface;
-import easytests.core.models.SubjectModelInterface;
-import easytests.core.models.TopicModelInterface;
-import easytests.core.models.UserModelInterface;
+import easytests.core.models.*;
 
 
 /**
@@ -18,4 +15,6 @@ public interface AccessControlLayerServiceInterface {
     Boolean hasAccess(TopicModelInterface source);
 
     Boolean hasAccess(QuestionModelInterface source);
+
+    Boolean hasAccess(IssueModelInterface source);
 }

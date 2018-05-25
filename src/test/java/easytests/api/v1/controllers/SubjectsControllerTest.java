@@ -5,6 +5,8 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.UserModelEmpty;
+import easytests.core.options.SubjectsOptions;
+import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.UsersServiceInterface;
@@ -13,8 +15,6 @@ import easytests.support.JsonSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
@@ -138,9 +138,58 @@ public class SubjectsControllerTest {
     /**
      * update
      */
+    @Test
+    public void testShowSuccess() throws Exception {
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subjectModel.map(this.subjectsSupport.getEntityFixtureMock(0));
+        when(this.subjectsOptionsBuilder.forAuth()).thenReturn(new SubjectsOptions());
+        when(this.subjectsService.find(any(Integer.class), any(SubjectsOptionsInterface.class))).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+
+        mvc.perform(get("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, subjectModel.getId())
+                        .with(name, subjectModel.getName())
+                        .with(description, subjectModel.getDescription())
+                        .with(user, new JsonSupport().with(id, subjectModel.getUser().getId()))
+                        .build()
+                ))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowNotFound() throws Exception {
+        when(this.subjectsOptionsBuilder.forAuth()).thenReturn(new SubjectsOptions());
+        when(this.subjectsService.find(any(Integer.class), any(SubjectsOptionsInterface.class))).thenReturn(null);
+
+        mvc.perform(get("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowForbidden() throws Exception {
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subjectModel.map(this.subjectsSupport.getEntityFixtureMock(0));
+        when(this.subjectsOptionsBuilder.forAuth()).thenReturn(new SubjectsOptions());
+        when(this.subjectsService.find(any(Integer.class), any(SubjectsOptionsInterface.class))).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+
+        mvc.perform(get("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
     /**
-     * show(subjectId)
+     * delete(subjectId)
      */
+
     @Test
     public void testDeleteSuccess() throws Exception {
         final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
