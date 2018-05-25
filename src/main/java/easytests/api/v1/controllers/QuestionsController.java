@@ -48,7 +48,7 @@ public class QuestionsController extends AbstractController {
             throw new ForbiddenException();
         }
         
-        this.questionsService.delete(questionModel;
+        this.questionsService.delete(questionModel);
     }
 
     private QuestionModelInterface getQuestionModel(Integer id, QuestionsOptionsInterface questionOptions)
