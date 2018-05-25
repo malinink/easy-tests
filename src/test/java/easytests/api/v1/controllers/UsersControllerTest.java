@@ -15,6 +15,8 @@ import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
+
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -127,7 +129,7 @@ public class UsersControllerTest {
     public void testUpdateSuccess() throws Exception {
         final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
         when(this.usersService.find(any(), any())).thenReturn(userModel);
-
+        final ArgumentCaptor<UserModelInterface> userModelCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
         mvc.perform(put("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
@@ -144,7 +146,8 @@ public class UsersControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
 
-        verify(this.usersService, times(1)).save(userModel);
+        verify(this.usersService, times(1)).save(userModelCaptor.capture());
+        this.usersSupport.assertEquals(userModel, userModelCaptor.getValue());
     }
     /**
      * testUpdateWithoutIdFailed
