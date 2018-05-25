@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -145,7 +146,9 @@ public class UsersControllerTest {
 
         final UserModelInterface userModel = new UserModel();
         userModel.map(this.usersSupport.getEntityFixtureMock(0));
-        when(this.usersService.find(any(Integer.class))).thenReturn(userModel);
+        when(this.usersService.find(any(), any())).thenReturn(userModel);
+
+        final ArgumentCaptor<UserModelInterface> argumentCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
 
         mvc.perform(delete("/v1/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -153,7 +156,8 @@ public class UsersControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
-        verify(this.usersService, times(1)).delete(userModel);
+        verify(this.usersService, times(1)).delete(argumentCaptor.capture());
+        this.usersSupport.assertEquals(argumentCaptor.getValue(), userModel);
     }
 
     @Test
@@ -171,7 +175,7 @@ public class UsersControllerTest {
     public void testDeleteForbidden() throws Exception {
         final UserModelInterface userModel = new UserModel();
         userModel.map(this.usersSupport.getEntityFixtureMock(0));
-        when(this.usersService.find(any(Integer.class))).thenReturn(userModel);
+        when(this.usersService.find(any(), any())).thenReturn(userModel);
 
         final UserModelInterface userNotAdminModel = new UserModel();
         userNotAdminModel.map(this.usersSupport.getNotAdminUser());
