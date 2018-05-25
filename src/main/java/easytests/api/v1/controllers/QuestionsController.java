@@ -47,11 +47,7 @@ public class QuestionsController extends AbstractController {
         if (!this.acl.hasAccess(questionModel)) {
             throw new ForbiddenException();
         }
-
-        if (questionModel == null) {
-            throw new NotFoundException();
-        }
-
+        
         this.questionsService.delete(questionModel;
     }
 
