@@ -135,7 +135,7 @@ public class IssuesControllerTest {
      * delete(issueId)
      */
     @Test
-    public void testDeleteSucces() throws Exception {
+    public void testDeleteSuccess() throws Exception {
         final ArgumentCaptor<IssueModelInterface> issueModelArgumentCaptor = ArgumentCaptor.forClass(IssueModelInterface.class);
         final IssueModelInterface issueModel = this.issueSupport.getModelFixtureMock(0);
         when(this.issuesService.find(any(), any())).thenReturn(issueModel);
