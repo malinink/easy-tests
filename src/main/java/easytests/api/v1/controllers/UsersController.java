@@ -74,7 +74,7 @@ public class UsersController {
             throw new NotFoundException();
         }
 
-        final UserModelInterface userModelForDelete = this.getUserModel(userId,this.usersOptionsBuilder.forDelete());
+        final UserModelInterface userModelForDelete = this.getUserModel(userId, this.usersOptionsBuilder.forDelete());
         this.usersService.delete(userModelForDelete);
     }
 
