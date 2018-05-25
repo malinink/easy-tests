@@ -72,7 +72,7 @@ public class IssuesController extends AbstractController {
 
     @DeleteMapping("/{issueId}")
     public void delete(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException {
-        final IssueModelInterface issueModel = this.getIssueModel(issueId);
+        final IssueModelInterface issueModel = this.issuesService.find(issueId, this.issuesOptions.forDelete());
 
         if (issueModel == null) {
             throw new NotFoundException();
@@ -84,7 +84,7 @@ public class IssuesController extends AbstractController {
     }
 
     private IssueModelInterface getIssueModel(Integer id) throws NotFoundException {
-        final IssuesOptionsInterface issuesOptionsInterface = this.issuesOptions.forDelete();
+        final IssuesOptionsInterface issuesOptionsInterface = this.issuesOptions.forAuth();
         return this.getIssueModel(id, issuesOptionsInterface);
     }
 
