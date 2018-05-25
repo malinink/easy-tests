@@ -93,6 +93,7 @@ public class SubjectsController extends AbstractController {
     /**
      * delete(subjectId)
      */
+
     @DeleteMapping("/{subjectId}")
     public void delete(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
         final SubjectModelInterface subjectModel = this.getSubjectModel(subjectId);
