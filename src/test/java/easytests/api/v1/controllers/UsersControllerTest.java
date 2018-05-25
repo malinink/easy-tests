@@ -112,8 +112,7 @@ public class UsersControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
-
-    /**
+    /**.
      * testCreateSuccess
      */
     /**
@@ -125,6 +124,7 @@ public class UsersControllerTest {
     /**
      * testUpdateSuccess
      */
+
     @Test
     public void testUpdateSuccess() throws Exception {
         final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
@@ -152,6 +152,7 @@ public class UsersControllerTest {
     /**
      * testUpdateWithoutIdFailed
      */
+
     @Test
     public void testUpdateWithoutIdFailed() throws Exception {
         mvc.perform(put("/v1/users")
@@ -172,6 +173,7 @@ public class UsersControllerTest {
     /**
      * testUpdateWithSubjectsFailed
      */
+
     @Test
     public void testUpdateWithSubjectsFailed() throws Exception {
         mvc.perform(put("/v1/users")

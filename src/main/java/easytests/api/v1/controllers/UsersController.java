@@ -61,6 +61,7 @@ public class UsersController {
     /**
      * update
      */
+
     @PutMapping("")
     public void update(@RequestBody User user) throws BadRequestException, NotFoundException {
         if (user.getId() == null) {
@@ -82,6 +83,7 @@ public class UsersController {
     /**
      * showMe
      */
+
     private UserModelInterface getUserModel(Integer id, UsersOptionsInterface userOptions) throws NotFoundException {
         final UserModelInterface userModel = this.usersService.find(id, userOptions);
         if (userModel == null) {
