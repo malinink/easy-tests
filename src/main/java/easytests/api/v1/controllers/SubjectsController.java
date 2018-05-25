@@ -93,5 +93,4 @@ public class SubjectsController extends AbstractController {
     /**
      * delete(subjectId)
      */
-
 }

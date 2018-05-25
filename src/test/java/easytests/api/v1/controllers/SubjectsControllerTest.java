@@ -5,10 +5,10 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.UserModelEmpty;
-import easytests.core.options.SubjectsOptions;
-import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
+import easytests.core.options.SubjectsOptions;
+import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.services.UsersServiceInterface;
 import easytests.support.SubjectsSupport;
 import easytests.support.JsonSupport;
@@ -91,12 +91,12 @@ public class SubjectsControllerTest {
                         .with(new JsonSupport()
                                 .with(id, subjectsModels.get(0).getId())
                                 .with(name, subjectsModels.get(0).getName())
-                                .with(description, subjectsModels.get(0).getDescription())
+                                .with(description,subjectsModels.get(0).getDescription())
                                 .with(user, new JsonSupport().with(id, subjectsModels.get(0).getUser().getId())))
                         .with(new JsonSupport()
                                 .with(id, subjectsModels.get(1).getId())
                                 .with(name, subjectsModels.get(1).getName())
-                                .with(description, subjectsModels.get(1).getDescription())
+                                .with(description,subjectsModels.get(1).getDescription())
                                 .with(user, new JsonSupport().with(id, subjectsModels.get(1).getUser().getId())))
                         .build()
                 ))
