@@ -75,7 +75,8 @@ public class SubjectsController extends AbstractController {
         if (!this.acl.hasAccess(subjectModel)) {
             throw new ForbiddenException();
         }
-
+        //from session service get userId and check it with subject usercreator id
+        // check method from VR
         this.subjectsMapper.map(subject, subjectModel);
 
         this.subjectsService.save(subjectModel);

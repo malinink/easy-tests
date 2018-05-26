@@ -141,9 +141,11 @@ public class SubjectsControllerTest {
     @Test
     public void testUpdateSuccess() throws Exception {
         final SubjectModelInterface subjectModel = subjectsSupport.getModelFixtureMock(0);
+        //get entity fict mock 0
+        //then
         when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
-
+        //peredaem additional mock for update
         mvc.perform(put("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
@@ -158,8 +160,7 @@ public class SubjectsControllerTest {
                 .andReturn();
 
         verify(this.subjectsService, times(1)).save(subjectModel);
-        this.subjectsSupport.assertEquals(subjectModel, this.subjectsService.find(subjectModel.getId()));
-
+        //v save peredaem argumentcaptor
     }
 
     @Test
