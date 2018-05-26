@@ -63,5 +63,4 @@ public class QuizzesController extends AbstractController {
     /**
      * show(quizId)
      */
-
 }
