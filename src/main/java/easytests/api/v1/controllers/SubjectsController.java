@@ -90,19 +90,22 @@ public class SubjectsController extends AbstractController {
     private SubjectModelInterface getSubjectModel(Integer id) throws NotFoundException {
         return this.getSubjectModel(id, this.subjectsOptionsBuilder.forAuth());
     }
+
+    private SubjectModelInterface getSubjectModelforDelete(Integer id) throws NotFoundException {
+        return this.getSubjectModel(id, this.subjectsOptionsBuilder.forDelete());
+    }
     /**
      * delete(subjectId)
      */
 
     @DeleteMapping("/{subjectId}")
     public void delete(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
-        final SubjectModelInterface subjectModel = this.getSubjectModel(subjectId);
-        if (subjectModel == null) {
-            throw new NotFoundException();
-        }
-        if (!this.acl.hasAccess(subjectModel)) {
+        final SubjectModelInterface subjectModelforAuth = this.getSubjectModel(subjectId);
+        System.err.println("TRALALA");
+        if (!this.acl.hasAccess(subjectModelforAuth)) {
             throw new ForbiddenException();
         }
-        this.subjectsService.delete(subjectModel);
+        final SubjectModelInterface subjectModelforDelete = this.getSubjectModelforDelete(subjectId);
+        this.subjectsService.delete(subjectModelforDelete);
     }
 }
