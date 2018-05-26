@@ -5,8 +5,6 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.IssueModelEmpty;
-import easytests.core.options.QuizzesOptions;
-import easytests.core.options.QuizzesOptionsInterface;
 import easytests.core.options.builder.QuizzesOptionsBuilder;
 import easytests.core.services.IssuesService;
 import easytests.core.services.QuizzesService;
@@ -67,6 +65,7 @@ public class QuizzesControllerTest {
 
     private QuizzesSupport quizzesSupport = new QuizzesSupport();
     private TesteesSupport testeesSupport = new TesteesSupport();
+
 
     @Test
     public void testListSuccess() throws Exception {
