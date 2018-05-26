@@ -5,12 +5,9 @@ import easytests.api.v1.models.Question;
 import easytests.core.models.AnswerModel;
 import easytests.core.models.QuestionModel;
 import java.util.List;
-import easytests.api.v1.models.AdminAnswer;
 import easytests.api.v1.models.Identity;
-import easytests.api.v1.models.Question;
 import easytests.core.models.*;
 import java.util.ArrayList;
-import java.util.List;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -25,30 +22,27 @@ public class QuestionsMapper extends ModelMapper {
     public QuestionsMapper() {
         super();
         this.createTypeMap(QuestionModel.class, Question.class)
-            .addMappings(mapper -> {
-                mapper.<Integer>map(questionModel -> questionModel.getQuestionType().getId(),
-                    (question, id) -> question.setType(id));
+                .addMappings(mapper -> {
+                            mapper.<Integer>map(questionModel -> questionModel.getQuestionType().getId(),
+                                    (question, id) -> question.setType(id));
 
-                mapper.<Integer>map(questionModel -> questionModel.getTopic().getId(),
-                    (question, id) -> question.getTopic().setId(id));
+                            mapper.<Integer>map(questionModel -> questionModel.getTopic().getId(),
+                                    (question, id) -> question.getTopic().setId(id));
 
-                mapper.<List<AdminAnswer>>map(questionModel -> questionModel.getAnswers(),
-                    (question, list) -> question.setAnswers(list));
-            }
-            );
+                            mapper.<List<AdminAnswer>>map(questionModel -> questionModel.getAnswers(),
+                                    (question, list) -> question.setAnswers(list));
+                        }
+                );
         this.createTypeMap(AnswerModel.class, AdminAnswer.class)
-            .addMappings(mapper -> {
-                mapper.<String>map(answerModel -> answerModel.getTxt(),
-                    (answer, text) -> answer.setText(text));
+                .addMappings(mapper -> {
+                            mapper.<String>map(answerModel -> answerModel.getTxt(),
+                                    (answer, text) -> answer.setText(text));
 
-                mapper.<Boolean>map(answerModel -> answerModel.getRight(),
-                    (answer, right) -> answer.setIsRight(right));
-            }
-            );
-    }
-    public QuestionsMapper() {
-        super();
-        //-----------------------
+                            mapper.<Boolean>map(answerModel -> answerModel.getRight(),
+                                    (answer, right) -> answer.setIsRight(right));
+                        }
+                );
+
         Converter<Identity, TopicModel> convertIdentityToTopicModel
                 = new Converter<Identity, TopicModel>() {
             public TopicModel convert(MappingContext<Identity, TopicModel> context) {
@@ -98,6 +92,7 @@ public class QuestionsMapper extends ModelMapper {
                 return answerModels;
             }
         };
+
         Converter<Integer, QuestionTypeModel> convertIntegerToQuestionTypeModel
                 = new Converter<Integer, QuestionTypeModel>() {
             public QuestionTypeModel convert(MappingContext<Integer, QuestionTypeModel> context) {
@@ -119,5 +114,6 @@ public class QuestionsMapper extends ModelMapper {
         };
 
         this.addMappings(mymap);
+
     }
 }
