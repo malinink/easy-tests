@@ -3,8 +3,6 @@ package easytests.api.v1.models;
 import lombok.Data;
 
 
-
-
 /**
  * @author SvetlanaTselikova
  */
@@ -23,6 +21,4 @@ public class User {
     private Boolean isAdmin;
 
     private Integer state;
-
 }
-
