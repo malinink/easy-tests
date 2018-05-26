@@ -4,6 +4,8 @@ import easytests.api.v1.mappers.UsersMapper;
 import easytests.auth.services.SessionServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
+import easytests.core.options.UsersOptions;
+import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
 import easytests.support.JsonSupport;
@@ -146,7 +148,8 @@ public class UsersControllerTest {
 
         final UserModelInterface userModel = new UserModel();
         userModel.map(this.usersSupport.getEntityFixtureMock(0));
-        when(this.usersService.find(any(), any())).thenReturn(userModel);
+        when(this.usersOptionsBuilder.forDelete()).thenReturn(new UsersOptions());
+        when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(userModel);
 
         final ArgumentCaptor<UserModelInterface> argumentCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
 
@@ -164,7 +167,8 @@ public class UsersControllerTest {
     public void testDeleteForbidden() throws Exception {
         final UserModelInterface userModel = new UserModel();
         userModel.map(this.usersSupport.getEntityFixtureMock(0));
-        when(this.usersService.find(any(), any())).thenReturn(userModel);
+        when(this.usersOptionsBuilder.forDelete()).thenReturn(new UsersOptions());
+        when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(userModel);
 
         final UserModelInterface userNotAdminModel = new UserModel();
         userNotAdminModel.map(this.usersSupport.getNotAdminUser());
@@ -183,7 +187,8 @@ public class UsersControllerTest {
         userAdminModel.map(this.usersSupport.getAdminUser());
         when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
-        when(this.usersService.find(any(Integer.class))).thenReturn(null);
+        when(this.usersOptionsBuilder.forDelete()).thenReturn(new UsersOptions());
+        when(this.usersService.find(any(Integer.class), any(UsersOptionsInterface.class))).thenReturn(null);
 
         mvc.perform(delete("/v1/users/1")
                 .contentType(MediaType.APPLICATION_JSON))
