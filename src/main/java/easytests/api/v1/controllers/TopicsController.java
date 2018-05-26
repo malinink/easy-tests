@@ -87,7 +87,7 @@ public class TopicsController extends AbstractController {
             throw new NotFoundException();
         }
 
-        if (!this.acl.hasAccess(topicModel)) {
+        if (!this.acl.hasAccess(this.topicsService.find(topicId, topicsOptionsBuilder.forAuth()))) {
             throw new ForbiddenException();
         }
 
