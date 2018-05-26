@@ -4,13 +4,9 @@ import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
-import easytests.core.models.empty.QuestionModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
-import easytests.core.models.empty.QuestionTypeModelEmpty;
-import easytests.core.options.AnswersOptionsInterface;
-import easytests.core.options.QuestionsOptions;
-import easytests.core.options.AnswersOptions;
-import easytests.core.options.QuestionsOptionsInterface;
+import easytests.core.options.*;
+import easytests.core.options.builder.TopicsOptionsBuilder;
 import easytests.core.services.QuestionsService;
 import easytests.core.services.QuestionTypesService;
 import easytests.core.services.AnswersService;
@@ -76,6 +72,9 @@ public class QuestionsControllerTest {
     private AccessControlLayerServiceInterface acl;
 
     @MockBean
+    private TopicsOptionsBuilder topicsOptionsBuilder;
+
+    @MockBean
     private QuestionsOptions questionsOptions;
 
     @MockBean
@@ -84,6 +83,7 @@ public class QuestionsControllerTest {
     private QuestionsSupport questionSupport = new QuestionsSupport();
 
     private AnswersSupport answersSupport = new AnswersSupport();
+
 
     @Test
     public void testListSuccess() throws Exception {
@@ -105,8 +105,10 @@ public class QuestionsControllerTest {
 
         int topicIdParamValue = 1;
 
-        when(this.topicsService.find(topicIdParamValue))
-                .thenReturn(new TopicModelEmpty(topicIdParamValue));
+        final TopicModel topicModel = new TopicModel();
+        topicModel.setId(topicIdParamValue);
+        when(this.topicsService.find(topicIdParamValue, this.topicsOptionsBuilder.forAuth()))
+                .thenReturn(topicModel);
         when(this.questionsService.findByTopic(any(),any())).thenReturn(questionsModels);
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
 
@@ -173,7 +175,7 @@ public class QuestionsControllerTest {
     public void testListForbidden() throws Exception {
         int topicIdParamValue = 1;
 
-        when(this.topicsService.find(topicIdParamValue))
+        when(this.topicsService.find(topicIdParamValue, this.topicsOptionsBuilder.forAuth()))
                .thenReturn(new TopicModelEmpty(topicIdParamValue));
 
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);

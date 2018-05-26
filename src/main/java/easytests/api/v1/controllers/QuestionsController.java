@@ -8,6 +8,7 @@ import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.AnswersOptions;
 import easytests.core.options.QuestionsOptions;
+import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import java.util.List;
@@ -31,13 +32,16 @@ public class QuestionsController extends AbstractController {
     protected TopicsServiceInterface topicsService;
 
     @Autowired
+    protected TopicsOptionsBuilderInterface topicsOptionsBuilder;
+
+    @Autowired
     @Qualifier("QuestionsMapperV1")
     private QuestionsMapper questionsMapper;
 
     @GetMapping
     public List<Question> list(@RequestParam(name = "topicId", required = true) Integer topicId)
             throws NotFoundException, ForbiddenException {
-        final TopicModelInterface topicModel = this.topicsService.find(topicId);
+        final TopicModelInterface topicModel = this.topicsService.find(topicId, this.topicsOptionsBuilder.forAuth());
 
         if (topicModel == null) {
             throw new NotFoundException();
