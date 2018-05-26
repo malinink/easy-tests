@@ -1,6 +1,5 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.exceptions.UnidentifiedModelException;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author VeronikaRevjakina
  */
 @RestController("SubjectsControllerV1")
-@SuppressWarnings("checkstyle:linelength")
+@SuppressWarnings({"checkstyle:linelength", "checkstyle:MultipleStringLiterals"})
 @RequestMapping("/v1/subjects")
 public class SubjectsController extends AbstractController {
 
@@ -65,7 +64,7 @@ public class SubjectsController extends AbstractController {
      */
 
     @PutMapping("")
-    public void update(@RequestBody Subject subject) throws BadRequestException, ForbiddenException {
+    public void update(@RequestBody Subject subject) throws UnidentifiedModelException, NotFoundException, ForbiddenException {
 
         if (subject.getId() == null) {
             throw new UnidentifiedModelException();
@@ -95,6 +94,10 @@ public class SubjectsController extends AbstractController {
         return this.subjectsMapper.map(subjectModel, Subject.class);
     }
 
+    /**
+     * delete(subjectId)
+     */
+
     private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectOptions)
             throws NotFoundException {
         final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectOptions);
@@ -105,21 +108,6 @@ public class SubjectsController extends AbstractController {
     }
 
     private SubjectModelInterface getSubjectModel(Integer id) throws NotFoundException {
-        return this.getSubjectModel(id, this.subjectsOptionsBuilder.forAuth());
-    }
-    /**
-     * delete(subjectId)
-     */
-
-    private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectOptions) throws BadRequestException {
-        final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectOptions);
-        if (subjectModel == null) {
-            throw new BadRequestException();
-        }
-        return subjectModel;
-    }
-
-    private SubjectModelInterface getSubjectModel(Integer id) throws BadRequestException {
         return this.getSubjectModel(id, this.subjectsOptionsBuilder.forAuth());
     }
 }

@@ -149,7 +149,7 @@ public class SubjectsControllerTest {
                         .with(id, 1)
                         .with(name, "newSubject")
                         .with(description, "newDescription")
-                        .with(user, 1)
+                        .with(user, new JsonSupport().with(id, 2))
                         .build()
                 ))
                 .andExpect(status().isOk())
@@ -172,7 +172,7 @@ public class SubjectsControllerTest {
                         .with(user, new JsonSupport().with(id, 2))
                         .build()
                 ))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(content().string(""))
                 .andReturn();
     }
