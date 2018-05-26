@@ -72,12 +72,13 @@ public class IssuesController extends AbstractController {
 
     @DeleteMapping("/{issueId}")
     public void delete(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException {
-        final IssuesOptionsInterface issuesOptions = this.issuesOptionsBuilder.forDelete();
-        final IssueModelInterface issueModel = this.getIssueModel(issueId);
+        IssueModelInterface issueModel = this.getIssueModel(issueId);
 
         if (!this.acl.hasAccess(issueModel)) {
             throw new ForbiddenException();
         }
+        final IssuesOptionsInterface issuesOptions = this.issuesOptionsBuilder.forDelete();
+        issueModel = this.issuesService.find(issueId, issuesOptions);
         this.issuesService.delete(issueModel, issuesOptions);
     }
 
@@ -86,7 +87,7 @@ public class IssuesController extends AbstractController {
         return this.getIssueModel(id, issuesOptionsInterface);
     }
 
-    public IssueModelInterface getIssueModel(Integer id, IssuesOptionsInterface issueOption)
+    private IssueModelInterface getIssueModel(Integer id, IssuesOptionsInterface issueOption)
             throws NotFoundException {
         final IssueModelInterface issueModel = this.issuesService.find(id, issueOption);
         if (issueModel == null) {

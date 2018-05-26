@@ -8,6 +8,7 @@ import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.IssuesOptions;
 import easytests.core.options.IssuesOptionsInterface;
 import easytests.core.options.builder.IssuesOptionsBuilder;
+import easytests.core.options.builder.IssuesOptionsBuilderInterface;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.support.IssueSupport;
@@ -140,17 +141,18 @@ public class IssuesControllerTest {
      */
     @Test
     public void testDeleteSuccess() throws Exception {
-//        final ArgumentCaptor<IssuesOptions> issueModelOptionsArgumentCaptor = ArgumentCaptor.forClass(IssuesOptions.class);
-        final IssuesOptionsInterface issuesOptionauth = this.issuesOptionsBuilder.forAuth();
-        final IssuesOptionsInterface issuesOptiondel = this.issuesOptionsBuilder.forDelete();
-        final IssueModelInterface issueModel = this.issueSupport.getModelFixtureMock(0);
+        final IssuesOptionsInterface issuesOptionauth = new IssuesOptions();
+        final IssuesOptionsInterface issuesOptiondel = new IssuesOptions();
 
-//        verify(this.issuesService, times(1)).find(any(), issueModelOptionsArgumentCaptor.capture());
-//        Assert.assertEquals(issueModelOptionsArgumentCaptor, issuesOptionauth);
-//        verify(this.issuesService, times(1)).delete(issueModel, issueModelOptionsArgumentCaptor.capture());
-//        Assert.assertEquals(issueModelOptionsArgumentCaptor, issuesOptiondel);
-        when(this.issuesService.find(any(), issuesOptionauth)).thenReturn(issueModel);
-//        when(this.issuesService.find(any(), any())).thenReturn(issueModel);
+        when(this.issuesOptionsBuilder.forAuth()).thenReturn(issuesOptionauth);
+        when(this.issuesOptionsBuilder.forDelete()).thenReturn(issuesOptiondel);
+
+        final IssueModelInterface issueModelForAuth = this.issueSupport.getModelFixtureMock(0);
+        final IssueModelInterface issueModelForDel = this.issueSupport.getModelFixtureMock(0);
+
+        when(this.issuesService.find(anyInt(), eq(issuesOptionauth))).thenReturn(issueModelForAuth);
+        when(this.issuesService.find(anyInt(), eq(issuesOptiondel))).thenReturn(issueModelForDel);
+
         when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
 
         this.mvc.perform(delete("/v1/issues/1")
@@ -158,7 +160,7 @@ public class IssuesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
-        verify(this.issuesService, times(1)).delete(issueModel);
+        verify(this.issuesService, times(1)).delete(issueModelForDel, issuesOptiondel);
     }
 
     @Test
