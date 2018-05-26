@@ -81,17 +81,19 @@ public class TopicsController extends AbstractController {
 
     @DeleteMapping("/{topicId}")
     public void delete(@PathVariable Integer topicId) throws NotFoundException, ForbiddenException {
-        final TopicModelInterface topicModel = getTopicModel(topicId);
+        final TopicModelInterface topicModelwithAuth = getTopicModel(topicId);
 
-        if (topicModel == null) {
+        if (topicModelwithAuth == null) {
             throw new NotFoundException();
         }
 
-        if (!this.acl.hasAccess(topicModel)) {
+        if (!this.acl.hasAccess(topicModelwithAuth)) {
             throw new ForbiddenException();
         }
+        final TopicsOptionsInterface optionforDelete = this.topicsOptionsBuilder.forDelete();
+        final TopicModelInterface topicModelwithDelete = this.topicsService.find(topicId, optionforDelete);
 
-        this.topicsService.delete(this.topicsService.find(topicId, this.topicsOptionsBuilder.forDelete()), this.topicsOptionsBuilder.forDelete());
+        this.topicsService.delete(topicModelwithDelete, optionforDelete);
     }
 
     private TopicModelInterface getTopicModel(Integer id, TopicsOptionsInterface topicOptions)
