@@ -74,9 +74,6 @@ public class TopicsController extends AbstractController {
         if (topic.getId() != null) {
             throw new IdentifiedModelException();
         }
-        if (topic.getSubject() == null) {
-            throw new BadRequestException("subjects must be not absent");
-        }
 
         final TopicModelInterface userModel = this.topicsMapper.map(topic, TopicModel.class);
 

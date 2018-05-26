@@ -187,20 +187,6 @@ public class TopicsControllerTest {
                 .andReturn();
     }
 
-    @Test
-    public void testCreateWithSubjectsFailed() throws Exception {
-        mvc.perform(post("/v1/topics")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new JsonSupport()
-                        .with(id, "id")
-                        .with(name, "name")
-                        .with(subject, new JsonSupport())
-                        .build()
-                ))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(""))
-                .andReturn();
-    }
 
 
     @Test
