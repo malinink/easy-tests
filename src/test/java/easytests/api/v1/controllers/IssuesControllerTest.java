@@ -5,6 +5,8 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.SubjectModelEmpty;
+import easytests.core.options.IssuesOptions;
+import easytests.core.options.IssuesOptionsInterface;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
@@ -26,6 +28,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+
 
 /**
  * @author Yarik2308
@@ -129,6 +133,58 @@ public class IssuesControllerTest {
     /**
      * show(issueId)
      */
+    @Test
+    public void testShowSuccess() throws Exception {
+        final IssueModelInterface issueModel = new IssueModel();
+        issueModel.map(this.issueSupport.getEntityFixtureMock(0));
+        when(this.issuesOptionsBuilder.forAuth()).thenReturn(new IssuesOptions());
+        when(this.issuesService.find(any(Integer.class), any())).thenReturn(issueModel);
+        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
+
+
+
+        this.mvc.perform(get("/v1/issues/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, issueModel.getId())
+                        .with(name, issueModel.getName())
+                        .with(subject, new JsonSupport().with(id, issueModel.getSubject().getId()))
+                        .build()
+                ))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowNotFound() throws Exception {
+        when(this.issuesOptionsBuilder.forAuth()).thenReturn(new IssuesOptions());
+        when(this.issuesService.find(any(Integer.class), any(IssuesOptionsInterface.class))).thenReturn(null);
+
+        mvc.perform(get("/v1/issues/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowForbidden() throws Exception {
+        final IssueModelInterface issueModel = new IssueModel();
+        issueModel.map(this.issueSupport.getEntityFixtureMock(0));
+        when(this.issuesOptionsBuilder.forAuth()).thenReturn(new IssuesOptions());
+        when(this.issuesService.find(any(Integer.class), any())).thenReturn(issueModel);
+        when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(false);
+
+        mvc.perform(get("/v1/issues/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+
+
     /**
      * delete(issueId)
      */
