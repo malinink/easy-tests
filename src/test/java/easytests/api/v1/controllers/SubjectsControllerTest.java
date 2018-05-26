@@ -199,22 +199,6 @@ public class SubjectsControllerTest {
     }
 
     @Test
-    public void testUpdateIdFailed() throws Exception {
-
-        mvc.perform(put("/v1/subjects")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new JsonSupport()
-                        .with(name, "newSubject")
-                        .with(description, "newDescription")
-                        .with(user, new JsonSupport().with(id, 2))
-                        .build()
-                ))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(""))
-                .andReturn();
-    }
-
-    @Test
     public void testShowSuccess() throws Exception {
         final SubjectModelInterface subjectModel = new SubjectModel();
         subjectModel.map(this.subjectsSupport.getEntityFixtureMock(0));
