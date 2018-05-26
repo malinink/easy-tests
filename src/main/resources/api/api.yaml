@@ -688,34 +688,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/V1Error'
-    put:
-      summary: Update an existing Issue
-      operationId: updateIssue
-      tags:
-        - Issues
-      parameters:
-        - name: body
-          in: body
-          required: true
-          description: Issue that needs to be updated
-          schema:
-            $ref: '#/definitions/V1Issue'
-      responses:
-        '200':
-          description: Issue was successfully updated
-        '400':
-          description: Bad request
-          schema:
-            $ref: '#/definitions/V1Error'
-        '403':
-          description: Permission denied
-          schema:
-            $ref: '#/definitions/V1Error'
-        default:
-          description: Unexpected error
-          schema:
-            $ref: '#/definitions/V1Error'
-
+            
   /v1/issues/{issueId}:
     parameters:
       - name: issueId
@@ -1159,12 +1132,15 @@ definitions:
     type: object
     required:
       - id
+      - issue
       - inviteCode
       - codeExpired
     properties:
       id:
         type: integer
         format: int64
+      issue:
+        $ref: '#/definitions/V1Identity'
       inviteCode:
         type: string
       codeExpired:
@@ -1179,10 +1155,12 @@ definitions:
         $ref: '#/definitions/V1Testee'
     example:
       id: 1
+      issue:
+        id: 1
       inviteCode: 1
       codeExpired: false
-      startedAt: 2018-03-11T23:20:50
-      finishedAt: 2018-03-11T23:30:50
+      startedAt: 2018-03-11T23:20:50Z
+      finishedAt: 2018-03-11T23:30:50Z
       testee:
         - id: 1
           firstName: Ivan
