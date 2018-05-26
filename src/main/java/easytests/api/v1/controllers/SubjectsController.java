@@ -5,12 +5,14 @@ import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.exceptions.UnidentifiedModelException;
 import easytests.api.v1.mappers.SubjectsMapper;
 import easytests.api.v1.models.Subject;
+import easytests.core.models.SubjectModel;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.UsersServiceInterface;
+import easytests.test
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class SubjectsController extends AbstractController {
     @Autowired
     @Qualifier("SubjectsMapperV1")
     private SubjectsMapper subjectsMapper;
+
+    private SubjectsSupport subjectSupport = new TopicsSupport();
+
 
     @GetMapping("")
     public List<Subject> list(@RequestParam(name = "userId", required = true) Integer userId)
@@ -69,7 +74,6 @@ public class SubjectsController extends AbstractController {
         if (subject.getId() == null) {
             throw new UnidentifiedModelException();
         }
-
         final SubjectModelInterface subjectModel = this.getSubjectModel(subject.getId());
 
         if (!this.acl.hasAccess(subjectModel)) {

@@ -3,6 +3,7 @@ package easytests.api.v1.controllers;
 import easytests.api.v1.mappers.SubjectsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.entities.SubjectEntity;
 import easytests.core.models.*;
 import easytests.core.models.empty.UserModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
@@ -140,9 +141,12 @@ public class SubjectsControllerTest {
 
     @Test
     public void testUpdateSuccess() throws Exception {
-        final SubjectModelInterface subjectModel = subjectsSupport.getModelFixtureMock(0);
-        //get entity fict mock 0
-        //then
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subjectModel.map(this.subjectsSupport.getEntityFixtureMock(0));
+
+        final SubjectModelInterface newSubjectModel = new SubjectModel();
+        newSubjectModel.map(this.subjectsSupport.getEntityAdditionalMock(0));
+
         when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
         //peredaem additional mock for update
