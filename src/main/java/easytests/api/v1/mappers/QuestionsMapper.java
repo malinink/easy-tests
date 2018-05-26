@@ -22,17 +22,18 @@ public class QuestionsMapper extends ModelMapper {
     public QuestionsMapper() {
         super();
         this.createTypeMap(QuestionModel.class, Question.class)
-                .addMappings(mapper -> {
+            .addMappings(
+                mapper -> {
                     mapper.<Integer>map(questionModel ->
-                            questionModel.getQuestionType().getId(), (question, id) -> question.setType(id));
-
+                        questionModel.getQuestionType().getId(), (question, id) -> question.setType(id));
+    
                     mapper.<Integer>map(questionModel ->
-                            questionModel.getTopic().getId(), (question, id) -> question.getTopic().setId(id));
-
+                        questionModel.getTopic().getId(), (question, id) -> question.getTopic().setId(id));
+    
                     mapper.<List<AdminAnswer>>map(questionModel ->
-                            questionModel.getAnswers(), (question, list) -> question.setAnswers(list));
+                        questionModel.getAnswers(), (question, list) -> question.setAnswers(list));
                 }
-                );
+            );
         this.createTypeMap(AnswerModel.class, AdminAnswer.class)
                 .addMappings(mapper -> {
                     mapper.<String>map(answerModel -> answerModel.getTxt(),
