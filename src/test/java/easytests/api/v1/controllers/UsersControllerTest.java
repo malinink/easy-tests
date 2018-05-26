@@ -5,7 +5,6 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.auth.services.SessionServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
-import easytests.core.options.UsersOptions;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
 import easytests.support.JsonSupport;
@@ -158,7 +157,6 @@ public class UsersControllerTest {
         userModel.map(this.usersSupport.getAdminUser());
         when(this.sessionService.getUserModel()).thenReturn(userModel);
         when(this.sessionService.isUser()).thenReturn(true);
-        when(this.usersService.findByEmail(any(), any())).thenReturn(userModel);
 
         mvc.perform(get("/v1/users/me")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -180,9 +178,6 @@ public class UsersControllerTest {
      */
     @Test
     public void testShowMeForbidden() throws Exception {
-        final UserModelInterface userModel = new UserModel();
-        userModel.map(this.usersSupport.getAdminUser());
-        when(this.sessionService.getUserModel()).thenReturn(userModel);
         when(this.sessionService.isUser()).thenReturn(false);
 
 

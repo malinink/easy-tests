@@ -70,10 +70,11 @@ public class UsersController {
 
     @GetMapping("/me")
     public User showme() throws ForbiddenException {
-        final UserModelInterface userModel = this.sessionService.getUserModel();
+
         if (!this.sessionService.isUser()) {
             throw new ForbiddenException();
         }
+        final UserModelInterface userModel = this.sessionService.getUserModel();
         return this.usersMapper.map(userModel, User.class);
     }
 
