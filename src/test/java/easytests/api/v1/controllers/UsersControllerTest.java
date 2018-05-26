@@ -166,6 +166,7 @@ public class UsersControllerTest {
                         .with(lastName, userModel.getLastName())
                         .with(surname, userModel.getSurname())
                         .with(email, userModel.getEmail())
+                        .with(isAdmin, userModel.getIsAdmin())
                         .with(state, userModel.getState())
                         .build()
                 ))
