@@ -196,6 +196,25 @@ public class UsersControllerTest {
                 .andReturn();
     }
 
+    @Test
+    public void testUpdateNotFound() throws Exception {
+        mvc.perform(put("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 7)
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@fmail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
     /**
      * testShowSuccess
      */
