@@ -64,12 +64,14 @@ public class QuestionsController extends AbstractController {
                 .map(model -> this.questionsMapper.map(model, Question.class))
                 .collect(Collectors.toList());
     }
+    
     /**
      * create
      */
     /**
      * update
      */
+    
     @GetMapping("/{questionId}")
     public Question show(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
         final QuestionModelInterface questionModel = this.getQuestionModel(
