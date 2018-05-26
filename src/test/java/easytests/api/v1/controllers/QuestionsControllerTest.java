@@ -1,8 +1,11 @@
 package easytests.api.v1.controllers;
 
+import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.models.AnswerModel;
+import easytests.core.models.AnswerModelInterface;
 import easytests.core.models.QuestionModel;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
@@ -13,6 +16,8 @@ import easytests.support.QuestionsSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
+
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -69,7 +74,7 @@ public class QuestionsControllerTest {
             questionModel.setId(5);
             return null;
         }).when(this.questionsService).save(any(QuestionModelInterface.class));
-
+        final ArgumentCaptor<QuestionModelInterface> questionModelCaptor = ArgumentCaptor.forClass(QuestionModelInterface.class);
         mvc.perform(post("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
@@ -103,6 +108,8 @@ public class QuestionsControllerTest {
                                 .build()
                 ))
                 .andReturn();
+        verify(this.questionsService, times(1)).save(questionModelCaptor.capture());
+
     }
 
     @Test
@@ -116,22 +123,18 @@ public class QuestionsControllerTest {
                         .with(topic, new JsonSupport().with(id, 1))
                         .with(answers, new JsonSupport()
                                 .with(new JsonSupport()
-                                        .with(id, 1)
                                         .with(text, "Answer1text")
                                         .with(isRight, false)
                                         .with(number, 1))
                                 .with(new JsonSupport()
-                                        .with(id, 2)
                                         .with(text, "Answer2text")
                                         .with(isRight, true)
                                         .with(number, 2))
                                 .with(new JsonSupport()
-                                        .with(id, 3)
                                         .with(text, "Answer3text")
                                         .with(isRight, false)
                                         .with(number, 3))
                                 .with(new JsonSupport()
-                                        .with(id, 4)
                                         .with(text, "Answer4text")
                                         .with(isRight, false)
                                         .with(number, 4)))
@@ -144,12 +147,13 @@ public class QuestionsControllerTest {
 
     @Test
     public void testCreateWithAnswersEmptyFailed() throws Exception {
-        mvc.perform(post("/v1/objects")
+        mvc.perform(post("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
                         .with(text, "Questiontext")
                         .with(type, 1)
                         .with(topic, new JsonSupport().with(id, 1))
+                        .with(answers, new JsonSupport())
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
@@ -167,22 +171,18 @@ public class QuestionsControllerTest {
                         .with(topic, new JsonSupport().with(id, 1))
                         .with(answers, new JsonSupport()
                                 .with(new JsonSupport()
-                                        .with(id, 1)
                                         .with(text, "Answer1text")
                                         .with(isRight, false)
                                         .with(number, 1))
                                 .with(new JsonSupport()
-                                        .with(id, 2)
                                         .with(text, "Answer2text")
                                         .with(isRight, true)
                                         .with(number, 2))
                                 .with(new JsonSupport()
-                                        .with(id, 3)
                                         .with(text, "Answer3text")
                                         .with(isRight, true)
                                         .with(number, 3))
                                 .with(new JsonSupport()
-                                        .with(id, 4)
                                         .with(text, "Answer4text")
                                         .with(isRight, false)
                                         .with(number, 4)))
