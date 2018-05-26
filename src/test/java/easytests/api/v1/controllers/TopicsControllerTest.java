@@ -3,17 +3,21 @@ package easytests.api.v1.controllers;
 import easytests.api.v1.mappers.TopicsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.entities.TopicEntity;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.models.empty.SubjectModelEmpty;
+import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.support.JsonSupport;
 import easytests.support.TopicsSupport;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,6 +32,8 @@ import java.util.stream.IntStream;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.when;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -135,9 +141,10 @@ public class TopicsControllerTest {
                 .andReturn();
 
     }
-
+//    TopicModelEmpty
     @Test
     public void testCreateSuccess() throws Exception {
+        ArgumentCaptor<TopicModelInterface> argumentCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
         doAnswer(invocation -> {
             final TopicModel topicModel = (TopicModel) invocation.getArguments()[0];
             topicModel.setId(5);
@@ -159,6 +166,10 @@ public class TopicsControllerTest {
                                 .build()
                 ))
                 .andReturn();
+        verify(this.topicsService, times(1)).save(argumentCaptor.capture());
+        Assert.assertEquals(argumentCaptor.getValue().getName(), "TopicName");
+        Assert.assertEquals(argumentCaptor.getValue().getSubject().getId().toString(), "1");
+        Assert.assertEquals(argumentCaptor.getValue().getId().toString(), "5");
     }
 
     @Test
