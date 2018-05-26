@@ -145,7 +145,7 @@ public class SubjectsControllerTest {
         subjectModel.map(this.subjectsSupport.getEntityFixtureMock(0));
 
         final SubjectModelInterface newSubjectModel = new SubjectModel();
-        newSubjectModel.map(this.subjectsSupport.getEntityAdditionalMock(0));
+        newSubjectModel.map(this.subjectsSupport.getEntityAdditionalMock(1));
 
         when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);

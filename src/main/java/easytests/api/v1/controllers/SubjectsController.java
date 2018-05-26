@@ -5,14 +5,13 @@ import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.exceptions.UnidentifiedModelException;
 import easytests.api.v1.mappers.SubjectsMapper;
 import easytests.api.v1.models.Subject;
-import easytests.core.models.SubjectModel;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.UserModelInterface;
 import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilderInterface;
+import easytests.core.options.builder.UsersOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.UsersServiceInterface;
-import easytests.test
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +35,17 @@ public class SubjectsController extends AbstractController {
     protected SubjectsOptionsBuilderInterface subjectsOptionsBuilder;
 
     @Autowired
+    protected UsersOptionsBuilderInterface usersOptionsBuilder;
+
+    @Autowired
     protected UsersServiceInterface usersService;
 
     @Autowired
     @Qualifier("SubjectsMapperV1")
     private SubjectsMapper subjectsMapper;
 
-    private SubjectsSupport subjectSupport = new TopicsSupport();
+
+    //private SubjectsSupport subjectSupport = new TopicsSupport();
 
 
     @GetMapping("")
@@ -76,18 +79,12 @@ public class SubjectsController extends AbstractController {
         }
         final SubjectModelInterface subjectModel = this.getSubjectModel(subject.getId());
 
-        if (!this.acl.hasAccess(subjectModel)) {
-            throw new ForbiddenException();
-        }
-        //from session service get userId and check it with subject usercreator id
-        // check method from VR
+        this.checkUser(subject);
+
         this.subjectsMapper.map(subject, subjectModel);
 
         this.subjectsService.save(subjectModel);
     }
-    /**
-     * show(subjectId)
-     */
 
     @GetMapping("/{subjectId}")
     public Subject show(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
@@ -102,6 +99,18 @@ public class SubjectsController extends AbstractController {
     /**
      * delete(subjectId)
      */
+
+    private void checkUser(Subject subject) throws ForbiddenException {
+        final UserModelInterface userModel = this.usersService.find(
+                subject.getUser().getId(),
+                this.usersOptionsBuilder.forAuth()
+        );
+
+        if (!this.acl.hasAccess(userModel)) {
+            throw new ForbiddenException();
+        }
+
+    }
 
     private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectOptions)
             throws NotFoundException {
