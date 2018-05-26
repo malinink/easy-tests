@@ -7,6 +7,7 @@ import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.UserModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
+import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.options.SubjectsOptions;
 import easytests.core.options.SubjectsOptionsInterface;
@@ -67,6 +68,9 @@ public class SubjectsControllerTest {
     @MockBean
     SubjectsOptionsBuilder subjectsOptionsBuilder;
 
+    @MockBean
+    UsersOptionsBuilder usersOptionsBuilder;
+    
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
     private UsersSupport usersSupport = new UsersSupport();
