@@ -74,7 +74,7 @@ public class UsersController {
         if (user.getId() != null) {
             throw new IdentifiedModelException();
         }
-        if (this.usersService.findByEmail(user.getEmail()) != null) {
+        if (this.usersService.findByEmail(user.getEmail()) != null) { //It doesn'nt work
             throw new BadRequestException("This email already exist.");
         }
 

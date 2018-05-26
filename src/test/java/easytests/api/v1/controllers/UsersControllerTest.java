@@ -211,12 +211,11 @@ public class UsersControllerTest {
         userAdminModel.map(this.usersSupport.getAdminUser());
         when(this.sessionService.isUser()).thenReturn(true);
         when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
-
         final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
+        when(this.usersService.findByEmail(userModel.getEmail())).thenReturn(userModel); // Because service cant find user by email.
         mvc.perform(post("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(id, 5)
                         .with(firstName, "firstName")
                         .with(lastName, "lastName")
                         .with(surname, "surname")
@@ -226,6 +225,29 @@ public class UsersControllerTest {
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testCreateWithIsAdminIsUserFailed() throws Exception {
+        final UserModelInterface userNotAdminModel = new UserModel();
+        userNotAdminModel.map(this.usersSupport.getNotAdminUser());
+        when(this.sessionService.isUser()).thenReturn(false);
+        when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
+
+        mvc.perform(post("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@mail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
+                .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
                 .andReturn();
     }
