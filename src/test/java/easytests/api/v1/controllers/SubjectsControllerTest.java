@@ -158,7 +158,7 @@ public class SubjectsControllerTest {
                 .content(new JsonSupport()
                         .with(name, "Subject")
                         .with(description, "Subject description")
-                        .with(user, new JsonSupport().with(id,2))
+                        .with(user, new JsonSupport().with(id,3))
                         .build()
                 ))
                 .andExpect(status().is(201))
@@ -192,15 +192,7 @@ public class SubjectsControllerTest {
     }
 
     @Test
-    public void testCheckUserBadRequest() throws Exception {
-        Subject subject = new Subject();
-        mvc.perform(post("/v1/subjects").param("subject", "subject"))
-                .andExpect(status().isBadRequest());
-
-    }
-
-    @Test
-    public void testCreateForbidden() throws Exception {
+    public void testCreateBadRequest() throws Exception {
         when(this.usersService.find(2)).thenReturn(new UserModelEmpty(2));
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
 
@@ -212,7 +204,7 @@ public class SubjectsControllerTest {
                         .with(user, new JsonSupport().with(id, 2))
                         .build()
                 ))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string(""))
                 .andReturn();
     }
