@@ -51,15 +51,27 @@ public class UsersController {
                 .map(model -> this.usersMapper.map(model, User.class))
                 .collect(Collectors.toList());
     }
+    
     /**
      * create
      */
     /**
      * update
      */
-    /**
-     * show(userId)
-     */
+    @GetMapping("/{userId}")
+    public User show(@PathVariable Integer userId) throws NotFoundException, ForbiddenException {
+        final UserModelInterface userModel = this.usersService.find(userId);
+
+        if (!this.isAdmin()) {
+            throw new ForbiddenException();
+        }
+
+        if (userModel == null) {
+            throw new NotFoundException();
+        }
+
+        return this.usersMapper.map(userModel, User.class);
+    }
     /**
      * delete(userId)
      */
