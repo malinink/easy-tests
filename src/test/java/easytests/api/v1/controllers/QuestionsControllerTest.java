@@ -1,11 +1,8 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
-import easytests.core.models.AnswerModel;
-import easytests.core.models.AnswerModelInterface;
 import easytests.core.models.QuestionModel;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
@@ -15,9 +12,8 @@ import easytests.support.JsonSupport;
 import easytests.support.QuestionsSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.mockito.BDDMockito.*;
-
 import org.mockito.ArgumentCaptor;
+import static org.mockito.BDDMockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -160,6 +156,11 @@ public class QuestionsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
+
+    /**
+     * TODO
+     * Add tests more for Validators
+     */
 
     @Test
     public void testCreateWithAnswerValidationFailed() throws Exception {

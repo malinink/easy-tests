@@ -5,6 +5,7 @@ import easytests.api.v1.exceptions.IdentifiedModelException;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.Question;
+import easytests.api.v1.validators.*;
 import easytests.core.models.QuestionModel;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import easytests.api.v1.validators.*;
 
 /**
  * @author RisaMagpie
@@ -21,7 +21,7 @@ import easytests.api.v1.validators.*;
 @RestController("QuestionsControllerV1")
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/questions")
-public class QuestionsController extends AbstractController{
+public class QuestionsController extends AbstractController {
 
     @Autowired
     protected QuestionsService questionsService;
@@ -53,7 +53,6 @@ public class QuestionsController extends AbstractController{
             throw new BadRequestException("Answers must be not absent");
         }
 
-       //VALIDATOR
         final QuiestionsValidator quiestionsValidator = new QuiestionsValidator();
 
         final QuestionModelInterface questionModel = this.questionsMapper.map(question, QuestionModel.class);

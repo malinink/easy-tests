@@ -21,7 +21,7 @@ public class QuiestionsValidator {
             }
         }
         switch (questionModel.getQuestionType().getId()) {
-            case 1: {
+            case 1:
                 if (rightAnswersCount == 0) {
                     throw new BadRequestException("Right Answer must be exist");
                 }
@@ -29,8 +29,8 @@ public class QuiestionsValidator {
                     throw new BadRequestException("This Question can have only one right Answer");
                 }
                 break;
-            }
-            case 2: {
+
+            case 2:
                 if (rightAnswersCount == 0) {
                     throw new BadRequestException("Right Answers must be exist");
                 }
@@ -41,11 +41,10 @@ public class QuiestionsValidator {
                     throw new BadRequestException("This Question can't have all right Answers");
                 }
                 break;
-            }
 
-            case 3: {
+            case 3:
                 break;
-            }
+
             /**
              * TODO
              * Add check for Numeric And Text Answers
