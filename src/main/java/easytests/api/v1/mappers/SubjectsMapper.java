@@ -31,7 +31,7 @@ public class SubjectsMapper extends ModelMapper {
                 return userModel;
                 }
         };
-        final PropertyMap<Subject, SubjectModel> mymap = new PropertyMap<Subject, SubjectModel>() {
+        final PropertyMap<Subject, SubjectModel> map = new PropertyMap<Subject, SubjectModel>() {
             protected void configure() {
                 map(source.getId()).setId(null);
                 map(source.getName()).setName(null);
@@ -40,7 +40,7 @@ public class SubjectsMapper extends ModelMapper {
             }
         };
 
-        this.addMappings(mymap);
+        this.addMappings(map);
     }
 
 }
