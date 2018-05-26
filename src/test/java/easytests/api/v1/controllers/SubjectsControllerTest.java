@@ -18,6 +18,8 @@ import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
+
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -139,9 +141,8 @@ public class SubjectsControllerTest {
     @Test
     public void testUpdateSuccess() throws Exception {
         final SubjectModelInterface subjectModel = subjectsSupport.getModelFixtureMock(0);
-
         when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
-        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
 
         mvc.perform(put("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -157,6 +158,8 @@ public class SubjectsControllerTest {
                 .andReturn();
 
         verify(this.subjectsService, times(1)).save(subjectModel);
+        this.subjectsSupport.assertEquals(subjectModel, this.subjectsService.find(subjectModel.getId()));
+
     }
 
     @Test

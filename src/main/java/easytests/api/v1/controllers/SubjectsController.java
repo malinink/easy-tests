@@ -72,7 +72,7 @@ public class SubjectsController extends AbstractController {
 
         final SubjectModelInterface subjectModel = this.getSubjectModel(subject.getId());
 
-        if (!this.acl.hasAccess(subjectModel.getUser())) {
+        if (!this.acl.hasAccess(subjectModel)) {
             throw new ForbiddenException();
         }
 
