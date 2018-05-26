@@ -1,6 +1,7 @@
 package easytests.support;
 
 import easytests.core.entities.UserEntity;
+import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.UserModelInterface;
 import easytests.core.models.empty.ModelsListEmpty;
 import org.junit.Assert;
@@ -245,6 +246,16 @@ public class UsersSupport {
             this.assertEquals(userEntity, actual.get(i));
             i++;
         }
+    }
+
+    public void assertModelsEqualsWithoutIdandSubjects(UserModelInterface expected, UserModelInterface actual) {
+        Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
+        Assert.assertEquals(expected.getLastName(), actual.getLastName());
+        Assert.assertEquals(expected.getSurname(), actual.getSurname());
+        Assert.assertEquals(expected.getEmail(), actual.getEmail());
+        Assert.assertEquals(expected.getPassword(), actual.getPassword());
+        Assert.assertEquals(expected.getIsAdmin(), actual.getIsAdmin());
+        Assert.assertEquals(expected.getState(), actual.getState());
     }
 
     public UserEntity getAdminUser() {

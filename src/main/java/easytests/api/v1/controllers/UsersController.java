@@ -67,7 +67,10 @@ public class UsersController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Identity create(@RequestBody User user) throws BadRequestException {
+    public Identity create(@RequestBody User user) throws BadRequestException, ForbiddenException {
+        if (!this.isAdmin()) {
+            throw new ForbiddenException();
+        }
         if (user.getId() != null) {
             throw new IdentifiedModelException();
         }

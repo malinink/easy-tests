@@ -45,7 +45,6 @@ public class UsersControllerTest {
     private static String email = "email";
     private static String isAdmin = "isAdmin";
     private static String state = "state";
-    private static String subjects = "subjects";
 
     @Autowired
     private MockMvc mvc;
@@ -70,6 +69,7 @@ public class UsersControllerTest {
     public void testListSuccess() throws Exception {
         final UserModelInterface userAdminModel = new UserModel();
         userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
         when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
         final List<UserModelInterface> usersModels = new ArrayList<>();
@@ -110,6 +110,7 @@ public class UsersControllerTest {
     public void testListForbidden() throws Exception {
         final UserModelInterface userNotAdminModel = new UserModel();
         userNotAdminModel.map(this.usersSupport.getNotAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
         when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
 
         mvc.perform(get("/v1/users")
@@ -120,43 +121,50 @@ public class UsersControllerTest {
     }
 
     @Test
-     public void testCreateSuccess() throws Exception {
-         doAnswer(invocation -> {
-             final UserModel userModel = (UserModel) invocation.getArguments()[0];
-             userModel.setId(5);
-             return null;
-         }).when(this.usersService).save(any(UserModelInterface.class));
-         final ArgumentCaptor<UserModelInterface> userCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
-         mvc.perform(post("/v1/users")
-                 .contentType(MediaType.APPLICATION_JSON)
-                 .content(new JsonSupport()
-                         .with(firstName, "FirstName")
-                         .with(lastName, "LastName")
-                         .with(surname, "SurName")
-                         .with(email, "mail@mail.ru")
-                         .with(isAdmin, true)
-                         .with(state, 1)
-                         .build()
-                 ))
-                 .andExpect(status().is(201))
-                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                 .andExpect(content().json(
-                         new JsonSupport()
-                                 .with(id, 5)
-                                 .build()
-                 ))
-                 .andReturn();
-         verify(this.usersService, times(1)).save(userCaptor.capture());
-        Assert.assertEquals(userCaptor.getValue().getFirstName(), "FirstName");
-        Assert.assertEquals(userCaptor.getValue().getLastName(), "LastName");
-        Assert.assertEquals(userCaptor.getValue().getSurname(), "SurName");
-        Assert.assertEquals(userCaptor.getValue().getState(), (Integer) 1);
-        Assert.assertEquals(userCaptor.getValue().getIsAdmin(), true);
-    }
+    public void testCreateSuccess() throws Exception {
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
+        final UserModelInterface userAdditionalModel = this.usersSupport.getModelAdditionalMock(0);
+        doAnswer(invocation -> {
+            final UserModel userModel = (UserModel) invocation.getArguments()[0];
+            userModel.setId(5);
+            return null;
+        }).when(this.usersService).save(any(UserModelInterface.class));
+        final ArgumentCaptor<UserModelInterface> userCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
+        mvc.perform(post("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(firstName, userAdditionalModel.getFirstName())
+                        .with(lastName, userAdditionalModel.getLastName())
+                        .with(surname, userAdditionalModel.getSurname())
+                        .with(email, userAdditionalModel.getEmail())
+                        .with(isAdmin, userAdditionalModel.getIsAdmin())
+                        .with(state, userAdditionalModel.getState())
+                        .build()
+                ))
+                .andExpect(status().is(201))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(
+                        new JsonSupport()
+                                .with(id, 5)
+                                .build()
+                ))
+                .andReturn();
+        verify(this.usersService, times(1)).save(userCaptor.capture());
+        when(userAdditionalModel.getPassword()).thenReturn(userCaptor.getValue().getPassword()); // When, because userAdditionalModel is a MOCK
+        this.usersSupport.assertModelsEqualsWithoutIdandSubjects(userCaptor.getValue(), userAdditionalModel);
+    }
 
     @Test
     public void testCreateWithIdFailed() throws Exception {
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
         mvc.perform(post("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
@@ -175,7 +183,12 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testCreateWithSubjectsFailed() throws Exception {
+    public void testCreateWithIsAdminFailed() throws Exception {
+        final UserModelInterface userNotAdminModel = new UserModel();
+        userNotAdminModel.map(this.usersSupport.getNotAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
+
         mvc.perform(post("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
@@ -185,16 +198,38 @@ public class UsersControllerTest {
                         .with(email, "mail@mail.com")
                         .with(isAdmin, true)
                         .with(state, 0)
-                        .with(subjects, new JsonSupport()
-                                .withArray()
-                                .withNotNull())
+                        .build()
+                ))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testCreateWithEmailFailed() throws Exception { //Dont coverage mail fail
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
+        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
+        mvc.perform(post("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 5)
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, userModel.getEmail())
+                        .with(isAdmin, true)
+                        .with(state, 0)
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(""))
                 .andReturn();
     }
-  
+
     /**
      * testUpdateSuccess
      */
