@@ -4,6 +4,7 @@ import easytests.api.v1.exceptions.*;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.core.models.AnswerModelInterface;
 import easytests.core.models.QuestionModelInterface;
+import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.options.builder.AnswersOptionsBuilderInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilderInterface;
 import easytests.core.services.AnswersService;
@@ -51,12 +52,7 @@ public class QuestionsController extends AbstractController {
      */
     @DeleteMapping("/{questionId}")
     public void delete(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
-        final QuestionModelInterface questionModel = this.questionsService.find(questionId,
-                questionsOptionsBuilder.forDelete());
-
-        if (questionModel == null) {
-            throw new NotFoundException();
-        }
+        final QuestionModelInterface questionModel = this.getQuestionModel(questionId);
 
         if (!this.acl.hasAccess(questionModel)) {
             throw new ForbiddenException();
@@ -67,6 +63,19 @@ public class QuestionsController extends AbstractController {
 
         this.answersService.delete(answerModels);
         this.questionsService.delete(questionModel);
+    }
+
+    private QuestionModelInterface getQuestionModel (Integer id,
+                                                     QuestionsOptionsInterface questionOptions) throws NotFoundException {
+        final QuestionModelInterface questionModel = this.questionsService.find(id, questionOptions);
+        if (questionModel == null) {
+            throw new NotFoundException();
+        }
+        return questionModel;
+    }
+
+    private QuestionModelInterface getQuestionModel (Integer id) throws NotFoundException {
+        return this.getQuestionModel(id, this.questionsOptionsBuilder.forAuth());
     }
 
 }

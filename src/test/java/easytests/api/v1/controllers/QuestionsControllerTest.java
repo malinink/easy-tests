@@ -87,6 +87,7 @@ public class QuestionsControllerTest {
             answerModels.add(answerModel);
         });
 
+        when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions());
         when(this.questionsOptionsBuilder.forDelete()).thenReturn(new QuestionsOptions());
         when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class)))
                 .thenReturn(questionModel);
@@ -114,6 +115,7 @@ public class QuestionsControllerTest {
     public void testDeleteForbidden() throws Exception {
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.map(this.questionsSupport.getEntityFixtureMock(0));
+        when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions());
         when(this.questionsOptionsBuilder.forDelete()).thenReturn(new QuestionsOptions());
         when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class))).
                 thenReturn(questionModel);
@@ -129,6 +131,7 @@ public class QuestionsControllerTest {
     @Test
     public void testDeleteNotFound() throws Exception {
         final QuestionModelInterface questionModel = this.questionsSupport.getModelFixtureMock(0);
+        when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions());
         when(this.questionsOptionsBuilder.forDelete()).thenReturn(new QuestionsOptions());
         when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class))).thenReturn(null);
 
