@@ -7,6 +7,8 @@ import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.models.empty.SubjectModelEmpty;
+import easytests.core.options.TopicsOptions;
+import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
@@ -187,16 +189,26 @@ public class TopicsControllerTest {
 
     @Test
     public void testDeleteSuccess() throws Exception {
-        final TopicModelInterface topicModel = this.topicsSupport.getModelFixtureMock(0);
-        when(this.topicsService.find(any(), any())).thenReturn(topicModel);
+        final TopicsOptionsInterface topicsOptionAuth = new TopicsOptions();
+        final TopicsOptionsInterface topicsOptionDelete = new TopicsOptions();
+
+        when(this.topicsOptionsBuilder.forAuth()).thenReturn(topicsOptionAuth);
+        when(this.topicsOptionsBuilder.forDelete()).thenReturn(topicsOptionDelete);
+
+        final TopicModelInterface topicModelForAuth = this.topicsSupport.getModelFixtureMock(0);
+        final TopicModelInterface topicModelForDelete = this.topicsSupport.getModelFixtureMock(0);
+
+        when(this.topicsService.find(anyInt(), eq(topicsOptionAuth))).thenReturn(topicModelForAuth);
+        when(this.topicsService.find(anyInt(), eq(topicsOptionDelete))).thenReturn(topicModelForDelete);
+
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
+
         this.mvc.perform(delete("/v1/topics/1")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
-        verify(this.topicsService, times(1)).delete(topicModel);
+        verify(this.topicsService, times(1)).delete(topicModelForDelete, topicsOptionDelete);
     }
 
     @Test
