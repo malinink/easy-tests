@@ -6,8 +6,6 @@ import easytests.api.v1.mappers.QuizzesMapper;
 import easytests.api.v1.models.Quiz;
 import easytests.core.models.IssueModelInterface;
 import easytests.core.models.QuizModelInterface;
-import easytests.core.options.IssuesOptions;
-import easytests.core.options.QuizzesOptions;
 import easytests.core.options.QuizzesOptionsInterface;
 import easytests.core.options.builder.QuizzesOptionsBuilderInterface;
 import easytests.core.services.IssuesServiceInterface;
@@ -66,10 +64,7 @@ public class QuizzesController extends AbstractController {
 
     @GetMapping("/{quizId}")
     public Quiz show(@PathVariable Integer quizId) throws NotFoundException, ForbiddenException {
-        final QuizModelInterface quizModel = this.getQuizModel(
-                quizId,
-                (new QuizzesOptions()).withIssue(new IssuesOptions())
-        );
+        final QuizModelInterface quizModel = this.getQuizModel(quizId);
         if (!this.acl.hasAccess(quizModel)) {
             throw new ForbiddenException();
         }
@@ -83,6 +78,10 @@ public class QuizzesController extends AbstractController {
             throw new NotFoundException();
         }
         return quizModel;
+    }
+
+    private QuizModelInterface getQuizModel(Integer id) throws NotFoundException {
+        return this.getQuizModel(id, this.quizzesOptions.forAuth());
     }
 
 }
