@@ -9,6 +9,7 @@ import easytests.core.options.AnswersOptions;
 import easytests.core.options.QuestionsOptions;
 import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
+import easytests.core.services.AnswersService;
 import easytests.core.services.QuestionTypesService;
 import easytests.core.services.QuestionsService;
 import easytests.core.services.TopicsService;
