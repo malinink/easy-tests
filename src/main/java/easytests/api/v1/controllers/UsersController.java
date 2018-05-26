@@ -39,6 +39,9 @@ public class UsersController {
     private UsersMapper usersMapper;
   
     private Boolean isAdmin() {
+        if (!this.sessionService.isUser()) {
+            return false;
+        }
         return this.sessionService.getUserModel().getIsAdmin();
     }
 
