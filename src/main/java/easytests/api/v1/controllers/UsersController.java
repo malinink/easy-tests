@@ -5,6 +5,7 @@ import easytests.api.v1.mappers.UsersMapper;
 import easytests.api.v1.models.User;
 import easytests.auth.services.SessionServiceInterface;
 import easytests.core.models.UserModelInterface;
+import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilderInterface;
 import easytests.core.services.UsersServiceInterface;
 import java.util.List;
@@ -78,4 +79,27 @@ public class UsersController {
     /**
      * showMe
      */
+
+    @GetMapping("/me")
+    public User showme() throws ForbiddenException {
+
+        if (!this.sessionService.isUser()) {
+            throw new ForbiddenException();
+        }
+        final UserModelInterface userModel = this.sessionService.getUserModel();
+        return this.usersMapper.map(userModel, User.class);
+    }
+
+    private UserModelInterface getUserModel(Integer id, UsersOptionsInterface userOptions) throws NotFoundException {
+        final UserModelInterface userModel = this.usersService.find(id, userOptions);
+        if (userModel == null) {
+            throw new NotFoundException();
+        }
+        return userModel;
+    }
+
+    private UserModelInterface getUserModel(Integer id) throws NotFoundException {
+        return this.getUserModel(id, this.usersOptionsBuilder.forAuth());
+    }
+
 }
