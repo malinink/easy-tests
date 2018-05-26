@@ -14,6 +14,7 @@ import easytests.support.JsonSupport;
 import easytests.support.TopicsSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,7 +28,10 @@ import java.util.List;
 import java.util.stream.IntStream;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -134,6 +138,75 @@ public class TopicsControllerTest {
 
     }
 
+    @Test
+    public void testUpdateSuccess() throws Exception {
+        final TopicModelInterface topicModel = this.topicsSupport.getModelFixtureMock(0);
+        when(this.topicsService.find(any(), any())).thenReturn(topicModel);
+        final ArgumentCaptor<TopicModelInterface> topicModelCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
+        mvc.perform(put("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, topicModel.getId())
+                        .with(name, topicModel.getName())
+                        .with(subject, new JsonSupport().with(id, topicModel.getSubject().getId()))
+                        .build()
+                ))
+                .andExpect(status().is(200))
+                .andExpect(content().string(""))
+                .andReturn();
+        verify(this.topicsService, times(1)).save(topicModelCaptor.capture());
+        this.topicsSupport.assertEquals(topicModel, topicModelCaptor.getValue());
+    }
+
+    /**
+     * testUpdateWithoutIdFailed
+     */
+
+    @Test
+    public void testUpdateWithoutIdFailed() throws Exception {
+        mvc.perform(put("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(name, "name")
+                        .with(subject, new JsonSupport().with(id, 1))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+    /**
+     * testUpdateWithSubjectsFailed
+     */
+
+    @Test
+    public void testUpdateWithSubjectsFailed() throws Exception {
+        mvc.perform(put("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 1)
+                        .with(name, "name")
+                        .with(subject, new JsonSupport())
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+    @Test
+    public void testUpdateNotFound() throws Exception {
+        mvc.perform(put("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 7)
+                        .with(name, "name")
+                        .with(subject, new JsonSupport().with(id, 1))
+                        .build()
+                ))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
 
     @Test
     public void testShowSuccess() throws Exception {

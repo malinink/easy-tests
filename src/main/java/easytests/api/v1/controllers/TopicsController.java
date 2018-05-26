@@ -1,11 +1,14 @@
 package easytests.api.v1.controllers;
 
+import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.NotFoundException;
+import easytests.api.v1.exceptions.UnidentifiedModelException;
 import easytests.api.v1.mappers.TopicsMapper;
 import easytests.api.v1.models.Topic;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
+import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
@@ -65,6 +68,19 @@ public class TopicsController extends AbstractController {
     /**
      * update
      */
+    @PutMapping("")
+    public void update(@RequestBody Topic topic) throws BadRequestException, NotFoundException {
+        if (topic.getId() == null) {
+            throw new UnidentifiedModelException();
+        }
+
+        final TopicModelInterface topicModel = this.getTopicModel(topic.getId());
+
+        this.topicsMapper.map(topic, topicModel);
+
+        this.topicsService.save(topicModel);
+    }
+
     @GetMapping("/{topicId}")
     public Topic show(@PathVariable Integer topicId) throws NotFoundException, ForbiddenException {
         final TopicModelInterface topicModel = this.topicsService.find(topicId);
@@ -81,4 +97,16 @@ public class TopicsController extends AbstractController {
     /**
      * delete(topicId)
      */
+
+    private TopicModelInterface getTopicModel(Integer id, TopicsOptionsInterface userOptions) throws NotFoundException {
+        final TopicModelInterface topicModel = this.topicsService.find(id, userOptions);
+        if (topicModel == null) {
+            throw new NotFoundException();
+        }
+        return topicModel;
+    }
+
+    private TopicModelInterface getTopicModel(Integer id) throws NotFoundException {
+        return this.getTopicModel(id, this.topicsOptionsBuilder.forAuth());
+    }
 }
