@@ -41,7 +41,6 @@ public class UsersControllerTest {
     private static String email = "email";
     private static String isAdmin = "isAdmin";
     private static String state = "state";
-    private static String subjects = "subjects";
 
     @Autowired
     private MockMvc mvc;
@@ -54,7 +53,6 @@ public class UsersControllerTest {
 
     private UsersSupport usersSupport = new UsersSupport();
 
-    private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
     @MockBean
     private AccessControlLayerServiceInterface acl;

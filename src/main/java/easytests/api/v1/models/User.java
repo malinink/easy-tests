@@ -1,6 +1,5 @@
 package easytests.api.v1.models;
 
-import java.util.List;
 import lombok.Data;
 
 
@@ -25,6 +24,5 @@ public class User {
 
     private Integer state;
 
-    private List<Identity> subjects;
 }
 
