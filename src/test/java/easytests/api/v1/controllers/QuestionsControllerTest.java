@@ -91,7 +91,7 @@ public class QuestionsControllerTest {
      */
 
     @Test
-    public void testShowWithAnswersSuccess() throws Exception {
+    public void testShowSuccess() throws Exception {
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.map(this.questionSupport.getEntityFixtureMock(0));
         final List<AnswerModelInterface> answersModels = new ArrayList<>();
