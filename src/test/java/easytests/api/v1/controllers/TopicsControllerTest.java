@@ -187,18 +187,16 @@ public class TopicsControllerTest {
 
     @Test
     public void testDeleteSuccess() throws Exception {
-        final TopicModelInterface questionModel = this.topicsSupport.getModelFixtureMock(0);
-        when(this.topicsService.find(any(), any())).thenReturn(questionModel);
+        final TopicModelInterface topicModel = this.topicsSupport.getModelFixtureMock(0);
+        when(this.topicsService.find(any(), any())).thenReturn(topicModel);
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
-        final ArgumentCaptor<TopicModelInterface> argumentCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
         this.mvc.perform(delete("/v1/topics/1")
                 .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
-        verify(this.topicsService, times(1)).delete(argumentCaptor.capture());
-        this.topicsSupport.assertEquals(argumentCaptor.getValue(), questionModel);
+        verify(this.topicsService, times(1)).delete(topicModel);
     }
 
     @Test
@@ -214,9 +212,9 @@ public class TopicsControllerTest {
 
     @Test
     public void testDeleteForbidden() throws Exception {
-        final TopicModelInterface questionModel = new TopicModel();
-        questionModel.map(this.topicsSupport.getEntityFixtureMock(0));
-        when(this.topicsService.find(any(), any())).thenReturn(questionModel);
+        final TopicModelInterface topicModel = new TopicModel();
+        topicModel.map(this.topicsSupport.getEntityFixtureMock(0));
+        when(this.topicsService.find(any(), any())).thenReturn(topicModel);
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);
 
         mvc.perform(delete("/v1/topics/1")
