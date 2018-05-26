@@ -6,24 +6,22 @@ import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.AnswerModelInterface;
 import easytests.core.options.AnswersOptions;
-import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.options.QuestionsOptions;
+import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
-import easytests.core.services.QuestionsService;
 import easytests.core.services.QuestionTypesService;
-import easytests.core.services.AnswersService;
+import easytests.core.services.QuestionsService;
 import easytests.core.services.TopicsService;
-import easytests.support.QuestionsSupport;
 import easytests.support.AnswersSupport;
 import easytests.support.JsonSupport;
+import easytests.support.QuestionsSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.mockito.BDDMockito.*;
-
 import org.mockito.ArgumentCaptor;
+import static org.mockito.BDDMockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -48,10 +46,8 @@ public class QuestionsControllerTest {
     private static String type = "type";
     private static String topic = "topic";
     private static String answers = "answers";
-
     private static String isRight = "isRight";
     private static String number = "number";
-
 
     @Autowired
     private MockMvc mvc;
