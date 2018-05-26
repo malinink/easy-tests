@@ -28,7 +28,7 @@ public class IssuesController extends AbstractController {
     protected IssuesServiceInterface issuesService;
 
     @Autowired
-    protected IssuesOptionsBuilder issuesOptions;
+    protected IssuesOptionsBuilder issuesOptionsBuilder;
 
     @Autowired
     protected SubjectsServiceInterface subjectsService;
@@ -72,24 +72,21 @@ public class IssuesController extends AbstractController {
 
     @DeleteMapping("/{issueId}")
     public void delete(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException {
-        final IssueModelInterface issueModel = getIssueModel(issueId);
-        this.issuesService.find(issueModel.getId(), this.issuesOptions.forDelete());
+        final IssuesOptionsInterface issuesOptions = this.issuesOptionsBuilder.forDelete();
+        final IssueModelInterface issueModel = this.getIssueModel(issueId);
 
-        if (issueModel == null) {
-            throw new NotFoundException();
-        }
         if (!this.acl.hasAccess(issueModel)) {
             throw new ForbiddenException();
         }
-        this.issuesService.delete(issueModel);
+        this.issuesService.delete(issueModel, issuesOptions);
     }
 
     private IssueModelInterface getIssueModel(Integer id) throws NotFoundException {
-        final IssuesOptionsInterface issuesOptionsInterface = this.issuesOptions.forAuth();
+        final IssuesOptionsInterface issuesOptionsInterface = this.issuesOptionsBuilder.forAuth();
         return this.getIssueModel(id, issuesOptionsInterface);
     }
 
-    private IssueModelInterface getIssueModel(Integer id, IssuesOptionsInterface issueOption)
+    public IssueModelInterface getIssueModel(Integer id, IssuesOptionsInterface issueOption)
             throws NotFoundException {
         final IssueModelInterface issueModel = this.issuesService.find(id, issueOption);
         if (issueModel == null) {

@@ -5,6 +5,8 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.SubjectModelEmpty;
+import easytests.core.options.IssuesOptions;
+import easytests.core.options.IssuesOptionsInterface;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
@@ -13,6 +15,8 @@ import easytests.support.JsonSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
@@ -136,22 +140,32 @@ public class IssuesControllerTest {
      */
     @Test
     public void testDeleteSuccess() throws Exception {
-        final ArgumentCaptor<IssueModelInterface> issueModelArgumentCaptor = ArgumentCaptor.forClass(IssueModelInterface.class);
+//        final ArgumentCaptor<IssuesOptions> issueModelOptionsArgumentCaptor = ArgumentCaptor.forClass(IssuesOptions.class);
+        final IssuesOptionsInterface issuesOptionauth = this.issuesOptionsBuilder.forAuth();
+        final IssuesOptionsInterface issuesOptiondel = this.issuesOptionsBuilder.forDelete();
         final IssueModelInterface issueModel = this.issueSupport.getModelFixtureMock(0);
-        when(this.issuesService.find(any(), any())).thenReturn(issueModel);
+
+//        verify(this.issuesService, times(1)).find(any(), issueModelOptionsArgumentCaptor.capture());
+//        Assert.assertEquals(issueModelOptionsArgumentCaptor, issuesOptionauth);
+//        verify(this.issuesService, times(1)).delete(issueModel, issueModelOptionsArgumentCaptor.capture());
+//        Assert.assertEquals(issueModelOptionsArgumentCaptor, issuesOptiondel);
+        when(this.issuesService.find(any(), issuesOptionauth)).thenReturn(issueModel);
+//        when(this.issuesService.find(any(), any())).thenReturn(issueModel);
         when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
+
         this.mvc.perform(delete("/v1/issues/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
-        verify(this.issuesService, times(1)).delete(issueModelArgumentCaptor.capture());
+        verify(this.issuesService, times(1)).delete(issueModel);
     }
 
     @Test
     public void testDeleteForbidden() throws Exception {
         final IssueModel issueModel = new IssueModel();
         issueModel.map(this.issueSupport.getEntityFixtureMock(0));
+
         when(this.issuesService.find(any(), any())).thenReturn(issueModel);
         when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(false);
         this.mvc.perform(delete("/v1/issues/1")
