@@ -4,7 +4,6 @@ import easytests.api.v1.mappers.IssuesMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
-import easytests.core.models.QuizModelInterface;
 import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.IssuesOptions;
 import easytests.core.options.IssuesOptionsInterface;
@@ -151,6 +150,7 @@ public class IssuesControllerTest {
                 .andExpect(content().json(new JsonSupport()
                         .with(id, issueModel.getId())
                         .with(name, issueModel.getName())
+                        .with(subject, new JsonSupport().with(id, issueModel.getSubject().getId()))
                         .build()
                 ))
                 .andReturn();

@@ -7,7 +7,6 @@ import easytests.api.v1.models.Issue;
 import easytests.core.models.IssueModelInterface;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.options.IssuesOptionsInterface;
-import easytests.core.options.SubjectsOptions;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
@@ -80,7 +79,7 @@ public class IssuesController extends AbstractController {
     }
 
     private IssueModelInterface getIssueModel(Integer id) throws NotFoundException {
-        final IssuesOptionsInterface issuesOptionsInterface = this.issuesOptions.forAuth().withSubject(new SubjectsOptions());
+        final IssuesOptionsInterface issuesOptionsInterface = this.issuesOptions.forAuth();
         return this.getIssueModel(id, issuesOptionsInterface);
     }
 
