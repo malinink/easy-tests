@@ -75,11 +75,11 @@ public class TopicsController extends AbstractController {
             throw new IdentifiedModelException();
         }
 
-        final TopicModelInterface userModel = this.topicsMapper.map(topic, TopicModel.class);
+        final TopicModelInterface topicModel = this.topicsMapper.map(topic, TopicModel.class);
 
-        this.topicsService.save(userModel);
+        this.topicsService.save(topicModel);
 
-        return this.topicsMapper.map(userModel, Identity.class);
+        return this.topicsMapper.map(topicModel, Identity.class);
     }
 
     /**
