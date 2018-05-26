@@ -24,13 +24,13 @@ public class SubjectsMapper extends ModelMapper {
 
         final Converter<Identity, UserModel> convertIdentityToUserModel =
                 new Converter<Identity, UserModel>() {
-                    public UserModel convert(MappingContext<Identity, UserModel> context) {
-                        final UserModel userModel = new UserModel();
-                        userModel.setId(context.getSource().getId());
+                public UserModel convert(MappingContext<Identity, UserModel> context) {
+                    final UserModel userModel = new UserModel();
+                    userModel.setId(context.getSource().getId());
 
-                        return userModel;
+                return userModel;
                     }
-                };
+        };
         final PropertyMap<Subject, SubjectModel> mymap = new PropertyMap<Subject, SubjectModel>() {
             protected void configure() {
                 map(source.getId()).setId(null);
