@@ -13,10 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 /**
  * @author lelay
@@ -67,9 +65,19 @@ public class TopicsController extends AbstractController {
     /**
      * update
      */
-    /**
-     * show(topicId)
-     */
+    @GetMapping("/{topicId}")
+    public Topic show(@PathVariable Integer topicId) throws NotFoundException, ForbiddenException {
+        final TopicModelInterface topicModel = this.topicsService.find(topicId);
+
+        if (topicModel == null) {
+            throw new NotFoundException();
+        }
+
+        if (!this.acl.hasAccess(topicModel)) {
+            throw new ForbiddenException();
+        }
+        return this.topicsMapper.map(topicModel, Topic.class);
+    }
     /**
      * delete(topicId)
      */

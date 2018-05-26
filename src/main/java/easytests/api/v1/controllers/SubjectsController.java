@@ -84,6 +84,29 @@ public class SubjectsController extends AbstractController {
     /**
      * show(subjectId)
      */
+
+    @GetMapping("/{subjectId}")
+    public Subject show(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
+        final SubjectModelInterface subjectModel = this.getSubjectModel(subjectId);
+
+        if (!this.acl.hasAccess(subjectModel)) {
+            throw new ForbiddenException();
+        }
+        return this.subjectsMapper.map(subjectModel, Subject.class);
+    }
+
+    private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectOptions)
+            throws NotFoundException {
+        final SubjectModelInterface subjectModel = this.subjectsService.find(id, subjectOptions);
+        if (subjectModel == null) {
+            throw new NotFoundException();
+        }
+        return subjectModel;
+    }
+
+    private SubjectModelInterface getSubjectModel(Integer id) throws NotFoundException {
+        return this.getSubjectModel(id, this.subjectsOptionsBuilder.forAuth());
+    }
     /**
      * delete(subjectId)
      */
