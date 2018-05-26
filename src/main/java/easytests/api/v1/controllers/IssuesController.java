@@ -37,6 +37,9 @@ public class IssuesController extends AbstractController {
     @Qualifier("IssuesMapperV1")
     private IssuesMapper issuesMapper;
 
+    /**
+     * list
+     */
     @GetMapping
     public List<Issue> list(@RequestParam(name = "subjectId", required = true) Integer subjectId)
             throws NotFoundException, ForbiddenException {
@@ -63,10 +66,10 @@ public class IssuesController extends AbstractController {
     /**
      * update
      */
+
     /**
      * show(issueId)
      */
-
     @GetMapping("/{issueId}")
     public Object show(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException {
 
@@ -78,25 +81,10 @@ public class IssuesController extends AbstractController {
         return this.issuesMapper.map(issueModel, Issue.class);
     }
 
-    private IssueModelInterface getIssueModel(Integer id) throws NotFoundException {
-        final IssuesOptionsInterface issuesOptionsInterface = this.issuesOptions.forAuth();
-        return this.getIssueModel(id, issuesOptionsInterface);
-    }
-
-    private IssueModelInterface getIssueModel(Integer id, IssuesOptionsInterface issueOption)
-            throws NotFoundException {
-        final IssueModelInterface issueModel = this.issuesService.find(id, issueOption);
-        if (issueModel == null) {
-            throw new NotFoundException();
-        }
-        return issueModel;
-    }
-
 
     /**
      * delete(issueId)
      */
-
     @DeleteMapping("/{issueId}")
     public void delete(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException {
         IssueModelInterface issueModel = this.getIssueModel(issueId);
