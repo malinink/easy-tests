@@ -1,6 +1,7 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.exceptions.*;
+import easytests.api.v1.exceptions.ForbiddenException;
+import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.api.v1.models.Question;
 import easytests.core.models.QuestionModelInterface;
@@ -8,10 +9,8 @@ import easytests.core.models.TopicModelInterface;
 import easytests.core.options.AnswersOptions;
 import easytests.core.options.QuestionsOptions;
 import easytests.core.options.QuestionsOptionsInterface;
-import easytests.core.options.builder.AnswersOptionsBuilderInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilderInterface;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
-import easytests.core.services.AnswersService;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import java.util.List;
@@ -28,21 +27,15 @@ import org.springframework.web.bind.annotation.*;
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/questions")
 public class QuestionsController extends AbstractController {
-
-    @Autowired
-    protected AnswersService answersService;
-
     @Autowired
     protected QuestionsServiceInterface questionsService;
-  
+
     @Autowired
     protected TopicsServiceInterface topicsService;
 
     @Autowired
-    protected AnswersOptionsBuilderInterface answersOptionsBuilder;
-
     protected QuestionsOptionsBuilderInterface questionsOptionsBuilder;
-  
+
     @Autowired
     protected TopicsOptionsBuilderInterface topicsOptionsBuilder;
 
@@ -71,7 +64,7 @@ public class QuestionsController extends AbstractController {
                 .map(model -> this.questionsMapper.map(model, Question.class))
                 .collect(Collectors.toList());
     }
-    
+
     /**
      * create
      */
