@@ -5,6 +5,8 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
 import easytests.core.models.empty.IssueModelEmpty;
+import easytests.core.options.QuizzesOptions;
+import easytests.core.options.QuizzesOptionsInterface;
 import easytests.core.options.builder.QuizzesOptionsBuilder;
 import easytests.core.services.IssuesService;
 import easytests.core.services.QuizzesService;
@@ -65,7 +67,6 @@ public class QuizzesControllerTest {
 
     private QuizzesSupport quizzesSupport = new QuizzesSupport();
     private TesteesSupport testeesSupport = new TesteesSupport();
-
 
     @Test
     public void testListSuccess() throws Exception {
@@ -150,4 +151,89 @@ public class QuizzesControllerTest {
     /**
      * show(quizId)
      */
+
+    @Test
+    public void testShowSuccess() throws Exception {
+        final QuizModelInterface quizModel = new QuizModel();
+        quizModel.map(this.quizzesSupport.getEntityFixtureMock(0));
+        when(this.quizzesOptionsBuilder.forAuth()).thenReturn(new QuizzesOptions());
+        when(this.quizzesService.find(any(Integer.class), any(QuizzesOptionsInterface.class))).thenReturn(quizModel);
+        when(this.acl.hasAccess(any(QuizModelInterface.class))).thenReturn(true);
+
+        mvc.perform(get("/v1/quizzes/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, quizModel.getId())
+                        .with(issue, new JsonSupport().with(id, quizModel.getIssue().getId()))
+                        .with(inviteCode, quizModel.getInviteCode())
+                        .with(codeExpired, quizModel.getCodeExpired())
+                        .with(startedAt, quizModel.getStartedAt())
+                        .with(finishedAt, quizModel.getFinishedAt())
+                        .build()
+                ))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowNotFound() throws Exception {
+        when(this.quizzesOptionsBuilder.forAuth()).thenReturn(new QuizzesOptions());
+        when(this.quizzesService.find(any(Integer.class), any(QuizzesOptionsInterface.class))).thenReturn(null);
+
+        mvc.perform(get("/v1/quizzes/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowForbidden() throws Exception {
+        final QuizModelInterface quizModel = new QuizModel();
+        quizModel.map(this.quizzesSupport.getEntityFixtureMock(0));
+        when(this.quizzesOptionsBuilder.forAuth()).thenReturn(new QuizzesOptions());
+        when(this.quizzesService.find(any(Integer.class), any(QuizzesOptionsInterface.class))).thenReturn(quizModel);
+        when(this.acl.hasAccess(any(QuizModelInterface.class))).thenReturn(false);
+
+        mvc.perform(get("/v1/quizzes/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testShowWithTesteeSuccess() throws Exception {
+        final QuizModelInterface quizModel = new QuizModel();
+        quizModel.map(this.quizzesSupport.getEntityFixtureMock(0));
+        final TesteeModelInterface testeeModel = new TesteeModel();
+        testeeModel.map(this.testeesSupport.getEntityFixtureMock(0));
+        quizModel.setTestee(testeeModel);
+        when(this.quizzesOptionsBuilder.forAuth()).thenReturn(new QuizzesOptions());
+        when(this.quizzesService.find(any(Integer.class), any(QuizzesOptionsInterface.class))).thenReturn(quizModel);
+        when(this.acl.hasAccess(any(QuizModelInterface.class))).thenReturn(true);
+
+        mvc.perform(get("/v1/quizzes/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(id, quizModel.getId())
+                        .with(issue, new JsonSupport().with(id, quizModel.getIssue().getId()))
+                        .with(inviteCode, quizModel.getInviteCode())
+                        .with(codeExpired, quizModel.getCodeExpired())
+                        .with(startedAt, quizModel.getStartedAt())
+                        .with(finishedAt, quizModel.getFinishedAt())
+                                .with(testee, new JsonSupport()
+                                        .with(id, testeeModel.getId())
+                                        .with(firstName, testeeModel.getFirstName())
+                                        .with(lastName, testeeModel.getLastName())
+                                        .with(surname, testeeModel.getSurname())
+                                        .with(groupNumber, testeeModel.getGroupNumber())
+                                )
+                        .build()
+                ))
+                .andReturn();
+    }
 }

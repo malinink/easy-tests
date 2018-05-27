@@ -6,6 +6,7 @@ import easytests.api.v1.mappers.IssuesMapper;
 import easytests.api.v1.models.Issue;
 import easytests.core.models.IssueModelInterface;
 import easytests.core.models.SubjectModelInterface;
+import easytests.core.options.IssuesOptionsInterface;
 import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
@@ -27,7 +28,7 @@ public class IssuesController extends AbstractController {
     protected IssuesServiceInterface issuesService;
 
     @Autowired
-    protected IssuesOptionsBuilder issuesOptions;
+    protected IssuesOptionsBuilder issuesOptionsBuilder;
 
     @Autowired
     protected SubjectsServiceInterface subjectsService;
@@ -36,6 +37,9 @@ public class IssuesController extends AbstractController {
     @Qualifier("IssuesMapperV1")
     private IssuesMapper issuesMapper;
 
+    /**
+     * list
+     */
     @GetMapping
     public List<Issue> list(@RequestParam(name = "subjectId", required = true) Integer subjectId)
             throws NotFoundException, ForbiddenException {
@@ -62,11 +66,48 @@ public class IssuesController extends AbstractController {
     /**
      * update
      */
+
     /**
      * show(issueId)
      */
+    @GetMapping("/{issueId}")
+    public Object show(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException {
+
+        final IssueModelInterface issueModel = this.getIssueModel(issueId);
+
+        if (!this.acl.hasAccess(issueModel)) {
+            throw new ForbiddenException();
+        }
+        return this.issuesMapper.map(issueModel, Issue.class);
+    }
+
+
     /**
      * delete(issueId)
      */
+    @DeleteMapping("/{issueId}")
+    public void delete(@PathVariable Integer issueId) throws NotFoundException, ForbiddenException {
+        IssueModelInterface issueModel = this.getIssueModel(issueId);
 
+        if (!this.acl.hasAccess(issueModel)) {
+            throw new ForbiddenException();
+        }
+        final IssuesOptionsInterface issuesOptions = this.issuesOptionsBuilder.forDelete();
+        issueModel = this.issuesService.find(issueId, issuesOptions);
+        this.issuesService.delete(issueModel, issuesOptions);
+    }
+
+    private IssueModelInterface getIssueModel(Integer id) throws NotFoundException {
+        final IssuesOptionsInterface issuesOptionsInterface = this.issuesOptionsBuilder.forAuth();
+        return this.getIssueModel(id, issuesOptionsInterface);
+    }
+
+    private IssueModelInterface getIssueModel(Integer id, IssuesOptionsInterface issueOption)
+            throws NotFoundException {
+        final IssueModelInterface issueModel = this.issuesService.find(id, issueOption);
+        if (issueModel == null) {
+            throw new NotFoundException();
+        }
+        return issueModel;
+    }
 }
