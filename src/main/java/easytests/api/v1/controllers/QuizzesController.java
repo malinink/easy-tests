@@ -6,6 +6,7 @@ import easytests.api.v1.mappers.QuizzesMapper;
 import easytests.api.v1.models.Quiz;
 import easytests.core.models.IssueModelInterface;
 import easytests.core.models.QuizModelInterface;
+import easytests.core.options.QuizzesOptionsInterface;
 import easytests.core.options.builder.QuizzesOptionsBuilderInterface;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.QuizzesServiceInterface;
@@ -13,10 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -63,4 +61,27 @@ public class QuizzesController extends AbstractController {
     /**
      * show(quizId)
      */
+
+    @GetMapping("/{quizId}")
+    public Quiz show(@PathVariable Integer quizId) throws NotFoundException, ForbiddenException {
+        final QuizModelInterface quizModel = this.getQuizModel(quizId);
+        if (!this.acl.hasAccess(quizModel)) {
+            throw new ForbiddenException();
+        }
+
+        return this.quizzesMapper.map(quizModel, Quiz.class);
+    }
+
+    private QuizModelInterface getQuizModel(Integer id, QuizzesOptionsInterface quizOptions) throws NotFoundException {
+        final QuizModelInterface quizModel = this.quizzesService.find(id, quizOptions);
+        if (quizModel == null) {
+            throw new NotFoundException();
+        }
+        return quizModel;
+    }
+
+    private QuizModelInterface getQuizModel(Integer id) throws NotFoundException {
+        return this.getQuizModel(id, this.quizzesOptions.forAuth());
+    }
+
 }

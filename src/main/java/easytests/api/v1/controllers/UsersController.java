@@ -55,12 +55,27 @@ public class UsersController {
                 .map(model -> this.usersMapper.map(model, User.class))
                 .collect(Collectors.toList());
     }
+
     /**
      * create
      */
     /**
      * update
      */
+    @GetMapping("/{userId}")
+    public User show(@PathVariable Integer userId) throws NotFoundException, ForbiddenException {
+        final UserModelInterface userModel = this.usersService.find(userId);
+
+        if (!this.isAdmin()) {
+            throw new ForbiddenException();
+        }
+
+        if (userModel == null) {
+            throw new NotFoundException();
+        }
+
+        return this.usersMapper.map(userModel, User.class);
+    }
 
     @PutMapping("")
     public void update(@RequestBody User user) throws BadRequestException, NotFoundException {
@@ -84,6 +99,16 @@ public class UsersController {
      * showMe
      */
 
+    @GetMapping("/me")
+    public User showme() throws ForbiddenException {
+
+        if (!this.sessionService.isUser()) {
+            throw new ForbiddenException();
+        }
+        final UserModelInterface userModel = this.sessionService.getUserModel();
+        return this.usersMapper.map(userModel, User.class);
+    }
+
     private UserModelInterface getUserModel(Integer id, UsersOptionsInterface userOptions) throws NotFoundException {
         final UserModelInterface userModel = this.usersService.find(id, userOptions);
         if (userModel == null) {
@@ -95,4 +120,5 @@ public class UsersController {
     private UserModelInterface getUserModel(Integer id) throws NotFoundException {
         return this.getUserModel(id, this.usersOptionsBuilder.forAuth());
     }
+
 }
