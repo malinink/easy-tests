@@ -3,6 +3,7 @@ package easytests.api.v1.controllers;
 import easytests.api.v1.mappers.UsersMapper;
 import easytests.auth.services.SessionServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.entities.UserEntity;
 import easytests.core.models.*;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
@@ -43,6 +44,7 @@ public class UsersControllerTest {
     private static String isAdmin = "isAdmin";
     private static String state = "state";
     private static String subjects = "subjects";
+    private static String password = "password";
 
     @Autowired
     private MockMvc mvc;
@@ -127,19 +129,23 @@ public class UsersControllerTest {
 
     @Test
     public void testUpdateSuccess() throws Exception {
-        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
+        final UserModelInterface userModelforUpdate = this.usersSupport.getModelAdditionalMock(1);
+        final UserEntity userEntity = this.usersSupport.getEntityFixtureMock(0);
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(userEntity);
+        userModel.setPassword(userModelforUpdate.getPassword());
         when(this.usersService.find(any(), any())).thenReturn(userModel);
         final ArgumentCaptor<UserModelInterface> userModelCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
         mvc.perform(put("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(id, 1)
-                        .with(firstName, "firstName")
-                        .with(lastName, "lastName")
-                        .with(surname, "surname")
-                        .with(email, "mail@fmail.com")
-                        .with(isAdmin, true)
-                        .with(state, 0)
+                        .with(id, userModelforUpdate.getId())
+                        .with(firstName, userModelforUpdate.getFirstName())
+                        .with(lastName, userModelforUpdate.getLastName())
+                        .with(surname, userModelforUpdate.getSurname())
+                        .with(email, userModelforUpdate.getEmail())
+                        .with(isAdmin, userModelforUpdate.getIsAdmin())
+                        .with(state, userModelforUpdate.getState())
                         .build()
                 ))
                 .andExpect(status().is(200))
@@ -147,7 +153,7 @@ public class UsersControllerTest {
                 .andReturn();
 
         verify(this.usersService, times(1)).save(userModelCaptor.capture());
-        this.usersSupport.assertEquals(userModel, userModelCaptor.getValue());
+        this.usersSupport.assertEquals(userModelforUpdate, userModelCaptor.getValue());
     }
     /**
      * testUpdateWithoutIdFailed
@@ -170,34 +176,12 @@ public class UsersControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
-    /**
-     * testUpdateWithSubjectsFailed
-     */
 
-    @Test
-    public void testUpdateWithSubjectsFailed() throws Exception {
-        mvc.perform(put("/v1/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new JsonSupport()
-                        .with(id, 1)
-                        .with(firstName, "firstName")
-                        .with(lastName, "lastName")
-                        .with(surname, "surname")
-                        .with(email, "mail@fmail.com")
-                        .with(isAdmin, true)
-                        .with(state, 0)
-                        .with(subjects, new JsonSupport()
-                                .withArray()
-                                .withNotNull())
-                        .build()
-                ))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(""))
-                .andReturn();
-    }
 
     @Test
     public void testUpdateNotFound() throws Exception {
+        when(this.usersService.find(any(Integer.class))).thenReturn(null);
+
         mvc.perform(put("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
