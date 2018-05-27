@@ -213,7 +213,8 @@ public class QuestionsControllerTest {
             questionModel1.setId(5);
             return null;
         }).when(this.questionsService).save(any(QuestionModelInterface.class), any(QuestionsOptionsInterface.class));
-        final ArgumentCaptor<QuestionModelInterface> questionModelCaptor = ArgumentCaptor.forClass(QuestionModelInterface.class);
+        final ArgumentCaptor<QuestionModelInterface>
+                questionModelCaptor = ArgumentCaptor.forClass(QuestionModelInterface.class);
         when(this.topicsService.find(any(), any())).thenReturn(questionModel.getTopic());
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
         mvc.perform(post("/v1/questions")
@@ -243,7 +244,8 @@ public class QuestionsControllerTest {
         Assert.assertEquals(questionModel.getId(), questionModelCaptor.getValue().getId());
         Assert.assertEquals(questionModel.getText(), questionModelCaptor.getValue().getText());
         Assert.assertEquals(questionModel.getTopic().getId(), questionModelCaptor.getValue().getTopic().getId());
-        this.answersSupport.assertEqualsWithoutQuestion(questionModel.getAnswers().get(0), questionModelCaptor.getValue().getAnswers().get(0));
+        this.answersSupport.assertEqualsWithoutQuestion(questionModel.getAnswers().get(0),
+                questionModelCaptor.getValue().getAnswers().get(0));
     }
 
     @Test
@@ -261,19 +263,7 @@ public class QuestionsControllerTest {
                                 .with(new JsonSupport()
                                         .with(text, "Answer1text")
                                         .with(isRight, false)
-                                        .with(number, 1))
-                                .with(new JsonSupport()
-                                        .with(text, "Answer2text")
-                                        .with(isRight, true)
-                                        .with(number, 2))
-                                .with(new JsonSupport()
-                                        .with(text, "Answer3text")
-                                        .with(isRight, false)
-                                        .with(number, 3))
-                                .with(new JsonSupport()
-                                        .with(text, "Answer4text")
-                                        .with(isRight, false)
-                                        .with(number, 4)))
+                                        .with(number, 1)))
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
@@ -293,6 +283,28 @@ public class QuestionsControllerTest {
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testCreateForbidden() throws Exception {
+        when(this.topicsService.find(any(), any())).thenReturn(new TopicModelEmpty());
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);
+        mvc.perform(post("/v1/questions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(text, "Questiontext")
+                        .with(type, 1)
+                        .with(topic, new JsonSupport().with(id, 1))
+                        .with(answers, new JsonSupport()
+                                .with(new JsonSupport()
+                                        .with(text, "Answer1text")
+                                        .with(isRight, false)
+                                        .with(number, 1)))
+                        .build()
+                ))
+                .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
                 .andReturn();
     }
