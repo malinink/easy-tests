@@ -1,6 +1,5 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.exceptions.UnidentifiedModelException;

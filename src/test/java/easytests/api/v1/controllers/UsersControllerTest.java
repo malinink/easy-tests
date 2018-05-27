@@ -9,7 +9,6 @@ import easytests.core.models.*;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
 import easytests.support.JsonSupport;
-import easytests.support.SubjectsSupport;
 import easytests.support.UsersSupport;
 import java.util.ArrayList;
 import java.util.List;
