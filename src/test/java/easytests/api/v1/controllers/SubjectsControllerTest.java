@@ -3,6 +3,7 @@ package easytests.api.v1.controllers;
 import easytests.api.v1.mappers.SubjectsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.entities.SubjectEntity;
 import easytests.core.models.*;
 import easytests.core.models.empty.UserModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
@@ -193,18 +194,18 @@ public class SubjectsControllerTest {
      */
     @Test
     public void testDeleteSuccess() throws Exception {
-        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
+        final SubjectEntity subjectEntity = this.subjectsSupport.getEntityFixtureMock(0);
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subjectModel.map(subjectEntity);
         when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
-        final ArgumentCaptor<SubjectModelInterface> argumentCaptor = ArgumentCaptor.forClass(SubjectModelInterface.class);
         this.mvc.perform(delete("/v1/subjects/1")
                 .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
-        verify(this.subjectsService, times(1)).delete(argumentCaptor.capture());
-        this.subjectsSupport.assertEquals(argumentCaptor.getValue(), subjectModel);
+        verify(this.subjectsService, times(1)).delete(subjectModel, subjectsOptionsBuilder.forDelete()  );
     }
     @Test
     public void testDeleteForbidden() throws Exception {
@@ -220,7 +221,8 @@ public class SubjectsControllerTest {
     }
     @Test
     public void testDeleteNotFound() throws Exception {
-        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+        when(this.subjectsService.find(any(Integer.class))).thenReturn(null);
+
         this.mvc.perform(delete("/v1/subjects/5")
                 .contentType(MediaType.APPLICATION_JSON)
         )

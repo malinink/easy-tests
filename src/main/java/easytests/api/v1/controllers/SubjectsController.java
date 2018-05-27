@@ -70,7 +70,7 @@ public class SubjectsController extends AbstractController {
 
     @GetMapping("/{subjectId}")
     public Subject show(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
-        final SubjectModelInterface subjectModel = this.getSubjectModel(subjectId);
+        final SubjectModelInterface subjectModel = this.getSubjectModel(subjectId, subjectsOptionsBuilder.forAuth());
 
         if (!this.acl.hasAccess(subjectModel)) {
             throw new ForbiddenException();
@@ -87,25 +87,19 @@ public class SubjectsController extends AbstractController {
         return subjectModel;
     }
 
-    private SubjectModelInterface getSubjectModel(Integer id) throws NotFoundException {
-        return this.getSubjectModel(id, this.subjectsOptionsBuilder.forAuth());
-    }
-
-    private SubjectModelInterface getSubjectModelforDelete(Integer id) throws NotFoundException {
-        return this.getSubjectModel(id, this.subjectsOptionsBuilder.forDelete());
-    }
     /**
      * delete(subjectId)
      */
 
     @DeleteMapping("/{subjectId}")
     public void delete(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
-        final SubjectModelInterface subjectModelforAuth = this.getSubjectModel(subjectId);
-        System.err.println("TRALALA");
+        final SubjectModelInterface subjectModelforAuth
+                = this.getSubjectModel(subjectId, subjectsOptionsBuilder.forAuth());
         if (!this.acl.hasAccess(subjectModelforAuth)) {
             throw new ForbiddenException();
         }
-        final SubjectModelInterface subjectModelforDelete = this.getSubjectModelforDelete(subjectId);
-        this.subjectsService.delete(subjectModelforDelete);
+        final SubjectModelInterface subjectModelforDelete
+                = this.getSubjectModel(subjectId, subjectsOptionsBuilder.forDelete());
+        this.subjectsService.delete(subjectModelforDelete, subjectsOptionsBuilder.forDelete());
     }
 }
