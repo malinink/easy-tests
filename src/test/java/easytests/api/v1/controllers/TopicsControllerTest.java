@@ -3,6 +3,7 @@ package easytests.api.v1.controllers;
 import easytests.api.v1.mappers.TopicsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.entities.TopicEntity;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
@@ -140,15 +141,18 @@ public class TopicsControllerTest {
 
     @Test
     public void testUpdateSuccess() throws Exception {
-        final TopicModelInterface topicModel = this.topicsSupport.getModelFixtureMock(0);
+        final TopicModelInterface topicModelforUpdate = this.topicsSupport.getModelAdditionalMock(1);
+        final TopicEntity topicEntity = this.topicsSupport.getEntityFixtureMock(0);
+        final TopicModelInterface topicModel = new TopicModel();
+        topicModel.map(topicEntity);
         when(this.topicsService.find(any(), any())).thenReturn(topicModel);
         final ArgumentCaptor<TopicModelInterface> topicModelCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
         mvc.perform(put("/v1/topics")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(id, topicModel.getId())
-                        .with(name, topicModel.getName())
-                        .with(subject, new JsonSupport().with(id, topicModel.getSubject().getId()))
+                        .with(id, topicModelforUpdate.getId())
+                        .with(name, topicModelforUpdate.getName())
+                        .with(subject, new JsonSupport().with(id, topicModelforUpdate.getSubject().getId()))
                         .build()
                 ))
                 .andExpect(status().is(200))
@@ -175,26 +179,12 @@ public class TopicsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
-    /**
-     * testUpdateWithSubjectsFailed
-     */
+
 
     @Test
-    public void testUpdateWithSubjectsFailed() throws Exception {
-        mvc.perform(put("/v1/topics")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new JsonSupport()
-                        .with(id, 1)
-                        .with(name, "name")
-                        .with(subject, new JsonSupport())
-                        .build()
-                ))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(""))
-                .andReturn();
-    }
-    @Test
     public void testUpdateNotFound() throws Exception {
+        when(this.topicsService.find(any(Integer.class))).thenReturn(null);
+
         mvc.perform(put("/v1/topics")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
