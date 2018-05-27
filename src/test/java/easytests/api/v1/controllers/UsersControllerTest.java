@@ -181,7 +181,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testCreateWithIsAdminFailed() throws Exception {
+    public void testCreateForbidden() throws Exception {
         final UserModelInterface userNotAdminModel = new UserModel();
         userNotAdminModel.map(this.usersSupport.getNotAdminUser());
         when(this.sessionService.isUser()).thenReturn(true);
