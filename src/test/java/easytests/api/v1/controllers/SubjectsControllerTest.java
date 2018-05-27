@@ -7,6 +7,7 @@ import easytests.core.entities.SubjectEntity;
 import easytests.core.models.*;
 import easytests.core.models.empty.UserModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
+import easytests.core.options.builder.UsersOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.options.SubjectsOptions;
 import easytests.core.options.SubjectsOptionsInterface;
@@ -54,6 +55,8 @@ public class SubjectsControllerTest {
     @MockBean
     private UsersServiceInterface usersService;
 
+    @MockBean
+    private UsersOptionsBuilderInterface usersOptionsBuilder;
 
     @Autowired
     @Qualifier("SubjectsMapperV1")
@@ -126,7 +129,6 @@ public class SubjectsControllerTest {
         when(this.usersService.find(userIdParamValue))
                 .thenReturn(new UserModelEmpty(userIdParamValue));
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
-
         this.mvc.perform(get("/v1/subjects?userId={userIdParamValue}", userIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON)
         )
@@ -135,6 +137,7 @@ public class SubjectsControllerTest {
                 .andReturn();
 
     }
+
     /**
      * create
      */
@@ -148,36 +151,42 @@ public class SubjectsControllerTest {
         newSubjectModel.map(this.subjectsSupport.getEntityAdditionalMock(1));
 
         when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
-        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
-        //peredaem additional mock for update
+        when(this.usersService.find(any(), any())).thenReturn(newSubjectModel.getUser());
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+        final ArgumentCaptor<SubjectModelInterface> subjectModelCaptor = ArgumentCaptor.forClass(SubjectModelInterface.class);
+
         mvc.perform(put("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(id, 1)
-                        .with(name, "newSubject")
-                        .with(description, "newDescription")
-                        .with(user, new JsonSupport().with(id, 2))
+                        .with(id, newSubjectModel.getId())
+                        .with(name, newSubjectModel.getName())
+                        .with(description, newSubjectModel.getDescription())
+                        .with(user, new JsonSupport().with(id, newSubjectModel.getUser().getId()))
                         .build()
                 ))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
 
-        verify(this.subjectsService, times(1)).save(subjectModel);
-        //v save peredaem argumentcaptor
+        verify(this.subjectsService, times(1)).save(subjectModelCaptor.capture());
+        this.subjectsSupport.assertEquals(newSubjectModel, subjectModelCaptor.getValue());
     }
 
     @Test
     public void testUpdateNotFound() throws Exception {
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+        when(this.subjectsService.find(any(), any())).thenReturn(null);
+
+        final SubjectModelInterface newSubjectModel = new SubjectModel();
+        newSubjectModel.map(this.subjectsSupport.getEntityAdditionalMock(1));
 
         mvc.perform(put("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(id, 5)
-                        .with(name, "newSubject")
-                        .with(description, "newDescription")
-                        .with(user, new JsonSupport().with(id, 2))
+                        .with(id, newSubjectModel.getId())
+                        .with(name, newSubjectModel.getName())
+                        .with(description, newSubjectModel.getDescription())
+                        .with(user, new JsonSupport().with(id, newSubjectModel.getUser().getId()))
                         .build()
                 ))
                 .andExpect(status().isNotFound())
@@ -189,16 +198,19 @@ public class SubjectsControllerTest {
     public void testUpdateForbidden() throws Exception {
         final SubjectModelInterface subjectModel = subjectsSupport.getModelFixtureMock(0);
 
-        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+
+        final SubjectModelInterface newSubjectModel = new SubjectModel();
+        newSubjectModel.map(this.subjectsSupport.getEntityAdditionalMock(1));
 
         mvc.perform(put("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(id, 5)
-                        .with(name, "newSubject")
-                        .with(description, "newDescription")
-                        .with(user, new JsonSupport().with(id, 2))
+                        .with(id, newSubjectModel.getId())
+                        .with(name, newSubjectModel.getName())
+                        .with(description, newSubjectModel.getDescription())
+                        .with(user, new JsonSupport().with(id, newSubjectModel.getUser().getId()))
                         .build()
                 ))
                 .andExpect(status().isForbidden())

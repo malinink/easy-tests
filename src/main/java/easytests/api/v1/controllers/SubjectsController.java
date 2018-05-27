@@ -44,10 +44,6 @@ public class SubjectsController extends AbstractController {
     @Qualifier("SubjectsMapperV1")
     private SubjectsMapper subjectsMapper;
 
-
-    //private SubjectsSupport subjectSupport = new TopicsSupport();
-
-
     @GetMapping("")
     public List<Subject> list(@RequestParam(name = "userId", required = true) Integer userId)
             throws NotFoundException, ForbiddenException {
