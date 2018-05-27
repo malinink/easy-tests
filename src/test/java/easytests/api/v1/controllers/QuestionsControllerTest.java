@@ -200,13 +200,7 @@ public class QuestionsControllerTest {
         final AnswerModelInterface answer1 = new AnswerModel();
         answer1.map(this.answersSupport.getEntityAdditionalMock(0));
         answer1.setQuestion(null);
-        final AnswerModelInterface answer2 = new AnswerModel();
-        answer2.map(this.answersSupport.getEntityAdditionalMock(1));
-        answer2.setQuestion(null);
-        final AnswerModelInterface answer3 = new AnswerModel();
-        answer3.map(this.answersSupport.getEntityAdditionalMock(2));
-        answer3.setQuestion(null);
-        final List<AnswerModelInterface> answersList = Arrays.asList(answer1, answer2, answer3);
+        final List<AnswerModelInterface> answersList = Arrays.asList(answer1);
         final QuestionEntity questionEntity = this.questionSupport.getEntityAdditionalMock(0);
         final QuestionModelInterface questionModel = new QuestionModel();
         final QuestionTypeModelInterface questionType = new QuestionTypeModel();
@@ -234,15 +228,7 @@ public class QuestionsControllerTest {
                                 .with(new JsonSupport()
                                         .with(text, answer1.getTxt())
                                         .with(isRight, answer1.getRight())
-                                        .with(number, answer1.getSerialNumber()))
-                                .with(new JsonSupport()
-                                        .with(text, answer2.getTxt())
-                                        .with(isRight, answer2.getRight())
-                                        .with(number, answer2.getSerialNumber()))
-                                .with(new JsonSupport()
-                                        .with(text, answer3.getTxt())
-                                        .with(isRight, answer3.getRight())
-                                        .with(number, answer3.getSerialNumber())
+                                        .with(number, answer1.getSerialNumber())
                                 ))
                         .build()
                 ))

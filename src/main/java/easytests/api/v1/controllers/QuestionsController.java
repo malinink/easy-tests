@@ -86,11 +86,9 @@ public class QuestionsController extends AbstractController {
 
         final QuestionsOptions questionsOptions = new QuestionsOptions();
 
-        final AnswersOptions answersOptions = new AnswersOptions();
-
         final QuestionModelInterface questionModel = this.questionsMapper.map(question, QuestionModel.class);
 
-        questionsService.save(questionModel, questionsOptions.withAnswers(answersOptions));
+        this.questionsService.save(questionModel, questionsOptions.withAnswers(new AnswersOptions()));
 
         return this.questionsMapper.map(questionModel, Identity.class);
     }

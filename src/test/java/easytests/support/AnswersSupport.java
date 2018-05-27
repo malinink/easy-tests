@@ -56,14 +56,6 @@ public class AnswersSupport {
                     true
             },
             {
-                    // for insert entity
-                    null,
-                    "Answer33",
-                    3,
-                    3,
-                    false
-            },
-            {
                     // for update entity with id = 1
                     1,
                     "NewAnswer",
