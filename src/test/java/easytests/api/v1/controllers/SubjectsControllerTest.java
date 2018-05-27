@@ -187,7 +187,7 @@ public class SubjectsControllerTest {
                         .with(id, 3)
                         .with(name,"Subject" )
                         .with(description, "Subject description")
-                        .with(user, new JsonSupport().with(3))
+                        .with(user, new JsonSupport().with(id,3))
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
