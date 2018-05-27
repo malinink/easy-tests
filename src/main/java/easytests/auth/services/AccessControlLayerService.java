@@ -58,4 +58,14 @@ public class AccessControlLayerService implements AccessControlLayerServiceInter
     private Boolean hasAccess(IssueModelInterface source, UserModelInterface userModel) {
         return this.hasAccess(source.getSubject(), userModel);
     }
+
+    @Override
+    public Boolean hasAccess(QuizModelInterface source) {
+        return this.hasAccess(source, this.sessionService.getUserModel());
+    }
+
+    private Boolean hasAccess(QuizModelInterface source, UserModelInterface userModel) {
+        return this.hasAccess(source.getIssue(), userModel);
+    }
+
 }
