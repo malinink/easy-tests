@@ -76,7 +76,8 @@ public class QuestionsController extends AbstractController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Identity create(@RequestBody Question question) throws Exception {
-        final TopicModelInterface topicModel = this.topicsService.find(question.getTopic().getId(), this.topicsOptionsBuilder.forAuth());
+        final TopicModelInterface topicModel = this.topicsService
+                .find(question.getTopic().getId(), this.topicsOptionsBuilder.forAuth());
         if (!this.acl.hasAccess(topicModel)) {
             throw new ForbiddenException();
         }
