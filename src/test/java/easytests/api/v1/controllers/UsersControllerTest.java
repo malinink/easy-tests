@@ -178,6 +178,28 @@ public class UsersControllerTest {
                 .andReturn();
     }
 
+    @Test
+    public void testUpdateForbidden() throws Exception {
+        final UserModelInterface userNotAdminModel = new UserModel();
+        userNotAdminModel.map(this.usersSupport.getNotAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
+
+        mvc.perform(put("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 1)
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@fmail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
 
     @Test
     public void testUpdateNotFound() throws Exception {

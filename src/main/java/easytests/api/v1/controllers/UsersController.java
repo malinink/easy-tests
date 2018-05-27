@@ -78,7 +78,12 @@ public class UsersController {
     }
 
     @PutMapping("")
-    public void update(@RequestBody User user) throws BadRequestException, NotFoundException {
+    public void update(@RequestBody User user) throws Exception {
+
+        if (!this.isAdmin()) {
+            throw new ForbiddenException();
+        }
+
         if (user.getId() == null) {
             throw new UnidentifiedModelException();
         }
