@@ -6,7 +6,6 @@ import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.Question;
-import easytests.api.v1.validators.QuiestionsValidator;
 import easytests.core.models.QuestionModel;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.TopicModelInterface;
@@ -77,18 +76,18 @@ public class QuestionsController extends AbstractController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Identity create(@RequestBody Question question) throws Exception {
+        final TopicModelInterface topicModel = this.topicsService.find(question.getTopic().getId(), this.topicsOptionsBuilder.forAuth());
+        if (!this.acl.hasAccess(topicModel)) {
+            throw new ForbiddenException();
+        }
 
         if (question.getId() != null) {
             throw new IdentifiedModelException();
         }
 
-        final QuiestionsValidator quiestionsValidator = new QuiestionsValidator();
-
-        final QuestionsOptions questionsOptions = new QuestionsOptions();
-
         final QuestionModelInterface questionModel = this.questionsMapper.map(question, QuestionModel.class);
 
-        this.questionsService.save(questionModel, questionsOptions.withAnswers(new AnswersOptions()));
+        this.questionsService.save(questionModel, new QuestionsOptions().withAnswers(new AnswersOptions()));
 
         return this.questionsMapper.map(questionModel, Identity.class);
     }

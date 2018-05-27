@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -203,13 +205,7 @@ public class QuestionsControllerTest {
         final List<AnswerModelInterface> answersList = Arrays.asList(answer1);
         final QuestionEntity questionEntity = this.questionSupport.getEntityAdditionalMock(0);
         final QuestionModelInterface questionModel = new QuestionModel();
-        final QuestionTypeModelInterface questionType = new QuestionTypeModel();
-        final TopicModelInterface topicModel = new TopicModel();
-        topicModel.setId(questionEntity.getTopicId());
-        questionType.setId(questionEntity.getQuestionTypeId());
-        questionModel.setText(questionEntity.getText());
-        questionModel.setQuestionType(questionType);
-        questionModel.setTopic(topicModel);
+        questionModel.map(questionEntity);
         questionModel.setAnswers(answersList);
         questionModel.setId(5);
         doAnswer(invocation -> {
@@ -218,6 +214,8 @@ public class QuestionsControllerTest {
             return null;
         }).when(this.questionsService).save(any(QuestionModelInterface.class), any(QuestionsOptionsInterface.class));
         final ArgumentCaptor<QuestionModelInterface> questionModelCaptor = ArgumentCaptor.forClass(QuestionModelInterface.class);
+        when(this.topicsService.find(any(), any())).thenReturn(questionModel.getTopic());
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
         mvc.perform(post("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
@@ -242,11 +240,16 @@ public class QuestionsControllerTest {
                 .andReturn();
         verify(this.questionsService, times(1))
                 .save(questionModelCaptor.capture(), any(QuestionsOptionsInterface.class));
-        this.questionSupport.assertEquals(questionModel, questionModelCaptor.getValue());
+        Assert.assertEquals(questionModel.getId(), questionModelCaptor.getValue().getId());
+        Assert.assertEquals(questionModel.getText(), questionModelCaptor.getValue().getText());
+        Assert.assertEquals(questionModel.getTopic().getId(), questionModelCaptor.getValue().getTopic().getId());
+        this.answersSupport.assertEqualsWithoutQuestion(questionModel.getAnswers().get(0), questionModelCaptor.getValue().getAnswers().get(0));
     }
 
     @Test
     public void testCreateWithIdFailed() throws Exception {
+        when(this.topicsService.find(any(), any())).thenReturn(new TopicModelEmpty());
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
         mvc.perform(post("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
