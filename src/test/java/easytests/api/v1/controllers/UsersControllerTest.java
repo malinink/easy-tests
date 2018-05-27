@@ -181,7 +181,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testCreateForbidden() throws Exception {
+    public void testCreateNotAdminForbidden() throws Exception {
         final UserModelInterface userNotAdminModel = new UserModel();
         userNotAdminModel.map(this.usersSupport.getNotAdminUser());
         when(this.sessionService.isUser()).thenReturn(true);
@@ -228,7 +228,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testCreateWithIsAdminIsUserFailed() throws Exception {
+    public void testCreateNotAUserForbidden() throws Exception {
         final UserModelInterface userNotAdminModel = new UserModel();
         userNotAdminModel.map(this.usersSupport.getNotAdminUser());
         when(this.sessionService.isUser()).thenReturn(false);
