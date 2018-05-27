@@ -36,7 +36,8 @@ public class TopicsController extends AbstractController {
     @Autowired
     protected SubjectsServiceInterface subjectsService;
 
-    protected SubjectsOptionsBuilderInterface subjectsOptionsBuilder = new SubjectsOptionsBuilder();
+    @Autowired
+    protected SubjectsOptionsBuilderInterface subjectsOptionsBuilder;
 
     @Autowired
     @Qualifier("TopicsMapperV1")

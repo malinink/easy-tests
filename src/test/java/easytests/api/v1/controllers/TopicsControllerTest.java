@@ -148,22 +148,27 @@ public class TopicsControllerTest {
 //    TopicModelEmpty
     @Test
     public void testCreateSuccess() throws Exception {
-        final TopicModelInterface topicAdditionalModel = this.topicsSupport.getModelAdditionalMock(0);
-        topicAdditionalModel.setId(5);
+        final TopicEntity topicAdditionalEntity = this.topicsSupport.getEntityAdditionalMock(0);
+        topicAdditionalEntity.setId(5);
+        final TopicModelInterface newTopicModel = new TopicModel();
+        newTopicModel.map(topicAdditionalEntity);
+
+        when(this.subjectsService.find(any(), any())).thenReturn(newTopicModel.getSubject());
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+
+
         ArgumentCaptor<TopicModelInterface> argumentCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
         doAnswer(invocation -> {
             final TopicModel topicModel = (TopicModel) invocation.getArguments()[0];
             topicModel.setId(5);
             return null;
         }).when(this.topicsService).save(any(TopicModelInterface.class));
-        when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModelEmpty());
-        when(new SubjectsOptions().withUser(any(UsersOptions.class))).thenReturn(new SubjectsOptionsBuilder().forAuth());
 
         mvc.perform(post("/v1/topics")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(name, topicAdditionalModel.getName())
-                        .with(subject, new JsonSupport().with(id, topicAdditionalModel.getSubject().getId()))
+                        .with(name, newTopicModel.getName())
+                        .with(subject, new JsonSupport().with(id, newTopicModel.getSubject().getId()))
                         .build()
                 ))
                 .andExpect(status().is(201))
@@ -175,7 +180,7 @@ public class TopicsControllerTest {
                 ))
                 .andReturn();
         verify(this.topicsService, times(1)).save(argumentCaptor.capture());
-        this.topicsSupport.assertEquals(argumentCaptor.getValue(), topicAdditionalModel);
+        this.topicsSupport.assertEquals(argumentCaptor.getValue(), newTopicModel);
     }
 
     @Test
