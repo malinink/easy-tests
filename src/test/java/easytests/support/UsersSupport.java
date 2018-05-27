@@ -1,7 +1,6 @@
 package easytests.support;
 
 import easytests.core.entities.UserEntity;
-import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.UserModelInterface;
 import easytests.core.models.empty.ModelsListEmpty;
 import org.junit.Assert;

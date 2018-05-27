@@ -4,8 +4,6 @@ import easytests.api.v1.mappers.UsersMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.auth.services.SessionServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
-import easytests.core.entities.UserEntity;
-import easytests.auth.services.SessionServiceInterface;
 import easytests.core.models.*;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
@@ -16,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -207,7 +204,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testCreateWithEmailFailed() throws Exception { //Dont coverage mail fail
+    public void testCreateWithEmailFailed() throws Exception {
         final UserModelInterface userAdminModel = new UserModel();
         userAdminModel.map(this.usersSupport.getAdminUser());
         when(this.sessionService.isUser()).thenReturn(true);
@@ -262,10 +259,12 @@ public class UsersControllerTest {
     /**
      * testUpdateWithSubjectsFailed
      */
+
     @Test
     public void testShowSuccess() throws Exception {
         final UserModelInterface userAdminModel = new UserModel();
         userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
         when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
         final UserModelInterface userModel = new UserModel();
@@ -310,6 +309,7 @@ public class UsersControllerTest {
     public void testShowNotFound() throws Exception {
         final UserModelInterface userAdminModel = new UserModel();
         userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
         when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
         when(this.usersService.find(any(Integer.class))).thenReturn(null);
@@ -330,6 +330,7 @@ public class UsersControllerTest {
     /**
      * testShowMeSuccess
      */
+
     @Test
     public void testShowMeSuccess() throws Exception {
         final UserModelInterface userModel = new UserModel();
@@ -356,6 +357,7 @@ public class UsersControllerTest {
     /**
      * testShowMeFailed
      */
+
     @Test
     public void testShowMeForbidden() throws Exception {
         when(this.sessionService.isUser()).thenReturn(false);
