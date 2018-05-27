@@ -3,25 +3,19 @@ package easytests.api.v1.controllers;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.entities.QuestionEntity;
 import easytests.core.models.*;
+import easytests.core.models.AnswerModelInterface;
 import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.options.*;
-import easytests.core.models.AnswerModelInterface;
-import easytests.core.options.AnswersOptions;
-import easytests.core.options.QuestionsOptions;
-import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
 import easytests.core.options.builder.TopicsOptionsBuilder;
 import easytests.core.services.*;
-import easytests.support.*;
-import easytests.core.services.AnswersService;
-import easytests.core.services.QuestionTypesService;
-import easytests.core.services.QuestionsService;
-import easytests.core.services.TopicsService;
 import easytests.support.AnswersSupport;
 import easytests.support.JsonSupport;
 import easytests.support.QuestionsSupport;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 import org.junit.Test;
@@ -98,7 +92,7 @@ public class QuestionsControllerTest {
         final List<QuestionModelInterface> questionsModels = new ArrayList<>();
 
         final List<AnswerModelInterface> answersModels = new ArrayList<>();
-        IntStream.range(0, 2).forEach(answerIdx ->{
+        IntStream.range(0, 2).forEach(answerIdx -> {
             final AnswerModel answerModel = new AnswerModel();
             answerModel.map(answersSupport.getEntityFixtureMock(answerIdx));
             answersModels.add(answerModel);
@@ -117,7 +111,7 @@ public class QuestionsControllerTest {
         topicModel.setId(topicIdParamValue);
         when(this.topicsService.find(topicIdParamValue, this.topicsOptionsBuilder.forAuth()))
                 .thenReturn(topicModel);
-        when(this.questionsService.findByTopic(any(),any())).thenReturn(questionsModels);
+        when(this.questionsService.findByTopic(any(), any())).thenReturn(questionsModels);
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
 
         this.mvc.perform(get("/v1/questions?topicId={topicIdParamValue}", topicIdParamValue)
@@ -203,35 +197,53 @@ public class QuestionsControllerTest {
 
     @Test
     public void testCreateSuccess() throws Exception {
+        final AnswerModelInterface answer1 = new AnswerModel();
+        answer1.map(this.answersSupport.getEntityAdditionalMock(0));
+        answer1.setQuestion(null);
+        final AnswerModelInterface answer2 = new AnswerModel();
+        answer2.map(this.answersSupport.getEntityAdditionalMock(1));
+        answer2.setQuestion(null);
+        final AnswerModelInterface answer3 = new AnswerModel();
+        answer3.map(this.answersSupport.getEntityAdditionalMock(2));
+        answer3.setQuestion(null);
+        final List<AnswerModelInterface> answersList = Arrays.asList(answer1, answer2, answer3);
+        final QuestionEntity questionEntity = this.questionSupport.getEntityAdditionalMock(0);
+        final QuestionModelInterface questionModel = new QuestionModel();
+        final QuestionTypeModelInterface questionType = new QuestionTypeModel();
+        final TopicModelInterface topicModel = new TopicModel();
+        topicModel.setId(questionEntity.getTopicId());
+        questionType.setId(questionEntity.getQuestionTypeId());
+        questionModel.setText(questionEntity.getText());
+        questionModel.setQuestionType(questionType);
+        questionModel.setTopic(topicModel);
+        questionModel.setAnswers(answersList);
+        questionModel.setId(5);
         doAnswer(invocation -> {
-            final QuestionModel questionModel = (QuestionModel) invocation.getArguments()[0];
-            questionModel.setId(5);
+            final QuestionModel questionModel1 = (QuestionModel) invocation.getArguments()[0];
+            questionModel1.setId(5);
             return null;
-        }).when(this.questionsService).save(any(QuestionModelInterface.class));
+        }).when(this.questionsService).save(any(QuestionModelInterface.class), any(QuestionsOptionsInterface.class));
         final ArgumentCaptor<QuestionModelInterface> questionModelCaptor = ArgumentCaptor.forClass(QuestionModelInterface.class);
         mvc.perform(post("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(text, "Question")
-                        .with(type, 1)
-                        .with(topic, new JsonSupport().with(id, 1))
+                        .with(text, questionModel.getText())
+                        .with(type, questionModel.getQuestionType().getId())
+                        .with(topic, new JsonSupport().with(id, questionModel.getTopic().getId()))
                         .with(answers, new JsonSupport()
                                 .with(new JsonSupport()
-                                        .with(text, "Answer1text")
-                                        .with(isRight, false)
-                                        .with(number, 1))
+                                        .with(text, answer1.getTxt())
+                                        .with(isRight, answer1.getRight())
+                                        .with(number, answer1.getSerialNumber()))
                                 .with(new JsonSupport()
-                                        .with(text, "Answer2text")
-                                        .with(isRight, true)
-                                        .with(number, 2))
+                                        .with(text, answer2.getTxt())
+                                        .with(isRight, answer2.getRight())
+                                        .with(number, answer2.getSerialNumber()))
                                 .with(new JsonSupport()
-                                        .with(text, "Answer3text")
-                                        .with(isRight, false)
-                                        .with(number, 3))
-                                .with(new JsonSupport()
-                                        .with(text, "Answer4text")
-                                        .with(isRight, false)
-                                        .with(number, 4)))
+                                        .with(text, answer3.getTxt())
+                                        .with(isRight, answer3.getRight())
+                                        .with(number, answer3.getSerialNumber())
+                                ))
                         .build()
                 ))
                 .andExpect(status().isCreated())
@@ -242,8 +254,9 @@ public class QuestionsControllerTest {
                                 .build()
                 ))
                 .andReturn();
-        verify(this.questionsService, times(1)).save(questionModelCaptor.capture());
-
+        verify(this.questionsService, times(1))
+                .save(questionModelCaptor.capture(), any(QuestionsOptionsInterface.class));
+        this.questionSupport.assertEquals(questionModel, questionModelCaptor.getValue());
     }
 
     @Test
@@ -296,43 +309,6 @@ public class QuestionsControllerTest {
     }
 
     /**
-     * TODO
-     * Add tests more for Validators
-     */
-
-    @Test
-    public void testCreateWithAnswerValidationFailed() throws Exception {
-        mvc.perform(post("/v1/questions")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new JsonSupport()
-                        .with(text, "Question2text")
-                        .with(type, 1)
-                        .with(topic, new JsonSupport().with(id, 1))
-                        .with(answers, new JsonSupport()
-                                .with(new JsonSupport()
-                                        .with(text, "Answer1text")
-                                        .with(isRight, false)
-                                        .with(number, 1))
-                                .with(new JsonSupport()
-                                        .with(text, "Answer2text")
-                                        .with(isRight, true)
-                                        .with(number, 2))
-                                .with(new JsonSupport()
-                                        .with(text, "Answer3text")
-                                        .with(isRight, true)
-                                        .with(number, 3))
-                                .with(new JsonSupport()
-                                        .with(text, "Answer4text")
-                                        .with(isRight, false)
-                                        .with(number, 4)))
-                        .build()
-                ))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(""))
-                .andReturn();
-    }
-
-    /**
      * update
      */
 
@@ -347,8 +323,10 @@ public class QuestionsControllerTest {
             answersModels.add(answerModel);
         });
         questionModel.setAnswers(answersModels);
-        when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions().withAnswers(new AnswersOptions()));
-        when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class))).thenReturn(questionModel);
+        when(this.questionsOptionsBuilder.forAuth())
+                .thenReturn(new QuestionsOptions().withAnswers(new AnswersOptions()));
+        when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class)))
+                .thenReturn(questionModel);
         when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(true);
 
         mvc.perform(get("/v1/questions/1")
@@ -382,7 +360,8 @@ public class QuestionsControllerTest {
     @Test
     public void testShowNotFound() throws Exception {
         when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions());
-        when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class))).thenReturn(null);
+        when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class)))
+                .thenReturn(null);
 
         mvc.perform(get("/v1/questions/1")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -396,7 +375,8 @@ public class QuestionsControllerTest {
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.map(this.questionSupport.getEntityFixtureMock(0));
         when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions());
-        when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class))).thenReturn(questionModel);
+        when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class)))
+                .thenReturn(questionModel);
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
 
         mvc.perform(get("/v1/questions/1")

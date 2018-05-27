@@ -23,5 +23,17 @@ public class AdminAnswersMapper extends ModelMapper {
                 ).addMappings(
                         mapper -> mapper.map(AnswerModel::getRight, AdminAnswer::setIsRight)
         );
+
+        this.createTypeMap(AdminAnswer.class, AnswerModel.class)
+                .addMappings(
+                        mapper -> mapper.map(AdminAnswer::getId, AnswerModel::setId)
+                ).addMappings(
+                        mapper -> mapper.map(AdminAnswer::getText, AnswerModel::setTxt)
+                ).addMappings(
+                        mapper -> mapper.map(AdminAnswer::getNumber, AnswerModel::setSerialNumber)
+                ).addMappings(
+                        mapper -> mapper.map(AdminAnswer::getIsRight, AnswerModel::setRight)
+        );
     }
+
 }

@@ -1,6 +1,5 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.IdentifiedModelException;
 import easytests.api.v1.exceptions.NotFoundException;
@@ -83,17 +82,15 @@ public class QuestionsController extends AbstractController {
             throw new IdentifiedModelException();
         }
 
-        if (question.getAnswers() == null) {
-            throw new BadRequestException("Answers must be not absent");
-        }
-
         final QuiestionsValidator quiestionsValidator = new QuiestionsValidator();
+
+        final QuestionsOptions questionsOptions = new QuestionsOptions();
+
+        final AnswersOptions answersOptions = new AnswersOptions();
 
         final QuestionModelInterface questionModel = this.questionsMapper.map(question, QuestionModel.class);
 
-        quiestionsValidator.validateQuestion(questionModel);
-
-        this.questionsService.save(questionModel);
+        questionsService.save(questionModel, questionsOptions.withAnswers(answersOptions));
 
         return this.questionsMapper.map(questionModel, Identity.class);
     }
@@ -121,10 +118,6 @@ public class QuestionsController extends AbstractController {
             throw new NotFoundException();
         }
         return questionModel;
-    }
-
-    private QuestionModelInterface getQuestionModel(Integer id) throws NotFoundException {
-        return this.getQuestionModel(id, this.questionsOptionsBuilder.forAuth());
     }
     /**
      * delete(questionId)
