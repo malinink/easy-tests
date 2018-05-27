@@ -79,25 +79,20 @@ public class QuestionsControllerTest {
      */
     @Test
     public void testDeleteSuccess() throws Exception {
-        final QuestionModelInterface questionModel = this.questionsSupport.getModelFixtureMock(0);
-        final List<AnswerModelInterface> answerModels = new ArrayList<>();
-        IntStream.range(0, 2).forEach(idx -> {
-            final AnswerModel answerModel = new AnswerModel();
-            answerModel.map(this.answersSupport.getEntityFixtureMock(idx));
-            answerModels.add(answerModel);
-        });
+        final QuestionModelInterface questionModelForAuth = this.questionsSupport.getModelFixtureMock(0);
+        final QuestionModelInterface questionModelForDelete = this.questionsSupport.getModelFixtureMock(0);
 
-        when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions());
-        when(this.questionsOptionsBuilder.forDelete()).thenReturn(new QuestionsOptions());
-        when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class)))
-                .thenReturn(questionModel);
+        final QuestionsOptionsInterface questionOptionForAuth = new QuestionsOptions();
+        final QuestionsOptionsInterface questionOptionForDelete = new QuestionsOptions();
+
+        when(this.questionsOptionsBuilder.forAuth()).thenReturn(questionOptionForAuth);
+        when(this.questionsOptionsBuilder.forDelete()).thenReturn(questionOptionForDelete);
+
+        when(this.questionsService.find(any(Integer.class), eq(questionOptionForAuth)))
+                .thenReturn(questionModelForAuth);
         when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(true);
-        when(this.answersOptionsBuilder.forDelete()).thenReturn(new AnswersOptions());
-        when(this.answersService.findByQuestion(any(QuestionModelInterface.class), any(AnswersOptionsInterface.class)))
-                .thenReturn(answerModels);
-        final ArgumentCaptor<QuestionModelInterface> argumentCaptor = ArgumentCaptor
-                .forClass(QuestionModelInterface.class);
-        final ArgumentCaptor<List> answersCaptor = ArgumentCaptor.forClass(List.class);
+        when(this.questionsService.find(any(Integer.class), eq(questionOptionForDelete)))
+                .thenReturn(questionModelForDelete);
 
         this.mvc.perform(delete("/v1/questions/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -105,19 +100,18 @@ public class QuestionsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
-        verify(this.answersService, times(1)).delete(answersCaptor.capture());
-        verify(this.questionsService, times(1)).delete(argumentCaptor.capture());
-        this.answersSupport.assertModelsListEquals(answersCaptor.getValue(), answerModels);
-        this.questionsSupport.assertEquals(argumentCaptor.getValue(), questionModel);
+
+        verify(this.questionsService, times(1)).delete(questionModelForDelete,
+                questionOptionForDelete);
     }
 
     @Test
     public void testDeleteForbidden() throws Exception {
-        final QuestionModelInterface questionModel = new QuestionModel();
-        questionModel.map(this.questionsSupport.getEntityFixtureMock(0));
-        when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions());
-        when(this.questionsOptionsBuilder.forDelete()).thenReturn(new QuestionsOptions());
-        when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class))).
+        final QuestionModelInterface questionModel = this.questionsSupport.getModelFixtureMock(0);
+        final QuestionsOptionsInterface questionOption = new QuestionsOptions();
+
+        when(this.questionsOptionsBuilder.forAuth()).thenReturn(questionOption);
+        when(this.questionsService.find(any(Integer.class), eq(questionOption))).
                 thenReturn(questionModel);
         when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(false);
 
@@ -130,10 +124,10 @@ public class QuestionsControllerTest {
 
     @Test
     public void testDeleteNotFound() throws Exception {
-        final QuestionModelInterface questionModel = this.questionsSupport.getModelFixtureMock(0);
-        when(this.questionsOptionsBuilder.forAuth()).thenReturn(new QuestionsOptions());
-        when(this.questionsOptionsBuilder.forDelete()).thenReturn(new QuestionsOptions());
-        when(this.questionsService.find(any(Integer.class), any(QuestionsOptionsInterface.class))).thenReturn(null);
+        final QuestionsOptionsInterface questionOption = new QuestionsOptions();
+
+        when(this.questionsOptionsBuilder.forAuth()).thenReturn(questionOption);
+        when(this.questionsService.find(any(Integer.class), eq(questionOption))).thenReturn(null);
 
         mvc.perform(delete("/v1/questions/1")
                 .contentType(MediaType.APPLICATION_JSON))
