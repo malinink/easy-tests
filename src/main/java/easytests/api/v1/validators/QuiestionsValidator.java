@@ -1,7 +1,6 @@
 package easytests.api.v1.validators;
 
 import easytests.api.v1.exceptions.BadRequestException;
-import easytests.core.models.AnswerModelInterface;
 import easytests.core.models.QuestionModelInterface;
 
 /**
@@ -12,7 +11,7 @@ public class QuiestionsValidator {
     private AnswersValidator answersValidator = new AnswersValidator();
 
     public void validateQuestion(QuestionModelInterface questionModel) throws Exception {
-        int rightAnswersCount = 0;
+        final int rightAnswersCount = 0;
 
         //for (AnswerModelInterface answerModel: questionModel.getAnswers()) {
         //    this.answersValidator.validateAnswer(answerModel);
