@@ -4,18 +4,12 @@ import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.models.*;
-import easytests.core.models.AnswerModelInterface;
-import easytests.core.options.AnswersOptions;
-import easytests.core.options.QuestionsOptionsInterface;
-import easytests.core.options.QuestionsOptions;
+import easytests.core.models.empty.TopicModelEmpty;
+import easytests.core.options.*;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
-import easytests.core.services.QuestionsService;
-import easytests.core.services.QuestionTypesService;
-import easytests.core.services.AnswersService;
-import easytests.core.services.TopicsService;
-import easytests.support.QuestionsSupport;
-import easytests.support.AnswersSupport;
-import easytests.support.JsonSupport;
+import easytests.core.options.builder.TopicsOptionsBuilder;
+import easytests.core.services.*;
+import easytests.support.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -74,15 +68,125 @@ public class QuestionsControllerTest {
     private AccessControlLayerServiceInterface acl;
 
     @MockBean
+    private TopicsOptionsBuilder topicsOptionsBuilder;
+  
+    @MockBean
     private QuestionsOptionsBuilder questionsOptionsBuilder;
+
+    @MockBean
+    private QuestionsOptions questionsOptions;
+
+    @MockBean
+    private AnswersOptions answersOptions;
 
     private QuestionsSupport questionSupport = new QuestionsSupport();
 
     private AnswersSupport answersSupport = new AnswersSupport();
 
-    /**
-     * list
-     */
+    @Test
+    public void testListSuccess() throws Exception {
+        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
+
+        final List<AnswerModelInterface> answersModels = new ArrayList<>();
+        IntStream.range(0, 2).forEach(answerIdx ->{
+            final AnswerModel answerModel = new AnswerModel();
+            answerModel.map(answersSupport.getEntityFixtureMock(answerIdx));
+            answersModels.add(answerModel);
+        });
+
+        IntStream.range(0, 2).forEach(idx -> {
+            final QuestionModel questionModel = new QuestionModel();
+            questionModel.map(this.questionSupport.getEntityFixtureMock(idx));
+            questionModel.setAnswers(answersModels);
+            questionsModels.add(questionModel);
+        });
+
+        int topicIdParamValue = 1;
+
+        final TopicModel topicModel = new TopicModel();
+        topicModel.setId(topicIdParamValue);
+        when(this.topicsService.find(topicIdParamValue, this.topicsOptionsBuilder.forAuth()))
+                .thenReturn(topicModel);
+        when(this.questionsService.findByTopic(any(),any())).thenReturn(questionsModels);
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
+
+        this.mvc.perform(get("/v1/questions?topicId={topicIdParamValue}", topicIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(new JsonSupport()
+                        .with(new JsonSupport()
+                                .with(id, questionsModels.get(0).getId())
+                                .with(text, questionsModels.get(0).getText())
+                                .with(type, questionsModels.get(0).getQuestionType().getId())
+                                .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId()))
+                                .with(answers, new JsonSupport()
+                                    .with(new JsonSupport()
+                                        .with(id, questionsModels.get(0).getAnswers().get(0).getId())
+                                        .with(text, questionsModels.get(0).getAnswers().get(0).getTxt())
+                                        .with(isRight, questionsModels.get(0).getAnswers().get(0).getRight())
+                                        .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber()))
+                                    .with(new JsonSupport()
+                                        .with(id, questionsModels.get(0).getAnswers().get(1).getId())
+                                        .with(text, questionsModels.get(0).getAnswers().get(1).getTxt())
+                                        .with(isRight, questionsModels.get(0).getAnswers().get(1).getRight())
+                                        .with(number, questionsModels.get(0).getAnswers().get(1).getSerialNumber()))
+                                )
+                        )
+                        .with(new JsonSupport()
+                                .with(id, questionsModels.get(1).getId())
+                                .with(text, questionsModels.get(1).getText())
+                                .with(type, questionsModels.get(1).getQuestionType().getId())
+                                .with(topic, new JsonSupport().with(id, questionsModels.get(1).getTopic().getId()))
+                                .with(answers, new JsonSupport()
+                                    .with(new JsonSupport()
+                                        .with(id, questionsModels.get(1).getAnswers().get(0).getId())
+                                        .with(text, questionsModels.get(1).getAnswers().get(0).getTxt())
+                                        .with(isRight, questionsModels.get(1).getAnswers().get(0).getRight())
+                                        .with(number, questionsModels.get(1).getAnswers().get(0).getSerialNumber()))
+                                    .with(new JsonSupport()
+                                        .with(id, questionsModels.get(1).getAnswers().get(1).getId())
+                                        .with(text, questionsModels.get(1).getAnswers().get(1).getTxt())
+                                        .with(isRight, questionsModels.get(1).getAnswers().get(1).getRight())
+                                        .with(number, questionsModels.get(1).getAnswers().get(1).getSerialNumber()))
+                                )
+                        ).build()
+                ))
+                .andReturn();
+    }
+
+    @Test
+    public void testListNotFound() throws Exception {
+        int topicIdParamValue = 5;
+
+        when(this.topicsService.find(topicIdParamValue))
+                .thenReturn(null);
+
+        this.mvc.perform(get("/v1/questions?topicId={topicIdParamValue}", topicIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testListForbidden() throws Exception {
+        int topicIdParamValue = 1;
+
+        when(this.topicsService.find(topicIdParamValue, this.topicsOptionsBuilder.forAuth()))
+               .thenReturn(new TopicModelEmpty(topicIdParamValue));
+
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);
+
+        this.mvc.perform(get("/v1/questions?topicId={topicIdParamValue}", topicIdParamValue)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+
+    }
+
     /**
      * create
      */
@@ -163,5 +267,4 @@ public class QuestionsControllerTest {
     /**
      * delete(questionId)
      */
-
 }
