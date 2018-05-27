@@ -43,8 +43,6 @@ public class UsersControllerTest {
     private static String email = "email";
     private static String isAdmin = "isAdmin";
     private static String state = "state";
-    private static String subjects = "subjects";
-    private static String password = "password";
 
     @Autowired
     private MockMvc mvc;
