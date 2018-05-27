@@ -127,16 +127,16 @@ public class QuestionsControllerTest {
                                 .with(type, questionsModels.get(0).getQuestionType().getId())
                                 .with(topic, new JsonSupport().with(id, questionsModels.get(0).getTopic().getId()))
                                 .with(answers, new JsonSupport()
-                                    .with(new JsonSupport()
-                                        .with(id, questionsModels.get(0).getAnswers().get(0).getId())
-                                        .with(text, questionsModels.get(0).getAnswers().get(0).getTxt())
-                                        .with(isRight, questionsModels.get(0).getAnswers().get(0).getRight())
-                                        .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber()))
-                                    .with(new JsonSupport()
-                                        .with(id, questionsModels.get(0).getAnswers().get(1).getId())
-                                        .with(text, questionsModels.get(0).getAnswers().get(1).getTxt())
-                                        .with(isRight, questionsModels.get(0).getAnswers().get(1).getRight())
-                                        .with(number, questionsModels.get(0).getAnswers().get(1).getSerialNumber()))
+                                        .with(new JsonSupport()
+                                                .with(id, questionsModels.get(0).getAnswers().get(0).getId())
+                                                .with(text, questionsModels.get(0).getAnswers().get(0).getTxt())
+                                                .with(isRight, questionsModels.get(0).getAnswers().get(0).getRight())
+                                                .with(number, questionsModels.get(0).getAnswers().get(0).getSerialNumber()))
+                                        .with(new JsonSupport()
+                                                .with(id, questionsModels.get(0).getAnswers().get(1).getId())
+                                                .with(text, questionsModels.get(0).getAnswers().get(1).getTxt())
+                                                .with(isRight, questionsModels.get(0).getAnswers().get(1).getRight())
+                                                .with(number, questionsModels.get(0).getAnswers().get(1).getSerialNumber()))
                                 )
                         )
                         .with(new JsonSupport()
@@ -145,16 +145,16 @@ public class QuestionsControllerTest {
                                 .with(type, questionsModels.get(1).getQuestionType().getId())
                                 .with(topic, new JsonSupport().with(id, questionsModels.get(1).getTopic().getId()))
                                 .with(answers, new JsonSupport()
-                                    .with(new JsonSupport()
-                                        .with(id, questionsModels.get(1).getAnswers().get(0).getId())
-                                        .with(text, questionsModels.get(1).getAnswers().get(0).getTxt())
-                                        .with(isRight, questionsModels.get(1).getAnswers().get(0).getRight())
-                                        .with(number, questionsModels.get(1).getAnswers().get(0).getSerialNumber()))
-                                    .with(new JsonSupport()
-                                        .with(id, questionsModels.get(1).getAnswers().get(1).getId())
-                                        .with(text, questionsModels.get(1).getAnswers().get(1).getTxt())
-                                        .with(isRight, questionsModels.get(1).getAnswers().get(1).getRight())
-                                        .with(number, questionsModels.get(1).getAnswers().get(1).getSerialNumber()))
+                                        .with(new JsonSupport()
+                                                .with(id, questionsModels.get(1).getAnswers().get(0).getId())
+                                                .with(text, questionsModels.get(1).getAnswers().get(0).getTxt())
+                                                .with(isRight, questionsModels.get(1).getAnswers().get(0).getRight())
+                                                .with(number, questionsModels.get(1).getAnswers().get(0).getSerialNumber()))
+                                        .with(new JsonSupport()
+                                                .with(id, questionsModels.get(1).getAnswers().get(1).getId())
+                                                .with(text, questionsModels.get(1).getAnswers().get(1).getTxt())
+                                                .with(isRight, questionsModels.get(1).getAnswers().get(1).getRight())
+                                                .with(number, questionsModels.get(1).getAnswers().get(1).getSerialNumber()))
                                 )
                         ).build()
                 ))
@@ -180,7 +180,7 @@ public class QuestionsControllerTest {
         int topicIdParamValue = 1;
 
         when(this.topicsService.find(topicIdParamValue, this.topicsOptionsBuilder.forAuth()))
-               .thenReturn(new TopicModelEmpty(topicIdParamValue));
+                .thenReturn(new TopicModelEmpty(topicIdParamValue));
 
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);
 
@@ -387,7 +387,63 @@ public class QuestionsControllerTest {
                 .andReturn();
     }
 
-    /**
-     * delete(questionId)
-     */
+    @Test
+    public void testDeleteSuccess() throws Exception {
+        final QuestionModelInterface questionModelForAuth = this.questionSupport.getModelFixtureMock(0);
+        final QuestionModelInterface questionModelForDelete = this.questionSupport.getModelFixtureMock(0);
+
+        final QuestionsOptionsInterface questionOptionForAuth = new QuestionsOptions();
+        final QuestionsOptionsInterface questionOptionForDelete = new QuestionsOptions();
+
+        when(this.questionsOptionsBuilder.forAuth()).thenReturn(questionOptionForAuth);
+        when(this.questionsOptionsBuilder.forDelete()).thenReturn(questionOptionForDelete);
+
+        when(this.questionsService.find(any(Integer.class), eq(questionOptionForAuth)))
+                .thenReturn(questionModelForAuth);
+        when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(true);
+        when(this.questionsService.find(any(Integer.class), eq(questionOptionForDelete)))
+                .thenReturn(questionModelForDelete);
+
+        this.mvc.perform(delete("/v1/questions/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+
+        verify(this.questionsService, times(1)).delete(questionModelForDelete,
+                questionOptionForDelete);
+    }
+
+    @Test
+    public void testDeleteForbidden() throws Exception {
+        final QuestionModelInterface questionModel = this.questionSupport.getModelFixtureMock(0);
+        final QuestionsOptionsInterface questionOption = new QuestionsOptions();
+
+        when(this.questionsOptionsBuilder.forAuth()).thenReturn(questionOption);
+        when(this.questionsService.find(any(Integer.class), eq(questionOption))).
+                thenReturn(questionModel);
+        when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(false);
+
+        mvc.perform(delete("/v1/questions/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testDeleteNotFound() throws Exception {
+        final QuestionsOptionsInterface questionOption = new QuestionsOptions();
+
+        when(this.questionsOptionsBuilder.forAuth()).thenReturn(questionOption);
+        when(this.questionsService.find(any(Integer.class), eq(questionOption))).thenReturn(null);
+
+        mvc.perform(delete("/v1/questions/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
 }

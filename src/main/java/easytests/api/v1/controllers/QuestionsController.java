@@ -119,4 +119,22 @@ public class QuestionsController extends AbstractController {
     /**
      * delete(questionId)
      */
+
+    private QuestionModelInterface getQuestionModel(Integer id) throws NotFoundException {
+        return this.getQuestionModel(id, this.questionsOptionsBuilder.forAuth());
+    }
+
+    @DeleteMapping("/{questionId}")
+    public void delete(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
+        final QuestionModelInterface questionModel = this.getQuestionModel(questionId);
+        final QuestionsOptionsInterface questionOption = this.questionsOptionsBuilder.forDelete();
+
+        if (!this.acl.hasAccess(questionModel)) {
+            throw new ForbiddenException();
+        }
+
+        final QuestionModelInterface questionModelForDelete = this.questionsService.find(questionId, questionOption);
+        this.questionsService.delete(questionModelForDelete, questionOption);
+    }
+
 }

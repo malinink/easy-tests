@@ -5,6 +5,7 @@ import easytests.core.models.AnswerModel;
 import easytests.core.models.AnswerModelInterface;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.QuestionModelEmpty;
+import java.util.List;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
@@ -203,5 +204,23 @@ public class AnswersSupport {
 
     public void assertEquals(AnswerEntity expected, AnswerModelInterface actual) {
         assertEquals(actual, expected);
+    }
+
+    public void assertModelsListEquals(List<AnswerModelInterface> expected, List<AnswerModelInterface> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (AnswerModelInterface answerModel: expected) {
+            this.assertEquals(answerModel, actual.get(i));
+            i++;
+        }
+    }
+
+    public void assertEntitiesListEquals(List<AnswerEntity> expected, List<AnswerEntity> actual) {
+        Assert.assertEquals(expected.size(), actual.size());
+        Integer i = 0;
+        for (AnswerEntity answerEntity: expected) {
+            this.assertEquals(answerEntity, actual.get(i));
+            i++;
+        }
     }
 }
