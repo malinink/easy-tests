@@ -5,6 +5,8 @@ import easytests.api.v1.mappers.UsersMapper;
 import easytests.api.v1.models.User;
 import easytests.auth.services.SessionServiceInterface;
 import easytests.core.models.UserModelInterface;
+import easytests.core.options.UsersOptions;
+import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilderInterface;
 import easytests.core.services.UsersServiceInterface;
 import java.util.List;
@@ -63,7 +65,8 @@ public class UsersController {
      */
     @DeleteMapping("/{userId}")
     public void delete(@PathVariable Integer userId) throws NotFoundException, ForbiddenException {
-        final UserModelInterface userModel = this.usersService.find(userId, this.usersOptionsBuilder.forDelete());
+        final UsersOptionsInterface usersOptions = this.usersOptionsBuilder.forDelete();
+        final UserModelInterface userModel = this.usersService.find(userId,usersOptions);
 
         if (!this.isAdmin()) {
             throw new ForbiddenException();
@@ -73,7 +76,7 @@ public class UsersController {
             throw new NotFoundException();
         }
 
-        this.usersService.delete(userModel);
+        this.usersService.delete(userModel, usersOptions);
     }
 
     /**
