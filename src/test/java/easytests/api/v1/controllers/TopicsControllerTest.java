@@ -188,6 +188,25 @@ public class TopicsControllerTest {
     }
 
 
+    @Test
+    public void testCreateBadRequest() throws Exception {
+        when(this.subjectsService.find(2)).thenReturn(new SubjectModelEmpty(2));
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+
+
+        mvc.perform(post("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                                .with(name, "TopicName")
+                                .with(subject, new JsonSupport().with(id, 2))
+                                .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+
 
     @Test
     public void testShowSuccess() throws Exception {

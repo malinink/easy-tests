@@ -10,7 +10,8 @@ import easytests.api.v1.models.Topic;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
-import easytests.core.options.builder.TopicsOptionsBuilderInterface;
+import easytests.core.options.builder.SubjectsOptionsBuilder;
+import easytests.core.options.builder.SubjectsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import java.util.List;
@@ -30,13 +31,12 @@ import org.springframework.web.bind.annotation.*;
 public class TopicsController extends AbstractController {
 
     @Autowired
-    protected SubjectsServiceInterface subjectsService;
-
-    @Autowired
     protected TopicsServiceInterface topicsService;
 
     @Autowired
-    private TopicsOptionsBuilderInterface topicsOptionsBuilder;
+    protected SubjectsServiceInterface subjectsService;
+
+    protected SubjectsOptionsBuilderInterface subjectsOptionsBuilder = new SubjectsOptionsBuilder();
 
     @Autowired
     @Qualifier("TopicsMapperV1")
@@ -75,11 +75,24 @@ public class TopicsController extends AbstractController {
             throw new IdentifiedModelException();
         }
 
+        this.checkSubject(topic);
+
         final TopicModelInterface topicModel = this.topicsMapper.map(topic, TopicModel.class);
 
         this.topicsService.save(topicModel);
 
         return this.topicsMapper.map(topicModel, Identity.class);
+    }
+
+    private void checkSubject(Topic topic) throws BadRequestException {
+        final SubjectModelInterface subjectModel = this.subjectsService.find(
+                topic.getSubject().getId(),
+                this.subjectsOptionsBuilder.forAuth()
+                                );
+        if (!this.acl.hasAccess(subjectModel)) {
+            throw new BadRequestException();
+        }
+
     }
 
     /**
