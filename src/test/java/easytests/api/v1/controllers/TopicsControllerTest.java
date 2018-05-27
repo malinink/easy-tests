@@ -4,11 +4,15 @@ import easytests.api.v1.mappers.TopicsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.entities.TopicEntity;
+import easytests.core.models.SubjectModel;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
+import easytests.core.options.SubjectsOptions;
+import easytests.core.options.UsersOptions;
+import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
@@ -144,18 +148,22 @@ public class TopicsControllerTest {
 //    TopicModelEmpty
     @Test
     public void testCreateSuccess() throws Exception {
+        final TopicModelInterface topicAdditionalModel = this.topicsSupport.getModelAdditionalMock(0);
+        topicAdditionalModel.setId(5);
         ArgumentCaptor<TopicModelInterface> argumentCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
         doAnswer(invocation -> {
             final TopicModel topicModel = (TopicModel) invocation.getArguments()[0];
             topicModel.setId(5);
             return null;
         }).when(this.topicsService).save(any(TopicModelInterface.class));
+        when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModelEmpty());
+        when(new SubjectsOptions().withUser(any(UsersOptions.class))).thenReturn(new SubjectsOptionsBuilder().forAuth());
 
         mvc.perform(post("/v1/topics")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(name, "TopicName")
-                        .with(subject, new JsonSupport().with(id, 1))
+                        .with(name, topicAdditionalModel.getName())
+                        .with(subject, new JsonSupport().with(id, topicAdditionalModel.getSubject().getId()))
                         .build()
                 ))
                 .andExpect(status().is(201))
@@ -167,9 +175,7 @@ public class TopicsControllerTest {
                 ))
                 .andReturn();
         verify(this.topicsService, times(1)).save(argumentCaptor.capture());
-        Assert.assertEquals(argumentCaptor.getValue().getName(), "TopicName");
-        Assert.assertEquals(argumentCaptor.getValue().getSubject().getId().toString(), "1");
-        Assert.assertEquals(argumentCaptor.getValue().getId().toString(), "5");
+        this.topicsSupport.assertEquals(argumentCaptor.getValue(), topicAdditionalModel);
     }
 
     @Test
