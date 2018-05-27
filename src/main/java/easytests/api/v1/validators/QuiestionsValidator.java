@@ -14,12 +14,12 @@ public class QuiestionsValidator {
     public void validateQuestion(QuestionModelInterface questionModel) throws Exception {
         int rightAnswersCount = 0;
 
-        for (AnswerModelInterface answerModel: questionModel.getAnswers()) {
-            this.answersValidator.validateAnswer(answerModel);
-            if (answerModel.getRight()) {
-                ++rightAnswersCount;
-            }
-        }
+        //for (AnswerModelInterface answerModel: questionModel.getAnswers()) {
+        //    this.answersValidator.validateAnswer(answerModel);
+        //    if (answerModel.getRight()) {
+        //        ++rightAnswersCount;
+        //    }
+        //}
         switch (questionModel.getQuestionType().getId()) {
             case 1:
                 if (rightAnswersCount == 0) {

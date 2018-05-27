@@ -13,27 +13,16 @@ import org.springframework.stereotype.Service;
 public class AdminAnswersMapper extends ModelMapper {
     public AdminAnswersMapper() {
         super();
-        this.createTypeMap(AnswerModel.class, AdminAnswer.class)
-                .addMappings(
-                        mapper -> mapper.map(AnswerModel::getId, AdminAnswer::setId)
-                ).addMappings(
-                        mapper -> mapper.map(AnswerModel::getTxt, AdminAnswer::setText)
-                ).addMappings(
-                        mapper -> mapper.map(AnswerModel::getSerialNumber, AdminAnswer::setNumber)
-                ).addMappings(
-                        mapper -> mapper.map(AnswerModel::getRight, AdminAnswer::setIsRight)
-        );
-
         this.createTypeMap(AdminAnswer.class, AnswerModel.class)
-                .addMappings(
-                        mapper -> mapper.map(AdminAnswer::getId, AnswerModel::setId)
-                ).addMappings(
-                        mapper -> mapper.map(AdminAnswer::getText, AnswerModel::setTxt)
-                ).addMappings(
-                        mapper -> mapper.map(AdminAnswer::getNumber, AnswerModel::setSerialNumber)
-                ).addMappings(
-                        mapper -> mapper.map(AdminAnswer::getIsRight, AnswerModel::setRight)
-        );
+            .addMappings(
+                mapper -> mapper.map(AdminAnswer::getId, AnswerModel::setId))
+            .addMappings(
+                mapper -> mapper.map(AdminAnswer::getText, AnswerModel::setTxt))
+            .addMappings(
+                mapper -> mapper.map(AdminAnswer::getNumber, AnswerModel::setSerialNumber))
+            .addMappings(
+                mapper -> mapper.map(AdminAnswer::getIsRight, AnswerModel::setRight)
+            );
     }
 
 }
