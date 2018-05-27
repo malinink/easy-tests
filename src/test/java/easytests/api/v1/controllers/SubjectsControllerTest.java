@@ -153,7 +153,7 @@ public class SubjectsControllerTest {
         }).when(this.subjectsService).save(any(SubjectModelInterface.class));
 
         final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(1);
-        when(this.usersService.find(any(Integer.class))).thenReturn(userModel);
+        when(this.usersService.find(any(Integer.class),any())).thenReturn(userModel);
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
         final ArgumentCaptor<SubjectModelInterface> subjectCaptor = ArgumentCaptor.forClass(SubjectModelInterface.class);
 
@@ -176,7 +176,7 @@ public class SubjectsControllerTest {
         verify(this.subjectsService, times(1)).save(subjectCaptor.capture());
         Assert.assertEquals(subjectCaptor.getValue().getName(), "Subject");
         Assert.assertEquals(subjectCaptor.getValue().getDescription(), "Subject description");
-        Assert.assertEquals(subjectCaptor.getValue().getUser().getId(), (Integer) 2);
+        Assert.assertEquals(subjectCaptor.getValue().getUser().getId(), (Integer) 3);
     }
 
     @Test
