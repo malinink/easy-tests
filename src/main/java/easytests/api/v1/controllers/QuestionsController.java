@@ -10,11 +10,16 @@ import easytests.api.v1.models.Question;
 import easytests.api.v1.validators.QuiestionsValidator;
 import easytests.core.models.QuestionModel;
 import easytests.core.models.QuestionModelInterface;
+import easytests.core.models.TopicModelInterface;
 import easytests.core.options.AnswersOptions;
+import easytests.core.options.QuestionsOptions;
 import easytests.core.options.QuestionsOptionsInterface;
 import easytests.core.options.builder.QuestionsOptionsBuilderInterface;
+import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -28,24 +33,44 @@ import org.springframework.web.bind.annotation.*;
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/questions")
 public class QuestionsController extends AbstractController {
-
     @Autowired
     protected QuestionsServiceInterface questionsService;
-
-    @Autowired
-    protected QuestionsOptionsBuilderInterface questionsOptionsBuilder;
 
     @Autowired
     protected TopicsServiceInterface topicsService;
 
     @Autowired
+    protected QuestionsOptionsBuilderInterface questionsOptionsBuilder;
+
+    @Autowired
+    protected TopicsOptionsBuilderInterface topicsOptionsBuilder;
+
+    @Autowired
     @Qualifier("QuestionsMapperV1")
     private QuestionsMapper questionsMapper;
 
+    @GetMapping
+    public List<Question> list(@RequestParam(name = "topicId", required = true) Integer topicId)
+            throws NotFoundException, ForbiddenException {
+        final TopicModelInterface topicModel = this.topicsService.find(topicId, this.topicsOptionsBuilder.forAuth());
 
-    /**
-     * list
-     */
+        if (topicModel == null) {
+            throw new NotFoundException();
+        }
+
+        if (!this.acl.hasAccess(topicModel)) {
+            throw new ForbiddenException();
+        }
+
+        final List<QuestionModelInterface> questionsModels =
+                this.questionsService.findByTopic(topicModel, new QuestionsOptions().withAnswers(new AnswersOptions()));
+
+        return questionsModels
+                .stream()
+                .map(model -> this.questionsMapper.map(model, Question.class))
+                .collect(Collectors.toList());
+    }
+
     /**
      * create
      */
@@ -76,6 +101,7 @@ public class QuestionsController extends AbstractController {
     /**
      * update
      */
+
     @GetMapping("/{questionId}")
     public Question show(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
         final QuestionModelInterface questionModel = this.getQuestionModel(
