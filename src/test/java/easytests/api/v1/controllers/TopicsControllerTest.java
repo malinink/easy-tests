@@ -8,6 +8,7 @@ import easytests.core.models.SubjectModel;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
+import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
@@ -140,7 +141,7 @@ public class TopicsControllerTest {
                 .andReturn();
 
     }
-//    TopicModelEmpty
+
     @Test
     public void testCreateSuccess() throws Exception {
         final TopicEntity topicAdditionalEntity = this.topicsSupport.getEntityAdditionalMock(0);
@@ -153,6 +154,7 @@ public class TopicsControllerTest {
         doAnswer(invocation -> {
             final TopicModel topicModel = (TopicModel) invocation.getArguments()[0];
             topicModel.setId(5);
+            topicModel.setQuestions(new ModelsListEmpty());
             return null;
         }).when(this.topicsService).save(any(TopicModelInterface.class));
 
@@ -172,7 +174,7 @@ public class TopicsControllerTest {
                 ))
                 .andReturn();
         verify(this.topicsService, times(1)).save(argumentCaptor.capture());
-        this.topicsSupport.assertEquals(argumentCaptor.getValue(), topicAdditionalEntity);
+        this.topicsSupport.assertEquals(topicAdditionalEntity, argumentCaptor.getValue());
     }
 
     @Test
@@ -192,7 +194,7 @@ public class TopicsControllerTest {
 
 
     @Test
-    public void testCreateForbidden() throws Exception {
+    public void testCreateBadRequest() throws Exception {
         when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModel());
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
 
@@ -204,7 +206,7 @@ public class TopicsControllerTest {
                                 .with(subject, new JsonSupport().with(id, 2))
                                 .build()
                 ))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string(""))
                 .andReturn();
     }

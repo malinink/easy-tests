@@ -1,5 +1,6 @@
 package easytests.api.v1.controllers;
 
+import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.IdentifiedModelException;
 import easytests.api.v1.exceptions.NotFoundException;
@@ -83,13 +84,13 @@ public class TopicsController extends AbstractController {
         return this.topicsMapper.map(topicModel, Identity.class);
     }
 
-    private void checkSubject(Topic topic) throws ForbiddenException {
+    private void checkSubject(Topic topic) throws BadRequestException {
         final SubjectModelInterface subjectModel = this.subjectsService.find(
                 topic.getSubject().getId(),
                 this.subjectsOptionsBuilder.forAuth()
                                 );
         if (!this.acl.hasAccess(subjectModel)) {
-            throw new ForbiddenException();
+            throw new BadRequestException();
         }
 
     }
