@@ -1,5 +1,6 @@
 package easytests.api.v1.controllers;
 
+import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.exceptions.UnidentifiedModelException;
@@ -116,14 +117,14 @@ public class TopicsController extends AbstractController {
         return this.getTopicModel(id, this.topicsOptionsBuilder.forAuth());
     }
 
-    private void checkSubject(Topic topic) throws ForbiddenException {
+    private void checkSubject(Topic topic) throws ForbiddenException, BadRequestException {
         final SubjectModelInterface subjectModel = this.subjectsService.find(
                 topic.getSubject().getId(),
                 this.subjectsOptionsBuilder.forAuth()
         );
 
         if (!this.acl.hasAccess(subjectModel)) {
-            throw new ForbiddenException();
+            throw new BadRequestException();
         }
     }
 }

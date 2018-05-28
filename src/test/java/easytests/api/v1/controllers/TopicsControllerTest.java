@@ -207,7 +207,7 @@ public class TopicsControllerTest {
     }
 
     @Test
-    public void testUpdateForbidden() throws Exception {
+    public void testUpdateBadRequest() throws Exception {
         when(this.topicsService.find(any(), any())).thenReturn(new TopicModelEmpty(1));
         when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModel());
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
@@ -219,7 +219,7 @@ public class TopicsControllerTest {
                         .with(subject, new JsonSupport().with(id, 1))
                         .build()
                 ))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string(""))
                 .andReturn();
     }
