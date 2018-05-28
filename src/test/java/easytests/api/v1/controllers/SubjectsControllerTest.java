@@ -197,15 +197,20 @@ public class SubjectsControllerTest {
         final SubjectEntity subjectEntity = this.subjectsSupport.getEntityFixtureMock(0);
         final SubjectModelInterface subjectModel = new SubjectModel();
         subjectModel.map(subjectEntity);
+
+        final SubjectsOptionsInterface subjectsOptionsDelete = new SubjectsOptions();
+        when(this.subjectsOptionsBuilder.forDelete()).thenReturn(subjectsOptionsDelete);
+
         when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+
         this.mvc.perform(delete("/v1/subjects/1")
                 .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
-        verify(this.subjectsService, times(1)).delete(subjectModel, subjectsOptionsBuilder.forDelete()  );
+        verify(this.subjectsService, times(1)).delete(subjectModel, subjectsOptionsDelete  );
     }
     @Test
     public void testDeleteForbidden() throws Exception {
