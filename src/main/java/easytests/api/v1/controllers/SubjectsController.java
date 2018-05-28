@@ -84,6 +84,10 @@ public class SubjectsController extends AbstractController {
 
     @PutMapping("")
     public void update(@RequestBody Subject subject) throws NotFoundException, BadRequestException {
+        if (subject.getId() == null) {
+            throw new BadRequestException();
+        }
+
         final SubjectModelInterface subjectModel = this.getSubjectModel(subject.getId());
         this.checkUser(subject);
 
