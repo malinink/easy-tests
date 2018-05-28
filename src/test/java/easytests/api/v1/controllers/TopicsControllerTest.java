@@ -13,7 +13,7 @@ import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.options.TopicsOptions;
 import easytests.core.options.TopicsOptionsInterface;
-import easytests.core.options.builder.TopicsOptionsBuilderInterface;
+import easytests.core.options.builder.TopicsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.support.JsonSupport;
@@ -21,7 +21,6 @@ import easytests.support.TopicsSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
-import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -68,6 +67,9 @@ public class TopicsControllerTest {
 
     @MockBean
     private AccessControlLayerServiceInterface acl;
+
+    @MockBean
+    private TopicsOptionsBuilder topicsOptionsBuilder;
 
     @MockBean
     protected SubjectsOptionsBuilder subjectsOptionsBuilder;

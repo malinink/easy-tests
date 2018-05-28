@@ -11,8 +11,8 @@ import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.TopicsOptionsInterface;
-import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
+import easytests.core.options.builder.TopicsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import java.util.List;
@@ -38,6 +38,9 @@ public class TopicsController extends AbstractController {
 
     @Autowired
     protected SubjectsServiceInterface subjectsService;
+
+    @Autowired
+    protected TopicsOptionsBuilder topicsOptionsBuilder;
 
     @Autowired
     @Qualifier("TopicsMapperV1")
