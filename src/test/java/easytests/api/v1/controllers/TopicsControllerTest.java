@@ -11,6 +11,7 @@ import easytests.core.models.TopicModelInterface;
 import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
+import easytests.core.options.builder.TopicsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.support.JsonSupport;
@@ -61,6 +62,9 @@ public class TopicsControllerTest {
 
     @MockBean
     private AccessControlLayerServiceInterface acl;
+
+    @MockBean
+    private TopicsOptionsBuilder topicsOptionsBuilder;
 
     @MockBean
     protected SubjectsOptionsBuilder subjectsOptionsBuilder;
