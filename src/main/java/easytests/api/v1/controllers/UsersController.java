@@ -46,10 +46,6 @@ public class UsersController {
         return this.sessionService.getUserModel().getIsAdmin();
     }
 
-    /**
-     * list
-     */
-
     @GetMapping("")
     public List<User> list() throws ForbiddenException {
         if (!this.isAdmin()) {
@@ -62,10 +58,6 @@ public class UsersController {
                 .map(model -> this.usersMapper.map(model, User.class))
                 .collect(Collectors.toList());
     }
-
-    /**
-     * create
-     */
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
@@ -105,6 +97,27 @@ public class UsersController {
         }
 
         return this.usersMapper.map(userModel, User.class);
+    }
+
+    @PutMapping("")
+    public void update(@RequestBody User user) throws Exception {
+        if (!this.isAdmin()) {
+            throw new ForbiddenException();
+        }
+
+        if (user.getId() == null) {
+            throw new UnidentifiedModelException();
+        }
+
+        final UserModelInterface userModel = this.usersService.find(user.getId());
+
+        if (userModel == null) {
+            throw new NotFoundException();
+        }
+
+        this.usersMapper.map(user, userModel);
+
+        this.usersService.save(userModel);
     }
 
     @DeleteMapping("/{userId}")

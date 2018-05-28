@@ -4,6 +4,7 @@ import easytests.api.v1.mappers.UsersMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.auth.services.SessionServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.entities.UserEntity;
 import easytests.core.models.*;
 import easytests.core.options.UsersOptions;
 import easytests.core.options.UsersOptionsInterface;
@@ -307,6 +308,115 @@ public class UsersControllerTest {
 
         mvc.perform(get("/v1/users/10")
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateSuccess() throws Exception {
+        final UserModelInterface userModelforUpdate = this.usersSupport.getModelAdditionalMock(1);
+        final UserEntity userEntity = this.usersSupport.getEntityFixtureMock(0);
+        final UserModelInterface userModel = new UserModel();
+        userModel.map(userEntity);
+        userModel.setPassword(userModelforUpdate.getPassword());
+
+        when(this.usersService.find(any())).thenReturn(userModel);
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
+        final ArgumentCaptor<UserModelInterface> userModelCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
+        mvc.perform(put("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, userModelforUpdate.getId())
+                        .with(firstName, userModelforUpdate.getFirstName())
+                        .with(lastName, userModelforUpdate.getLastName())
+                        .with(surname, userModelforUpdate.getSurname())
+                        .with(email, userModelforUpdate.getEmail())
+                        .with(isAdmin, userModelforUpdate.getIsAdmin())
+                        .with(state, userModelforUpdate.getState())
+                        .build()
+                ))
+                .andExpect(status().is(200))
+                .andExpect(content().string(""))
+                .andReturn();
+
+        verify(this.usersService, times(1)).save(userModelCaptor.capture());
+        this.usersSupport.assertEquals(userModelforUpdate, userModelCaptor.getValue());
+    }
+    /**
+     * testUpdateWithoutIdFailed
+     */
+
+    @Test
+    public void testUpdateWithoutIdFailed() throws Exception {
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
+        mvc.perform(put("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@fmail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateForbidden() throws Exception {
+        final UserModelInterface userNotAdminModel = new UserModel();
+        userNotAdminModel.map(this.usersSupport.getNotAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
+
+        mvc.perform(put("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 1)
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@fmail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateNotFound() throws Exception {
+        when(this.usersService.find(any(Integer.class))).thenReturn(null);
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
+        mvc.perform(put("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 7)
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@fmail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(""))
                 .andReturn();
