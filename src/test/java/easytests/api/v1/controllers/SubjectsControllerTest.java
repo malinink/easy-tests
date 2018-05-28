@@ -269,7 +269,7 @@ public class SubjectsControllerTest {
     }
 
     @Test
-    public void testUpdateForbidden() throws Exception {
+    public void testUpdateBadRequest() throws Exception {
         final SubjectModelInterface subjectModel = subjectsSupport.getModelFixtureMock(0);
 
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
@@ -287,7 +287,7 @@ public class SubjectsControllerTest {
                         .with(user, new JsonSupport().with(id, newSubjectModel.getUser().getId()))
                         .build()
                 ))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string(""))
                 .andReturn();
     }

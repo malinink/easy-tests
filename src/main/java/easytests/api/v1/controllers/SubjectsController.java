@@ -83,9 +83,9 @@ public class SubjectsController extends AbstractController {
     }
 
     @PutMapping("")
-    public void update(@RequestBody Subject subject) throws UnidentifiedModelException, NotFoundException, ForbiddenException {
-        this.checkUser(subject);
+    public void update(@RequestBody Subject subject) throws NotFoundException, BadRequestException {
         final SubjectModelInterface subjectModel = this.getSubjectModel(subject.getId());
+        this.checkUser(subject);
 
         this.subjectsMapper.map(subject, subjectModel);
         this.subjectsService.save(subjectModel);
@@ -105,14 +105,14 @@ public class SubjectsController extends AbstractController {
      * delete(subjectId)
      */
 
-    private void checkUser(Subject subject) throws ForbiddenException {
+    private void checkUser(Subject subject) throws BadRequestException {
         final UserModelInterface userModel = this.usersService.find(
                 subject.getUser().getId(),
                 this.usersOptionsBuilder.forAuth()
         );
 
         if (!this.acl.hasAccess(userModel)) {
-            throw new ForbiddenException();
+            throw new BadRequestException();
         }
     }
 
