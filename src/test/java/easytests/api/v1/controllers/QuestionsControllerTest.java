@@ -3,7 +3,9 @@ package easytests.api.v1.controllers;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.entities.QuestionEntity;
 import easytests.core.models.*;
+import easytests.core.models.empty.QuestionModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.options.*;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
@@ -16,6 +18,8 @@ import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.BDDMockito.*;
+
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -74,14 +78,22 @@ public class QuestionsControllerTest {
     private QuestionsOptionsBuilder questionsOptionsBuilder;
 
     @MockBean
+    private UsersServiceInterface usersService;
+
+    @MockBean
     private QuestionsOptions questionsOptions;
 
     @MockBean
     private AnswersOptions answersOptions;
 
+    @MockBean
+    private SubjectsService subjectsService;
+
     private QuestionsSupport questionSupport = new QuestionsSupport();
 
     private AnswersSupport answersSupport = new AnswersSupport();
+
+    private QuestionsSupport questionsSupport = new QuestionsSupport();
 
     @Test
     public void testListSuccess() throws Exception {
@@ -190,10 +202,90 @@ public class QuestionsControllerTest {
     /**
      * create
      */
+    @Test
+    public void testUpdateSuccess() throws Exception {
+        final QuestionModelInterface questionModelforUpdate = this.questionsSupport.getModelAdditionalMock(1);
+
+        final QuestionEntity questionEntity = this.questionsSupport.getEntityFixtureMock(0);
+        final QuestionModelInterface questionModel = new QuestionModel();
+        questionModel.map(questionEntity);
+
+        when(this.questionsService.find(any(), any())).thenReturn(questionModel);
+        when(this.topicsService.find(any(), any())).thenReturn(new TopicModel());
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
+
+        final ArgumentCaptor<QuestionModelInterface> questionModelCaptor = ArgumentCaptor.forClass(QuestionModelInterface.class);
+
+        mvc.perform(put("/v1/questions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, questionModelforUpdate.getId())
+                        .with(text, questionModelforUpdate.getText())
+                        .with(type, questionModelforUpdate.getQuestionType().getId())
+                        .with(topic, new JsonSupport().with(id, questionModelforUpdate.getTopic().getId()))
+                        .build()
+                ))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+        verify(this.questionsService, times(1)).save(questionModelCaptor.capture());
+        this.questionsSupport.assertEquals(questionModel, questionModelCaptor.getValue());
+    }
+
     /**
-     * update
+     * testUpdateWithoutIdFailed
      */
 
+    /*@Test
+    public void testUpdateWithoutIdFailed() throws Exception {
+        mvc.perform(put("/v1/questions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(name, "name")
+                        .with(subject, new JsonSupport().with(id, 1))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+
+    @Test
+    public void testUpdateNotFound() throws Exception {
+        when(this.questionsService.find(any(Integer.class))).thenReturn(null);
+
+        mvc.perform(put("/v1/questions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 7)
+                        .with(name, "name")
+                        .with(subject, new JsonSupport().with(id, 1))
+                        .build()
+                ))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateForbidden() throws Exception {
+        when(this.questionsService.find(any(), any())).thenReturn(new QuestionModelEmpty(1));
+        when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModel());
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+        mvc.perform(put("/v1/questions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 1)
+                        .with(name, "Name")
+                        .with(subject, new JsonSupport().with(id, 1))
+                        .build()
+                ))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+*/
     @Test
     public void testShowSuccess() throws Exception {
         final QuestionModelInterface questionModel = new QuestionModel();

@@ -1,5 +1,6 @@
 package easytests.api.v1.controllers;
 
+import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.exceptions.UnidentifiedModelException;
@@ -77,14 +78,11 @@ public class QuestionsController extends AbstractController {
      */
 
     @PutMapping("")
-    public void update(@RequestBody Question question) throws UnidentifiedModelException, NotFoundException, ForbiddenException {
+    public void update(@RequestBody Question question) throws UnidentifiedModelException, NotFoundException, BadRequestException {
 
-        if (question.getId() == null) {
-            throw new UnidentifiedModelException();
-        }
         final QuestionModelInterface questionModel = this.getQuestionModel(question.getId());
 
-        this.checkUser(question);
+        this.checkTopic(question);
 
         this.questionsMapper.map(question, questionModel);
 
@@ -103,16 +101,15 @@ public class QuestionsController extends AbstractController {
         return this.questionsMapper.map(questionModel, Question.class);
     }
 
-    private void checkUser(Question question) throws ForbiddenException {
-        final UserModelInterface userModel = this.usersService.find(
-                question.getId(),
-                this.questionsOptionsBuilder.forAuth().withAnswers()
+    private void checkTopic(Question question) throws BadRequestException {
+        final TopicModelInterface topicModel = this.topicsService.find(
+                question.getTopic().getId(),
+                this.topicsOptionsBuilder.forAuth()
         );
 
-        if (!this.acl.hasAccess(userModel)) {
-            throw new ForbiddenException();
+        if (!this.acl.hasAccess(topicModel)) {
+            throw new BadRequestException();
         }
-
     }
 
     private QuestionModelInterface getQuestionModel(Integer id, QuestionsOptionsInterface
