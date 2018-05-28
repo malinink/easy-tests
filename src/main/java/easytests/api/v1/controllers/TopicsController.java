@@ -1,6 +1,5 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.IdentifiedModelException;
 import easytests.api.v1.exceptions.NotFoundException;
@@ -111,6 +110,7 @@ public class TopicsController extends AbstractController {
         }
         return this.topicsMapper.map(topicModel, Topic.class);
     }
+
     /**
      * delete(topicId)
      */
