@@ -84,7 +84,7 @@ public class SubjectsController extends AbstractController {
 
     @PutMapping("")
     public void update(@RequestBody Subject subject) throws NotFoundException, BadRequestException {
-        if (subject.getId() == null) {
+        if (subject.getUser().getId() == null) {
             throw new BadRequestException();
         }
 
