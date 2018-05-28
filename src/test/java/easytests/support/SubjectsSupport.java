@@ -157,6 +157,7 @@ public class SubjectsSupport {
         Assert.assertEquals(expected.getName(), actual.getName());
         Assert.assertEquals(expected.getDescription(), actual.getDescription());
         // TODO is it a good idea to assertEquals on models list and models objects here ? @malinink
+        // TODO set user on object creation? @malinink
         Assert.assertEquals(expected.getUser().getId(), actual.getUser().getId());
         Assert.assertEquals(expected.getTopics(), actual.getTopics());
         Assert.assertEquals(expected.getIssueStandard(), actual.getIssueStandard());
