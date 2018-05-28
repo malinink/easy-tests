@@ -10,6 +10,7 @@ import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
+import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import java.util.List;
@@ -26,6 +27,9 @@ import org.springframework.web.bind.annotation.*;
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
 @RequestMapping("/v1/topics")
 public class TopicsController extends AbstractController {
+
+    @Autowired
+    protected SubjectsOptionsBuilder subjectsOptionsBuilder;
 
     @Autowired
     protected SubjectsServiceInterface subjectsService;
@@ -76,6 +80,8 @@ public class TopicsController extends AbstractController {
 
         final TopicModelInterface topicModel = this.getTopicModel(topic.getId());
 
+        this.checkSubject(topic);
+
         this.topicsMapper.map(topic, topicModel);
 
         this.topicsService.save(topicModel);
@@ -104,6 +110,17 @@ public class TopicsController extends AbstractController {
             throw new NotFoundException();
         }
         return topicModel;
+    }
+
+    private void checkSubject(Topic topic) throws ForbiddenException {
+        final SubjectModelInterface subjectModel = this.subjectsService.find(
+                topic.getSubject().getId(),
+                this.subjectsOptionsBuilder.forAuth()
+        );
+
+        if (!this.acl.hasAccess(subjectModel)) {
+            throw new ForbiddenException();
+        }
     }
 
     private TopicModelInterface getTopicModel(Integer id) throws NotFoundException {
