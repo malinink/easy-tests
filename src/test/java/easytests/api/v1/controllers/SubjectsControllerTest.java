@@ -198,6 +198,7 @@ public class SubjectsControllerTest {
                 .andReturn();
     }
 
+
     @Test
     public void testCreateBadRequest() throws Exception {
         when(this.usersService.find(2)).thenReturn(new UserModelEmpty(2));
@@ -229,6 +230,7 @@ public class SubjectsControllerTest {
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
         final ArgumentCaptor<SubjectModelInterface> subjectModelCaptor = ArgumentCaptor.forClass(SubjectModelInterface.class);
 
+
         mvc.perform(put("/v1/subjects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
@@ -244,6 +246,27 @@ public class SubjectsControllerTest {
 
         verify(this.subjectsService, times(1)).save(subjectModelCaptor.capture());
         this.subjectsSupport.assertEquals(newSubjectModel, subjectModelCaptor.getValue());
+    }
+
+    @Test
+    public void testUpdateIdFailed() throws Exception {
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+        when(this.subjectsService.find(any(), any())).thenReturn(null);
+
+        final SubjectModelInterface newSubjectModel = new SubjectModel();
+        newSubjectModel.map(this.subjectsSupport.getEntityAdditionalMock(1));
+
+        mvc.perform(put("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(name, newSubjectModel.getName())
+                        .with(description, newSubjectModel.getDescription())
+                        .with(user, new JsonSupport().with(id, newSubjectModel.getUser().getId()))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
     }
 
     @Test
