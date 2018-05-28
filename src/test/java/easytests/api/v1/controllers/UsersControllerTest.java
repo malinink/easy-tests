@@ -13,8 +13,10 @@ import easytests.support.UsersSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -49,13 +51,14 @@ public class UsersControllerTest {
     private UsersService usersService;
 
     @MockBean
+    private AccessControlLayerServiceInterface acl;
+
+    @MockBean
     private UsersOptionsBuilder usersOptionsBuilder;
 
     private UsersSupport usersSupport = new UsersSupport();
 
-
-    @MockBean
-    private AccessControlLayerServiceInterface acl;
+    private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
     @MockBean
     private SessionServiceInterface sessionService;
@@ -64,6 +67,7 @@ public class UsersControllerTest {
     public void testListSuccess() throws Exception {
         final UserModelInterface userAdminModel = new UserModel();
         userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
         when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
         final List<UserModelInterface> usersModels = new ArrayList<>();
@@ -104,6 +108,7 @@ public class UsersControllerTest {
     public void testListForbidden() throws Exception {
         final UserModelInterface userNotAdminModel = new UserModel();
         userNotAdminModel.map(this.usersSupport.getNotAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
         when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
 
         mvc.perform(get("/v1/users")
@@ -113,15 +118,138 @@ public class UsersControllerTest {
                 .andReturn();
     }
 
-    /**
-     * testCreateSuccess
-     */
-    /**
-     * testCreateWithIdFailed
-     */
-    /**
-     * testCreateWithSubjectsFailed
-     */
+    @Test
+    public void testCreateSuccess() throws Exception {
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
+        final UserModelInterface userAdditionalModel = this.usersSupport.getModelAdditionalMock(0);
+        doAnswer(invocation -> {
+            final UserModel userModel = (UserModel) invocation.getArguments()[0];
+            userModel.setId(5);
+            return null;
+        }).when(this.usersService).save(any(UserModelInterface.class));
+        final ArgumentCaptor<UserModelInterface> userCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
+        mvc.perform(post("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(firstName, userAdditionalModel.getFirstName())
+                        .with(lastName, userAdditionalModel.getLastName())
+                        .with(surname, userAdditionalModel.getSurname())
+                        .with(email, userAdditionalModel.getEmail())
+                        .with(isAdmin, userAdditionalModel.getIsAdmin())
+                        .with(state, userAdditionalModel.getState())
+                        .build()
+                ))
+                .andExpect(status().is(201))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(
+                        new JsonSupport()
+                                .with(id, 5)
+                                .build()
+                ))
+                .andReturn();
+        verify(this.usersService, times(1)).save(userCaptor.capture());
+        when(userAdditionalModel.getPassword()).thenReturn(userCaptor.getValue().getPassword()); // When, because userAdditionalModel is a MOCK
+        this.usersSupport.assertModelsEqualsWithoutIdandSubjects(userCaptor.getValue(), userAdditionalModel);
+    }
+
+    @Test
+    public void testCreateWithIdFailed() throws Exception {
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
+        mvc.perform(post("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 2)
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@mail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testCreateNotAdminForbidden() throws Exception {
+        final UserModelInterface userNotAdminModel = new UserModel();
+        userNotAdminModel.map(this.usersSupport.getNotAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
+
+        mvc.perform(post("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@mail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testCreateWithEmailFailed() throws Exception {
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(0);
+        when(this.usersService.findByEmail(userModel.getEmail())).thenReturn(userModel); // Because service cant find user by email.
+        mvc.perform(post("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, userModel.getEmail())
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testCreateNotAUserForbidden() throws Exception {
+        final UserModelInterface userNotAdminModel = new UserModel();
+        userNotAdminModel.map(this.usersSupport.getNotAdminUser());
+        when(this.sessionService.isUser()).thenReturn(false);
+        when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
+
+        mvc.perform(post("/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(firstName, "firstName")
+                        .with(lastName, "lastName")
+                        .with(surname, "surname")
+                        .with(email, "mail@mail.com")
+                        .with(isAdmin, true)
+                        .with(state, 0)
+                        .build()
+                ))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
     /**
      * testUpdateSuccess
      */
@@ -131,10 +259,12 @@ public class UsersControllerTest {
     /**
      * testUpdateWithSubjectsFailed
      */
+
     @Test
     public void testShowSuccess() throws Exception {
         final UserModelInterface userAdminModel = new UserModel();
         userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
         when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
         final UserModelInterface userModel = new UserModel();
@@ -179,6 +309,7 @@ public class UsersControllerTest {
     public void testShowNotFound() throws Exception {
         final UserModelInterface userAdminModel = new UserModel();
         userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
         when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
         when(this.usersService.find(any(Integer.class))).thenReturn(null);
@@ -199,6 +330,7 @@ public class UsersControllerTest {
     /**
      * testShowMeSuccess
      */
+
     @Test
     public void testShowMeSuccess() throws Exception {
         final UserModelInterface userModel = new UserModel();
@@ -225,6 +357,7 @@ public class UsersControllerTest {
     /**
      * testShowMeFailed
      */
+
     @Test
     public void testShowMeForbidden() throws Exception {
         when(this.sessionService.isUser()).thenReturn(false);
