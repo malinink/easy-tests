@@ -7,6 +7,8 @@ import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.models.empty.SubjectModelEmpty;
+import easytests.core.options.TopicsOptions;
+import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
@@ -14,6 +16,8 @@ import easytests.support.JsonSupport;
 import easytests.support.TopicsSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.mockito.BDDMockito.*;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,6 +31,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -176,6 +181,55 @@ public class TopicsControllerTest {
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);
 
         mvc.perform(get("/v1/topics/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testDeleteSuccess() throws Exception {
+        final TopicsOptionsInterface topicsOptionAuth = new TopicsOptions();
+        final TopicsOptionsInterface topicsOptionDelete = new TopicsOptions();
+
+        when(this.topicsOptionsBuilder.forAuth()).thenReturn(topicsOptionAuth);
+        when(this.topicsOptionsBuilder.forDelete()).thenReturn(topicsOptionDelete);
+
+        final TopicModelInterface topicModelForAuth = this.topicsSupport.getModelFixtureMock(0);
+        final TopicModelInterface topicModelForDelete = this.topicsSupport.getModelFixtureMock(0);
+
+        when(this.topicsService.find(anyInt(), eq(topicsOptionAuth))).thenReturn(topicModelForAuth);
+        when(this.topicsService.find(anyInt(), eq(topicsOptionDelete))).thenReturn(topicModelForDelete);
+
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
+
+        this.mvc.perform(delete("/v1/topics/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+        verify(this.topicsService, times(1)).delete(topicModelForDelete, topicsOptionDelete);
+    }
+
+    @Test
+    public void testDeleteNotFound() throws Exception {
+        when(this.topicsService.find(any(Integer.class))).thenReturn(null);
+
+        mvc.perform(delete("/v1/topics/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testDeleteForbidden() throws Exception {
+        final TopicModelInterface topicModel = new TopicModel();
+        topicModel.map(this.topicsSupport.getEntityFixtureMock(0));
+        when(this.topicsService.find(any(), any())).thenReturn(topicModel);
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);
+
+        mvc.perform(delete("/v1/topics/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
