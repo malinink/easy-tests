@@ -67,12 +67,12 @@ public class TopicsControllerTest {
     @MockBean
     private AccessControlLayerServiceInterface acl;
 
+    @MockBean
+    protected SubjectsOptionsBuilder subjectsOptionsBuilder;
+
     @Autowired
     @Qualifier("TopicsMapperV1")
     private TopicsMapper topicsMapper;
-
-    @MockBean
-    TopicsOptionsBuilderInterface topicsOptionsBuilder;
 
     private TopicsSupport topicsSupport = new TopicsSupport();
 
@@ -149,13 +149,10 @@ public class TopicsControllerTest {
     @Test
     public void testCreateSuccess() throws Exception {
         final TopicEntity topicAdditionalEntity = this.topicsSupport.getEntityAdditionalMock(0);
-        topicAdditionalEntity.setId(5);
-        final TopicModelInterface newTopicModel = new TopicModel();
-        newTopicModel.map(topicAdditionalEntity);
+        when(topicAdditionalEntity.getId()).thenReturn(5);
 
-        when(this.subjectsService.find(any(), any())).thenReturn(newTopicModel.getSubject());
+        when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModel());
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
-
 
         ArgumentCaptor<TopicModelInterface> argumentCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
         doAnswer(invocation -> {
@@ -167,8 +164,8 @@ public class TopicsControllerTest {
         mvc.perform(post("/v1/topics")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(name, newTopicModel.getName())
-                        .with(subject, new JsonSupport().with(id, newTopicModel.getSubject().getId()))
+                        .with(name, topicAdditionalEntity.getName())
+                        .with(subject, new JsonSupport().with(id, topicAdditionalEntity.getSubjectId()))
                         .build()
                 ))
                 .andExpect(status().is(201))
@@ -180,7 +177,7 @@ public class TopicsControllerTest {
                 ))
                 .andReturn();
         verify(this.topicsService, times(1)).save(argumentCaptor.capture());
-        this.topicsSupport.assertEquals(argumentCaptor.getValue(), newTopicModel);
+        this.topicsSupport.assertEquals(argumentCaptor.getValue(), topicAdditionalEntity);
     }
 
     @Test
@@ -200,8 +197,8 @@ public class TopicsControllerTest {
 
 
     @Test
-    public void testCreateBadRequest() throws Exception {
-        when(this.subjectsService.find(2)).thenReturn(new SubjectModelEmpty(2));
+    public void testCreateForbidden() throws Exception {
+        when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModel());
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
 
 
@@ -212,7 +209,7 @@ public class TopicsControllerTest {
                                 .with(subject, new JsonSupport().with(id, 2))
                                 .build()
                 ))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
                 .andReturn();
     }
