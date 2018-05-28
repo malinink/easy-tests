@@ -549,7 +549,7 @@ paths:
           schema:
             $ref: '#/definitions/V1Question'
       responses:
-        '200': 
+        '200':
           description: Question was successfully updated
         '400':
           description: Bad request
@@ -597,7 +597,7 @@ paths:
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/V1Error'    
+            $ref: '#/definitions/V1Error'
     delete:
       summary: Delete Question with specified ID
       operationId: deleteQuestionById
