@@ -20,17 +20,16 @@ public class SubjectsMapper extends ModelMapper {
         super();
         this.createTypeMap(SubjectModel.class, Subject.class)
                 .addMappings(mapper -> mapper.<Integer>map(subjectModel -> subjectModel.getUser().getId(),
-                        (subject, id) -> subject.getUser().setId(id)));
+                    (subject, id) -> subject.getUser().setId(id)));
 
         final Converter<Identity, UserModel> convertIdentityToUserModel =
-                new Converter<Identity, UserModel>() {
-                    public UserModel convert(MappingContext<Identity, UserModel> context) {
-                        final UserModel userModel = new UserModel();
-                        userModel.setId(context.getSource().getId());
-
-                        return userModel;
-                    }
-                };
+            new Converter<Identity, UserModel>() {
+                public UserModel convert(MappingContext<Identity, UserModel> context) {
+                    final UserModel userModel = new UserModel();
+                    userModel.setId(context.getSource().getId());
+                    return userModel;
+                }
+            };
         final PropertyMap<Subject, SubjectModel> map = new PropertyMap<Subject, SubjectModel>() {
             protected void configure() {
                 map(source.getId()).setId(null);
