@@ -10,11 +10,11 @@ import easytests.core.options.UsersOptionsInterface;
 import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.UsersService;
 import easytests.support.JsonSupport;
+import easytests.support.SubjectsSupport;
 import easytests.support.UsersSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -316,6 +316,7 @@ public class UsersControllerTest {
     public void testDeleteSuccess() throws Exception {
         final UserModelInterface userAdminModel = new UserModel();
         userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
         when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
         final UserModelInterface userModel = new UserModel();
@@ -350,6 +351,7 @@ public class UsersControllerTest {
     public void testDeleteNotFound() throws Exception {
         final UserModelInterface userAdminModel = new UserModel();
         userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.isUser()).thenReturn(true);
         when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
         final UsersOptionsInterface usersOptionsForDelete = new UsersOptions();
