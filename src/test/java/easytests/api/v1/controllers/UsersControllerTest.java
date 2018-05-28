@@ -199,9 +199,9 @@ public class UsersControllerTest {
 
         final UserModelInterface userModel = new UserModel();
         userModel.map(this.usersSupport.getEntityFixtureMock(0));
-        final UsersOptionsInterface usersOptionsForDelete=new UsersOptions();
+        final UsersOptionsInterface usersOptionsForDelete = new UsersOptions();
         when(this.usersOptionsBuilder.forDelete()).thenReturn(usersOptionsForDelete);
-        when(this.usersService.find(any(Integer.class),eq(usersOptionsForDelete))).thenReturn(userModel);
+        when(this.usersService.find(any(Integer.class), eq(usersOptionsForDelete))).thenReturn(userModel);
 
         mvc.perform(delete("/v1/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -209,17 +209,11 @@ public class UsersControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
-        verify(this.usersService, times(1)).delete(userModel,usersOptionsForDelete);
+        verify(this.usersService, times(1)).delete(userModel, usersOptionsForDelete);
     }
 
     @Test
     public void testDeleteForbidden() throws Exception {
-        final UserModelInterface userModel = new UserModel();
-        userModel.map(this.usersSupport.getEntityFixtureMock(0));
-        final UsersOptionsInterface usersOptionsForDelete=new UsersOptions();
-        when(this.usersOptionsBuilder.forDelete()).thenReturn(usersOptionsForDelete);
-        when(this.usersService.find(any(Integer.class),eq(usersOptionsForDelete))).thenReturn(userModel);
-
         final UserModelInterface userNotAdminModel = new UserModel();
         userNotAdminModel.map(this.usersSupport.getNotAdminUser());
         when(this.sessionService.getUserModel()).thenReturn(userNotAdminModel);
@@ -237,9 +231,9 @@ public class UsersControllerTest {
         userAdminModel.map(this.usersSupport.getAdminUser());
         when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
-        final UsersOptionsInterface usersOptionsForDelete=new UsersOptions();
+        final UsersOptionsInterface usersOptionsForDelete = new UsersOptions();
         when(this.usersOptionsBuilder.forDelete()).thenReturn(usersOptionsForDelete);
-        when(this.usersService.find(any(Integer.class),eq(usersOptionsForDelete))).thenReturn(null);
+        when(this.usersService.find(any(Integer.class), eq(usersOptionsForDelete))).thenReturn(null);
 
         mvc.perform(delete("/v1/users/1")
                 .contentType(MediaType.APPLICATION_JSON))
