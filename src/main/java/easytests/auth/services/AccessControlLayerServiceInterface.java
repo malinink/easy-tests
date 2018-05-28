@@ -19,5 +19,4 @@ public interface AccessControlLayerServiceInterface {
     Boolean hasAccess(IssueModelInterface source);
 
     Boolean hasAccess(QuizModelInterface source);
-
 }
