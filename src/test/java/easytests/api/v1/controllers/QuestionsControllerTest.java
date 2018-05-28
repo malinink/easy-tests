@@ -199,10 +199,13 @@ public class QuestionsControllerTest {
 
     @Test
     public void testCreateSuccess() throws Exception {
-        final AnswerModelInterface answer1 = new AnswerModel();
-        answer1.map(this.answersSupport.getEntityAdditionalMock(0));
-        answer1.setQuestion(null);
-        final List<AnswerModelInterface> answersList = Arrays.asList(answer1);
+        final List<AnswerModelInterface> answersList = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            final AnswerModelInterface answer = new AnswerModel();
+            answer.map(this.answersSupport.getEntityAdditionalMock(i));
+            answer.setQuestion(null);
+            answersList.add(answer);
+        }
         final QuestionEntity questionEntity = this.questionSupport.getEntityAdditionalMock(0);
         final QuestionModelInterface questionModel = new QuestionModel();
         questionModel.map(questionEntity);
@@ -225,9 +228,19 @@ public class QuestionsControllerTest {
                         .with(topic, new JsonSupport().with(id, questionModel.getTopic().getId()))
                         .with(answers, new JsonSupport()
                                 .with(new JsonSupport()
-                                        .with(text, answer1.getTxt())
-                                        .with(isRight, answer1.getRight())
-                                        .with(number, answer1.getSerialNumber())
+                                        .with(text, answersList.get(0).getTxt())
+                                        .with(isRight, answersList.get(0).getRight())
+                                        .with(number, answersList.get(0).getSerialNumber())
+                                )
+                                .with(new JsonSupport()
+                                        .with(text, answersList.get(1).getTxt())
+                                        .with(isRight, answersList.get(1).getRight())
+                                        .with(number, answersList.get(1).getSerialNumber())
+                                )
+                                .with(new JsonSupport()
+                                        .with(text, answersList.get(2).getTxt())
+                                        .with(isRight, answersList.get(2).getRight())
+                                        .with(number, answersList.get(2).getSerialNumber())
                                 ))
                         .build()
                 ))
