@@ -8,8 +8,8 @@ import easytests.api.v1.models.Topic;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.TopicsOptionsInterface;
-import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
+import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import java.util.List;
@@ -71,6 +71,7 @@ public class TopicsController extends AbstractController {
     /**
      * update
      */
+
     @PutMapping("")
     public void update(@RequestBody Topic topic) throws Exception {
         if (topic.getId() == null) {
