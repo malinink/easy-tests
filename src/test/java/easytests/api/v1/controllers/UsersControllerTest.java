@@ -134,7 +134,12 @@ public class UsersControllerTest {
         final UserModelInterface userModel = new UserModel();
         userModel.map(userEntity);
         userModel.setPassword(userModelforUpdate.getPassword());
+
         when(this.usersService.find(any(), any())).thenReturn(userModel);
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
         final ArgumentCaptor<UserModelInterface> userModelCaptor = ArgumentCaptor.forClass(UserModelInterface.class);
         mvc.perform(put("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -161,6 +166,10 @@ public class UsersControllerTest {
 
     @Test
     public void testUpdateWithoutIdFailed() throws Exception {
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
+
         mvc.perform(put("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
@@ -203,6 +212,9 @@ public class UsersControllerTest {
     @Test
     public void testUpdateNotFound() throws Exception {
         when(this.usersService.find(any(Integer.class))).thenReturn(null);
+        final UserModelInterface userAdminModel = new UserModel();
+        userAdminModel.map(this.usersSupport.getAdminUser());
+        when(this.sessionService.getUserModel()).thenReturn(userAdminModel);
 
         mvc.perform(put("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
