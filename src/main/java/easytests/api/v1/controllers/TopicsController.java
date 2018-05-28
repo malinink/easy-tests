@@ -10,7 +10,6 @@ import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
-import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
@@ -102,6 +101,10 @@ public class TopicsController extends AbstractController {
         return this.topicsMapper.map(topicModel, Topic.class);
     }
 
+    /**
+     * delete(topicId)
+     */
+
     @DeleteMapping("/{topicId}")
     public void delete(@PathVariable Integer topicId) throws NotFoundException, ForbiddenException {
         final TopicModelInterface topicModelforAuth = this.getTopicModel(topicId);
@@ -113,6 +116,17 @@ public class TopicsController extends AbstractController {
         final TopicModelInterface topicModelForDelete = this.topicsService.find(topicId, topicsOptionDelete);
 
         this.topicsService.delete(topicModelForDelete, topicsOptionDelete);
+    }
+
+    private void checkSubject(Topic topic) throws ForbiddenException, BadRequestException {
+        final SubjectModelInterface subjectModel = this.subjectsService.find(
+                topic.getSubject().getId(),
+                this.subjectsOptionsBuilder.forAuth()
+        );
+
+        if (!this.acl.hasAccess(subjectModel)) {
+            throw new BadRequestException();
+        }
     }
 
     private TopicModelInterface getTopicModel(Integer id, TopicsOptionsInterface topicOptions)
@@ -127,30 +141,5 @@ public class TopicsController extends AbstractController {
     private TopicModelInterface getTopicModel(Integer id) throws NotFoundException {
         return this.getTopicModel(id, this.topicsOptionsBuilder.forAuth());
     }
-    /**
-     * delete(topicId)
-     */
 
-    private TopicModelInterface getTopicModel(Integer id, TopicsOptionsInterface userOptions) throws NotFoundException {
-        final TopicModelInterface topicModel = this.topicsService.find(id, userOptions);
-        if (topicModel == null) {
-            throw new NotFoundException();
-        }
-        return topicModel;
-    }
-
-    private TopicModelInterface getTopicModel(Integer id) throws NotFoundException {
-        return this.getTopicModel(id, this.topicsOptionsBuilder.forAuth());
-    }
-
-    private void checkSubject(Topic topic) throws ForbiddenException, BadRequestException {
-        final SubjectModelInterface subjectModel = this.subjectsService.find(
-                topic.getSubject().getId(),
-                this.subjectsOptionsBuilder.forAuth()
-        );
-
-        if (!this.acl.hasAccess(subjectModel)) {
-            throw new BadRequestException();
-        }
-    }
 }
