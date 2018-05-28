@@ -1,6 +1,5 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.exceptions.UnidentifiedModelException;
@@ -38,7 +37,7 @@ public class TopicsController extends AbstractController {
     protected TopicsServiceInterface topicsService;
 
     @Autowired
-    private TopicsOptionsBuilderInterface topicsOptionsBuilder;
+    protected TopicsOptionsBuilderInterface topicsOptionsBuilder;
 
     @Autowired
     @Qualifier("TopicsMapperV1")
@@ -73,7 +72,7 @@ public class TopicsController extends AbstractController {
      * update
      */
     @PutMapping("")
-    public void update(@RequestBody Topic topic) throws BadRequestException, NotFoundException {
+    public void update(@RequestBody Topic topic) throws Exception {
         if (topic.getId() == null) {
             throw new UnidentifiedModelException();
         }
@@ -112,6 +111,10 @@ public class TopicsController extends AbstractController {
         return topicModel;
     }
 
+    private TopicModelInterface getTopicModel(Integer id) throws NotFoundException {
+        return this.getTopicModel(id, this.topicsOptionsBuilder.forAuth());
+    }
+
     private void checkSubject(Topic topic) throws ForbiddenException {
         final SubjectModelInterface subjectModel = this.subjectsService.find(
                 topic.getSubject().getId(),
@@ -121,9 +124,5 @@ public class TopicsController extends AbstractController {
         if (!this.acl.hasAccess(subjectModel)) {
             throw new ForbiddenException();
         }
-    }
-
-    private TopicModelInterface getTopicModel(Integer id) throws NotFoundException {
-        return this.getTopicModel(id, this.topicsOptionsBuilder.forAuth());
     }
 }

@@ -4,10 +4,13 @@ import easytests.api.v1.mappers.TopicsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.entities.TopicEntity;
+import easytests.core.models.SubjectModel;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.models.empty.SubjectModelEmpty;
+import easytests.core.models.empty.TopicModelEmpty;
+import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
@@ -60,12 +63,15 @@ public class TopicsControllerTest {
     @MockBean
     private AccessControlLayerServiceInterface acl;
 
+    @MockBean
+    private TopicsOptionsBuilderInterface topicsOptionsBuilder;
+
+    @MockBean
+    protected SubjectsOptionsBuilder subjectsOptionsBuilder;
+
     @Autowired
     @Qualifier("TopicsMapperV1")
     private TopicsMapper topicsMapper;
-
-    @MockBean
-    TopicsOptionsBuilderInterface topicsOptionsBuilder;
 
     private TopicsSupport topicsSupport = new TopicsSupport();
 
@@ -147,6 +153,8 @@ public class TopicsControllerTest {
         topicModel.map(topicEntity);
         when(this.topicsService.find(any(), any())).thenReturn(topicModel);
         final ArgumentCaptor<TopicModelInterface> topicModelCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
+        when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModel());
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
         mvc.perform(put("/v1/topics")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
@@ -194,6 +202,24 @@ public class TopicsControllerTest {
                         .build()
                 ))
                 .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateForbidden() throws Exception {
+        when(this.topicsService.find(any(), any())).thenReturn(new TopicModelEmpty(1));
+        when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModel());
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+        mvc.perform(put("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 1)
+                        .with(name, "Name")
+                        .with(subject, new JsonSupport().with(id, 1))
+                        .build()
+                ))
+                .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
                 .andReturn();
     }
