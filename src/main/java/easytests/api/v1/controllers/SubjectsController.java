@@ -69,13 +69,10 @@ public class SubjectsController extends AbstractController {
 
     @PutMapping("")
     public void update(@RequestBody Subject subject) throws UnidentifiedModelException, NotFoundException, ForbiddenException {
-
+        this.checkUser(subject);
         final SubjectModelInterface subjectModel = this.getSubjectModel(subject.getId());
 
-        this.checkUser(subject);
-
         this.subjectsMapper.map(subject, subjectModel);
-
         this.subjectsService.save(subjectModel);
     }
 
