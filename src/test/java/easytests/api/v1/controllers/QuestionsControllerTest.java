@@ -288,7 +288,7 @@ public class QuestionsControllerTest {
     }
 
     @Test
-    public void testCreateForbidden() throws Exception {
+    public void testCreateBadRequest() throws Exception {
         when(this.topicsService.find(any(), any())).thenReturn(new TopicModelEmpty());
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);
         mvc.perform(post("/v1/questions")
@@ -304,7 +304,7 @@ public class QuestionsControllerTest {
                                         .with(number, 1)))
                         .build()
                 ))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string(""))
                 .andReturn();
     }
@@ -421,8 +421,8 @@ public class QuestionsControllerTest {
         final QuestionsOptionsInterface questionOption = new QuestionsOptions();
 
         when(this.questionsOptionsBuilder.forAuth()).thenReturn(questionOption);
-        when(this.questionsService.find(any(Integer.class), eq(questionOption))).
-                thenReturn(questionModel);
+        when(this.questionsService.find(any(Integer.class), eq(questionOption)))
+                .thenReturn(questionModel);
         when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(false);
 
         mvc.perform(delete("/v1/questions/1")

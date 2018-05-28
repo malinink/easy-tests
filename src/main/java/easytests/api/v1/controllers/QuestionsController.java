@@ -1,5 +1,6 @@
 package easytests.api.v1.controllers;
 
+import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.IdentifiedModelException;
 import easytests.api.v1.exceptions.NotFoundException;
@@ -76,21 +77,26 @@ public class QuestionsController extends AbstractController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Identity create(@RequestBody Question question) throws Exception {
-        final TopicModelInterface topicModel = this.topicsService
-                .find(question.getTopic().getId(), this.topicsOptionsBuilder.forAuth());
-        if (!this.acl.hasAccess(topicModel)) {
-            throw new ForbiddenException();
-        }
-
         if (question.getId() != null) {
             throw new IdentifiedModelException();
         }
+
+        this.checkTopic(question.getTopic().getId());
 
         final QuestionModelInterface questionModel = this.questionsMapper.map(question, QuestionModel.class);
 
         this.questionsService.save(questionModel, new QuestionsOptions().withAnswers(new AnswersOptions()));
 
         return this.questionsMapper.map(questionModel, Identity.class);
+    }
+
+    private void checkTopic(Integer topicId) throws BadRequestException {
+        final TopicModelInterface topicModel = this.topicsService
+                .find(topicId, this.topicsOptionsBuilder.forAuth());
+
+        if (!this.acl.hasAccess(topicModel)) {
+            throw new BadRequestException();
+        }
     }
 
     /**
