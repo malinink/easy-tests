@@ -1,23 +1,30 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.mappers.SubjectsMapper;
+import easytests.api.v1.models.Subject;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.entities.SubjectEntity;
 import easytests.core.models.*;
 import easytests.core.models.empty.UserModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
+import easytests.core.options.builder.UsersOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.options.SubjectsOptions;
 import easytests.core.options.SubjectsOptionsInterface;
 import easytests.core.services.UsersServiceInterface;
 import easytests.support.SubjectsSupport;
+import easytests.support.UsersSupport;
 import easytests.support.JsonSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.*;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,6 +33,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -62,7 +70,12 @@ public class SubjectsControllerTest {
     @MockBean
     SubjectsOptionsBuilder subjectsOptionsBuilder;
 
+    @MockBean
+    UsersOptionsBuilder usersOptionsBuilder;
+    
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
+
+    private UsersSupport usersSupport = new UsersSupport();
 
     @Test
     public void testListSuccess() throws Exception {
@@ -91,12 +104,12 @@ public class SubjectsControllerTest {
                         .with(new JsonSupport()
                                 .with(id, subjectsModels.get(0).getId())
                                 .with(name, subjectsModels.get(0).getName())
-                                .with(description,subjectsModels.get(0).getDescription())
+                                .with(description, subjectsModels.get(0).getDescription())
                                 .with(user, new JsonSupport().with(id, subjectsModels.get(0).getUser().getId())))
                         .with(new JsonSupport()
                                 .with(id, subjectsModels.get(1).getId())
                                 .with(name, subjectsModels.get(1).getName())
-                                .with(description,subjectsModels.get(1).getDescription())
+                                .with(description, subjectsModels.get(1).getDescription())
                                 .with(user, new JsonSupport().with(id, subjectsModels.get(1).getUser().getId())))
                         .build()
                 ))
@@ -132,9 +145,75 @@ public class SubjectsControllerTest {
                 .andReturn();
 
     }
-    /**
-     * create
-     */
+
+    @Test
+    public void testCreateSuccess() throws Exception {
+        doAnswer(invocation -> {
+            final SubjectModel subjectModel = (SubjectModel) invocation.getArguments()[0];
+            subjectModel.setId(5);
+            return null;
+        }).when(this.subjectsService).save(any(SubjectModelInterface.class));
+
+        final UserModelInterface userModel = this.usersSupport.getModelFixtureMock(1);
+        when(this.usersService.find(any(Integer.class),any())).thenReturn(userModel);
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+        final ArgumentCaptor<SubjectModelInterface> subjectCaptor = ArgumentCaptor.forClass(SubjectModelInterface.class);
+
+        mvc.perform(post("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(name, "Subject")
+                        .with(description, "Subject description")
+                        .with(user, new JsonSupport().with(id,3))
+                        .build()
+                ))
+                .andExpect(status().is(201))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(
+                        new JsonSupport()
+                                .with(id, 5)
+                                .build()
+                ))
+                .andReturn();
+        verify(this.subjectsService, times(1)).save(subjectCaptor.capture());
+        Assert.assertEquals(subjectCaptor.getValue().getName(), "Subject");
+        Assert.assertEquals(subjectCaptor.getValue().getDescription(), "Subject description");
+        Assert.assertEquals(subjectCaptor.getValue().getUser().getId(), (Integer) 3);
+    }
+
+    @Test
+    public void testCreateWithIdFailed() throws Exception {
+        mvc.perform(post("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 3)
+                        .with(name,"Subject" )
+                        .with(description, "Subject description")
+                        .with(user, new JsonSupport().with(id,3))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testCreateBadRequest() throws Exception {
+        when(this.usersService.find(2)).thenReturn(new UserModelEmpty(2));
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
+
+        mvc.perform(post("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(name, "Subject")
+                        .with(description, "Subject description")
+                        .with(user, new JsonSupport().with(id, 2))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
     /**
      * update
      */
@@ -189,5 +268,47 @@ public class SubjectsControllerTest {
     /**
      * delete(subjectId)
      */
-    
+    @Test
+    public void testDeleteSuccess() throws Exception {
+        final SubjectEntity subjectEntity = this.subjectsSupport.getEntityFixtureMock(0);
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subjectModel.map(subjectEntity);
+
+        final SubjectsOptionsInterface subjectsOptionsDelete = new SubjectsOptions();
+        when(this.subjectsOptionsBuilder.forDelete()).thenReturn(subjectsOptionsDelete);
+
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+
+        this.mvc.perform(delete("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+        verify(this.subjectsService, times(1)).delete(subjectModel, subjectsOptionsDelete  );
+    }
+    @Test
+    public void testDeleteForbidden() throws Exception {
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+        this.mvc.perform(delete("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+    @Test
+    public void testDeleteNotFound() throws Exception {
+        when(this.subjectsService.find(any(Integer.class))).thenReturn(null);
+
+        this.mvc.perform(delete("/v1/subjects/5")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
 }

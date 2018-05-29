@@ -12,12 +12,12 @@ import easytests.core.options.builder.QuestionsOptionsBuilderInterface;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
-import easytests.core.services.UsersServiceInterface;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+
 
 /**
  * @author RisaMagpie
@@ -34,10 +34,7 @@ public class QuestionsController extends AbstractController {
 
     @Autowired
     protected QuestionsOptionsBuilderInterface questionsOptionsBuilder;
-
-    @Autowired
-    protected UsersServiceInterface usersService;
-
+  
     @Autowired
     protected TopicsOptionsBuilderInterface topicsOptionsBuilder;
 
@@ -98,6 +95,19 @@ public class QuestionsController extends AbstractController {
         return this.questionsMapper.map(questionModel, Question.class);
     }
 
+    @DeleteMapping("/{questionId}")
+    public void delete(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
+        final QuestionModelInterface questionModel = this.getQuestionModel(questionId);
+        final QuestionsOptionsInterface questionOption = this.questionsOptionsBuilder.forDelete();
+
+        if (!this.acl.hasAccess(questionModel)) {
+            throw new ForbiddenException();
+        }
+
+        final QuestionModelInterface questionModelForDelete = this.questionsService.find(questionId, questionOption);
+        this.questionsService.delete(questionModelForDelete, questionOption);
+    }
+
     private void checkTopic(Question question) throws BadRequestException {
         final TopicModelInterface topicModel = this.topicsService.find(
                 question.getTopic().getId(),
@@ -121,7 +131,4 @@ public class QuestionsController extends AbstractController {
     private QuestionModelInterface getQuestionModel(Integer id) throws NotFoundException {
         return this.getQuestionModel(id, this.questionsOptionsBuilder.forAuth());
     }
-    /**
-     * delete(questionId)
-     */
 }

@@ -13,12 +13,6 @@ public class IssueModelTest extends AbstractModelTest {
 
     private IssueSupport issueSupport = new IssueSupport();
 
-    @Override
-    protected ConfigurationBuilder getConfigurationBuilder() {
-        return super.getConfigurationBuilder()
-                .ignoreProperty("subject");
-    }
-
     @Test
     public void testCommon() throws Exception {
         super.testCommon(IssueModel.class);
