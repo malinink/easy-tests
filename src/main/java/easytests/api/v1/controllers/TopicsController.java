@@ -14,8 +14,6 @@ import easytests.core.models.TopicModelInterface;
 import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
-import easytests.core.options.builder.SubjectsOptionsBuilder;
-import easytests.core.options.builder.TopicsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import java.util.List;
@@ -37,17 +35,13 @@ public class TopicsController extends AbstractController {
     protected SubjectsOptionsBuilder subjectsOptionsBuilder;
 
     @Autowired
-    protected SubjectsOptionsBuilder subjectsOptionsBuilder;
-
-    @Autowired
     protected TopicsServiceInterface topicsService;
 
     @Autowired
     protected TopicsOptionsBuilderInterface topicsOptionsBuilder;
-    protected SubjectsServiceInterface subjectsService;
 
     @Autowired
-    protected TopicsOptionsBuilder topicsOptionsBuilder;
+    protected SubjectsServiceInterface subjectsService;
 
     @Autowired
     @Qualifier("TopicsMapperV1")
@@ -93,16 +87,6 @@ public class TopicsController extends AbstractController {
         this.topicsService.save(topicModel);
 
         return this.topicsMapper.map(topicModel, Identity.class);
-    }
-
-    private void checkSubject(Topic topic) throws BadRequestException {
-        final SubjectModelInterface subjectModel = this.subjectsService.find(
-                topic.getSubject().getId(),
-                this.subjectsOptionsBuilder.forAuth()
-                                );
-        if (!this.acl.hasAccess(subjectModel)) {
-            throw new BadRequestException();
-        }
 
     }
 
