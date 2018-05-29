@@ -208,18 +208,19 @@ public class QuestionsControllerTest {
 
     @Test
     public void testUpdateSuccess() throws Exception {
-        final QuestionModelInterface questionModel = new QuestionModel();
-        questionModel.map(this.questionsSupport.getEntityFixtureMock(0));
-
-        final QuestionModelInterface newQuestionModel = new QuestionModel();
-        newQuestionModel.map(this.questionsSupport.getEntityAdditionalMock(1));
-
         final List<AnswerModelInterface> answersModels = new ArrayList<>();
         IntStream.range(0, 2).forEach(answerIdx ->{
             final AnswerModel answerModel = new AnswerModel();
             answerModel.map(answersSupport.getEntityFixtureMock(answerIdx));
             answersModels.add(answerModel);
         });
+
+        final QuestionModelInterface questionModel = new QuestionModel();
+        questionModel.map(this.questionsSupport.getEntityFixtureMock(0));
+
+        final QuestionModelInterface newQuestionModel = new QuestionModel();
+        newQuestionModel.map(this.questionsSupport.getEntityAdditionalMock(1));
+
         questionModel.setAnswers(answersModels);
 
         final List<AnswerModelInterface> newAnswersModels = new ArrayList<>();
@@ -307,16 +308,40 @@ public class QuestionsControllerTest {
     }
 
 
-    /*@Test
+    @Test
     public void testUpdateNotFound() throws Exception {
         when(this.questionsService.find(any(Integer.class))).thenReturn(null);
+
+        final QuestionModelInterface newQuestionModel = new QuestionModel();
+        newQuestionModel.map(this.questionsSupport.getEntityAdditionalMock(1));
+
+        final List<AnswerModelInterface> newAnswersModels = new ArrayList<>();
+        final AnswerModel newAnswerModelAdditional = new AnswerModel();
+        newAnswerModelAdditional.map(answersSupport.getEntityAdditionalMock(2));
+        newAnswersModels.add(newAnswerModelAdditional);
+        newAnswerModelAdditional.map(answersSupport.getEntityFixtureMock(1));
+        newAnswersModels.add(newAnswerModelAdditional);
+        newQuestionModel.setAnswers(newAnswersModels);
 
         mvc.perform(put("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(id, 7)
-                        .with(name, "name")
-                        .with(subject, new JsonSupport().with(id, 1))
+                        .with(id, newQuestionModel.getId())
+                        .with(text, newQuestionModel.getText())
+                        .with(type, newQuestionModel.getQuestionType().getId())
+                        .with(topic, new JsonSupport().with(id, newQuestionModel.getTopic().getId()))
+                        .with(answers, new JsonSupport()
+                                .with(new JsonSupport()
+                                        .with(id, newQuestionModel.getAnswers().get(0).getId())
+                                        .with(text, newQuestionModel.getAnswers().get(0).getTxt())
+                                        .with(isRight, newQuestionModel.getAnswers().get(0).getRight())
+                                        .with(number, newQuestionModel.getAnswers().get(0).getSerialNumber()))
+                                .with(new JsonSupport()
+                                        .with(id, newQuestionModel.getAnswers().get(1).getId())
+                                        .with(text, newQuestionModel.getAnswers().get(1).getTxt())
+                                        .with(isRight, newQuestionModel.getAnswers().get(1).getRight())
+                                        .with(number, newQuestionModel.getAnswers().get(1).getSerialNumber()))
+                        )
                         .build()
                 ))
                 .andExpect(status().isNotFound())
@@ -325,22 +350,59 @@ public class QuestionsControllerTest {
     }
 
     @Test
-    public void testUpdateForbidden() throws Exception {
-        when(this.questionsService.find(any(), any())).thenReturn(new QuestionModelEmpty(1));
-        when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModel());
-        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+    public void testUpdateBadRequest() throws Exception {
+        final List<AnswerModelInterface> answersModels = new ArrayList<>();
+        IntStream.range(0, 2).forEach(answerIdx ->{
+            final AnswerModel answerModel = new AnswerModel();
+            answerModel.map(answersSupport.getEntityFixtureMock(answerIdx));
+            answersModels.add(answerModel);
+        });
+
+        final QuestionModelInterface questionModel = new QuestionModel();
+        questionModel.map(this.questionsSupport.getEntityFixtureMock(0));
+
+        final QuestionModelInterface newQuestionModel = new QuestionModel();
+        newQuestionModel.map(this.questionsSupport.getEntityAdditionalMock(1));
+
+        questionModel.setAnswers(answersModels);
+
+        final List<AnswerModelInterface> newAnswersModels = new ArrayList<>();
+        final AnswerModel newAnswerModelAdditional = new AnswerModel();
+        newAnswerModelAdditional.map(answersSupport.getEntityAdditionalMock(2));
+        newAnswersModels.add(newAnswerModelAdditional);
+        newAnswersModels.add(answersModels.get(1));
+        newQuestionModel.setAnswers(newAnswersModels);
+
+
+        when(this.questionsService.find(any(), any())).thenReturn(questionModel);
+        when(this.topicsService.find(any(), any())).thenReturn(new TopicModel());
+        when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(false);
+
         mvc.perform(put("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(id, 1)
-                        .with(name, "Name")
-                        .with(subject, new JsonSupport().with(id, 1))
+                        .with(id, newQuestionModel.getId())
+                        .with(text, newQuestionModel.getText())
+                        .with(type, newQuestionModel.getQuestionType().getId())
+                        .with(topic, new JsonSupport().with(id, newQuestionModel.getTopic().getId()))
+                        .with(answers, new JsonSupport()
+                                .with(new JsonSupport()
+                                        .with(id, newQuestionModel.getAnswers().get(0).getId())
+                                        .with(text, newQuestionModel.getAnswers().get(0).getTxt())
+                                        .with(isRight, newQuestionModel.getAnswers().get(0).getRight())
+                                        .with(number, newQuestionModel.getAnswers().get(0).getSerialNumber()))
+                                .with(new JsonSupport()
+                                        .with(id, newQuestionModel.getAnswers().get(1).getId())
+                                        .with(text, newQuestionModel.getAnswers().get(1).getTxt())
+                                        .with(isRight, newQuestionModel.getAnswers().get(1).getRight())
+                                        .with(number, newQuestionModel.getAnswers().get(1).getSerialNumber()))
+                        )
                         .build()
                 ))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string(""))
                 .andReturn();
-    }*/
+    }
 
     @Test
     public void testShowSuccess() throws Exception {

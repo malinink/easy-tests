@@ -15,14 +15,14 @@ public class AdminAnswersMapper extends ModelMapper {
         super();
         this.createTypeMap(AdminAnswer.class, AnswerModel.class)
                 .addMappings(
-                        mapper -> mapper.map(AdminAnswer::getId, AnswerModel::setId))
+                    mapper -> mapper.map(AdminAnswer::getId, AnswerModel::setId))
                 .addMappings(
-                        mapper -> mapper.map(AdminAnswer::getText, AnswerModel::setTxt))
+                    mapper -> mapper.map(AdminAnswer::getText, AnswerModel::setTxt))
                 .addMappings(
-                        mapper -> mapper.map(AdminAnswer::getNumber, AnswerModel::setSerialNumber))
+                    mapper -> mapper.map(AdminAnswer::getNumber, AnswerModel::setSerialNumber))
                 .addMappings(
-                        mapper -> mapper.map(AdminAnswer::getIsRight, AnswerModel::setRight)
-                );
+                    mapper -> mapper.map(AdminAnswer::getIsRight, AnswerModel::setRight)
+            );
     }
 
 }

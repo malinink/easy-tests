@@ -5,7 +5,6 @@ import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.api.v1.models.Question;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.TopicModelInterface;
-import easytests.core.models.UserModelInterface;
 import easytests.core.options.AnswersOptions;
 import easytests.core.options.QuestionsOptions;
 import easytests.core.options.QuestionsOptionsInterface;
@@ -13,10 +12,10 @@ import easytests.core.options.builder.QuestionsOptionsBuilderInterface;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
+import easytests.core.services.UsersServiceInterface;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import easytests.core.services.UsersServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -75,7 +74,7 @@ public class QuestionsController extends AbstractController {
      */
 
     @PutMapping("")
-    public void update(@RequestBody Question question) throws UnidentifiedModelException, NotFoundException, BadRequestException {
+    public void update(@RequestBody Question question) throws NotFoundException, BadRequestException {
         if (question.getId() == null) {
             throw new UnidentifiedModelException();
         }

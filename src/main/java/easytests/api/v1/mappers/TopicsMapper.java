@@ -15,6 +15,6 @@ public class TopicsMapper extends ModelMapper {
         super();
         this.createTypeMap(TopicModel.class, Topic.class)
                 .addMappings(mapper -> mapper.<Integer>map(topicModel -> topicModel.getSubject().getId(),
-                        (topic, id) -> topic.getSubject().setId(id)));
+                    (topic, id) -> topic.getSubject().setId(id)));
     }
 }

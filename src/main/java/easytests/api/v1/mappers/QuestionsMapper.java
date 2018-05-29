@@ -26,62 +26,62 @@ public class QuestionsMapper extends ModelMapper {
         super();
         this.createTypeMap(QuestionModel.class, Question.class)
                 .addMappings(mapper -> {
-                            mapper.<Integer>map(questionModel ->
+                    mapper.<Integer>map(questionModel ->
                                     questionModel.getQuestionType().getId(), (question, id) -> question.setType(id));
 
-                            mapper.<Integer>map(questionModel ->
+                    mapper.<Integer>map(questionModel ->
                                     questionModel.getTopic().getId(), (question, id) -> question.getTopic().setId(id));
 
-                            mapper.<List<AdminAnswer>>map(questionModel ->
+                    mapper.<List<AdminAnswer>>map(questionModel ->
                                     questionModel.getAnswers(), (question, list) -> question.setAnswers(list));
-                        }
-                );
+                }
+            );
         this.createTypeMap(AnswerModel.class, AdminAnswer.class)
                 .addMappings(mapper -> {
-                            mapper.<String>map(answerModel ->
+                    mapper.<String>map(answerModel ->
                                     answerModel.getTxt(), (answer, text) -> answer.setText(text));
 
-                            mapper.<Boolean>map(answerModel ->
+                    mapper.<Boolean>map(answerModel ->
                                     answerModel.getRight(), (answer, right) -> answer.setIsRight(right));
-                        }
-                );
+                }
+            );
 
         Converter<Identity, TopicModel> convertIdentityToTopicModel =
-                new Converter<Identity, TopicModel>() {
-                    public TopicModel convert(MappingContext<Identity, TopicModel> context) {
-                        final TopicModel topicModel = new TopicModel();
-                        topicModel.setId(context.getSource().getId());
+            new Converter<Identity, TopicModel>() {
+                public TopicModel convert(MappingContext<Identity, TopicModel> context) {
+                    final TopicModel topicModel = new TopicModel();
+                    topicModel.setId(context.getSource().getId());
 
-                        return topicModel;
-                    }
-                };
+                    return topicModel;
+                }
+            };
 
         Converter<List<AdminAnswer>, List<AnswerModel>> convertAdminAnswerListToAnswerModelList
                 = new Converter<List<AdminAnswer>, List<AnswerModel>>() {
-            public List<AnswerModel> convert(MappingContext<List<AdminAnswer>, List<AnswerModel>> context) {
-                final List<AnswerModel> answerModels = new ArrayList<>();
-                for (int i = 0; i < context.getSource().size(); ++i) {
-                    final AdminAnswer adminAnswer = context.getSource().get(i);
+                    public List<AnswerModel> convert(MappingContext<List<AdminAnswer>, List<AnswerModel>> context) {
+                        final List<AnswerModel> answerModels = new ArrayList<>();
+                        for (int i = 0; i < context.getSource().size(); ++i) {
+                            final AdminAnswer adminAnswer = context.getSource().get(i);
 
-                    final AnswerModel answerModel = new AnswerModel();
+                            final AnswerModel answerModel = new AnswerModel();
 
-                    adminAnswersMapper.map(adminAnswer, answerModel);
+                            adminAnswersMapper.map(adminAnswer, answerModel);
 
-                    answerModels.add(answerModel);
-                }
-                return answerModels;
-            }
-        };
+                            answerModels.add(answerModel);
+                        }
+                        return answerModels;
+                    }
+                };
 
         Converter<Integer, QuestionTypeModel> convertIntegerToQuestionTypeModel
                 = new Converter<Integer, QuestionTypeModel>() {
-            public QuestionTypeModel convert(MappingContext<Integer, QuestionTypeModel> context) {
-                final QuestionTypeModel questionTypeModel = new QuestionTypeModel();
-                questionTypeModel.setId(context.getSource());
+                    public QuestionTypeModel convert(MappingContext<Integer, QuestionTypeModel> context) {
+                        final QuestionTypeModel questionTypeModel = new QuestionTypeModel();
+                        questionTypeModel.setId(context.getSource());
 
-                return questionTypeModel;
-            }
-        };
+                        return questionTypeModel;
+                    }
+                };
 
         final PropertyMap<Question, QuestionModel> mymap = new PropertyMap<Question, QuestionModel>() {
             protected void configure() {
