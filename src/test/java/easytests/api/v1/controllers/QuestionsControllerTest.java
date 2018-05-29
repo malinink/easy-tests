@@ -3,10 +3,7 @@ package easytests.api.v1.controllers;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
-import easytests.core.entities.QuestionEntity;
 import easytests.core.models.*;
-import easytests.core.models.empty.ModelsListEmpty;
-import easytests.core.models.empty.QuestionModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.options.*;
 import easytests.core.options.builder.QuestionsOptionsBuilder;
@@ -18,8 +15,6 @@ import java.util.List;
 import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.mockito.BDDMockito.*;
-
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,7 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -59,12 +54,6 @@ public class QuestionsControllerTest {
     @MockBean
     private TopicsService topicsService;
 
-    @MockBean
-    private AnswersService answersService;
-
-    @MockBean
-    private QuestionTypesService questionTypesService;
-
     @Autowired
     @Qualifier("QuestionsMapperV1")
     private QuestionsMapper questionsMapper;
@@ -78,19 +67,7 @@ public class QuestionsControllerTest {
     @MockBean
     private QuestionsOptionsBuilder questionsOptionsBuilder;
 
-    @MockBean
-    private UsersServiceInterface usersService;
-
-    @MockBean
-    private QuestionsOptions questionsOptions;
-
     @MockBean AnswerModel answerModel;
-
-    @MockBean
-    private AnswersOptions answersOptions;
-
-    @MockBean
-    private SubjectsService subjectsService;
 
     private QuestionsSupport questionSupport = new QuestionsSupport();
 
@@ -238,6 +215,7 @@ public class QuestionsControllerTest {
 
 
         final ArgumentCaptor<QuestionModelInterface> questionModelCaptor = ArgumentCaptor.forClass(QuestionModelInterface.class);
+        final ArgumentCaptor<QuestionsOptionsInterface> questionOptionCaptor = ArgumentCaptor.forClass(QuestionsOptionsInterface.class);
 
         mvc.perform(put("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -263,13 +241,9 @@ public class QuestionsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
-        verify(this.questionsService, times(1)).save(questionModelCaptor.capture());
+        verify(this.questionsService, times(1)).save(questionModelCaptor.capture(), questionOptionCaptor.capture());
         this.questionsSupport.assertEquals(questionModel, questionModelCaptor.getValue());
     }
-
-    /**
-     * testUpdateWithoutIdFailed
-     */
 
     @Test
     public void testUpdateWithoutIdFailed() throws Exception {
@@ -308,7 +282,6 @@ public class QuestionsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
-
 
     @Test
     public void testUpdateNotFound() throws Exception {

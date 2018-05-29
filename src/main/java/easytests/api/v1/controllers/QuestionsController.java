@@ -77,12 +77,19 @@ public class QuestionsController extends AbstractController {
 
         final QuestionModelInterface questionModel = this.getQuestionModel(question.getId());
 
-        this.checkQuestion(question);
+        if (!this.acl.hasAccess(questionModel)) {
+            throw new ForbiddenException();
+        }
         this.checkTopic(question);
 
-        this.questionsMapper.map(question, questionModel);
+        final QuestionsOptionsInterface questionOptionWithAnswers =
+                new QuestionsOptions().withAnswers(new AnswersOptions());
 
-        this.questionsService.save(questionModel);
+        final QuestionModelInterface questionModelWithAnswers =
+                this.questionsService.find(question.getId(), questionOptionWithAnswers);
+
+        this.questionsMapper.map(question, questionModelWithAnswers);
+        this.questionsService.save(questionModelWithAnswers, questionOptionWithAnswers);
     }
     
     @GetMapping("/{questionId}")
@@ -118,17 +125,6 @@ public class QuestionsController extends AbstractController {
 
         if (!this.acl.hasAccess(topicModel)) {
             throw new BadRequestException();
-        }
-    }
-
-    private void checkQuestion(Question question) throws ForbiddenException {
-        final QuestionModelInterface questionModel = this.questionsService.find(
-                question.getId(),
-                this.questionsOptionsBuilder.forAuth()
-        );
-
-        if (!this.acl.hasAccess(questionModel)) {
-            throw new ForbiddenException();
         }
     }
 
