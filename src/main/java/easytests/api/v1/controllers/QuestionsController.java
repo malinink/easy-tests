@@ -69,13 +69,15 @@ public class QuestionsController extends AbstractController {
      */
 
     @PutMapping("")
-    public void update(@RequestBody Question question) throws NotFoundException, BadRequestException {
+    public void update(@RequestBody Question question)
+            throws ForbiddenException, NotFoundException, BadRequestException {
         if (question.getId() == null) {
             throw new UnidentifiedModelException();
         }
 
         final QuestionModelInterface questionModel = this.getQuestionModel(question.getId());
 
+        this.checkQuestion(question);
         this.checkTopic(question);
 
         this.questionsMapper.map(question, questionModel);
@@ -116,6 +118,17 @@ public class QuestionsController extends AbstractController {
 
         if (!this.acl.hasAccess(topicModel)) {
             throw new BadRequestException();
+        }
+    }
+
+    private void checkQuestion(Question question) throws ForbiddenException {
+        final QuestionModelInterface questionModel = this.questionsService.find(
+                question.getId(),
+                this.questionsOptionsBuilder.forAuth()
+        );
+
+        if (!this.acl.hasAccess(questionModel)) {
+            throw new ForbiddenException();
         }
     }
 
