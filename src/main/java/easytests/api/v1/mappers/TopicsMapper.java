@@ -1,3 +1,4 @@
+
 package easytests.api.v1.mappers;
 
 import easytests.api.v1.models.Topic;
@@ -13,7 +14,7 @@ public class TopicsMapper extends ModelMapper {
     public TopicsMapper() {
         super();
         this.createTypeMap(TopicModel.class, Topic.class)
-            .addMappings(mapper -> mapper.<Integer>map(topicModel -> topicModel.getSubject().getId(),
-                (topic, id) -> topic.getSubject().setId(id)));
+                .addMappings(mapper -> mapper.<Integer>map(topicModel -> topicModel.getSubject().getId(),
+                        (topic, id) -> topic.getSubject().setId(id)));
     }
 }

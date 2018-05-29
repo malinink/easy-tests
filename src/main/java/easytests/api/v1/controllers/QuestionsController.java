@@ -1,9 +1,6 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.exceptions.BadRequestException;
-import easytests.api.v1.exceptions.ForbiddenException;
-import easytests.api.v1.exceptions.NotFoundException;
-import easytests.api.v1.exceptions.UnidentifiedModelException;
+import easytests.api.v1.exceptions.*;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.api.v1.models.Question;
 import easytests.core.models.QuestionModelInterface;
@@ -79,6 +76,9 @@ public class QuestionsController extends AbstractController {
 
     @PutMapping("")
     public void update(@RequestBody Question question) throws UnidentifiedModelException, NotFoundException, BadRequestException {
+        if (question.getId() == null) {
+            throw new UnidentifiedModelException();
+        }
 
         final QuestionModelInterface questionModel = this.getQuestionModel(question.getId());
 

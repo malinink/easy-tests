@@ -5,6 +5,7 @@ import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
 import easytests.core.entities.QuestionEntity;
 import easytests.core.models.*;
+import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.QuestionModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.options.*;
@@ -82,6 +83,8 @@ public class QuestionsControllerTest {
 
     @MockBean
     private QuestionsOptions questionsOptions;
+
+    @MockBean AnswerModel answerModel;
 
     @MockBean
     private AnswersOptions answersOptions;
@@ -202,13 +205,30 @@ public class QuestionsControllerTest {
     /**
      * create
      */
+
     @Test
     public void testUpdateSuccess() throws Exception {
-        final QuestionModelInterface questionModelforUpdate = this.questionsSupport.getModelAdditionalMock(1);
-
-        final QuestionEntity questionEntity = this.questionsSupport.getEntityFixtureMock(0);
         final QuestionModelInterface questionModel = new QuestionModel();
-        questionModel.map(questionEntity);
+        questionModel.map(this.questionsSupport.getEntityFixtureMock(0));
+
+        final QuestionModelInterface newQuestionModel = new QuestionModel();
+        newQuestionModel.map(this.questionsSupport.getEntityAdditionalMock(1));
+
+        final List<AnswerModelInterface> answersModels = new ArrayList<>();
+        IntStream.range(0, 2).forEach(answerIdx ->{
+            final AnswerModel answerModel = new AnswerModel();
+            answerModel.map(answersSupport.getEntityFixtureMock(answerIdx));
+            answersModels.add(answerModel);
+        });
+        questionModel.setAnswers(answersModels);
+
+        final List<AnswerModelInterface> newAnswersModels = new ArrayList<>();
+        final AnswerModel newAnswerModelAdditional = new AnswerModel();
+        newAnswerModelAdditional.map(answersSupport.getEntityAdditionalMock(2));
+        newAnswersModels.add(newAnswerModelAdditional);
+        newAnswersModels.add(answersModels.get(1));
+        newQuestionModel.setAnswers(newAnswersModels);
+
 
         when(this.questionsService.find(any(), any())).thenReturn(questionModel);
         when(this.topicsService.find(any(), any())).thenReturn(new TopicModel());
@@ -219,10 +239,22 @@ public class QuestionsControllerTest {
         mvc.perform(put("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(id, questionModelforUpdate.getId())
-                        .with(text, questionModelforUpdate.getText())
-                        .with(type, questionModelforUpdate.getQuestionType().getId())
-                        .with(topic, new JsonSupport().with(id, questionModelforUpdate.getTopic().getId()))
+                        .with(id, newQuestionModel.getId())
+                        .with(text, newQuestionModel.getText())
+                        .with(type, newQuestionModel.getQuestionType().getId())
+                        .with(topic, new JsonSupport().with(id, newQuestionModel.getTopic().getId()))
+                        .with(answers, new JsonSupport()
+                                .with(new JsonSupport()
+                                        .with(id, newQuestionModel.getAnswers().get(0).getId())
+                                        .with(text, newQuestionModel.getAnswers().get(0).getTxt())
+                                        .with(isRight, newQuestionModel.getAnswers().get(0).getRight())
+                                        .with(number, newQuestionModel.getAnswers().get(0).getSerialNumber()))
+                                .with(new JsonSupport()
+                                        .with(id, newQuestionModel.getAnswers().get(1).getId())
+                                        .with(text, newQuestionModel.getAnswers().get(1).getTxt())
+                                        .with(isRight, newQuestionModel.getAnswers().get(1).getRight())
+                                        .with(number, newQuestionModel.getAnswers().get(1).getSerialNumber()))
+                        )
                         .build()
                 ))
                 .andExpect(status().isOk())
@@ -236,13 +268,37 @@ public class QuestionsControllerTest {
      * testUpdateWithoutIdFailed
      */
 
-    /*@Test
+    @Test
     public void testUpdateWithoutIdFailed() throws Exception {
+        final QuestionModelInterface newQuestionModel = new QuestionModel();
+        newQuestionModel.map(this.questionsSupport.getEntityAdditionalMock(1));
+
+        final List<AnswerModelInterface> newAnswersModels = new ArrayList<>();
+        final AnswerModel newAnswerModelAdditional = new AnswerModel();
+        newAnswerModelAdditional.map(answersSupport.getEntityAdditionalMock(2));
+        newAnswersModels.add(newAnswerModelAdditional);
+        newAnswerModelAdditional.map(answersSupport.getEntityFixtureMock(1));
+        newAnswersModels.add(newAnswerModelAdditional);
+        newQuestionModel.setAnswers(newAnswersModels);
+
         mvc.perform(put("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonSupport()
-                        .with(name, "name")
-                        .with(subject, new JsonSupport().with(id, 1))
+                        .with(text, newQuestionModel.getText())
+                        .with(type, newQuestionModel.getQuestionType().getId())
+                        .with(topic, new JsonSupport().with(id, newQuestionModel.getTopic().getId()))
+                        .with(answers, new JsonSupport()
+                                .with(new JsonSupport()
+                                        .with(id, newQuestionModel.getAnswers().get(0).getId())
+                                        .with(text, newQuestionModel.getAnswers().get(0).getTxt())
+                                        .with(isRight, newQuestionModel.getAnswers().get(0).getRight())
+                                        .with(number, newQuestionModel.getAnswers().get(0).getSerialNumber()))
+                                .with(new JsonSupport()
+                                        .with(id, newQuestionModel.getAnswers().get(1).getId())
+                                        .with(text, newQuestionModel.getAnswers().get(1).getTxt())
+                                        .with(isRight, newQuestionModel.getAnswers().get(1).getRight())
+                                        .with(number, newQuestionModel.getAnswers().get(1).getSerialNumber()))
+                        )
                         .build()
                 ))
                 .andExpect(status().isBadRequest())
@@ -251,7 +307,7 @@ public class QuestionsControllerTest {
     }
 
 
-    @Test
+    /*@Test
     public void testUpdateNotFound() throws Exception {
         when(this.questionsService.find(any(Integer.class))).thenReturn(null);
 
@@ -284,8 +340,8 @@ public class QuestionsControllerTest {
                 .andExpect(status().isForbidden())
                 .andExpect(content().string(""))
                 .andReturn();
-    }
-*/
+    }*/
+
     @Test
     public void testShowSuccess() throws Exception {
         final QuestionModelInterface questionModel = new QuestionModel();
