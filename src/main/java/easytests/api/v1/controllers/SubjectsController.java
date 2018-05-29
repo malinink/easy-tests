@@ -85,7 +85,7 @@ public class SubjectsController extends AbstractController {
     @PutMapping("")
     public void update(@RequestBody Subject subject) throws NotFoundException, BadRequestException {
         if (subject.getId() == null) {
-            throw new IdentifiedModelException();
+            throw new UnidentifiedModelException();
         }
 
         final SubjectModelInterface subjectModel = this.getSubjectModel(subject.getId());
