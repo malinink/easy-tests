@@ -15,11 +15,9 @@ import easytests.core.services.TopicsServiceInterface;
 import easytests.core.services.UsersServiceInterface;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-
 
 /**
  * @author RisaMagpie
