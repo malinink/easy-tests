@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.*;
-
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -73,7 +71,7 @@ public class SubjectsControllerTest {
 
     @MockBean
     UsersOptionsBuilder usersOptionsBuilder;
-
+    
     private SubjectsSupport subjectsSupport = new SubjectsSupport();
 
     private UsersSupport usersSupport = new UsersSupport();
@@ -197,7 +195,6 @@ public class SubjectsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
-
 
     @Test
     public void testCreateBadRequest() throws Exception {
@@ -363,8 +360,50 @@ public class SubjectsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
-    /**
-     * delete(subjectId)
-     */
-    
+
+    @Test
+    public void testDeleteSuccess() throws Exception {
+        final SubjectEntity subjectEntity = this.subjectsSupport.getEntityFixtureMock(0);
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subjectModel.map(subjectEntity);
+
+        final SubjectsOptionsInterface subjectsOptionsDelete = new SubjectsOptions();
+        when(this.subjectsOptionsBuilder.forDelete()).thenReturn(subjectsOptionsDelete);
+
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+
+        this.mvc.perform(delete("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+        verify(this.subjectsService, times(1)).delete(subjectModel, subjectsOptionsDelete  );
+    }
+
+    @Test
+    public void testDeleteForbidden() throws Exception {
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+        this.mvc.perform(delete("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testDeleteNotFound() throws Exception {
+        when(this.subjectsService.find(any(Integer.class))).thenReturn(null);
+
+        this.mvc.perform(delete("/v1/subjects/5")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
 }

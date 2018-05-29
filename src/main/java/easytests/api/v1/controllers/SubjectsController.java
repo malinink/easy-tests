@@ -47,7 +47,7 @@ public class SubjectsController extends AbstractController {
 
     @GetMapping("")
     public List<Subject> list(@RequestParam(name = "userId", required = true) Integer userId)
-        throws NotFoundException, ForbiddenException {
+            throws NotFoundException, ForbiddenException {
         final UserModelInterface userModel = this.usersService.find(userId);
 
         if (userModel == null) {
@@ -69,7 +69,7 @@ public class SubjectsController extends AbstractController {
     @ResponseStatus(HttpStatus.CREATED)
     public Identity create(@RequestBody Subject subject) throws BadRequestException, ForbiddenException {
         if (subject.getId() != null) {
-            throw new UnidentifiedModelException();
+            throw new IdentifiedModelException();
         }
 
         this.checkUser(subject);
@@ -105,9 +105,18 @@ public class SubjectsController extends AbstractController {
         return this.subjectsMapper.map(subjectModel, Subject.class);
     }
 
-    /**
-     * delete(subjectId)
-     */
+    @DeleteMapping("/{subjectId}")
+    public void delete(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
+        final SubjectModelInterface subjectModelforAuth = this.getSubjectModel(subjectId);
+        if (!this.acl.hasAccess(subjectModelforAuth)) {
+            throw new ForbiddenException();
+        }
+
+        final SubjectsOptionsInterface subjectsOptionsDelete = this.subjectsOptionsBuilder.forDelete();
+        final SubjectModelInterface subjectModelforDelete
+                = this.getSubjectModel(subjectId, subjectsOptionsDelete);
+        this.subjectsService.delete(subjectModelforDelete, subjectsOptionsDelete);
+    }
 
     private void checkUser(Subject subject) throws BadRequestException {
         final UserModelInterface userModel = this.usersService.find(
@@ -118,6 +127,7 @@ public class SubjectsController extends AbstractController {
         if (!this.acl.hasAccess(userModel)) {
             throw new BadRequestException();
         }
+
     }
 
     private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectOptions)
@@ -132,4 +142,5 @@ public class SubjectsController extends AbstractController {
     private SubjectModelInterface getSubjectModel(Integer id) throws NotFoundException {
         return this.getSubjectModel(id, this.subjectsOptionsBuilder.forAuth());
     }
+
 }
