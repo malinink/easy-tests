@@ -4,6 +4,7 @@ import easytests.api.v1.mappers.SubjectsMapper;
 import easytests.api.v1.models.Subject;
 import easytests.auth.services.AccessControlLayerServiceInterface;
 import easytests.config.SwaggerRequestValidationConfig;
+import easytests.core.entities.SubjectEntity;
 import easytests.core.models.*;
 import easytests.core.models.empty.UserModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
@@ -23,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.*;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -102,12 +104,12 @@ public class SubjectsControllerTest {
                         .with(new JsonSupport()
                                 .with(id, subjectsModels.get(0).getId())
                                 .with(name, subjectsModels.get(0).getName())
-                                .with(description,subjectsModels.get(0).getDescription())
+                                .with(description, subjectsModels.get(0).getDescription())
                                 .with(user, new JsonSupport().with(id, subjectsModels.get(0).getUser().getId())))
                         .with(new JsonSupport()
                                 .with(id, subjectsModels.get(1).getId())
                                 .with(name, subjectsModels.get(1).getName())
-                                .with(description,subjectsModels.get(1).getDescription())
+                                .with(description, subjectsModels.get(1).getDescription())
                                 .with(user, new JsonSupport().with(id, subjectsModels.get(1).getUser().getId())))
                         .build()
                 ))
@@ -266,5 +268,47 @@ public class SubjectsControllerTest {
     /**
      * delete(subjectId)
      */
-    
+    @Test
+    public void testDeleteSuccess() throws Exception {
+        final SubjectEntity subjectEntity = this.subjectsSupport.getEntityFixtureMock(0);
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subjectModel.map(subjectEntity);
+
+        final SubjectsOptionsInterface subjectsOptionsDelete = new SubjectsOptions();
+        when(this.subjectsOptionsBuilder.forDelete()).thenReturn(subjectsOptionsDelete);
+
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+
+        this.mvc.perform(delete("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+        verify(this.subjectsService, times(1)).delete(subjectModel, subjectsOptionsDelete  );
+    }
+    @Test
+    public void testDeleteForbidden() throws Exception {
+        final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+        this.mvc.perform(delete("/v1/subjects/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+    @Test
+    public void testDeleteNotFound() throws Exception {
+        when(this.subjectsService.find(any(Integer.class))).thenReturn(null);
+
+        this.mvc.perform(delete("/v1/subjects/5")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
 }
