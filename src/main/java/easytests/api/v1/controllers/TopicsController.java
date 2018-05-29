@@ -4,6 +4,7 @@ import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
 import easytests.api.v1.exceptions.IdentifiedModelException;
 import easytests.api.v1.exceptions.NotFoundException;
+import easytests.api.v1.exceptions.UnidentifiedModelException;
 import easytests.api.v1.mappers.TopicsMapper;
 import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.Topic;
@@ -11,6 +12,8 @@ import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.TopicsOptionsInterface;
+import easytests.core.options.builder.SubjectsOptionsBuilder;
+import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.options.builder.TopicsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
@@ -34,9 +37,13 @@ public class TopicsController extends AbstractController {
     protected SubjectsOptionsBuilder subjectsOptionsBuilder;
 
     @Autowired
+    protected SubjectsOptionsBuilder subjectsOptionsBuilder;
+
+    @Autowired
     protected TopicsServiceInterface topicsService;
 
     @Autowired
+    protected TopicsOptionsBuilderInterface topicsOptionsBuilder;
     protected SubjectsServiceInterface subjectsService;
 
     @Autowired
@@ -102,6 +109,22 @@ public class TopicsController extends AbstractController {
     /**
      * update
      */
+
+    @PutMapping("")
+    public void update(@RequestBody Topic topic) throws Exception {
+        if (topic.getId() == null) {
+            throw new UnidentifiedModelException();
+        }
+
+        final TopicModelInterface topicModel = this.getTopicModel(topic.getId());
+
+        this.checkSubject(topic);
+
+        this.topicsMapper.map(topic, topicModel);
+
+        this.topicsService.save(topicModel);
+    }
+
     @GetMapping("/{topicId}")
     public Topic show(@PathVariable Integer topicId) throws NotFoundException, ForbiddenException {
         final TopicModelInterface topicModel = this.topicsService.find(topicId);
@@ -133,6 +156,17 @@ public class TopicsController extends AbstractController {
         this.topicsService.delete(topicModelForDelete, topicsOptionDelete);
     }
 
+    private void checkSubject(Topic topic) throws ForbiddenException, BadRequestException {
+        final SubjectModelInterface subjectModel = this.subjectsService.find(
+                topic.getSubject().getId(),
+                this.subjectsOptionsBuilder.forAuth()
+        );
+
+        if (!this.acl.hasAccess(subjectModel)) {
+            throw new BadRequestException();
+        }
+    }
+
     private TopicModelInterface getTopicModel(Integer id, TopicsOptionsInterface topicOptions)
             throws NotFoundException {
         final TopicModelInterface topicModel = this.topicsService.find(id, topicOptions);
@@ -145,4 +179,5 @@ public class TopicsController extends AbstractController {
     private TopicModelInterface getTopicModel(Integer id) throws NotFoundException {
         return this.getTopicModel(id, this.topicsOptionsBuilder.forAuth());
     }
+
 }

@@ -27,6 +27,27 @@ public class TopicsMapper extends ModelMapper {
         final Converter<Identity, SubjectModel> convertIdentityToSubjectModel =
                 new Converter<Identity, SubjectModel>() {
             public SubjectModel convert(MappingContext<Identity, SubjectModel> context) {
+
+                    final SubjectModel subjectModel = new SubjectModel();
+                    subjectModel.setId(context.getSource().getId());
+
+                    return subjectModel;
+            }
+        };
+
+        final PropertyMap<Topic, TopicModel> mymap = new PropertyMap<Topic, TopicModel>() {
+            protected void configure() {
+                map(source.getId()).setId(null);
+                map(source.getName()).setName(null);
+                using(convertIdentityToSubjectModel).map(source.getSubject()).setSubject(null);
+            }
+        };
+
+        this.addMappings(mymap);
+
+        final Converter<Identity, SubjectModel> convertIdentityToSubjectModel =
+                new Converter<Identity, SubjectModel>() {
+            public SubjectModel convert(MappingContext<Identity, SubjectModel> context) {
                 final SubjectModel subjectModel = new SubjectModel();
                 subjectModel.setId(context.getSource().getId());
 
