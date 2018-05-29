@@ -69,7 +69,7 @@ public class SubjectsController extends AbstractController {
     @ResponseStatus(HttpStatus.CREATED)
     public Identity create(@RequestBody Subject subject) throws BadRequestException, ForbiddenException {
         if (subject.getId() != null) {
-            throw new IdentifiedModelException();
+            throw new UnidentifiedModelException();
         }
 
         this.checkUser(subject);
