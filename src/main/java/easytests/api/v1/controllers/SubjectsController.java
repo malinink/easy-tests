@@ -1,8 +1,6 @@
 package easytests.api.v1.controllers;
 
 import easytests.api.v1.exceptions.*;
-import easytests.api.v1.exceptions.ForbiddenException;
-import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.mappers.SubjectsMapper;
 import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.Subject;
@@ -49,7 +47,7 @@ public class SubjectsController extends AbstractController {
 
     @GetMapping("")
     public List<Subject> list(@RequestParam(name = "userId", required = true) Integer userId)
-        throws NotFoundException, ForbiddenException {
+            throws NotFoundException, ForbiddenException {
         final UserModelInterface userModel = this.usersService.find(userId);
 
         if (userModel == null) {
@@ -84,24 +82,18 @@ public class SubjectsController extends AbstractController {
 
     }
 
-    private void checkUser(Subject subject) throws BadRequestException {
-        final UserModelInterface userModel = this.usersService.find(
-            subject.getUser().getId(),
-            this.usersOptionsBuilder.forAuth()
-        );
-
-        if (!this.acl.hasAccess(userModel)) {
-            throw new BadRequestException();
+    @PutMapping("")
+    public void update(@RequestBody Subject subject) throws NotFoundException, BadRequestException {
+        if (subject.getId() == null) {
+            throw new UnidentifiedModelException();
         }
 
-    }
+        final SubjectModelInterface subjectModel = this.getSubjectModel(subject.getId());
+        this.checkUser(subject);
 
-    /**
-     * update
-     */
-    /**
-     * show(subjectId)
-     */
+        this.subjectsMapper.map(subject, subjectModel);
+        this.subjectsService.save(subjectModel);
+    }
 
     @GetMapping("/{subjectId}")
     public Subject show(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
@@ -111,6 +103,31 @@ public class SubjectsController extends AbstractController {
             throw new ForbiddenException();
         }
         return this.subjectsMapper.map(subjectModel, Subject.class);
+    }
+
+    @DeleteMapping("/{subjectId}")
+    public void delete(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
+        final SubjectModelInterface subjectModelforAuth = this.getSubjectModel(subjectId);
+        if (!this.acl.hasAccess(subjectModelforAuth)) {
+            throw new ForbiddenException();
+        }
+
+        final SubjectsOptionsInterface subjectsOptionsDelete = this.subjectsOptionsBuilder.forDelete();
+        final SubjectModelInterface subjectModelforDelete
+                = this.getSubjectModel(subjectId, subjectsOptionsDelete);
+        this.subjectsService.delete(subjectModelforDelete, subjectsOptionsDelete);
+    }
+
+    private void checkUser(Subject subject) throws BadRequestException {
+        final UserModelInterface userModel = this.usersService.find(
+                subject.getUser().getId(),
+                this.usersOptionsBuilder.forAuth()
+        );
+
+        if (!this.acl.hasAccess(userModel)) {
+            throw new BadRequestException();
+        }
+
     }
 
     private SubjectModelInterface getSubjectModel(Integer id, SubjectsOptionsInterface subjectOptions)
@@ -126,22 +143,4 @@ public class SubjectsController extends AbstractController {
         return this.getSubjectModel(id, this.subjectsOptionsBuilder.forAuth());
     }
 
-
-
-    /**
-     * delete(subjectId)
-     */
-
-    @DeleteMapping("/{subjectId}")
-    public void delete(@PathVariable Integer subjectId) throws NotFoundException, ForbiddenException {
-        final SubjectModelInterface subjectModelforAuth = this.getSubjectModel(subjectId);
-        if (!this.acl.hasAccess(subjectModelforAuth)) {
-            throw new ForbiddenException();
-        }
-
-        final SubjectsOptionsInterface subjectsOptionsDelete = this.subjectsOptionsBuilder.forDelete();
-        final SubjectModelInterface subjectModelforDelete
-                = this.getSubjectModel(subjectId, subjectsOptionsDelete);
-        this.subjectsService.delete(subjectModelforDelete, subjectsOptionsDelete);
-    }
 }

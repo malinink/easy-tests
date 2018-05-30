@@ -24,7 +24,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.*;
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -104,12 +103,12 @@ public class SubjectsControllerTest {
                         .with(new JsonSupport()
                                 .with(id, subjectsModels.get(0).getId())
                                 .with(name, subjectsModels.get(0).getName())
-                                .with(description, subjectsModels.get(0).getDescription())
+                                .with(description,subjectsModels.get(0).getDescription())
                                 .with(user, new JsonSupport().with(id, subjectsModels.get(0).getUser().getId())))
                         .with(new JsonSupport()
                                 .with(id, subjectsModels.get(1).getId())
                                 .with(name, subjectsModels.get(1).getName())
-                                .with(description, subjectsModels.get(1).getDescription())
+                                .with(description,subjectsModels.get(1).getDescription())
                                 .with(user, new JsonSupport().with(id, subjectsModels.get(1).getUser().getId())))
                         .build()
                 ))
@@ -214,9 +213,105 @@ public class SubjectsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
-    /**
-     * update
-     */
+
+    @Test
+    public void testUpdateSuccess() throws Exception {
+        final SubjectModelInterface subjectModel = new SubjectModel();
+        subjectModel.map(this.subjectsSupport.getEntityFixtureMock(0));
+
+        final SubjectModelInterface newSubjectModel = new SubjectModel();
+        newSubjectModel.map(this.subjectsSupport.getEntityAdditionalMock(1));
+
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+        when(this.usersService.find(any(), any())).thenReturn(newSubjectModel.getUser());
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+        final ArgumentCaptor<SubjectModelInterface> subjectModelCaptor = ArgumentCaptor.forClass(SubjectModelInterface.class);
+
+
+        mvc.perform(put("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, newSubjectModel.getId())
+                        .with(name, newSubjectModel.getName())
+                        .with(description, newSubjectModel.getDescription())
+                        .with(user, new JsonSupport().with(id, newSubjectModel.getUser().getId()))
+                        .build()
+                ))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""))
+                .andReturn();
+
+        verify(this.subjectsService, times(1)).save(subjectModelCaptor.capture());
+        this.subjectsSupport.assertEquals(newSubjectModel, subjectModelCaptor.getValue());
+    }
+
+    @Test
+    public void testUpdateIdFailed() throws Exception {
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+        when(this.subjectsService.find(any(), any())).thenReturn(null);
+
+        final SubjectModelInterface newSubjectModel = new SubjectModel();
+        newSubjectModel.map(this.subjectsSupport.getEntityAdditionalMock(1));
+
+        mvc.perform(put("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(name, newSubjectModel.getName())
+                        .with(description, newSubjectModel.getDescription())
+                        .with(user, new JsonSupport().with(id, newSubjectModel.getUser().getId()))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateNotFound() throws Exception {
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
+        when(this.subjectsService.find(any(), any())).thenReturn(null);
+
+        final SubjectModelInterface newSubjectModel = new SubjectModel();
+        newSubjectModel.map(this.subjectsSupport.getEntityAdditionalMock(1));
+
+        mvc.perform(put("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, newSubjectModel.getId())
+                        .with(name, newSubjectModel.getName())
+                        .with(description, newSubjectModel.getDescription())
+                        .with(user, new JsonSupport().with(id, newSubjectModel.getUser().getId()))
+                        .build()
+                ))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+    @Test
+    public void testUpdateBadRequest() throws Exception {
+        final SubjectModelInterface subjectModel = subjectsSupport.getModelFixtureMock(0);
+
+        when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
+        when(this.subjectsService.find(any(), any())).thenReturn(subjectModel);
+
+        final SubjectModelInterface newSubjectModel = new SubjectModel();
+        newSubjectModel.map(this.subjectsSupport.getEntityAdditionalMock(1));
+
+        mvc.perform(put("/v1/subjects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, newSubjectModel.getId())
+                        .with(name, newSubjectModel.getName())
+                        .with(description, newSubjectModel.getDescription())
+                        .with(user, new JsonSupport().with(id, newSubjectModel.getUser().getId()))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
     @Test
     public void testShowSuccess() throws Exception {
         final SubjectModelInterface subjectModel = new SubjectModel();
@@ -265,9 +360,7 @@ public class SubjectsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
-    /**
-     * delete(subjectId)
-     */
+
     @Test
     public void testDeleteSuccess() throws Exception {
         final SubjectEntity subjectEntity = this.subjectsSupport.getEntityFixtureMock(0);
@@ -288,6 +381,7 @@ public class SubjectsControllerTest {
                 .andReturn();
         verify(this.subjectsService, times(1)).delete(subjectModel, subjectsOptionsDelete  );
     }
+
     @Test
     public void testDeleteForbidden() throws Exception {
         final SubjectModelInterface subjectModel = this.subjectsSupport.getModelFixtureMock(0);
@@ -300,6 +394,7 @@ public class SubjectsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
+
     @Test
     public void testDeleteNotFound() throws Exception {
         when(this.subjectsService.find(any(Integer.class))).thenReturn(null);
