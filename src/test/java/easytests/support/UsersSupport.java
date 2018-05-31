@@ -247,4 +247,40 @@ public class UsersSupport {
         }
     }
 
+    public void assertModelsEqualsWithoutIdandSubjects(UserModelInterface expected, UserModelInterface actual) {
+        Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
+        Assert.assertEquals(expected.getLastName(), actual.getLastName());
+        Assert.assertEquals(expected.getSurname(), actual.getSurname());
+        Assert.assertEquals(expected.getEmail(), actual.getEmail());
+        Assert.assertEquals(expected.getPassword(), actual.getPassword());
+        Assert.assertEquals(expected.getIsAdmin(), actual.getIsAdmin());
+        Assert.assertEquals(expected.getState(), actual.getState());
+    }
+
+    public UserEntity getAdminUser() {
+        return this.getEntityMock(
+                5,
+                "FirstName",
+                "LastName",
+                "Surname",
+                "email@mail.ru",
+                "hash",
+                true,
+                1
+        );
+    }
+
+    public UserEntity getNotAdminUser() {
+        return this.getEntityMock(
+                6,
+                "FirstName",
+                "LastName",
+                "Surname1",
+                "gmail@gmail.com",
+                "hash",
+                false,
+                1
+        );
+    }
+
 }
