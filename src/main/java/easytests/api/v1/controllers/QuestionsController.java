@@ -1,9 +1,13 @@
 package easytests.api.v1.controllers;
 
+import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
+import easytests.api.v1.exceptions.IdentifiedModelException;
 import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.mappers.QuestionsMapper;
+import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.Question;
+import easytests.core.models.QuestionModel;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.AnswersOptions;
@@ -17,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -68,6 +73,32 @@ public class QuestionsController extends AbstractController {
     /**
      * create
      */
+
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Identity create(@RequestBody Question question) throws Exception {
+        if (question.getId() != null) {
+            throw new IdentifiedModelException();
+        }
+
+        this.checkTopic(question.getTopic().getId());
+
+        final QuestionModelInterface questionModel = this.questionsMapper.map(question, QuestionModel.class);
+
+        this.questionsService.save(questionModel, new QuestionsOptions().withAnswers(new AnswersOptions()));
+
+        return this.questionsMapper.map(questionModel, Identity.class);
+    }
+
+    private void checkTopic(Integer topicId) throws BadRequestException {
+        final TopicModelInterface topicModel = this.topicsService
+                .find(topicId, this.topicsOptionsBuilder.forAuth());
+
+        if (!this.acl.hasAccess(topicModel)) {
+            throw new BadRequestException();
+        }
+    }
+
     /**
      * update
      */
@@ -92,6 +123,9 @@ public class QuestionsController extends AbstractController {
         }
         return questionModel;
     }
+    /**
+     * delete(questionId)
+     */
 
     private QuestionModelInterface getQuestionModel(Integer id) throws NotFoundException {
         return this.getQuestionModel(id, this.questionsOptionsBuilder.forAuth());

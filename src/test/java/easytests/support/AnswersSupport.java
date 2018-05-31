@@ -1,6 +1,7 @@
 package easytests.support;
 
 import easytests.core.entities.AnswerEntity;
+import easytests.core.models.AnswerModel;
 import easytests.core.models.AnswerModelInterface;
 import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.QuestionModelEmpty;
@@ -144,12 +145,25 @@ public class AnswersSupport {
         assertEquals(expected, actual, true);
     }
 
+    public void assertEqualsWithoutQuestion(AnswerModelInterface expected, AnswerModelInterface actual) {
+        assertEqualsWithoutQuestion(expected, actual, true);
+    }
+
     private void assertEquals(AnswerEntity expected, AnswerEntity actual, Boolean exceptId) {
         if (!exceptId) {
             Assert.assertEquals(expected.getId(), actual.getId());
         }
         Assert.assertEquals(expected.getTxt(), actual.getTxt());
         Assert.assertEquals(expected.getQuestionId(), actual.getQuestionId());
+        Assert.assertEquals(expected.getSerialNumber(), actual.getSerialNumber());
+        Assert.assertEquals(expected.getRight(), actual.getRight());
+    }
+
+    private void assertEqualsWithoutQuestion(AnswerModelInterface expected, AnswerModelInterface actual, Boolean exceptId) {
+        if (!exceptId) {
+            Assert.assertEquals(expected.getId(), actual.getId());
+        }
+        Assert.assertEquals(expected.getTxt(), actual.getTxt());
         Assert.assertEquals(expected.getSerialNumber(), actual.getSerialNumber());
         Assert.assertEquals(expected.getRight(), actual.getRight());
     }

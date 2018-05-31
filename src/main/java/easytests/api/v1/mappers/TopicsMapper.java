@@ -10,9 +10,11 @@ import org.modelmapper.PropertyMap;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Service;
 
+
 /**
  * @author lelay
  */
+
 @Service("TopicsMapperV1")
 public class TopicsMapper extends ModelMapper {
     public TopicsMapper() {
@@ -42,4 +44,5 @@ public class TopicsMapper extends ModelMapper {
 
         this.addMappings(mymap);
     }
+
 }
