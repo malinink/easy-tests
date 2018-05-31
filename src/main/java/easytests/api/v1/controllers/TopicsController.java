@@ -13,6 +13,7 @@ import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
+import easytests.core.options.builder.SubjectsOptionsBuilderInterface;
 import easytests.core.options.builder.TopicsOptionsBuilderInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
@@ -41,6 +42,9 @@ public class TopicsController extends AbstractController {
     protected TopicsOptionsBuilderInterface topicsOptionsBuilder;
 
     @Autowired
+    protected SubjectsOptionsBuilderInterface subjectsOptionsBuilderInterface;
+
+    @Autowired
     protected SubjectsServiceInterface subjectsService;
 
     @Autowired
@@ -50,7 +54,8 @@ public class TopicsController extends AbstractController {
     @GetMapping("")
     public List<Topic> list(@RequestParam(name = "subjectId", required = true) Integer subjectId)
             throws NotFoundException, ForbiddenException {
-        final SubjectModelInterface subjectModel = this.subjectsService.find(subjectId);
+        final SubjectModelInterface subjectModel = this.subjectsService
+                .find(subjectId, this.subjectsOptionsBuilderInterface.forAuth());
 
         if (subjectModel == null) {
             throw new NotFoundException();
