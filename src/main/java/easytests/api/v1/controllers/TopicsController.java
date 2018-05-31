@@ -2,11 +2,14 @@ package easytests.api.v1.controllers;
 
 import easytests.api.v1.exceptions.BadRequestException;
 import easytests.api.v1.exceptions.ForbiddenException;
+import easytests.api.v1.exceptions.IdentifiedModelException;
 import easytests.api.v1.exceptions.NotFoundException;
 import easytests.api.v1.exceptions.UnidentifiedModelException;
 import easytests.api.v1.mappers.TopicsMapper;
+import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.Topic;
 import easytests.core.models.SubjectModelInterface;
+import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.TopicsOptionsInterface;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
@@ -17,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -31,13 +35,13 @@ public class TopicsController extends AbstractController {
     protected SubjectsOptionsBuilder subjectsOptionsBuilder;
 
     @Autowired
-    protected SubjectsServiceInterface subjectsService;
-
-    @Autowired
     protected TopicsServiceInterface topicsService;
 
     @Autowired
     protected TopicsOptionsBuilderInterface topicsOptionsBuilder;
+
+    @Autowired
+    protected SubjectsServiceInterface subjectsService;
 
     @Autowired
     @Qualifier("TopicsMapperV1")
@@ -68,6 +72,24 @@ public class TopicsController extends AbstractController {
     /**
      * create
      */
+
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Identity create(@RequestBody Topic topic) throws Exception {
+        if (topic.getId() != null) {
+            throw new IdentifiedModelException();
+        }
+
+        this.checkSubject(topic);
+
+        final TopicModelInterface topicModel = this.topicsMapper.map(topic, TopicModel.class);
+
+        this.topicsService.save(topicModel);
+
+        return this.topicsMapper.map(topicModel, Identity.class);
+
+    }
+
     /**
      * update
      */

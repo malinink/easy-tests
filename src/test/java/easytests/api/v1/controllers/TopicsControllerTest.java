@@ -8,13 +8,15 @@ import easytests.core.models.SubjectModel;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.models.TopicModel;
 import easytests.core.models.TopicModelInterface;
+import easytests.core.models.empty.ModelsListEmpty;
 import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.models.empty.TopicModelEmpty;
 import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.options.builder.TopicsOptionsBuilder;
+import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.options.TopicsOptions;
 import easytests.core.options.TopicsOptionsInterface;
-import easytests.core.options.builder.TopicsOptionsBuilderInterface;
+import easytests.core.options.builder.TopicsOptionsBuilder;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
 import easytests.support.JsonSupport;
@@ -40,7 +42,11 @@ import static org.mockito.BDDMockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -229,6 +235,77 @@ public class TopicsControllerTest {
                 .andExpect(content().string(""))
                 .andReturn();
     }
+
+    @Test
+    public void testCreateSuccess() throws Exception {
+        final TopicEntity topicAdditionalEntity = this.topicsSupport.getEntityAdditionalMock(0);
+        when(topicAdditionalEntity.getId()).thenReturn(5);
+
+        when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModel());
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
+
+        ArgumentCaptor<TopicModelInterface> argumentCaptor = ArgumentCaptor.forClass(TopicModelInterface.class);
+        doAnswer(invocation -> {
+            final TopicModel topicModel = (TopicModel) invocation.getArguments()[0];
+            topicModel.setId(5);
+            topicModel.setQuestions(new ModelsListEmpty());
+            return null;
+        }).when(this.topicsService).save(any(TopicModelInterface.class));
+
+        mvc.perform(post("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(name, topicAdditionalEntity.getName())
+                        .with(subject, new JsonSupport().with(id, topicAdditionalEntity.getSubjectId()))
+                        .build()
+                ))
+                .andExpect(status().is(201))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(
+                        new JsonSupport()
+                                .with(id, 5)
+                                .build()
+                ))
+                .andReturn();
+        verify(this.topicsService, times(1)).save(argumentCaptor.capture());
+        this.topicsSupport.assertEquals(topicAdditionalEntity, argumentCaptor.getValue());
+    }
+
+    @Test
+    public void testCreateWithIdFailed() throws Exception {
+        mvc.perform(post("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                        .with(id, 2)
+                        .with(name, "TopicName")
+                        .with(subject, new JsonSupport().with(id, 1))
+                        .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+
+    @Test
+    public void testCreateBadRequest() throws Exception {
+        when(this.subjectsService.find(any(), any())).thenReturn(new SubjectModel());
+        when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
+
+
+        mvc.perform(post("/v1/topics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new JsonSupport()
+                                .with(name, "TopicName")
+                                .with(subject, new JsonSupport().with(id, 2))
+                                .build()
+                ))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""))
+                .andReturn();
+    }
+
+
 
     @Test
     public void testShowSuccess() throws Exception {

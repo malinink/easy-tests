@@ -2,7 +2,9 @@ package easytests.api.v1.controllers;
 
 import easytests.api.v1.exceptions.*;
 import easytests.api.v1.mappers.QuestionsMapper;
+import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.Question;
+import easytests.core.models.QuestionModel;
 import easytests.core.models.QuestionModelInterface;
 import easytests.core.models.TopicModelInterface;
 import easytests.core.options.AnswersOptions;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -28,13 +31,13 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionsController extends AbstractController {
     @Autowired
     protected QuestionsServiceInterface questionsService;
-  
+
     @Autowired
     protected TopicsServiceInterface topicsService;
 
     @Autowired
     protected QuestionsOptionsBuilderInterface questionsOptionsBuilder;
-  
+
     @Autowired
     protected TopicsOptionsBuilderInterface topicsOptionsBuilder;
 
@@ -63,10 +66,31 @@ public class QuestionsController extends AbstractController {
                 .map(model -> this.questionsMapper.map(model, Question.class))
                 .collect(Collectors.toList());
     }
-    
-    /**
-     * create
-     */
+
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Identity create(@RequestBody Question question) throws Exception {
+        if (question.getId() != null) {
+            throw new IdentifiedModelException();
+        }
+
+        this.checkTopic(question.getTopic().getId());
+
+        final QuestionModelInterface questionModel = this.questionsMapper.map(question, QuestionModel.class);
+
+        this.questionsService.save(questionModel, new QuestionsOptions().withAnswers(new AnswersOptions()));
+
+        return this.questionsMapper.map(questionModel, Identity.class);
+    }
+
+    private void checkTopic(Integer topicId) throws BadRequestException {
+        final TopicModelInterface topicModel = this.topicsService
+                .find(topicId, this.topicsOptionsBuilder.forAuth());
+
+        if (!this.acl.hasAccess(topicModel)) {
+            throw new BadRequestException();
+        }
+    }
 
     @PutMapping("")
     public void update(@RequestBody Question question)
@@ -91,7 +115,7 @@ public class QuestionsController extends AbstractController {
         this.questionsMapper.map(question, questionModelWithAnswers);
         this.questionsService.save(questionModelWithAnswers, questionOptionWithAnswers);
     }
-    
+
     @GetMapping("/{questionId}")
     public Question show(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
         final QuestionModelInterface questionModel = this.getQuestionModel(
