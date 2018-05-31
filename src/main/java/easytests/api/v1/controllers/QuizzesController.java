@@ -8,6 +8,7 @@ import easytests.core.models.IssueModelInterface;
 import easytests.core.models.QuizModelInterface;
 import easytests.core.options.QuizzesOptionsInterface;
 import easytests.core.options.builder.QuizzesOptionsBuilderInterface;
+import easytests.core.options.builder.IssuesOptionsBuilderInterface;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.QuizzesServiceInterface;
 import java.util.List;
@@ -32,6 +33,9 @@ public class QuizzesController extends AbstractController {
     private QuizzesOptionsBuilderInterface quizzesOptions;
 
     @Autowired
+    private IssuesOptionsBuilderInterface issuesOptionsBuilder;
+
+    @Autowired
     private IssuesServiceInterface issuesService;
 
     @Autowired
@@ -41,7 +45,7 @@ public class QuizzesController extends AbstractController {
     @GetMapping("")
     public List<Quiz> list(@RequestParam(name = "issueId", required = true) Integer issueId)
             throws NotFoundException, ForbiddenException {
-        final IssueModelInterface issueModel = this.issuesService.find(issueId);
+        final IssueModelInterface issueModel = this.issuesService.find(issueId, this.issuesOptionsBuilder.forAuth());
 
         if (issueModel == null) {
             throw new NotFoundException();
