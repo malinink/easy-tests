@@ -88,9 +88,11 @@ public class SubjectsControllerTest {
 
         int userIdParamValue = 1;
 
+        final UserModel userModel = new UserModel();
+        userModel.setId(userIdParamValue);
         when(this.usersService.find(userIdParamValue, this.usersOptionsBuilder.forAuth()))
-                .thenReturn(new UserModelEmpty(userIdParamValue));
-        when(this.subjectsService.findByUser(new UserModelEmpty(userIdParamValue)))
+                .thenReturn(userModel);
+        when(this.subjectsService.findByUser(userModel))
                 .thenReturn(subjectsModels);
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
 

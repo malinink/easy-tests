@@ -8,7 +8,7 @@ import easytests.core.models.empty.SubjectModelEmpty;
 import easytests.core.options.IssuesOptions;
 import easytests.core.options.IssuesOptionsInterface;
 import easytests.core.options.builder.IssuesOptionsBuilder;
-import easytests.core.options.builder.IssuesOptionsBuilderInterface;
+import easytests.core.options.builder.SubjectsOptionsBuilder;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.support.IssueSupport;
@@ -62,6 +62,9 @@ public class IssuesControllerTest {
     @MockBean
     private IssuesOptionsBuilder issuesOptionsBuilder;
 
+    @MockBean
+    private SubjectsOptionsBuilder subjectsOptionsBuilder;
+
     private IssueSupport issueSupport = new IssueSupport();
 
     @Test
@@ -75,9 +78,11 @@ public class IssuesControllerTest {
 
         int subjectIdParamValue = 1;
 
-        when(this.subjectsService.find(subjectIdParamValue))
-                .thenReturn(new SubjectModelEmpty(subjectIdParamValue));
-        when(this.issuesService.findBySubject(new SubjectModelEmpty(subjectIdParamValue)))
+        final SubjectModel subjectModel = new SubjectModel();
+        subjectModel.setId(subjectIdParamValue);
+        when(this.subjectsService.find(subjectIdParamValue, this.subjectsOptionsBuilder.forAuth()))
+                .thenReturn(subjectModel);
+        when(this.issuesService.findBySubject(subjectModel))
                 .thenReturn(issuesModels);
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(true);
 
@@ -104,6 +109,8 @@ public class IssuesControllerTest {
     public void testListNotFound() throws Exception {
         int subjectIdParamValue = 5;
 
+        when(this.subjectsService.find(subjectIdParamValue)).thenReturn(null);
+
         this.mvc.perform(get("/v1/issues?subjectId={subjectIdParamValue}", subjectIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON)
         )
@@ -116,7 +123,7 @@ public class IssuesControllerTest {
     public void testListForbidden() throws Exception {
         int subjectIdParamValue = 1;
 
-        when(this.subjectsService.find(subjectIdParamValue))
+        when(this.subjectsService.find(subjectIdParamValue, this.subjectsOptionsBuilder.forAuth()))
                 .thenReturn(new SubjectModelEmpty(subjectIdParamValue));
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
 

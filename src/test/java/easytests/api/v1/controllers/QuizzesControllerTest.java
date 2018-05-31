@@ -94,7 +94,7 @@ public class QuizzesControllerTest {
         final IssueModel issueModel = new IssueModel();
         issueModel.setId(issueIdParamValue);
         when(this.issuesService.find(any(Integer.class), any())).thenReturn(issueModel);
-        when(this.quizzesService.findByIssue(any(IssueModelInterface.class))).thenReturn(quizzesModels);
+        when(this.quizzesService.findByIssue(issueModel)).thenReturn(quizzesModels);
         when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
 
         this.mvc.perform(get("/v1/quizzes?issueId={issueIdParamValue}", issueIdParamValue)

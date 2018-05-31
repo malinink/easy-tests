@@ -8,6 +8,7 @@ import easytests.core.models.IssueModelInterface;
 import easytests.core.models.SubjectModelInterface;
 import easytests.core.options.IssuesOptionsInterface;
 import easytests.core.options.builder.IssuesOptionsBuilder;
+import easytests.core.options.builder.SubjectsOptionsBuilderInterface;
 import easytests.core.services.IssuesServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import java.util.List;
@@ -31,6 +32,9 @@ public class IssuesController extends AbstractController {
     protected IssuesOptionsBuilder issuesOptionsBuilder;
 
     @Autowired
+    protected SubjectsOptionsBuilderInterface subjectsOptionsBuilder;
+
+    @Autowired
     protected SubjectsServiceInterface subjectsService;
 
     @Autowired
@@ -43,7 +47,8 @@ public class IssuesController extends AbstractController {
     @GetMapping
     public List<Issue> list(@RequestParam(name = "subjectId", required = true) Integer subjectId)
             throws NotFoundException, ForbiddenException {
-        final SubjectModelInterface subjectModel = this.subjectsService.find(subjectId);
+        final SubjectModelInterface subjectModel = this.subjectsService
+                .find(subjectId, this.subjectsOptionsBuilder.forAuth());
 
         if (subjectModel == null) {
             throw new NotFoundException();
