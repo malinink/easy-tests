@@ -207,15 +207,15 @@ public class QuestionsControllerTest {
         newAnswersModels.add(answersModels.get(1));
         newQuestionModel.setAnswers(newAnswersModels);
 
+        final QuestionsOptionsInterface questionOptionWithAnswers =
+                new QuestionsOptions().withAnswers(new AnswersOptions());
 
         when(this.questionsService.find(any(), any())).thenReturn(questionModel);
         when(this.topicsService.find(any(), any())).thenReturn(new TopicModel());
         when(this.acl.hasAccess(any(TopicModelInterface.class))).thenReturn(true);
         when(this.acl.hasAccess(any(QuestionModelInterface.class))).thenReturn(true);
 
-
         final ArgumentCaptor<QuestionModelInterface> questionModelCaptor = ArgumentCaptor.forClass(QuestionModelInterface.class);
-        final ArgumentCaptor<QuestionsOptionsInterface> questionOptionCaptor = ArgumentCaptor.forClass(QuestionsOptionsInterface.class);
 
         mvc.perform(put("/v1/questions")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -241,7 +241,7 @@ public class QuestionsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(""))
                 .andReturn();
-        verify(this.questionsService, times(1)).save(questionModelCaptor.capture(), questionOptionCaptor.capture());
+        verify(this.questionsService, times(1)).save(questionModelCaptor.capture(), eq(questionOptionWithAnswers));
         this.questionsSupport.assertEquals(questionModel, questionModelCaptor.getValue());
     }
 
