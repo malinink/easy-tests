@@ -83,15 +83,6 @@ public class QuestionsController extends AbstractController {
         return this.questionsMapper.map(questionModel, Identity.class);
     }
 
-    private void checkTopic(Integer topicId) throws BadRequestException {
-        final TopicModelInterface topicModel = this.topicsService
-                .find(topicId, this.topicsOptionsBuilder.forAuth());
-
-        if (!this.acl.hasAccess(topicModel)) {
-            throw new BadRequestException();
-        }
-    }
-
     @PutMapping("")
     public void update(@RequestBody Question question)
             throws ForbiddenException, NotFoundException, BadRequestException {
@@ -104,7 +95,7 @@ public class QuestionsController extends AbstractController {
         if (!this.acl.hasAccess(questionModel)) {
             throw new ForbiddenException();
         }
-        this.checkTopic(question);
+        this.checkTopic(question.getTopic().getId());
 
         final QuestionsOptionsInterface questionOptionWithAnswers =
                 new QuestionsOptions().withAnswers(new AnswersOptions());
@@ -141,11 +132,9 @@ public class QuestionsController extends AbstractController {
         this.questionsService.delete(questionModelForDelete, questionOption);
     }
 
-    private void checkTopic(Question question) throws BadRequestException {
-        final TopicModelInterface topicModel = this.topicsService.find(
-                question.getTopic().getId(),
-                this.topicsOptionsBuilder.forAuth()
-        );
+    private void checkTopic(Integer topicId) throws BadRequestException {
+        final TopicModelInterface topicModel = this.topicsService
+                .find(topicId, this.topicsOptionsBuilder.forAuth());
 
         if (!this.acl.hasAccess(topicModel)) {
             throw new BadRequestException();
