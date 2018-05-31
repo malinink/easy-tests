@@ -48,7 +48,7 @@ public class SubjectsController extends AbstractController {
     @GetMapping("")
     public List<Subject> list(@RequestParam(name = "userId", required = true) Integer userId)
             throws NotFoundException, ForbiddenException {
-        final UserModelInterface userModel = this.usersService.find(userId);
+        final UserModelInterface userModel = this.usersService.find(userId, this.usersOptionsBuilder.forAuth());
 
         if (userModel == null) {
             throw new NotFoundException();
