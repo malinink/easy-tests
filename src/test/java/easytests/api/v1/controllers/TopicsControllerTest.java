@@ -95,9 +95,9 @@ public class TopicsControllerTest {
             topicModel.map(this.topicsSupport.getEntityFixtureMock(idx));
             topicsModels.add(topicModel);
         });
-        when(this.topicsService.findBySubject(any(SubjectModelInterface.class))).thenReturn(topicsModels);
 
-        when(this.subjectsService.find(Integer.valueOf(subjectIdParamValue)))
+        when(this.topicsService.findBySubject(any(SubjectModelInterface.class))).thenReturn(topicsModels);
+        when(this.subjectsService.find(Integer.valueOf(subjectIdParamValue), this.subjectsOptionsBuilder.forAuth()))
                 .thenReturn(new SubjectModelEmpty(Integer.valueOf(subjectIdParamValue)));
         when(this.acl.hasAccess(any(SubjectModelInterface.class)))
                 .thenReturn(true);
@@ -131,7 +131,9 @@ public class TopicsControllerTest {
 
     @Test
     public void testListNotFound() throws Exception {
-        final String nonexistentSubjectId = "5";
+        int nonexistentSubjectId = 5;
+
+        when(this.subjectsService.find(nonexistentSubjectId)).thenReturn(null);
 
         this.mvc.perform(get("/v1/topics?subjectId={nonexistentSubjectId}", nonexistentSubjectId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -144,7 +146,7 @@ public class TopicsControllerTest {
     @Test
     public void testListForbidden() throws Exception {
 
-        when(this.subjectsService.find(Integer.valueOf(subjectIdParamValue)))
+        when(this.subjectsService.find(Integer.valueOf(subjectIdParamValue), this.subjectsOptionsBuilder.forAuth()))
                 .thenReturn(new SubjectModelEmpty(Integer.valueOf(subjectIdParamValue)));
         when(this.acl.hasAccess(any(SubjectModelInterface.class))).thenReturn(false);
 

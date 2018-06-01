@@ -88,9 +88,11 @@ public class SubjectsControllerTest {
 
         int userIdParamValue = 1;
 
-        when(this.usersService.find(userIdParamValue))
-                .thenReturn(new UserModelEmpty(userIdParamValue));
-        when(this.subjectsService.findByUser(new UserModelEmpty(userIdParamValue)))
+        final UserModel userModel = new UserModel();
+        userModel.setId(userIdParamValue);
+        when(this.usersService.find(userIdParamValue, this.usersOptionsBuilder.forAuth()))
+                .thenReturn(userModel);
+        when(this.subjectsService.findByUser(userModel))
                 .thenReturn(subjectsModels);
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(true);
 
@@ -120,6 +122,9 @@ public class SubjectsControllerTest {
     public void testListNotFound() throws Exception {
         int userIdParamValue = 5;
 
+        when(this.subjectsService.find(userIdParamValue))
+                .thenReturn(null);
+
         this.mvc.perform(get("/v1/subjects?userId={userIdParamValue}", userIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON)
         )
@@ -132,7 +137,7 @@ public class SubjectsControllerTest {
     public void testListForbidden() throws Exception {
         int userIdParamValue = 1;
 
-        when(this.usersService.find(userIdParamValue))
+        when(this.usersService.find(userIdParamValue, this.usersOptionsBuilder.forAuth()))
                 .thenReturn(new UserModelEmpty(userIdParamValue));
         when(this.acl.hasAccess(any(UserModelInterface.class))).thenReturn(false);
 

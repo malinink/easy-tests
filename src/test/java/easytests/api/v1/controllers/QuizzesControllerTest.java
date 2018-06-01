@@ -7,6 +7,7 @@ import easytests.core.models.*;
 import easytests.core.models.empty.IssueModelEmpty;
 import easytests.core.options.QuizzesOptions;
 import easytests.core.options.QuizzesOptionsInterface;
+import easytests.core.options.builder.IssuesOptionsBuilder;
 import easytests.core.options.builder.QuizzesOptionsBuilder;
 import easytests.core.services.IssuesService;
 import easytests.core.services.QuizzesService;
@@ -65,6 +66,9 @@ public class QuizzesControllerTest {
     @MockBean
     private QuizzesOptionsBuilder quizzesOptionsBuilder;
 
+    @MockBean
+    private IssuesOptionsBuilder issuesOptionsBuilder;
+
     private QuizzesSupport quizzesSupport = new QuizzesSupport();
     private TesteesSupport testeesSupport = new TesteesSupport();
 
@@ -87,9 +91,10 @@ public class QuizzesControllerTest {
 
         int issueIdParamValue = 1;
 
-
-        when(this.issuesService.find(any(Integer.class))).thenReturn(new IssueModelEmpty(issueIdParamValue));
-        when(this.quizzesService.findByIssue(any(IssueModelInterface.class))).thenReturn(quizzesModels);
+        final IssueModel issueModel = new IssueModel();
+        issueModel.setId(issueIdParamValue);
+        when(this.issuesService.find(any(Integer.class), any())).thenReturn(issueModel);
+        when(this.quizzesService.findByIssue(issueModel)).thenReturn(quizzesModels);
         when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(true);
 
         this.mvc.perform(get("/v1/quizzes?issueId={issueIdParamValue}", issueIdParamValue)
@@ -127,6 +132,9 @@ public class QuizzesControllerTest {
     public void testListNotFound() throws Exception {
         int issueIdParamValue = 10;
 
+        when(this.issuesService.find(issueIdParamValue))
+                .thenReturn(null);
+
         this.mvc.perform(get("/v1/quizzes?issueId={issueIdParamValue}", issueIdParamValue)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -138,7 +146,7 @@ public class QuizzesControllerTest {
     public void testListForbidden() throws Exception {
         int issueIdParamValue = 10;
 
-        when(this.issuesService.find(issueIdParamValue))
+        when(this.issuesService.find(issueIdParamValue, this.issuesOptionsBuilder.forAuth()))
                 .thenReturn(new IssueModelEmpty(issueIdParamValue));
         when(this.acl.hasAccess(any(IssueModelInterface.class))).thenReturn(false);
 
