@@ -7,13 +7,17 @@ import easytests.core.models.TopicModelInterface;
 import easytests.core.services.QuestionsServiceInterface;
 import easytests.core.services.SubjectsServiceInterface;
 import easytests.core.services.TopicsServiceInterface;
+import easytests.support.SubjectsSupport;
+import easytests.support.TopicsSupport;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,322 +33,277 @@ import static org.mockito.Mockito.verify;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TopicsOptionsTest {
+
+    private TopicsSupport topicsSupport = new TopicsSupport();
+
+    private TopicsOptionsInterface topicsOptions;
+
+    private SubjectsOptionsInterface subjectsOptions;
+
+    private QuestionsOptionsInterface questionsOptions;
+
+    private TopicModelInterface topicModel;
+
+    private List<TopicModelInterface> topicsModels;
+
+    private SubjectModelInterface subjectModel;
+
+    private List<SubjectModelInterface> subjectsModels;
+
+    private List<QuestionModelInterface> questionsModels;
+
+    private List<List<QuestionModelInterface>> questionsModelsList;
+
+    private SubjectsServiceInterface subjectsService;
+
+    private QuestionsServiceInterface questionsService;
+
+    private TopicsServiceInterface topicsService;
+
+
+
+    @Before
+    public void before(){
+        this.topicModel = Mockito.mock(TopicModelInterface.class);
+        this.subjectsService = Mockito.mock(SubjectsServiceInterface.class);
+        this.questionsService = Mockito.mock(QuestionsServiceInterface.class);
+        this.topicsService = Mockito.mock(TopicsServiceInterface.class);
+        this.subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        this.questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
+
+        this.topicsOptions = new TopicsOptions();
+        this.topicsOptions.setSubjectsService(subjectsService);
+        this.topicsOptions.setQuestionsService(questionsService);
+        this.topicsOptions.setTopicsService(topicsService);
+    }
+
+    private TopicsOptionsTest withTopicModel() {
+        this.topicModel = this.topicsSupport.getModelFixtureMock(0);
+        return this;
+    }
+
+    private TopicsOptionsTest withSubjectModelFounded() {
+        this.subjectModel = Mockito.mock(SubjectModelInterface.class);
+        SubjectModelInterface subjectModelWithId = Mockito.mock(SubjectModelInterface.class);
+
+        given(this.topicModel.getSubject()).willReturn(subjectModelWithId);
+        given(this.subjectsService.find(this.topicModel.getSubject().getId(), this.subjectsOptions)).willReturn(this.subjectModel);
+
+        return this;
+    }
+
+    private TopicsOptionsTest withSubjectModelInjected() {
+        given(this.topicModel.getSubject()).willReturn(this.subjectModel);
+        return this;
+    }
+
+    private TopicsOptionsTest withSubjectsModelsFounded() {
+        this.subjectsModels = new ArrayList<>(2);
+        final SubjectModelInterface subjectModelFirst = Mockito.mock(SubjectModelInterface.class);
+        final SubjectModelInterface subjectModelSecond = Mockito.mock(SubjectModelInterface.class);
+        final SubjectModelInterface subjectModelWithIdFirst = Mockito.mock(SubjectModelInterface.class);
+        final SubjectModelInterface subjectModelWithIdSecond = Mockito.mock(SubjectModelInterface.class);
+
+        given(this.topicsModels.get(0).getSubject()).willReturn(subjectModelWithIdFirst);
+        given(this.topicsModels.get(1).getSubject()).willReturn(subjectModelWithIdSecond);
+        given(this.topicsModels.get(0).getSubject().getId()).willReturn(0);
+        given(this.topicsModels.get(1).getSubject().getId()).willReturn(1);
+
+        this.subjectsModels.add(subjectModelFirst);
+        this.subjectsModels.add(subjectModelSecond);
+
+        given(subjectsService.find(this.topicsModels.get(0).getSubject().getId(), subjectsOptions))
+                .willReturn(subjectsModels.get(0));
+        given(subjectsService.find(this.topicsModels.get(1).getSubject().getId(), subjectsOptions))
+                .willReturn(subjectsModels.get(1));
+
+        return this;
+    }
+
+    private TopicsOptionsTest withQustionsModelsFounded() {
+        this.questionsModels = new ArrayList<>();
+
+        given(this.questionsService.findByTopic(this.topicModel, this.questionsOptions)).willReturn(this.questionsModels);
+
+        return this;
+    }
+
+    private TopicsOptionsTest withQustionsModelsInjected() {
+        this.topicModel.setQuestions(this.questionsModels);
+        given(this.topicModel.getQuestions()).willReturn(this.questionsModels);
+        return this;
+    }
+
+    private TopicsOptionsTest withSubject() {
+        this.topicsOptions.withSubject(this.subjectsOptions);
+        return this;
+    }
+
+    private TopicsOptionsTest withQuestions() {
+        this.topicsOptions.withQuestions(this.questionsOptions);
+        return this;
+    }
+
+    private TopicsOptionsTest withTopicsList() {
+        this.topicsModels = new ArrayList<>(2);
+        this.topicsModels.add(this.topicsSupport.getModelFixtureMock(0));
+        this.topicsModels.add(this.topicsSupport.getModelFixtureMock(1));
+
+        return this;
+    }
+
+    private TopicsOptionsTest withQuestionsModelsListFounded() {
+        this.questionsModelsList = new ArrayList<>(2);
+        this.questionsModelsList.add(new ArrayList<>());
+        this.questionsModelsList.add(new ArrayList<>());
+
+        given(this.questionsService.findByTopic(this.topicsModels.get(0), this.questionsOptions))
+                .willReturn(questionsModelsList.get(0));
+        given(this.questionsService.findByTopic(this.topicsModels.get(1), this.questionsOptions))
+                .willReturn(questionsModelsList.get(1));
+
+        return this;
+    }
+
     @Test
     public void testWithRelationsSubjectOnSingleModel() throws Exception {
+        this.withTopicModel().withSubjectModelFounded().withSubject();
 
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
+        final TopicModelInterface topicModelWithRelations =  this.topicsOptions.withRelations(this.topicModel);
 
-        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setSubjectsService(subjectsService);
-        topicsOptions.setTopicsService(topicsService);
-
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-        topicsOptions.withSubject(subjectsOptions);
-
-        final SubjectModelInterface subjectModel = Mockito.mock(SubjectModelInterface.class);
-        final SubjectModelInterface subjectModelWithId = Mockito.mock(SubjectModelInterface.class);
-
-        given(topicModel.getSubject()).willReturn(subjectModelWithId);
-        given(subjectsService.find(topicModel.getSubject().getId(), subjectsOptions)).willReturn(subjectModel);
-
-        final TopicModelInterface topicModelWithRelations =  topicsOptions.withRelations(topicModel);
-
-        Assert.assertEquals(topicModel,topicModelWithRelations);
-        subjectsService.find(1, subjectsOptions);
-        verify(topicModel).setSubject(subjectModel);
+        Assert.assertSame(this.topicModel, topicModelWithRelations);
+        subjectsService.find(1, this.subjectsOptions);
+        verify(this.topicModel).setSubject(this.subjectModel);
     }
 
     @Test
     public void testWithRelationsQuestionsOnSingleModel() throws Exception {
+        this.withTopicModel().withQustionsModelsFounded().withQuestions();
 
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
+        final TopicModelInterface topicModelWithRelations =  this.topicsOptions.withRelations(this.topicModel);
 
-        topicsOptions.setQuestionsService(questionsService);
-        topicsOptions.setTopicsService(topicsService);
-
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-        topicsOptions.withQuestions(questionsOptions);
-
-        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
-        questionsModels.add(Mockito.mock(QuestionModelInterface.class));
-
-        given(questionsService.findByTopic(topicModel, questionsOptions)).willReturn(questionsModels);
-
-        final TopicModelInterface topicModelWithRelations =  topicsOptions.withRelations(topicModel);
-
-        Assert.assertEquals(topicModel,topicModelWithRelations);
-        verify(questionsService).findByTopic(topicModel, questionsOptions);
-        verify(topicModel).setQuestions(questionsModels);
+        Assert.assertSame(this.topicModel,topicModelWithRelations);
+        verify(this.questionsService).findByTopic(this.topicModel, this.questionsOptions);
+        verify(this.topicModel).setQuestions(this.questionsModels);
     }
 
     @Test
-    public void testWithRelationsOnNull() throws Exception{
-
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
+    public void testWithRelationsOnNull() throws Exception {
         final TopicModelInterface nullTopicModel = null;
 
-        final TopicModelInterface topicModelWithRelations =  topicsOptions.withRelations(nullTopicModel);
+        final TopicModelInterface topicModelWithRelations =  this.topicsOptions.withRelations(nullTopicModel);
 
-        Assert.assertNull(topicModelWithRelations);
+        Assert.assertSame(null, topicModelWithRelations);
     }
 
     @Test
     public void testWithRelationsSubjectOnList() throws Exception{
 
-        final TopicModelInterface topicModelFirst = Mockito.mock(TopicModelInterface.class);
-        final TopicModelInterface topicModelSecond = Mockito.mock(TopicModelInterface.class);
-        final List<TopicModelInterface> topicsModels = new ArrayList<>(2);
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
+        this.withTopicsList().withSubjectsModelsFounded().withSubject();
 
-        topicsOptions.setTopicsService(topicsService);
-        topicsOptions.setSubjectsService(subjectsService);
-        topicsOptions.withSubject(subjectsOptions);
-        topicsModels.add(topicModelFirst);
-        topicsModels.add(topicModelSecond);
+        final List<TopicModelInterface> topicsModelsWithRelations =  this.topicsOptions.withRelations(this.topicsModels);
 
-        final SubjectModelInterface subjectModelFirst = Mockito.mock(SubjectModelInterface.class);
-        final SubjectModelInterface subjectModelWithIdFirst = Mockito.mock(SubjectModelInterface.class);
-        final SubjectModelInterface subjectModelSecond = Mockito.mock(SubjectModelInterface.class);
-        final SubjectModelInterface subjectModelWithIdSecond = Mockito.mock(SubjectModelInterface.class);
-
-        given(topicModelFirst.getSubject()).willReturn(subjectModelWithIdFirst);
-        given(topicModelSecond.getSubject()).willReturn(subjectModelWithIdSecond);
-        given(topicModelFirst.getSubject().getId()).willReturn(1);
-        given(topicModelSecond.getSubject().getId()).willReturn(2);
-        given(subjectsService.find(topicModelFirst.getSubject().getId(), subjectsOptions)).willReturn(subjectModelFirst);
-        given(subjectsService.find(topicModelSecond.getSubject().getId(), subjectsOptions)).willReturn(subjectModelSecond);
-
-        final List<TopicModelInterface> topicsModelsWithRelations =  topicsOptions.withRelations(topicsModels);
-
-        Assert.assertEquals(topicsModelsWithRelations,topicsModels);
-        subjectsService.find(1, subjectsOptions);
-        subjectsService.find(2, subjectsOptions);
-        verify(topicsModels.get(0)).setSubject(subjectModelFirst);
-        verify(topicsModels.get(1)).setSubject(subjectModelSecond);
+        Assert.assertSame(topicsModelsWithRelations, this.topicsModels);
+        this.subjectsService.find(0, this.subjectsOptions);
+        this.subjectsService.find(1, this.subjectsOptions);
+        verify(this.topicsModels.get(0)).setSubject(this.subjectsModels.get(0));
+        verify(this.topicsModels.get(1)).setSubject(this.subjectsModels.get(1));
     }
 
 
     @Test
     public void testWithRelationsQuestionsOnList() throws Exception{
-
-        final TopicModelInterface topicModelFirst = Mockito.mock(TopicModelInterface.class);
-
-        final TopicModelInterface topicModelSecond = Mockito.mock(TopicModelInterface.class);
-
-        final List<TopicModelInterface> topicsModels = new ArrayList<>(2);
-        topicsModels.add(topicModelFirst);
-        topicsModels.add(topicModelSecond);
-
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-
-        final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-
-        topicsOptions.setTopicsService(topicsService);
-        topicsOptions.setQuestionsService(questionsService);
-        topicsOptions.withQuestions(questionsOptions);
-
-
-        final List<QuestionModelInterface> questionsModelsFirst = new ArrayList<>();
-        questionsModelsFirst.add(Mockito.mock(QuestionModelInterface.class));
-
-        final List<QuestionModelInterface> questionsModelsSecond = new ArrayList<>();
-        questionsModelsSecond.add(Mockito.mock(QuestionModelInterface.class));
-
-        given(questionsService.findByTopic(topicModelFirst, questionsOptions)).willReturn(questionsModelsFirst);
-        given(questionsService.findByTopic(topicModelSecond, questionsOptions)).willReturn(questionsModelsSecond);
+        this.withTopicsList().withQuestionsModelsListFounded().withQuestions();
 
         final List<TopicModelInterface> topicsModelsWithRelations =  topicsOptions.withRelations(topicsModels);
 
-        Assert.assertEquals(topicsModelsWithRelations,topicsModels);
-        verify(questionsService).findByTopic(topicModelFirst, questionsOptions);
-        verify(topicsModels.get(0)).setQuestions(questionsModelsFirst);
-        verify(questionsService).findByTopic(topicModelSecond, questionsOptions);
-        verify(topicsModels.get(1)).setQuestions(questionsModelsSecond);
+        Assert.assertSame(topicsModelsWithRelations,topicsModels);
+        verify(this.questionsService).findByTopic(this.topicsModels.get(0), this.questionsOptions);
+        verify(this.topicsModels.get(0)).setQuestions(this.questionsModelsList.get(0));
+        verify(this.questionsService).findByTopic(this.topicsModels.get(1), this.questionsOptions);
+        verify(this.topicsModels.get(1)).setQuestions(this.questionsModelsList.get(1));
     }
 
     @Test
-    public void testSaveWithRelationsSubject() throws Exception{
-
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final SubjectModelInterface subjectModelId = Mockito.mock(SubjectModelInterface.class);
-        given(topicModel.getSubject()).willReturn(subjectModelId);
-
-        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setSubjectsService(subjectsService);
-        topicsOptions.setTopicsService(topicsService);
-
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-        topicsOptions.withSubject(subjectsOptions);
-
-        final SubjectModelInterface subjectModel = new SubjectModel();
-        topicModel.setSubject(subjectModel);
-
+    public void testSaveWithRelationsSubject() throws Exception {
+        this.withTopicModel().withSubjectModelInjected().withSubject();
         final InOrder inOrder = Mockito.inOrder(subjectsService, topicsService);
 
-        topicsOptions.saveWithRelations(topicModel);
+        this.topicsOptions.saveWithRelations(this.topicModel);
 
-        inOrder.verify(subjectsService).save(topicModel.getSubject(), subjectsOptions);
-        inOrder.verify(topicsService).save(topicModel);
+        inOrder.verify(this.subjectsService).save(this.topicModel.getSubject(), this.subjectsOptions);
+        inOrder.verify(this.topicsService).save(this.topicModel);
     }
 
     @Test
     public void testSaveWithRelationsQuestions() throws Exception{
+        this.withTopicModel().withQustionsModelsInjected().withQuestions();
+        final InOrder inOrder = Mockito.inOrder(this.topicsService, this.questionsService);
 
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setQuestionsService(questionsService);
-        topicsOptions.setTopicsService(topicsService);
+        this.topicsOptions.saveWithRelations(this.topicModel);
 
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-        topicsOptions.withQuestions(questionsOptions);
-
-        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
-        topicModel.setQuestions(questionsModels);
-
-        final InOrder inOrder = Mockito.inOrder(topicsService, questionsService);
-
-        topicsOptions.saveWithRelations(topicModel);
-
-        inOrder.verify(topicsService).save(topicModel);
-        inOrder.verify(questionsService).save(topicModel.getQuestions(), questionsOptions);
+        inOrder.verify(this.topicsService).save(this.topicModel);
+        inOrder.verify(this.questionsService).save(this.topicModel.getQuestions(), this.questionsOptions);
     }
 
     @Test
     public void testDeleteWithRelationsSubject() throws Exception{
+        this.withTopicModel().withSubjectModelInjected().withSubject();
+        final InOrder inOrder = Mockito.inOrder(this.topicsService, this.subjectsService);
 
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final SubjectModelInterface subjectModelId = Mockito.mock(SubjectModelInterface.class);
-        given(topicModel.getSubject()).willReturn(subjectModelId);
+        this.topicsOptions.deleteWithRelations(this.topicModel);
 
-        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setSubjectsService(subjectsService);
-        topicsOptions.setTopicsService(topicsService);
-
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-        topicsOptions.withSubject(subjectsOptions);
-
-        final SubjectModelInterface subjectModel = new SubjectModel();
-        topicModel.setSubject(subjectModel);
-
-        final InOrder inOrder = Mockito.inOrder(topicsService, subjectsService);
-
-        topicsOptions.deleteWithRelations(topicModel);
-
-        inOrder.verify(topicsService).delete(topicModel);
-        inOrder.verify(subjectsService).save(topicModel.getSubject(), subjectsOptions);
+        inOrder.verify(this.topicsService).delete(this.topicModel);
+        inOrder.verify(this.subjectsService).save(this.topicModel.getSubject(), this.subjectsOptions);
     }
 
     @Test
     public void testDeleteWithRelationsQuestion() throws Exception{
+        this.withTopicModel().withQustionsModelsInjected().withQuestions();
+        final InOrder inOrder = Mockito.inOrder(this.questionsService, this.topicsService);
 
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setQuestionsService(questionsService);
-        topicsOptions.setTopicsService(topicsService);
+        this.topicsOptions.deleteWithRelations(this.topicModel);
 
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-        topicsOptions.withQuestions(questionsOptions);
-
-        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
-        topicModel.setQuestions(questionsModels);
-
-        final InOrder inOrder = Mockito.inOrder(questionsService, topicsService);
-
-        topicsOptions.deleteWithRelations(topicModel);
-
-        inOrder.verify(questionsService).save(topicModel.getQuestions(), questionsOptions);
-        inOrder.verify(topicsService).delete(topicModel);
+        inOrder.verify(this.questionsService).save(this.topicModel.getQuestions(), this.questionsOptions);
+        inOrder.verify(this.topicsService).delete(this.topicModel);
     }
 
     @Test
     public void testWithSubject() throws Exception {
-
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-
-        final TopicsOptionsInterface topicsOptionsWithSubject = topicsOptions.withSubject(subjectsOptions);
-        Assert.assertEquals(topicsOptionsWithSubject, topicsOptions);
+        final TopicsOptionsInterface topicsOptionsWithSubject = this.topicsOptions.withSubject(this.subjectsOptions);
+        Assert.assertSame(topicsOptionsWithSubject, this.topicsOptions);
     }
 
     @Test
     public void testWithQuestions() throws Exception {
-
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-
-        final TopicsOptionsInterface topicsOptionsWithQuestions = topicsOptions.withQuestions(questionsOptions);
-        Assert.assertEquals(topicsOptionsWithQuestions, topicsOptions);
+        final TopicsOptionsInterface topicsOptionsWithQuestions = this.topicsOptions.withQuestions(this.questionsOptions);
+        Assert.assertEquals(topicsOptionsWithQuestions, this.topicsOptions);
     }
 
     @Test
     public void testSaveDeleteWithRelationsSubject() {
+        this.withTopicModel().withSubjectModelInjected().withSubject();
 
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final SubjectModelInterface subjectModelId = Mockito.mock(SubjectModelInterface.class);
-        given(topicModel.getSubject()).willReturn(subjectModelId);
+        this.topicsOptions.saveWithRelations(this.topicModel);
+        verify(this.topicsService).save(this.topicModel);
 
-        final SubjectsServiceInterface subjectsService = Mockito.mock(SubjectsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setSubjectsService(subjectsService);
-        topicsOptions.setTopicsService(topicsService);
+        this.topicsOptions.deleteWithRelations(this.topicModel);
+        verify(this.topicsService).delete(this.topicModel);
 
-        final SubjectsOptionsInterface subjectsOptions = Mockito.mock(SubjectsOptionsInterface.class);
-        topicsOptions.withSubject(subjectsOptions);
-
-        final SubjectModelInterface subjectModel = new SubjectModel();
-        topicModel.setSubject(subjectModel);
-
-        topicsOptions.saveWithRelations(topicModel);
-        verify(topicsService).save(topicModel);
-
-        topicsOptions.deleteWithRelations(topicModel);
-        verify(topicsService).delete(topicModel);
-
-        verify(subjectsService, times(2)).save(topicModel.getSubject(), subjectsOptions);
+        verify(this.subjectsService, times(2)).save(this.topicModel.getSubject(), this.subjectsOptions);
     }
 
     @Test
     public void testSaveDeleteWithRelationsQuestion() throws Exception{
+        this.withTopicModel().withQustionsModelsInjected().withQuestions();
 
-        final TopicsOptionsInterface topicsOptions = new TopicsOptions();
-        final TopicModelInterface topicModel = Mockito.mock(TopicModelInterface.class);
-        final QuestionsServiceInterface questionsService = Mockito.mock(QuestionsServiceInterface.class);
-        final TopicsServiceInterface topicsService = Mockito.mock(TopicsServiceInterface.class);
-        topicsOptions.setQuestionsService(questionsService);
-        topicsOptions.setTopicsService(topicsService);
+        this.topicsOptions.saveWithRelations((this.topicModel));
+        verify(this.topicsService).save(this.topicModel);
 
-        final QuestionsOptionsInterface questionsOptions = Mockito.mock(QuestionsOptionsInterface.class);
-        topicsOptions.withQuestions(questionsOptions);
-
-        final List<QuestionModelInterface> questionsModels = new ArrayList<>();
-        topicModel.setQuestions(questionsModels);
-
-        topicsOptions.saveWithRelations((topicModel));
-        verify(topicsService).save(topicModel);
-
-        topicsOptions.deleteWithRelations(topicModel);
-        verify(topicsService).delete(topicModel);
+        this.topicsOptions.deleteWithRelations(this.topicModel);
+        verify(this.topicsService).delete(this.topicModel);
         
-        verify(questionsService, times(2)).save(topicModel.getQuestions(), questionsOptions);
+        verify(this.questionsService, times(2)).save(this.topicModel.getQuestions(), this.questionsOptions);
     }
 
 }
