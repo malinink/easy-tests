@@ -1,9 +1,6 @@
 package easytests.api.v1.controllers;
 
-import easytests.api.v1.exceptions.BadRequestException;
-import easytests.api.v1.exceptions.ForbiddenException;
-import easytests.api.v1.exceptions.IdentifiedModelException;
-import easytests.api.v1.exceptions.NotFoundException;
+import easytests.api.v1.exceptions.*;
 import easytests.api.v1.mappers.QuestionsMapper;
 import easytests.api.v1.models.Identity;
 import easytests.api.v1.models.Question;
@@ -70,10 +67,6 @@ public class QuestionsController extends AbstractController {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * create
-     */
-
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Identity create(@RequestBody Question question) throws Exception {
@@ -90,18 +83,29 @@ public class QuestionsController extends AbstractController {
         return this.questionsMapper.map(questionModel, Identity.class);
     }
 
-    private void checkTopic(Integer topicId) throws BadRequestException {
-        final TopicModelInterface topicModel = this.topicsService
-                .find(topicId, this.topicsOptionsBuilder.forAuth());
-
-        if (!this.acl.hasAccess(topicModel)) {
-            throw new BadRequestException();
+    @PutMapping("")
+    public void update(@RequestBody Question question)
+            throws ForbiddenException, NotFoundException, BadRequestException {
+        if (question.getId() == null) {
+            throw new UnidentifiedModelException();
         }
-    }
 
-    /**
-     * update
-     */
+        final QuestionModelInterface questionModel = this.getQuestionModel(question.getId());
+
+        if (!this.acl.hasAccess(questionModel)) {
+            throw new ForbiddenException();
+        }
+        this.checkTopic(question.getTopic().getId());
+
+        final QuestionsOptionsInterface questionOptionWithAnswers =
+                new QuestionsOptions().withAnswers(new AnswersOptions());
+
+        final QuestionModelInterface questionModelWithAnswers =
+                this.questionsService.find(question.getId(), questionOptionWithAnswers);
+
+        this.questionsMapper.map(question, questionModelWithAnswers);
+        this.questionsService.save(questionModelWithAnswers, questionOptionWithAnswers);
+    }
 
     @GetMapping("/{questionId}")
     public Question show(@PathVariable Integer questionId) throws NotFoundException, ForbiddenException {
@@ -113,22 +117,6 @@ public class QuestionsController extends AbstractController {
             throw new ForbiddenException();
         }
         return this.questionsMapper.map(questionModel, Question.class);
-    }
-
-    private QuestionModelInterface getQuestionModel(Integer id, QuestionsOptionsInterface
-            questionOptions) throws NotFoundException {
-        final QuestionModelInterface questionModel = this.questionsService.find(id, questionOptions);
-        if (questionModel == null) {
-            throw new NotFoundException();
-        }
-        return questionModel;
-    }
-    /**
-     * delete(questionId)
-     */
-
-    private QuestionModelInterface getQuestionModel(Integer id) throws NotFoundException {
-        return this.getQuestionModel(id, this.questionsOptionsBuilder.forAuth());
     }
 
     @DeleteMapping("/{questionId}")
@@ -144,4 +132,25 @@ public class QuestionsController extends AbstractController {
         this.questionsService.delete(questionModelForDelete, questionOption);
     }
 
+    private void checkTopic(Integer topicId) throws BadRequestException {
+        final TopicModelInterface topicModel = this.topicsService
+                .find(topicId, this.topicsOptionsBuilder.forAuth());
+
+        if (!this.acl.hasAccess(topicModel)) {
+            throw new BadRequestException();
+        }
+    }
+
+    private QuestionModelInterface getQuestionModel(Integer id, QuestionsOptionsInterface
+            questionOptions) throws NotFoundException {
+        final QuestionModelInterface questionModel = this.questionsService.find(id, questionOptions);
+        if (questionModel == null) {
+            throw new NotFoundException();
+        }
+        return questionModel;
+    }
+
+    private QuestionModelInterface getQuestionModel(Integer id) throws NotFoundException {
+        return this.getQuestionModel(id, this.questionsOptionsBuilder.forAuth());
+    }
 }

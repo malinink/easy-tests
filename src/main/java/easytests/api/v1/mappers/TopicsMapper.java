@@ -20,19 +20,19 @@ public class TopicsMapper extends ModelMapper {
     public TopicsMapper() {
         super();
         this.createTypeMap(TopicModel.class, Topic.class)
-            .addMappings(mapper -> mapper.<Integer>map(topicModel -> topicModel.getSubject().getId(),
-                (topic, id) -> topic.getSubject().setId(id)));
+                .addMappings(mapper -> mapper.<Integer>map(topicModel -> topicModel.getSubject().getId(),
+                    (topic, id) -> topic.getSubject().setId(id)));
 
         final Converter<Identity, SubjectModel> convertIdentityToSubjectModel =
-                new Converter<Identity, SubjectModel>() {
-            public SubjectModel convert(MappingContext<Identity, SubjectModel> context) {
+            new Converter<Identity, SubjectModel>() {
+                public SubjectModel convert(MappingContext<Identity, SubjectModel> context) {
 
                     final SubjectModel subjectModel = new SubjectModel();
                     subjectModel.setId(context.getSource().getId());
 
                     return subjectModel;
-            }
-        };
+                }
+            };
 
         final PropertyMap<Topic, TopicModel> mymap = new PropertyMap<Topic, TopicModel>() {
             protected void configure() {
