@@ -17,7 +17,7 @@ before_script:
 - psql -c 'create database easyteststest;' -U postgres
 script:
 - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V --quiet
-- APITESTRESULT=$(curl -X POST --data-binary @src/main/resources/api/api.yaml -H 'content-type:application/yaml' http://online.swagger.io/validator/debug)
+- APITESTRESULT=$(curl -X POST --data-binary @src/main/resources/api/api.yaml -H 'content-type:application/yaml' https://validator.swagger.io/validator/debug)
 - test "$APITESTRESULT" = '{}' || (echo $APITESTRESULT && false)
 - ./mvnw checkstyle:check --quiet
 - ./mvnw migration:up --quiet
