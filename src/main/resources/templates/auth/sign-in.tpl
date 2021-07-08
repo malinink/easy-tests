@@ -5,7 +5,7 @@ content: contents {
             div(class :'center-align') {
                 div (class:'section') {
                     h5 {
-                        span ('Sign In')
+                        span (sign_in)
                     }
                 }
                 div (class:'container') {
@@ -21,7 +21,7 @@ content: contents {
                                     }
                                     input (class:'validate', type:'email', name:'login', id:'login', required:'', value:login)
                                     label (for:'email') {
-                                        span ('Enter your email')
+                                        span (enter_email)
                                     }
                                 }
                             }
@@ -32,12 +32,12 @@ content: contents {
                                     }
                                     input (class:'validate', type:'password', name:'password', id:'password', required:'')
                                     label (for:'password') {
-                                        span ('Enter your password')
+                                        span (enter_password)
                                     }
                                 }
                                 label (style:'float: right;') {
                                     a (class: 'grey-text', href:'#!') {
-                                        b ('Forgot Password?')
+                                        b (forgot_password)
                                     }
                                 }
                             }
@@ -45,7 +45,7 @@ content: contents {
                             div(class :'center-align') {
                                 div (class:'row') {
                                     button (type:'submit', name:'btn_login', class:'col s12 btn btn-large waves-effect waves-light teal lighten-2') {
-                                        span ('Login')
+                                        span (login_text)
                                     }
                                 }
                             }
